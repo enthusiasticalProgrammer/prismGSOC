@@ -104,7 +104,6 @@ public class DoubleVector
 	
 	/**
 	 * Create a new DoubleVector from an existing MTBDD representation of an array.
-	 * <br>[ DEREFS: <i>none</i> ]
 	 */
 	public DoubleVector(JDDNode dd, JDDVars vars, ODDNode odd)
 	{
