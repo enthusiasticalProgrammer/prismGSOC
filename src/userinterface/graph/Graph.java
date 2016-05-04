@@ -1049,6 +1049,8 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			  //Get the nodes used to describe the various parts of the graph
 			  NodeList rootChildren = chartFormat.getChildNodes(); 
 			   
+			  // Element layout is depricated for now. 
+			  Element layout = (Element) rootChildren.item(0); 
 			  Element xAxis = (Element) rootChildren.item(1); 
 			  Element yAxis = (Element) rootChildren.item(2);
 			  
@@ -1100,6 +1102,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	{
 		try 
 		{ 
+			JFreeChart chart = getChart(); 
 		 	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
 		 	DocumentBuilder builder = factory.newDocumentBuilder(); 
 		 	Document doc = builder.newDocument();

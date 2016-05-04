@@ -43,6 +43,10 @@ public class GUIVisualLogger extends javax.swing.JPanel
 	private static final long serialVersionUID = 1L;
 
 	//Attributes
+    
+    //NON-GUI
+    private int thing = 0;
+    private Thread adder;
     private GUIVisualLogModel theModel;
     
     //GUI COMPONENTS

@@ -36,7 +36,6 @@ import javax.swing.event.*;
 import settings.*;
 import userinterface.*;
 
-@SuppressWarnings("serial")
 public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 {
 	private SettingTable graphPropertiesTable, axisPropertiesTable, displayPropertiesTable, seriesPropertiesTable;

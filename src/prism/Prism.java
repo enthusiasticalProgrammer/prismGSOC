@@ -263,6 +263,9 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	// Are we doing digital clocks translation for PTAs?
 	boolean digital = false;
 
+	// Info about the strategy that was generated
+	private strat.Strategy strategy;
+
 	// Info for explicit files load
 	private File explicitFilesStatesFile = null;
 	private File explicitFilesTransFile = null;
@@ -1872,6 +1875,16 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	}
 
 	/**
+	 * Get the currently stored strategy
+	 * 
+	 * @return
+	 */
+	public strat.Strategy getStrategy()
+	{
+		return strategy;
+	}
+
+	/**
 	 * Returns true if the current model is of a type that can be built (e.g. not a PTA).
 	 */
 	public boolean modelCanBeBuilt()
@@ -2798,14 +2811,10 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			return modelCheckPTA(propertiesFile, prop.getExpression(), definedPFConstants);
 		}
 
-		// For exact model checking
-		if (settings.getBoolean(PrismSettings.PRISM_EXACT_ENABLED)) {
-			return modelCheckExact(propertiesFile, prop);
-		}
 		// For fast adaptive uniformisation
 		if (currentModelType == ModelType.CTMC && settings.getString(PrismSettings.PRISM_TRANSIENT_METHOD).equals("Fast adaptive uniformisation")) {
 			FastAdaptiveUniformisationModelChecker fauMC;
-			fauMC = new FastAdaptiveUniformisationModelChecker(this, currentModulesFile, propertiesFile);
+			fauMC = new FastAdaptiveUniformisationModelChecker(this, currentModulesFile, propertiesFile, getSimulator());
 			return fauMC.check(prop.getExpression());
 		}
 		// Auto-switch engine if required
@@ -2817,25 +2826,56 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				setEngine(Prism.EXPLICIT);
 			}
 		}
+		else if (currentModelType == ModelType.MDP && Expression.containsMultiObjective(prop.getExpression())) {
+			if (settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_LP
+			    && settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
+				mainLog.printWarning("Switching to linear programming method to allow verification of the formula.");
+				settings.setChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD, Prism.MDP_MULTI_LP);
+			}
+			if (settings.getChoice(PrismSettings.PRISM_ENGINE) != Prism.EXPLICIT && !getExplicit()) {
+				mainLog.printWarning("Switching to explicit engine to allow verification of the formula.");
+				engineSwitch = true;
+				lastEngine = getEngine();
+				setEngine(Prism.EXPLICIT);
+			}
+		}
+		// Compatibility check
+		if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
+			if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
+				throw new PrismException("Cannot generate strategies with the current engine "
+						+ "because some state of the model do not have unique action labels for each choice. "
+						+ "Either switch to the explicit engine or add more action labels to the model");
+		}
+
 		try {
 			// Build model, if necessary
 			buildModelIfRequired();
 
-			// Compatibility check
-			if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
-				if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
-					throw new PrismException("Cannot generate strategies with the current engine "
-							+ "because some state of the model do not have unique action labels for each choice. "
-							+ "Either switch to the explicit engine or add more action labels to the model");
-			}
-
 			// Create new model checker object and do model checking
 			if (!getExplicit()) {
-				ModelChecker mc = createModelChecker(propertiesFile);
+				ModelChecker mc = createModelChecker(propertiesFile); 
 				res = mc.check(prop.getExpression());
 			} else {
 				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
-				res = mc.check(currentModelExpl, prop.getExpression());
+				// if implement strategy option is enabled, build a product with
+				// strategy before model checking
+				if (getSettings().getBoolean(PrismSettings.PRISM_IMPLEMENT_STRATEGY) && strategy != null) {
+					try {
+						mc.setStrategy(strategy);
+						res = mc.check(strategy.buildProduct(currentModelExpl), prop.getExpression());
+					} catch (UnsupportedOperationException e) {
+						throw new PrismException("Building the product of the model and strategy failed");
+					}
+				} else
+					res = mc.check(currentModelExpl, prop.getExpression());
+
+				// saving strategy if it was generated.
+				if (settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY)) {
+					strategy = mc.getStrategy();
+					if (strategy != null)
+						strategy.setInfo("Property: " + prop.getExpression() + "\n" + "Type: " + strategy.getType() + "\nMemory size: "
+								+ strategy.getMemorySize());
+				}
 			}
 		} finally {
 			// Undo auto-switch (if any)
@@ -3265,42 +3305,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	}
 
 	/**
-	 * Compute steady-state probabilities (for a DTMC or CTMC) using symbolic engines.
-	 * Optionally (if non-null), read in the initial probability distribution from a file.
-	 * If null, start from initial state (or uniform distribution over multiple initial states).
+	 *  Sets the strategy that will be available for this prism session
+	 * @param strat the strategy
 	 */
-	protected StateValues computeSteadyStateProbabilities(Model model, File fileIn) throws PrismException
+	public void setStrategy(strat.Strategy strat)
 	{
-		ProbModelChecker mc;
-		if (model.getModelType() == ModelType.DTMC) {
-			mc = new ProbModelChecker(this, model, null);
-		} else if (model.getModelType() == ModelType.CTMC) {
-			mc = new StochModelChecker(this, model, null);
-		} else {
-			throw new PrismException("Steady-state probabilities only computed for DTMCs/CTMCs");
-		}
-		return mc.doSteadyState(fileIn);
-	}
-
-	/**
-	 * Compute steady-state probabilities (for a DTMC or CTMC) using the explicit engine.
-	 * Optionally (if non-null), read in the initial probability distribution from a file.
-	 * If null, start from initial state (or uniform distribution over multiple initial states).
-	 */
-	protected explicit.StateValues computeSteadyStateProbabilitiesExplicit(explicit.Model model, File fileIn) throws PrismException
-	{
-		DTMCModelChecker mcDTMC;
-		explicit.StateValues probs;
-		if (model.getModelType() == ModelType.DTMC) {
-			mcDTMC = new DTMCModelChecker(this);
-			//TODO: probs = mcDTMC.doSteadyState((DTMC) model, fileIn);
-			probs = mcDTMC.doSteadyState((DTMC) model, (File) null);
-		} else if (model.getModelType() == ModelType.CTMC) {
-			throw new PrismException("Not implemented yet");
-		} else {
-			throw new PrismException("Steady-state probabilities only computed for DTMCs/CTMCs");
-		}
-		return probs;
+		this.strategy = strat;
 	}
 
 	/**
@@ -3591,6 +3601,11 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			currentModel.clear();
 		/*if (currentModelExpl != null)
 			currentModelExpl.clear();*/
+		
+		// nullify the strategy
+		strategy = null;
+		getSimulator().setStrategy(null);
+		// if (currentModelExpl != null) currentModelExpl.clear();
 	}
 
 	/**

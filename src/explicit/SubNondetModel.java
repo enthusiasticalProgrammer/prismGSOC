@@ -462,6 +462,21 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s, int i) {
+		s = translateState(s);
+		i = translateAction(s, i);
+		
+		Map<Integer,Double> distrs = new HashMap<Integer, Double>();
+		Iterator<Entry<Integer,Double>> it = model.getTransitionsIterator(s, i);
+		while(it.hasNext()) {
+			Entry<Integer, Double> e = it.next();
+			int succ = inverseTranslateState(e.getKey());
+			distrs.put(succ, e.getValue());
+		}
+		return distrs.entrySet().iterator();
+	}
+	
+	@Override
 	public Model constructInducedModel(MDStrategy strat)
 	{
 		throw new RuntimeException("Not implemented");

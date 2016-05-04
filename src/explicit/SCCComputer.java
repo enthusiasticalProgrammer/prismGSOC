@@ -96,6 +96,11 @@ public abstract class SCCComputer extends PrismComponent
 	public abstract void computeBSCCs();
 
 	/**
+	 * Get the list of computed SCCs.
+	 */
+	public abstract List<BitSet> getSCCs();
+
+	/**
 	 * Get the list of computed BSCCs.
 	 */
 	public abstract List<BitSet> getBSCCs();

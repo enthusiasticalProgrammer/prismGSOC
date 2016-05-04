@@ -29,7 +29,6 @@ package userinterface.model;
 import javax.swing.*;
 import userinterface.*;
 
-@SuppressWarnings("serial")
 public class GUITransientTime extends javax.swing.JDialog
 {
 	public static final int OK = 0;
@@ -46,7 +45,6 @@ public class GUITransientTime extends javax.swing.JDialog
 		return new GUITransientTime(parent).requestTime();
 	}
 
-	@SuppressWarnings("deprecation")
 	public int requestTime()
 	{
 		show();

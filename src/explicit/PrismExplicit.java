@@ -269,7 +269,18 @@ public class PrismExplicit extends PrismComponent
 		
 		mainLog.println("\nComputing steady-state probabilities...");
 		l = System.currentTimeMillis();
-		probs = computeSteadyStateProbabilities(model);
+
+		if (model.getModelType() == ModelType.DTMC) {
+			DTMCModelChecker mcDTMC = new DTMCModelChecker(this);
+			probs = mcDTMC.doSteadyState((DTMC) model);
+		}
+		else if (model.getModelType() == ModelType.CTMC) {
+			throw new PrismException("Not implemented yet"); // TODO
+		}
+		else {
+			throw new PrismException("Steady-state probabilities only computed for DTMCs/CTMCs");
+		}
+		
 		l = System.currentTimeMillis() - l;
 		
 		// print message
@@ -442,6 +453,33 @@ public class PrismExplicit extends PrismComponent
 			PrismExplicit pe = new PrismExplicit(prism.getMainLog(), prism.getSettings());
 			Model modelExpl = pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
 			pe.modelCheck(modelExpl, modulesFile, propertiesFile, propertiesFile.getProperty(0));
+		} catch (PrismException e) {
+			System.out.println(e);
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		}
+	}
+
+	/**
+	 * Simple test program.
+	 */
+	private static void modelCheckViaExplicitFiles(String args[])
+	{
+		Prism prism;
+		try {
+			PrismLog log = new PrismFileLog("stdout");
+			prism = new Prism(log, log);
+			prism.initialise();
+			prism.setDoProbChecks(false);
+			ModulesFile modulesFile = prism.parseModelFile(new File(args[0]));
+			PropertiesFile propertiesFile = prism.parsePropertiesFile(modulesFile, new File(args[1]));
+			prism.loadPRISMModel(modulesFile);
+			prism.exportTransToFile(true, Prism.EXPORT_PLAIN, new File("tmp.tra"));
+			prism.exportLabelsToFile(null, Prism.EXPORT_PLAIN, new File("tmp.lab"));
+			DTMCSimple modelExplicit = new DTMCSimple();
+			modelExplicit.buildFromPrismExplicit("tmp.tra");
+			PrismExplicit pe = new PrismExplicit(prism.getMainLog(), prism.getSettings());
+			pe.modelCheck(modelExplicit, null, propertiesFile, propertiesFile.getProperty(0));
 		} catch (PrismException e) {
 			System.out.println(e);
 		} catch (FileNotFoundException e) {

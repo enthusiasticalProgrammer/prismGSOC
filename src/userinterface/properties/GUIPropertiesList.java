@@ -39,7 +39,6 @@ import parser.*;
 import parser.ast.*;
 import prism.*;
 
-@SuppressWarnings("serial")
 public class GUIPropertiesList extends JList implements KeyListener
 {
 	//STATICS

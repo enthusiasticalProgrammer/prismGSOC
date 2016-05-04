@@ -193,6 +193,14 @@ public class TypeCheck extends ASTTraverse
 			}
 			e.setType(TypePathBool.getInstance());
 			break;
+		case ExpressionTemporal.R_F:
+			if (e.getOperand2() != null) {
+				type = e.getOperand2().getType();
+				if (!(type instanceof TypeBool) && !(type instanceof TypePathBool))
+					throw new PrismLangException("Type error: Argument of " + e.getOperatorSymbol() + " operator is not Boolean", e.getOperand2());
+			}
+			e.setType(TypePathDouble.getInstance());
+			break;
 		case ExpressionTemporal.R_C:
 		case ExpressionTemporal.R_I:
 		case ExpressionTemporal.R_S:
@@ -371,18 +379,12 @@ public class TypeCheck extends ASTTraverse
 			}
 			break;
 		case ExpressionFunc.MULTI:
-			// All operands must be booleans or doubles, and doubles must come first.
-			boolean seenBoolean = false;
+		case ExpressionFunc.MLESSMULTI:
+			// All operands must be booleans or doubles
 			for (i = 0; i < n; i++) {
 				if (!(types[i] instanceof TypeBool || types[i] instanceof TypeDouble)) {
 					throw new PrismLangException("Type error: non-Boolean/Double argument to  function \"" + e.getName()
 							+ "\"", e.getOperand(i));
-				}
-				if (seenBoolean && types[i] instanceof TypeDouble) {
-					throw new PrismLangException("Type error: in the function \"" + e.getName() + "\", any Double arguments must come before any Boolean arguments.");
-				}
-				if (types[i] instanceof TypeBool) {
-					seenBoolean = true;
 				}
 			}
 			break;
@@ -418,10 +420,18 @@ public class TypeCheck extends ASTTraverse
 			e.setType(TypeDouble.getInstance());
 			break;
 		case ExpressionFunc.MULTI:
-			// Resulting type is always same as first arg
-			if (types[0] instanceof TypeBool)
+		case ExpressionFunc.MLESSMULTI:
+			// Resulting type is determined by types of the arguments within
+			int doubleCount = 0;
+			for(Type t : types) {
+				if (t instanceof TypeDouble) {
+					doubleCount++;
+				}
+			}
+			
+			if (doubleCount == 0) //only constraints
 				e.setType(TypeBool.getInstance());
-			else if (types.length == 1 || types[1] instanceof TypeBool) //in this case type[0] is TypeDouble
+			else if (doubleCount == 1) //numerical, possibly subject to constraint
 				e.setType(TypeDouble.getInstance());
 			else
 				e.setType(TypeVoid.getInstance());
@@ -487,7 +497,7 @@ public class TypeCheck extends ASTTraverse
 
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
-		// Check reward struct ref(s)
+		// Check reward struct ref
 		if (e.getRewardStructIndex() != null && e.getRewardStructIndex() instanceof Expression) {
 			Expression rsi = (Expression) e.getRewardStructIndex();
 			if (!(rsi.getType() instanceof TypeInt)) {

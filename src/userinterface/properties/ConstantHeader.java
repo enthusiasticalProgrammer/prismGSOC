@@ -29,7 +29,6 @@ package userinterface.properties;
 
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class ConstantHeader extends javax.swing.JPanel
 {
     

@@ -65,8 +65,6 @@ public class PrismSyntaxHighlighter
 		puncReplaceFrom_HTML.add("<"); puncReplaceTo_HTML.add("&lt;");
 		puncReplaceFrom_HTML.add(">"); puncReplaceTo_HTML.add("&gt;");
 		puncReplaceFrom_LATEX = new ArrayList<String>(); puncReplaceTo_LATEX = new ArrayList<String>();
-		puncReplaceFrom_LATEX.add("\\{"); puncReplaceTo_LATEX.add("\\\\{");
-		puncReplaceFrom_LATEX.add("\\}"); puncReplaceTo_LATEX.add("\\\\}");
 		puncReplaceFrom_LATEX.add("&"); puncReplaceTo_LATEX.add("\\\\&");
 		puncReplaceFrom_LATEX.add("_"); puncReplaceTo_LATEX.add("\\\\_");
 		puncReplaceFrom_LATEX.add("%"); puncReplaceTo_LATEX.add("\\\\%");
@@ -74,13 +72,12 @@ public class PrismSyntaxHighlighter
 		puncReplaceFrom_LATEX.add("<="); puncReplaceTo_LATEX.add("\\${\\\\leq}\\$");
 		puncReplaceFrom_LATEX.add("->"); puncReplaceTo_LATEX.add("\\$\\\\rightarrow\\$");
 		puncReplaceFrom_LATEX.add("=>"); puncReplaceTo_LATEX.add("\\$\\\\Rightarrow\\$");
+		puncReplaceFrom_LATEX.add("\\{"); puncReplaceTo_LATEX.add("\\\\{");
+		puncReplaceFrom_LATEX.add("\\}"); puncReplaceTo_LATEX.add("\\\\}");
 		puncReplaceFrom_LATEX.add("="); puncReplaceTo_LATEX.add("\\${=}\\$");
 		puncReplaceFrom_LATEX.add(">"); puncReplaceTo_LATEX.add("\\${>}\\$");
 		puncReplaceFrom_LATEX.add("<"); puncReplaceTo_LATEX.add("\\${<}\\$");
-		puncReplaceFrom_LATEX.add("#"); puncReplaceTo_LATEX.add("\\\\#");
 		puncReplaceFrom_LATEXMATHS = new ArrayList<String>(); puncReplaceTo_LATEXMATHS = new ArrayList<String>();
-		puncReplaceFrom_LATEXMATHS.add("\\{"); puncReplaceTo_LATEXMATHS.add("\\\\{");
-		puncReplaceFrom_LATEXMATHS.add("\\}"); puncReplaceTo_LATEXMATHS.add("\\\\}");
 		puncReplaceFrom_LATEXMATHS.add("&"); puncReplaceTo_LATEXMATHS.add("\\\\&");
 		puncReplaceFrom_LATEXMATHS.add("_"); puncReplaceTo_LATEXMATHS.add("\\\\_");
 		puncReplaceFrom_LATEXMATHS.add("%"); puncReplaceTo_LATEXMATHS.add("\\\\%");
@@ -88,6 +85,8 @@ public class PrismSyntaxHighlighter
 		puncReplaceFrom_LATEXMATHS.add("<="); puncReplaceTo_LATEXMATHS.add("{\\\\leq}");
 		puncReplaceFrom_LATEXMATHS.add("->"); puncReplaceTo_LATEXMATHS.add("\\\\rightarrow");
 		puncReplaceFrom_LATEXMATHS.add("=>"); puncReplaceTo_LATEXMATHS.add("\\\\Rightarrow");
+		puncReplaceFrom_LATEXMATHS.add("\\{"); puncReplaceTo_LATEXMATHS.add("\\\\{");
+		puncReplaceFrom_LATEXMATHS.add("\\}"); puncReplaceTo_LATEXMATHS.add("\\\\}");
 		puncReplaceFrom_LATEXMATHS.add("="); puncReplaceTo_LATEXMATHS.add("{=}");
 		puncReplaceFrom_LATEXMATHS.add(">"); puncReplaceTo_LATEXMATHS.add("{>}");
 		puncReplaceFrom_LATEXMATHS.add("<"); puncReplaceTo_LATEXMATHS.add("{<}");
@@ -233,15 +232,24 @@ public class PrismSyntaxHighlighter
 	
 	public static void highlight(InputStream stream, int oType) throws PrismLangException
 	{
+		PrismParser prismParser;
+		PrismParserTokenManager tokenManager;
 		Token first, t, st;
 		boolean done = false;
 		
 		try {
-
+			// obtain exclusive acces to the prism parser
+			// (don't forget to release it afterwards)
+			prismParser = Prism.getPrismParser();
+			try {
+				// restart parser and get its token manager
+				PrismParser.ReInit(stream);
+				tokenManager = prismParser.token_source;
+				
 				// get stream of tokens from token manager and put in a linked list
-				first = t = PrismParserTokenManager.getNextToken();
+				first = t = tokenManager.getNextToken();
 				while (t != null && t.kind != PrismParserConstants.EOF) {
-					t.next = PrismParserTokenManager.getNextToken();
+					t.next = tokenManager.getNextToken();
 					t = t.next;
 				}
 				
@@ -290,12 +298,15 @@ public class PrismSyntaxHighlighter
 						output(t.image, PUNCTUATION, oType);
 					// next token
 					t = t.next;
-
+				}
 			}
-			
-		}finally {
-			// release prism parser
-			Prism.releasePrismParser();
+			finally {
+				// release prism parser
+				Prism.releasePrismParser();
+			}
+		}
+		catch (InterruptedException e) {
+			throw new PrismLangException("Concurrency error in parser");
 		}
 	}
 

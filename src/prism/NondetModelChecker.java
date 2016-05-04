@@ -1904,6 +1904,176 @@ public class NondetModelChecker extends NonProbModelChecker
 		return probs;
 	}
 
+	// compute (max) probabilities for multi-objective reachability
+
+	protected Object computeMultiReachProbs(NondetModel modelProduct, LTLModelChecker mcLtl, List<JDDNode> rewards, JDDNode st, List<JDDNode> targets,
+			List<JDDNode> combinations, List<Integer> combinationIDs, OpsAndBoundsList opsAndBounds, boolean hasconflictobjectives) throws PrismException
+	{
+		JDDNode yes, no, maybe, bottomec = null;
+		Object value;
+		int i, j, n;
+		// Local copy of setting
+		int engine = this.engine;
+
+		//JDDNode maybe_r = null; // maybe states for the reward formula
+		//JDDNode trr = null; // transition rewards
+		//int op1 = relOps.get(0).intValue(); // the operator of the first objective query
+
+		n = targets.size();
+
+		JDDNode labels[] = new JDDNode[n];
+		String labelNames[] = new String[n];
+		// Build temporary DDs for combined targets
+		for (i = 0; i < n; i++) {
+			JDD.Ref(targets.get(i));
+			JDDNode tmp = targets.get(i);
+			if (combinations != null) {
+				for (j = 0; j < combinations.size(); j++) {
+					if ((combinationIDs.get(j) & (1 << i)) > 0) {
+						JDD.Ref(combinations.get(j));
+						tmp = JDD.Or(tmp, combinations.get(j));
+					}
+				}
+			}
+			labels[i] = tmp;
+			labelNames[i] = "target" + i;
+		}
+
+		if (prism.getExportTarget()) {
+			try {
+				mainLog.print("\nExporting target states info to file \"" + prism.getExportTargetFilename() + "\"...");
+				PrismMTBDD.ExportLabels(labels, labelNames, "l", modelProduct.getAllDDRowVars(), modelProduct.getODD(), Prism.EXPORT_PLAIN,
+						prism.getExportTargetFilename());
+			} catch (FileNotFoundException e) {
+				mainLog.println("\nWarning: Could not export target to file \"" + prism.getExportTargetFilename() + "\"");
+			}
+		}
+
+		// yes - union of targets (just to compute no)
+		yes = JDD.Constant(0);
+		//n = targets.size();
+		for (i = 0; i < n; i++) {
+			JDD.Ref(targets.get(i));
+			yes = JDD.Or(yes, targets.get(i));
+		}
+		if (combinations != null)
+			for (i = 0; i < combinations.size(); i++) {
+				JDD.Ref(combinations.get(i));
+				yes = JDD.Or(yes, combinations.get(i));
+			}
+
+		if (opsAndBounds.rewardSize() == 0)
+			no = PrismMTBDD.Prob0A(modelProduct.getTrans01(), modelProduct.getReach(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+					modelProduct.getAllDDNondetVars(), modelProduct.getReach(), yes);
+		else {
+			no = JDD.Constant(0);
+			bottomec = PrismMTBDD.Prob0A(modelProduct.getTrans01(), modelProduct.getReach(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+					modelProduct.getAllDDNondetVars(), modelProduct.getReach(), yes);
+			List<JDDNode> becs = mcLtl.findBottomEndComponents(modelProduct, bottomec);
+			JDD.Deref(bottomec);
+			bottomec = JDD.Constant(0);
+			for (JDDNode ec : becs)
+				bottomec = JDD.Or(bottomec, ec);
+		}
+
+		/*if(op1>2) { // the first query is about reward
+			JDDNode no_r = PrismMTBDD.Prob0A(modelProduct.getTrans01(), modelProduct.getReach(), 
+					modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(), 
+					modelProduct.getAllDDNondetVars(), modelProduct.getReach(), targets.get(0));
+			JDD.Ref(no_r);
+			maybe_r = JDD.And(modelProduct.getReach(), JDD.Not(JDD.Or(targets.get(0), no_r)));
+			trr = modelProduct.getTransRewards();
+		}*/
+
+		// maybe
+		JDD.Ref(modelProduct.getReach());
+		JDD.Ref(yes);
+		JDD.Ref(no);
+		maybe = JDD.And(modelProduct.getReach(), JDD.Not(JDD.Or(yes, no)));
+
+		for (i = 0; i < rewards.size(); i++) {
+			JDDNode tmp = rewards.remove(i);
+			JDD.Ref(no);
+			tmp = JDD.Apply(JDD.TIMES, tmp, JDD.Not(no));
+			rewards.add(i, tmp);
+		}
+
+		// print out yes/no/maybe
+		mainLog.print("\nyes = " + JDD.GetNumMintermsString(yes, modelProduct.getAllDDRowVars().n()));
+		mainLog.print(", no = " + JDD.GetNumMintermsString(no, modelProduct.getAllDDRowVars().n()));
+		mainLog.print(", maybe = " + JDD.GetNumMintermsString(maybe, modelProduct.getAllDDRowVars().n()) + "\n");
+
+		// compute probabilities
+		mainLog.println("\nComputing remaining probabilities...");
+		// switch engine, if necessary
+		if (engine == Prism.HYBRID) {
+			mainLog.println("Switching engine since only sparse engine currently supports this computation...");
+			engine = Prism.SPARSE;
+		}
+		mainLog.println("Engine: " + Prism.getEngineString(engine));
+		
+		int method = prism.getMDPMultiSolnMethod();
+		
+		try {
+			if (engine != Prism.SPARSE)
+				throw new PrismException("Currently only sparse engine supports multi-objective properties");
+		
+			if (method == Prism.MDP_MULTI_LP) {
+				//LP currently does not support Pareto
+				if (opsAndBounds.numberOfNumerical() > 1) {
+					throw new PrismException("Linear programming method currently does not support generating of Pareto curves.");
+				}
+				
+				if (opsAndBounds.rewardSize() > 0) {
+					if (hasconflictobjectives) {
+						value = PrismSparse.NondetMultiReachReward1(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getSynchs(),
+								modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(),
+								targets, combinations, combinationIDs, opsAndBounds, maybe, st, rewards, bottomec);
+					} else {
+						value = PrismSparse.NondetMultiReachReward(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getSynchs(),
+								modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(),
+								targets, opsAndBounds, maybe, st, rewards, bottomec);
+					}
+				} else {
+					if (hasconflictobjectives) {
+						value = PrismSparse.NondetMultiReach1(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getSynchs(),
+								modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(),
+								targets, combinations, combinationIDs, opsAndBounds, maybe, st);
+					} else {
+						value = PrismSparse.NondetMultiReach(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getSynchs(),
+								modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(),
+								targets, opsAndBounds, maybe, st);
+					}
+				}
+			} else if (method == Prism.MDP_MULTI_GAUSSSEIDEL || method == Prism.MDP_MULTI_VALITER) {
+				double timePre = System.currentTimeMillis();
+				value = weightedMultiReachProbs(modelProduct, yes, maybe, st, labels, rewards, opsAndBounds);
+				double timePost = System.currentTimeMillis();
+				double time = ((double) (timePost - timePre)) / 1000.0;
+				mainLog.println("Multi-objective value iterations took " + time + " s.");
+			} else {
+				throw new PrismException("Don't know how to model-check using the method: "
+						+ method);
+			}
+		} catch (PrismException e) {
+			throw e;
+		} finally {
+			// derefs
+			if (opsAndBounds.rewardSize() > 0)
+				JDD.Deref(bottomec);
+			JDD.Deref(yes);
+			JDD.Deref(no);
+			JDD.Deref(maybe);
+			for (int k = 0; k < labels.length; k++)
+				JDD.Deref(labels[k]);
+			for (i = 0; i < rewards.size(); i++) {
+				JDD.Deref(rewards.get(i));
+			}
+		}
+		
+		return value;
+	}
+
 	// compute cumulative rewards
 
 	protected StateValues computeCumulRewards(JDDNode tr, JDDNode sr, JDDNode trr, int time, boolean min) throws PrismException
@@ -2141,6 +2311,552 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		return rewards;
 	}
+
+	/**
+	 * Check whether state set represented by dd is "weak absorbing",
+	 * i.e. whether set is closed under all successors.
+	 * Note: does not deref dd.
+	 */
+	private boolean checkWeakAbsorbing(JDDNode dd, NondetModel model)
+	{
+		boolean result;
+
+		JDD.Ref(model.getTrans01());
+		JDD.Ref(dd);
+		JDDNode tmp = JDD.And(model.getTrans01(), dd);
+		tmp = JDD.SwapVariables(tmp, model.getAllDDRowVars(), model.getAllDDColVars());
+		tmp = JDD.ThereExists(tmp, model.getAllDDNondetVars());
+		tmp = JDD.ThereExists(tmp, model.getAllDDColVars());
+		JDD.Ref(model.getReach());
+		tmp = JDD.And(model.getReach(), tmp);
+		JDD.Ref(dd);
+		tmp = JDD.And(tmp, JDD.Not(dd));
+		result = tmp.equals(JDD.ZERO);
+		JDD.Deref(tmp);
+
+		return result;
+	}
+
+	private int changeToInteger(List<Integer> ids)
+	{
+		int k = 0;
+		for (int i = 0; i < ids.size(); i++) {
+			int j = 1;
+			if (ids.get(i) > 0)
+				j = j << ids.get(i);
+			k += j;
+		}
+		return k;
+	}
+
+	protected Object weightedMultiReachProbs(NondetModel modelProduct, JDDNode yes_ones, JDDNode maybe, JDDNode st, JDDNode[] targets, List<JDDNode> rewards, OpsAndBoundsList opsAndBounds)
+			throws PrismException
+	{
+		int numberOfMaximizing = opsAndBounds.numberOfNumerical();
+
+		if (numberOfMaximizing > 2)
+			throw new PrismException("Number of maximizing objectives must be at most 3");
+
+		if (numberOfMaximizing >= 2 && opsAndBounds.probSize() + opsAndBounds.rewardSize() > numberOfMaximizing)
+				throw new PrismException("Number of maximizing objectives can be 2 or 3 only if there are no other (i.e. bounded) objectives present");
+			
+		if (numberOfMaximizing >= 2) {
+			return generateParetoCurve(modelProduct, yes_ones, maybe, st, targets, rewards, opsAndBounds);
+		} else
+			return targetDrivenMultiReachProbs(modelProduct, yes_ones, maybe, st, targets, rewards, opsAndBounds);
+	}
+	
+	protected TileList generateParetoCurve(NondetModel modelProduct, JDDNode yes_ones, JDDNode maybe, final JDDNode st, JDDNode[] targets,
+			List<JDDNode> rewards, OpsAndBoundsList opsAndBounds) throws PrismException
+	{
+		int numberOfPoints = 0;
+		int rewardStepBounds[] = new int[rewards.size()];
+		for (int i = 0; i < rewardStepBounds.length; i++)
+			rewardStepBounds[i] = opsAndBounds.getRewardStepBound(i);
+		
+		int probStepBounds[] = new int[targets.length];
+		for (int i = 0; i < probStepBounds.length; i++)
+			probStepBounds[i] = opsAndBounds.getProbStepBound(i);
+		
+		
+		double timer = System.currentTimeMillis();
+		boolean min = false;
+
+		//convert minimizing rewards to maximizing
+		for (int i = 0; i < opsAndBounds.rewardSize(); i++) {
+			if (opsAndBounds.getRewardOperator(i) == Operator.R_LE) {
+				JDDNode negated = JDD.Apply(JDD.TIMES, JDD.Constant(-1), rewards.get(i));
+				//JDD.Ref(negated);
+				rewards.set(i, negated);
+				//boundsRewards.set(i, -1 * boundsRewards.get(i));
+			}
+			
+			if (opsAndBounds.getRewardOperator(i) == Operator.R_MIN) {
+				JDDNode negated = JDD.Apply(JDD.TIMES, JDD.Constant(-1), rewards.get(i));
+				//JDD.Ref(negated);
+				rewards.set(i, negated);
+				//boundsRewards.set(i, -1 * boundsRewards.get(i));
+			}
+		}
+		
+		double tolerance = prism.getSettings().getDouble(PrismSettings.PRISM_PARETO_EPSILON);
+		int maxIters = prism.getSettings().getInteger(PrismSettings.PRISM_MULTI_MAX_POINTS);
+
+		NativeIntArray adversary = new NativeIntArray((int) modelProduct.getNumStates());
+		int dimProb = targets.length;
+		int dimReward = rewards.size();
+		Point targetPoint = new Point(dimProb + dimReward);
+		ArrayList<Point> computedPoints = new ArrayList<Point>();
+		ArrayList<Point> computedDirections = new ArrayList<Point>();
+		ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+
+		//create vectors and sparse matrices for the objectives
+		final DoubleVector[] probDoubleVectors = new DoubleVector[dimProb];
+		final NDSparseMatrix[] rewSparseMatrices = new NDSparseMatrix[dimReward];
+
+		JDD.Ref(modelProduct.getTrans());
+		JDD.Ref(modelProduct.getReach());
+
+		//create a sparse matrix for transitions
+		JDDNode a = JDD.Apply(JDD.TIMES, modelProduct.getTrans(), modelProduct.getReach());
+
+		if (!min) {
+			JDD.Ref(a);
+			JDDNode tmp = JDD.And(JDD.Equals(a, 1.0), JDD.Identity(modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars()));
+			a = JDD.ITE(tmp, JDD.Constant(0), a);
+		}
+
+		NDSparseMatrix trans_matrix = NDSparseMatrix.BuildNDSparseMatrix(a, modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+				modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars());
+
+		//create double vectors for probabilistic objectives
+		for (int i = 0; i < dimProb; i++) {
+			probDoubleVectors[i] = new DoubleVector(targets[i], modelProduct.getAllDDRowVars(), modelProduct.getODD());
+		}
+
+		//create sparse matrices for reward objectives
+		for (int i = 0; i < dimReward; i++) {
+			NDSparseMatrix rew_matrix = NDSparseMatrix.BuildSubNDSparseMatrix(a, modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+					modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), rewards.get(i));
+			rewSparseMatrices[i] = rew_matrix;
+		}
+
+		JDD.Deref(a);
+
+		for (int i = 0; i < dimProb; i++) {
+			double[] result;
+			
+			double[] weights = new double[dimProb + dimReward];
+			weights[i] = 1.0;
+			/*if (prism.getMDPMultiSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				//System.out.println("Doing GS");
+					result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+							modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, new DoubleVector[] {probDoubleVectors[i]}, new int[] {probStepBounds[i]}, null,
+							new double[] { 1.0 }, null);
+			} else {
+				//System.out.println("Not doing GS");
+				result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+						modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, new DoubleVector[] {probDoubleVectors[i]}, new int[] {probStepBounds[i]}, null,
+						new double[] { 1.0 }, null);
+			}*/
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+						trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			} else {
+				result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+					 	trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			}
+			
+			//The following is thrown because in this case the i-th dimension is
+			//zero and we might have problems when getting an separating hyperplane.
+			/*if (result[0] == 0)
+				throw new PrismException("The probabilistic objective number " + i + " is degenerate since the optimal value is also the least optimal value." );
+			*/
+			targetPoint = new Point(result);
+			pointsForInitialTile.add(targetPoint);
+		}
+
+		for (int i = 0; i < dimReward; i++) {
+			if (verbose) {
+				mainLog.println("Getting an upper bound on maximizing objective " + i);
+			}
+
+			double[] result;
+			double[] weights = new double[dimProb + dimReward];
+			weights[i] = 1.0;
+			/*System.out.println(prism.getMDPSolnMethod());
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				//System.out.println("Doing GS");
+					result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+							modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, null, null, new NDSparseMatrix[] { rewSparseMatrices[i] },
+							new double[] { 1.0 }, new int[] { rewardStepBounds[i] });
+			} else {
+				//System.out.println("Not doing GS");
+					result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+							modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, null, null, new NDSparseMatrix[] { rewSparseMatrices[i] },
+							new double[] { 1.0 }, new int[] { rewardStepBounds[i] });
+			}*/
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+						trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			} else {
+				result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+					 	trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			}
+			
+			numberOfPoints++;
+			targetPoint = new Point(result);
+			pointsForInitialTile.add(targetPoint);
+			
+			if (verbose) {
+				mainLog.println("Upper bound is " + Arrays.toString(result));
+			}
+		}
+		
+		if (verbose)
+			mainLog.println("Points for initial tile: " + pointsForInitialTile);
+		
+		Tile initialTile = new Tile(pointsForInitialTile);
+		TileList tileList = new TileList(initialTile, opsAndBounds, tolerance);
+		
+		Point direction = tileList.getCandidateHyperplane();
+		
+		if (verbose) {
+			mainLog.println("The initial direction is " + direction);
+		}
+		
+		boolean decided = false;
+		int iters = 0;
+		int output = 0;
+		while (iters < maxIters) {
+			iters++;
+
+			//create the weights array
+			double[] weights = new double[dimProb + dimReward];
+			for (int i = 0; i < dimProb + dimReward; i++) {
+				weights[i] = direction.getCoord(i);
+			}
+
+			double[] result;
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+						trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			} else {
+				result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+					 	trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			}
+			
+		/*	//Minimizing operators are negated, and for Pareto we need to maximize.
+			for (int i = 0; i < dimProb; i++) {
+				if (opsAndBounds.getOperator(i) == Operator.P_MIN) {
+					result[i] = -(1-result[i]);
+				}
+			} */
+			
+			numberOfPoints++;
+			
+			//collect the numbers obtained from methods executed above.
+			Point newPoint = new Point(result);
+
+			if (verbose) {
+				mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
+				mainLog.println("TileList:" + tileList);
+			}
+
+			computedPoints.add(newPoint);
+			computedDirections.add(direction);
+
+			tileList.addNewPoint(newPoint);
+			//mainLog.println("\nTiles after adding: " + tileList);
+			//compute new direction
+			direction = tileList.getCandidateHyperplane();
+
+			if (verbose) {
+				mainLog.println("New direction is " + direction);
+				//mainLog.println("TileList: " + tileList);
+				
+			}
+
+			if (direction == null) {
+				//no tile could be improved
+				decided = true;
+				break;
+			}
+		}
+
+		timer = System.currentTimeMillis() - timer;
+		mainLog.println("The value iteration(s) took " + timer / 1000.0 + " seconds altogether.");
+		mainLog.println("Number of weight vectors used: " + numberOfPoints);
+
+		if (!decided)
+			throw new PrismException("The computation did not finish in " + maxIters
+					+ " target point iterations, try increasing this number using the -multimaxpoints switch.");
+		else {
+			String paretoFile = prism.getSettings().getString(PrismSettings.PRISM_EXPORT_PARETO_FILENAME);
+			
+			//export to file if required
+			if (paretoFile != null && !paretoFile.equals("")) {
+				MultiObjUtils.exportPareto(tileList, paretoFile);
+				mainLog.println("Exported Pareto curve. To see it, run\n etc/scripts/prism-pareto.py " + paretoFile);
+			}
+			
+			mainLog.println("Computed " + tileList.getNumberOfDifferentPoints() + " points altogether:\n");
+			mainLog.println(tileList.getPoints().toString());			
+			
+			return tileList;
+		}	
+	}
+
+	protected double targetDrivenMultiReachProbs(NondetModel modelProduct, JDDNode yes_ones, JDDNode maybe, final JDDNode st, JDDNode[] targets,
+			List<JDDNode> rewards, OpsAndBoundsList opsAndBounds) throws PrismException
+	{
+		int numberOfPoints = 0;
+		int rewardStepBounds[] = new int[rewards.size()];
+		for (int i = 0; i < rewardStepBounds.length; i++)
+			rewardStepBounds[i] = opsAndBounds.getRewardStepBound(i);
+		
+		int probStepBounds[] = new int[targets.length];
+		for (int i = 0; i < probStepBounds.length; i++)
+			probStepBounds[i] = opsAndBounds.getProbStepBound(i);
+		
+		
+		double timer = System.currentTimeMillis();
+		boolean min = false;
+
+		//convert minimizing rewards to maximizing
+		for (int i = 0; i < opsAndBounds.rewardSize(); i++) {
+			if (opsAndBounds.getRewardOperator(i) == Operator.R_LE) {
+				JDDNode negated = JDD.Apply(JDD.TIMES, JDD.Constant(-1), rewards.get(i));
+				//JDD.Ref(negated);
+				rewards.set(i, negated);
+				//boundsRewards.set(i, -1 * boundsRewards.get(i));
+			}
+			
+			if (opsAndBounds.getRewardOperator(i) == Operator.R_MIN) {
+				JDDNode negated = JDD.Apply(JDD.TIMES, JDD.Constant(-1), rewards.get(i));
+				//JDD.Ref(negated);
+				rewards.set(i, negated);
+				//boundsRewards.set(i, -1 * boundsRewards.get(i));
+			}
+		}
+		
+		boolean maximizingProb = (opsAndBounds.probSize() > 0 && (opsAndBounds.getProbOperator(0) == Operator.P_MAX || opsAndBounds.getProbOperator(0) == Operator.P_MIN));
+		boolean maximizingReward = (opsAndBounds.rewardSize() > 0 && (opsAndBounds.getRewardOperator(0) == Operator.R_MAX || opsAndBounds.getRewardOperator(0) == Operator.R_MIN));
+		boolean maximizingNegated = (maximizingProb && opsAndBounds.getProbOperator(0) == Operator.P_MIN) || (maximizingReward && opsAndBounds.getRewardOperator(0) == Operator.R_MIN);
+
+		int maxIters = prism.getSettings().getInteger(PrismSettings.PRISM_MULTI_MAX_POINTS);
+
+		NativeIntArray adversary = new NativeIntArray((int) modelProduct.getNumStates());
+		int dimProb = targets.length;
+		int dimReward = rewards.size();
+		Point targetPoint = new Point(dimProb + dimReward);
+		ArrayList<Point> computedPoints = new ArrayList<Point>();
+		ArrayList<Point> computedDirections = new ArrayList<Point>();
+
+		ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+
+		//create vectors and sparse matrices for the objectives
+		final DoubleVector[] probDoubleVectors = new DoubleVector[dimProb];
+		final NDSparseMatrix[] rewSparseMatrices = new NDSparseMatrix[dimReward];
+
+		JDD.Ref(modelProduct.getTrans());
+		JDD.Ref(modelProduct.getReach());
+
+		//create a sparse matrix for transitions
+		JDDNode a = JDD.Apply(JDD.TIMES, modelProduct.getTrans(), modelProduct.getReach());
+
+		if (!min) {
+			JDD.Ref(a);
+			JDDNode tmp = JDD.And(JDD.Equals(a, 1.0), JDD.Identity(modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars()));
+			a = JDD.ITE(tmp, JDD.Constant(0), a);
+		}
+
+		NDSparseMatrix trans_matrix = NDSparseMatrix.BuildNDSparseMatrix(a, modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+				modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars());
+
+		//create double vectors for probabilistic objectives
+		for (int i = 0; i < dimProb; i++) {
+			probDoubleVectors[i] = new DoubleVector(targets[i], modelProduct.getAllDDRowVars(), modelProduct.getODD());
+		}
+
+		//create sparse matrices for reward objectives
+		for (int i = 0; i < dimReward; i++) {
+			NDSparseMatrix rew_matrix = NDSparseMatrix.BuildSubNDSparseMatrix(a, modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+					modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), rewards.get(i));
+			rewSparseMatrices[i] = rew_matrix;
+		}
+
+		JDD.Deref(a);
+
+		//initialize the target point
+		for (int i = 0; i < dimProb; i++) {
+			targetPoint.setCoord(i, opsAndBounds.getProbBound(i));
+		}
+		if (maximizingProb) {
+			targetPoint.setCoord(0, 1.0);
+		}
+
+		for (int i = 0; i < dimReward; i++) {
+			//multiply by -1 in case of minimizing, that converts it to maximizing.
+			double t = (opsAndBounds.getRewardOperator(i) == Operator.R_LE) ? -opsAndBounds.getRewardBound(i) : opsAndBounds.getRewardBound(i);
+			targetPoint.setCoord(i + dimProb, t);
+		}
+		if (maximizingReward) {
+			if (verbose) {
+				mainLog.println("Getting an upper bound on maximizing objective");
+			}
+
+			double[] result;
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				//System.out.println("Doing GS");
+					result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+							modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, null, null, new NDSparseMatrix[] { rewSparseMatrices[0] },
+							new double[] { 1.0 }, new int[] { rewardStepBounds[0] });
+			} else {
+				//System.out.println("Not doing GS");
+					result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(), modelProduct.getAllDDColVars(),
+							modelProduct.getAllDDNondetVars(), false, st, adversary, trans_matrix, null, null, new NDSparseMatrix[] { rewSparseMatrices[0] },
+							new double[] { 1.0 }, new int[] { rewardStepBounds[0] });
+			}
+			numberOfPoints++;
+				
+			targetPoint.setCoord(dimProb, result[0]);
+
+			if (verbose) {
+				mainLog.println("Upper bound is " + result[0]);
+			}
+		}
+
+		Point direction = MultiObjUtils.getWeights(targetPoint, computedPoints);
+		
+		if (verbose) {
+			mainLog.println("The initial target point is " + targetPoint);
+			mainLog.println("The initial direction is " + direction);
+		}
+
+		boolean decided = false;
+		boolean isAchievable = false;
+		int iters = 0;
+		int output = 0;
+		while (iters < maxIters) {
+			iters++;
+
+			//create the weights array
+			double[] weights = new double[dimProb + dimReward];
+			for (int i = 0; i < dimProb + dimReward; i++) {
+				weights[i] = direction.getCoord(i);
+			}
+
+			double[] result;
+			if (prism.getMDPSolnMethod() == Prism.MDP_MULTI_GAUSSSEIDEL) {
+				result = PrismSparse.NondetMultiObjGS(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+						trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			} else {
+				result = PrismSparse.NondetMultiObj(modelProduct.getODD(), modelProduct.getAllDDRowVars(),
+						modelProduct.getAllDDColVars(), modelProduct.getAllDDNondetVars(), false, st, adversary,
+					 	trans_matrix, probDoubleVectors, probStepBounds, rewSparseMatrices, weights, rewardStepBounds);
+			}
+			numberOfPoints++;
+			
+			//collect the numbers obtained from methods executed above.
+			Point newPoint = new Point(result);
+
+			if (verbose) {
+				mainLog.println("New point is " + newPoint + ".");
+			}
+
+			computedPoints.add(newPoint);
+			computedDirections.add(direction);
+
+			
+			//if (prism.getExportMultiGraphs())
+			//	MultiObjUtils.printGraphFileDebug(targetPoint, computedPoints, computedDirections, prism.getExportMultiGraphsDir(), output++);
+
+			//check if the new point together with the direction shows the point is unreachable
+			double dNew = 0.0;
+			for (int i = 0; i < dimProb + dimReward; i++) {
+				dNew += newPoint.getCoord(i) * direction.getCoord(i);
+			}
+
+			double dTarget = 0.0;
+			for (int i = 0; i < dimProb + dimReward; i++) {
+				dTarget += targetPoint.getCoord(i) * direction.getCoord(i);
+			}
+
+			if (dTarget > dNew) {
+				if (maximizingProb || maximizingReward) {
+					int maximizingCoord = (maximizingProb) ? 0 : dimProb;
+					double rest = dNew - (dTarget - direction.getCoord(maximizingCoord) * targetPoint.getCoord(maximizingCoord));
+					if ((!maximizingNegated && rest < 0) || (maximizingNegated && rest > 0)) {
+						//target can't be lowered
+						decided = true;
+						targetPoint.setCoord(maximizingCoord, Double.NaN);
+						if (verbose)
+							mainLog.println("Decided, target is " + targetPoint);
+						break;
+					} else {
+						double lowered = rest / direction.getCoord(maximizingCoord);
+						targetPoint.setCoord(maximizingCoord, lowered);
+						//HACK
+						if (lowered == Double.NEGATIVE_INFINITY) {
+							targetPoint.setCoord(maximizingCoord, Double.NaN);
+							mainLog.println("\nThe constraints are not achievable!\n");
+							decided = true;
+							isAchievable = false;
+							break;
+						}
+						if (verbose)
+							mainLog.println("Target lowered to " + targetPoint);
+
+						//if (prism.getExportMultiGraphs())
+						//	MultiObjUtils.printGraphFileDebug(targetPoint, computedPoints, computedDirections, prism.getExportMultiGraphsDir(), output++);
+					}
+				} else {
+					decided = true;
+					isAchievable = false;
+					break;
+				}
+			}
+
+			//compute new direction
+			direction = MultiObjUtils.getWeights(targetPoint, computedPoints);
+
+			if (verbose) {
+				mainLog.println("New direction is " + direction);
+			}
+
+			if (direction == null || computedDirections.contains(direction)) //The second disjunct is for convergence
+			{
+				//there is no hyperplane strictly separating the target from computed points
+				//hence we can conclude that the point is reachable
+				decided = true;
+				isAchievable = true;
+				break;
+			}
+		}
+
+		timer = System.currentTimeMillis() - timer;
+		mainLog.println("The value iteration(s) took " + timer / 1000.0 + " seconds altogether.");
+		mainLog.println("Number of weight vectors used: " + numberOfPoints);
+
+		if (!decided)
+			throw new PrismException("The computation did not finish in " + maxIters
+					+ " target point iterations, try increasing this number using the -multimaxpoints switch.");
+		if (maximizingProb || maximizingReward) {
+			int maximizingCoord = (maximizingProb) ? 0 : dimProb;
+			return (maximizingNegated) ? -targetPoint.getCoord(maximizingCoord) : targetPoint.getCoord(maximizingCoord);
+		} else {
+			return (isAchievable) ? 1.0 : 0.0;
+		}
+	}
+	
 }
 
 // ------------------------------------------------------------------------------

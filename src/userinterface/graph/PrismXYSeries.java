@@ -31,7 +31,6 @@ import java.util.*;
 import org.jfree.data.xy.*;
 import org.jfree.data.general.*;
 
-@SuppressWarnings("serial")
 public class PrismXYSeries extends XYSeries
 {
 	/** Do not allow negative and zero values on the x axis. */
@@ -171,6 +170,7 @@ public class PrismXYSeries extends XYSeries
 	public XYDataItem addOrUpdate(Number x, Number y) {
 		
 		XYDataItem item = new XYDataItem(x,y);
+		XYDataItem result = null;
 		
 		/** If this is a valid update. */
 		if (checkValidity(item))
@@ -181,13 +181,13 @@ public class PrismXYSeries extends XYSeries
 			/* If in discarded items, then remove and return this. */ 
 			if (indexD >= 0)
 			{
-				discardedItems.remove(indexD);
+				result = discardedItems.remove(indexD);
 			}
 			
 			/* If in main items, then remove and return this. (Should not be both in discarded and main items) */ 
 			if (indexS >= 0)
 			{
-				super.remove(indexS);
+				result = super.remove(indexS);
 			}
 			
 			this.add(item, true);
@@ -238,7 +238,6 @@ public class PrismXYSeries extends XYSeries
 		}			
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void updateByIndex(int index, Number y) {
 		XYDataItem existing = getDataItem(index);

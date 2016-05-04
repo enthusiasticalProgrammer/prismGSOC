@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import explicit.rewards.MCRewards;
+import prism.PrismException;
 import explicit.rewards.MDPRewards;
 
 /**
@@ -39,6 +39,11 @@ import explicit.rewards.MDPRewards;
  */
 public interface MDP extends NondetModel
 {
+	/**
+	 * Get the number of transitions from choice {@code i} of state {@code s}.
+	 */
+	public int getNumTransitions(int s, int i);
+
 	/**
 	 * Get an iterator over the transitions from choice {@code i} of state {@code s}.
 	 */
@@ -236,10 +241,22 @@ public interface MDP extends NondetModel
 	public double mvMultRewGSMinMax(double vect[], MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[]);
 
 	/**
-	 * Do a single row of Jacobi-style matrix-vector multiplication and sum of rewards followed by min/max.
-	 * i.e. return min/max_k { rew(s) + rew_k(s) + (sum_{j!=s} P_k(s,j)*vect[j]) / 1-P_k(s,s) }
+	 * Do a single row of matrix-vector multiplication and sum of action reward followed by min/max.
+	 * i.e. return min/max_k { rew(s) + sum_j P_k(s,j)*vect[j] }
 	 * Optionally, store optimal (memoryless) strategy info. 
-	 * @param s State (row) index
+	 * @param s Row index
+	 * @param vect Vector to multiply by
+	 * @param mdpRewards The rewards
+	 * @param min Min or max for (true=min, false=max)
+	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
+	 */
+	public double mvMultRewMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[]);
+
+	/**
+	 * Do a single row of Jacobi-style matrix-vector multiplication and sum of action reward followed by min/max.
+	 * i.e. return min/max_k { (sum_{j!=s} P_k(s,j)*vect[j]) / 1-P_k(s,s) }
+	 * Optionally, store optimal (memoryless) strategy info. 
+	 * @param s Row index
 	 * @param vect Vector to multiply by
 	 * @param mdpRewards The rewards
 	 * @param min Min or max for (true=min, false=max)
@@ -271,4 +288,9 @@ public interface MDP extends NondetModel
 	 * @param dest Vector to write result to.
 	 */
 	public void mvMultRight(int[] states, int[] strat, double[] source, double[] dest);
+
+	/**
+	 * Export to a dot file, highlighting states in 'mark' and choices for a (memoryless) strategy.
+	 */
+	public void exportToDotFileWithStrat(String filename, BitSet mark, int strat[]) throws PrismException;
 }

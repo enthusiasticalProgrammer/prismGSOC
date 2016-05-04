@@ -179,7 +179,6 @@ import org.jfree.ui.TextAnchor;
 // TODO: support for margins that get inherited from ValueAxis
 // TODO: add auto tick unit selection
 
-@SuppressWarnings("serial")
 public class PrismLogarithmicAxis extends ValueAxis {
 
     /** The logarithm base. */

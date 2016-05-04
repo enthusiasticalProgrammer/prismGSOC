@@ -70,6 +70,23 @@ public class TileList
 	}
 
 	/**
+	 * Stores a TileList so that it can be retrieved for visualisation in multi-objective
+	 * verification
+	 * @param formula Formula to which the tile list corresponds
+	 * @param formulaX Formula that should be used as an X axis label
+	 * @param formulaY Formula that should be used as an Y axis label
+	 * @param tl
+	 */
+	public static void addStoredTileList(Expression formula, Expression formulaX, Expression formulaY, TileList tl)
+	{
+		storedFormulas.add(formula);
+		storedFormulasX.add(formulaX);
+		storedFormulasY.add(formulaY);
+		storedTileLists.add(tl);
+
+	}
+	
+	/**
 	 * Formulas for X and Y axes (or multi-obj formulas) of the corresponding
 	 * elements of storedTileLists.
 	 */

@@ -35,8 +35,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import common.IterableStateSet;
-
 import prism.ModelType;
 import prism.PrismException;
 import prism.PrismLog;
@@ -110,57 +108,75 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	@Override
-	public void exportTransitionsToDotFile(int i, PrismLog out)
+	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
-		int j, numChoices;
+		int i, j, numChoices;
 		String nij;
 		Object action;
-		numChoices = getNumChoices(i);
-		for (j = 0; j < numChoices; j++) {
-			action = getAction(i, j);
-			nij = "n" + i + "_" + j;
-			out.print(i + " -> " + nij + " [ arrowhead=none,label=\"" + j);
-			if (action != null)
-				out.print(":" + action);
-			out.print("\" ];\n");
-			out.print(nij + " [ shape=point,width=0.1,height=0.1,label=\"\" ];\n");
-			Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i, j);
-			while (iter.hasNext()) {
-				Map.Entry<Integer, Double> e = iter.next();
-				out.print(nij + " -> " + e.getKey() + " [ label=\"" + e.getValue() + "\" ];\n");
+		try {
+			FileWriter out = new FileWriter(filename);
+			out.write("digraph " + getModelType() + " {\nsize=\"8,5\"\nnode [shape=box];\n");
+			for (i = 0; i < numStates; i++) {
+				if (mark != null && mark.get(i))
+					out.write(i + " [style=filled  fillcolor=\"#cccccc\"]\n");
+				numChoices = getNumChoices(i);
+				for (j = 0; j < numChoices; j++) {
+					action = getAction(i, j);
+					nij = "n" + i + "_" + j;
+					out.write(i + " -> " + nij + " [ arrowhead=none,label=\"" + j);
+					if (action != null)
+						out.write(":" + action);
+					out.write("\" ];\n");
+					out.write(nij + " [ shape=point,width=0.1,height=0.1,label=\"\" ];\n");
+					Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i, j);
+					while (iter.hasNext()) {
+						Map.Entry<Integer, Double> e = iter.next();
+						out.write(nij + " -> " + e.getKey() + " [ label=\"" + e.getValue() + "\" ];\n");
+					}
+				}
 			}
+			out.write("}\n");
+			out.close();
+		} catch (IOException e) {
+			throw new PrismException("Could not write " + getModelType() + " to file \"" + filename + "\"" + e);
 		}
 	}
 
 	@Override
-	public void exportToDotFileWithStrat(PrismLog out, BitSet mark, int strat[])
+	public void exportToDotFileWithStrat(String filename, BitSet mark, int strat[]) throws PrismException
 	{
 		int i, j, numChoices;
 		String nij;
 		Object action;
 		String style;
-		out.print("digraph " + getModelType() + " {\nsize=\"8,5\"\nnode [shape=box];\n");
-		for (i = 0; i < numStates; i++) {
-			if (mark != null && mark.get(i))
-				out.print(i + " [style=filled  fillcolor=\"#cccccc\"]\n");
-			numChoices = getNumChoices(i);
-			for (j = 0; j < numChoices; j++) {
-				style = (strat[i] == j) ? ",color=\"#ff0000\",fontcolor=\"#ff0000\"" : "";
-				action = getAction(i, j);
-				nij = "n" + i + "_" + j;
-				out.print(i + " -> " + nij + " [ arrowhead=none,label=\"" + j);
-				if (action != null)
-					out.print(":" + action);
-				out.print("\"" + style + " ];\n");
-				out.print(nij + " [ shape=point,height=0.1,label=\"\"" + style + " ];\n");
-				Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i, j);
-				while (iter.hasNext()) {
-					Map.Entry<Integer, Double> e = iter.next();
-					out.print(nij + " -> " + e.getKey() + " [ label=\"" + e.getValue() + "\"" + style + " ];\n");
+		try {
+			FileWriter out = new FileWriter(filename);
+			out.write("digraph " + getModelType() + " {\nsize=\"8,5\"\nnode [shape=box];\n");
+			for (i = 0; i < numStates; i++) {
+				if (mark != null && mark.get(i))
+					out.write(i + " [style=filled  fillcolor=\"#cccccc\"]\n");
+				numChoices = getNumChoices(i);
+				for (j = 0; j < numChoices; j++) {
+					style = (strat[i] == j) ? ",color=\"#ff0000\",fontcolor=\"#ff0000\"" : "";
+					action = getAction(i, j);
+					nij = "n" + i + "_" + j;
+					out.write(i + " -> " + nij + " [ arrowhead=none,label=\"" + j);
+					if (action != null)
+						out.write(":" + action);
+					out.write("\"" + style + " ];\n");
+					out.write(nij + " [ shape=point,height=0.1,label=\"\"" + style + " ];\n");
+					Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i, j);
+					while (iter.hasNext()) {
+						Map.Entry<Integer, Double> e = iter.next();
+						out.write(nij + " -> " + e.getKey() + " [ label=\"" + e.getValue() + "\"" + style + " ];\n");
+					}
 				}
 			}
+			out.write("}\n");
+			out.close();
+		} catch (IOException e) {
+			throw new PrismException("Could not write " + getModelType() + " to file \"" + filename + "\"" + e);
 		}
-		out.print("}\n");
 	}
 
 	@Override
@@ -235,20 +251,47 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	@Override
 	public void mvMultMinMax(double vect[], boolean min, double result[], BitSet subset, boolean complement, int strat[])
 	{
-		for (int s : new IterableStateSet(subset, numStates, complement)) {
-			result[s] = mvMultMinMaxSingle(s, vect, min, strat);
+		int s;
+		// Loop depends on subset/complement arguments
+		if (subset == null) {
+			for (s = 0; s < numStates; s++)
+				result[s] = mvMultMinMaxSingle(s, vect, min, strat);
+		} else if (complement) {
+			for (s = subset.nextClearBit(0); s < numStates; s = subset.nextClearBit(s + 1))
+				result[s] = mvMultMinMaxSingle(s, vect, min, strat);
+		} else {
+			for (s = subset.nextSetBit(0); s >= 0; s = subset.nextSetBit(s + 1))
+				result[s] = mvMultMinMaxSingle(s, vect, min, strat);
 		}
 	}
 
 	@Override
 	public double mvMultGSMinMax(double vect[], boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
 	{
+		int s;
 		double d, diff, maxDiff = 0.0;
-		for (int s : new IterableStateSet(subset, numStates, complement)) {
-			d = mvMultJacMinMaxSingle(s, vect, min, strat);
-			diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-			maxDiff = diff > maxDiff ? diff : maxDiff;
-			vect[s] = d;
+		// Loop depends on subset/complement arguments
+		if (subset == null) {
+			for (s = 0; s < numStates; s++) {
+				d = mvMultJacMinMaxSingle(s, vect, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
+		} else if (complement) {
+			for (s = subset.nextClearBit(0); s < numStates; s = subset.nextClearBit(s + 1)) {
+				d = mvMultJacMinMaxSingle(s, vect, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
+		} else {
+			for (s = subset.nextSetBit(0); s >= 0; s = subset.nextSetBit(s + 1)) {
+				d = mvMultJacMinMaxSingle(s, vect, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
 		}
 		// Use this code instead for backwards Gauss-Seidel
 		/*for (s = numStates - 1; s >= 0; s--) {
@@ -265,20 +308,47 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	@Override
 	public void mvMultRewMinMax(double vect[], MDPRewards mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[])
 	{
-		for (int s : new IterableStateSet(subset, numStates, complement)) {
-			result[s] = mvMultRewMinMaxSingle(s, vect, mdpRewards, min, strat);
+		int s;
+		// Loop depends on subset/complement arguments
+		if (subset == null) {
+			for (s = 0; s < numStates; s++)
+				result[s] = mvMultRewMinMaxSingle(s, vect, mdpRewards, min, strat);
+		} else if (complement) {
+			for (s = subset.nextClearBit(0); s < numStates; s = subset.nextClearBit(s + 1))
+				result[s] = mvMultRewMinMaxSingle(s, vect, mdpRewards, min, strat);
+		} else {
+			for (s = subset.nextSetBit(0); s >= 0; s = subset.nextSetBit(s + 1))
+				result[s] = mvMultRewMinMaxSingle(s, vect, mdpRewards, min, strat);
 		}
 	}
 
 	@Override
 	public double mvMultRewGSMinMax(double vect[], MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
 	{
+		int s;
 		double d, diff, maxDiff = 0.0;
-		for (int s : new IterableStateSet(subset, numStates, complement)) {
-			d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min, strat);
-			diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-			maxDiff = diff > maxDiff ? diff : maxDiff;
-			vect[s] = d;
+		// Loop depends on subset/complement arguments
+		if (subset == null) {
+			for (s = 0; s < numStates; s++) {
+				d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
+		} else if (complement) {
+			for (s = subset.nextClearBit(0); s < numStates; s = subset.nextClearBit(s + 1)) {
+				d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
+		} else {
+			for (s = subset.nextSetBit(0); s >= 0; s = subset.nextSetBit(s + 1)) {
+				d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min, strat);
+				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
+				maxDiff = diff > maxDiff ? diff : maxDiff;
+				vect[s] = d;
+			}
 		}
 		// Use this code instead for backwards Gauss-Seidel
 		/*for (s = numStates - 1; s >= 0; s--) {

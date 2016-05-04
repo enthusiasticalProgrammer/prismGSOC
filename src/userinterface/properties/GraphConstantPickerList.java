@@ -31,7 +31,6 @@ import javax.swing.*;
 import java.util.*;
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class GraphConstantPickerList extends JPanel implements Scrollable
 {
     

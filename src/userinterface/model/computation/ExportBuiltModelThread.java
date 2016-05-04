@@ -31,6 +31,7 @@ import java.io.*;
 import javax.swing.*;
 
 import parser.ast.PropertiesFile;
+import prism.*;
 import userinterface.*;
 import userinterface.model.*;
 import userinterface.util.*;
@@ -111,8 +112,8 @@ public class ExportBuiltModelThread extends GUIComputationThread
 					}
 				});
 				return;
-			} catch (Exception e2) {
-				error(e2);
+			} catch (PrismException e2) {
+				error(e2.getMessage());
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
 					public void run()

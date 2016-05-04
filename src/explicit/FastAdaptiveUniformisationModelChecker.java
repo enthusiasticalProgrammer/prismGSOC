@@ -38,9 +38,9 @@ import parser.ast.PropertiesFile;
 import parser.ast.RewardStruct;
 import prism.PrismComponent;
 import prism.PrismException;
-import prism.PrismNotSupportedException;
 import prism.Result;
-import simulator.ModulesFileModelGenerator;
+import simulator.PrismModelExplorer;
+import simulator.SimulatorEngine;
 
 /**
  * CTMC model checker based on fast adaptive uniformisation.
@@ -51,6 +51,8 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	private ModulesFile modulesFile;
 	// Properties file
 	private PropertiesFile propertiesFile;
+	// Simulator engine
+	private SimulatorEngine engine;
 	// Constants from model
 	private Values constantValues;
 	// Labels from the model
@@ -61,11 +63,12 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	/**
 	 * Constructor.
 	 */
-	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismException
+	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile, SimulatorEngine engine) throws PrismException
 	{
 		super(parent);
 		this.modulesFile = modulesFile;
 		this.propertiesFile = propertiesFile;
+		this.engine = engine;
 
 		// Get combined constant values from model/properties
 		constantValues = new Values();
@@ -119,7 +122,7 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		else if (expr instanceof ExpressionReward)
 			res = checkExpressionReward((ExpressionReward) expr);
 		else
-			throw new PrismNotSupportedException("Fast adaptive uniformisation not yet supported for this operator");
+			throw new PrismException("Fast adaptive uniformisation not yet supported for this operator");
 
 		return res;
 	}
@@ -131,15 +134,15 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	{
 		// Check whether P=? (only case allowed)
 		if (expr.getProb() != null) {
-			throw new PrismNotSupportedException("Fast adaptive uniformisation model checking currently only supports P=? properties");
+			throw new PrismException("Fast adaptive uniformisation model checking currently only supports P=? properties");
 		}
 
 		if (!(expr.getExpression() instanceof ExpressionTemporal)) {
-			throw new PrismNotSupportedException("Fast adaptive uniformisation model checking currently only supports simple path operators");
+			throw new PrismException("Fast adaptive uniformisation model checking currently only supports simple path operators");
 		}
 		ExpressionTemporal exprTemp = (ExpressionTemporal) expr.getExpression();
 		if (!exprTemp.isSimplePathFormula()) {
-			throw new PrismNotSupportedException("Fast adaptive uniformisation window model checking currently only supports simple until operators");
+			throw new PrismException("Fast adaptive uniformisation window model checking currently only supports simple until operators");
 		}
 
 		double timeLower = 0.0;
@@ -147,17 +150,17 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 			timeLower = exprTemp.getLowerBound().evaluateDouble(constantValues);
 		}
 		if (exprTemp.getUpperBound() == null) {
-			throw new PrismNotSupportedException("Fast adaptive uniformisation window model checking currently requires an upper time bound");
+			throw new PrismException("Fast adaptive uniformisation window model checking currently requires an upper time bound");
 		}
 		double timeUpper = exprTemp.getUpperBound().evaluateDouble(constantValues);
 
 		if (!exprTemp.hasBounds()) {
-			throw new PrismNotSupportedException("Fast adaptive uniformisation window model checking currently only supports timed properties");
+			throw new PrismException("Fast adaptive uniformisation window model checking currently only supports timed properties");
 		}
 
 		mainLog.println("Starting transient probability computation using fast adaptive uniformisation...");
-		ModulesFileModelGenerator prismModelGen = new ModulesFileModelGenerator(modulesFile, this);
-		FastAdaptiveUniformisation fau = new FastAdaptiveUniformisation(this, prismModelGen);
+		PrismModelExplorer modelExplorer = new PrismModelExplorer(engine, modulesFile);
+		FastAdaptiveUniformisation fau = new FastAdaptiveUniformisation(this, modelExplorer);
 		fau.setConstantValues(constantValues);
 
 		Expression op1 = exprTemp.getOperand1();
@@ -184,12 +187,11 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		case ExpressionTemporal.P_W:
 		case ExpressionTemporal.P_R:
 		default:
-			throw new PrismNotSupportedException("operator currently not supported for fast adaptive uniformisation");
+			throw new PrismException("operator currently not supported for fast adaptive uniformisation");
 		}
+		
 		fau.setSink(sink);
 		fau.computeTransientProbsAdaptive(timeLower);
-		fau.clearSinkStates();
-
 		switch (operator) {
 		case ExpressionTemporal.P_U:
 		case ExpressionTemporal.P_F:
@@ -203,7 +205,7 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		case ExpressionTemporal.P_W:
 		case ExpressionTemporal.P_R:
 		default:
-			throw new PrismNotSupportedException("operator currently not supported for fast adaptive uniformisation");
+			throw new PrismException("operator currently not supported for fast adaptive uniformisation");
 		}
 		Values varValues = new Values();
 		varValues.addValue("deadlock", "true");
@@ -218,14 +220,36 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		return new Result(new Double(fau.getValue()));
 	}
 
+	private RewardStruct findRewardStruct(ExpressionReward expr) throws PrismException
+	{
+		RewardStruct rewStruct = null;		
+		Object rs = expr.getRewardStructIndex();
+		if (modulesFile == null)
+			throw new PrismException("No model file to obtain reward structures");
+		if (modulesFile.getNumRewardStructs() == 0)
+			throw new PrismException("Model has no rewards specified");
+		if (rs == null) {
+			rewStruct = modulesFile.getRewardStruct(0);
+		} else if (rs instanceof Expression) {
+			int i = ((Expression) rs).evaluateInt(constantValues);
+			rs = new Integer(i); // for better error reporting below
+			rewStruct = modulesFile.getRewardStruct(i - 1);
+		} else if (rs instanceof String) {
+			rewStruct = modulesFile.getRewardStructByName((String) rs);
+		}
+		if (rewStruct == null)
+			throw new PrismException("Invalid reward structure index \"" + rs + "\"");
+		return rewStruct;
+	}
+
 	/**
 	 * Model check an R operator.
 	 */
 	private Result checkExpressionReward(ExpressionReward expr) throws PrismException
 	{
 		mainLog.println("Starting transient probability computation using fast adaptive uniformisation...");
-		ModulesFileModelGenerator prismModelGen = new ModulesFileModelGenerator(modulesFile, this);
-		FastAdaptiveUniformisation fau = new FastAdaptiveUniformisation(this, prismModelGen);
+		PrismModelExplorer modelExplorer = new PrismModelExplorer(engine, modulesFile);
+		FastAdaptiveUniformisation fau = new FastAdaptiveUniformisation(this, modelExplorer);
 		ExpressionTemporal temporal = (ExpressionTemporal) expr.getExpression();
 		switch (temporal.getOperator()) {
 		case ExpressionTemporal.R_I:
@@ -235,10 +259,10 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 			fau.setAnalysisType(FastAdaptiveUniformisation.AnalysisType.REW_CUMUL);
 			break;
 		default:
-			throw new PrismNotSupportedException("Currently only instantaneous or cumulative rewards are allowed.");
+			throw new PrismException("Currently only instantaneous or cumulative rewards are allowed.");
 		}
 		double time = temporal.getUpperBound().evaluateDouble(constantValues);
-		RewardStruct rewStruct = expr.getRewardStructByIndexObject(modulesFile, constantValues);
+		RewardStruct rewStruct = findRewardStruct(expr);
 		fau.setRewardStruct(rewStruct);
 		fau.setConstantValues(constantValues);
 		fau.computeTransientProbsAdaptive(time);

@@ -51,10 +51,10 @@ import userinterface.util.*;
  * 
  * All actions can be and should be used as menu items.
  */
-@SuppressWarnings("serial")
 public class GUIClipboard extends GUIPlugin
 {
 	/* the current GUIPlugin undoManager */
+	private GUIPrism prism;
 	private GUIPlugin plugin;
 	private GUIUndoManager undoManager;
     private JMenu editMenu;
@@ -65,6 +65,7 @@ public class GUIClipboard extends GUIPlugin
     public GUIClipboard(GUIPrism pr)
     {
         super(pr, false);
+        this.prism = pr;
         initComponents();
         doUndoManagerEnables();
         doClipboardEnables();
@@ -381,5 +382,13 @@ public class GUIClipboard extends GUIPlugin
 
 	public Action getSelectAllAction() {
 		return actionSelectAll;
-	}  
+	}
+
+	
+	
+	
+	
+	
+    
+    
 }

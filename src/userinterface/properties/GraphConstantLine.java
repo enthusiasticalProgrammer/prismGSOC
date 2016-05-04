@@ -33,7 +33,6 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Locale;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -43,7 +42,6 @@ import javax.swing.UIManager;
 import parser.type.*;
 import prism.DefinedConstant;
 
-@SuppressWarnings("serial")
 public class GraphConstantLine extends javax.swing.JPanel
 {
     public static final String SINGLE_DEFAULT = "0";
@@ -53,6 +51,7 @@ public class GraphConstantLine extends javax.swing.JPanel
     
     private DefinedConstant dc;
     private GUIGraphPicker parent;
+    private Type type;
     
     /** Creates new form ConstantLine */
     public GraphConstantLine(DefinedConstant dc, GUIGraphPicker parent)
@@ -89,7 +88,7 @@ public class GraphConstantLine extends javax.swing.JPanel
                         setIcon(null);
                         String str;
                         Double d = (Double) obj;
-                        NumberFormat n = DecimalFormat.getInstance(Locale.UK);
+                        NumberFormat n = new DecimalFormat();
                         n.setMaximumFractionDigits(6);
                         str = n.format(d.doubleValue());
                         setText((obj == null) ? "" : str);
@@ -133,6 +132,7 @@ public class GraphConstantLine extends javax.swing.JPanel
     
     public void setConstType(Type type)
     {
+    	this.type = type;
     	if (type instanceof TypeDouble) {
     		typeLabel.setText("double");
     	} else if (type instanceof TypeInt) {
@@ -193,7 +193,9 @@ public class GraphConstantLine extends javax.swing.JPanel
     {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        choiceButtonGroup = new javax.swing.ButtonGroup();
         boolSingleValueCombo = new javax.swing.JComboBox();
+        sizerPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -273,10 +275,12 @@ public class GraphConstantLine extends javax.swing.JPanel
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox boolSingleValueCombo;
+    private javax.swing.ButtonGroup choiceButtonGroup;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel nameLabel;
+    private javax.swing.JPanel sizerPanel;
     private javax.swing.JLabel typeLabel;
     private javax.swing.JComboBox valuePicker;
     // End of variables declaration//GEN-END:variables

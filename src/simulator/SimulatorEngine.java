@@ -28,7 +28,9 @@ package simulator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import parser.State;
 import parser.Values;
@@ -43,16 +45,19 @@ import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
 import parser.type.Type;
 import prism.ModelType;
+import prism.Prism;
 import prism.PrismComponent;
 import prism.PrismException;
 import prism.PrismFileLog;
 import prism.PrismLangException;
 import prism.PrismLog;
+import prism.PrismSettings;
 import prism.PrismUtils;
 import prism.ResultsCollection;
 import prism.UndefinedConstants;
 import simulator.method.SimulationMethod;
 import simulator.sampler.Sampler;
+import strat.InvalidStrategyStateException;
 import strat.Strategy;
 import userinterface.graph.Graph;
 
@@ -139,6 +144,13 @@ public class SimulatorEngine extends PrismComponent
 	// Random number generator
 	private RandomNumberGenerator rng;
 
+	// strategy information
+	private Strategy strategy;
+	private Map<State, Integer> stateIds;
+	
+	// TODO: remove this (not in trunk any more)
+	private Prism prism;
+
 	// ------------------------------------------------------------------------------
 	// Basic setup
 	// ------------------------------------------------------------------------------
@@ -146,9 +158,10 @@ public class SimulatorEngine extends PrismComponent
 	/**
 	 * Constructor for the simulator engine.
 	 */
-	public SimulatorEngine(PrismComponent parent)
+	public SimulatorEngine(PrismComponent parent, Prism prism)
 	{
 		super(parent);
+		this.prism = prism;
 		modulesFile = null;
 		modelType = null;
 		varList = null;
@@ -167,6 +180,7 @@ public class SimulatorEngine extends PrismComponent
 		tmpTransitionRewards = null;
 		updater = null;
 		rng = new RandomNumberGenerator();
+		strategy = null;
 	}
 
 	// ------------------------------------------------------------------------------
@@ -236,8 +250,23 @@ public class SimulatorEngine extends PrismComponent
 			}
 		}
 		updater.calculateStateRewards(currentState, tmpStateRewards);
+
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
+		strategy = prism.getStrategy();
+		if (strategy != null && path instanceof PathFull) {
+			// initialising the strategy
+			try {
+				if (stateIds == null || stateIds.isEmpty())
+					this.setStrategy(strategy);
+				strategy.init(stateIds.get(currentState));
+			} catch (InvalidStrategyStateException error) {
+				// TODO Auto-generated catch block
+				error.printStackTrace();
+			}
+			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
+		}
+
 		// Reset transition list
 		transitionListBuilt = false;
 		transitionListState = null;
@@ -324,7 +353,7 @@ public class SimulatorEngine extends PrismComponent
 			r = transitions.getProbabilitySum();
 			// Pick a random number to determine choice/transition
 			d = rng.randomUnifDouble(r);
-			ref = transitions.new Ref();
+			TransitionList.Ref ref = transitions.new Ref();
 			transitions.getChoiceIndexByProbabilitySum(d, ref);
 			// Execute
 			executeTimedTransition(ref.i, ref.offset, rng.randomExpDouble(r), -1);
@@ -420,15 +449,11 @@ public class SimulatorEngine extends PrismComponent
 		if (time > path.getTotalTime()) {
 			throw new PrismException("There is no time point " + time + " to backtrack to");
 		}
+		int step, n;
 		PathFull pathFull = (PathFull) path;
-		// Get length (non-on-the-fly paths will never exceed length Integer.MAX_VALUE) 
-		long nLong = path.size();
-		if (nLong > Integer.MAX_VALUE)
-			throw new PrismException("PathFull cannot deal with paths over length " + Integer.MAX_VALUE);
-		int n = (int) nLong;
+		n = path.size();
 		// Find the index of the step we are in at that point
 		// i.e. the first state whose cumulative time on entering exceeds 'time'
-		int step;
 		for (step = 0; step <= n && pathFull.getCumulativeTime(step) < time; step++)
 			;
 		// Then backtrack to this step
@@ -466,7 +491,9 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForStep(int step) throws PrismException
 	{
-		computeTransitionsForState(((PathFull) path).getState(step));
+		updater.calculateTransitions(((PathFull) path).getState(step), transitionList);
+		transitionListBuilt = true;
+		transitionListState = new State(((PathFull) path).getState(step));
 	}
 
 	/**
@@ -757,8 +784,8 @@ public class SimulatorEngine extends PrismComponent
 		Choice choice = transitions.getChoice(i);
 		if (!onTheFly && index == -1)
 			index = transitions.getTotalIndexOfTransition(i, offset);
-		// Get probability for transition
-		double p = choice.getProbability(offset);
+		// Compute probability for transition (is normalised for a DTMC)
+		double p = (modelType == ModelType.DTMC ? choice.getProbability(offset) / transitions.getNumChoices() : choice.getProbability(offset));
 		// Compute its transition rewards
 		updater.calculateTransitionRewards(path.getCurrentState(), choice, tmpTransitionRewards);
 		// Compute next state. Note use of path.getCurrentState() because currentState
@@ -767,7 +794,19 @@ public class SimulatorEngine extends PrismComponent
 		// Compute state rewards for new state 
 		updater.calculateStateRewards(currentState, tmpStateRewards);
 		// Update path
-		path.addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
+		if (strategy != null && path instanceof PathFull) {
+			// update strategy
+			try {
+				strategy.updateMemory(i, stateIds.get(currentState));
+			} catch (InvalidStrategyStateException error) {
+				//error.printStackTrace();
+				throw new PrismException("Strategy update failed");
+			}
+			((PathFull) path).addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions,
+					strategy.getCurrentMemoryElement());
+		} else
+			path.addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
+
 		// Reset transition list 
 		transitionListBuilt = false;
 		transitionListState = null;
@@ -806,7 +845,18 @@ public class SimulatorEngine extends PrismComponent
 		// Compute state rewards for new state 
 		updater.calculateStateRewards(currentState, tmpStateRewards);
 		// Update path
-		path.addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
+		if (strategy != null && path instanceof PathFull) {
+			// update strategy
+			try {
+				strategy.updateMemory(i, stateIds.get(currentState));
+			} catch (InvalidStrategyStateException error) {
+				//error.printStackTrace();
+				throw new PrismException("Strategy update failed");
+			}
+			((PathFull) path).addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions,
+					strategy.getCurrentMemoryElement());
+		} else
+			path.addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
 		// Reset transition list 
 		transitionListBuilt = false;
 		transitionListState = null;
@@ -842,6 +892,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	private void recomputeSamplers() throws PrismLangException
 	{
+		int i, n;
 		resetSamplers();
 		// Get length (non-on-the-fly paths will never exceed length Integer.MAX_VALUE) 
 		long nLong = path.size();
@@ -935,7 +986,8 @@ public class SimulatorEngine extends PrismComponent
 	{
 		// Compute the current transition list, if required
 		if (!transitionListBuilt) {
-			computeTransitionsForCurrentState();
+			updater.calculateTransitions(currentState, transitionList);
+			transitionListBuilt = true;
 		}
 		return transitionList;
 	}
@@ -1062,7 +1114,9 @@ public class SimulatorEngine extends PrismComponent
 	public double getTransitionProbability(int i, int offset) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
-		return transitions.getChoice(i).getProbability(offset);
+		double p = transitions.getChoice(i).getProbability(offset);
+		// For DTMCs, we need to normalise (over choices)
+		return (modelType == ModelType.DTMC ? p / transitions.getNumChoices() : p);
 	}
 
 	/**
@@ -1072,7 +1126,9 @@ public class SimulatorEngine extends PrismComponent
 	public double getTransitionProbability(int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
-		return transitions.getTransitionProbability(index);
+		double p = transitions.getTransitionProbability(index);
+		// For DTMCs, we need to normalise (over choices)
+		return (modelType == ModelType.DTMC ? p / transitions.getNumChoices() : p);
 	}
 
 	/**
@@ -1084,7 +1140,10 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public String getTransitionUpdateString(int index) throws PrismException
 	{
-		return getTransitionList().getTransitionUpdateString(index, getTransitionListState());
+		// We need the state containing the transitions. Usually, this is the current (final) state
+		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
+		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
+		return getTransitionList().getTransitionUpdateString(index, state);
 	}
 
 	/**
@@ -1106,7 +1165,10 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public State computeTransitionTarget(int i, int offset) throws PrismException
 	{
-		return getTransitionList().getChoice(i).computeTarget(offset, getTransitionListState());
+		// We need the state containing the transitions. Usually, this is the current (final) state
+		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
+		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
+		return getTransitionList().getChoice(i).computeTarget(offset, state);
 	}
 
 	/**
@@ -1115,7 +1177,10 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public State computeTransitionTarget(int index) throws PrismException
 	{
-		return getTransitionList().computeTransitionTarget(index, getTransitionListState());
+		// We need the state containing the transitions. Usually, this is the current (final) state
+		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
+		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
+		return getTransitionList().computeTransitionTarget(index, state);
 	}
 
 	// ------------------------------------------------------------------------------
@@ -1822,5 +1887,23 @@ public class SimulatorEngine extends PrismComponent
 	public void stopSampling()
 	{
 		// TODO
+	}
+
+	/**
+	 * Update strategy reference
+	 *
+	 * @param strategy
+	 */
+	public void setStrategy(Strategy strategy)
+	{
+		this.strategy = strategy;
+		if (strategy != null && prism.getBuiltModelExplicit() != null) {
+			stateIds = new HashMap<State, Integer>();
+			java.util.List<State> stateslist = prism.getBuiltModelExplicit().getStatesList();
+			int i = 0;
+			for (State s : stateslist)
+				stateIds.put(s, i++);
+
+		}
 	}
 }

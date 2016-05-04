@@ -81,8 +81,6 @@ public class GraphResultListener implements ResultListener
 				x = ((Integer)xObj).intValue(); // Use integer value.  	
 			} else if(xObj instanceof Double) {
 				x = ((Double)xObj).doubleValue(); // Use double value.
-			} else if(xObj instanceof BigRational) {
-				x = ((BigRational)xObj).doubleValue(); // Use double value.
 			} else return; // Cancel if non integer/double			
 			
 			// Cancel if x = +/- infinity or NaN
@@ -95,9 +93,6 @@ public class GraphResultListener implements ResultListener
 				graph.addPointToSeries(seriesKey, new XYDataItem(x, y));
 			} else if (result instanceof Integer) {
 				y = ((Integer) result).intValue();
-				graph.addPointToSeries(seriesKey, new XYDataItem(x, y));
-			} else if (result instanceof BigRational) {
-				y = ((BigRational) result).doubleValue();
 				graph.addPointToSeries(seriesKey, new XYDataItem(x, y));
 			} else if (result instanceof Interval) {
 				Interval interval = (Interval) result;

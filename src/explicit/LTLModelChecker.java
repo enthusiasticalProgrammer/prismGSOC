@@ -2,6 +2,7 @@
 //	
 //	Copyright (c) 2002-
 //	Authors:
+//	* Alessandro Bruni <albr@dtu.dk> (Technical University of Denmark)
 //	* Dave Parker <david.parker@comlab.ox.ac.uk> (University of Oxford)
 //	* Joachim Klein <klein@tcs.inf.tu-dresden.de> (TU Dresden)
 //	

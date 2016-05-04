@@ -76,8 +76,8 @@ public class ComputeSteadyStateThread extends GUIComputationThread
 		// Do Computation
 		try {
 			prism.doSteadyState(exportType, exportFile, null);
-		} catch (Exception e) {
-			error(e);
+		} catch (PrismException e) {
+			error(e.getMessage());
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()

@@ -103,11 +103,30 @@ public class PathFull extends Path implements PathFullInfo
 		loopDet.initialise();
 	}
 
+	// Overloaded method including strategy state
+	public void initialise(State initialState, double[] initialStateRewards, Object stratState)
+	{
+		initialise(initialState, initialStateRewards);
+		// steps.get(steps.size() - 1).stratState = stratState;
+	}
+
+	public void initialiseStrat(Object stratState)
+	{
+		steps.get(steps.size() - 1).stratState = stratState;
+	}
+
 	@Override
 	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards,
 			TransitionList transitionList)
 	{
 		addStep(1.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList);
+	}
+
+	// Overloaded version with strategy state
+	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards,
+			TransitionList transitionList, Object stratState)
+	{
+		addStep(0.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList, stratState);
 	}
 
 	@Override
@@ -142,6 +161,14 @@ public class PathFull extends Path implements PathFullInfo
 		size++;
 		// Update loop detector
 		loopDet.addStep(this, transitionList);
+	}
+
+	// Overloaded version including strategy state
+	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
+			double[] newStateRewards, TransitionList transitionList, Object stratState)
+	{
+		addStep(time, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList);
+		steps.get(steps.size() - 1).stratState = stratState;
 	}
 
 	// MUTATORS (additional)
@@ -450,6 +477,11 @@ public class PathFull extends Path implements PathFullInfo
 		return true;
 	}
 
+	public Object getStrategyState(int step)
+	{
+		return steps.get(step).stratState;
+	}
+
 	// Other methods
 
 	/**
@@ -545,6 +577,7 @@ public class PathFull extends Path implements PathFullInfo
 			moduleOrActionIndex = 0;
 			probability = 0.0;
 			transitionRewards = new double[numRewardStructs];
+			stratState = null;
 		}
 
 		// Current state (before transition)
@@ -566,6 +599,8 @@ public class PathFull extends Path implements PathFullInfo
 		public double probability;
 		// Transition rewards associated with step
 		public double transitionRewards[];
+		// Strategy state
+		public Object stratState;
 	}
 
 	class DisplayThread extends Thread

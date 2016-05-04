@@ -33,9 +33,9 @@ import javax.swing.border.*;
 import java.util.*;
 
 import prism.*;
+import parser.type.*;
 import userinterface.*;
 
-@SuppressWarnings("serial")
 public class GUIExperimentPicker extends javax.swing.JDialog
 {
 	public static final int NO_VALUES = 0;
@@ -54,6 +54,11 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	
 	private ConstantPickerList propTable;
 	private ConstantPickerList modelTable;
+	
+	private boolean areModel, areProp;
+	
+	private Action okAction;
+	private Action cancelAction;
 	
 	private javax.swing.JButton okayButton;
 	
@@ -76,6 +81,8 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	public GUIExperimentPicker(GUIPrism parent, UndefinedConstants undef, boolean areModel, boolean areProp, boolean offerGraph, boolean offerSimulation)
 	{
 		super(parent, "Define Constants", true);
+		this.areModel = areModel;
+		this.areProp  = areProp;
 		this.undef = undef;
 		this.gui = parent;
 		
@@ -344,7 +351,6 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		else return NO_VALUES;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public int defineValues()
 	{
 		show();

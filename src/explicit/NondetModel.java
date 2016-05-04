@@ -90,7 +90,7 @@ public interface NondetModel extends Model
 	 * @param s The state
 	 * @param i Choice index
 	 */
-	public Iterator<Integer> getSuccessorsIterator(int s, int i);
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s, int i);
 	
 	/**
 	 * Construct a model that is induced by applying strategy {@code strat} to this model.
