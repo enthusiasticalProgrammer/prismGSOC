@@ -40,7 +40,6 @@ import javax.swing.event.*;
 import java.io.*;
 import userinterface.model.*;
 
-@SuppressWarnings("serial")
 public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListener
 {	
 	private JEditorPane editor;

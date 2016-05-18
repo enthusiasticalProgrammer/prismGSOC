@@ -107,7 +107,7 @@ public class MDStrategyIV extends MDStrategy
 	@Override
 	public void exportInducedModel(PrismLog out)
 	{
-		// TODO
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

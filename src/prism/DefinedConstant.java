@@ -238,7 +238,6 @@ public class DefinedConstant
 	
 	public boolean incr()
 	{
-
 		int ih, is, iv;
 		double dl, dh, ds, dv;
 		boolean overflow = false;

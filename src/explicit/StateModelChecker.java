@@ -74,6 +74,7 @@ import prism.PrismLog;
 import prism.PrismNotSupportedException;
 import prism.PrismSettings;
 import prism.Result;
+import strat.Strategy;
 
 /**
  * Super class for explicit-state model checkers.
@@ -109,6 +110,11 @@ public class StateModelChecker extends PrismComponent
 
 	// Generate/store a strategy during model checking?
 	protected boolean genStrat = false;
+	
+	// Strategy generation
+	protected boolean generateStrategy = false;
+	protected boolean implementStrategy = false;
+	protected Strategy strategy = null;
 
 	// Do bisimulation minimisation before model checking?
 	protected boolean doBisim = false;
@@ -135,7 +141,7 @@ public class StateModelChecker extends PrismComponent
 	public StateModelChecker(PrismComponent parent) throws PrismException
 	{
 		super(parent);
-
+		
 		// For explicit.StateModelChecker and its subclasses, we explicitly set 'settings'
 		// to null if there is no parent or if the parent has a null 'settings'.
 		// This allows us to choose to ignore the default one created by PrismComponent.
@@ -345,6 +351,29 @@ public class StateModelChecker extends PrismComponent
 	{
 		return storeVector;
 	}
+	/**
+	 * Set flag of whether to generate a strategy.
+	 */
+	public void setGenerateStrategy(boolean b)
+	{
+		this.generateStrategy = b;
+	}
+
+	/**
+	 * Set flag of whether to implement the strategy when model checking
+	 */
+	public void setImplementStrategy(boolean b)
+	{
+		this.implementStrategy = b;
+	}
+
+	/**
+	 * Method sets the strategy to be used by the model checker
+	 */
+	public void setStrategy(Strategy strategy)
+	{
+		this.strategy = strategy;
+	}
 
 	/**
 	 * Whether or not a strategy should be generated during model checking.
@@ -389,6 +418,14 @@ public class StateModelChecker extends PrismComponent
 			constantValues.addValues(propertiesFile.getConstantValues());
 	}
 
+	/**
+	 * Method to retrieve the strategy that has been generated
+	 */
+	public Strategy getStrategy()
+	{
+		return strategy;
+	}
+
 	// Model checking functions
 
 	/**
@@ -400,6 +437,8 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public Result check(Model model, Expression expr) throws PrismException
 	{
+
+		ExpressionFilter exprFilter=null;
 		long timer = 0;
 		StateValues vals;
 		String resultString;
@@ -410,14 +449,48 @@ public class StateModelChecker extends PrismComponent
 		// Remove any existing filter info
 		currentFilter = null;
 
-		// Wrap a filter round the property, if needed
-		// (in order to extract the final result of model checking) 
-		ExpressionFilter exprFilter = ExpressionFilter.addDefaultFilterIfNeeded(expr, model.getNumInitialStates() == 1);
-		// And if we need to store a copy of the results vector, make a note of this
-		if (storeVector) {
-			exprFilter.setStoreVector(true);
+		// The final result of model checking will be a single value. If the expression to be checked does not
+		// already yield a single value (e.g. because a filter has not been explicitly included), we need to wrap
+		// a new (invisible) filter around it. Note that some filters (e.g. print/argmin/argmax) also do not
+		// return single values and have to be treated in this way.
+		if (!expr.returnsSingleValue()) {
+			// New filter depends on expression type and number of initial states.
+			// Boolean expressions...
+			if (expr.getType() instanceof TypeBool) {
+				// Result is true iff true for all initial states
+				exprFilter = new ExpressionFilter("forall", expr, new ExpressionLabel("init"));
+			}
+			// Non-Boolean (double or integer) expressions...
+			else {
+				// Result is for the initial state, if there is just one,
+				// or the range over all initial states, if multiple
+				if (model.getNumInitialStates() == 1) {
+					exprFilter = new ExpressionFilter("state", expr, new ExpressionLabel("init"));
+				} else {
+					exprFilter = new ExpressionFilter("range", expr, new ExpressionLabel("init"));
+				}
+			}
 		}
-		expr = exprFilter;
+		// Even, when the expression does already return a single value, if the the outermost operator
+		// of the expression is not a filter, we still need to wrap a new filter around it.
+		// e.g. 2*filter(...) or 1-P=?[...{...}]
+		// This because the final result of model checking is only stored when we process a filter.
+		else if (!(expr instanceof ExpressionFilter)) {
+			// We just pick the first value (they are all the same)
+			exprFilter = new ExpressionFilter("first", expr, new ExpressionLabel("init"));
+			// We stop any additional explanation being displayed to avoid confusion.
+			exprFilter.setExplanationEnabled(false);
+		}
+
+		// For any case where a new filter was created above...
+		if (exprFilter != null) {
+			// Make it invisible (not that it will be displayed)
+			exprFilter.setInvisible(true);
+			// Compute type of new filter expression (will be same as child)
+			exprFilter.typeCheck();
+			// Store as expression to be model checked
+			expr = exprFilter;
+		}
 
 		// If required, do bisimulation minimisation
 		if (doBisim) {
@@ -446,7 +519,6 @@ public class StateModelChecker extends PrismComponent
 		mainLog.print("\n" + resultString + "\n");
 
 		// Clean up
-		//vals.clear();
 		result.setVector(vals);
 
 		// Return result
@@ -823,6 +895,7 @@ public class StateModelChecker extends PrismComponent
 		Property prop = propertiesFile.lookUpPropertyObjectByName(expr.getName());
 		if (prop != null) {
 			mainLog.println("\nModel checking : " + prop);
+
 			return checkExpression(model, prop.getExpression(), statesOfInterest);
 		} else {
 			throw new PrismException("Unknown property reference " + expr);
@@ -1117,7 +1190,6 @@ public class StateModelChecker extends PrismComponent
 		} else if (vals != null) {
 			vals.clear();
 		}
-
 		return resVals;
 	}
 

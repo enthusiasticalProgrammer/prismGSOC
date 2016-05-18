@@ -26,7 +26,6 @@
 
 package pepa.compiler;
 
-@SuppressWarnings("serial")
 public class InternalError extends Exception {
     private static final String flag = "\n[><]  ----------->   ";
 

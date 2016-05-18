@@ -115,6 +115,7 @@ public class SamplerBoundedUntilDisc extends SamplerBoolean
 				valueKnown = true;
 				value = true;
 			}
+
 			// Or, if not, have we violated the LHS of the until?
 			else if (!left.evaluateBoolean(currentState)) {
 				valueKnown = true;

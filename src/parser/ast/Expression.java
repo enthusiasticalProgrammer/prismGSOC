@@ -548,6 +548,7 @@ public abstract class Expression extends ASTElement
 		return new ExpressionLiteral(TypeInt.getInstance(), i);
 	}
 
+
 	public static ExpressionLiteral Double(double d)
 	{
 		return new ExpressionLiteral(TypeDouble.getInstance(), d);
@@ -756,7 +757,7 @@ public abstract class Expression extends ASTElement
 			{
 				public void visitPost(ExpressionFunc e) throws PrismLangException
 				{
-					if (e.getNameCode() == ExpressionFunc.MULTI)
+					if (e.getNameCode() == ExpressionFunc.MULTI || e.getNameCode() == ExpressionFunc.MLESSMULTI)
 						throw new PrismLangException("Found one", e);
 				}
 			};

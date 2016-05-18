@@ -29,7 +29,6 @@ package userinterface.properties;
 
 import java.awt.Font;
 
-@SuppressWarnings("serial")
 public class GUIPropertyResultDialog extends javax.swing.JDialog
 {
 	private static int noOpen = 0;

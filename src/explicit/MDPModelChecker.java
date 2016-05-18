@@ -37,6 +37,33 @@ import parser.ast.Declaration;
 import parser.ast.DeclarationIntUnbounded;
 import parser.ast.Expression;
 import prism.Prism;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import parser.ast.Expression;
+import parser.ast.ExpressionFunc;
+import parser.ast.ExpressionProb;
+import parser.ast.ExpressionReward;
+import parser.ast.ExpressionSS;
+import parser.ast.ExpressionTemporal;
+import parser.ast.ExpressionUnaryOp;
+import parser.ast.RelOp;
+import parser.ast.RewardStruct;
+import parser.type.TypeDouble;
+import parser.type.TypeVoid;
+import parser.visitor.ASTTraverse;
+import prism.DRA;
+import prism.Filter;
+import prism.Operator;
+import prism.Pair;
+import prism.Point;
+import prism.Prism;
+import prism.PrismCL;
 import prism.PrismComponent;
 import prism.PrismDevNullLog;
 import prism.PrismException;
@@ -51,6 +78,16 @@ import explicit.rewards.MCRewards;
 import explicit.rewards.MCRewardsFromMDPRewards;
 import explicit.rewards.MDPRewards;
 import explicit.rewards.Rewards;
+import prism.PrismLangException;
+import prism.PrismLog;
+import prism.PrismSettings;
+import prism.PrismUtils;
+import prism.Tile;
+import prism.TileList;
+import sparse.PrismSparse;
+import strat.MDStrategyArray;
+import explicit.rewards.ConstructRewards;
+import explicit.rewards.MDPRewards;
 
 /**
  * Explicit-state model checker for Markov decision processes (MDPs).
@@ -66,7 +103,192 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 	
 	// Model checking functions
+	
+	@Override
+	protected StateValues checkExpressionMultiObjective(Model model,
+			ExpressionFunc expr) throws PrismException
+	{
+		boolean memoryless;
+		if (((ExpressionFunc) expr).getName().equals("multi"))
+			memoryless = false;
+		else if (((ExpressionFunc) expr).getName().equals("mlessmulti"))
+			memoryless = true;
+		else throw new UnsupportedOperationException("Unsupported function: " + expr);
+		
+		// Make sure we are only expected to compute a value for a single state
+		if (currentFilter == null || !(currentFilter.getOperator() == Filter.FilterOperator.STATE))
+			throw new PrismException("Multi-objective model checking can only compute values from a single state");
+		
+		int numObjectives = expr.getNumOperands();
+		
+		ArrayList<Operator> operators = new ArrayList<Operator>();
+		ArrayList<Double> bounds = new ArrayList<Double>();
+		ArrayList<MDPRewards> rewards = new ArrayList<MDPRewards>();
+		
+		int numericalCount = 0; //used to determine if we do multi-obj.
+		ArrayList<Integer> numericalIndices = new ArrayList<Integer>();
+		//extract data
+		for (int i = 0; i < numObjectives; i++) {
+			if (expr.getOperand(i) instanceof ExpressionReward) {
+				ExpressionReward operand = (ExpressionReward) expr.getOperand(i);
+				RelOp relOp = operand.getRelOp();
+				
+				//check that the parameters are of the form we can handle
+				if (!(operand.getExpression() instanceof ExpressionTemporal))
+					throw new PrismException("The reward subexpression must be a temporal expression.");
+				ExpressionTemporal eT = (ExpressionTemporal) operand.getExpression();
+				if (eT.getOperator() != ExpressionTemporal.R_S)
+					throw new PrismException("We only support steady state (long-run) rewards.");
 
+				//comparison operator
+				Operator op;
+				if (relOp.equals(RelOp.MAX)) {
+					numericalCount++;
+					numericalIndices.add(i);
+					op = Operator.R_MAX;
+				} else if (relOp.equals(RelOp.GT)) // currently do not support
+					//relOps.add(1);
+					throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+				else if (relOp.equals(RelOp.GEQ)) {
+					op = Operator.R_GE;
+				} else if (relOp.equals(RelOp.MIN)) {
+					numericalCount++;
+					numericalIndices.add(i);
+					op = Operator.R_MIN;
+				} else if (relOp.equals(RelOp.LT)) // currently do not support
+					//relOps.add(6);
+					throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+				else if (relOp.equals(RelOp.LEQ)) {
+					op = Operator.R_LE;
+				} else
+					throw new PrismException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");				
+				operators.add(op);
+				
+				// Store rewards bound
+				Expression rb = operand.getReward();
+				
+				if (rb != null) {
+					double p = rb.evaluateDouble(constantValues);
+					bounds.add(p);
+				} else {
+					bounds.add(-1.0);
+				}
+				
+				Object rs = operand.getRewardStructIndex();
+				RewardStruct rewStruct = null;
+				// Get reward info
+				if (modulesFile == null)
+					throw new PrismException("No model file to obtain reward structures");
+				if (modulesFile.getNumRewardStructs() == 0)
+					throw new PrismException("Model has no rewards specified");
+				if (rs == null) {
+					rewStruct = modulesFile.getRewardStruct(0);
+				} else if (rs instanceof Expression) {
+					i = ((Expression) rs).evaluateInt(constantValues);
+					rs = new Integer(i); // for better error reporting below
+					rewStruct = modulesFile.getRewardStruct(i - 1);
+				} else if (rs instanceof String) {
+					rewStruct = modulesFile.getRewardStructByName((String) rs);
+				}
+				if (rewStruct == null)
+					throw new PrismException("Invalid reward structure index \"" + rs + "\"");
+
+				// Build rewards
+				ConstructRewards constructRewards = new ConstructRewards(mainLog);
+				MDPRewards mdpRewards = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
+				rewards.add(mdpRewards);
+				
+			} else {
+				throw new PrismException("Only long-run properties are supported.");
+			}
+		}
+		
+		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
+		MultiLongRun mlr = new MultiLongRun((MDP) model, rewards, operators, bounds, method);
+		StateValues sv = null;
+		mlr.createMultiLongRunLP(memoryless);
+		if (numericalCount > 0 && memoryless)
+			throw new PrismException("mlessmulti can only be used for non-numerical queries" +
+					" (optimal memoryless strategies might not exist, and so max/min would not apply)");
+		else if (numericalCount == 0 && memoryless) {
+			sv = mlr.solveMemoryless();
+			if (generateStrategy)
+				this.strategy = mlr.getStrategy(memoryless);
+		} else if (numericalCount < 2) {
+			sv = mlr.solveDefault();
+			if (generateStrategy)
+				this.strategy = mlr.getStrategy(memoryless);
+		} else {//Pareto
+			ArrayList<Point> computedPoints = new ArrayList<Point>();
+			ArrayList<Point> computedDirections = new ArrayList<Point>();
+			ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+			Point p1 = mlr.solveMulti(new Point(new double[] {1.0,0.0}));
+			//mainLog.println("p1 " + p1);
+			Point p2 = mlr.solveMulti(new Point(new double[] {0.0,1.0}));
+			pointsForInitialTile.add(p1);
+			pointsForInitialTile.add(p2);
+			//mainLog.println("p2 " + p2);
+			
+			int numberOfPoints = 2;
+			boolean verbose = true;
+			Tile initialTile = new Tile(pointsForInitialTile);
+			TileList tileList = new TileList(initialTile, null, 10e-3);
+			
+			Point direction = tileList.getCandidateHyperplane();
+			
+			if (verbose) {
+				mainLog.println("The initial direction is " + direction);
+			}
+			
+			boolean decided = false;
+			int iters = 0;
+			int output = 0;
+			while (iters < maxIters) {
+				iters++;
+
+				double[] result;
+				Point newPoint = mlr.solveMulti(direction);			
+				numberOfPoints++;
+				
+				if (verbose) {
+					mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
+					mainLog.println("TileList:" + tileList);
+				}
+
+				computedPoints.add(newPoint);
+				computedDirections.add(direction);
+
+				tileList.addNewPoint(newPoint);
+				//mainLog.println("\nTiles after adding: " + tileList);
+				//compute new direction
+				direction = tileList.getCandidateHyperplane();
+
+				if (verbose) {
+					mainLog.println("New direction is " + direction);
+					//mainLog.println("TileList: " + tileList);
+					
+				}
+
+				if (direction == null) {
+					//no tile could be improved
+					decided = true;
+					break;
+				}
+			}
+			
+			//TODO 0 and 1 should not be hardcoded, what if we have more objectives?
+			TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)),
+					expr.getOperand(numericalIndices.get(1)), tileList);
+			sv = new StateValues(TypeVoid.getInstance(), tileList, model);
+		}
+		
+		return sv;
+	}
+	
+	/**
+	 * from PRISM TODO Christopher: merge both versions to one
+	 * 
+	 * */
 	@Override
 	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
@@ -147,6 +369,236 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 
 	/**
+	 * Compute probabilities for the contents of a P operator.
+	 */
+	protected StateValues checkProbPathFormula(NondetModel model, Expression expr, boolean min) throws PrismException
+	{
+		// Test whether this is a simple path formula (i.e. PCTL)
+		// and then pass control to appropriate method. 
+		if (expr.isSimplePathFormula()) {
+			return checkProbPathFormulaSimple(model, expr, min);
+		} else {
+			return checkProbPathFormulaLTL(model, expr, min);
+		}
+	}
+
+	/**
+	 * Compute probabilities for a simple, non-LTL path operator.
+	 */
+	protected StateValues checkProbPathFormulaSimple(NondetModel model, Expression expr, boolean min) throws PrismException
+	{
+		StateValues probs = null;
+
+		// Negation/parentheses
+		if (expr instanceof ExpressionUnaryOp) {
+			ExpressionUnaryOp exprUnary = (ExpressionUnaryOp) expr;
+			// Parentheses
+			if (exprUnary.getOperator() == ExpressionUnaryOp.PARENTH) {
+				// Recurse
+				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand(), min);
+			}
+			// Negation
+			else if (exprUnary.getOperator() == ExpressionUnaryOp.NOT) {
+				// Compute, then subtract from 1 
+				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand(), !min);
+				probs.timesConstant(-1.0);
+				probs.plusConstant(1.0);
+			}
+		}
+		// Temporal operators
+		else if (expr instanceof ExpressionTemporal) {
+			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
+			// Next
+			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
+				probs = checkProbNext(model, exprTemp, min);
+			}
+			// Until
+			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
+				if (exprTemp.hasBounds()) {
+					probs = checkProbBoundedUntil(model, exprTemp, min);
+				} else {
+					probs = checkProbUntil(model, exprTemp, min);
+				}
+			}
+			// Anything else - convert to until and recurse
+			else {
+				probs = checkProbPathFormulaSimple(model, exprTemp.convertToUntilForm(), min);
+			}
+		}
+
+		if (probs == null)
+			throw new PrismException("Unrecognised path operator in P operator");
+
+		return probs;
+	}
+
+	/**
+	 * Compute probabilities for a next operator.
+	 */
+	protected StateValues checkProbNext(NondetModel model, ExpressionTemporal expr, boolean min) throws PrismException
+	{
+		BitSet target = null;
+		ModelCheckerResult res = null;
+
+		// Model check the operand
+		target = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		res = computeNextProbs((MDP) model, target, min);
+		return StateValues.createFromDoubleArray(res.soln, model);
+	}
+
+	/**
+	 * Compute probabilities for a bounded until operator.
+	 */
+	protected StateValues checkProbBoundedUntil(NondetModel model, ExpressionTemporal expr, boolean min) throws PrismException
+	{
+		int time;
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// get info from bounded until
+		time = expr.getUpperBound().evaluateInt(constantValues);
+		if (expr.upperBoundIsStrict())
+			time--;
+		if (time < 0) {
+			String bound = expr.upperBoundIsStrict() ? "<" + (time + 1) : "<=" + time;
+			throw new PrismException("Invalid bound " + bound + " in bounded until formula");
+		}
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1()).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		// Compute probabilities
+
+		// a trivial case: "U<=0"
+		if (time == 0) {
+			// prob is 1 in b2 states, 0 otherwise
+			probs = StateValues.createFromBitSetAsDoubles(b2, model);
+		} else {
+			res = computeBoundedUntilProbs((MDP) model, b1, b2, time, min);
+			probs = StateValues.createFromDoubleArray(res.soln, model);
+		}
+
+		return probs;
+	}
+
+	/**
+	 * Compute probabilities for an (unbounded) until operator.
+	 */
+	protected StateValues checkProbUntil(NondetModel model, ExpressionTemporal expr, boolean min) throws PrismException
+	{
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1()).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		res = computeUntilProbs((MDP) model, b1, b2, min);
+		probs = StateValues.createFromDoubleArray(res.soln, model);
+		result.setStrategy(res.strat);
+
+		return probs;
+	}
+
+	/**
+	 * Compute probabilities for an LTL path formula
+	 */
+	protected StateValues checkProbPathFormulaLTL(NondetModel model, Expression expr, boolean min) throws PrismException
+	{
+		LTLModelChecker mcLtl;
+		StateValues probsProduct, probs;
+		Expression ltl;
+		DRA<BitSet> dra;
+		Model modelProduct;
+		DTMCModelChecker mcProduct;
+		long time;
+
+		// Can't do LTL with time-bounded variants of the temporal operators
+		try {
+			expr.accept(new ASTTraverse()
+			{
+				public void visitPre(ExpressionTemporal e) throws PrismLangException
+				{
+					if (e.getLowerBound() != null)
+						throw new PrismLangException(e.getOperatorSymbol());
+					if (e.getUpperBound() != null)
+						throw new PrismLangException(e.getOperatorSymbol());
+				}
+			});
+		} catch (PrismLangException e) {
+			String s = "Temporal operators (like " + e.getMessage() + ")";
+			s += " cannot have time bounds for LTL properties";
+			throw new PrismException(s);
+		}
+
+		// For LTL model checking routines
+		mcLtl = new LTLModelChecker(this);
+
+		// Model check maximal state formulas
+		Vector<BitSet> labelBS = new Vector<BitSet>();
+		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
+
+		// Convert LTL formula to deterministic Rabin automaton (DRA)
+		mainLog.println("\nBuilding deterministic Rabin automaton (for " + ltl + ")...");
+		time = System.currentTimeMillis();
+		dra = LTLModelChecker.convertLTLFormulaToDRA(ltl);
+		int draSize = dra.size();
+		mainLog.println("\nDRA has " + dra.size() + " states, " + dra.getNumAcceptancePairs() + " pairs.");
+		// dra.print(System.out);
+		time = System.currentTimeMillis() - time;
+		mainLog.println("\nTime for Rabin translation: " + time / 1000.0 + " seconds.");
+
+		// Build product of Markov chain and automaton
+		mainLog.println("\nConstructing MC-DRA product...");
+		Pair<Model, int[]> pair = mcLtl.constructProductMC(dra, (DTMC) model, labelBS);
+		modelProduct = pair.first;
+		int invMap[] = pair.second;
+		int modelProductSize = modelProduct.getNumStates();
+		mainLog.print("\n" + modelProduct.infoStringTable());
+
+		// Find accepting BSCCs + compute reachability probabilities
+		mainLog.println("\nFinding accepting BSCCs...");
+		BitSet acceptingBSCCs = mcLtl.findAcceptingBSCCsForRabin(dra, modelProduct, invMap);
+		mainLog.println("\nComputing reachability probabilities...");
+		mcProduct = new DTMCModelChecker(this);
+		mcProduct.inheritSettings(this);
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((DTMC) modelProduct, acceptingBSCCs).soln, modelProduct);
+
+		// Mapping probabilities in the original model
+		double[] probsProductDbl = probsProduct.getDoubleArray();
+		double[] probsDbl = new double[model.getNumStates()];
+
+		// Get the probabilities for the original model by taking the initial states
+		// of the product and projecting back to the states of the original model
+		for (int i : modelProduct.getInitialStates()) {
+			int s = invMap[i] / draSize;
+			probsDbl[s] = probsProductDbl[i];
+		}
+
+		probs = StateValues.createFromDoubleArray(probsDbl, model);
+		probsProduct.clear();
+
+		return probs;
+	}
+
+	/**
+	 * TODO Christopher: merge it with other checkRewardMethod
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
@@ -219,6 +671,94 @@ public class MDPModelChecker extends ProbModelChecker
 		return rewards;
 	}
 	
+	/**
+	 * Compute rewards for the contents of an R operator.
+	 */
+	protected StateValues checkRewardFormula(NondetModel model, MDPRewards modelRewards, Expression expr, boolean min) throws PrismException
+	{
+		StateValues rewards = null;
+
+		if (expr instanceof ExpressionTemporal) {
+			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
+			switch (exprTemp.getOperator()) {
+			case ExpressionTemporal.R_C:
+				rewards = checkRewardCumul(model, modelRewards, exprTemp, min);
+				break;
+			case ExpressionTemporal.R_F:
+				rewards = checkRewardReach(model, modelRewards, exprTemp, min);
+				break;
+			default:
+				throw new PrismException("Explicit engine does not yet handle the " + exprTemp.getOperatorSymbol() + " operator in the R operator");
+			}
+		}
+
+		if (rewards == null)
+			throw new PrismException("Unrecognised operator in R operator");
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a cumulative reward operator.
+	 */
+	protected StateValues checkRewardCumul(NondetModel model, MDPRewards modelRewards, ExpressionTemporal expr, boolean min) throws PrismException
+	{
+		int time; // time
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// check that there is an upper time bound
+		if (expr.getUpperBound() == null) {
+			throw new PrismException("Cumulative reward operator without time bound (C) is only allowed for multi-objective queries");
+		}
+
+		// get info from inst reward
+		time = expr.getUpperBound().evaluateInt(constantValues);
+		if (time < 0) {
+			throw new PrismException("Invalid time bound " + time + " in cumulative reward formula");
+		}
+
+		// a trivial case: "<=0"
+		if (time == 0) {
+			rewards = new StateValues(TypeDouble.getInstance(), model.getNumStates(), new Double(0));
+		} else {
+			// compute rewards
+			try {
+				res = computeCumulativeRewards((MDP) model, modelRewards, time, min);
+				rewards = StateValues.createFromDoubleArray(res.soln, model);
+				result.setStrategy(res.strat);
+			} catch (PrismException e) {
+				throw e;
+			}
+		}
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a reachability reward operator.
+	 */
+	protected StateValues checkRewardReach(NondetModel model, MDPRewards modelRewards, ExpressionTemporal expr, boolean min) throws PrismException
+	{
+		BitSet b;
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// model check operand first
+		b = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeReachRewards((MDP) model, modelRewards, b, min);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+		result.setStrategy(res.strat);
+
+		return rewards;
+	}
+
+
 	// Numerical computation functions
 
 	/**
@@ -467,10 +1007,15 @@ public class MDPModelChecker extends ProbModelChecker
 		if (exportAdv) {
 			// Prune strategy
 			restrictStrategyToReachableStates(mdp, strat);
+			// Print strategy
+			mainLog.print("Strat:");
+			for (int i = 0; i < n; i++) {
+				mainLog.print(" " + i + ":" + strat[i]);
+			}
+			mainLog.println();
 			// Export
 			PrismLog out = new PrismFileLog(exportAdvFilename);
 			new DTMCFromMDPMemorylessAdversary(mdp, strat).exportToPrismExplicitTra(out);
-			out.close();
 		}
 
 		// Update time taken
@@ -1082,7 +1627,11 @@ public class MDPModelChecker extends ProbModelChecker
 	/**
 	 * Compute bounded until probabilities.
 	 * i.e. compute the min/max probability of reaching a state in {@code target},
+<<<<<<< HEAD
 	 * within k steps, and while remaining in states in {@code remain}.
+=======
+	 * within k steps, and while remaining in states in @{code remain}.
+>>>>>>> remotes/multi/master
 	 * @param mdp The MDP
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
@@ -1214,7 +1763,9 @@ public class MDPModelChecker extends ProbModelChecker
 		while (iters < k) {
 			iters++;
 			// Matrix-vector multiply and min/max ops
-			mdp.mvMultRewMinMax(soln, mdpRewards, min, soln2, null, false, null);
+			int strat[] = new int[n];
+			mdp.mvMultRewMinMax(soln, mdpRewards, min, soln2, null, false, strat);
+			mainLog.println(strat);
 			// Swap vectors for next iter
 			tmpsoln = soln;
 			soln = soln2;
@@ -1382,10 +1933,15 @@ public class MDPModelChecker extends ProbModelChecker
 		if (exportAdv) {
 			// Prune strategy
 			restrictStrategyToReachableStates(mdp, strat);
+			// Print strategy
+			mainLog.print("Strat:");
+			for (int i = 0; i < n; i++) {
+				mainLog.print(" " + i + ":" + strat[i]);
+			}
+			mainLog.println();
 			// Export
 			PrismLog out = new PrismFileLog(exportAdvFilename);
 			new DTMCFromMDPMemorylessAdversary(mdp, strat).exportToPrismExplicitTra(out);
-			out.close();
 		}
 
 		// Finished expected reachability
@@ -1581,6 +2137,7 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Compute expected reachability rewards using policy iteration.
 	 * The array {@code strat} is used both to pass in the initial strategy for policy iteration,
 	 * and as storage for the resulting optimal strategy (if needed).
@@ -1679,6 +2236,8 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 
 	/**
+=======
+>>>>>>> remotes/multi/master
 	 * Construct strategy information for min/max expected reachability.
 	 * (More precisely, list of indices of choices resulting in min/max.)
 	 * (Note: indices are guaranteed to be sorted in ascending order.)

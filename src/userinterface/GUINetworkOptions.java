@@ -31,7 +31,6 @@ import userinterface.util.*;
 import java.util.*;
 import org.w3c.dom.*;
 
-@SuppressWarnings("serial")
 public class GUINetworkOptions extends OptionsPanel
 {   
     

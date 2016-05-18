@@ -37,6 +37,7 @@ import userinterface.GUIPrism;
 import param.BigRational;
 import parser.*;
 import parser.ast.*;
+import parser.type.TypeVoid;
 import prism.*;
 
 /**

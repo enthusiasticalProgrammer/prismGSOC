@@ -36,7 +36,6 @@ import parser.ast.*;
 import parser.type.*;
 import prism.*;
 
-@SuppressWarnings("serial")
 public class GUIPropConstantList extends JTable
 {
 	

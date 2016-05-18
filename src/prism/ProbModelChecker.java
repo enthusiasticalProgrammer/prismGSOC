@@ -167,17 +167,17 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Check for trivial (i.e. stupid) cases
 		if (opInfo.isTriviallyTrue()) {
-			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
+			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
 			JDD.Ref(reach);
 			return new StateValuesMTBDD(reach, model);
 		} else if (opInfo.isTriviallyFalse()) {
-			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
+			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
 			return new StateValuesMTBDD(JDD.Constant(0), model);
 		}
 
 		// Print a warning if Pmin/Pmax used
 		if (opInfo.getRelOp() == RelOp.MIN || opInfo.getRelOp() == RelOp.MAX) {
-			mainLog.printWarning("\"Pmin=?\" and \"Pmax=?\" operators are identical to \"P=?\" for DTMCs/CTMCs");
+			prism.mainLog.printWarning("\"Pmin=?\" and \"Pmax=?\" operators are identical to \"P=?\" for DTMCs/CTMCs");
 		}
 
 		// Compute probabilities
@@ -186,8 +186,8 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Print out probabilities
 		if (prism.getVerbose()) {
-			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
-			probs.print(mainLog);
+			prism.mainLog.print("\nProbabilities (non-zero only) for all states:\n");
+			probs.print(prism.mainLog);
 		}
 
 		// For =? properties, just return values
@@ -220,7 +220,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Print a warning if Rmin/Rmax used
 		if (opInfo.getRelOp() == RelOp.MIN || opInfo.getRelOp() == RelOp.MAX) {
-			mainLog.printWarning("\"Rmin=?\" and \"Rmax=?\" operators are identical to \"R=?\" for DTMCs/CTMCs");
+			prism.mainLog.printWarning("\"Rmin=?\" and \"Rmax=?\" operators are identical to \"R=?\" for DTMCs/CTMCs");
 		}
 
 		// Compute rewards
@@ -251,9 +251,10 @@ public class ProbModelChecker extends NonProbModelChecker
 			throw new PrismException("Unrecognised operator in R operator");
 
 		// Print out rewards
+
 		if (prism.getVerbose()) {
-			mainLog.print("\nRewards (non-zero only) for all states:\n");
-			rewards.print(mainLog);
+			prism.mainLog.print("\nRewards (non-zero only) for all states:\n");
+			rewards.print(prism.mainLog);
 		}
 
 		// For =? properties, just return values
@@ -276,6 +277,10 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	protected StateValues checkExpressionSteadyState(ExpressionSS expr) throws PrismException
 	{
+		Expression pb; // probability bound (expression)
+		double p = 0; // probability bound (actual value)
+		String relOp; // relational operator
+
 		// BSCC stuff
 		List<JDDNode> bsccs = null;
 		JDDNode notInBSCCs = null;
@@ -291,11 +296,11 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Check for trivial (i.e. stupid) cases
 		if (opInfo.isTriviallyTrue()) {
-			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
+			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
 			JDD.Ref(reach);
 			return new StateValuesMTBDD(reach, model);
 		} else if (opInfo.isTriviallyFalse()) {
-			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
+			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
 			return new StateValuesMTBDD(JDD.Constant(0), model);
 		}
 
@@ -313,7 +318,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			}
 			// Unless we've been told to skip it
 			else {
-				mainLog.println("\nSkipping BSCC computation...");
+				prism.mainLog.println("\nSkipping BSCC computation...");
 				bsccs = new Vector<JDDNode>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
@@ -324,25 +329,25 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Compute steady-state probability for each BSCC...
 			probBSCCs = new double[numBSCCs];
 			for (i = 0; i < numBSCCs; i++) {
-				mainLog.println("\nComputing steady state probabilities for BSCC " + (i + 1));
+				prism.mainLog.println("\nComputing steady state probabilities for BSCC " + (i + 1));
 				bscc = bsccs.get(i);
 				// Compute steady state probabilities
 				probs = computeSteadyStateProbsForBSCC(trans, bscc);
 				if (verbose) {
-					mainLog.print("\nBSCC " + (i + 1) + " steady-state probabilities: \n");
-					probs.print(mainLog);
+					prism.mainLog.print("\nBSCC " + (i + 1) + " steady-state probabilities: \n");
+					probs.print(prism.mainLog);
 				}
 				// Sum probabilities over BDD b
 				d = probs.sumOverBDD(b);
 				probBSCCs[i] = d;
-				mainLog.print("\nBSCC " + (i + 1) + " probability: " + d + "\n");
+				prism.mainLog.print("\nBSCC " + (i + 1) + " probability: " + d + "\n");
 				// Free vector
 				probs.clear();
 			}
 
 			// If every state is in a BSCC, it's much easier...
 			if (notInBSCCs.equals(JDD.ZERO)) {
-				mainLog.println("\nAll states are in BSCCs (so no reachability probabilities computed)");
+				prism.mainLog.println("\nAll states are in BSCCs (so no reachability probabilities computed)");
 				// There are more efficient ways to do this if we just create the solution BDD directly
 				// But we actually build the prob vector so it can be printed out if necessary
 				tmp = JDD.Constant(0);
@@ -374,13 +379,13 @@ public class ProbModelChecker extends NonProbModelChecker
 					// Skip BSCCs with zero probability
 					if (probBSCCs[i] == 0.0)
 						continue;
-					mainLog.println("\nComputing probabilities of reaching BSCC " + (i + 1));
+					prism.mainLog.println("\nComputing probabilities of reaching BSCC " + (i + 1));
 					bscc = bsccs.get(i);
 					// Compute probabilities
 					probs = computeUntilProbs(trans, trans01, notInBSCCs, bscc);
 					if (verbose) {
-						mainLog.print("\nBSCC " + (i + 1) + " reachability probabilities: \n");
-						probs.print(mainLog);
+						prism.mainLog.print("\nBSCC " + (i + 1) + " reachability probabilities: \n");
+						probs.print(prism.mainLog);
 					}
 					// Multiply by BSCC prob, add to total
 					probs.timesConstant(probBSCCs[i]);
@@ -392,8 +397,8 @@ public class ProbModelChecker extends NonProbModelChecker
 
 			// print out probabilities
 			if (verbose) {
-				mainLog.print("\nS operator probabilities: \n");
-				totalProbs.print(mainLog);
+				prism.mainLog.print("\nS operator probabilities: \n");
+				totalProbs.print(prism.mainLog);
 			}
 		} catch (PrismException e) {
 			// Tidy up and pass on the exception
@@ -487,6 +492,10 @@ public class ProbModelChecker extends NonProbModelChecker
 					probs = checkProbUntil(exprTemp, qual);
 				}
 			}
+			// Anything else - convert to until and recurse
+			else {
+				probs = checkProbPathFormulaSimple(exprTemp.convertToUntilForm(), qual);
+			}
 		}
 
 		if (probs == null)
@@ -524,19 +533,19 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Build product of Markov chain and automaton
 		// (note: might be a CTMC - StochModelChecker extends this class)
-		mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		prism.mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		modelProduct = mcLtl.constructProductMC(da, model, labelDDs, daDDRowVars, daDDColVars);
-		mainLog.println();
-		modelProduct.printTransInfo(mainLog, prism.getExtraDDInfo());
+		prism.mainLog.println();
+		modelProduct.printTransInfo(prism.mainLog, prism.getExtraDDInfo());
 		// Output product, if required
 		if (prism.getExportProductTrans()) {
 			try {
-				mainLog.println("\nExporting product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"...");
+				prism.mainLog.println("\nExporting product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"...");
 				modelProduct.exportToFile(Prism.EXPORT_PLAIN, true, new File(prism.getExportProductTransFilename()));
 			} catch (FileNotFoundException e) {
-				mainLog.printWarning("Could not export product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"");
+				prism.mainLog.printWarning("Could not export product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"");
 			}
 		}
 		if (prism.getExportProductStates()) {

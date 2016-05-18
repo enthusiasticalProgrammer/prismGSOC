@@ -26,7 +26,6 @@
 
 package userinterface;
 
-@SuppressWarnings("serial")
 public class GUINetwork extends GUIPlugin
 {
     private GUINetworkOptions options;

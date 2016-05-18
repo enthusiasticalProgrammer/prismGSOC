@@ -97,7 +97,7 @@ public class ExpressionIdent extends Expression
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public Expression deepCopy()
 	{

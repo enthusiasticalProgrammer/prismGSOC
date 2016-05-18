@@ -59,6 +59,15 @@ import userinterface.GUIPrism;
 import userinterface.OptionsPanel;
 import userinterface.util.GUIEvent;
 import userinterface.util.GUILogEvent;
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+import userinterface.*;
+import prism.PrismLog;
+import userinterface.util.*;
+import prism.*;
 
 @SuppressWarnings("serial")
 public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsListener

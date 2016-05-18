@@ -47,6 +47,23 @@ import acceptance.AcceptanceType;
 import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import parser.ast.Expression;
+import parser.ast.ExpressionTemporal;
+import parser.ast.ExpressionUnaryOp;
+import parser.type.TypeDouble;
+import parser.visitor.ASTTraverse;
+import prism.DRA;
+import prism.Pair;
+import prism.PrismComponent;
+import prism.PrismException;
+import prism.PrismLangException;
+import prism.PrismUtils;
+import explicit.rewards.MCRewards;
 
 /**
  * Explicit-state model checker for discrete-time Markov chains (DTMCs).
@@ -63,73 +80,124 @@ public class DTMCModelChecker extends ProbModelChecker
 
 	// Model checking functions
 
-	@Override
-	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	/**
+	 * Compute probabilities for the contents of a P operator.
+	 */
+	protected StateValues checkProbPathFormula(Model model, Expression expr) throws PrismException
 	{
-		LTLModelChecker mcLtl;
-		StateValues probsProduct, probs;
-		LTLModelChecker.LTLProduct<DTMC> product;
-		DTMCModelChecker mcProduct;
-
-		// For LTL model checking routines
-		mcLtl = new LTLModelChecker(this);
-
-		// Build product of Markov chain and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH,
-				AcceptanceType.GENERIC
-		};
-		product = mcLtl.constructProductMC(this, (DTMC)model, expr, statesOfInterest, allowedAcceptance);
-
-		// Output product, if required
-		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
-		}
-		if (getExportProductStates()) {
-			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
-			PrismFileLog out = new PrismFileLog(getExportProductStatesFilename());
-			VarList newVarList = (VarList) modulesFile.createVarList().clone();
-			String daVar = "_da";
-			while (newVarList.getIndex(daVar) != -1) {
-				daVar = "_" + daVar;
-			}
-			newVarList.addVar(0, new Declaration(daVar, new DeclarationIntUnbounded()), 1, null);
-			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
-			out.close();
-		}
-		
-		// Find accepting states + compute reachability probabilities
-		BitSet acc;
-		if (product.getAcceptance() instanceof AcceptanceReach) {
-			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+		// Test whether this is a simple path formula (i.e. PCTL)
+		// and then pass control to appropriate method. 
+		if (expr.isSimplePathFormula()) {
+			return checkProbPathFormulaSimple(model, expr);
 		} else {
-			mainLog.println("\nFinding accepting BSCCs...");
-			acc = mcLtl.findAcceptingBSCCs(product.getProductModel(), product.getAcceptance());
+			return checkProbPathFormulaLTL(model, expr, false);
 		}
-		mainLog.println("\nComputing reachability probabilities...");
-		mcProduct = new DTMCModelChecker(this);
-		mcProduct.inheritSettings(this);
-		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs(product.getProductModel(), acc).soln, product.getProductModel());
+	}
 
-		// Output vector over product, if required
-		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				probsProduct.print(out, false, false, false, false);
-				out.close();
+	/**
+	 * Compute probabilities for a simple, non-LTL path operator.
+	 */
+	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr) throws PrismException
+	{
+		StateValues probs = null;
+
+		// Negation/parentheses
+		if (expr instanceof ExpressionUnaryOp) {
+			ExpressionUnaryOp exprUnary = (ExpressionUnaryOp) expr;
+			// Parentheses
+			if (exprUnary.getOperator() == ExpressionUnaryOp.PARENTH) {
+				// Recurse
+				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand());
+			}
+			// Negation
+			else if (exprUnary.getOperator() == ExpressionUnaryOp.NOT) {
+				// Compute, then subtract from 1 
+				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand());
+				probs.timesConstant(-1.0);
+				probs.plusConstant(1.0);
+			}
 		}
-		
-		// Mapping probabilities in the original model
-		probs = product.projectToOriginalModel(probsProduct);
-		probsProduct.clear();
+		// Temporal operators
+		else if (expr instanceof ExpressionTemporal) {
+			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
+			// Next
+			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
+				probs = checkProbNext(model, exprTemp);
+			}
+			// Until
+			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
+				if (exprTemp.hasBounds()) {
+					probs = checkProbBoundedUntil(model, exprTemp);
+				} else {
+					probs = checkProbUntil(model, exprTemp);
+				}
+			}
+			// Anything else - convert to until and recurse
+			else {
+				probs = checkProbPathFormulaSimple(model, exprTemp.convertToUntilForm());
+			}
+		}
+
+		if (probs == null)
+			throw new PrismException("Unrecognised path operator in P operator");
 
 		return probs;
 	}
 
 	/**
+	 * Compute probabilities for a next operator.
+	 */
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr) throws PrismException
+	{
+		BitSet target = null;
+		ModelCheckerResult res = null;
+
+		// Model check the operand
+		target = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		res = computeNextProbs((DTMC) model, target);
+		return StateValues.createFromDoubleArray(res.soln, model);
+	}
+
+	/**
+	 * Compute probabilities for a bounded until operator.
+	 */
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
+	{
+		int time;
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// get info from bounded until
+		time = expr.getUpperBound().evaluateInt(constantValues);
+		if (expr.upperBoundIsStrict())
+			time--;
+		if (time < 0) {
+			String bound = expr.upperBoundIsStrict() ? "<" + (time + 1) : "<=" + time;
+			throw new PrismException("Invalid bound " + bound + " in bounded until formula");
+		}
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1()).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// compute probabilities
+
+		// a trivial case: "U<=0"
+		if (time == 0) {
+			// prob is 1 in b2 states, 0 otherwise
+			probs = StateValues.createFromBitSetAsDoubles(b2, model);
+		} else {
+			res = computeBoundedUntilProbs((DTMC) model, b1, b2, time);
+			probs = StateValues.createFromDoubleArray(res.soln, model);
+		}
+
+		return probs;
+	}
+
+	/**
+	<<<<<<< HEAD
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
@@ -144,19 +212,16 @@ public class DTMCModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of Markov chain and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
-		product = mcLtl.constructProductMC(this, (DTMC)model, expr, statesOfInterest, allowedAcceptance);
-		
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		product = mcLtl.constructProductMC(this, (DTMC) model, expr, statesOfInterest, allowedAcceptance);
+
 		// Adapt reward info to product model
 		productRewards = ((MCRewards) modelRewards).liftFromModel(product);
-		
+
 		// Output product, if required
 		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+			mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+			product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
 		}
 		if (getExportProductStates()) {
 			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
@@ -170,12 +235,12 @@ public class DTMCModelChecker extends ProbModelChecker
 			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
 			out.close();
 		}
-		
+
 		// Find accepting states + compute reachability rewards
 		BitSet acc;
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
 		} else {
 			mainLog.println("\nFinding accepting BSCCs...");
 			acc = mcLtl.findAcceptingBSCCs(product.getProductModel(), product.getAcceptance());
@@ -183,23 +248,224 @@ public class DTMCModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability probabilities...");
 		mcProduct = new DTMCModelChecker(this);
 		mcProduct.inheritSettings(this);
-		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc).soln, product.getProductModel());
-		
+		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc).soln,
+				product.getProductModel());
+
 		// Output vector over product, if required
 		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				rewardsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+			rewardsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Mapping rewards in the original model
 		rewards = product.projectToOriginalModel(rewardsProduct);
 		rewardsProduct.clear();
-		
+
 		return rewards;
 	}
-	
+
+	/**
+	 * Compute probabilities for an (unbounded) until operator.
+	 */
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr) throws PrismException
+	{
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1()).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		res = computeUntilProbs((DTMC) model, b1, b2);
+		probs = StateValues.createFromDoubleArray(res.soln, model);
+
+		return probs;
+	}
+
+	/**
+	 * Compute probabilities for an LTL path formula
+	 */
+	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual) throws PrismException
+	{
+		LTLModelChecker mcLtl;
+		StateValues probsProduct, probs;
+		Expression ltl;
+		DRA<BitSet> dra;
+		Model modelProduct;
+		DTMCModelChecker mcProduct;
+		long time;
+
+		// Can't do LTL with time-bounded variants of the temporal operators
+		try {
+			expr.accept(new ASTTraverse()
+			{
+				public void visitPre(ExpressionTemporal e) throws PrismLangException
+				{
+					if (e.getLowerBound() != null)
+						throw new PrismLangException(e.getOperatorSymbol());
+					if (e.getUpperBound() != null)
+						throw new PrismLangException(e.getOperatorSymbol());
+				}
+			});
+		} catch (PrismLangException e) {
+			String s = "Temporal operators (like " + e.getMessage() + ")";
+			s += " cannot have time bounds for LTL properties";
+			throw new PrismException(s);
+		}
+
+		// For LTL model checking routines
+		mcLtl = new LTLModelChecker(this);
+
+		// Model check maximal state formulas
+		Vector<BitSet> labelBS = new Vector<BitSet>();
+		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
+
+		// Convert LTL formula to deterministic Rabin automaton (DRA)
+		mainLog.println("\nBuilding deterministic Rabin automaton (for " + ltl + ")...");
+		time = System.currentTimeMillis();
+		dra = LTLModelChecker.convertLTLFormulaToDRA(ltl);
+		int draSize = dra.size();
+		mainLog.println("\nDRA has " + dra.size() + " states, " + dra.getNumAcceptancePairs() + " pairs.");
+		// dra.print(System.out);
+		time = System.currentTimeMillis() - time;
+		mainLog.println("\nTime for Rabin translation: " + time / 1000.0 + " seconds.");
+
+		// Build product of Markov chain and automaton
+		mainLog.println("\nConstructing MC-DRA product...");
+		Pair<Model, int[]> pair = mcLtl.constructProductMC(dra, (DTMC) model, labelBS);
+		modelProduct = pair.first;
+		int invMap[] = pair.second;
+		int modelProductSize = modelProduct.getNumStates();
+		mainLog.print("\n" + modelProduct.infoStringTable());
+
+		// Find accepting BSCCs + compute reachability probabilities
+		mainLog.println("\nFinding accepting BSCCs...");
+		BitSet acceptingBSCCs = mcLtl.findAcceptingBSCCsForRabin(dra, modelProduct, invMap);
+		mainLog.println("\nComputing reachability probabilities...");
+		mcProduct = new DTMCModelChecker(this);
+		mcProduct.inheritSettings(this);
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((DTMC) modelProduct, acceptingBSCCs).soln, modelProduct);
+
+		// Mapping probabilities in the original model
+		double[] probsProductDbl = probsProduct.getDoubleArray();
+		double[] probsDbl = new double[model.getNumStates()];
+
+		// Get the probabilities for the original model by taking the initial states
+		// of the product and projecting back to the states of the original model
+		for (int i : modelProduct.getInitialStates()) {
+			int s = invMap[i] / draSize;
+			probsDbl[s] = probsProductDbl[i];
+		}
+
+		probs = StateValues.createFromDoubleArray(probsDbl, model);
+		probsProduct.clear();
+
+		return probs;
+	}
+
+	/**
+	 * Compute rewards for the contents of an R operator.
+	 */
+	protected StateValues checkRewardFormula(Model model, MCRewards modelRewards, Expression expr) throws PrismException
+	{
+		StateValues rewards = null;
+
+		if (expr instanceof ExpressionTemporal) {
+			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
+			switch (exprTemp.getOperator()) {
+			case ExpressionTemporal.R_F:
+				rewards = checkRewardReach(model, modelRewards, exprTemp);
+				break;
+			case ExpressionTemporal.R_I:
+				rewards = checkRewardInstantaneous(model, modelRewards, exprTemp);
+				break;
+			case ExpressionTemporal.R_C:
+				rewards = checkRewardCumulative(model, modelRewards, exprTemp);
+				break;
+			default:
+				throw new PrismException("Explicit engine does not yet handle the " + exprTemp.getOperatorSymbol() + " operator in the R operator");
+			}
+		}
+
+		if (rewards == null)
+			throw new PrismException("Unrecognised operator in R operator");
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a reachability reward operator.
+	 */
+	protected StateValues checkRewardReach(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		BitSet b;
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// model check operand first
+		b = checkExpression(model, expr.getOperand2()).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeReachRewards((DTMC) model, modelRewards, b);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for an instantaneous reward operator.
+	 */
+	protected StateValues checkRewardInstantaneous(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// get time bound
+		double t = expr.getUpperBound().evaluateDouble(constantValues);
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeInstantaneousRewards((DTMC) model, modelRewards, t);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a cumulative reward operator.
+	 */
+	protected StateValues checkRewardCumulative(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// get time bound
+		double t = expr.getUpperBound().evaluateDouble(constantValues);
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeCumulativeRewards((DTMC) model, modelRewards, t);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rewards;
+	}
+
 	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -332,13 +598,13 @@ public class DTMCModelChecker extends ProbModelChecker
 			}
 		}
 		mainLog.print("States in non-zero reward BSCCs: " + bsccsNonZero.cardinality());
-		
+
 		// Find states with infinite reward (those reach a non-zero reward BSCC with prob > 0)
 		BitSet inf = prob0(dtmc, null, bsccsNonZero);
 		inf.flip(0, n);
 		int numInf = inf.cardinality();
 		mainLog.println(", inf=" + numInf + ", maybe=" + (n - numInf));
-		
+
 		// Compute rewards
 		// (do this using the functions for "reward reachability" properties but with no targets)
 		switch (linEqMethod) {
@@ -356,6 +622,25 @@ public class DTMCModelChecker extends ProbModelChecker
 
 		// Return results
 		return res;
+	}
+
+	/**
+	 * Compute steady-state probabilities for an S operator.
+	 */
+	protected StateValues checkSteadyStateFormula(Model model, Expression expr) throws PrismException
+	{
+		BitSet b;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// Model check operand first
+		b = checkExpression(model, expr).getBitSet();
+
+		double multProbs[] = Utils.bitsetToDoubleArray(b, model.getNumStates());
+		res = computeSteadyStateBackwardsProbs((DTMC) model, multProbs);
+		probs = StateValues.createFromDoubleArray(res.soln, model);
+
+		return probs;
 	}
 
 	// Steady-state/transient probability computation
@@ -409,6 +694,47 @@ public class DTMCModelChecker extends ProbModelChecker
 	public StateValues doTransient(DTMC dtmc, int k, double initDist[]) throws PrismException
 	{
 		throw new PrismNotSupportedException("Not implemented yet");
+	}
+
+	// Utility methods for probability distributions
+
+	/**
+	 * Generate a probability distribution, stored as a StateValues object, from a file.
+	 * If {@code distFile} is null, so is the return value.
+	 */
+	public StateValues readDistributionFromFile(File distFile, Model model) throws PrismException
+	{
+		StateValues dist = null;
+
+		if (distFile != null) {
+			mainLog.println("\nImporting probability distribution from file \"" + distFile + "\"...");
+			// Build an empty vector 
+			dist = new StateValues(TypeDouble.getInstance(), model);
+			// Populate vector from file
+			dist.readFromFile(distFile);
+		}
+
+		return dist;
+	}
+
+	/**
+	 * Build a probability distribution, stored as a StateValues object,
+	 * from the initial states info of the current model: either probability 1 for
+	 * the (single) initial state or equiprobable over multiple initial states.
+	 */
+	public StateValues buildInitialDistribution(Model model) throws PrismException
+	{
+		StateValues dist = null;
+
+		// Build an empty vector 
+		dist = new StateValues(TypeDouble.getInstance(), model);
+		// Populate vector (equiprobable over initial states)
+		double d = 1.0 / model.getNumInitialStates();
+		for (int in : model.getInitialStates()) {
+			dist.setDoubleValue(in, d);
+		}
+
+		return dist;
 	}
 
 	// Numerical computation functions
@@ -614,7 +940,6 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-
 	/**
 	 * Prob0 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 0,
@@ -726,6 +1051,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
+	<<<<<<< HEAD
 	 * Prob1 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 1,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
@@ -734,7 +1060,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param pre The predecessor relation of the DTMC
 	 */
-	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target, PredecessorRelation pre) {
+	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target, PredecessorRelation pre)
+	{
 		// Implements the constrained reachability algorithm from
 		// Baier, Katoen: Principles of Model Checking (Corollary 10.31 Qualitative Constrained Reachability)
 		long timer;
@@ -799,6 +1126,14 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param dtmc The DTMC
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
+	=======
+	 * Prob1 precomputation algorithm.
+	 * i.e. determine the states of a DTMC which, with probability 1,
+	 * reach a state in {@code target}, while remaining in those in @{code remain}.
+	 * @param mdp The MDP
+	 * @param remain Remain in these states (optional: null means "all")
+	 * @param target Target states
+	>>>>>>> remotes/multi/master
 	 */
 	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target)
 	{
@@ -1611,7 +1946,6 @@ public class DTMCModelChecker extends ProbModelChecker
 		ModelCheckerResult res;
 		try {
 			// Two examples of building and solving a DTMC
-
 			int version = 2;
 			if (version == 1) {
 

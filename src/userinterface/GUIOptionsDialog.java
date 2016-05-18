@@ -31,7 +31,6 @@ import javax.swing.*;
 import prism.*;
 import settings.*;
 
-@SuppressWarnings("serial")
 public class GUIOptionsDialog extends javax.swing.JDialog
 {
 	
@@ -68,7 +67,6 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		// defunct
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void show()
 	{
 		super.show();
@@ -197,7 +195,6 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		
 	}//GEN-LAST:event_defaultButtonActionPerformed
 	
-	@SuppressWarnings("deprecation")
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{//GEN-HEADEREND:event_cancelButtonActionPerformed
 		hide();

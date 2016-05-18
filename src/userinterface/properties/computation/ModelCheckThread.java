@@ -33,6 +33,7 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import parser.ast.PropertiesFile;
+import prism.PrismException;
 import prism.Result;
 import userinterface.GUIComputationThread;
 import userinterface.GUIPrism;
@@ -103,9 +104,9 @@ public class ModelCheckThread extends GUIComputationThread
 			// Do model checking
 			try {
 				result = prism.modelCheck(propertiesFile, propertiesFile.getPropertyObject(i));
-			} catch (Exception e) {
+			} catch (PrismException e) {
 				result = new Result(e);
-				error(e);
+				error(e.getMessage());
 			}
 			ic.interrupt();
 			try {

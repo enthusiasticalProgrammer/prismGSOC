@@ -39,6 +39,7 @@ import common.IterableStateSet;
 import explicit.rewards.MCRewards;
 import prism.ModelType;
 import prism.Pair;
+
 import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismUtils;
@@ -84,6 +85,23 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 		}
 	}
 
+	public String infoString()
+	{
+		String s = "";
+		s += numStates + " states (" + getNumInitialStates() + " initial)";
+		s += ", " + getNumTransitions() + " transitions";
+		return s;
+	}
+
+	@Override
+	public String infoStringTable()
+	{
+		String s = "";
+		s += "States:      " + numStates + " (" + getNumInitialStates() + " initial)\n";
+		s += "Transitions: " + getNumTransitions() + "\n";
+		return s;
+	}
+
 	@Override
 	public void exportTransitionsToDotFile(int i, PrismLog out)
 	{
@@ -92,6 +110,29 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 			Map.Entry<Integer, Double> e = iter.next();
 			out.print(i + " -> " + e.getKey() + " [ label=\"");
 			out.print(e.getValue() + "\" ];\n");
+		}
+	}
+	
+	public void exportToDotFile(String filename, BitSet mark) throws PrismException
+	{
+		int i;
+		try {
+			FileWriter out = new FileWriter(filename);
+			out.write("digraph " + getModelType() + " {\nsize=\"8,5\"\nnode [shape=box];\n");
+			for (i = 0; i < numStates; i++) {
+				if (mark != null && mark.get(i))
+					out.write(i + " [style=filled  fillcolor=\"#cccccc\"]\n");
+				Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i);
+				while (iter.hasNext()) {
+					Map.Entry<Integer, Double> e = iter.next();
+					out.write(i + " -> " + e.getKey() + " [ label=\"");
+					out.write(e.getValue() + "\" ];\n");
+				}
+			}
+			out.write("}\n");
+			out.close();
+		} catch (IOException e) {
+			throw new PrismException("Could not write " + getModelType() + " to file \"" + filename + "\"" + e);
 		}
 	}
 
@@ -137,8 +178,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 	}
 	
 	// Accessors (for DTMC)
-	
-	@Override
+	@Override	
 	public Iterator<Entry<Integer, Pair<Double, Object>>> getTransitionsAndActionsIterator(int s)
 	{
 		// Default implementation: extend iterator, setting all actions to null
@@ -163,15 +203,6 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 			maxDiff = diff > maxDiff ? diff : maxDiff;
 			vect[s] = d;
 		}
-		// Use this code instead for backwards Gauss-Seidel
-		/*for (s = numStates - 1; s >= 0; s--) {
-			if (subset.get(s)) {
-				d = mvMultJacSingle(s, vect);
-				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-				maxDiff = diff > maxDiff ? diff : maxDiff;
-				vect[s] = d;
-			}
-		}*/
 		return maxDiff;
 	}
 

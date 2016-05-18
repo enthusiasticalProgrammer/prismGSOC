@@ -34,11 +34,12 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.table.*;
 
-@SuppressWarnings("serial")
 public class SettingTable extends JPanel implements ListSelectionListener, TableModelListener, ItemListener, SettingDisplay
 {
 	private Component parent;
 	private SettingTableModel theModel;
+	
+	private int lineWidth;
 	
 	private boolean shouldRemove;
 	/** Creates new form PropertyTable */
@@ -200,8 +201,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
             //just saying tableScroll.setColumnHeader(null); does not work as it should
             //Unfortunately, it overrides a deprecated API, so let's hope they
             //sort it out by Java 5.0, nice one Sun...
-            @SuppressWarnings("deprecation")
-			protected void configureEnclosingScrollPane()
+            protected void configureEnclosingScrollPane()
             {
                 Container p = getParent();
                 if (p instanceof JViewport)
@@ -360,58 +360,11 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			commentLabel.setText("");
 			commentText.setText("");
 		}
-		//System.out.println("TABLE CHANGED");
-		//       CellEditor ce = theTable.getCellEditor();
-		//        if(ce != null) ce.cancelCellEditing();
-		//        theCombo.setModel(theModel.getComboModel());
-		//        for(int i = 0; i < theModel.getRowCount(); i++)
-		//        {
-		//            ////System.out.println("Row "+i);
-		//            String value = theModel.getValueAt(i, 1).toString();
-		//            int lines = 1;
-		//
-		//            if(theModel.getValueAt(i, 1) instanceof FontColorProperty)
-		//            {
-		//                int height = ((FontColorProperty)theModel.getValueAt(i,1)).getFontColorPair().f.getSize();
-		//
-		//                height = Math.max(height, (lineWidth-2));
-		//                theTable.setRowHeight(i, (height*lines)+4);
-		//            }
-		//            else if(theModel.getValueAt(i, 1) instanceof SingleProperty)
-		//            {
-		//                //lines = getNumLines(value);
-		//                //theTable.setRowHeight(i, (lineWidth*lines)+2);
-		//                //int heightWanted = (int)area.getPreferredSize().getHeight();
-		//                  ///  if(heightWanted != theTable.getRowHeight(row));
-		//                   // theTable.setRowHeight(row, heightWanted);
-		//            }
-		//            else if(theModel.getValueAt(i, 1) instanceof MultipleProperty)
-		//            {
-		//                lines = getNumLines(value);
-		//                theTable.setRowHeight(i, (lineWidth*lines)+2);
-		//            }
-		//
-		//
-		//
-		//        }
-		//        doChoiceBox();
-		//theTable.s
-		//System.out.println("getting the combomodel");
+
 		theCombo.setModel(theModel.getComboModel());
 		doChoiceBox();
 	}
 	
-	//    public static int getNumLines(String str)
-	//    {
-	//        int count = 1;
-	//        for(int i = 0; i < str.length(); i++)
-	//        {
-	//            char curr = str.charAt(i);
-	//            if(curr=='\n') count++;
-	//        }
-	//        ////System.out.println("count = "+count);
-	//        return count;
-	//    }
 	
 	public void itemStateChanged(ItemEvent e)
 	{
@@ -530,7 +483,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			{
 				ArrayList settings = (ArrayList)value;
 				ArrayList values = new ArrayList();
-
 				Setting first = null;
 				for(int i = 0; i < settings.size();i++)
 				{
@@ -651,10 +603,13 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		
 		public void refreshGroupNames()
 		{
+			//System.out.println("refreshing group names");
 			Iterator it = owners.iterator();
 			SettingOwner last = null;
+			int currGroupCount = 0;
 			String tempName = "";
 			groupNames = new ArrayList();
+			int index = 0;
 			
 			String ownerList = "";
 			while(it.hasNext())
@@ -665,6 +620,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				if(last == null)
 				{
 					//this is the first group
+					currGroupCount++;
 					if(!po.getSettingOwnerName().equals(""))ownerList += "\'"+po.getSettingOwnerName()+"\'";
 					tempName = po.getSettingOwnerClassName();
 					//groupStarts.add(new Integer(0));
@@ -672,6 +628,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				else if(po.getSettingOwnerID() == last.getSettingOwnerID())
 				{
 					//this is for the second or after in the sequence
+					currGroupCount++;
+					//tempName = ""+currGroupCount+" "+po.getClassDescriptor()+"s";
 					if(!po.getSettingOwnerClassName().endsWith("s"))
 						tempName = po.getSettingOwnerClassName()+"s";
 					if(!po.getSettingOwnerName().equals(""))ownerList += ", \'"+po.getSettingOwnerName()+"\'";
@@ -682,11 +640,16 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					tempName+=" "+ownerList+"";
 					ownerList = "";
 					groupNames.add(tempName);
+					//System.out.println("adding: "+tempName);
+					//groupSizes.add(new Integer(currGroupCount));
+					currGroupCount = 0;
+					currGroupCount++;
 					ownerList += "\'"+po.getSettingOwnerName()+"\'";
 					if(!po.getSettingOwnerName().equals(""))tempName = po.getSettingOwnerClassName()+" \'"+po.getSettingOwnerName()+"\'";
 					//groupStarts.add(new Integer(index));
 				}
 				last = po;
+				index++;
 			}
 			if(owners.size() != 0)
 			{

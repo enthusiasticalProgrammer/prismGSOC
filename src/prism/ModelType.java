@@ -148,6 +148,7 @@ public enum ModelType
 	 * Do the transitions in a choice sum to 1 for this model type?
 	 * Can also use this to test whether models uses rates or probabilities.
 	 */
+	//TODO Christpher: does this make sense
 	public boolean choicesSumToOne()
 	{
 		return true;
@@ -164,6 +165,7 @@ public enum ModelType
 	/**
 	 * Does this model allow nondeterministic choices?
 	 */
+	//TODO Christopher: does this make sense?
 	public boolean nondeterministic()
 	{
 		return true;
@@ -203,3 +205,4 @@ public enum ModelType
 		}
 	}
 }
+

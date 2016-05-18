@@ -31,9 +31,21 @@ import parser.Values;
 import parser.visitor.ASTVisitor;
 import prism.OpRelOpBound;
 import prism.PrismLangException;
+import parser.*;
+import parser.visitor.*;
+import prism.PrismLangException;
 
+
+//TODO Christopher: einen etwas genaueren Blick darauf werfen
 public class ExpressionProb extends ExpressionQuant
 {
+	String relOp = null;
+	Expression prob = null;
+	Expression expression = null;
+	// Note: this "old-style" filter is just for display purposes
+	// The parser creates an (invisible) new-style filter around this expression
+	Filter filter = null;
+
 	// Constructors
 
 	public ExpressionProb()
@@ -49,12 +61,28 @@ public class ExpressionProb extends ExpressionQuant
 
 	// Set methods
 
+
 	/**
 	 * Set the probability bound. Equivalent to {@code setBound(p)}.
 	 */
 	public void setProb(Expression p)
 	{
 		setBound(p);
+	}
+
+	public void setRelOp(String r)
+	{
+		relOp = r;
+	}
+
+	public void setExpression(Expression e)
+	{
+		expression = e;
+	}
+
+	public void setFilter(Filter f)
+	{
+		filter = f;
 	}
 
 	// Get methods
@@ -93,7 +121,21 @@ public class ExpressionProb extends ExpressionQuant
 	
 	// Methods required for Expression:
 
-	@Override
+	public Expression getExpression()
+	{
+		return expression;
+	}
+
+	public Filter getFilter()
+	{
+		return filter;
+	}
+
+	// Methods required for Expression:
+
+	/**
+	 * Is this expression constant?
+	 */
 	public boolean isConstant()
 	{
 		return false;
@@ -110,6 +152,7 @@ public class ExpressionProb extends ExpressionQuant
 	{
 		throw new PrismLangException("Cannot evaluate a P operator without a model");
 	}
+
 
 	@Override
 	public String getResultName()
@@ -157,7 +200,6 @@ public class ExpressionProb extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
-
 		s += "P" + getModifierString() + getRelOp();
 		s += (getBound() == null) ? "?" : getBound().toString();
 		s += " [ " + getExpression();
@@ -167,6 +209,7 @@ public class ExpressionProb extends ExpressionQuant
 
 		return s;
 	}
+
 }
 
 //------------------------------------------------------------------------------

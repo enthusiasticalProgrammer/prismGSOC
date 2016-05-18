@@ -29,7 +29,6 @@ package userinterface.properties;
 
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class GraphConstantHeader extends javax.swing.JPanel
 {
     

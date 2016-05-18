@@ -42,6 +42,8 @@ public class Generalized {
 	private GState gremoved;
 	private GScc scc_stack;
 	private int gstate_id;
+	private int gstate_count;
+	private int gtrans_count;
 	private int rank;
 	private int scc_id;
 	private MyBitSet fin;
@@ -136,6 +138,8 @@ public class Generalized {
 		
 		init_size = 0;
 		gstate_id = 1;
+		gstate_count = 0;
+		gtrans_count = 0;
 
 		fin = new MyBitSet();
 		bad_scc = new MyBitSet();
@@ -320,7 +324,7 @@ public class Generalized {
 	/* creates all the transitions from a state */
 	private void make_gtrans(Alternating a, GState s)
 	{
-		int i = 0, trans_exist = 1;
+		int i, state_trans = 0, trans_exist = 1;
 		Vector<Integer> list;
 		GState s1;
 		Alternating.ATrans t1;
@@ -369,6 +373,7 @@ public class Generalized {
 						if (free == s.trans)
 							s.trans = t2;
 						free = null;
+						state_trans--;
 					} else if (t1.to.containsAll(t2.to.nodes_set) && t1.pos.containsAll(t2.pos) && t1.neg.containsAll(t2.neg) && t2._final.equals(fin)) {	/* t1 is redundant */
 						break;
 					} else {
@@ -384,6 +389,7 @@ public class Generalized {
 					trans._final = (MyBitSet) fin.clone();
 					trans.nxt = s.trans.nxt;
 					s.trans.nxt = trans;
+					state_trans++;
 				}
 			}
 			if (p.trans == null)
@@ -444,6 +450,8 @@ public class Generalized {
 		s.prv = gstates;
 		s.nxt.prv = s;
 		gstates.nxt = s;
+		gtrans_count += state_trans;
+		gstate_count++;
 	}
 
 	/* redirects transitions before removing a state from the automaton */

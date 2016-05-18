@@ -210,6 +210,7 @@ public abstract class ExpressionQuant extends Expression
 			return false;
 		return true;
 	}
+	
 }
 
 //------------------------------------------------------------------------------

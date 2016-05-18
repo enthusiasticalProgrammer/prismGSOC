@@ -135,7 +135,6 @@ public class ExplicitFiles2MTBDD
 
 	private void readStatesFromFile() throws PrismException
 	{
-
 		String s, ss[];
 		int i, j, lineNum = 0;
 
@@ -143,7 +142,7 @@ public class ExplicitFiles2MTBDD
 		statesArray = new int[numStates][];
 		BufferedReader in = null;
 		try {
-			
+
 			in = new BufferedReader(new FileReader(statesFile));
 			// skip first line
 			in.readLine();
@@ -180,12 +179,13 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("File I/O error reading from \"" + statesFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of states file \"" + statesFile + "\"");
-		} finally{
+		} finally {
 			try {
-			       if (in != null) in.close();
-			     } catch (IOException io) {
-			    	 throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
-			     }
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
 	}
 
@@ -444,8 +444,10 @@ public class ExplicitFiles2MTBDD
 		moduleDDColVars[0] = new JDDVars();
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
-			moduleDDRowVars[0].copyVarsFrom(varDDRowVars[i]);
-			moduleDDColVars[0].copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			moduleDDRowVars[0].addVars(varDDRowVars[i]);
+			moduleDDColVars[0].addVars(varDDColVars[i]);
 		}
 
 		// put refs for all vars in whole system together
@@ -461,8 +463,10 @@ public class ExplicitFiles2MTBDD
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
 			// add to list
-			allDDRowVars.copyVarsFrom(varDDRowVars[i]);
-			allDDColVars.copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			allDDRowVars.addVars(varDDRowVars[i]);
+			allDDColVars.addVars(varDDColVars[i]);
 		}
 		if (modelType == ModelType.MDP) {
 			for (i = 0; i < ddChoiceVars.length; i++) {

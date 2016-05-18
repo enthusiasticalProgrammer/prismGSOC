@@ -375,7 +375,11 @@ public abstract class PrismLog implements Closeable, AutoCloseable
 	
 	/**
 	 * Prints a warning message {@code s}, preceded by "\nWarning: " and followed by a newline character.
+<<<<<<< HEAD
 	 * <br>
+=======
+	 * <p/>
+>>>>>>> remotes/multi/master
 	 * Also increases {@link #numberOfWarnings} by one. This variable can then be
 	 * queried using {@link #getNumberOfWarnings()} at the end of computation
 	 * and the user can be appropriately informed that there were warnings generated.

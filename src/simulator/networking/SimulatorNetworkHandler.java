@@ -716,7 +716,6 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 	
 	//TableModel methods
-	@SuppressWarnings("serial")
 	private AbstractTableModel tableModel = new AbstractTableModel()
 	{
 		

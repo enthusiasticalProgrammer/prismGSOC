@@ -30,8 +30,11 @@ package jltl2ba;
 import java.util.Vector;
 import java.io.PrintStream;
 
+import jltl2ba.Alternating.ATrans;
 import jltl2ba.SimpleLTL;
 import prism.PrismException;
+
+//TODO Christopher duplicate method pairs!
 
 public class Alternating {
 	public int astate_count;
@@ -84,17 +87,21 @@ public class Alternating {
 		return rv;
 	}
 
-	public static class AProd {
+
+	public static class AProd
+	{
 		public int astate;
 		public ATrans prod;
 		public ATrans trans;
 		public AProd nxt;
 		public AProd prv;
 
-		public AProd() {
+		public AProd()
+		{
 			;
 		}
 	}
+	
 
 	public Alternating(SimpleLTL formula, APSet apset) throws PrismException {
 		astate_count = 0;

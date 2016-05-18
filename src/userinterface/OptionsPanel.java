@@ -30,7 +30,6 @@ package userinterface;
 import javax.swing.*;
 import prism.*;
 
-@SuppressWarnings("serial")
 public abstract class OptionsPanel extends JPanel
 {
     

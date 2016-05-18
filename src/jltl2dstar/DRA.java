@@ -247,15 +247,52 @@ public class DRA extends DA {
 		return accNew;
 	}
 
-	
-	//	public DRA calculateUnionStuttered(DRA other,
-	//			StutterSensitivenessInformation stutter_information,
-	//			boolean trueloop_check,
-	//			boolean detailed_states) {
-	//		if (this.isStreett() ||	other.isStreett()) {
-	//			throw new PrismException("Can not calculate union for Streett automata");
-	//		}
-	//
-	//		return DAUnionAlgorithm<DRA>.calculateUnionStuttered(this, other, stutter_information, trueloop_check, detailed_states);
-	//	}
+	/**
+	 * Convert the DRA from jltl2dstar to PRISM data structures.  
+	 */
+	public prism.DRA<BitSet> createPrismDRA() throws PrismException
+	{
+		int i, k, numLabels, numStates, src, dest;
+		List<String> apList;
+		BitSet bitset, bitset2;
+		RabinAcceptance acc;
+		prism.DRA<BitSet> draNew;
+		
+		numLabels = getAPSize();
+		numStates = size();
+		draNew = new prism.DRA<BitSet>(numStates);
+		// Copy AP set
+		apList = new ArrayList<String>(numLabels);
+		for (i = 0; i < numLabels; i++) {
+			apList.add(getAPSet().getAP(i));
+		}
+		draNew.setAPList(apList);
+		// Copy start state
+		draNew.setStartState(getStartState().getName());
+		// Copy edges
+		for (i = 0; i < numStates; i++) {
+			DA_State cur_state = get(i);
+			src = cur_state.getName();
+			for (Map.Entry<APElement, DA_State> transition : cur_state.edges().entrySet()) {
+				dest = transition.getValue().getName();
+				bitset = new BitSet();
+				for (k = 0; k < numLabels; k++) {
+					bitset.set(k, transition.getKey().get(k));
+				}
+				draNew.addEdge(src, bitset, dest);
+			}
+		}
+		// Copy acceptance pairs
+		acc = acceptance(); 
+		for (i = 0; i < acc.size(); i++) {
+			bitset = new BitSet();
+			bitset.or(acc.getAcceptance_U(i));
+			bitset2 = new BitSet();
+			bitset2.or(acc.getAcceptance_L(i));
+			// Note: Pairs (U_i,L_i) become (L_i,K_i) in PRISM's notation
+			draNew.addAcceptancePair(bitset, bitset2);
+		}
+		
+		return draNew;
+	}
 }

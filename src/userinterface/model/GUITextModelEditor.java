@@ -84,7 +84,6 @@ import userinterface.util.GUIUndoManager;
  * model files. Currently supports Prism and Pepa models. It also tells 
  * the GUIPrism, of which it is a member, about modified events.
  */
-@SuppressWarnings("serial")
 public class GUITextModelEditor extends GUIModelEditor implements DocumentListener, MouseListener
 {
 	private GUIMultiModelHandler handler;

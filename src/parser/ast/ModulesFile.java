@@ -2,7 +2,7 @@
 //	
 //	Copyright (c) 2002-
 //	Authors:
-//	* Dave Parker <d.a.parker@cs.bham.ac.uk> (University of Birmingham/Oxford)
+//	* Dave Parker <david.parker@comlab.ox.ac.uk> (University of Oxford, formerly University of Birmingham)
 //	
 //------------------------------------------------------------------------------
 //	
@@ -628,6 +628,11 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		// Check module names
 		checkModuleNames();
 
+		// Get synchronising action names
+		getSynchNames();
+		// Then identify/check any references to action names
+		findAllActions(synchs);
+
 		// Check constant identifiers
 		checkConstantIdents();
 		// Find all instances of constants
@@ -659,6 +664,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 
 		// Various semantic checks 
 		doSemanticChecks();
+
 		// Type checking
 		typeCheck();
 		
@@ -904,6 +910,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Check "system...endsystem" constructs, if present.
 	 */
 	private void checkSystemDefns() throws PrismLangException
@@ -977,6 +984,8 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	}
 
 	/**
+=======
+>>>>>>> remotes/multi/master
 	 * Get  a list of constants in the model that are undefined
 	 * ("const int x;" rather than "const int x = 1;") 
 	 */
@@ -1023,6 +1032,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Get access to the values that have been provided for undefined constants in the model 
 	 * (e.g. via the method {@link #setUndefinedConstants(Values)}).
 	 */
@@ -1032,6 +1042,8 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	}
 
 	/**
+=======
+>>>>>>> remotes/multi/master
 	 * Get access to the values for all constants in the model, including the 
 	 * undefined constants set previously via the method {@link #setUndefinedConstants(Values)}.
 	 * Until they are set for the first time, this method returns null.  
@@ -1244,7 +1256,6 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Perform a deep copy.
 	 */
-	@SuppressWarnings("unchecked")
 	public ASTElement deepCopy()
 	{
 		int i, n;
@@ -1294,5 +1305,6 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		return ret;
 	}
 }
+
 
 // ------------------------------------------------------------------------------

@@ -326,6 +326,7 @@ public class StateValuesDV implements StateValues
 		return (StateValues) new StateValuesDV(tmp, newModel);
 	}
 
+	//TODO Christopher: merge this method with the next one
 	@Override
 	public JDDNode getBDDFromInterval(String relOpString, double bound)
 	{

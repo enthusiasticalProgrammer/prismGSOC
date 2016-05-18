@@ -153,6 +153,14 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		setState(READY_OKAY);
 	}
 	
+
+	private synchronized void setNoDoneThisStint(int noDone)
+	{
+		this.noDoneThisStint = noDone;
+		progressBar.repaint();
+		owner.notifyChange(this);
+	}
+	
 	public void setErroneousStintToZero()
 	{
 		this.noDoneThisStint = 0;
@@ -263,6 +271,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		
 		
 		setState(SENDING_FILES);
+		int result = 0;
 		try
 		{
 			String[] parameters =
@@ -294,6 +303,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		
 	}
 	
+
 	public void startStint(int noIterations, long maxPathLength, String binaryName, boolean doFeedback, boolean resultsFeedback)
 	{
 		if(getHostState() != READY_OKAY && getHostState() != READY_UNKNOWN_STATUS) return; //must be ready
@@ -304,7 +314,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		setState(RUNNING);
 		if(doFeedback || resultsFeedback)
 		{
-			
 			if(resultsFeedback)
 				feedbackResults = "feedbackResultsFile"+System.currentTimeMillis()+".txt";
 			feedbackThread = new StintFeedbackThread(doFeedback, resultsFeedback);
@@ -669,9 +678,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						{
 							
 							reader = new BufferedReader(new FileReader(localFeedback));
-							int done = Integer.parseInt(reader.readLine());
 							
-							noDoneThisStint = done;
 							owner.notifyChange(instance);
 						}
 						catch(FileNotFoundException ee)

@@ -34,16 +34,16 @@ import javax.swing.table.*;
 import java.util.*; 
 import userinterface.*;
 
-@SuppressWarnings("serial")
 public class GUIResultsTable extends javax.swing.JDialog
 {
 	private static int noOpen = 0;
 	
+
 	private GUIExperiment exp;
 	
 	private JPanel topPanel;
 	private JButton closeButton;
-	
+
 	private JTable table;
 	private ResultsTableModel tableModel;
 	
@@ -124,7 +124,6 @@ public class GUIResultsTable extends javax.swing.JDialog
 		this.getContentPane().add(tmpPanel);
 	}
 
-	@SuppressWarnings("deprecation")
 	public void show()
 	{
 		noOpen++;

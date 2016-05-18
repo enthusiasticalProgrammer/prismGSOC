@@ -254,6 +254,7 @@ public abstract class Sampler
 				return new SamplerRewardInstDisc(exprTemp, rsi);
 			}
 		case ExpressionTemporal.P_F:
+		case ExpressionTemporal.R_F:
 			// reachability reward
 			return new SamplerRewardReach(exprTemp, rsi);
 		}

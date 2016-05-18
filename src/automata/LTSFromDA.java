@@ -29,6 +29,7 @@ package automata;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import prism.ModelType;
@@ -222,12 +223,13 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public Model constructInducedModel(MDStrategy strat)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportToDotFileWithStrat(PrismLog out, BitSet mark, int[] strat)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
+
 }

@@ -29,7 +29,6 @@ import java.awt.*;
 import prism.*;
 import java.net.URL;
 
-@SuppressWarnings("serial")
 public class GUIPrismSplash extends Frame 
 {
 	private String filename;

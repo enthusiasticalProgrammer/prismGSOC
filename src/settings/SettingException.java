@@ -26,7 +26,6 @@
 
 package settings;
 
-@SuppressWarnings("serial")
 public class SettingException extends Exception
 {
     /** Creates a new instance of SettingException */

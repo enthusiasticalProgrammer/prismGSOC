@@ -146,6 +146,7 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Empty the list of initial states.
 	 */
 	public void clearInitialStates()
@@ -154,6 +155,8 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
+=======
+>>>>>>> remotes/multi/master
 	 * Add a state to the list of deadlock states.
 	 */
 	public void addDeadlockState(int i)
@@ -183,6 +186,7 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Sets the VarList for this model (may be {@code null}).
 	 */
 	public void setVarList(VarList varList)
@@ -195,6 +199,12 @@ public abstract class ModelExplicit implements Model
 	 * Any existing label with the same name is overwritten.
 	 * @param name The name of the label
 	 * @param states The states that satisfy the label 
+=======
+	 * Adds a label and the set the states that satisfy it.
+	 * Any existing label with the same name is overwritten.
+	 * @param name The name of the label
+	 * @param states The states that satisyy the label 
+>>>>>>> remotes/multi/master
 	 */
 	public void addLabel(String name, BitSet states)
 	{
@@ -290,7 +300,6 @@ public abstract class ModelExplicit implements Model
 		for (int dl : deadlocks) {
 			bs.set(dl);
 		}
-
 		return StateValues.createFromBitSet(bs, this);
 	}
 
@@ -305,7 +314,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return deadlocks.contains(i);
 	}
-
+	
 	@Override
 	public List<State> getStatesList()
 	{
@@ -329,6 +338,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return labels.get(name);
 	}
+
 
 	@Override
 	public boolean hasLabel(String name)
@@ -449,7 +459,6 @@ public abstract class ModelExplicit implements Model
 	{
 		if (statesList == null)
 			return;
-
 		// Print header: list of model vars
 		if (exportType == Prism.EXPORT_MATLAB)
 			log.print("% ");

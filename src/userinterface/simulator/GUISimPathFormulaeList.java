@@ -35,16 +35,18 @@ import prism.PrismException;
 import userinterface.properties.*;
 import simulator.*;
 
-@SuppressWarnings("serial")
+
 public class GUISimPathFormulaeList extends JList
 {
 
+	private GUISimulator guiSim;
 	private SimulatorEngine engine;
 	private DefaultListModel listModel;
 
 	/** Creates a new instance of GUISimPathFormulaeList */
 	public GUISimPathFormulaeList(GUISimulator guiSim)
 	{
+		this.guiSim = guiSim;
 		this.engine = guiSim.getPrism().getSimulator();
 		listModel = new DefaultListModel();
 		setModel(listModel);

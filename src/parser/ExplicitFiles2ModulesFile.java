@@ -42,7 +42,9 @@ import parser.type.Type;
 import parser.type.TypeBool;
 import parser.type.TypeInt;
 import prism.ModelType;
+import prism.Prism;
 import prism.PrismException;
+import prism.PrismLog;
 
 /**
  * Class to build a (partial) ModulesFile corresponding to imported explicit-state file storage of a model.
@@ -51,13 +53,11 @@ import prism.PrismException;
  */
 public class ExplicitFiles2ModulesFile
 {
-
 	// Num states
 	private int numStates = 0;
 
 	public ExplicitFiles2ModulesFile()
 	{
-
 	}
 
 	/**

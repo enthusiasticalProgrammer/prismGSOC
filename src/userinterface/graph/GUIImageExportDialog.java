@@ -33,9 +33,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import userinterface.*;
 
-@SuppressWarnings("serial")
 public class GUIImageExportDialog extends JDialog implements DocumentListener
-{
+{         
+	//ATTRIBUTES    
 	 
 	private int exportWidth;
 	private int exportHeight;

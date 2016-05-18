@@ -1,4 +1,4 @@
-//==============================================================================
+package userinterface.simulator.networking;//==============================================================================
 //	
 //	Copyright (c) 2002-
 //	Authors:
@@ -24,13 +24,14 @@
 //	
 //==============================================================================
 
-package userinterface.simulator.networking;
+
 
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
+import java.util.regex.*;
 import java.awt.*;
 
 import userinterface.*;
@@ -42,7 +43,6 @@ import parser.ast.*;
 import prism.*;
 import settings.*;
 
-@SuppressWarnings("serial")
 public class GUISimulatorDistributionDialog extends javax.swing.JDialog implements Observer
 {
 	private SimulatorNetworkHandler network;
@@ -50,12 +50,17 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	
 	//The job to be done
 	private boolean isExperiment;
+	private SimulatorEngine simulator;
+	private GUIMultiProperties properties;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
 	private ArrayList props;
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
+	private Thread experimentThread;
+	private Expression experimentFormula;
+
 	private boolean cancelled = false;
 	
 	private ArrayList propertyValues = null;
@@ -71,6 +76,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		super(parent, modal);
 		setTitle("PRISM Distributed Simulator");
 		
+		this.simulator = simulator;
+
 		initComponents();
 		setLocationRelativeTo(getParent()); // centre
 		
@@ -87,14 +94,15 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void show(GUIExperiment expr, Thread exprThread, ModulesFile modulesFile, PropertiesFile properties, UndefinedConstants undefinedConstants, Expression propertyToCheck, SimulationInformation info) throws PrismException
 	{
 		this.isExperiment = true;
 		this.modulesFile = modulesFile;
 		this.propertiesFile = properties;
+		this.experimentFormula = propertyToCheck;
 		this.expr = expr;
 		this.info = info;
+		this.experimentThread = exprThread;
 		this.undefinedConstants = undefinedConstants;
 		//setup the interface
 		PrismSettings settings = GUIPrism.getGUI().getPrism().getSettings();
@@ -145,10 +153,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList props, SimulationInformation info) throws PrismException
 	{
 		this.isExperiment = false;
+		this.properties = properties;
 		this.modulesFile =modulesFile;
 		this.propertiesFile = propertiesFile;
 		this.props = props;
@@ -613,15 +621,13 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			System.out.println("We proceed with fingers crossed");
 		}
 	}//GEN-LAST:event_editButtonActionPerformed
-	
-	@SuppressWarnings("deprecation")
+
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{//GEN-HEADEREND:event_cancelButtonActionPerformed
 		cancelled = true;
 		hide();
 	}//GEN-LAST:event_cancelButtonActionPerformed
 	
-	@SuppressWarnings("deprecation")
 	private void doneButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_doneButtonActionPerformed
 	{//GEN-HEADEREND:event_doneButtonActionPerformed
 		if(network.countIterationsDone() < info.getNumSamples())
@@ -637,10 +643,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				{
 					cancelled = true;
 					hide();
-					break;
 				}
-				default:
-					break;
+				case 2: //do nothing
 			}
 		}
 	}//GEN-LAST:event_doneButtonActionPerformed
@@ -903,9 +907,13 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	class PepaView extends PlainView
 	{
 		
+		private Matcher match;
+		private Pattern pattern;
 		public PepaView(Element elem)
 		{
 			super(elem);
+			
+			pattern = Pattern.compile("%.*");
 		}
 		
 		public void paint(Graphics g, Shape a)
@@ -923,6 +931,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			{
 				g.setColor(Color.green);
 				Document doc = getDocument();
+				Segment segment = getLineBuffer();
 				
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine-stLine);

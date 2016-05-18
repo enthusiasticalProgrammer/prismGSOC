@@ -40,6 +40,7 @@ import prism.*;
  */
 public class DigitalClocks
 {
+
 	// Log
 	private PrismLog mainLog;
 	// Model to be converted
@@ -103,6 +104,7 @@ public class DigitalClocks
 
 		// Store model/properties files
 		this.modulesFile = modulesFile;
+
 		constantValues = modulesFile.getConstantValues();
 		// TODO: need property constants too?
 		varList = modulesFile.createVarList();

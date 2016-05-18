@@ -57,10 +57,6 @@ import parser.PrismSyntaxHighlighter;
 class PrismEditorKit extends DefaultEditorKit
 {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private PrismContext preferences;
 	private GUIMultiModelHandler handler;
 	
@@ -104,7 +100,6 @@ class PrismEditorKit extends DefaultEditorKit
 
 }
 
-@SuppressWarnings("serial")
 class PrismContext extends StyleContext implements ViewFactory
 {
 
@@ -213,7 +208,6 @@ class PrismView extends PlainView
 		{
 			g.setColor(Color.green);
 			Document doc = getDocument();
-
 			String s = doc.getText(stLine, enLine-stLine);
 			Style[] styles = highlight(s, (p0-stLine), (p1-p0));
 			String fname = handler.getPrismEditorFontFast().getName();

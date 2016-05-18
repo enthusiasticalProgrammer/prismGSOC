@@ -64,7 +64,7 @@ public class SimPathPlotThread extends GUIComputationThread
 					plug.warning(msg);
 				}
 			}
-		} catch (PrismException e) {
+		} catch (Exception e) {
 			error(e.getMessage());
 		}
 	}

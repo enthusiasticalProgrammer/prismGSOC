@@ -32,7 +32,7 @@ import prism.PrismException;
 public final class FoxGlynn
 {
 	// constructor parameters
-	private double overflow, accuracy;
+	private double underflow, overflow, accuracy;
 	private double q_tmax;
 
 	// returned values
@@ -40,9 +40,10 @@ public final class FoxGlynn
 	private double totalWeight;
 	private double[] weights;
 
-	public FoxGlynn(double qtmax, double of, double acc) throws PrismException
+	public FoxGlynn(double qtmax, double uf, double of, double acc) throws PrismException
 	{
 		q_tmax = qtmax;
+		underflow = uf;
 		overflow = of;
 		accuracy = acc;
 		run();
@@ -205,6 +206,27 @@ public final class FoxGlynn
 			}
 			this.totalWeight += this.weights[s-this.left];
 		}
+	}
+
+	public static void test()
+	{
+		double[] weights;
+		double totalWeight = 0.0;
+		int left, right;
+
+		FoxGlynn w = null;
+		try {
+			// q = maxDiagRate, time = time parameter (a U<time b)
+			double q = 1, time = 1;
+			w = new FoxGlynn(q * time, 1.0e-300, 1.0e+300, 1.0e-6);
+		} catch (PrismException e) {
+			// ...
+		}
+		weights = w.getWeights();
+		left = w.getLeftTruncationPoint();
+		right = w.getRightTruncationPoint();
+		totalWeight = w.getTotalWeight();
+		w = null;
 	}
 
 }

@@ -75,6 +75,7 @@ public class ExpressionConstant extends Expression
 		return true;
 	}
 	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{

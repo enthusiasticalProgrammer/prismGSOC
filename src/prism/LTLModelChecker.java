@@ -42,6 +42,7 @@ import acceptance.AcceptanceRabinDD;
 import acceptance.AcceptanceType;
 import automata.DA;
 import automata.LTL2DA;
+
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -83,7 +84,7 @@ public class LTLModelChecker extends PrismComponent
 				// Only support temporal bounds for discrete time models
 				return false;
 			}
-			
+
 			if (!expr.isSimplePathFormula()) {
 				// Only support temporal bounds for simple path formulas
 				return false;
@@ -171,11 +172,12 @@ public class LTLModelChecker extends PrismComponent
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the DA
 	 */
-	public DA<BitSet,? extends AcceptanceOmega> constructDAForLTLFormula(ModelChecker mc, Model model, Expression expr, Vector<JDDNode> labelDDs, AcceptanceType... allowedAcceptance) throws PrismException
+	public DA<BitSet, ? extends AcceptanceOmega> constructDAForLTLFormula(ModelChecker mc, Model model, Expression expr, Vector<JDDNode> labelDDs,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			if (model.getModelType().continuousTime()) {
-				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType()+".");
+				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType() + ".");
 			}
 
 			if (!expr.isSimplePathFormula()) {
@@ -188,11 +190,11 @@ public class LTLModelChecker extends PrismComponent
 
 		// Convert LTL formula to deterministic automaton (DA)
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
-		long time  = System.currentTimeMillis();
+		long time = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(this);
 		DA<BitSet, ? extends AcceptanceOmega> da = ltl2da.convertLTLFormulaToDA(ltl, mc.getConstantValues(), allowedAcceptance);
 		da.checkForCanonicalAPs(labelDDs.size());
-		mainLog.println(da.getAutomataType()+" has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
+		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		time = System.currentTimeMillis() - time;
 		mainLog.println("Time for deterministic automaton translation: " + time / 1000.0 + " seconds.");
 		// If required, export DA
@@ -206,18 +208,6 @@ public class LTLModelChecker extends PrismComponent
 		return da;
 	}
 
-
-	/**
-	 * Construct the product of a DA and a DTMC/CTMC.
-	 * @param da The DA
-	 * @param model The DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
-	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
-	{
-		return constructProductMC(da, model, labelDDs, null, null, true);
-	}
-
 	/**
 	 * Construct the product of a DA and a DTMC/CTMC.
 	 * @param da The DA
@@ -226,24 +216,49 @@ public class LTLModelChecker extends PrismComponent
 	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
 	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
 	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy, JDDVars daDDColVarsCopy)
-			throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy) throws PrismException
 	{
 		return constructProductMC(da, model, labelDDs, daDDRowVarsCopy, daDDColVarsCopy, true);
 	}
 
 	/**
-	 * Construct the product of a DA and a DTMC/CTMC.
-	 * @param da The DA
+	 * Construct the product of a DRA and a DTMC/CTMC.
+	 * @param dra The DRA
 	 * @param model The  DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DA
-	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
-	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
+	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 */
+	public ProbModel constructProductMC(DRA<BitSet> dra, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
+	{
+		return constructProductMC(dra, model, labelDDs, null, null);
+	}
+
+	/**
+	 * Construct the product of a DRA and a DTMC/CTMC.
+	 * @param dra The DRA
+	 * @param model The  DTMC/CTMC
+	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 * @param draDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DRA
+	 * @param draDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DRA
+	 */
+	public ProbModel constructProductMC(DRA<BitSet> dra, ProbModel model, Vector<JDDNode> labelDDs, JDDVars draDDRowVarsCopy, JDDVars draDDColVarsCopy)
+			throws PrismException
+	{
+		return constructProductMC(dra, model, labelDDs, draDDRowVarsCopy, draDDColVarsCopy);
+	}
+
+	/**
+	 * Construct the product of a DRA and a DTMC/CTMC.
+	 * @param dra The DRA
+	 * @param model The  DTMC/CTMC
+	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 * @param draDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DRA
+	 * @param draDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DRA
 	 * @param allInit Do we assume that all states of the original model are initial states?
 	 *        (just for the purposes of reachability)
 	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy, JDDVars daDDColVarsCopy,
-			boolean allInit) throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars draDDRowVarsCopy,
+			JDDVars draDDColVarsCopy, boolean allInit) throws PrismException
 	{
 		// Existing model - dds, vars, etc.
 		JDDVars varDDRowVars[];
@@ -350,7 +365,7 @@ public class LTLModelChecker extends PrismComponent
 
 		// Create a new model model object to store the product model
 		ProbModel modelProd = new ProbModel(
-		// New transition matrix/start state
+				// New transition matrix/start state
 				newTrans, newStart,
 				// Don't pass in any rewards info
 				new JDDNode[0], new JDDNode[0], new String[0],
@@ -359,10 +374,7 @@ public class LTLModelChecker extends PrismComponent
 				// New list of var names
 				newDDVarNames,
 				// Module info (unchanged)
-				model.getNumModules(),
-				model.getModuleNames(),
-				JDDVars.copyArray(model.getModuleDDRowVars()),
-				JDDVars.copyArray(model.getModuleDDColVars()),
+				model.getNumModules(), model.getModuleNames(), JDDVars.copyArray(model.getModuleDDRowVars()), JDDVars.copyArray(model.getModuleDDColVars()),
 				// New var info
 				model.getNumVars() + 1, newVarList, newVarDDRowVars, newVarDDColVars,
 				// Constants (no change)
@@ -374,7 +386,7 @@ public class LTLModelChecker extends PrismComponent
 		modelProd.findDeadlocks(false);
 		if (modelProd.getDeadlockStates().size() > 0) {
 			// Assuming original model has no deadlocks, neither should product
-			throw new PrismException("Model-"+da.getAutomataType()+" product has deadlock states");
+			throw new PrismException("Model-" + da.getAutomataType() + " product has deadlock states");
 		}
 
 		// Reset initial state
@@ -384,10 +396,10 @@ public class LTLModelChecker extends PrismComponent
 		modelProd.setStart(newStart);
 
 		// if possible, return copies of the DA DD variables via the method parameters
-		if (daDDRowVarsCopy != null)
-			daDDRowVarsCopy.copyVarsFrom(daDDRowVars);
-		if (daDDColVarsCopy != null)
-			daDDColVarsCopy.copyVarsFrom(daDDColVars);
+		if (draDDRowVarsCopy != null)
+			draDDRowVarsCopy.copyVarsFrom(daDDRowVars);
+		if (draDDColVarsCopy != null)
+			draDDColVarsCopy.copyVarsFrom(daDDColVars);
 
 		daDDRowVars.derefAll();
 		daDDColVars.derefAll();
@@ -414,8 +426,8 @@ public class LTLModelChecker extends PrismComponent
 	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
 	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
 	 */
-	public NondetModel constructProductMDP(DA<BitSet, ? extends AcceptanceOmega> da, NondetModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy, JDDVars daDDColVarsCopy)
-			throws PrismException
+	public NondetModel constructProductMDP(DA<BitSet, ? extends AcceptanceOmega> da, NondetModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy) throws PrismException
 	{
 		return constructProductMDP(da, model, labelDDs, daDDRowVarsCopy, daDDColVarsCopy, true, null);
 	}
@@ -427,13 +439,14 @@ public class LTLModelChecker extends PrismComponent
 	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
 	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
+	
 	 * @param allInit Do we assume that all states of the original model are initial states?
 	 *        (just for the purposes of reachability) If not, the required initial states should be given
 	 * @param init The initial state(s) (of the original model) used to build the product;
 	 *        if null; we just take the existing initial states from model.getStart().
 	 */
-	public NondetModel constructProductMDP(DA<BitSet, ? extends AcceptanceOmega> da, NondetModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy, JDDVars daDDColVarsCopy,
-			boolean allInit, JDDNode init) throws PrismException
+	public NondetModel constructProductMDP(DA<BitSet, ? extends AcceptanceOmega> da, NondetModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy, boolean allInit, JDDNode init) throws PrismException
 	{
 		// Existing model - dds, vars, etc.
 		JDDVars varDDRowVars[];
@@ -521,7 +534,6 @@ public class LTLModelChecker extends PrismComponent
 		Declaration decl = new Declaration(daVar, new DeclarationInt(Expression.Int(0), Expression.Int(Math.max(da.size() - 1, 1))));
 		newVarList.addVar(before ? 0 : varList.getNumVars(), decl, 1, model.getConstantValues());
 
-
 		// Build transition matrix for product
 		newTrans = buildTransMask(da, labelDDs, allDDRowVars, allDDColVars, daDDRowVars, daDDColVars);
 		JDD.Ref(model.getTrans());
@@ -542,24 +554,18 @@ public class LTLModelChecker extends PrismComponent
 
 		// Create a new model model object to store the product model
 		NondetModel modelProd = new NondetModel(
-		// New transition matrix/start state
+				// New transition matrix/start state
 				newTrans, newStart,
 				// Don't pass in any rewards info
 				new JDDNode[0], new JDDNode[0], new String[0],
 				// New list of all row/col vars
 				newAllDDRowVars, newAllDDColVars,
 				// Nondet variables (unchanged)
-				model.getAllDDSchedVars().copy(),
-				model.getAllDDSynchVars().copy(),
-				model.getAllDDChoiceVars().copy(),
-				model.getAllDDNondetVars().copy(),
+				model.getAllDDSchedVars().copy(), model.getAllDDSynchVars().copy(), model.getAllDDChoiceVars().copy(), model.getAllDDNondetVars().copy(),
 				// New list of var names
 				newDDVarNames,
 				// Module info (unchanged)
-				model.getNumModules(),
-				model.getModuleNames(),
-				JDDVars.copyArray(model.getModuleDDRowVars()),
-				JDDVars.copyArray(model.getModuleDDColVars()),
+				model.getNumModules(), model.getModuleNames(), JDDVars.copyArray(model.getModuleDDRowVars()), JDDVars.copyArray(model.getModuleDDColVars()),
 				// New var info
 				model.getNumVars() + 1, newVarList, newVarDDRowVars, newVarDDColVars,
 				// Constants (no change)
@@ -611,8 +617,8 @@ public class LTLModelChecker extends PrismComponent
 	 * So the BDD is over column variables for model states (permuted from those found in the BDDs in
 	 * {@code labelDDs}) and row/col variables for the DA (from {@code daDDRowVars}, {@code daDDColVars}).
 	 */
-	public JDDNode buildTransMask(DA<BitSet, ? extends AcceptanceOmega> da, Vector<JDDNode> labelDDs, JDDVars allDDRowVars, JDDVars allDDColVars, JDDVars daDDRowVars,
-			JDDVars daDDColVars)
+	public JDDNode buildTransMask(DA<BitSet, ? extends AcceptanceOmega> da, Vector<JDDNode> labelDDs, JDDVars allDDRowVars, JDDVars allDDColVars,
+			JDDVars daDDRowVars, JDDVars daDDColVars)
 	{
 		JDDNode daMask, label, exprBDD, transition;
 		int i, j, k, numAPs, numStates, numEdges;
@@ -655,7 +661,7 @@ public class LTLModelChecker extends PrismComponent
 	 * So the BDD is over row variables for model states (as found in the BDDs in {@code labelDDs})
 	 * and row variables for the DA (from {@code daDDRowVars}).
 	 */
-	public JDDNode buildStartMask(DA<BitSet,? extends AcceptanceOmega> da, Vector<JDDNode> labelDDs, JDDVars daDDRowVars)
+	public JDDNode buildStartMask(DA<BitSet, ? extends AcceptanceOmega> da, Vector<JDDNode> labelDDs, JDDVars daDDRowVars)
 	{
 		JDDNode startMask, label, exprBDD, dest, tmp;
 		int i, j, k, numAPs, numEdges;
@@ -956,10 +962,10 @@ public class LTLModelChecker extends PrismComponent
 	 * @param fairness Consider fairness?
 	 * @return A referenced BDD for the union of all states in accepting MECs
 	 */
-	public JDDNode findAcceptingECStatesForGeneralizedRabin(AcceptanceGenRabinDD acceptance, NondetModel model, JDDVars draDDRowVars, JDDVars draDDColVars, boolean fairness)
-			throws PrismException
+	public JDDNode findAcceptingECStatesForGeneralizedRabin(AcceptanceGenRabinDD acceptance, NondetModel model, JDDVars draDDRowVars, JDDVars draDDColVars,
+			boolean fairness) throws PrismException
 	{
-		
+
 		if (fairness) {
 			throw new PrismNotSupportedException("Accepting end-component computation for generalized Rabin is currently not supported with fairness");
 		}
@@ -970,14 +976,14 @@ public class LTLModelChecker extends PrismComponent
 
 		// Go through the GR acceptance pairs (L_i, K_i_1, ..., K_i_n) 
 		for (int i = 0; i < acceptance.size(); i++) {
-					
+
 			// Filter out L_i states from the model and find the MECs
 			JDDNode notL = JDD.Not(acceptance.get(i).getL());
 			JDD.Ref(model.getTrans01());
 			JDD.Ref(notL);
 			JDDNode candidateStates = JDD.Apply(JDD.TIMES, model.getTrans01(), notL);
 			notL = JDD.PermuteVariables(notL, draDDRowVars, draDDColVars);
-			candidateStates = JDD.Apply(JDD.TIMES, candidateStates,	notL);
+			candidateStates = JDD.Apply(JDD.TIMES, candidateStates, notL);
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDColVars());
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDNondetVars());
 			List<JDDNode> mecs = findMECStates(model, candidateStates);
@@ -1002,7 +1008,7 @@ public class LTLModelChecker extends PrismComponent
 		return allAcceptingStates;
 	}
 
-	public JDDNode findMultiAcceptingStates(DA<BitSet,AcceptanceRabin> dra, NondetModel model, JDDVars draDDRowVars, JDDVars draDDColVars, boolean fairness,
+	public JDDNode findMultiAcceptingStates(DA<BitSet, AcceptanceRabin> dra, NondetModel model, JDDVars draDDRowVars, JDDVars draDDColVars, boolean fairness,
 			List<JDDNode> allecs, List<JDDNode> statesH, List<JDDNode> statesL) throws PrismException
 	{
 		JDDNode acceptingStates = null, allAcceptingStates, candidateStates;
@@ -1066,9 +1072,9 @@ public class LTLModelChecker extends PrismComponent
 		return allAcceptingStates;
 	}
 
-	public void findMultiConflictAcceptingStates(DA<BitSet,AcceptanceRabin>[] dra, NondetModel model, JDDVars[] draDDRowVars, JDDVars[] draDDColVars, List<JDDNode> targetDDs,
-			List<List<JDDNode>> allstatesH, List<List<JDDNode>> allstatesL, List<JDDNode> combinations, List<List<Integer>> combinationIDs)
-			throws PrismException
+	public void findMultiConflictAcceptingStates(DA<BitSet, AcceptanceRabin>[] dra, NondetModel model, JDDVars[] draDDRowVars, JDDVars[] draDDColVars,
+			List<JDDNode> targetDDs, List<List<JDDNode>> allstatesH, List<List<JDDNode>> allstatesL, List<JDDNode> combinations,
+			List<List<Integer>> combinationIDs) throws PrismException
 	{
 		List<queueElement> queue = new ArrayList<queueElement>();
 		int sp = 0;
@@ -1107,8 +1113,8 @@ public class LTLModelChecker extends PrismComponent
 		}
 	}
 
-	private void computeCombinations(DA<BitSet,AcceptanceRabin>[] dra, NondetModel model, JDDVars[] draDDRowVars, JDDVars[] draDDColVars, List<JDDNode> targetDDs,
-			List<List<JDDNode>> allstatesH, List<List<JDDNode>> allstatesL, List<queueElement> queue, int sp) throws PrismException
+	private void computeCombinations(DA<BitSet, AcceptanceRabin>[] dra, NondetModel model, JDDVars[] draDDRowVars, JDDVars[] draDDColVars,
+			List<JDDNode> targetDDs, List<List<JDDNode>> allstatesH, List<List<JDDNode>> allstatesL, List<queueElement> queue, int sp) throws PrismException
 	{
 		queueElement e = queue.get(sp);
 		int bound = queue.size();

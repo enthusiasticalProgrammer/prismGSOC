@@ -61,7 +61,6 @@ import settings.*;
  * This class represents multiple series on a single unit graph; all series are
  * rendered together by MultiGraphView.
  */
-@SuppressWarnings("serial")
 public class Graph extends ChartPanel implements SettingOwner, EntityResolver, Observer, Printable
 {
 	/** Interval for graph updates (in ms). */

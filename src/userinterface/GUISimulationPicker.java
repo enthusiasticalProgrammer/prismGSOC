@@ -1034,7 +1034,6 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 
 	}
 
-	@SuppressWarnings("serial")
 	class DefineValuesTable extends AbstractTableModel
 	{
 		ArrayList<Value> values;

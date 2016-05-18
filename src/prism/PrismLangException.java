@@ -28,7 +28,6 @@ package prism;
 
 import parser.ast.ASTElement;
 
-@SuppressWarnings("serial")
 public class PrismLangException extends PrismException
 {
 	public static final int MAX_ERR_STR = 20;

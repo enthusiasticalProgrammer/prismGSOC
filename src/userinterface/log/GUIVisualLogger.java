@@ -37,12 +37,9 @@ import javax.swing.tree.*;
 public class GUIVisualLogger extends javax.swing.JPanel
 {
     
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	//Attributes
+    //Attributes
+    
+    //NON-GUI
     private GUIVisualLogModel theModel;
     
     //GUI COMPONENTS

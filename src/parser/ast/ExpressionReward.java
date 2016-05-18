@@ -34,22 +34,28 @@ import prism.OpRelOpBound;
 import prism.PrismException;
 import prism.PrismLangException;
 
+
 public class ExpressionReward extends ExpressionQuant
 {
-	protected Object rewardStructIndex = null;
-	protected Object rewardStructIndexDiv = null;
-	
+	//TODO: Christopher kann man die naechsten beiden mergen?
+	Object rewardStructIndex = null;
+	Object rewardStructIndexDiv = null;
+	Expression reward = null;
+	Expression expression = null;
+	// Note: this "old-style" filter is just for display purposes
+	// The parser creates an (invisible) new-style filter around this expression
+
 	// Constructors
 	
 	public ExpressionReward()
 	{
 	}
 	
-	public ExpressionReward(Expression expression, String relOpString, Expression r)
+	public ExpressionReward(Expression e, String relOpString, Expression p)
 	{
-		setExpression(expression);
+		expression = e;
 		setRelOp(relOpString);
-		setBound(r);
+		reward = p;
 	}
 
 	// Set methods
@@ -59,17 +65,19 @@ public class ExpressionReward extends ExpressionQuant
 		rewardStructIndex = o;
 	}
 
-	public void setRewardStructIndexDiv(Object o)
+	public void setReward(Expression p)
 	{
-		rewardStructIndexDiv = o;
+		reward = p;
 	}
 
-	/**
-	 * Set the reward bound. Equivalent to {@code setBound(r)}.
-	 */
-	public void setReward(Expression r)
+	public void setExpression(Expression e)
 	{
-		setBound(r);
+		expression = e;
+	}
+	
+	public void setFilter(Filter f)
+	{
+		filter = f;
 	}
 
 	// Get methods
@@ -79,18 +87,6 @@ public class ExpressionReward extends ExpressionQuant
 		return rewardStructIndex;
 	}
 
-	public Object getRewardStructIndexDiv()
-	{
-		return rewardStructIndexDiv;
-	}
-
-	/**
-	 * Get the reward bound. Equivalent to {@code getBound()}.
-	 */
-	public Expression getReward()
-	{
-		return getBound();
-	}
 
 	// Other methods
 	
@@ -167,7 +163,26 @@ public class ExpressionReward extends ExpressionQuant
 	
 	// Methods required for Expression:
 	
-	@Override
+	public Expression getReward()
+	{
+		return reward;
+	}
+
+	public Expression getExpression()
+	{
+		return expression;
+	}
+	
+	public Filter getFilter()
+	{
+		return filter;
+	}
+
+	// Methods required for Expression:
+	
+	/**
+	 * Is this expression constant?
+	 */
 	public boolean isConstant()
 	{
 		return false;
@@ -249,7 +264,6 @@ public class ExpressionReward extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
-		
 		s += "R" + getModifierString();
 		if (rewardStructIndex != null) {
 			if (rewardStructIndex instanceof Expression) s += "{"+rewardStructIndex+"}";
@@ -264,8 +278,7 @@ public class ExpressionReward extends ExpressionQuant
 		s += (getBound()==null) ? "?" : getBound().toString();
 		s += " [ " + getExpression();
 		if (getFilter() != null) s += " "+getFilter();
-		s += " ]";
-		
+		s += " ]";	
 		return s;
 	}
 
@@ -300,6 +313,17 @@ public class ExpressionReward extends ExpressionQuant
 		} else if (!rewardStructIndexDiv.equals(other.rewardStructIndexDiv))
 			return false;
 		return true;
+	}
+
+	public Object getRewardStructIndexDiv()
+	{
+		return rewardStructIndexDiv;
+	}
+
+	public void setRewardStructIndexDiv(Object rewardStructIndexDiv2)
+	{
+		rewardStructIndexDiv=rewardStructIndexDiv2;
+		
 	}
 }
 

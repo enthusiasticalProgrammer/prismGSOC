@@ -29,6 +29,7 @@ package userinterface.graph;
 import java.util.Observable;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
 
 import settings.BooleanSetting;
 import settings.ColorSetting;
@@ -38,6 +39,7 @@ import settings.SettingException;
 import settings.SettingOwner;
 
 import java.awt.*;
+import javax.swing.UIManager;
 
 /**
  * Representation of the display settings of a Graph.
@@ -54,6 +56,9 @@ public class DisplaySettings extends Observable implements SettingOwner
 	/** JFreeChart representation of graphs. */
 	private JFreeChart chart;
 	
+	/** XYPlot of this JFreeChart */
+	private XYPlot plot;
+	
 	private BooleanSetting antiAlias;	
 	private ColorSetting backgroundColor;	
 	
@@ -64,6 +69,7 @@ public class DisplaySettings extends Observable implements SettingOwner
 		
 		antiAlias = new BooleanSetting("anti-aliasing", new Boolean(true), "Should the graph be rendered using anti-aliasing?", this, false);
 		Color defaultColor = Color.white; 
+		this.plot = chart.getXYPlot();
 		
 		backgroundColor = new ColorSetting("background colour", defaultColor, "The background colour of the graph panel", this, false);
 		

@@ -32,6 +32,7 @@ import java.util.Map;
 
 import parser.State;
 import parser.ast.ConstantList;
+
 import parser.ast.Expression;
 import parser.ast.ExpressionBinaryOp;
 import parser.ast.ExpressionConstant;
@@ -45,6 +46,8 @@ import prism.PrismException;
 import prism.PrismLangException;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
+
+import prism.PrismLog;
 import explicit.IndexedSet;
 import explicit.StateStorage;
 

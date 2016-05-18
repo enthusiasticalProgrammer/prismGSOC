@@ -57,7 +57,6 @@ import userinterface.OptionsPanel;
  * the text in the given text pane and the location of a parsing error. The 
  * font the panel uses is taken from the font for the given text pane.
  */
-@SuppressWarnings("serial")
 public class GUITextModelEditorGutter extends JPanel implements PropertyChangeListener, DocumentListener
 {
 

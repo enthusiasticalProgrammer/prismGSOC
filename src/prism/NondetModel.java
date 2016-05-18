@@ -66,6 +66,9 @@ public class NondetModel extends ProbModel
 		return transReln;
 	}
 
+
+	// accessor methods
+
 	// type
 	public ModelType getModelType()
 	{
@@ -234,6 +237,7 @@ public class NondetModel extends ProbModel
 				transSynch[i] = JDD.Apply(JDD.TIMES, reach, transSynch[i]);
 			}
 		}
+
 		// also filter transReln DD (if necessary)
 		if (transReln != null) {
 			JDD.Ref(reach);

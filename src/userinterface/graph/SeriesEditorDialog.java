@@ -45,10 +45,12 @@ import userinterface.*;
 import org.jfree.data.xy.*;
 import org.jfree.data.general.*;
 
-@SuppressWarnings("serial")
 public class SeriesEditorDialog extends JDialog
 {         
 	//ATTRIBUTES    
+	private Action okAction;
+	private Action cancelAction;
+	private GUIPrism gui;
 	private java.util.List<SeriesEditor> editors;
 	
 	private boolean cancelled;
@@ -109,7 +111,6 @@ public class SeriesEditorDialog extends JDialog
 		cut.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallCut.png"));
 		//cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		
-
 		AbstractAction copy = new AbstractAction()
 		{
 		    public void actionPerformed(ActionEvent e)
@@ -154,7 +155,7 @@ public class SeriesEditorDialog extends JDialog
 			SeriesSettings settings = graph.getGraphSeries(key);
 			PrismXYSeries xySeries = (PrismXYSeries)graph.getXYSeries(key);
 			
-			SeriesEditor editor = new SeriesEditor(graph, xySeries, cut, copy, paste, delete);
+			SeriesEditor editor = new SeriesEditor(graph, xySeries, settings, cut, copy, paste, delete);
 			editor.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			
 			tabbedPane.addTab(settings.getSeriesHeading(), editor);
@@ -282,17 +283,18 @@ public class SeriesEditorDialog extends JDialog
 		private java.util.List<Double> yAxisBuffer;
 		
 		private Graph graph;
+		private SeriesSettings settings;
 		private PrismXYSeries xySeries;
 		
 		private AbstractTableModel tableModel;
 		private JTable table;
 		
-
-		private SeriesEditor(Graph graph, PrismXYSeries xySeries, Action cut, Action copy, Action paste, Action delete)
+		private SeriesEditor(Graph graph, PrismXYSeries xySeries, SeriesSettings settings, Action cut, Action copy, Action paste, Action delete)
 		{
 			super.setLayout(new BorderLayout());
 			
 			this.graph = graph;
+			this.settings = settings;
 			this.xySeries = xySeries;
 			
 			this.xAxisBuffer = new ArrayList<Double>(bufferSize);
@@ -396,6 +398,8 @@ public class SeriesEditorDialog extends JDialog
 					// Updating graph points...
 					else
 					{				
+						XYDataItem dataItem = SeriesEditor.this.xySeries.getDataItem(rowIndex);
+						
 						// Null values are for in the buffer only. 
 						if (value == null)
 							value = Double.NaN;
@@ -611,6 +615,26 @@ public class SeriesEditorDialog extends JDialog
 					xySeries.remove(rowIndex);
 				}
 			}
+		}
+
+		public SeriesSettings getSettings() 
+		{
+			return settings;
+		}
+
+		public void setSettings(SeriesSettings settings) 
+		{
+			this.settings = settings;
+		}
+
+		public PrismXYSeries getXySeries() 
+		{
+			return xySeries;
+		}
+
+		public void setXySeries(PrismXYSeries xySeries) 
+		{
+			this.xySeries = xySeries;
 		}
 
 		public void actionPerformed(ActionEvent e) 

@@ -32,7 +32,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 
-@SuppressWarnings("serial")
 public class FontChooser extends javax.swing.JDialog implements ListSelectionListener, ActionListener, FocusListener, ChangeListener
 {
     
@@ -413,7 +412,6 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
     /**
      * @param args the command line arguments
      */
-    @SuppressWarnings("deprecation")
 	public static void main(String args[])
     {
         new FontChooser(new javax.swing.JFrame()).show();

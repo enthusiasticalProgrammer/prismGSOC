@@ -52,7 +52,6 @@ import javax.swing.text.ViewFactory;
 /** Pepa model editor kit for the text model editor. Defines the syntax
  * highlighting that the model editor should use.
  */
-@SuppressWarnings("serial")
 class PepaEditorKit extends DefaultEditorKit
 {
 	
@@ -99,7 +98,6 @@ class PepaEditorKit extends DefaultEditorKit
 	
 }
 
-@SuppressWarnings("serial")
 class PepaContext extends StyleContext implements ViewFactory
 {
 
@@ -152,6 +150,7 @@ class PepaView extends PlainView
 		{
 			g.setColor(Color.green);
 			Document doc = getDocument();
+
 			
 			
 			//String s = doc.getText(p0, p1-p0);

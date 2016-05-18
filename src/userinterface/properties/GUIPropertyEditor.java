@@ -35,7 +35,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class GUIPropertyEditor extends javax.swing.JDialog implements ActionListener, KeyListener
 {
 	
@@ -53,6 +52,7 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 	private GUIPrism parent;
 	private GUIMultiProperties props;
 	private ModulesFile parsedModel;
+	private boolean dispose = false;
 	private String id;
 	private int propertyInvalidStrategy = GUIMultiProperties.WARN_INVALID_PROPS;
 	
@@ -107,7 +107,6 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 	
 	//Update methods
 	
-	@SuppressWarnings("deprecation")
 	public void show()
 	{
 		noOpen++;

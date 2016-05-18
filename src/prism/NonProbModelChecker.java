@@ -28,6 +28,7 @@ package prism;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import jdd.JDD;
 import jdd.JDDNode;
@@ -37,6 +38,7 @@ import parser.ast.ExpressionForAll;
 import parser.ast.ExpressionTemporal;
 import parser.ast.ExpressionUnaryOp;
 import parser.ast.PropertiesFile;
+import cex.CexPathAsBDDs;
 import cex.CexPathStates;
 
 /*
@@ -270,6 +272,7 @@ public class NonProbModelChecker extends StateModelChecker
 		ArrayList<JDDNode> cexDDs = null;
 		JDDNode cexInit = null;
 		boolean done, cexDone = false;
+		Vector<String> cexActions;
 		int iters, i;
 		long l;
 
@@ -377,6 +380,38 @@ public class NonProbModelChecker extends StateModelChecker
 					JDD.Deref(cexDDs.get(i));
 				}
 				result.setCounterexample(cex);
+				if (1 == 2) {
+					// For an MDP model, build a list of actions from counterexample
+					if (model.getModelType() == ModelType.MDP) {
+						cexActions = new Vector<String>();
+						for (i = cexDDs.size() - 1; i >= 1; i--) {
+							JDD.Ref(trans01);
+							JDD.Ref(cexDDs.get(i));
+							tmp3 = JDD.And(trans01, cexDDs.get(i));
+							JDD.Ref(cexDDs.get(i - 1));
+							tmp3 = JDD.And(tmp3, JDD.PermuteVariables(cexDDs.get(i - 1), allDDRowVars, allDDColVars));
+							tmp3 = JDD.ThereExists(tmp3, allDDColVars);
+							JDD.Ref(transActions);
+							tmp3 = JDD.Apply(JDD.TIMES, tmp3, transActions);
+							int action = (int) JDD.FindMax(tmp3);
+							cexActions.add(action > 0 ? model.getSynchs().get(action - 1) : "");
+							JDD.Deref(tmp3);
+							JDD.Deref(cexDDs.get(i));
+						}
+						JDD.Deref(cexDDs.get(0));
+						mainLog.println("Counterexample (action sequence): " + cexActions);
+						result.setCounterexample(cexActions);
+					}
+					// Otherwise, convert list of BDDs to list of states
+					else {
+						CexPathAsBDDs cexBDDs = new CexPathAsBDDs(model);
+						for (i = cexDDs.size() - 1; i >= 0; i--) {
+							cexBDDs.addState(cexDDs.get(i));
+							JDD.Deref(cexDDs.get(i));
+						}
+						result.setCounterexample(cexBDDs);
+					}
+				}
 			}
 		}
 

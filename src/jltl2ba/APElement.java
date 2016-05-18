@@ -27,7 +27,6 @@ import java.util.BitSet;
 /**
  * Class representing an element of 2^AP. 
  */
-@SuppressWarnings("serial")
 public class APElement extends MyBitSet {
 	
 	public APElement() {
@@ -119,3 +118,4 @@ public class APElement extends MyBitSet {
 		return sb.toString();
 	}
 }
+

@@ -32,7 +32,7 @@ import java.util.List;
 
 import prism.PrismComponent;
 import prism.PrismException;
-
+//TODO: Christopher: merge with prism.SCCComputer??
 /**
  * Abstract class for (explicit) classes that compute (B)SCCs,
  * i.e. (bottom) strongly connected components, for a model's transition graph.
@@ -71,10 +71,15 @@ public abstract class SCCComputer extends PrismComponent
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Compute (non-trivial) strongly connected components (SCCs) and store them.
 	 * They should be retrieved using {@link #getSCCs()}.
 	 * States in trivial SCCs (those comprising a single state without a self-loop) are also stored.
 	 * They should be retrieved using {@link #getNotInSCCs()}.
+=======
+	 * Compute strongly connected components (SCCs) and store them.
+	 * They can be retrieved using {@link #getSCCs()}.
+>>>>>>> remotes/multi/master
 	 */
 	public abstract void computeSCCs();
 

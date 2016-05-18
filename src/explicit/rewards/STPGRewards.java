@@ -35,6 +35,7 @@ import explicit.Product;
  * See the {@link explicit.STPG} interface for details of the accompanying model,
  * in particular, for an explanation of nested transitions. 
  */
+
 public interface STPGRewards extends MDPRewards
 {
 	/**

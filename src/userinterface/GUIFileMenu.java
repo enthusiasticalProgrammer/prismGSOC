@@ -37,7 +37,6 @@ import javax.swing.*;
 
 import userinterface.util.*;
 
-@SuppressWarnings("serial")
 public class GUIFileMenu extends GUIPlugin
 {
     private JMenu menu;

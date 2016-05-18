@@ -31,6 +31,7 @@ import javax.swing.*;
 
 import userinterface.*;
 import userinterface.model.*;
+import prism.*;
 import userinterface.util.*;
 
 /**
@@ -64,8 +65,8 @@ public class BuildModelThread extends GUIComputationThread
 		// Do build
 		try {
 			prism.buildModel();
-		} catch (Exception e) {
-			error(e);
+		} catch (PrismException e) {
+			error(e.getMessage());
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()

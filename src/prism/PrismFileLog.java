@@ -117,6 +117,7 @@ public class PrismFileLog extends PrismLog
 		return (fp != 0);
 	}
 
+
 	@Override
 	public long getFilePointer()
 	{

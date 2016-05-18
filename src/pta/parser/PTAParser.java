@@ -194,8 +194,7 @@ public class PTAParser implements PTAParserConstants {
 //-----------------------------------------------------------------------------------
 
 // PTA
-  @SuppressWarnings("all")
-static final public astPTA PTA() throws ParseException {
+  static final public astPTA PTA() throws ParseException {
         astPTA pta = new astPTA();
     label_1:
     while (true) {
@@ -308,8 +307,7 @@ static final public astPTA PTA() throws ParseException {
                 for (Constraint c : constrs) tr.addGuardConstraint(c);
   }
 
-  @SuppressWarnings("unused")
-static final public LinkedHashSet<Constraint> ConstraintList(astPTA pta) throws ParseException {
+  static final public LinkedHashSet<Constraint> ConstraintList(astPTA pta) throws ParseException {
         LinkedHashSet<Constraint> constrs = new LinkedHashSet<Constraint>();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case REG_IDENT:
@@ -402,8 +400,7 @@ static final public LinkedHashSet<Constraint> ConstraintList(astPTA pta) throws 
     }
   }
 
-  @SuppressWarnings("unused")
-static final public HashMap<Integer,Integer> Resets(astPTA pta) throws ParseException {
+  static final public HashMap<Integer,Integer> Resets(astPTA pta) throws ParseException {
         HashMap<Integer,Integer> resets = new HashMap<Integer,Integer>();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case REG_IDENT:
@@ -445,9 +442,9 @@ static final public HashMap<Integer,Integer> Resets(astPTA pta) throws ParseExce
                 resets.put(clock, val);
   }
 
-  @SuppressWarnings("unused")
-static final public double Probability() throws ParseException {
+  static final public double Probability() throws ParseException {
         Token t;
+        double d;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case REG_DOUBLE:
       t = jj_consume_token(REG_DOUBLE);
@@ -469,16 +466,14 @@ static final public double Probability() throws ParseException {
 //-----------------------------------------------------------------------------------
 
 // Identifier (returns String)
-  @SuppressWarnings("unused")
-static final public String Identifier() throws ParseException {
+  static final public String Identifier() throws ParseException {
     jj_consume_token(REG_IDENT);
                       {if (true) return getToken(0).image;}
     throw new Error("Missing return statement in function");
   }
 
 // Integer
-  @SuppressWarnings("unused")
-static final public int Integer() throws ParseException {
+  static final public int Integer() throws ParseException {
     jj_consume_token(REG_INT);
                     {if (true) return Integer.parseInt(getToken(0).image);}
     throw new Error("Missing return statement in function");
@@ -534,8 +529,7 @@ static final public int Integer() throws ParseException {
      ReInit(stream, null);
   }
   /** Reinitialise. */
-  @SuppressWarnings("static-access")
-static public void ReInit(java.io.InputStream stream, String encoding) {
+  static public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -562,8 +556,7 @@ static public void ReInit(java.io.InputStream stream, String encoding) {
   }
 
   /** Reinitialise. */
-  @SuppressWarnings("static-access")
-static public void ReInit(java.io.Reader stream) {
+  static public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -597,8 +590,7 @@ static public void ReInit(java.io.Reader stream) {
     for (int i = 0; i < 13; i++) jj_la1[i] = -1;
   }
 
-  @SuppressWarnings("static-access")
-static private Token jj_consume_token(int kind) throws ParseException {
+  static private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -614,8 +606,7 @@ static private Token jj_consume_token(int kind) throws ParseException {
 
 
 /** Get the next Token. */
-  @SuppressWarnings("static-access")
-static final public Token getNextToken() {
+  static final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -624,8 +615,7 @@ static final public Token getNextToken() {
   }
 
 /** Get the specific Token. */
-  @SuppressWarnings("static-access")
-static final public Token getToken(int index) {
+  static final public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -634,8 +624,7 @@ static final public Token getToken(int index) {
     return t;
   }
 
-  @SuppressWarnings("static-access")
-static private int jj_ntk() {
+  static private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else

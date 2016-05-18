@@ -117,10 +117,10 @@ public class SimulateModelCheckThread extends GUIComputationThread
 				// do simulation
 				results = prism.modelCheckSimulatorSimultaneously(pf, properties, definedPFConstants, initialState, maxPathLength, method);
 				method.reset();
-			} catch (Exception e) {
+			} catch (PrismException e) {
 				// in the case of an error which affects all props, store/report it
 				resultError = e;
-				error(e);
+				error(e.getMessage());
 			}
 			//after collecting the results stop all of the clock icons
 			for (int i = 0; i < clkThreads.size(); i++) {

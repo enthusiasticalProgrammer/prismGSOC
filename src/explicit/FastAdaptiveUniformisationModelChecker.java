@@ -218,6 +218,28 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		return new Result(new Double(fau.getValue()));
 	}
 
+	private RewardStruct findRewardStruct(ExpressionReward expr) throws PrismException
+	{
+		RewardStruct rewStruct = null;		
+		Object rs = expr.getRewardStructIndex();
+		if (modulesFile == null)
+			throw new PrismException("No model file to obtain reward structures");
+		if (modulesFile.getNumRewardStructs() == 0)
+			throw new PrismException("Model has no rewards specified");
+		if (rs == null) {
+			rewStruct = modulesFile.getRewardStruct(0);
+		} else if (rs instanceof Expression) {
+			int i = ((Expression) rs).evaluateInt(constantValues);
+			rs = new Integer(i); // for better error reporting below
+			rewStruct = modulesFile.getRewardStruct(i - 1);
+		} else if (rs instanceof String) {
+			rewStruct = modulesFile.getRewardStructByName((String) rs);
+		}
+		if (rewStruct == null)
+			throw new PrismException("Invalid reward structure index \"" + rs + "\"");
+		return rewStruct;
+	}
+
 	/**
 	 * Model check an R operator.
 	 */

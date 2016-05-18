@@ -26,7 +26,6 @@
 
 package pta;
 
-
 public class DBMListFactory implements ZoneFactory
 {
 	/* Basic zone creation */

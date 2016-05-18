@@ -35,7 +35,7 @@ import java.util.*;
 import prism.*;
 import userinterface.*;
 
-@SuppressWarnings("serial")
+import parser.type.*;
 public class GUIExperimentPicker extends javax.swing.JDialog
 {
 	public static final int NO_VALUES = 0;
@@ -344,7 +344,6 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		else return NO_VALUES;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public int defineValues()
 	{
 		show();

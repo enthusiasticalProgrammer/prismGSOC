@@ -567,7 +567,6 @@ public class SeriesSettings extends Observable implements SettingOwner
 		return this.icon;
 	}
 	
-	@SuppressWarnings("serial")
 	private class GraphSeriesIcon extends JComponent
 	{
 		private Shape shape;

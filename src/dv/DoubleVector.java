@@ -198,7 +198,6 @@ public class DoubleVector
 		return DV_DotProduct(v, n, dv.v);
 	}
 
-
 	private native void DV_Filter(long v, long filter, double d, long vars, int num_vars, long odd);
 	/**
 	 * Filter vector using a bdd (set elements not in filter to d)
@@ -331,6 +330,7 @@ public class DoubleVector
 		
 		return sol;
 	}
+			
 	private native long DV_BDDGreaterThanEquals(long v, double bound, long vars, int num_vars, long odd);
 	private native long DV_BDDGreaterThan(long v, double bound, long vars, int num_vars, long odd);
 	private native long DV_BDDLessThanEquals(long v, double bound, long vars, int num_vars, long odd);
@@ -375,7 +375,7 @@ public class DoubleVector
 	public JDDNode getBDDFromCloseValueRel(double value, double epsilon, JDDVars vars, ODDNode odd)
 	{
 		JDDNode sol;
-		
+
 		sol = JDD.ptrToNode(
 			DV_BDDCloseValueRel(v, value, epsilon, vars.array(), vars.n(), odd.ptr())
 		);

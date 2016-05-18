@@ -39,6 +39,8 @@ import userinterface.graph.Graph;
  * The full path is stored, i.e. all info at all steps.
  * State objects and arrays are copied for storage.
  */
+
+//@Christopher Nota Bene: it is full with Multigain-Stuff
 public class PathFull extends Path implements PathFullInfo
 {
 	// Model to which the path corresponds
@@ -103,12 +105,32 @@ public class PathFull extends Path implements PathFullInfo
 		loopDet.initialise();
 	}
 
+	// Overloaded method including strategy state
+	public void initialise(State initialState, double[] initialStateRewards, Object stratState)
+	{
+		initialise(initialState, initialStateRewards);
+		// steps.get(steps.size() - 1).stratState = stratState;
+	}
+
+	public void initialiseStrat(Object stratState)
+	{
+		steps.get(steps.size() - 1).stratState = stratState;
+	}
+
 	@Override
 	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards,
 			TransitionList transitionList)
 	{
 		addStep(1.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList);
 	}
+
+	// Overloaded version with strategy state
+	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards,
+			TransitionList transitionList, Object stratState)
+	{
+		addStep(0.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList, stratState);
+	}
+
 
 	@Override
 	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
@@ -142,6 +164,14 @@ public class PathFull extends Path implements PathFullInfo
 		size++;
 		// Update loop detector
 		loopDet.addStep(this, transitionList);
+	}
+
+	// Overloaded version including strategy state
+	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
+			double[] newStateRewards, TransitionList transitionList, Object stratState)
+	{
+		addStep(time, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList);
+		steps.get(steps.size() - 1).stratState = stratState;
 	}
 
 	// MUTATORS (additional)
@@ -354,6 +384,7 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).stateRewards;
 	}
 
+
 	@Override
 	public double getCumulativeTime(int step)
 	{
@@ -361,30 +392,56 @@ public class PathFull extends Path implements PathFullInfo
 	}
 
 	@Override
+	/**
+	 * Get the total (state and transition) reward accumulated up until entering a given step of the path.
+	 * @param step Step index (0 = initial state/step of path)
+	 * @param rsi Reward structure index
+	 */
 	public double getCumulativeReward(int step, int rsi)
 	{
 		return steps.get(step).rewardsCumul[rsi];
 	}
 
 	@Override
+	/**
+	 * Get the time spent in a state at a given step of the path.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	public double getTime(int step)
 	{
 		return steps.get(step).time;
 	}
 
+
 	@Override
+	/**
+	 * Get the index of the choice taken for a given step.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	public int getChoice(int step)
 	{
 		return steps.get(step).choice;
 	}
 
+
 	@Override
+	/**
+	 * Get the index i of the action taken for a given step.
+	 * If i>0, then i-1 is the index of an action label (0-indexed)
+	 * If i<0, then -i-1 is the index of a module (0-indexed)
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	public int getModuleOrActionIndex(int step)
 	{
 		return steps.get(step).moduleOrActionIndex;
 	}
 
+
 	@Override
+	/**
+	 * Get a string describing the action/module of a given step.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	public String getModuleOrAction(int step)
 	{
 		int i = steps.get(step).moduleOrActionIndex;
@@ -406,6 +463,11 @@ public class PathFull extends Path implements PathFullInfo
 	}
 
 	@Override
+	/**
+	 * Get a transition reward associated with a given step.
+	 * @param step Step index (0 = initial state/step of path)
+	 * @param rsi Reward structure index
+	 */
 	public double getTransitionReward(int step, int rsi)
 	{
 		return steps.get(step).transitionRewards[rsi];
@@ -448,6 +510,11 @@ public class PathFull extends Path implements PathFullInfo
 	public boolean hasLoopInfo()
 	{
 		return true;
+	}
+
+	public Object getStrategyState(long step)
+	{
+		return steps.get((int)step).stratState;
 	}
 
 	// Other methods
@@ -545,6 +612,7 @@ public class PathFull extends Path implements PathFullInfo
 			moduleOrActionIndex = 0;
 			probability = 0.0;
 			transitionRewards = new double[numRewardStructs];
+			stratState = null;
 		}
 
 		// Current state (before transition)
@@ -566,6 +634,9 @@ public class PathFull extends Path implements PathFullInfo
 		public double probability;
 		// Transition rewards associated with step
 		public double transitionRewards[];
+
+		// Strategy state
+		public Object stratState;
 	}
 
 	class DisplayThread extends Thread

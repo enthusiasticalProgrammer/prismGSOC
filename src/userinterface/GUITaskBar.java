@@ -34,7 +34,6 @@ import javax.swing.*;
  * bar at the bottom of the screen describing what is currently going on and also
  * provides a simple method of removing text.
  */
-@SuppressWarnings("serial")
 public class GUITaskBar extends JLabel
 {
     //CONSTANTS

@@ -28,7 +28,6 @@ package pta;
 
 import java.util.*;
 
-@SuppressWarnings("serial")
 public class LocZoneSetOld extends ArrayList<LocZone>
 {
 	private int indexOfLastAdd = -1;

@@ -42,6 +42,7 @@ import prism.PrismUtils;
 public class Distribution implements Iterable<Entry<Integer, Double>>
 {
 	private HashMap<Integer, Double> map;
+	
 
 	/**
 	 * Create an empty distribution.
@@ -50,7 +51,6 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	{
 		clear();
 	}
-
 	/**
 	 * Copy constructor.
 	 */
@@ -106,7 +106,11 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Set the probability for index 'j' to 'prob'.
+=======
+	 * Set the probability for state 'j' to 'prob'.
+>>>>>>> remotes/multi/master
 	 */
 	public void set(int j, double prob)
 	{
@@ -117,7 +121,11 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Get the probability for index j. 
+=======
+	 * Get the probability for state j. 
+>>>>>>> remotes/multi/master
 	 */
 	public double get(int j)
 	{
@@ -147,7 +155,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Returns true if at least one index in the support of the distribution is in the set. 
 	 */
@@ -185,7 +193,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	{
 		return map.isEmpty();
 	}
-
+	
 	/**
 	 * Get the size of the support of the distribution.
 	 */
@@ -237,7 +245,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		}
 		return distrNew;
 	}
-
+		
 	@Override
 	public boolean equals(Object o)
 	{
@@ -255,7 +263,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		}
 		return true;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{

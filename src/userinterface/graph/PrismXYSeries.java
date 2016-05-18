@@ -31,7 +31,6 @@ import java.util.*;
 import org.jfree.data.xy.*;
 import org.jfree.data.general.*;
 
-@SuppressWarnings("serial")
 public class PrismXYSeries extends XYSeries
 {
 	/** Do not allow negative and zero values on the x axis. */
@@ -167,6 +166,7 @@ public class PrismXYSeries extends XYSeries
 	 *  @return A copy of the overwritten data item, or <code>null</code> if no 
      *  	    item was overwritten.
 	 */
+	//TODO Christopher: returned immer null => rewrite to void wenn moeglich mit ueberKlasse
 	@Override
 	public XYDataItem addOrUpdate(Number x, Number y) {
 		
@@ -238,7 +238,6 @@ public class PrismXYSeries extends XYSeries
 		}			
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void updateByIndex(int index, Number y) {
 		XYDataItem existing = getDataItem(index);

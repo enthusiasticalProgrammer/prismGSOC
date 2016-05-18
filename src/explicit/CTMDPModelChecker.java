@@ -37,8 +37,11 @@ import prism.PrismNotSupportedException;
 
 /**
  * Explicit-state model checker for continuous-time Markov decision processes (CTMDPs).
+ * 
+ * This uses various bits of functionality of MDPModelChecker, so we inherit from that.
+ * (This way MDPModelChecker picks up any options set on this one.) 
  */
-public class CTMDPModelChecker extends ProbModelChecker
+public class CTMDPModelChecker extends MDPModelChecker
 {
 	/**
 	 * Create a new CTMDPModelChecker, inherit basic state from parent (unless null).
@@ -169,7 +172,7 @@ public class CTMDPModelChecker extends ProbModelChecker
 		q = 99;//ctmdp.unif;
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
-		fg = new FoxGlynn(qt, 1e+300, termCritParam / 8.0);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, termCritParam / 8.0);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {

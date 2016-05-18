@@ -176,7 +176,7 @@ public abstract class SCCComputer extends PrismComponent
 		// First compute SCCs
 		computeSCCs();
 
-		// Now check which ones are BSCCs and keep them
+		// Now check which ones are BSCCs and keep the
 		bsccs = new Vector<JDDNode>();
 		notInBSCCs = notInSCCs;
 		n = sccs.size();

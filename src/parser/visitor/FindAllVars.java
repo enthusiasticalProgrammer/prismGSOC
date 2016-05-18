@@ -32,6 +32,10 @@ import parser.ast.ExpressionIdent;
 import parser.ast.ExpressionVar;
 import parser.ast.Update;
 import parser.type.Type;
+import java.util.Vector;
+
+import parser.ast.*;
+import parser.type.*;
 import prism.PrismLangException;
 
 /**

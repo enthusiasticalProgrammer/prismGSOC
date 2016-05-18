@@ -115,8 +115,7 @@ public interface PathFullInfo
 	 * What is the step index of the start of the deterministic loop, if it exists?
 	 * If no loop info is stored ({@link #hasLoopInfo()} is false), returns 0. 
 	 */
-	public abstract long loopStart();
-	
+	public abstract long loopStart();	
 	/**
 	 * What is the step index of the end of the deterministic loop, if it exists?
 	 * If no loop info is stored ({@link #hasLoopInfo()} is false), returns 0. 

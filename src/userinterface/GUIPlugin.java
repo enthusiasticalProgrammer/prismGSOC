@@ -46,6 +46,7 @@ import userinterface.util.GUIEvent;
 import userinterface.util.GUIEventHandler;
 import userinterface.util.GUIEventListener;
 import userinterface.util.GUILogEvent;
+import userinterface.util.GUIPrismFileFilter;
 import userinterface.util.GUIUndoManager;
 
 /** This abstract class should be overridden to implement a component to be plugged
@@ -379,12 +380,12 @@ public abstract class GUIPlugin extends JPanel implements GUIEventListener, Pris
 	/**
 	 * A utility method to show a file saving dialog with a specified file filter
 	 * 
-	 * @param fileFilter The file filter to be used within the file chooser.
+	 * @param matlabFilter The file filter to be used within the file chooser.
 	 * @return An integer which is one of the JFileChooser selection constants.
 	 */	
-	public int showSaveFileDialog(FileFilter fileFilter)
+	public int showSaveFileDialog(FileFilter matlabFilter)
 	{
-		return showSaveFileDialog(Collections.singletonList(fileFilter), fileFilter);
+		return showSaveFileDialog(Collections.singletonList(matlabFilter), matlabFilter);
 	}
 	
 	/**

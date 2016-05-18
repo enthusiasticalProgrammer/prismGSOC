@@ -38,11 +38,17 @@ public class TableResizer extends MouseInputAdapter
     private int col;
     private boolean colSel;
     private boolean colSelectionAllowed;
+    private int startWidth;
+    private int startX;
     private JTable table;
     private boolean active;
+    private boolean rowSelectionAllowed;
     private int row;
+    private int startY;
+    private int startHeight;
     private static final int PIXELS = 5;
     private Cursor lastCursor;
+    private static Cursor S_resizeCursor = Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
     private static Cursor E_resizeCursor = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
     
     
@@ -88,6 +94,9 @@ public class TableResizer extends MouseInputAdapter
         if (this.isMouseOverColMargin(p))
         {
             this.active = true;
+            this.startX = p.x;
+            //this.startWidth = table.getWidth();
+            startWidth = this.table.getColumnModel().getColumn(col).getWidth();
             this.colSelectionAllowed = this.table.getColumnSelectionAllowed();
             this.table.setColumnSelectionAllowed(false);
             colSel = true;
@@ -96,6 +105,7 @@ public class TableResizer extends MouseInputAdapter
     
     public void mouseDragged(MouseEvent e)
     {
+        Point p = e.getPoint();
         if (!active) return;
         if (colSel)
         {
@@ -136,8 +146,7 @@ public class TableResizer extends MouseInputAdapter
         return false;
     }
     
-    @SuppressWarnings("deprecation")
-	public static void main(String[]args)
+    public static void main(String[]args)
     {
         JFrame frame = new JFrame("Test");
         

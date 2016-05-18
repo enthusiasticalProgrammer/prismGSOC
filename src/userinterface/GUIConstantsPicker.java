@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
@@ -43,7 +44,6 @@ import parser.Values;
 import prism.PrismException;
 import prism.UndefinedConstants;
 
-@SuppressWarnings("serial")
 public class GUIConstantsPicker extends javax.swing.JDialog
 {
 	public static final int NO_VALUES = 0;
@@ -298,7 +298,6 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		else return NO_VALUES;
 	}
 
-	@SuppressWarnings("deprecation")
 	public int defineValues()
 	{
 		show();

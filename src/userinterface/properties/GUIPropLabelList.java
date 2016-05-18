@@ -38,10 +38,6 @@ import prism.*;
 public class GUIPropLabelList extends JTable
 {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private PropLabelModel theModel;
 	private GUIMultiProperties parent;
 	
@@ -154,7 +150,7 @@ public class GUIPropLabelList extends JTable
 	
 	/* Table model for the label list */
 	
-	@SuppressWarnings("serial")
+
 	class PropLabelModel extends AbstractTableModel
 	{
 		ArrayList labels; // The list of labels
@@ -345,7 +341,6 @@ public class GUIPropLabelList extends JTable
 		}
 	}
 	
-	@SuppressWarnings("serial")
 	class TheCellRenderer extends DefaultTableCellRenderer
 	{
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 

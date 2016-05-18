@@ -235,69 +235,73 @@ public class PrismSyntaxHighlighter
 	{
 		Token first, t, st;
 		boolean done = false;
-		
+
 		try {
 
-				// get stream of tokens from token manager and put in a linked list
-				first = t = PrismParserTokenManager.getNextToken();
-				while (t != null && t.kind != PrismParserConstants.EOF) {
-					t.next = PrismParserTokenManager.getNextToken();
-					t = t.next;
-				}
-				
-				// go through tokens to do syntax highlighting
-				t = first;
-				while (!done) {
-					// see if we're at the end
-					if (t == null) { done = true; continue; }
-					if (t.kind == PrismParserConstants.EOF) { done = true; }
-					// see if there was a lexical error
-					if (t.kind == PrismParserConstants.LEXICAL_ERROR) {
-						String s = "Lexical error (\""+t.image+"\", line "+t.beginLine+", column "+t.beginColumn+")";
-						throw new PrismLangException(s);
-					}
-					// if there are preceding special tokens
-					if (t.specialToken != null) {
-						// go back to start of special tokens
-						st = t.specialToken;
-						while (st.specialToken != null) st = st.specialToken;
-						// go through special tokens
-						while (st != null) {
-							// output
-							if (st.kind == PrismParserConstants.COMMENT) {
-								output(st.image, COMMENT, oType);
-							} else {
-								output(st.image, WHITESPACE, oType);
-							}
-							// next special token
-							st = st.next;
-						}
-					}
-					// output
-					if (t.kind == PrismParserConstants.EOF) {
-						output(t.image, EOF, oType);
-						continue;
-					}
-					else if (t.kind > PrismParserConstants.COMMENT && t.kind < PrismParserConstants.NOT)
-						output(t.image, KEYWORD, oType);
-					else if (t.kind == PrismParserConstants.REG_INT || t.kind == PrismParserConstants.REG_DOUBLE)
-						output(t.image, NUMERIC, oType);
-					else if (t.kind == PrismParserConstants.REG_IDENT || t.kind == PrismParserConstants.REG_IDENTPRIME)
-						output(t.image, IDENTIFIER, oType);
-					else if (t.kind == PrismParserConstants.PREPROC)
-						output(t.image, PREPROC, oType);
-					else
-						output(t.image, PUNCTUATION, oType);
-					// next token
-					t = t.next;
-
+			// get stream of tokens from token manager and put in a linked list
+			first = t = PrismParserTokenManager.getNextToken();
+			while (t != null && t.kind != PrismParserConstants.EOF) {
+				t.next = PrismParserTokenManager.getNextToken();
+				t = t.next;
 			}
-			
-		}finally {
+
+			// go through tokens to do syntax highlighting
+			t = first;
+			while (!done) {
+				// see if we're at the end
+				if (t == null) {
+					done = true;
+					continue;
+				}
+				if (t.kind == PrismParserConstants.EOF) {
+					done = true;
+				}
+				// see if there was a lexical error
+				if (t.kind == PrismParserConstants.LEXICAL_ERROR) {
+					String s = "Lexical error (\"" + t.image + "\", line " + t.beginLine + ", column " + t.beginColumn + ")";
+					throw new PrismLangException(s);
+				}
+				// if there are preceding special tokens
+				if (t.specialToken != null) {
+					// go back to start of special tokens
+					st = t.specialToken;
+					while (st.specialToken != null)
+						st = st.specialToken;
+					// go through special tokens
+					while (st != null) {
+						// output
+						if (st.kind == PrismParserConstants.COMMENT) {
+							output(st.image, COMMENT, oType);
+						} else {
+							output(st.image, WHITESPACE, oType);
+						}
+						// next special token
+						st = st.next;
+					}
+				}
+				// output
+				if (t.kind == PrismParserConstants.EOF) {
+					output(t.image, EOF, oType);
+					continue;
+				} else if (t.kind > PrismParserConstants.COMMENT && t.kind < PrismParserConstants.NOT)
+					output(t.image, KEYWORD, oType);
+				else if (t.kind == PrismParserConstants.REG_INT || t.kind == PrismParserConstants.REG_DOUBLE)
+					output(t.image, NUMERIC, oType);
+				else if (t.kind == PrismParserConstants.REG_IDENT || t.kind == PrismParserConstants.REG_IDENTPRIME)
+					output(t.image, IDENTIFIER, oType);
+				else if (t.kind == PrismParserConstants.PREPROC)
+					output(t.image, PREPROC, oType);
+				else
+					output(t.image, PUNCTUATION, oType);
+				// next token
+				t = t.next;
+			}
+		} finally {
 			// release prism parser
 			Prism.releasePrismParser();
 		}
 	}
+
 
 	private static void output(String s, int tType, int oType)
 	{

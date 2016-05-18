@@ -164,8 +164,7 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
     {
     }
     
-    @SuppressWarnings("deprecation")
-	public void keyPressed(KeyEvent e)
+    public void keyPressed(KeyEvent e)
     {
         
         try

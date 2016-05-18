@@ -36,11 +36,7 @@ import userinterface.OptionsPanel;
 
 public class GUIGeneralOptions extends OptionsPanel
 {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private GUIPrism gui;
+    private GUIPrism gui;
     private int last;
     private int adjust;
     /** Creates new form GUIGeneralOptions */

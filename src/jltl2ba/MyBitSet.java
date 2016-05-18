@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.io.PrintStream;
 
 
-@SuppressWarnings("serial")
 public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Integer> {
 
 	private int _size;	// workaround for default bitset size, resizing breaks stuff later!

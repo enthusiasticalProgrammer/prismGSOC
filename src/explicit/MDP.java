@@ -40,6 +40,11 @@ import explicit.rewards.MDPRewards;
 public interface MDP extends NondetModel
 {
 	/**
+	 * Get the number of transitions from choice {@code i} of state {@code s}.
+	 */
+	public int getNumTransitions(int s, int i);
+
+	/**
 	 * Get an iterator over the transitions from choice {@code i} of state {@code s}.
 	 */
 	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s, int i);
@@ -271,4 +276,5 @@ public interface MDP extends NondetModel
 	 * @param dest Vector to write result to.
 	 */
 	public void mvMultRight(int[] states, int[] strat, double[] source, double[] dest);
+
 }

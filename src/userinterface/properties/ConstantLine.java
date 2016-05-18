@@ -33,7 +33,6 @@ import java.awt.*;
 import prism.*;
 import parser.type.*;
 
-@SuppressWarnings("serial")
 public class ConstantLine extends javax.swing.JPanel
 {
 	public static final String SINGLE_DEFAULT = "0";

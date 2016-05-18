@@ -434,21 +434,50 @@ public abstract class ASTElement
 		accept(visitor);
 	}
 
-	/**
-	 * Perform any required semantic checks. These are just simple checks on expressions, mostly.
-	 * For semantic checks on models and properties, specifically, see:
-	 * {@link parser.visitor.ModulesFileSemanticCheck} and {@link parser.visitor.PropertiesSemanticCheck}. 
-	 * These checks are done *before* any undefined constants have been defined.
-	 */
+	//TODO Christopher: take a closer look at the calls of semanticCheck
+	
 	public void semanticCheck() throws PrismLangException
 	{
-		SemanticCheck visitor = new SemanticCheck();
+		semanticCheck(null, null);
+	}
+
+	/**
+	 * Perform any required semantic checks.
+	 */
+	public void semanticCheck(ModulesFile modulesFile) throws PrismLangException
+	{
+		semanticCheck(modulesFile, null);
+	}
+
+	/**
+	 * Perform any required semantic checks. Optionally pass in parent ModulesFile
+	 * and PropertiesFile for some additional checks (or leave null);
+	 * These checks are done *before* any undefined constants have been defined.
+	 */
+	public void semanticCheck(ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismLangException
+	{
+		SemanticCheck visitor = new SemanticCheck(modulesFile, propertiesFile);
 		accept(visitor);
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Evaluate partially: replace some constants and variables with actual values.
 	 * Warning: Unlike evaluate(), evaluatePartially() methods modify (and return) the expression. 
+=======
+	 * Perform further semantic checks that can only be done once values
+	 * for any undefined constants have been defined. Optionally pass in parent
+	 * ModulesFile and PropertiesFile for some additional checks (or leave null);
+	 */
+	public void semanticCheckAfterConstants(ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismLangException
+	{
+		SemanticCheckAfterConstants visitor = new SemanticCheckAfterConstants(modulesFile, propertiesFile);
+		accept(visitor);
+	}
+
+	/**
+	 * Evaluate partially: replace some constants and variables with actual values. 
+>>>>>>> remotes/multi/master
 	 */
 	public ASTElement evaluatePartially(EvaluateContext ec) throws PrismLangException
 	{
@@ -470,7 +499,10 @@ public abstract class ASTElement
 	 * Evaluate partially: replace some variables with actual values. 
 	 * Variables are specified as a State object, indexed over a subset of all variables,
 	 * and a mapping from indices (over all variables) to this subset (-1 if not in subset). 
+<<<<<<< HEAD
 	 * Warning: Unlike evaluate(), evaluatePartially() methods modify (and return) the expression. 
+=======
+>>>>>>> remotes/multi/master
 	 */
 	public ASTElement evaluatePartially(State substate, int[] varMap) throws PrismLangException
 	{

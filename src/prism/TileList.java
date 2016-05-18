@@ -68,14 +68,31 @@ public class TileList
 	{
 		return storedTileLists;
 	}
+	 
+	/**
+	 * Stores a TileList so that it can be retrieved for visualisation in multi-objective
+	 * verification
+	 * @param formula Formula to which the tile list corresponds
+	 * @param formulaX Formula that should be used as an X axis label
+	 * @param formulaY Formula that should be used as an Y axis label
+	 * @param tl
+	 */
+	public static void addStoredTileList(Expression formula, Expression formulaX, Expression formulaY, TileList tl)
+	{
+		storedFormulas.add(formula);
+		storedFormulasX.add(formulaX);
+		storedFormulasY.add(formulaY);
+		storedTileLists.add(tl);
 
+	}
+	
 	/**
 	 * Formulas for X and Y axes (or multi-obj formulas) of the corresponding
 	 * elements of storedTileLists.
 	 */
 	protected static List<Expression> storedFormulasX;
 	protected static List<Expression> storedFormulasY;
-	protected static List<List<Expression>> storedFormulas;
+	protected static List<Expression> storedFormulas;
 
 	public static List<Expression> getStoredFormulasX()
 	{
@@ -87,7 +104,7 @@ public class TileList
 		return storedFormulasY;
 	}
 
-	public static List<List<Expression>> getStoredFormulas()
+	public static List<Expression> getStoredFormulas()
 	{
 		return storedFormulas;
 	}
@@ -104,7 +121,7 @@ public class TileList
 	static {
 		storedFormulasX = new ArrayList<Expression>();
 		storedFormulasY = new ArrayList<Expression>();
-		storedFormulas = new ArrayList<List<Expression>>();
+		storedFormulas = new ArrayList<Expression>();
 		storedTileLists = new ArrayList<TileList>();
 	}
 
@@ -221,7 +238,11 @@ public class TileList
 	/**
 	 * Returns the points that form the tiles of this
 	 * TileList. The implementation is rather inefficient and is intended
+<<<<<<< HEAD
 	 * only for debugging purposes.
+=======
+	 * only for debugging pusposes.
+>>>>>>> remotes/multi/master
 	 */
 	public List<Point> getPoints()
 	{

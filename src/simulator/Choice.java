@@ -32,11 +32,14 @@ import prism.*;
 public interface Choice
 {
 	/**
+<<<<<<< HEAD
 	 * Scale probability/rate of all transitions, multiplying by d.
 	 */
 	public void scaleProbabilitiesBy(double d);
 	
 	/**
+=======
+>>>>>>> remotes/multi/master
 	 * Get the module/action for this choice, as an integer index
 	 * (-i for independent in ith module, i for synchronous on ith action)
 	 * (in both cases, modules/actions are 1-indexed)

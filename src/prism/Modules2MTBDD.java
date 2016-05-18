@@ -46,6 +46,7 @@ public class Modules2MTBDD
 	
 	// logs
 	private PrismLog mainLog;		// main log
+	private PrismLog techLog;		// tech log
 
 	// ModulesFile object to store syntax tree from parser
 	private ModulesFile modulesFile;
@@ -564,6 +565,8 @@ public class Modules2MTBDD
 		}
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
 			// check which module it belongs to
 			m = varList.getModule(i);
 			// if global...

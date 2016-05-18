@@ -47,6 +47,7 @@ public class CheckValid extends ASTTraverse
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		// R operator types restricted for some models
+
 		if (modelType == ModelType.MDP) {
 			if (e.getOperator() == ExpressionTemporal.R_S) {
 				throw new PrismLangException("Steady-state reward properties cannot be used for MDPs");
@@ -57,8 +58,16 @@ public class CheckValid extends ASTTraverse
 				throw new PrismLangException("Only reachability (F) reward properties can be used for PTAs");
 			}
 		}
-		// PTA only support upper time bounds
+		// Apart from CTMCs, we only support upper time bounds
 		if (e.getLowerBound() != null) {
+			if (modelType == ModelType.DTMC) {
+				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol()
+						+ " operator for DTMCs");
+			}
+			if (modelType == ModelType.MDP) {
+				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol()
+						+ " operator for MDPs");
+			}
 			if (modelType == ModelType.PTA) {
 				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol()
 						+ " operator for PTAs");
@@ -80,6 +89,7 @@ public class CheckValid extends ASTTraverse
 						+ " operator must be integers for PTAs");
 			}
 		}
+
 		// Don't allow lower bounds on weak until - does not have intuitive semantics
 		if (e.getOperator() == ExpressionTemporal.P_W && e.getLowerBound() != null) {
 			throw new PrismLangException("The weak until operator (W) with lower bounds is not yet supported");
