@@ -1984,6 +1984,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		propertiesPopup.add(details);
 
 		// strategies
+		strategiesMenu = new JMenu("Strategies");
 		strategiesMenu.setMnemonic('S');
 		strategiesMenu.setIcon(GUIPrism.getIconFromImage("smallStrategy.png"));
 
