@@ -447,12 +447,6 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	@Override
-	public JDDNode getBDDFromInterval(String relOpString, double bound)
-	{
-		return getBDDFromInterval(RelOp.parseSymbol(relOpString), bound);
-	}
-
-	@Override
 	public JDDNode getBDDFromInterval(RelOp relOp, double bound)
 	{
 		JDDNode sol = null;

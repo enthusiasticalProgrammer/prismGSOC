@@ -146,15 +146,6 @@ public interface StateValues extends StateVector
 	/** Returns an Object with the value of the i-th entry in this vector. */
 	Object getValue(int i);
 
-	
-	//TODO Christopher: dismiss this method in favor of the next one
-	/**
-	 * Generate BDD for states in the given interval
-	 * (interval specified as relational operator and bound)
-	 * <br>[ REFS: <i>result</i> ]
-	 */
-	JDDNode getBDDFromInterval(String relOpString, double bound);
-
 	/**
 	 * Generate BDD for states in the given interval
 	 * (interval specified as relational operator and bound)
