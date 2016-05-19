@@ -146,7 +146,6 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Empty the list of initial states.
 	 */
 	public void clearInitialStates()
@@ -155,8 +154,6 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * Add a state to the list of deadlock states.
 	 */
 	public void addDeadlockState(int i)
