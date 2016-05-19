@@ -502,29 +502,6 @@ public class ProbModelChecker extends NonProbModelChecker
 		else if (expr instanceof ExpressionSS) {
 			res = checkExpressionSteadyState(model, (ExpressionSS) expr);
 		}
-		// Otherwise, use the superclass
-		else {
-			res = super.checkExpression(model, expr, statesOfInterest);
-		}
-		return res;
-	}
-
-	public StateValues checkExpression(Model model, Expression expr) throws PrismException
-	{
-		StateValues res;
-
-		// P operator
-		if (expr instanceof ExpressionProb) {
-			res = checkExpressionProb(model, (ExpressionProb) expr);
-		}
-		// R operator
-		else if (expr instanceof ExpressionReward) {
-			res = checkExpressionReward(model, (ExpressionReward) expr);
-		}
-		// S operator
-		else if (expr instanceof ExpressionSS) {
-			res = checkExpressionSteadyState(model, (ExpressionSS) expr);
-		}
 		//Multi-objective model-checking
 		else if (expr instanceof ExpressionFunc
 				&& (((ExpressionFunc) expr).getName().equals("multi") || ((ExpressionFunc) expr).getName().equals("mlessmulti"))) {
@@ -532,9 +509,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 		// Otherwise, use the superclass
 		else {
-			res = super.checkExpression(model, expr,null);
+			res = super.checkExpression(model, expr, statesOfInterest);
 		}
-
 		return res;
 	}
 
@@ -602,7 +578,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	 * @param coalition If relevant, info about which set of players this P operator refers to
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
+			throws PrismException
 	{
 		// Get info from P operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
@@ -632,79 +609,6 @@ public class ProbModelChecker extends NonProbModelChecker
 	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
 	{
 		throw new PrismException("Multi-objective model-checking is not available for this type of models");
-	}
-
-	/**
-	 * Model check a P operator expression and return the values for all states.
-	 */
-	protected StateValues checkExpressionProb(Model model, ExpressionProb expr) throws PrismException
-	{
-		Expression pb; // Probability bound (expression)
-		double p = 0; // Probability bound (actual value)
-		boolean min = false; // For nondeterministic models, are we finding min (true) or max (false) probs
-		ModelType modelType = model.getModelType();
-
-		StateValues probs = null;
-
-		// Get info from prob operator
-		RelOp relOp = expr.getRelOp();
-		pb = expr.getProb();
-		if (pb != null) {
-			p = pb.evaluateDouble(constantValues);
-			if (p < 0 || p > 1)
-				throw new PrismException("Invalid probability bound " + p + " in P operator");
-		}
-
-		// For nondeterministic models, determine whether min or max probabilities needed
-		if (modelType.nondeterministic()) {
-			if (relOp.isLowerBound() || relOp.equals(RelOp.MIN)) {
-				// min
-				min = true;
-			} else if (relOp.isUpperBound()|| relOp.equals(RelOp.MAX)) {
-				// max
-				min = false;
-			} else {
-				throw new PrismException("Can't use \"P=?\" for nondeterministic models; use \"Pmin=?\" or \"Pmax=?\"");
-			}
-		}
-
-		// Compute probabilities
-		switch (modelType) {
-		case CTMC:
-			probs = ((CTMCModelChecker) this).checkProbPathFormula(model, expr.getExpression());
-			break;
-		case CTMDP:
-			probs = ((CTMDPModelChecker) this).checkProbPathFormula((NondetModel) model, expr.getExpression(), min);
-			break;
-		case DTMC:
-			probs = ((DTMCModelChecker) this).checkProbPathFormula(model, expr.getExpression());
-			break;
-		case MDP:
-			probs = ((MDPModelChecker) this).checkProbPathFormula((NondetModel) model, expr.getExpression(), min);
-			break;
-		/*case STPG:
-			probs = ((STPGModelChecker) this).checkProbPathFormula(model, expr.getExpression(), min);
-			break;*/
-		default:
-			throw new PrismException("Cannot model check " + expr + " for a " + modelType);
-		}
-
-		// Print out probabilities
-		if (getVerbosity() > 5) {
-			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
-			probs.print(mainLog);
-		}
-
-		// For =? properties, just return values
-		if (pb == null) {
-			return probs;
-		}
-		// Otherwise, compare against bound to get set of satisfying states
-		else {
-			BitSet sol = probs.getBitSetFromInterval(relOp, p);
-			probs.clear();
-			return StateValues.createFromBitSet(sol, model);
-		}
 	}
 
 	/**
@@ -964,7 +868,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Model check an R operator expression and return the values for all states.
 	 */
-	protected StateValues checkExpressionReward(Model model, ExpressionReward expr, boolean forAll, Coalition coalition, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionReward(Model model, ExpressionReward expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
+			throws PrismException
 	{
 		// Get info from R operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
@@ -997,113 +902,6 @@ public class ProbModelChecker extends NonProbModelChecker
 	}
 
 	/**
-	 * Model check an R operator expression and return the values for all states.
-	 */
-
-	protected StateValues checkExpressionReward(Model model, ExpressionReward expr) throws PrismException
-	{
-		Object rs; // Reward struct index
-		RewardStruct rewStruct = null; // Reward struct object
-		Expression rb; // Reward bound (expression)
-		double r = 0; // Reward bound (actual value)
-		RelOp relOp; // Relational operator
-		boolean min = false; // For nondeterministic models, are we finding min (true) or max (false) rewards
-		ModelType modelType = model.getModelType();
-		StateValues rews = null;
-		MCRewards mcRewards = null;
-		MDPRewards mdpRewards = null;
-		int i;
-
-		// Get info from reward operator
-		rs = expr.getRewardStructIndex();
-		relOp = expr.getRelOp();
-		rb = expr.getReward();
-		if (rb != null) {
-			r = rb.evaluateDouble(constantValues);
-			if (r < 0)
-				throw new PrismException("Invalid reward bound " + r + " in R[] formula");
-		}
-
-		// For nondeterministic models, determine whether min or max rewards needed
-		if (modelType.nondeterministic()) {
-			if (relOp.isLowerBound() || relOp.equals(RelOp.MIN)) {
-				// min
-				min = true;
-			} else if (relOp.isUpperBound() || relOp.equals(RelOp.MAX)) {
-				// max
-				min = false;
-			} else {
-				throw new PrismException("Can't use \"R=?\" for nondeterministic models; use \"Rmin=?\" or \"Rmax=?\"");
-			}
-		}
-
-		// Get reward info
-		if (modulesFile == null)
-			throw new PrismException("No model file to obtain reward structures");
-		if (modulesFile.getNumRewardStructs() == 0)
-			throw new PrismException("Model has no rewards specified");
-		if (rs == null) {
-			rewStruct = modulesFile.getRewardStruct(0);
-		} else if (rs instanceof Expression) {
-			i = ((Expression) rs).evaluateInt(constantValues);
-			rs = new Integer(i); // for better error reporting below
-			rewStruct = modulesFile.getRewardStruct(i - 1);
-		} else if (rs instanceof String) {
-			rewStruct = modulesFile.getRewardStructByName((String) rs);
-		}
-		if (rewStruct == null)
-			throw new PrismException("Invalid reward structure index \"" + rs + "\"");
-
-		// Build rewards
-		ConstructRewards constructRewards = new ConstructRewards(mainLog);
-		switch (modelType) {
-		case CTMC:
-		case DTMC:
-			mcRewards = constructRewards.buildMCRewardStructure((DTMC) model, rewStruct, constantValues);
-			break;
-		case MDP:
-			mdpRewards = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
-			break;
-		default:
-			throw new PrismException("Cannot build rewards for " + modelType + "s");
-		}
-
-		// Compute rewards
-		mainLog.println("Building reward structure...");
-		switch (modelType) {
-		case CTMC:
-			rews = ((CTMCModelChecker) this).checkRewardFormula(model, mcRewards, expr.getExpression());
-			break;
-		case DTMC:
-			rews = ((DTMCModelChecker) this).checkRewardFormula(model, mcRewards, expr.getExpression());
-			break;
-		case MDP:
-			rews = ((MDPModelChecker) this).checkRewardFormula((NondetModel) model, mdpRewards, expr.getExpression(), min);
-			break;
-		default:
-			throw new PrismException("Cannot model check " + expr + " for " + modelType + "s");
-		}
-
-		// Print out probabilities
-		if (getVerbosity() > 5) {
-			mainLog.print("\nRewards (non-zero only) for all states:\n");
-			rews.print(mainLog);
-		}
-
-		// For =? properties, just return values
-		if (rb == null) {
-			return rews;
-		}
-		// Otherwise, compare against bound to get set of satisfying states
-		else {
-			BitSet sol = rews.getBitSetFromInterval(relOp, r);
-			rews.clear();
-			return StateValues.createFromBitSet(sol, model);
-		}
-	}
-
-	/**
-	<<<<<<< HEAD
 	 * Construct rewards from a reward structure and a model.
 	 */
 	protected Rewards constructRewards(Model model, RewardStruct rewStruct) throws PrismException
@@ -1333,39 +1131,6 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Compute probabilities
 		StateValues probs = checkSteadyStateFormula(model, expr.getExpression(), minMax);
-
-		Expression pb; // Probability bound (expression)
-		double p = 0; // Probability bound (actual value)
-		ModelType modelType = model.getModelType();
-
-
-		
-		pb = expr.getProb();
-		if (pb != null) {
-			p = pb.evaluateDouble(constantValues);
-			if (p < 0 || p > 1)
-				throw new PrismException("Invalid probability bound " + p + " in P operator");
-		}
-
-
-		// Compute probabilities
-		switch (modelType) {
-		case CTMC:
-			//probs = ((CTMCModelChecker) this).checkSteadyStateFormula(model, expr.getExpression());
-			//break;
-			throw new PrismException("Explicit engine does not yet support the S operator for CTMCs");
-		case DTMC:
-			probs = ((DTMCModelChecker) this).checkSteadyStateFormula(model, expr.getExpression());
-			break;
-		default:
-			throw new PrismException("Cannot model check " + expr + " for a " + modelType);
-		}
-
-		// Print out probabilities
-		if (getVerbosity() > 5) {
-			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
-			probs.print(mainLog);
-		}
 
 		// For =? properties, just return values
 		if (opInfo.isNumeric()) {
