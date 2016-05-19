@@ -37,9 +37,11 @@ import prism.PrismLangException;
 
 public class ExpressionReward extends ExpressionQuant
 {
-	//TODO: Christopher kann man die naechsten beiden mergen?
-	Object rewardStructIndex = null;
-	Object rewardStructIndexDiv = null;
+	//both are de facto Expressions, but the mechanically generated PrismParser temporarily
+	//assigns them a String, also both are equivalent, but again the mechanically generated
+	//PrismParser uses them both
+	private Object rewardStructIndex = null;
+	private Object rewardStructIndexDiv = null;
 	Expression reward = null;
 	Expression expression = null;
 	// Note: this "old-style" filter is just for display purposes
