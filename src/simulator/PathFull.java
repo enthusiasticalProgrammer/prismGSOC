@@ -103,13 +103,6 @@ public class PathFull extends Path implements PathFullInfo
 		loopDet.initialise();
 	}
 
-	// Overloaded method including strategy state
-	public void initialise(State initialState, double[] initialStateRewards, Object stratState)
-	{
-		initialise(initialState, initialStateRewards);
-		// steps.get(steps.size() - 1).stratState = stratState;
-	}
-
 	public void initialiseStrat(Object stratState)
 	{
 		steps.get(steps.size() - 1).stratState = stratState;
@@ -372,10 +365,6 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).stateRewards[rsi];
 	}
 
-	/**
-	 * Get an array of state rewards for the state at a given step of the path.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	protected double[] getStateRewards(int step)
 	{
 		return steps.get(step).stateRewards;
@@ -423,10 +412,6 @@ public class PathFull extends Path implements PathFullInfo
 			return "?";
 	}
 
-	/**
-	 * Get the probability or rate associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public double getProbability(int step)
 	{
 		return steps.get(steps.size() - 2).probability;
@@ -438,10 +423,6 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).transitionRewards[rsi];
 	}
 
-	/**
-	 * Get an array of transitions reward associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	protected double[] getTransitionRewards(int step)
 	{
 		return steps.get(step).transitionRewards;
