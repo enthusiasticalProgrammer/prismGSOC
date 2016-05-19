@@ -34,8 +34,6 @@ import jltl2ba.Alternating.ATrans;
 import jltl2ba.SimpleLTL;
 import prism.PrismException;
 
-//TODO Christopher duplicate method pairs!
-
 public class Alternating {
 	public int astate_count;
 	public int atrans_count;

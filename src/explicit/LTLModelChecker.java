@@ -72,7 +72,6 @@ import prism.DRA;
 import prism.LTL2RabinLibrary;
 import prism.Pair;
 
-//TODO Christopher: check for duplicate code
 /**
  * LTL model checking functionality
  */
@@ -117,7 +116,7 @@ public class LTLModelChecker extends PrismComponent
 	/**
 	 * Create a new LTLModelChecker, inherit basic state from parent (unless null).
 	 */
-	public LTLModelChecker(PrismComponent parent) throws PrismException
+	public LTLModelChecker(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -143,16 +142,6 @@ public class LTLModelChecker extends PrismComponent
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * Convert an LTL formula into a DRA. The LTL formula is represented as a PRISM Expression,
-	 * in which atomic propositions are represented by ExpressionLabel objects.
-	 */
-	public static DRA<BitSet> convertLTLFormulaToDRA(Expression ltl) throws PrismException
-	{
-		return LTL2RabinLibrary.convertLTLFormulaToDRA(ltl);
-
 	}
 
 	/**
@@ -220,7 +209,6 @@ public class LTLModelChecker extends PrismComponent
 	}
 			
 	/**
-<<<<<<< HEAD
 	 * Construct a deterministic automaton (DA) for an LTL formula, having first extracted maximal state formulas
 	 * and model checked them with the passed in model checker. The maximal state formulas are assigned labels
 	 * (L0, L1, etc.) which become the atomic propositions in the resulting DA. BitSets giving the states which
@@ -601,191 +589,6 @@ public class LTLModelChecker extends PrismComponent
 		}
 
 		return product;
-	}
-	
-	/**
-	 * Construct the product of a DRA and a DTMC.
-	 * @param dra The DRA
-	 * @param dtmc The DTMC
-	 * @param labelBS BitSets giving the set of states for each AP in the DRA
-	 * @return The product DTMC and a list of each of its states (s,q), encoded as (s * draSize + q) 
-	 */
-	public Pair<Model, int[]> constructProductMC(DRA<BitSet> dra, DTMC dtmc, Vector<BitSet> labelBS) throws PrismException
-	{
-		DTMCSimple prodModel = new DTMCSimple();
-
-		int draSize = dra.size();
-		int numAPs = dra.getAPList().size();
-		int modelNumStates = dtmc.getNumStates();
-		int prodNumStates = modelNumStates * draSize;
-		int s_1, s_2, q_1, q_2;
-		BitSet s_labels = new BitSet(numAPs);
-
-		// Encoding: 
-		// each state s' = <s, q> = s * draSize + q
-		// s(s') = s' / draSize
-		// q(s') = s' % draSize
-
-		LinkedList<Point> queue = new LinkedList<Point>();
-		int map[] = new int[prodNumStates];
-		Arrays.fill(map, -1);
-
-		// As we need results for all states of the original model,
-		// we explore states of the product starting from those that
-		// correspond to *all* states of the original model.
-		// These are designated as initial states of the model
-		// (a) to ensure reachability is done for these states; and
-		// (b) to later identify the corresponding product state for each model state 
-		for (int s_0 = 0; s_0 < dtmc.getNumStates(); s_0++) {
-			// Get BitSet representing APs (labels) satisfied by state s_0
-			for (int k = 0; k < numAPs; k++) {
-				s_labels.set(k, labelBS.get(k).get(s_0));
-			}
-			// Find corresponding initial state in DRA
-			int q_0 = dra.getEdgeDestByLabel(dra.getStartState(), s_labels);
-			// Add (initial) state to product
-			queue.add(new Point(s_0, q_0));
-			prodModel.addState();
-			prodModel.addInitialState(prodModel.getNumStates() - 1);
-			map[s_0 * draSize + q_0] = prodModel.getNumStates() - 1;
-		}
-
-		// Product states
-		BitSet visited = new BitSet(prodNumStates);
-		while (!queue.isEmpty()) {
-			Point p = queue.pop();
-			s_1 = p.x;
-			q_1 = p.y;
-			visited.set(s_1 * draSize + q_1);
-
-			// Go through transitions from state s_1 in original DTMC
-			Iterator<Map.Entry<Integer, Double>> iter = dtmc.getTransitionsIterator(s_1);
-			while (iter.hasNext()) {
-				Map.Entry<Integer, Double> e = iter.next();
-				s_2 = e.getKey();
-				double prob = e.getValue();
-				// Get BitSet representing APs (labels) satisfied by successor state s_2
-				for (int k = 0; k < numAPs; k++) {
-					s_labels.set(k, labelBS.get(k).get(s_2));
-				}
-				// Find corresponding successor in DRA
-				q_2 = dra.getEdgeDestByLabel(q_1, s_labels);
-				// Add state/transition to model
-				if (!visited.get(s_2 * draSize + q_2) && map[s_2 * draSize + q_2] == -1) {
-					queue.add(new Point(s_2, q_2));
-					prodModel.addState();
-					map[s_2 * draSize + q_2] = prodModel.getNumStates() - 1;
-				}
-				prodModel.setProbability(map[s_1 * draSize + q_1], map[s_2 * draSize + q_2], prob);
-			}
-		}
-
-		// Build a mapping from state indices to states (s,q), encoded as (s * draSize + q) 
-		int invMap[] = new int[prodModel.getNumStates()];
-		for (int i = 0; i < map.length; i++) {
-			if (map[i] != -1) {
-				invMap[map[i]] = i;
-			}
-		}
-
-		prodModel.findDeadlocks(false);
-
-		return new Pair<Model, int[]>(prodModel, invMap);
-	}
-
-	/**
-	 * Construct the product of a DRA and an MDP.
-	 * @param dra The DRA
-	 * @param mdp The MDP
-	 * @param labelBS BitSets giving the set of states for each AP in the DRA
-	 * @return The product MDP and a list of each of its states (s,q), encoded as (s * draSize + q) 
-	 */
-	public Pair<NondetModel, int[]> constructProductMDP(DRA<BitSet> dra, MDP mdp, Vector<BitSet> labelBS) throws PrismException
-	{
-		MDPSimple prodModel = new MDPSimple();
-
-		int draSize = dra.size();
-		int numAPs = dra.getAPList().size();
-		int modelNumStates = mdp.getNumStates();
-		int prodNumStates = modelNumStates * draSize;
-		int s_1, s_2, q_1, q_2;
-		BitSet s_labels = new BitSet(numAPs);
-
-		// Encoding: 
-		// each state s' = <s, q> = s * draSize + q
-		// s(s') = s' / draSize
-		// q(s') = s' % draSize
-
-		LinkedList<Point> queue = new LinkedList<Point>();
-		int map[] = new int[prodNumStates];
-		Arrays.fill(map, -1);
-
-		// As we need results for all states of the original model,
-		// we explore states of the product starting from those that
-		// correspond to *all* states of the original model.
-		// These are designated as initial states of the model
-		// (a) to ensure reachability is done for these states; and
-		// (b) to later identify the corresponding product state for each model state 
-		for (int s_0 = 0; s_0 < mdp.getNumStates(); s_0++) {
-			// Get BitSet representing APs (labels) satisfied by state s_0
-			for (int k = 0; k < numAPs; k++) {
-				s_labels.set(k, labelBS.get(k).get(s_0));
-			}
-			// Find corresponding initial state in DRA
-			int q_0 = dra.getEdgeDestByLabel(dra.getStartState(), s_labels);
-			// Add (initial) state to product
-			queue.add(new Point(s_0, q_0));
-			prodModel.addState();
-			prodModel.addInitialState(prodModel.getNumStates() - 1);
-			map[s_0 * draSize + q_0] = prodModel.getNumStates() - 1;
-		}
-
-		// Product states
-		BitSet visited = new BitSet(prodNumStates);
-		while (!queue.isEmpty()) {
-			Point p = queue.pop();
-			s_1 = p.x;
-			q_1 = p.y;
-			visited.set(s_1 * draSize + q_1);
-
-			// Go through transitions from state s_1 in original DTMC
-			int numChoices = mdp.getNumChoices(s_1);
-			for (int j = 0; j < numChoices; j++) {
-				Distribution prodDistr = new Distribution();
-				Iterator<Map.Entry<Integer, Double>> iter = mdp.getTransitionsIterator(s_1, j);
-				while (iter.hasNext()) {
-					Map.Entry<Integer, Double> e = iter.next();
-					s_2 = e.getKey();
-					double prob = e.getValue();
-					// Get BitSet representing APs (labels) satisfied by successor state s_2
-					for (int k = 0; k < numAPs; k++) {
-						s_labels.set(k, labelBS.get(k).get(s_2));
-					}
-					// Find corresponding successor in DRA
-					q_2 = dra.getEdgeDestByLabel(q_1, s_labels);
-					// Add state/transition to model
-					if (!visited.get(s_2 * draSize + q_2) && map[s_2 * draSize + q_2] == -1) {
-						queue.add(new Point(s_2, q_2));
-						prodModel.addState();
-						map[s_2 * draSize + q_2] = prodModel.getNumStates() - 1;
-					}
-					prodDistr.set(map[s_2 * draSize + q_2], prob);
-				}
-				prodModel.addActionLabelledChoice(map[s_1 * draSize + q_1], prodDistr, mdp.getAction(s_1, j));
-			}
-		}
-
-		// Build a mapping from state indices to states (s,q), encoded as (s * draSize + q) 
-		int invMap[] = new int[prodModel.getNumStates()];
-		for (int i = 0; i < map.length; i++) {
-			if (map[i] != -1) {
-				invMap[map[i]] = i;
-			}
-		}
-
-		prodModel.findDeadlocks(false);
-
-		return new Pair<NondetModel, int[]>(prodModel, invMap);
 	}
 
 	/**

@@ -81,20 +81,6 @@ public class DTMCModelChecker extends ProbModelChecker
 	// Model checking functions
 
 	/**
-	 * Compute probabilities for the contents of a P operator.
-	 */
-	protected StateValues checkProbPathFormula(Model model, Expression expr) throws PrismException
-	{
-		// Test whether this is a simple path formula (i.e. PCTL)
-		// and then pass control to appropriate method. 
-		if (expr.isSimplePathFormula()) {
-			return checkProbPathFormulaSimple(model, expr);
-		} else {
-			return checkProbPathFormulaLTL(model, expr, false);
-		}
-	}
-
-	/**
 	 * Compute probabilities for a simple, non-LTL path operator.
 	 */
 	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr) throws PrismException
@@ -287,87 +273,6 @@ public class DTMCModelChecker extends ProbModelChecker
 
 		res = computeUntilProbs((DTMC) model, b1, b2);
 		probs = StateValues.createFromDoubleArray(res.soln, model);
-
-		return probs;
-	}
-
-	/**
-	 * Compute probabilities for an LTL path formula
-	 */
-	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual) throws PrismException
-	{
-		LTLModelChecker mcLtl;
-		StateValues probsProduct, probs;
-		Expression ltl;
-		DRA<BitSet> dra;
-		Model modelProduct;
-		DTMCModelChecker mcProduct;
-		long time;
-
-		// Can't do LTL with time-bounded variants of the temporal operators
-		try {
-			expr.accept(new ASTTraverse()
-			{
-				public void visitPre(ExpressionTemporal e) throws PrismLangException
-				{
-					if (e.getLowerBound() != null)
-						throw new PrismLangException(e.getOperatorSymbol());
-					if (e.getUpperBound() != null)
-						throw new PrismLangException(e.getOperatorSymbol());
-				}
-			});
-		} catch (PrismLangException e) {
-			String s = "Temporal operators (like " + e.getMessage() + ")";
-			s += " cannot have time bounds for LTL properties";
-			throw new PrismException(s);
-		}
-
-		// For LTL model checking routines
-		mcLtl = new LTLModelChecker(this);
-
-		// Model check maximal state formulas
-		Vector<BitSet> labelBS = new Vector<BitSet>();
-		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
-
-		// Convert LTL formula to deterministic Rabin automaton (DRA)
-		mainLog.println("\nBuilding deterministic Rabin automaton (for " + ltl + ")...");
-		time = System.currentTimeMillis();
-		dra = LTLModelChecker.convertLTLFormulaToDRA(ltl);
-		int draSize = dra.size();
-		mainLog.println("\nDRA has " + dra.size() + " states, " + dra.getNumAcceptancePairs() + " pairs.");
-		// dra.print(System.out);
-		time = System.currentTimeMillis() - time;
-		mainLog.println("\nTime for Rabin translation: " + time / 1000.0 + " seconds.");
-
-		// Build product of Markov chain and automaton
-		mainLog.println("\nConstructing MC-DRA product...");
-		Pair<Model, int[]> pair = mcLtl.constructProductMC(dra, (DTMC) model, labelBS);
-		modelProduct = pair.first;
-		int invMap[] = pair.second;
-		int modelProductSize = modelProduct.getNumStates();
-		mainLog.print("\n" + modelProduct.infoStringTable());
-
-		// Find accepting BSCCs + compute reachability probabilities
-		mainLog.println("\nFinding accepting BSCCs...");
-		BitSet acceptingBSCCs = mcLtl.findAcceptingBSCCsForRabin(dra, modelProduct, invMap);
-		mainLog.println("\nComputing reachability probabilities...");
-		mcProduct = new DTMCModelChecker(this);
-		mcProduct.inheritSettings(this);
-		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((DTMC) modelProduct, acceptingBSCCs).soln, modelProduct);
-
-		// Mapping probabilities in the original model
-		double[] probsProductDbl = probsProduct.getDoubleArray();
-		double[] probsDbl = new double[model.getNumStates()];
-
-		// Get the probabilities for the original model by taking the initial states
-		// of the product and projecting back to the states of the original model
-		for (int i : modelProduct.getInitialStates()) {
-			int s = invMap[i] / draSize;
-			probsDbl[s] = probsProductDbl[i];
-		}
-
-		probs = StateValues.createFromDoubleArray(probsDbl, model);
-		probsProduct.clear();
 
 		return probs;
 	}

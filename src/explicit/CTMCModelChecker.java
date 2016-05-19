@@ -35,7 +35,6 @@ import explicit.rewards.StateRewardsArray;
 import parser.ast.*;
 import parser.type.*;
 import prism.*;
-//TODO Christopher: ich glaube da ist multigain-Logik -> vorsichtig mergen
 /**
  * Explicit-state model checker for continuous-time Markov chains (CTMCs).
  * This uses various bits of functionality of DTMCModelChecker, so we inherit from that.
@@ -340,11 +339,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * Compute reachability/until probabilities.
 	 * i.e. compute the probability of reaching a state in {@code target},
 	 * while remaining in those in @{code remain}.
-<<<<<<< HEAD
-	 * @param ctmc The CTMC
-=======
-	 * @param dtmc The CTMC
->>>>>>> remotes/multi/master
+	 * @param dtmc The DTMC
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 * @param init Optionally, an initial solution vector (may be overwritten) 
