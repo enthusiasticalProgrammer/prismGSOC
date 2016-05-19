@@ -48,8 +48,6 @@ import javax.swing.Action;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
@@ -73,7 +71,6 @@ import parser.Values;
 import parser.ast.LabelList;
 import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
-import prism.ModelType;
 
 import prism.PrismException;
 import prism.PrismLangException;
@@ -98,17 +95,10 @@ import userinterface.properties.GUIPropertiesEvent;
 
 import userinterface.simulator.networking.GUINetworkEditor;
 import userinterface.util.GUIComputationEvent;
-import userinterface.util.GUIEvent;
-import userinterface.util.GUIExitEvent;
-import userinterface.properties.GUIPropertiesList;
-import userinterface.properties.GUIProperty;
-import userinterface.simulator.networking.GUINetworkEditor;
-import userinterface.util.GUIComputationEvent;
 import userinterface.util.GUIExitEvent;
 import userinterface.util.GUIPrismFileFilter;
 import explicit.Distribution;
 
-//@Christopher: Nota Bene: Hier steckt tonnenweise Multigain-Logik
 public class GUISimulator extends GUIPlugin implements MouseListener, ListSelectionListener, PrismSettingsListener
 {
 	private static final long serialVersionUID = 1L;
@@ -127,7 +117,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	// Menus/actions/etc.
 	private JMenu simulatorMenu;
 	private JPopupMenu pathPopupMenu;
-	private FileFilter textFilter;
 	private Action randomExploration, backtrack, backtrackToHere, removeToHere, newPath, newPathFromState, newPathPlot, newPathPlotFromState, resetPath,
 			exportPath, plotPath, configureView;
 
@@ -136,7 +125,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	//Current State
 	private boolean pathActive;
 	private ModulesFile parsedModel;
-	private boolean newPathAfterReceiveParseNotification, newPathPlotAfterReceiveParseNotification;
 	private boolean chooseInitialState;
 	private boolean strategyGenerated = false;
 	private Strategy strategy = null;
@@ -248,8 +236,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		modelTypeLabel.setText("Unknown");
 		totalTimeLabel.setText(formatDouble(0.0));
 		pathLengthLabel.setText("0");
-
-		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
 
 		displayStyleFast = true;
 		displayPathLoops = true;
@@ -473,15 +459,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 				// resetting strategy
 				strategy.reset();
-
-				//				// initialising strategy
-				//				try {
-				//					strategy.init(stateIds.get(new parser.State(initialState, parsedModel)));
-				//					updateStrategyInfoPanel();
-				//				} catch (InvalidStrategyStateException e) {
-				//					// TODO Auto-generated catch block
-				//					e.printStackTrace();
-				//				}
 			}
 
 			// Create a new path in the simulator and add labels/properties 
@@ -591,9 +568,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -634,8 +611,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						strategy.setMemory(updateTableModel.stratState);
 						updateTableModel.stratState=null;
 					} catch (InvalidStrategyStateException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 				}
 				engine.computeTransitionsForCurrentState();
@@ -646,9 +623,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -679,9 +656,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -707,8 +684,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 					strategy.setMemory(updateTableModel.stratState);
 					updateTableModel.stratState=null;
 				} catch (InvalidStrategyStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 			
@@ -719,9 +696,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -747,9 +724,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -774,9 +751,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		if (strategyGenerated) {
 			try {
 				strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-			} catch (InvalidStrategyStateException error) {
-				// TODO Auto-generated catch block
-				error.printStackTrace();
+			} catch (InvalidStrategyStateException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
 			}
 		}
 
@@ -822,9 +799,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -873,9 +850,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (strategyGenerated) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException error) {
-					// TODO Auto-generated catch block
-					error.printStackTrace();
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 
@@ -929,14 +906,12 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 
 		// Request a parse
-		newPathPlotAfterReceiveParseNotification = true;
 		this.chooseInitialState = chooseInitialState;
 		notifyEventListeners(new GUIPropertiesEvent(GUIPropertiesEvent.REQUEST_MODEL_PARSE));
 	}
 
 	public void newPathPlotAfterParse()
 	{
-		newPathPlotAfterReceiveParseNotification = false;
 		Values initialState;
 		try {
 			// Check model is simulate-able
@@ -1638,8 +1613,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 					try {
 						updateTableModel.updateUpdatesTable();
 					} catch (PrismException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 
 				} else if (state == ItemEvent.DESELECTED) {
@@ -1647,8 +1622,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 					try {
 						updateTableModel.updateUpdatesTable();
 					} catch (PrismException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 				}
 			}
@@ -2510,8 +2485,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 				} catch (PrismException e) {
 					return "";
 				} catch (InvalidStrategyStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 			return "";
@@ -2577,15 +2552,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		{
 			if (isOldUpdate()) {
 				engine.computeTransitionsForCurrentState();
-				//				if (strategy != null && stratState!=null)
-				//					try {
-				//						strategy.setMemory(stratState);
-				//						stratState = null;
-				//						updateStrategyInfoPanel();
-				//					} catch (InvalidStrategyStateException e) {
-				//						// TODO Auto-generated catch block
-				//						e.printStackTrace();
-				//					}
 			}
 			oldUpdate = false;
 			oldStep = -1;
@@ -2614,8 +2580,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						strategy.setMemory(stratState);
 						stratState=null;
 					} catch (InvalidStrategyStateException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 				}
 				updateUpdatesTable();
@@ -2630,8 +2596,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 					try {
 						strategy.setMemory(engine.getPathFull().getStrategyState(oldStep));
 					} catch (InvalidStrategyStateException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 				}
 
@@ -2663,8 +2629,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						stratState = null;
 						updateStrategyInfoPanel();
 					} catch (InvalidStrategyStateException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						throw new RuntimeException();
 					}
 				currentUpdatesTable.getSelectionModel().setSelectionInterval(0, 0);
 			}

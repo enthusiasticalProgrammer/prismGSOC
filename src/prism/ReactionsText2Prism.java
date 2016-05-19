@@ -102,7 +102,6 @@ public class ReactionsText2Prism extends Reactions2Prism
 	}
 
 
-	//TODO Christopher: merge with extractModelFromFile
 	@Override
 	public void load(InputStream in) throws PrismException
 	{
