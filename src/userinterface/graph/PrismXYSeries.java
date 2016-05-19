@@ -166,7 +166,6 @@ public class PrismXYSeries extends XYSeries
 	 *  @return A copy of the overwritten data item, or <code>null</code> if no 
      *  	    item was overwritten.
 	 */
-	//TODO Christopher: returned immer null => rewrite to void wenn moeglich mit ueberKlasse
 	@Override
 	public XYDataItem addOrUpdate(Number x, Number y) {
 		
@@ -192,7 +191,7 @@ public class PrismXYSeries extends XYSeries
 			
 			this.add(item, true);
 			
-			return null;
+			return item;
 		}
 		/* This is not a valid data item! */
 		else
