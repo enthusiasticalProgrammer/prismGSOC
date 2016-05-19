@@ -38,7 +38,7 @@ import parser.ast.ExpressionSS;
 import parser.ast.ExpressionStrategy;
 import parser.ast.ExpressionTemporal;
 import parser.ast.ExpressionUnaryOp;
-import parser.ast.RelOp;
+import parser.ast.ExpressionFunc;
 import parser.ast.RewardStruct;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
@@ -49,25 +49,14 @@ import prism.OpRelOpBound;
 import prism.PrismComponent;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
-import java.util.BitSet;
-
-import parser.ast.Expression;
-import parser.ast.ExpressionFunc;
-import parser.ast.ExpressionProb;
-import parser.ast.ExpressionReward;
-import parser.ast.ExpressionSS;
-import parser.ast.RewardStruct;
-import prism.ModelType;
-import prism.PrismComponent;
-import prism.PrismException;
 import prism.PrismSettings;
+
 import explicit.rewards.ConstructRewards;
 import explicit.rewards.MCRewards;
 import explicit.rewards.MDPRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.STPGRewards;
 
-//TODO Christopher: merge both check+some other methods
 /**
  * Super class for explicit-state probabilistic model checkers.
  */

@@ -35,11 +35,12 @@ import explicit.rewards.StateRewardsArray;
 import parser.ast.*;
 import parser.type.*;
 import prism.*;
-
 /**
  * Explicit-state model checker for continuous-time Markov chains (CTMCs).
+ * This uses various bits of functionality of DTMCModelChecker, so we inherit from that.
+ * (This way DTMCModelChecker picks up any options set on this one.) 
  */
-public class CTMCModelChecker extends ProbModelChecker
+public class CTMCModelChecker extends DTMCModelChecker
 {
 	/**
 	 * Create a new CTMCModelChecker, inherit basic state from parent (unless null).
@@ -123,8 +124,10 @@ public class CTMCModelChecker extends ProbModelChecker
 		return createDTMCModelChecker().checkExistsLTL(dtmcEmb, expr, statesOfInterest);
 	}
 
-	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	/**
+	 * Model check a time-bounded until operator; return vector of probabilities for all states.
+	 */
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;
@@ -180,11 +183,11 @@ public class CTMCModelChecker extends ProbModelChecker
 				// check for special case of lTime == 0, this is actually an unbounded until
 				if (lTime == 0) {
 					// compute probs
-					res = createDTMCModelChecker().computeUntilProbs((DTMC) model, b1, b2);
+					res = computeUntilProbs((DTMC) model, b1, b2);
 					probs = StateValues.createFromDoubleArray(res.soln, model);
 				} else {
 					// compute unbounded until probs
-					tmpRes = createDTMCModelChecker().computeUntilProbs((DTMC) model, b1, b2);
+					tmpRes = computeUntilProbs((DTMC) model, b1, b2);
 					// compute bounded until probs
 					res = computeTransientBackwardsProbs((CTMC) model, b1, b1, lTime, tmpRes.soln);
 					probs = StateValues.createFromDoubleArray(res.soln, model);
@@ -320,24 +323,34 @@ public class CTMCModelChecker extends ProbModelChecker
 		DTMC dtmcEmb = ctmc.getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeUntilProbs(dtmcEmb, remain, target);
 	}
+	
+	/**
+	 * @param dtmc The DTMC
+	 * @param target Target states
+	 */
+	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target) throws PrismException
+	{
+		mainLog.println("Building embedded DTMC...");
+		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
+		return super.computeNextProbs(dtmcEmb, target);
+	}
 
 	/**
 	 * Compute reachability/until probabilities.
 	 * i.e. compute the probability of reaching a state in {@code target},
 	 * while remaining in those in @{code remain}.
-	 * @param ctmc The CTMC
+	 * @param dtmc The DTMC
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 * @param init Optionally, an initial solution vector (may be overwritten) 
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.  
 	 */
-	public ModelCheckerResult computeReachProbs(CTMC ctmc, BitSet remain, BitSet target, double init[], BitSet known) throws PrismException
+	public ModelCheckerResult computeReachProbs(DTMC dtmc, BitSet remain, BitSet target, double init[], BitSet known) throws PrismException
 	{
-		// Construct embedded DTMC and do computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ctmc.getImplicitEmbeddedDTMC();
-		return createDTMCModelChecker().computeReachProbs(dtmcEmb, remain, target, init, known);
+		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
+		return super.computeReachProbs(dtmcEmb, remain, target, init, known);
 	}
 
 	/**
@@ -423,7 +436,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt, 1e+300, acc);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
@@ -500,7 +513,8 @@ public class CTMCModelChecker extends ProbModelChecker
 	 * @param mcRewards The rewards
 	 * @param t Time bound
 	 */
-	public ModelCheckerResult computeCumulativeRewards(CTMC ctmc, MCRewards mcRewards, double t) throws PrismException
+	@Override
+	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -514,13 +528,15 @@ public class CTMCModelChecker extends ProbModelChecker
 		// Optimisation: If t = 0, this is easy.
 		if (t == 0) {
 			res = new ModelCheckerResult();
-			res.soln = new double[ctmc.getNumStates()];
+			res.soln = new double[dtmc.getNumStates()];
 			return res;
 		}
 
 		// Start backwards transient computation
 		timer = System.currentTimeMillis();
 		mainLog.println("\nStarting backwards cumulative rewards computation...");
+
+		CTMC ctmc = (CTMC) dtmc;
 
 		// Store num states
 		n = ctmc.getNumStates();
@@ -530,7 +546,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt, 1e+300, acc);
+		fg = new FoxGlynn(qt,1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
@@ -639,7 +655,8 @@ public class CTMCModelChecker extends ProbModelChecker
 	 * @param mcRewards The rewards
 	 * @param t Time bound
 	 */
-	public ModelCheckerResult computeInstantaneousRewards(CTMC ctmc, MCRewards mcRewards, double t) throws PrismException
+	@Override
+	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -651,12 +668,12 @@ public class CTMCModelChecker extends ProbModelChecker
 		double q, qt, acc, weights[], totalWeight;
 
 		// Store num states
-		n = ctmc.getNumStates();
+		n = dtmc.getNumStates();
 
 		// Optimisation: If t = 0, this is easy.
 		if (t == 0) {
 			res = new ModelCheckerResult();
-			res.soln = new double[ctmc.getNumStates()];
+			res.soln = new double[dtmc.getNumStates()];
 			for (i = 0; i < n; i++)
 				res.soln[i] = mcRewards.getStateReward(i);
 			return res;
@@ -666,12 +683,14 @@ public class CTMCModelChecker extends ProbModelChecker
 		timer = System.currentTimeMillis();
 		mainLog.println("\nStarting backwards instantaneous rewards computation...");
 
+		CTMC ctmc = (CTMC) dtmc;
+
 		// Get uniformisation rate; do Fox-Glynn
 		q = ctmc.getDefaultUniformisationRate();
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt, 1e+300, acc);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
@@ -736,24 +755,24 @@ public class CTMCModelChecker extends ProbModelChecker
 
 	/**
 	 * Compute expected reachability rewards.
-	 * @param ctmc The CTMC
+	 * @param dtmc The CTMC
 	 * @param mcRewards The rewards
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeReachRewards(CTMC ctmc, MCRewards mcRewards, BitSet target) throws PrismException
+	public ModelCheckerResult computeReachRewards(DTMC dtmc, MCRewards mcRewards, BitSet target) throws PrismException
 	{
 		int i, n;
 		// Build embedded DTMC
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ctmc.getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
 		// Convert rewards
-		n = ctmc.getNumStates();
+		n = dtmc.getNumStates();
 		StateRewardsArray rewEmb = new StateRewardsArray(n);
 		for (i = 0; i < n; i++) {
-			rewEmb.setStateReward(i, mcRewards.getStateReward(i) / ctmc.getExitRate(i));
+			rewEmb.setStateReward(i, mcRewards.getStateReward(i) / ((CTMC) dtmc).getExitRate(i));
 		}
 		// Do computation on DTMC
-		return createDTMCModelChecker().computeReachRewards(dtmcEmb, rewEmb, target);
+		return super.computeReachRewards(dtmcEmb, rewEmb, target);
 	}
 
 	/**
@@ -791,7 +810,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		termCritParam = 1e-6;
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt, 1e+300, acc);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
