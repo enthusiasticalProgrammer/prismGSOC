@@ -264,7 +264,6 @@ public class MDPModelChecker extends ProbModelChecker
 		return sv;
 	}
 	
-	/**
 <<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
 	 * Compute probabilities for the contents of a P operator.
 	 */
@@ -278,9 +277,6 @@ public class MDPModelChecker extends ProbModelChecker
 			return checkProbPathFormulaLTL(model, expr, min);
 		}
 =======
-	 * from PRISM TODO Christopher: merge both versions to one
-	 * 
-	 * */
 	@Override
 	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
