@@ -90,7 +90,7 @@ public class ExpressionProb extends ExpressionQuant
 			return new OpRelOpBound("P", getRelOp(), null);
 		}
 	}
-	
+
 	// Methods required for Expression:
 
 	@Override
@@ -104,7 +104,7 @@ public class ExpressionProb extends ExpressionQuant
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -145,7 +145,7 @@ public class ExpressionProb extends ExpressionQuant
 		expr.setExpression(getExpression() == null ? null : getExpression().deepCopy());
 		expr.setRelOp(getRelOp());
 		expr.setBound(getBound() == null ? null : getBound().deepCopy());
-		expr.setFilter(getFilter() == null ? null : (Filter)getFilter().deepCopy());
+		expr.setFilter(getFilter() == null ? null : (Filter) getFilter().deepCopy());
 		expr.setType(type);
 		expr.setPosition(this);
 		return expr;
@@ -157,6 +157,7 @@ public class ExpressionProb extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
+
 		s += "P" + getModifierString() + getRelOp();
 		s += (getBound() == null) ? "?" : getBound().toString();
 		s += " [ " + getExpression();

@@ -39,8 +39,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	private Component parent;
 	private SettingTableModel theModel;
 	
-	private int lineWidth;
-	
 	private boolean shouldRemove;
 	/** Creates new form PropertyTable */
 	public SettingTable(Component parent)
@@ -603,13 +601,10 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		
 		public void refreshGroupNames()
 		{
-			//System.out.println("refreshing group names");
 			Iterator it = owners.iterator();
 			SettingOwner last = null;
-			int currGroupCount = 0;
 			String tempName = "";
 			groupNames = new ArrayList();
-			int index = 0;
 			
 			String ownerList = "";
 			while(it.hasNext())
@@ -620,7 +615,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				if(last == null)
 				{
 					//this is the first group
-					currGroupCount++;
 					if(!po.getSettingOwnerName().equals(""))ownerList += "\'"+po.getSettingOwnerName()+"\'";
 					tempName = po.getSettingOwnerClassName();
 					//groupStarts.add(new Integer(0));
@@ -628,7 +622,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				else if(po.getSettingOwnerID() == last.getSettingOwnerID())
 				{
 					//this is for the second or after in the sequence
-					currGroupCount++;
 					//tempName = ""+currGroupCount+" "+po.getClassDescriptor()+"s";
 					if(!po.getSettingOwnerClassName().endsWith("s"))
 						tempName = po.getSettingOwnerClassName()+"s";
@@ -642,14 +635,11 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					groupNames.add(tempName);
 					//System.out.println("adding: "+tempName);
 					//groupSizes.add(new Integer(currGroupCount));
-					currGroupCount = 0;
-					currGroupCount++;
 					ownerList += "\'"+po.getSettingOwnerName()+"\'";
 					if(!po.getSettingOwnerName().equals(""))tempName = po.getSettingOwnerClassName()+" \'"+po.getSettingOwnerName()+"\'";
 					//groupStarts.add(new Integer(index));
 				}
 				last = po;
-				index++;
 			}
 			if(owners.size() != 0)
 			{

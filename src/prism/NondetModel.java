@@ -66,9 +66,6 @@ public class NondetModel extends ProbModel
 		return transReln;
 	}
 
-
-	// accessor methods
-
 	// type
 	public ModelType getModelType()
 	{

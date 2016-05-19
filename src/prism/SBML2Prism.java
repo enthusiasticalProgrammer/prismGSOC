@@ -123,6 +123,12 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 		}
 	}
 
+	/**
+	* Function used by parseSBML() above to find the SBML DTD
+	* (this currently unused since we do not validate the SBML file when reading)
+	* (and since the DTD specified in the SBML files is not local)
+	* (if validation is enabled, put the DTD file "sbml.dtd" in PRISM's "dtds" directory)
+	*/
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
 	{
 		InputSource inputSource = null;

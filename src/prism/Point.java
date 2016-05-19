@@ -149,7 +149,6 @@ public class Point
 	}
 
 	/**
-<<<<<<< HEAD
  	 * Determines if this point is pointwise smaller than {@code p+SMALL_NUMBER}.
  	 * 
  	 */
@@ -169,8 +168,6 @@ public class Point
 	
 
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * Returns the point in which the coordinates are reweighted so that the
 	 * norm of the point is equal to 1.
 	 * @return

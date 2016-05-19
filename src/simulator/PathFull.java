@@ -39,7 +39,6 @@ import userinterface.graph.Graph;
  * The full path is stored, i.e. all info at all steps.
  * State objects and arrays are copied for storage.
  */
-
 public class PathFull extends Path implements PathFullInfo
 {
 	// Model to which the path corresponds
@@ -391,20 +390,17 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).time;
 	}
 
-
 	@Override
 	public int getChoice(int step)
 	{
 		return steps.get(step).choice;
 	}
 
-
 	@Override
 	public int getModuleOrActionIndex(int step)
 	{
 		return steps.get(step).moduleOrActionIndex;
 	}
-
 
 	@Override
 	public String getModuleOrAction(int step)

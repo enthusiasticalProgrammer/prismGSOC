@@ -10,11 +10,12 @@ import prism.PrismException;
  * @author vojfor
  *
  */
-public interface SolverProxyInterface {
+public interface SolverProxyInterface
+{
 	public static final int EQ = 32;
 	public static final int GE = 64;
 	public static final int LE = 128;
-	
+
 	/**
 	 * Adds new row to the problem.
 	 * @param row Gives the lhs, where the entry (i,d) says that column i should have constant d. Here i is indexed from 0
@@ -23,15 +24,15 @@ public interface SolverProxyInterface {
 	 * @param name Name to be given t
 	 * @throws PrismException
 	 */
-	public void addRowFromMap(Map<Integer,Double> row, double rhs, int op, String name) throws PrismException;
+	public void addRowFromMap(Map<Integer, Double> row, double rhs, int op, String name) throws PrismException;
 
 	/**
 	 * Solves the LP problem, optionally stopping when positive value is found.
 	 * @return
 	 * @throws PrismException
 	 */
-	public boolean solveIsPositive() throws PrismException;	
-	
+	public boolean solveIsPositive() throws PrismException;
+
 	/**
 	 * Solves the LP problem
 	 * @return
@@ -46,14 +47,14 @@ public interface SolverProxyInterface {
 	 * @throws PrismException
 	 */
 	public boolean getBoolResult() throws PrismException;
-	
+
 	/**
 	 * Returns value of the objective function. If infeasible, returns NaN
 	 * @return
 	 * @throws PrismException
 	 */
 	public double getDoubleResult() throws PrismException;
-	
+
 	/**
 	 * Sets name of the variable (=column) idx, indexed from 0. Useful for debugging.
 	 * @param idx
@@ -61,7 +62,7 @@ public interface SolverProxyInterface {
 	 * @throws PrismException
 	 */
 	public void setVarName(int idx, String name) throws PrismException;
-	
+
 	/**
 	 * Sets lower and upper bounds for the variable values
 	 * @param idx The variable to be changed, indexed from .
@@ -70,15 +71,15 @@ public interface SolverProxyInterface {
 	 * @throws PrismException
 	 */
 	public void setVarBounds(int idx, double lo, double up) throws PrismException;
-	
+
 	/**
 	 * Sets the objective function.
 	 * @param row See {@see #addRowFromMap(Map, double, int, String)}
 	 * @param max True for maximising, false for minimising
 	 * @throws PrismException
 	 */
-	public void setObjFunct(Map<Integer,Double> row, boolean max) throws PrismException;
-	
+	public void setObjFunct(Map<Integer, Double> row, boolean max) throws PrismException;
+
 	/**
 	 * Gets the array of variable values. Should be called only after solve was called. 
 	 */

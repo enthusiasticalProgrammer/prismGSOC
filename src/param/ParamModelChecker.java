@@ -56,8 +56,6 @@ package param;
 
 import java.util.BitSet;
 import java.util.List;
-import java.io.FileOutputStream;
-import java.util.*;
 
 import edu.jas.kern.ComputerThreads;
 import explicit.Model;
@@ -70,7 +68,6 @@ import parser.ast.Expression;
 import parser.ast.ExpressionBinaryOp;
 import parser.ast.ExpressionConstant;
 import parser.ast.ExpressionFilter;
-import parser.ast.*;
 import parser.ast.ExpressionFilter.FilterOperator;
 import parser.ast.ExpressionLabel;
 import parser.ast.ExpressionLiteral;
@@ -89,7 +86,6 @@ import parser.ast.RewardStruct;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
-import parser.type.*;
 import prism.ModelType;
 import prism.PrismComponent;
 import prism.PrismException;
@@ -98,8 +94,6 @@ import prism.PrismPrintStreamLog;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
 import prism.Result;
-import edu.jas.kern.ComputerThreads;
-import explicit.Model;
 
 /**
  * Model checker for parametric Markov models.

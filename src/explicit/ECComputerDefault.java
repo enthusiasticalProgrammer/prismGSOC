@@ -87,7 +87,7 @@ public class ECComputerDefault extends ECComputer
 	}
 
 	// Computation
-	
+
 	/**
 	 * Find all accepting maximal end components (MECs) in the submodel obtained
 	 * by restricting this one to the set of states {@code restrict},
@@ -107,7 +107,6 @@ public class ECComputerDefault extends ECComputer
 		}
 		// Initialise L with set of all states to look in (if non-empty)
 		List<BitSet> L = new ArrayList<BitSet>();
-
 		if (restrict.isEmpty())
 			return L;
 		L.add(restrict);
@@ -214,27 +213,5 @@ public class ECComputerDefault extends ECComputer
 			}
 		}
 		return r;
-	}
-
-	private boolean isMEC(BitSet b)
-	{
-		if (b.cardinality() == 0)
-			return false;
-
-		int state = b.nextSetBit(0);
-		while (state != -1) {
-			boolean atLeastOneAction = false;
-			for (int i = 0; i < model.getNumChoices(state); i++) {
-				if (model.allSuccessorsInSet(state, i, b)) {
-					atLeastOneAction = true;
-				}
-			}
-			if (!atLeastOneAction) {
-				return false;
-			}
-			state = b.nextSetBit(state + 1);
-		}
-
-		return true;
 	}
 }

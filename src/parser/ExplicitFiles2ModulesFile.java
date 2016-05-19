@@ -42,9 +42,7 @@ import parser.type.Type;
 import parser.type.TypeBool;
 import parser.type.TypeInt;
 import prism.ModelType;
-import prism.Prism;
 import prism.PrismException;
-import prism.PrismLog;
 
 /**
  * Class to build a (partial) ModulesFile corresponding to imported explicit-state file storage of a model.
@@ -53,11 +51,13 @@ import prism.PrismLog;
  */
 public class ExplicitFiles2ModulesFile
 {
+
 	// Num states
 	private int numStates = 0;
 
 	public ExplicitFiles2ModulesFile()
 	{
+
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ExplicitFiles2ModulesFile
 	 */
 	private ModulesFile createVarInfoFromStatesFile(File statesFile) throws PrismException
 	{
-		BufferedReader in=null;
+		BufferedReader in = null;
 		String s, ss[];
 		int i, j, lineNum = 0;
 		Module m;
@@ -190,11 +190,11 @@ public class ExplicitFiles2ModulesFile
 			throw new PrismException("Error detected at line " + lineNum + " of states file \"" + statesFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of states file \"" + statesFile + "\"");
-		}finally{
+		} finally {
 			try {
 				in.close();
 			} catch (IOException e) {
-				throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
 		// create modules file
@@ -223,7 +223,7 @@ public class ExplicitFiles2ModulesFile
 	 */
 	private ModulesFile createVarInfoFromTransFile(File transFile) throws PrismException
 	{
-		BufferedReader in=null;
+		BufferedReader in = null;
 		String s, ss[];
 		int lineNum = 0;
 		Module m;
@@ -252,11 +252,11 @@ public class ExplicitFiles2ModulesFile
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
-		}finally{
+		} finally {
 			try {
 				in.close();
 			} catch (IOException e) {
-				throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
 		// create modules file

@@ -69,7 +69,6 @@ import automata.LTL2DA;
 
 import common.IterableStateSet;
 import prism.DRA;
-import prism.LTL2RabinLibrary;
 import prism.Pair;
 
 /**

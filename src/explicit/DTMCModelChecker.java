@@ -529,25 +529,6 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	/**
-	 * Compute steady-state probabilities for an S operator.
-	 */
-	protected StateValues checkSteadyStateFormula(Model model, Expression expr) throws PrismException
-	{
-		BitSet b;
-		StateValues probs = null;
-		ModelCheckerResult res = null;
-
-		// Model check operand first
-		b = checkExpression(model, expr, null).getBitSet();
-
-		double multProbs[] = Utils.bitsetToDoubleArray(b, model.getNumStates());
-		res = computeSteadyStateBackwardsProbs((DTMC) model, multProbs);
-		probs = StateValues.createFromDoubleArray(res.soln, model);
-
-		return probs;
-	}
-
 	// Steady-state/transient probability computation
 
 	/**
@@ -845,6 +826,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
+	
 	/**
 	 * Prob0 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 0,
@@ -956,7 +938,6 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
-	<<<<<<< HEAD
 	 * Prob1 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 1,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
@@ -1031,14 +1012,6 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param dtmc The DTMC
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
-	=======
-	 * Prob1 precomputation algorithm.
-	 * i.e. determine the states of a DTMC which, with probability 1,
-	 * reach a state in {@code target}, while remaining in those in @{code remain}.
-	 * @param mdp The MDP
-	 * @param remain Remain in these states (optional: null means "all")
-	 * @param target Target states
-	>>>>>>> remotes/multi/master
 	 */
 	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target)
 	{

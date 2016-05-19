@@ -32,8 +32,6 @@ import parser.visitor.ASTVisitor;
 import prism.OpRelOpBound;
 import prism.PrismException;
 import prism.PrismLangException;
-import parser.*;
-import parser.visitor.*;
 
 public class ExpressionSS extends ExpressionQuant
 {
@@ -146,9 +144,7 @@ public class ExpressionSS extends ExpressionQuant
 		throw new PrismLangException("Cannot evaluate an S operator without a model");
 	}
 
-	/**
-	  * Get "name" of the result of this expression (used for y-axis of any graphs plotted)
-	  */
+	@Override
 	public String getResultName()
 	{
 		return (prob == null) ? "Probability" : "Result";

@@ -34,29 +34,6 @@ import prism.PrismLog;
 
 /**
  * Interface for classes to store strategies (for MDPs, games, etc.)
-package strat;
-
-import prism.PrismException;
-import prism.PrismLog;
-import explicit.Distribution;
-import explicit.Model;
-
-/**
- * 
- * Generic interface to use the strategies based on stochastic strategy automata
- * [?].
- * 
- * The strategy should be used interactively. The typical usage pattern would
- * be: 1) In the initial state of the model call init method. 2) Call nextMove
- * method with the initial state as parameter. 3) Choose the successor according
- * to the distribution. 4) Once entered the successor state, call updateMemory
- * method with the action taken in the previous state and the successor state.
- * 5) Repeat steps 2-4 forever.
- * 
- * Strategy could also used to obtain the choice after a (strategy-compatible)
- * history: 1) Call reset method to reset the strategy. 2) Follow the previous
- * instructions 1-5 except in step 3, choose the successor based on the given
- * history.
  */
 public interface Strategy
 {
@@ -64,7 +41,7 @@ public interface Strategy
 	public enum Choice {
 		INDEX, ACTION, UNKNOWN, ARBITRARY, UNREACHABLE;
 	};
-	
+
 	/**
 	 * Initialises memory based on a state
 	 * 
@@ -196,7 +173,6 @@ public interface Strategy
 	 */
 	public int getInitialStateOfTheProduct(int s);
 
-	
 	//	/**
 	//	 * Retrieve the expected value that this strategy will achieve from it's
 	//	 * current state
@@ -213,27 +189,27 @@ public interface Strategy
 	//	public double getExpectedValue(int action, int state);
 
 	// NEW METHODS:
-	
+
 	/**
 	 * Export the strategy to a PrismLog, displaying strategy choices as action names.
 	 */
 	public void exportActions(PrismLog out);
-	
+
 	/**
 	 * Export the strategy to a PrismLog, displaying strategy choices as indices.
 	 */
 	public void exportIndices(PrismLog out);
-	
+
 	/**
 	 * Export the model induced by this strategy to a PrismLog.
 	 */
 	public void exportInducedModel(PrismLog out);
-	
+
 	/**
 	 * Export the strategy to a dot file (of the model showing the strategy).
 	 */
 	public void exportDotFile(PrismLog out);
-	
+
 	/**
 	 * Initialise the strategy, based on an initial model state.
 	 * @param s Initial state of the model
@@ -246,12 +222,12 @@ public interface Strategy
 	 * @param s The new state of the model
 	 */
 	public void update(Object action, int s);
-	
+
 	/**
 	 * Get the action chosen by the strategy in the current state (assuming it is deterministic). 
 	 */
 	public Object getChoiceAction();
-	
+
 	/**
 	 * Clear storage of the strategy.
 	 */

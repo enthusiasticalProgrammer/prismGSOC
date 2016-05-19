@@ -301,7 +301,7 @@ public class PropertiesFile extends ASTElement
 
 		// Various semantic checks 
 		doSemanticChecks();
-		
+
 		// Various semantic checks 
 		semanticCheck(modulesFile, this);
 		// Type checking

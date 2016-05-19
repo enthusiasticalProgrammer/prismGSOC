@@ -42,7 +42,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 {
 	/** Name of the original file */
 	protected String parsedFileName;
-	
+
 	/**
 	 * Calling point for command-line script:
 	 * e.g. java -cp classes prism.ReactionsText2Prism myfile.txt 100
@@ -86,7 +86,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 	{
 		super(mainLog);
 	}
-	
+
 	@Override
 	public String getName()
 	{
@@ -101,7 +101,6 @@ public class ReactionsText2Prism extends Reactions2Prism
 		super.load(file);
 	}
 
-
 	@Override
 	public void load(InputStream in) throws PrismException
 	{
@@ -113,7 +112,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 		Parameter parameter;
 		Reaction reaction;
 		String reactionId = null, reactionName = null;
-		
+
 		// Initialise storage
 		speciesList = new ArrayList<Species>();
 		parameterList = new ArrayList<Parameter>();
@@ -264,7 +263,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of reactions file");
 		}
 	}
-	
+
 	/**
 	 * Main method: load reactions file, process and send resulting PRISM file to stdout
 	 */
@@ -278,13 +277,12 @@ public class ReactionsText2Prism extends Reactions2Prism
 		convertToPRISMCode(System.out);
 	}
 
-
 	/**
 	 * Build the reaction set model from a parsed SBML file.
 	 */
 	private void extractModelFromFile(File file) throws PrismException
 	{
-		load(file);	
+		load(file);
 	}
 
 	@Override
@@ -299,5 +297,5 @@ public class ReactionsText2Prism extends Reactions2Prism
 		// Reset filename storage
 		parsedFileName = null;
 	}
-	
+
 }

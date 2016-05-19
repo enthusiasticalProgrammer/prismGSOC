@@ -33,7 +33,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import param.ParamModelChecker;
 import parser.Values;
 import parser.ast.Expression;
 import parser.ast.ExpressionReward;
@@ -93,8 +92,6 @@ public class PrismCL implements PrismModelListener
 	private boolean param = false;
 	private ModelType typeOverride = null;
 	private boolean orderingOverride = false;
-	private boolean explicitbuild = false;
-	private boolean explicitbuildtest = false;
 	private boolean nobuild = false;
 	private boolean test = false;
 	private boolean testExitsOnFail = true;
@@ -144,7 +141,6 @@ public class PrismCL implements PrismModelListener
 
 	// logs
 	private PrismLog mainLog = null;
-	private PrismLog techLog = null;
 
 	// prism object
 	private Prism prism = null;
@@ -1640,14 +1636,6 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("zerorewardcheck")) {
 					prism.setCheckZeroLoops(true);
 				}
-				// explicit-state model construction
-				else if (sw.equals("explicitbuild")) {
-					explicitbuild = true;
-				}
-				// (hidden) option for testing of prototypical explicit-state model construction
-				else if (sw.equals("explicitbuildtest")) {
-					explicitbuildtest = true;
-				}
 
 				// MISCELLANEOUS UNDOCUMENTED/UNUSED OPTIONS:
 
@@ -1987,11 +1975,6 @@ public class PrismCL implements PrismModelListener
 			} catch (PrismException e) {
 				// Can't go wrong
 			}
-		}
-
-		// explicit overrides explicit build
-		if (prism.getExplicit()) {
-			explicitbuild = false;
 		}
 
 		// check not trying to do gauss-seidel with mtbdd engine
@@ -2396,15 +2379,6 @@ public class PrismCL implements PrismModelListener
 	{
 		prism.closeDown(true);
 		System.exit(0);
-	}
-
-	/**
-	 * Exit cleanly (with exit code i).
-	 */
-	private void exit(int i)
-	{
-		prism.closeDown(true);
-		System.exit(i);
 	}
 
 	// main method

@@ -46,7 +46,6 @@ public class Modules2MTBDD
 	
 	// logs
 	private PrismLog mainLog;		// main log
-	private PrismLog techLog;		// tech log
 
 	// ModulesFile object to store syntax tree from parser
 	private ModulesFile modulesFile;

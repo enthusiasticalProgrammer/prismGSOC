@@ -129,7 +129,6 @@ public interface Model
 	public BitSet getLabelStates(String name);
 	
 	/**
-<<<<<<< HEAD
 	 * Get the labels that are (optionally) stored.
 	 * Returns an empty set if there are no labels.
 	 */
@@ -139,8 +138,6 @@ public interface Model
 	public boolean hasLabel(String name);
 
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * Get the total number of transitions in the model.
 	 */
 	public int getNumTransitions();
@@ -173,11 +170,7 @@ public interface Model
 	 * Find all deadlock states and store this information in the model.
 	 * If requested (if fix=true) and if needed (i.e. for DTMCs/CTMCs),
 	 * fix deadlocks by adding self-loops in these states.
-<<<<<<< HEAD
 	 * The set of deadlocks (before any possible fixing) can be obtained from {@link #getDeadlockStates()}.
-=======
-	 * The set of deadlocks (before any possible fixing) can be obtained from {@link #getDeadlocks()}.
->>>>>>> remotes/multi/master
 	 * @throws PrismException if the model is unable to fix deadlocks because it is non-mutable.
 	 */
 	public void findDeadlocks(boolean fix) throws PrismException;
@@ -215,25 +208,18 @@ public interface Model
 	
 	/**
 	 * Export to a dot file.
-<<<<<<< HEAD
 	 * @param filename Name of file to export to
-=======
->>>>>>> remotes/multi/master
 	 */
 	public void exportToDotFile(String filename) throws PrismException;
 
 	/**
 	 * Export to a dot file, highlighting states in 'mark'.
-<<<<<<< HEAD
 	 * @param filename Name of file to export to
 	 * @param mark States to highlight (ignored if null)
-=======
->>>>>>> remotes/multi/master
 	 */
 	public void exportToDotFile(String filename, BitSet mark) throws PrismException;
 
 	/**
-<<<<<<< HEAD
 	 * Export to a dot file.
 	 * @param out PrismLog to export to
 	 */
@@ -255,8 +241,6 @@ public interface Model
 	public void exportToDotFile(PrismLog out, BitSet mark, boolean showStates);
 
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * Export to a equivalent PRISM language model description.
 	 */
 	public void exportToPrismLanguage(String filename) throws PrismException;

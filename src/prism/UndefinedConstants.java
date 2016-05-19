@@ -459,10 +459,6 @@ public class UndefinedConstants
 	 *  @param sl If sh are ss are null, this is the value to be assigned. Otherwise, it is the lower bound for the range.
 	 *  @param sh The upper bound for the range.
 	 *  @param ss The step for the values. Null means 1.
-<<<<<<< HEAD
-=======
-	 *  @param useAll If true, throw an exception if {@code name} is does not need to be defined
->>>>>>> remotes/multi/master
 	 *  
 	 *  @return True if the constant was defined before.
 	 */
@@ -662,11 +658,7 @@ public class UndefinedConstants
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Get the number of ranging constants (constants with range greater than 1) from the model file.
-=======
-	 * Get the number of ranging constants (constants with range > 1) from the model file.
->>>>>>> remotes/multi/master
 	 */
 	public int getNumModelRangingConstants()
 	{
@@ -692,11 +684,7 @@ public class UndefinedConstants
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Get the number of ranging constants (constants with range greater than 1) from the properties file.
-=======
-	 * Get the number of ranging constants (constants with range > 1) from the properties file.
->>>>>>> remotes/multi/master
 	 */
 	public int getNumPropertyRangingConstants()
 	{

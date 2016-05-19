@@ -32,6 +32,7 @@ import java.util.List;
 
 import prism.PrismComponent;
 import prism.PrismException;
+
 /**
  * Abstract class for (explicit) classes that compute (B)SCCs,
  * i.e. (bottom) strongly connected components, for a model's transition graph.

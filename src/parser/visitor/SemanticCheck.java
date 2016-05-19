@@ -44,10 +44,8 @@ public class SemanticCheck extends ASTTraverse
 	private PropertiesFile propertiesFile;
 	// Sometimes we need to keep track of parent (ancestor) objects
 	private ModulesFile inModulesFile = null;
-	private Module inModule = null;
 	private Expression inInvariant = null;
 	private Expression inGuard = null;
-	private Update inUpdate = null;
 
 	public SemanticCheck()
 	{
@@ -80,7 +78,7 @@ public class SemanticCheck extends ASTTraverse
 		// Register the fact we are entering a model
 		inModulesFile = e;
 	}
-	
+
 	public void visitPost(ModulesFile e) throws PrismLangException
 	{
 		int i, j, n, n2;
@@ -89,7 +87,7 @@ public class SemanticCheck extends ASTTraverse
 
 		// Register the fact we are leaving a model
 		inModulesFile = null;
-		
+
 		// Check for use of init...endinit _and_ var initial values
 		if (e.getInitialStates() != null) {
 			n = e.getNumGlobals();
@@ -131,7 +129,7 @@ public class SemanticCheck extends ASTTraverse
 		// (and we shouldn't check them - e.g. clock vars appearing in errors would show as an error)
 		return null;
 	}
-	
+
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -200,8 +198,7 @@ public class SemanticCheck extends ASTTraverse
 
 	public void visitPre(Module e) throws PrismLangException
 	{
-		// Register the fact we are entering a module
-		inModule = e;
+
 	}
 
 	public Object visit(Module e) throws PrismLangException
@@ -211,7 +208,8 @@ public class SemanticCheck extends ASTTraverse
 		int i, n;
 		n = e.getNumDeclarations();
 		for (i = 0; i < n; i++) {
-			if (e.getDeclaration(i) != null) e.getDeclaration(i).accept(this);
+			if (e.getDeclaration(i) != null)
+				e.getDeclaration(i).accept(this);
 		}
 		inInvariant = e.getInvariant();
 		if (e.getInvariant() != null)
@@ -219,7 +217,8 @@ public class SemanticCheck extends ASTTraverse
 		inInvariant = null;
 		n = e.getNumCommands();
 		for (i = 0; i < n; i++) {
-			if (e.getCommand(i) != null) e.getCommand(i).accept(this);
+			if (e.getCommand(i) != null)
+				e.getCommand(i).accept(this);
 		}
 		visitPost(e);
 		return null;
@@ -227,8 +226,7 @@ public class SemanticCheck extends ASTTraverse
 
 	public void visitPost(Module e) throws PrismLangException
 	{
-		// Register the fact we are leaving a module
-		inModule = null;
+
 	}
 
 	public Object visit(Command e) throws PrismLangException
@@ -242,11 +240,10 @@ public class SemanticCheck extends ASTTraverse
 		visitPost(e);
 		return null;
 	}
-	
+
 	public void visitPre(Update e) throws PrismLangException
 	{
-		// Register the fact we are entering an update
-		inUpdate = e;
+
 	}
 
 	public void visitPost(Update e) throws PrismLangException
@@ -257,9 +254,6 @@ public class SemanticCheck extends ASTTraverse
 		Module m;
 		ModulesFile mf;
 		boolean isLocal, isGlobal;
-
-		// Register the fact we are leaving an update
-		inUpdate = null;
 
 		// Determine containing command/module/model
 		// (mf should coincide with the stored modulesFile)

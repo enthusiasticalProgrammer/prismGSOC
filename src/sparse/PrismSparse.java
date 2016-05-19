@@ -40,7 +40,6 @@ import prism.PrismLog;
 import dv.DoubleVector;
 import dv.IntegerVector;
 
-
 //----------------------------------------------------------------------------------------------
 
 public class PrismSparse

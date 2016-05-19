@@ -32,7 +32,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +45,6 @@ import param.BigRational;
 import param.ModelBuilder;
 import param.ParamModelChecker;
 import param.RegionValues;
-import param.ModelBuilder;
-import param.ParamModelChecker;
 import parser.ExplicitFiles2ModulesFile;
 import parser.PrismParser;
 import parser.State;
@@ -55,8 +52,6 @@ import parser.Values;
 import parser.ast.Expression;
 import parser.ast.ForLoop;
 import parser.ast.ConstantList;
-import parser.ast.Expression;
-import parser.ast.ForLoop;
 import parser.ast.FormulaList;
 import parser.ast.LabelList;
 import parser.ast.ModulesFile;
@@ -66,7 +61,6 @@ import pta.DigitalClocks;
 import pta.PTAModelChecker;
 import simulator.GenerateSimulationPath;
 import simulator.ModulesFileModelGenerator;
-import simulator.PrismModelExplorer;
 import simulator.SimulatorEngine;
 import simulator.method.SimulationMethod;
 import sparse.PrismSparse;
@@ -79,7 +73,7 @@ import explicit.DTMC;
 import explicit.DTMCModelChecker;
 import explicit.FastAdaptiveUniformisation;
 import explicit.FastAdaptiveUniformisationModelChecker;
-//TODO Christopher: make enums
+
 /**
  * Main class for all PRISM's core functionality.
  * This is independent of the user interface (command line or gui).
@@ -180,7 +174,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------
 	// Settings / flags / options
 	//------------------------------------------------------------------------------
@@ -649,7 +643,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	{
 		this.reachMethod = reachMethod;
 	}
-	
+
 	/**
 	 *  Sets the strategy that will be available for this prism session
 	 * @param strat the strategy
@@ -1378,11 +1372,11 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
-		}finally{
+		} finally {
 			try {
 				strModel.close();
 			} catch (IOException e) {
-				throw new PrismLangException("Could not close input file. The following excption occurred: "+e.getMessage());
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
 
@@ -1577,11 +1571,11 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
-		}finally{
+		} finally {
 			try {
 				strProperties.close();
 			} catch (IOException e) {
-				throw new PrismLangException("Could not close input file. The following excption occurred: "+e.getMessage());
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
 
@@ -1758,7 +1752,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// TODO: print more info 
 		//mainLog.println();
 	}
-	
+
 	/**
 	 * Set (some or all) undefined constants for the currently loaded PRISM model
 	 * (assuming they have changed since the last time this was called).
@@ -1965,7 +1959,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	private void doBuildModel() throws PrismException
 	{
 		long l; // timer
-		
+
 		// Clear any existing built model(s)
 		clearBuiltModel();
 
@@ -2242,7 +2236,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// Check again (in case engine was switched)
 		if (getExplicit())
 			throw new PrismNotSupportedException("Export to Dot file not yet supported by explicit engine");
-		
+
 		// Export to dot file
 		mainLog.println("\nExporting to dot file \"" + file + "\"...");
 		JDD.ExportDDToDotFileLabelled(currentModel.getTrans(), file.getPath(), currentModel.getDDVarNames());
@@ -2677,8 +2671,8 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 					new StateListMTBDD(sccComputer.getSCCs().get(i), currentModel).printMatlab(tmpLog);
 				JDD.Deref(sccComputer.getSCCs().get(i));
 			} else {
-				explicit.StateValues.createFromBitSet(sccComputerExpl.getSCCs().get(i), currentModelExpl).print(tmpLog, true, exportType == EXPORT_MATLAB,
-						true, true);
+				explicit.StateValues.createFromBitSet(sccComputerExpl.getSCCs().get(i), currentModelExpl).print(tmpLog, true, exportType == EXPORT_MATLAB, true,
+						true);
 			}
 			if (exportType == EXPORT_MATLAB)
 				tmpLog.println("];");
@@ -2843,10 +2837,9 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				lastEngine = getEngine();
 				setEngine(Prism.EXPLICIT);
 			}
-		}
-		else if (currentModelType == ModelType.MDP && Expression.containsMultiObjective(prop.getExpression())) {
+		} else if (currentModelType == ModelType.MDP && Expression.containsMultiObjective(prop.getExpression())) {
 			if (settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_LP
-			    && settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
+					&& settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
 				mainLog.printWarning("Switching to linear programming method to allow verification of the formula.");
 				settings.setChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD, Prism.MDP_MULTI_LP);
 			}
@@ -2871,7 +2864,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 
 			// Create new model checker object and do model checking
 			if (!getExplicit()) {
-				ModelChecker mc = createModelChecker(propertiesFile); 
+				ModelChecker mc = createModelChecker(propertiesFile);
 				res = mc.check(prop.getExpression());
 			} else {
 				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
@@ -2891,8 +2884,8 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				if (settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY)) {
 					strategy = mc.getStrategy();
 					if (strategy != null)
-						strategy.setInfo("Property: " + prop.getExpression() + "\n" + "Type: " + strategy.getType() + "\nMemory size: "
-								+ strategy.getMemorySize());
+						strategy.setInfo(
+								"Property: " + prop.getExpression() + "\n" + "Type: " + strategy.getType() + "\nMemory size: " + strategy.getMemorySize());
 				}
 			}
 		} finally {
@@ -3324,7 +3317,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Compute steady-state probabilities (for a DTMC or CTMC) using symbolic engines.
 	 * Optionally (if non-null), read in the initial probability distribution from a file.
 	 * If null, start from initial state (or uniform distribution over multiple initial states).
@@ -3616,7 +3608,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			currentModel.clear();
 		/*if (currentModelExpl != null)
 			currentModelExpl.clear();*/
-		
+
 		// nullify the strategy
 		strategy = null;
 		getSimulator().setStrategy(null);
@@ -3983,8 +3975,8 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Old API:
 	 */
 	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
-			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod) throws PrismException,
-			InterruptedException
+			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
+			throws PrismException, InterruptedException
 	{
 		loadPRISMModel(modulesFile);
 		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);

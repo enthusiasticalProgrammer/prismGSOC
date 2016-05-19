@@ -490,7 +490,6 @@ public class StateValues implements StateVector
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Complement the (boolean) vector.
 	 */
 	public void complement() throws PrismException
@@ -503,8 +502,6 @@ public class StateValues implements StateVector
 	}
 	
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */
 	public void equals(StateValues sv) throws PrismException
@@ -1332,11 +1329,6 @@ public class StateValues implements StateVector
 	}
 
 	@Override
-
-	/**
-	 * Get the value of the ith element of the vector, as an Object.
-	 */
-
 	public Object getValue(int i)
 	{
 		if (type instanceof TypeInt) {

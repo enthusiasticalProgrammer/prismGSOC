@@ -74,21 +74,6 @@ import userinterface.util.GUIException;
 import userinterface.util.GUIExitEvent;
 import userinterface.util.PresentationMetalTheme;
 
-//Java Packages
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
-//Prism Packages
-import prism.*;
-import userinterface.util.*;
-
 /**  PRISM Graphical User Interface
  *  This class is the top level class for the PRISM GUI. It acts as a container
  *  for GUIPlugin objects.  The method getPluginArray() is defined to allow any

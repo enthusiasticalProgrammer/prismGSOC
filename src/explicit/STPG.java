@@ -54,11 +54,7 @@ import explicit.rewards.STPGRewards;
 public interface STPG extends NondetModel
 {
 	/**
-<<<<<<< HEAD
 	 * Get the player that owns state {@code s} (1 or 2 for an STPG).
-=======
-	 * Get the player (1 or 2) for state {@code s}.
->>>>>>> remotes/multi/master
 	 */
 	public int getPlayer(int s);
 
@@ -76,7 +72,7 @@ public interface STPG extends NondetModel
 	 * Is choice {@code i} of state {@code s} in nested form? (See {@link explicit.STPG} for details)
 	 */
 	public boolean isChoiceNested(int s, int i);
-	
+
 	/**
 	 * Get the number of (nested) choices in choice {@code i} of state {@code s}.
 	 */

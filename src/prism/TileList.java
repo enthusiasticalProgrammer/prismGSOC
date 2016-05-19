@@ -238,11 +238,7 @@ public class TileList
 	/**
 	 * Returns the points that form the tiles of this
 	 * TileList. The implementation is rather inefficient and is intended
-<<<<<<< HEAD
 	 * only for debugging purposes.
-=======
-	 * only for debugging pusposes.
->>>>>>> remotes/multi/master
 	 */
 	public List<Point> getPoints()
 	{

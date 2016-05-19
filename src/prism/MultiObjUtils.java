@@ -34,7 +34,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class contains auxiliary static methods used in multi-objective verification.
@@ -290,11 +289,7 @@ public class MultiObjUtils
 
 	/**
 	 * This method takes a list of points and returns a sub-list in which points that are very close to
-<<<<<<< HEAD
 	 * each other (where {@code isCloseTo(Point)} is used to determine what is "very close") are removed.
-=======
-	 * each other (where {@link #isCloseTo(Point)} is used to determine what is "very close") are removed.
->>>>>>> remotes/multi/master
 	 * The order of elements is preserved.
 	 * 
 	 * It is guaranteed that if there are two points {@code p1} and {@code p2} in {@code list} such that
@@ -331,11 +326,7 @@ public class MultiObjUtils
 
 	/**
 	 * This method takes the set of some corner points of a pareto curve {@code computedPoints} together
-<<<<<<< HEAD
 	 * with associated orthogonal lines {@code directions} that determine current over-approximation,
-=======
-	 * with associated orthogonal lines {@directions} that determine current over-approximation,
->>>>>>> remotes/multi/master
 	 * and returns the points which determine the over-approximation. (These points are in fact the intersecting
 	 * points of the directions which are not covered by other points.)
 	 * @param computedPoints Corner points of the Pareto curve

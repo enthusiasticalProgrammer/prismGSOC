@@ -153,14 +153,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		setState(READY_OKAY);
 	}
 	
-
-	private synchronized void setNoDoneThisStint(int noDone)
-	{
-		this.noDoneThisStint = noDone;
-		progressBar.repaint();
-		owner.notifyChange(this);
-	}
-	
 	public void setErroneousStintToZero()
 	{
 		this.noDoneThisStint = 0;
@@ -271,7 +263,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		
 		
 		setState(SENDING_FILES);
-		int result = 0;
 		try
 		{
 			String[] parameters =
@@ -684,10 +675,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						catch(FileNotFoundException ee)
 						{
 							//System.out.println("filenotfoundexception");
-						}
-						catch(IOException ee)
-						{
-							//System.out.println("ioexception");
 						}
 						catch(NumberFormatException ee)
 						{

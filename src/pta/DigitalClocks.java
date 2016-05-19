@@ -40,7 +40,6 @@ import prism.*;
  */
 public class DigitalClocks
 {
-
 	// Log
 	private PrismLog mainLog;
 	// Model to be converted

@@ -1,4 +1,3 @@
-package explicit;
 //==============================================================================
 //	
 //	Copyright (c) 2002-
@@ -25,14 +24,12 @@ package explicit;
 //	
 //==============================================================================
 
-
+package explicit;
 
 import java.util.BitSet;
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import prism.PrismLog;
-
 import strat.MDStrategy;
 
 /**

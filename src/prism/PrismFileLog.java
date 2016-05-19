@@ -37,7 +37,7 @@ public class PrismFileLog extends PrismLog
 	protected long fp;
 	/** Are we writing to stdout? */
 	protected boolean stdout;
-	
+
 	/**
 	 * Pointless constructor. Don't call this.
 	 */
@@ -75,7 +75,7 @@ public class PrismFileLog extends PrismLog
 	{
 		return create(filename, false);
 	}
-	
+
 	/**
 	 * Create a PRISM log which will write to {@code filename}, appending to an existing file if requested.
 	 * Throw a PRISM exception if there is a problem opening the file for writing.
@@ -90,33 +90,31 @@ public class PrismFileLog extends PrismLog
 		}
 		return log;
 	}
-	
+
 	public void open(String filename)
 	{
-		open (filename, false);
+		open(filename, false);
 	}
-	
+
 	public void open(String filename, boolean append)
 	{
 		this.filename = filename;
 		if (filename.equals("stdout")) {
 			fp = PrismNative.PN_GetStdout();
 			stdout = true;
-		}
-		else {
+		} else {
 			fp = append ? PrismNative.PN_OpenFileAppend(filename) : PrismNative.PN_OpenFile(filename);
 			stdout = false;
 		}
 	}
 
 	// Methods for PrismLog
-	
+
 	@Override
 	public boolean ready()
 	{
 		return (fp != 0);
 	}
-
 
 	@Override
 	public long getFilePointer()
@@ -133,9 +131,10 @@ public class PrismFileLog extends PrismLog
 	@Override
 	public void close()
 	{
-		if (!stdout) PrismNative.PN_CloseFile(fp);
+		if (!stdout)
+			PrismNative.PN_CloseFile(fp);
 	}
-	
+
 	@Override
 	public void print(boolean b)
 	{

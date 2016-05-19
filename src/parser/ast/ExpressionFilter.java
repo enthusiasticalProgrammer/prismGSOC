@@ -240,7 +240,6 @@ public class ExpressionFilter extends Expression
 	
 	// Methods required for ASTElement:
 
-
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{

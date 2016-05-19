@@ -47,10 +47,6 @@ public class ExplicitModel2MTBDD
 	// Explicit-state model
 	private explicit.Model modelExpl;
 
-	// ModulesFile object, essentially just to store variable info
-	private ModulesFile modulesFile;
-
-	// model info
 	// type
 	private ModelType modelType; // model type (dtmc/mdp/ctmc.)
 	// vars info
@@ -65,8 +61,6 @@ public class ExplicitModel2MTBDD
 	// dds/dd vars - whole system
 	private JDDNode trans; // transition matrix dd
 	private JDDNode start; // dd for start state
-	private JDDNode stateRewards; // dd of state rewards
-	private JDDNode transRewards; // dd of transition rewards
 	private JDDVars allDDRowVars; // all dd vars (rows)
 	private JDDVars allDDColVars; // all dd vars (cols)
 	private JDDVars allDDSynchVars; // all dd vars (synchronising actions)
@@ -371,7 +365,6 @@ public class ExplicitModel2MTBDD
 		synchs = new Vector<String>();
 		// Initialise mtbdds
 		trans = JDD.Constant(0);
-		transRewards = JDD.Constant(0);
 		if (modelType != ModelType.MDP) {
 			transPerAction = new Vector<JDDNode>();
 			transPerAction.add(JDD.Constant(0));
@@ -486,14 +479,6 @@ public class ExplicitModel2MTBDD
 		for (int r : modelExpl.getInitialStates()) {
 			start = JDD.Or(start, encodeState(r));
 		}
-	}
-
-	// read info about state rewards from states file
-
-	@Deprecated
-	public void computeStateRewards() throws PrismException
-	{
-		
 	}
 
 	/**

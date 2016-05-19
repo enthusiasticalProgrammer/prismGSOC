@@ -99,6 +99,7 @@ public class OpsAndBoundsList
 		relOps.add(op);
 		bounds.add(quantityBound);
 		stepBounds.add(stepBound);
+		
 		switch (op)
 		{
 			case P_MAX:

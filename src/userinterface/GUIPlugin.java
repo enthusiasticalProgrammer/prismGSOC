@@ -46,7 +46,6 @@ import userinterface.util.GUIEvent;
 import userinterface.util.GUIEventHandler;
 import userinterface.util.GUIEventListener;
 import userinterface.util.GUILogEvent;
-import userinterface.util.GUIPrismFileFilter;
 import userinterface.util.GUIUndoManager;
 
 /** This abstract class should be overridden to implement a component to be plugged

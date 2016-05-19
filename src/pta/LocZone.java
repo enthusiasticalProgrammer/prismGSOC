@@ -80,7 +80,6 @@ public class LocZone
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Do time part of predecessor operation (not including c-closure).
 	 * Note: pta is passed in just for efficiency, could find it if we wanted.
 	 */
@@ -91,8 +90,6 @@ public class LocZone
 	}
 	
 	/**
-=======
->>>>>>> remotes/multi/master
 	 * dPre: discrete predecessor
 	 */
 	public void dPre(Edge edge)

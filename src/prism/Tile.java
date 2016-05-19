@@ -27,7 +27,6 @@
 package prism;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -117,11 +116,7 @@ public class Tile
 	
 	/**
 	 * Returns true if this tile will be changed when {@code point} is added
-<<<<<<< HEAD
 	 * to a parent {@link TileList}. If {@code updateUpperBounds} is set, then also
-=======
-	 * to a parent {@link TileList}. If {@updateUpperBounds} is set, then also
->>>>>>> remotes/multi/master
 	 * the information about the tile lying on a pareto curve is updated
 	 *
 	 * @param updateUpperBounds If true, the new point does not split the tile, and

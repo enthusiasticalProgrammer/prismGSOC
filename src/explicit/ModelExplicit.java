@@ -71,7 +71,7 @@ public abstract class ModelExplicit implements Model
 	/** (Optionally) some labels (atomic propositions) associated with the model,
 	 * represented as a String->BitSet mapping from their names to the states that satisfy them. */
 	protected Map<String, BitSet> labels = new TreeMap<String, BitSet>();
-	
+
 	/**
 	 * (Optionally) the stored predecessor relation. Becomes inaccurate after the model is changed!
 	 */
@@ -183,7 +183,6 @@ public abstract class ModelExplicit implements Model
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Sets the VarList for this model (may be {@code null}).
 	 */
 	public void setVarList(VarList varList)
@@ -196,12 +195,6 @@ public abstract class ModelExplicit implements Model
 	 * Any existing label with the same name is overwritten.
 	 * @param name The name of the label
 	 * @param states The states that satisfy the label 
-=======
-	 * Adds a label and the set the states that satisfy it.
-	 * Any existing label with the same name is overwritten.
-	 * @param name The name of the label
-	 * @param states The states that satisyy the label 
->>>>>>> remotes/multi/master
 	 */
 	public void addLabel(String name, BitSet states)
 	{
@@ -228,8 +221,8 @@ public abstract class ModelExplicit implements Model
 		} else {
 			int i = 0;
 			while (true) {
-				if (!hasLabel(prefix+"_"+i)) {
-					label = prefix+"_"+i;
+				if (!hasLabel(prefix + "_" + i)) {
+					label = prefix + "_" + i;
 					break;
 				}
 				if (i == Integer.MAX_VALUE)
@@ -311,7 +304,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return deadlocks.contains(i);
 	}
-	
+
 	@Override
 	public List<State> getStatesList()
 	{
@@ -323,7 +316,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return constantValues;
 	}
-	
+
 	@Override
 	public VarList getVarList()
 	{
@@ -336,7 +329,6 @@ public abstract class ModelExplicit implements Model
 		return labels.get(name);
 	}
 
-
 	@Override
 	public boolean hasLabel(String name)
 	{
@@ -348,7 +340,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return labels.keySet();
 	}
-	
+
 	@Override
 	public abstract int getNumTransitions();
 
@@ -456,6 +448,7 @@ public abstract class ModelExplicit implements Model
 	{
 		if (statesList == null)
 			return;
+
 		// Print header: list of model vars
 		if (exportType == Prism.EXPORT_MATLAB)
 			log.print("% ");
@@ -501,7 +494,7 @@ public abstract class ModelExplicit implements Model
 		s += "Transitions: " + getNumTransitions() + "\n";
 		return s;
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{
@@ -516,12 +509,14 @@ public abstract class ModelExplicit implements Model
 	}
 
 	@Override
-	public boolean hasStoredPredecessorRelation() {
+	public boolean hasStoredPredecessorRelation()
+	{
 		return (predecessorRelation != null);
 	}
 
 	@Override
-	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew) {
+	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew)
+	{
 		if (predecessorRelation != null) {
 			return predecessorRelation;
 		}
@@ -535,7 +530,8 @@ public abstract class ModelExplicit implements Model
 	}
 
 	@Override
-	public void clearPredecessorRelation() {
+	public void clearPredecessorRelation()
+	{
 		predecessorRelation = null;
 	}
 

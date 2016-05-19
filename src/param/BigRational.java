@@ -178,7 +178,6 @@ public final class BigRational implements Comparable<BigRational>
 		} else if (string.equals("-Infinity") || string.equals("-Inf")) {
 			this.num = new BigInteger("-1");
 			this.den = new BigInteger("0");
-
 			return;
 		}
 		BigInteger num;
@@ -632,7 +631,6 @@ public final class BigRational implements Comparable<BigRational>
 	 * @param other rational number to compare to
 	 * @return {@code other} if {@code other} this is smaller than {@code this} and {@code this} otherwise
 	 */
-
 	public BigRational min(BigRational other)
 	{
 		if (this.compareTo(other) <= 0) {

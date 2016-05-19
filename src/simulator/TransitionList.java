@@ -158,16 +158,9 @@ public class TransitionList
 	// Random selection of a choice 
 
 	/**
-<<<<<<< HEAD
 	 * Get a reference to a transition according to a total probability (or rate) sum, x.
 	 * i.e.the first transition for which the sum of probabilities/rates of that and all prior
 	 * transitions (across all choices) exceeds x.
-=======
-	 * Get a reference to a transition according to a total probability (rate) sum, x.
-	 * i.e.the first transition for which the sum of probabilities of that and all prior
-	 * transitions (across all choices) exceeds x. Really, this is designed for the case
-	 * where these are rates, rather than probabilities.
->>>>>>> remotes/multi/master
 	 * @param x Probability (or rate) sum
 	 * @param ref Empty transition reference to store result
 	 */

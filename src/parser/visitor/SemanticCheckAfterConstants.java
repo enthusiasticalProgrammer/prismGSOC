@@ -38,33 +38,10 @@ import prism.PrismLangException;
  */
 public class SemanticCheckAfterConstants extends ASTTraverse
 {
-	private ModulesFile modulesFile;
-	private PropertiesFile propertiesFile;
 
 	public SemanticCheckAfterConstants()
 	{
-		this(null, null);
-	}
-
-	public SemanticCheckAfterConstants(ModulesFile modulesFile)
-	{
-		this(modulesFile, null);
-	}
-
-	public SemanticCheckAfterConstants(ModulesFile modulesFile, PropertiesFile propertiesFile)
-	{
-		setModulesFile(modulesFile);
-		setPropertiesFile(propertiesFile);
-	}
-
-	public void setModulesFile(ModulesFile modulesFile)
-	{
-		this.modulesFile = modulesFile;
-	}
-
-	public void setPropertiesFile(PropertiesFile propertiesFile)
-	{
-		this.propertiesFile = propertiesFile;
+		super();
 	}
 
 	public void visitPost(Update e) throws PrismLangException
