@@ -37,8 +37,6 @@ import parser.State;
 import parser.Values;
 import parser.VarList;
 import prism.ModelGenerator;
-import parser.ast.Expression;
-import parser.ast.ModulesFile;
 import prism.ModelType;
 import prism.Prism;
 import prism.PrismComponent;
@@ -48,14 +46,12 @@ import prism.PrismNotSupportedException;
 import prism.PrismPrintStreamLog;
 import prism.ProgressDisplay;
 import prism.UndefinedConstants;
-import simulator.SimulatorEngine;
 
 /**
  * Class to perform explicit-state reachability and model construction.
  * The information about the model to be built is provided via a {@link prism.ModelGenerator} interface.
  * To build a PRISM model, use {@link simulator.ModulesFileModelGenerator}.
  */
-//TODO Christopher engine used, constrtuctModel is duplicate
 public class ConstructModel extends PrismComponent
 {
 	// Options:
@@ -85,18 +81,6 @@ public class ConstructModel extends PrismComponent
 	/**
 	 * Get the list of states associated with the last model construction performed.  
 	 */
-
-	// The simulator engine
-	protected SimulatorEngine engine;
-
-
-
-
-	public ConstructModel(PrismComponent parent, SimulatorEngine engine) throws PrismException
-	{
-		super(parent);
-		this.engine = engine;
-	}
 
 	public List<State> getStatesList()
 	{
@@ -135,16 +119,6 @@ public class ConstructModel extends PrismComponent
 	public void setAttachLabels(boolean attachLabels)
 	{
 		this.attachLabels = attachLabels;
-	}
-
-	/**
-	 * Build the set of reachable states for a model and return it.
-	 * @param modelGen The ModelGenerator interface providing the model 
-	 */
-	public List<State> computeReachableStates(ModelGenerator modelGen) throws PrismException
-	{
-		constructModel(modelGen, true);
-		return getStatesList();
 	}
 
 	/**
@@ -402,252 +376,6 @@ public class ConstructModel extends PrismComponent
 		for (int j = 0; j < numLabels; j++) {
 			model.addLabel(modelGen.getLabelName(j), bitsets[j]);
 		}
-	}
-
-
-	/**
-	 * Build the set of reachable states for a PRISM model language description and return.
-	 * @param modulesFile The PRISM model
-	 */
-	public List<State> computeReachableStates(ModulesFile modulesFile) throws PrismException
-	{
-		constructModel(modulesFile, true, false);
-		return statesList;
-	}
-
-	/**
-	 * Construct an explicit-state model from a PRISM model language description and return.
-	 * @param modulesFile The PRISM model
-	 */
-	public Model constructModel(ModulesFile modulesFile) throws PrismException
-	{
-		return constructModel(modulesFile, false, true);
-	}
-
-	/**
-	 * Construct an explicit-state model from a PRISM model language description and return.
-	 * If {@code justReach} is true, no model is built and null is returned;
-	 * the set of reachable states can be obtained with {@link #getStatesList()}.
-	 * @param modulesFile The PRISM model
-	 * @param justReach If true, just build the reachable state set, not the model
-	 * @param buildSparse Build a sparse version of the model (if possible)?
-	 */
-	public Model constructModel(ModulesFile modulesFile, boolean justReach, boolean buildSparse) throws PrismException
-	{
-		return constructModel(modulesFile, justReach, buildSparse, true);
-	}
-
-	public Model constructModel(ModulesFile modulesFile, boolean justReach, boolean buildSparse, boolean distinguishActions) throws PrismException
-	{
-		// Model info
-		ModelType modelType;
-		// State storage
-		StateStorage<State> states;
-		LinkedList<State> explore;
-		State state, stateNew;
-		// Explicit model storage
-		ModelSimple modelSimple = null;
-		DTMCSimple dtmc = null;
-		CTMCSimple ctmc = null;
-		MDPSimple mdp = null;
-		CTMDPSimple ctmdp = null;
-		ModelExplicit model = null;
-		Distribution distr = null;
-		// Misc
-		int i, j, nc, nt, src, dest;
-		long timer;
-
-		// Display a warning if there are unbounded vars
-		VarList varList = modulesFile.createVarList();
-		if (varList.containsUnboundedVariables())
-			mainLog.printWarning("Model contains one or more unbounded variables: model construction may not terminate");
-		
-		// Starting reachability...
-		mainLog.print("\nComputing reachable states...");
-		mainLog.flush();
-		ProgressDisplay progress = new ProgressDisplay(mainLog);
-		progress.start();
-		timer = System.currentTimeMillis();
-
-		// Initialise simulator for this model
-		modelType = modulesFile.getModelType();
-		engine.createNewOnTheFlyPath(modulesFile);
-
-		// Create model storage
-		if (!justReach) {
-			// Create a (simple, mutable) model of the appropriate type
-			switch (modelType) {
-			case DTMC:
-				modelSimple = dtmc = new DTMCSimple();
-				break;
-			case CTMC:
-				modelSimple = ctmc = new CTMCSimple();
-				break;
-			case MDP:
-				modelSimple = mdp = new MDPSimple();
-				break;
-			case CTMDP:
-				modelSimple = ctmdp = new CTMDPSimple();
-				break;
-			}
-		}
-
-		// Initialise states storage
-		states = new IndexedSet<State>(true);
-		explore = new LinkedList<State>();
-		// Add initial state(s) to 'explore'
-		// Easy (normal) case: just one initial state
-		if (modulesFile.getInitialStates() == null) {
-			state = modulesFile.getDefaultInitialState();
-			explore.add(state);
-		}
-		// Otherwise, there may be multiple initial states
-		// For now, we handle this is in a very inefficient way
-		else {
-			Expression init = modulesFile.getInitialStates();
-			List<State> allPossStates = varList.getAllStates();
-			for (State possState : allPossStates) {
-				if (init.evaluateBoolean(modulesFile.getConstantValues(), possState)) {
-					explore.add(possState);
-				}
-			}
-		}
-		// Copy initial state(s) to 'states' and to the model
-		for (State initState : explore) {
-			states.add(initState);
-			if (!justReach) {
-				modelSimple.addState();
-				modelSimple.addInitialState(modelSimple.getNumStates() - 1);
-			}
-		}
-		// Explore...
-		src = -1;
-		while (!explore.isEmpty()) {
-			// Pick next state to explore
-			// (they are stored in order found so know index is src+1)
-			state = explore.removeFirst();
-			src++;
-			// Use simulator to explore all choices/transitions from this state
-			engine.initialisePath(state);
-			// Look at each outgoing choice in turn
-			nc = engine.getNumChoices();
-			for (i = 0; i < nc; i++) {
-
-				if (!justReach && (modelType == ModelType.MDP || modelType == ModelType.CTMDP)) {
-					distr = new Distribution();
-				}
-				// Look at each transition in the choice
-				nt = engine.getNumTransitions(i);
-				for (j = 0; j < nt; j++) {
-					stateNew = engine.computeTransitionTarget(i, j);
-					// Is this a new state?
-					if (states.add(stateNew)) {
-						// If so, add to the explore list
-						explore.add(stateNew);
-						// And to model
-						if (!justReach) {
-							modelSimple.addState();
-						}
-					}
-					// Get index of state in state set
-					dest = states.getIndexOfLastAdd();
-					// Add transitions to model
-					if (!justReach) {
-						switch (modelType) {
-						case DTMC:
-							dtmc.addToProbability(src, dest, engine.getTransitionProbability(i, j));
-							break;
-						case CTMC:
-							ctmc.addToProbability(src, dest, engine.getTransitionProbability(i, j));
-							break;
-						case MDP:
-							distr.add(dest, engine.getTransitionProbability(i, j));
-							break;
-						case CTMDP:
-							distr.add(dest, engine.getTransitionProbability(i, j));
-							break;
-						}
-					}
-				}
-				if (!justReach) {
-					if (modelType == ModelType.MDP) {
-						if (distinguishActions) {
-							mdp.addActionLabelledChoice(src, distr, engine.getTransitionAction(i, 0));
-						} else {
-							mdp.addChoice(src, distr);
-						}
-					} else if (modelType == ModelType.CTMDP) {
-						if (distinguishActions) {
-							ctmdp.addActionLabelledChoice(src, distr, engine.getTransitionAction(i, 0));
-						} else {
-							ctmdp.addChoice(src, distr);
-						}
-					}
-				}
-			}
-			// Print some progress info occasionally
-			progress.updateIfReady(src + 1);
-		}
-
-		// Finish progress display
-		progress.update(src + 1);
-		progress.end(" states");
-
-		// Reachability complete
-		mainLog.print("Reachable states exploration" + (justReach ? "" : " and model construction"));
-		mainLog.println(" done in " + ((System.currentTimeMillis() - timer) / 1000.0) + " secs.");
-		//mainLog.println(states);
-
-		// Find/fix deadlocks (if required)
-		if (!justReach && findDeadlocks) {
-			modelSimple.findDeadlocks(fixDeadlocks);
-		}
-
-		boolean sort = true;
-		int permut[] = null;
-
-		if (sort) {
-			// Sort states and convert set to list
-			mainLog.println("Sorting reachable states list...");
-			permut = states.buildSortingPermutation();
-			statesList = states.toPermutedArrayList(permut);
-			//mainLog.println(permut);
-		} else {
-			statesList = states.toArrayList();
-		}
-		states.clear();
-		states = null;
-		//mainLog.println(statesList);
-
-		// Construct new explicit-state model (with correct state ordering)
-		if (!justReach) {
-			switch (modelType) {
-			case DTMC:
-				model = sort ? new DTMCSimple(dtmc, permut) : (DTMCSimple) dtmc;
-				break;
-			case CTMC:
-				model = sort ? new CTMCSimple(ctmc, permut) : (CTMCSimple) ctmc;
-				break;
-			case MDP:
-				if (buildSparse) {
-					model = sort ? new MDPSparse(mdp, true, permut) : new MDPSparse(mdp);
-				} else {
-					model = sort ? new MDPSimple(mdp, permut) : mdp;
-				}
-				break;
-			case CTMDP:
-				model = sort ? new CTMDPSimple(ctmdp, permut) : mdp;
-				break;
-			}
-			model.setStatesList(statesList);
-			model.setConstantValues(new Values(modulesFile.getConstantValues()));
-			//mainLog.println("Model: " + model);
-		}
-
-		// Discard permutation
-		permut = null;
-
-		return model;
 	}
 
 	/**
