@@ -36,7 +36,6 @@ import prism.PrismUtils;
 
 // Class representing parsed properties file/list
 
-//TODO Christopher eliminate duplicate methods, also calls in tidyUp!
 public class PropertiesFile extends ASTElement
 {
 	// Associated ModulesFile (for constants, ...)
@@ -70,18 +69,6 @@ public class PropertiesFile extends ASTElement
 		constantValues = null;
 	}
 
-	public PropertiesFile(ModulesFile mf)
-	{
-		setModulesFile(mf);
-		formulaList = new FormulaList();
-		labelList = new LabelList();
-		combinedLabelList = new LabelList();
-		constantList = new ConstantList();
-		properties = new Vector<Property>();
-		allIdentsUsed = new Vector<String>();
-		constantValues = null;
-	}
-
 	// Set methods
 
 	/** Attach model information (so can access labels/constants etc.) */
@@ -100,12 +87,6 @@ public class PropertiesFile extends ASTElement
 			this.modulesFile.setFormulaList(new FormulaList());
 			this.modulesFile.setConstantList(new ConstantList());
 		}
-	}
-
-	/** Attach to a ModulesFile (so can access labels/constants etc.) */
-	public void setModulesFile(ModulesFile mf)
-	{
-		this.modulesFile = mf;
 	}
 
 	public void setFormulaList(FormulaList fl)
