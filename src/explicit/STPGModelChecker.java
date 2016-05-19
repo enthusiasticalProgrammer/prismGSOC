@@ -34,6 +34,8 @@ import java.util.Map;
 import common.IterableBitSet;
 
 import parser.ast.Expression;
+import parser.ast.ExpressionTemporal;
+import parser.ast.ExpressionUnaryOp;
 import prism.PrismComponent;
 import prism.PrismException;
 import prism.PrismFileLog;
@@ -61,6 +63,111 @@ public class STPGModelChecker extends ProbModelChecker
 	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		throw new PrismNotSupportedException("LTL model checking not yet supported for stochastic games");
+	}
+	
+	// Model checking functions
+
+	/**
+	 * Compute probabilities for a next operator.
+	 */
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, boolean min1, boolean min2) throws PrismException
+	{
+		BitSet target = null;
+		ModelCheckerResult res = null;
+
+		// Model check the operand
+		target = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		res = computeNextProbs((STPG) model, target, min1, min2);
+		return StateValues.createFromDoubleArray(res.soln, model);
+	}
+	
+	/**
+	 * Compute probabilities for a bounded until operator.
+	 */
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, boolean min1, boolean min2) throws PrismException
+	{
+		int time;
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// get info from bounded until
+		time = expr.getUpperBound().evaluateInt(constantValues);
+		if (expr.upperBoundIsStrict())
+			time--;
+		if (time < 0) {
+			String bound = expr.upperBoundIsStrict() ? "<" + (time + 1) : "<=" + time;
+			throw new PrismException("Invalid bound " + bound + " in bounded until formula");
+		}
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1(), null).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		// Compute probabilities
+
+		// a trivial case: "U<=0"
+		if (time == 0) {
+			// prob is 1 in b2 states, 0 otherwise
+			probs = StateValues.createFromBitSetAsDoubles(b2, model);
+		} else {
+			res = computeBoundedUntilProbs((STPG) model, b1, b2, time, min1, min2);
+			probs = StateValues.createFromDoubleArray(res.soln, model);
+		}
+
+		return probs;
+	}
+
+	/**
+	 * Compute probabilities for an (unbounded) until operator.
+	 */
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, boolean min1, boolean min2) throws PrismException
+	{
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1(), null).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		res = computeUntilProbs((STPG) model, b1, b2, min1, min2);
+		probs = StateValues.createFromDoubleArray(res.soln, model);
+
+		return probs;
+	}
+
+	/**
+	 * Compute rewards for the contents of an R operator.
+	 */
+	protected StateValues checkRewardFormula(Model model, STPGRewards rewards, ExpressionTemporal expr, boolean min1, boolean min2) throws PrismException
+	{
+		// Assume R [F ] for now...
+
+		BitSet target;
+		StateValues rews = null;
+		ModelCheckerResult res = null;
+
+		// model check operands first
+		target = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		res = computeReachRewards((STPG) model, rewards, target, min1, min2);
+		rews = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rews;
 	}
 
 	// Numerical computation functions
@@ -626,7 +733,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 * @param k Bound
-	 * @param min1 Min or max probabilities for player 1 (true=min, false=max)
+	 * @param min1 Min or max probabilities for player 1 (true=min, false=max)r
 	 * @param min2 Min or max probabilities for player 2 (true=min, false=max)
 	 */
 	public ModelCheckerResult computeBoundedUntilProbs(STPG stpg, BitSet remain, BitSet target, int k, boolean min1, boolean min2) throws PrismException
