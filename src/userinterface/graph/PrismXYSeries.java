@@ -192,7 +192,7 @@ public class PrismXYSeries extends XYSeries
 			
 			this.add(item, true);
 			
-			return null;
+			return item;
 		}
 		/* This is not a valid data item! */
 		else
