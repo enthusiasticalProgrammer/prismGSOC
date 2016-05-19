@@ -285,10 +285,6 @@ public class MDPModelChecker extends ProbModelChecker
 		return sv;
 	}
 	
-	/**
-	 * from PRISM TODO Christopher: merge both versions to one
-	 * 
-	 * */
 	@Override
 	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
