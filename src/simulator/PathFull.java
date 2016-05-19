@@ -40,7 +40,6 @@ import userinterface.graph.Graph;
  * State objects and arrays are copied for storage.
  */
 
-//@Christopher Nota Bene: it is full with Multigain-Stuff
 public class PathFull extends Path implements PathFullInfo
 {
 	// Model to which the path corresponds
@@ -103,13 +102,6 @@ public class PathFull extends Path implements PathFullInfo
 		}
 		// Initialise loop detector
 		loopDet.initialise();
-	}
-
-	// Overloaded method including strategy state
-	public void initialise(State initialState, double[] initialStateRewards, Object stratState)
-	{
-		initialise(initialState, initialStateRewards);
-		// steps.get(steps.size() - 1).stratState = stratState;
 	}
 
 	public void initialiseStrat(Object stratState)
@@ -375,10 +367,6 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).stateRewards[rsi];
 	}
 
-	/**
-	 * Get an array of state rewards for the state at a given step of the path.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	protected double[] getStateRewards(int step)
 	{
 		return steps.get(step).stateRewards;
@@ -392,21 +380,12 @@ public class PathFull extends Path implements PathFullInfo
 	}
 
 	@Override
-	/**
-	 * Get the total (state and transition) reward accumulated up until entering a given step of the path.
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param rsi Reward structure index
-	 */
 	public double getCumulativeReward(int step, int rsi)
 	{
 		return steps.get(step).rewardsCumul[rsi];
 	}
 
 	@Override
-	/**
-	 * Get the time spent in a state at a given step of the path.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public double getTime(int step)
 	{
 		return steps.get(step).time;
@@ -414,10 +393,6 @@ public class PathFull extends Path implements PathFullInfo
 
 
 	@Override
-	/**
-	 * Get the index of the choice taken for a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public int getChoice(int step)
 	{
 		return steps.get(step).choice;
@@ -425,12 +400,6 @@ public class PathFull extends Path implements PathFullInfo
 
 
 	@Override
-	/**
-	 * Get the index i of the action taken for a given step.
-	 * If i>0, then i-1 is the index of an action label (0-indexed)
-	 * If i<0, then -i-1 is the index of a module (0-indexed)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public int getModuleOrActionIndex(int step)
 	{
 		return steps.get(step).moduleOrActionIndex;
@@ -438,10 +407,6 @@ public class PathFull extends Path implements PathFullInfo
 
 
 	@Override
-	/**
-	 * Get a string describing the action/module of a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public String getModuleOrAction(int step)
 	{
 		int i = steps.get(step).moduleOrActionIndex;
@@ -453,30 +418,17 @@ public class PathFull extends Path implements PathFullInfo
 			return "?";
 	}
 
-	/**
-	 * Get the probability or rate associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	public double getProbability(int step)
 	{
 		return steps.get(steps.size() - 2).probability;
 	}
 
 	@Override
-	/**
-	 * Get a transition reward associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param rsi Reward structure index
-	 */
 	public double getTransitionReward(int step, int rsi)
 	{
 		return steps.get(step).transitionRewards[rsi];
 	}
 
-	/**
-	 * Get an array of transitions reward associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 */
 	protected double[] getTransitionRewards(int step)
 	{
 		return steps.get(step).transitionRewards;
