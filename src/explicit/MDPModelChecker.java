@@ -265,6 +265,7 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 	
 	/**
+<<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
 	 * Compute probabilities for the contents of a P operator.
 	 */
 	protected StateValues checkProbPathFormula(NondetModel model, Expression expr, boolean min) throws PrismException
@@ -276,6 +277,88 @@ public class MDPModelChecker extends ProbModelChecker
 		} else {
 			return checkProbPathFormulaLTL(model, expr, min);
 		}
+=======
+	 * from PRISM TODO Christopher: merge both versions to one
+	 * 
+	 * */
+	@Override
+	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	{
+		LTLModelChecker mcLtl;
+		StateValues probsProduct, probs;
+		MDPModelChecker mcProduct;
+		LTLModelChecker.LTLProduct<MDP> product;
+
+		// For min probabilities, need to negate the formula
+		// (add parentheses to allow re-parsing if required)
+		if (minMax.isMin()) {
+			expr = Expression.Not(Expression.Parenth(expr.deepCopy()));
+		}
+
+		// For LTL model checking routines
+		mcLtl = new LTLModelChecker(this);
+
+		// Build product of MDP and automaton
+		AcceptanceType[] allowedAcceptance = {
+				AcceptanceType.BUCHI,
+				AcceptanceType.RABIN,
+				AcceptanceType.GENERALIZED_RABIN,
+				AcceptanceType.REACH
+		};
+		product = mcLtl.constructProductMDP(this, (MDP)model, expr, statesOfInterest, allowedAcceptance);
+		
+		// Output product, if required
+		if (getExportProductTrans()) {
+				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+		}
+		if (getExportProductStates()) {
+			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductStatesFilename());
+			VarList newVarList = (VarList) modulesFile.createVarList().clone();
+			String daVar = "_da";
+			while (newVarList.getIndex(daVar) != -1) {
+				daVar = "_" + daVar;
+			}
+			newVarList.addVar(0, new Declaration(daVar, new DeclarationIntUnbounded()), 1, null);
+			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
+			out.close();
+		}
+		
+		// Find accepting states + compute reachability probabilities
+		BitSet acc;
+		if (product.getAcceptance() instanceof AcceptanceReach) {
+			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
+			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+		} else {
+			mainLog.println("\nFinding accepting MECs...");
+			acc = mcLtl.findAcceptingECStates(product.getProductModel(), product.getAcceptance());
+		}
+		mainLog.println("\nComputing reachability probabilities...");
+		mcProduct = new MDPModelChecker(this);
+		mcProduct.inheritSettings(this);
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((MDP)product.getProductModel(), acc, false).soln, product.getProductModel());
+
+		// Subtract from 1 if we're model checking a negated formula for regular Pmin
+		if (minMax.isMin()) {
+			probsProduct.timesConstant(-1.0);
+			probsProduct.plusConstant(1.0);
+		}
+
+		// Output vector over product, if required
+		if (getExportProductVector()) {
+				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+				probsProduct.print(out, false, false, false, false);
+				out.close();
+		}
+		
+		// Mapping probabilities in the original model
+		probs = product.projectToOriginalModel(probsProduct);
+		probsProduct.clear();
+
+		return probs;
+>>>>>>> consolidated merge in MDPModelChecker
 	}
 
 	/**
@@ -413,6 +496,7 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 
 	/**
+<<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
 	 * Compute probabilities for an LTL path formula
 	 */
 	protected StateValues checkProbPathFormulaLTL(NondetModel model, Expression expr, boolean min) throws PrismException
@@ -442,10 +526,22 @@ public class MDPModelChecker extends ProbModelChecker
 			s += " cannot have time bounds for LTL properties";
 			throw new PrismException(s);
 		}
+=======
+	 * Compute rewards for a co-safe LTL reward operator.
+	 */
+	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	{
+		LTLModelChecker mcLtl;
+		MDPRewards productRewards;
+		StateValues rewardsProduct, rewards;
+		MDPModelChecker mcProduct;
+		LTLModelChecker.LTLProduct<MDP> product;
+>>>>>>> consolidated merge in MDPModelChecker
 
 		// For LTL model checking routines
 		mcLtl = new LTLModelChecker(this);
 
+<<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
 		// Model check maximal state formulas
 		Vector<BitSet> labelBS = new Vector<BitSet>();
 		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
@@ -507,6 +603,67 @@ public class MDPModelChecker extends ProbModelChecker
 		return probs;
 	}
 
+=======
+		// Build product of MDP and automaton
+		AcceptanceType[] allowedAcceptance = {
+				AcceptanceType.RABIN,
+				AcceptanceType.REACH
+		};
+		product = mcLtl.constructProductMDP(this, (MDP)model, expr, statesOfInterest, allowedAcceptance);
+		
+		// Adapt reward info to product model
+		productRewards = ((MDPRewards) modelRewards).liftFromModel(product);
+		
+		// Output product, if required
+		if (getExportProductTrans()) {
+				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+		}
+		if (getExportProductStates()) {
+			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductStatesFilename());
+			VarList newVarList = (VarList) modulesFile.createVarList().clone();
+			String daVar = "_da";
+			while (newVarList.getIndex(daVar) != -1) {
+				daVar = "_" + daVar;
+			}
+			newVarList.addVar(0, new Declaration(daVar, new DeclarationIntUnbounded()), 1, null);
+			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
+			out.close();
+		}
+		
+		// Find accepting states + compute reachability rewards
+		BitSet acc;
+		if (product.getAcceptance() instanceof AcceptanceReach) {
+			// For a DFA, just collect the accept states
+			mainLog.println("\nSkipping end component detection since DRA is a DFA...");
+			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+		} else {
+			// Usually, we have to detect end components in the product
+			mainLog.println("\nFinding accepting end components...");
+			acc = mcLtl.findAcceptingECStates(product.getProductModel(), product.getAcceptance());
+		}
+		mainLog.println("\nComputing reachability rewards...");
+		mcProduct = new MDPModelChecker(this);
+		mcProduct.inheritSettings(this);
+		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc, minMax.isMin()).soln, product.getProductModel());
+		
+		// Output vector over product, if required
+		if (getExportProductVector()) {
+				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+				rewardsProduct.print(out, false, false, false, false);
+				out.close();
+		}
+		
+		// Mapping rewards in the original model
+		rewards = product.projectToOriginalModel(rewardsProduct);
+		rewardsProduct.clear();
+		
+		return rewards;
+	}
+	
+>>>>>>> consolidated merge in MDPModelChecker
 	/**
 	 * Compute rewards for the contents of an R operator.
 	 */
@@ -1407,7 +1564,11 @@ public class MDPModelChecker extends ProbModelChecker
 	/**
 	 * Compute bounded until probabilities.
 	 * i.e. compute the min/max probability of reaching a state in {@code target},
+<<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
 	 * within k steps, and while remaining in states in @{code remain}.
+=======
+	 * within k steps, and while remaining in states in {@code remain}.
+>>>>>>> consolidated merge in MDPModelChecker
 	 * @param mdp The MDP
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
@@ -1889,6 +2050,107 @@ public class MDPModelChecker extends ProbModelChecker
 	}
 
 	/**
+<<<<<<< 266ba5641154b20f3edaf65d427069a8f3cf9e03
+=======
+	 * Compute expected reachability rewards using policy iteration.
+	 * The array {@code strat} is used both to pass in the initial strategy for policy iteration,
+	 * and as storage for the resulting optimal strategy (if needed).
+	 * Passing in an initial strategy is required when some states have infinite reward,
+	 * to avoid the possibility of policy iteration getting stuck on an infinite-value strategy.
+	 * @param mdp The MDP
+	 * @param mdpRewards The rewards
+	 * @param target Target states
+	 * @param inf States for which reward is infinite
+	 * @param min Min or max rewards (true=min, false=max)
+	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
+	 */
+	protected ModelCheckerResult computeReachRewardsPolIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, int strat[])
+			throws PrismException
+	{
+		ModelCheckerResult res;
+		int i, n, iters, totalIters;
+		double soln[], soln2[];
+		boolean done;
+		long timer;
+		DTMCModelChecker mcDTMC;
+		DTMC dtmc;
+		MCRewards mcRewards;
+
+		// Re-use solution to solve each new policy (strategy)?
+		boolean reUseSoln = true;
+
+		// Start policy iteration
+		timer = System.currentTimeMillis();
+		mainLog.println("Starting policy iteration (" + (min ? "min" : "max") + ")...");
+
+		// Create a DTMC model checker (for solving policies)
+		mcDTMC = new DTMCModelChecker(this);
+		mcDTMC.inheritSettings(this);
+		mcDTMC.setLog(new PrismDevNullLog());
+
+		// Store num states
+		n = mdp.getNumStates();
+
+		// Create solution vector(s)
+		soln = new double[n];
+		soln2 = new double[n];
+
+		// Initialise solution vectors.
+		for (i = 0; i < n; i++)
+			soln[i] = soln2[i] = target.get(i) ? 0.0 : inf.get(i) ? Double.POSITIVE_INFINITY : 0.0;
+
+		// If not passed in, create new storage for strategy and initialise
+		// Initial strategy just picks first choice (0) everywhere
+		if (strat == null) {
+			strat = new int[n];
+			for (i = 0; i < n; i++)
+				strat[i] = 0;
+		}
+			
+		// Start iterations
+		iters = totalIters = 0;
+		done = false;
+		while (!done && iters < maxIters) {
+			iters++;
+			// Solve induced DTMC for strategy
+			dtmc = new DTMCFromMDPMemorylessAdversary(mdp, strat);
+			mcRewards = new MCRewardsFromMDPRewards(mdpRewards, strat);
+			res = mcDTMC.computeReachRewardsValIter(dtmc, mcRewards, target, inf, reUseSoln ? soln : null, null);
+			soln = res.soln;
+			totalIters += res.numIters;
+			// Check if optimal, improve non-optimal choices
+			mdp.mvMultRewMinMax(soln, mdpRewards, min, soln2, null, false, null);
+			done = true;
+			for (i = 0; i < n; i++) {
+				// Don't look at target/inf states - we may not have strategy info for them,
+				// so they might appear non-optimal
+				if (target.get(i) || inf.get(i))
+					continue;
+				if (!PrismUtils.doublesAreClose(soln[i], soln2[i], termCritParam, termCrit == TermCrit.ABSOLUTE)) {
+					done = false;
+					List<Integer> opt = mdp.mvMultRewMinMaxSingleChoices(i, soln, mdpRewards, min, soln2[i]);
+					// Only update strategy if strictly better
+					if (!opt.contains(strat[i]))
+						strat[i] = opt.get(0);
+				}
+			}
+		}
+
+		// Finished policy iteration
+		timer = System.currentTimeMillis() - timer;
+		mainLog.print("Policy iteration");
+		mainLog.println(" took " + iters + " cycles (" + totalIters + " iterations in total) and " + timer / 1000.0 + " seconds.");
+
+		// Return results
+		res = new ModelCheckerResult();
+		res.soln = soln;
+		res.numIters = totalIters;
+		res.timeTaken = timer / 1000.0;
+		return res;
+	}
+
+	/**
+>>>>>>> consolidated merge in MDPModelChecker
 	 * Construct strategy information for min/max expected reachability.
 	 * (More precisely, list of indices of choices resulting in min/max.)
 	 * (Note: indices are guaranteed to be sorted in ascending order.)
