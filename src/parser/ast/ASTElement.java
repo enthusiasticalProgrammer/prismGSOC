@@ -433,7 +433,7 @@ public abstract class ASTElement
 		TypeCheck visitor = new TypeCheck();
 		accept(visitor);
 	}
-
+	
 	/**
 	 * Perform any required semantic checks. These are just simple checks on expressions, mostly.
 	 * For semantic checks on models and properties, specifically, see:
