@@ -192,12 +192,6 @@ public class StateValuesVoid implements StateValues
 	}
 
 	@Override
-	public JDDNode getBDDFromInterval(String relOpString, double bound)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public JDDNode getBDDFromInterval(RelOp relOp, double bound)
 	{
 		throw new UnsupportedOperationException();
