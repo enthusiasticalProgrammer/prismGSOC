@@ -66,7 +66,7 @@ public class SystemBrackets extends SystemDefn
 	}
 	
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void getModules(Vector<String> v)

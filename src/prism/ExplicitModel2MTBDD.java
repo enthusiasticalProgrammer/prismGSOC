@@ -159,9 +159,6 @@ public class ExplicitModel2MTBDD
 		// Calculate BDD for initial state
 		buildInit();
 
-		// Compute state rewards
-		computeStateRewards();
-
 		int numModules = 1; // just one module
 		String moduleNames[] = modulesFile.getModuleNames(); // whose name is stored here
 		Values constantValues = new Values(); // no constants
@@ -315,8 +312,10 @@ public class ExplicitModel2MTBDD
 		moduleDDColVars[0] = new JDDVars();
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
-			moduleDDRowVars[0].copyVarsFrom(varDDRowVars[i]);
-			moduleDDColVars[0].copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			moduleDDRowVars[0].addVars(varDDRowVars[i]);
+			moduleDDColVars[0].addVars(varDDColVars[i]);
 		}
 
 		// put refs for all vars in whole system together
@@ -332,8 +331,10 @@ public class ExplicitModel2MTBDD
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
 			// add to list
-			allDDRowVars.copyVarsFrom(varDDRowVars[i]);
-			allDDColVars.copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			allDDRowVars.addVars(varDDRowVars[i]);
+			allDDColVars.addVars(varDDColVars[i]);
 		}
 		if (modelType == ModelType.MDP) {
 			for (i = 0; i < ddChoiceVars.length; i++) {
@@ -478,63 +479,6 @@ public class ExplicitModel2MTBDD
 		for (int r : modelExpl.getInitialStates()) {
 			start = JDD.Or(start, encodeState(r));
 		}
-	}
-
-	// read info about state rewards from states file
-
-	public void computeStateRewards() throws PrismException
-	{
-		/*BufferedReader in;
-		String s, ss[];
-		int i, j, lineNum = 0;
-		double d;
-		JDDNode tmp;
-
-		// initialise mtbdd
-		stateRewards = JDD.Constant(0);
-
-		if (statesFile == null)
-			return;
-
-		try {
-			// open file for reading
-			in = new BufferedReader(new FileReader(statesFile));
-			// skip first line
-			in.readLine();
-			lineNum = 1;
-			// read remaining lines
-			s = in.readLine();
-			lineNum++;
-			while (s != null) {
-				// skip blank lines
-				s = s.trim();
-				if (s.length() > 0) {
-					// split into two/three parts
-					ss = s.split(":");
-					// determine which state this line describes
-					i = Integer.parseInt(ss[0]);
-					// if there is a state reward...
-					ss = ss[1].split("=");
-					if (ss.length == 2) {
-						// determine value
-						d = Double.parseDouble(ss[1]);
-						// construct element of vector mtbdd
-						tmp = encodeState(i);
-						// add it into mtbdd for state rewards
-						stateRewards = JDD.Apply(JDD.PLUS, stateRewards, JDD.Apply(JDD.TIMES, JDD.Constant(d), tmp));
-					}
-				}
-				// read next line
-				s = in.readLine();
-				lineNum++;
-			}
-			// close file
-			in.close();
-		} catch (IOException e) {
-			throw new PrismException("File I/O error reading from \"" + statesFile + "\"");
-		} catch (NumberFormatException e) {
-			throw new PrismException("Error detected at line " + lineNum + " of states file \"" + statesFile + "\"");
-		}*/
 	}
 
 	/**

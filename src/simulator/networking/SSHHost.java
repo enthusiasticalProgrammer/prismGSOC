@@ -678,10 +678,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						{
 							//System.out.println("filenotfoundexception");
 						}
-						catch(IOException ee)
-						{
-							//System.out.println("ioexception");
-						}
 						catch(NumberFormatException ee)
 						{
 							//System.out.println("numberformatexception");

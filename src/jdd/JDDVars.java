@@ -223,7 +223,7 @@ public class JDDVars implements Iterable<JDDNode>
 	public void derefAll()
 	{
 		int i;
-
+		
 		for (i = 0; i < vars.size(); i++) {
 			JDD.Deref((JDDNode)vars.elementAt(i));
 		}

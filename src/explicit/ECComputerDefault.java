@@ -87,7 +87,7 @@ public class ECComputerDefault extends ECComputer
 	}
 
 	// Computation
-	
+
 	/**
 	 * Find all accepting maximal end components (MECs) in the submodel obtained
 	 * by restricting this one to the set of states {@code restrict},

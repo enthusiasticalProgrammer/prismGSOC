@@ -26,23 +26,23 @@
 
 package explicit;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Set;
 
 import prism.PrismUtils;
 
 /**
  * Explicit representation of a probability distribution.
- * Basically, a mapping from (integer-valued) state indices to (non-zero, double-valued) probabilities. 
+ * Basically, a mapping from (integer-valued) indices to (non-zero, double-valued) probabilities. 
  */
-public class Distribution implements Iterable<Entry<Integer,Double>>
+public class Distribution implements Iterable<Entry<Integer, Double>>
 {
-	@XmlElement
-	private HashMap<Integer,Double> map;
-	
+	private HashMap<Integer, Double> map;
+
 	/**
 	 * Create an empty distribution.
 	 */
@@ -50,48 +50,48 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	{
 		clear();
 	}
-	
+
 	/**
 	 * Copy constructor.
 	 */
 	public Distribution(Distribution distr)
 	{
 		this();
-		Iterator<Entry<Integer,Double>> i = distr.iterator();
+		Iterator<Entry<Integer, Double>> i = distr.iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			add(e.getKey(), e.getValue());
 		}
 	}
-	
+
 	/**
-	 * Construct a distribution from an existing one and a state index permutation,
-	 * i.e. in which state index i becomes index permut[i].
+	 * Construct a distribution from an existing one and an index permutation,
+	 * i.e. in which index i becomes index permut[i].
 	 * Note: have to build the new distributions from scratch anyway to do this,
 	 * so may as well provide this functionality as a constructor.
 	 */
 	public Distribution(Distribution distr, int permut[])
 	{
 		this();
-		Iterator<Entry<Integer,Double>> i = distr.iterator();
+		Iterator<Entry<Integer, Double>> i = distr.iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			add(permut[e.getKey()], e.getValue());
 		}
 	}
-	
+
 	/**
 	 * Clear all entries of the distribution.
 	 */
 	public void clear()
 	{
-		map = new HashMap<Integer,Double>();
+		map = new HashMap<Integer, Double>();
 	}
-	
+
 	/**
-	 * Add 'prob' to the probability for state 'j'.
+	 * Add 'prob' to the probability for index 'j'.
 	 * Return boolean indicating whether or not there was already
-	 * non-zero probability for this state (i.e. false denotes new transition).
+	 * non-zero probability for this index (i.e. false denotes new transition).
 	 */
 	public boolean add(int j, double prob)
 	{
@@ -106,7 +106,7 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	}
 
 	/**
-	 * Set the probability for state 'j' to 'prob'.
+	 * Set the probability for index 'j' to 'prob'.
 	 */
 	public void set(int j, double prob)
 	{
@@ -117,15 +117,15 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	}
 
 	/**
-	 * Get the probability for state j. 
+	 * Get the probability for index j. 
 	 */
 	public double get(int j)
 	{
 		Double d;
 		d = (Double) map.get(j);
-		return d==null ? 0.0 : d.doubleValue();
+		return d == null ? 0.0 : d.doubleValue();
 	}
-	
+
 	/**
 	 * Returns true if index j is in the support of the distribution. 
 	 */
@@ -133,35 +133,35 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	{
 		return map.get(j) != null;
 	}
-	
+
 	/**
 	 * Returns true if all indices in the support of the distribution are in the set. 
 	 */
 	public boolean isSubsetOf(BitSet set)
 	{
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			if (!set.get((Integer) e.getKey()))
 				return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns true if at least one index in the support of the distribution is in the set. 
 	 */
 	public boolean containsOneOf(BitSet set)
 	{
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			if (set.get((Integer) e.getKey()))
 				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get the support of the distribution.
 	 */
@@ -169,11 +169,11 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	{
 		return map.keySet();
 	}
-	
+
 	/**
 	 * Get an iterator over the entries of the map defining the distribution.
 	 */
-	public Iterator<Entry<Integer,Double>> iterator()
+	public Iterator<Entry<Integer, Double>> iterator()
 	{
 		return map.entrySet().iterator();
 	}
@@ -185,7 +185,7 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	{
 		return map.isEmpty();
 	}
-	
+
 	/**
 	 * Get the size of the support of the distribution.
 	 */
@@ -193,51 +193,51 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 	{
 		return map.size();
 	}
-	
+
 	/**
 	 * Get the sum of the probabilities in the distribution.
 	 */
 	public double sum()
 	{
 		double d = 0.0;
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			d += e.getValue();
 		}
 		return d;
 	}
-	
+
 	/**
-	 * Get the sum of all the probabilities in the distribution except for state j.
+	 * Get the sum of all the probabilities in the distribution except for index j.
 	 */
 	public double sumAllBut(int j)
 	{
 		double d = 0.0;
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			if (e.getKey() != j)
 				d += e.getValue();
 		}
 		return d;
 	}
-	
+
 	/**
-	 * Create a new distribution, based on a mapping from the state indices
-	 * used in this distribution to a different set  of state indices.
+	 * Create a new distribution, based on a mapping from the indices
+	 * used in this distribution to a different set of indices.
 	 */
 	public Distribution map(int map[])
 	{
 		Distribution distrNew = new Distribution();
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			distrNew.add(map[e.getKey()], e.getValue());
 		}
 		return distrNew;
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{
@@ -245,9 +245,9 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 		Distribution d = (Distribution) o;
 		if (d.size() != size())
 			return false;
-		Iterator<Entry<Integer,Double>> i = iterator();
+		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
-			Map.Entry<Integer,Double> e = i.next();
+			Map.Entry<Integer, Double> e = i.next();
 			d1 = e.getValue();
 			d2 = d.map.get(e.getKey());
 			if (d2 == null || !PrismUtils.doublesAreClose(d1, d2, 1e-12, false))
@@ -255,7 +255,7 @@ public class Distribution implements Iterable<Entry<Integer,Double>>
 		}
 		return true;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{

@@ -108,40 +108,6 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	@Override
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
-	{
-		int i, j, numChoices;
-		String nij;
-		Object action;
-		try {
-			FileWriter out = new FileWriter(filename);
-			out.write("digraph " + getModelType() + " {\nsize=\"8,5\"\nnode [shape=box];\n");
-			for (i = 0; i < numStates; i++) {
-				if (mark != null && mark.get(i))
-					out.write(i + " [style=filled  fillcolor=\"#cccccc\"]\n");
-				numChoices = getNumChoices(i);
-				for (j = 0; j < numChoices; j++) {
-					action = getAction(i, j);
-					nij = "n" + i + "_" + j;
-					out.write(i + " -> " + nij + " [ arrowhead=none,label=\"" + j);
-					if (action != null)
-						out.write(":" + action);
-					out.write("\" ];\n");
-					out.write(nij + " [ shape=point,width=0.1,height=0.1,label=\"\" ];\n");
-					Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i, j);
-					while (iter.hasNext()) {
-						Map.Entry<Integer, Double> e = iter.next();
-						out.write(nij + " -> " + e.getKey() + " [ label=\"" + e.getValue() + "\" ];\n");
-					}
-				}
-			}
-			out.write("}\n");
-			out.close();
-		} catch (IOException e) {
-			throw new PrismException("Could not write " + getModelType() + " to file \"" + filename + "\"" + e);
-		}
-	}
-
 	@Override
 	public void exportToDotFileWithStrat(String filename, BitSet mark, int strat[]) throws PrismException
 	{

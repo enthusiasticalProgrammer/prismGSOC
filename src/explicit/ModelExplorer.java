@@ -28,6 +28,7 @@ package explicit;
 import parser.State;
 import prism.PrismException;
 
+//TODO Christopher: Can we drop it
 public interface ModelExplorer
 {
 	public State getDefaultInitialState() throws PrismException;

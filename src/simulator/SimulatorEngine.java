@@ -51,7 +51,6 @@ import prism.PrismException;
 import prism.PrismFileLog;
 import prism.PrismLangException;
 import prism.PrismLog;
-import prism.PrismSettings;
 import prism.PrismUtils;
 import prism.ResultsCollection;
 import prism.UndefinedConstants;
@@ -147,7 +146,7 @@ public class SimulatorEngine extends PrismComponent
 	// strategy information
 	private Strategy strategy;
 	private Map<State, Integer> stateIds;
-	
+
 	// TODO: remove this (not in trunk any more)
 	private Prism prism;
 
@@ -999,9 +998,9 @@ public class SimulatorEngine extends PrismComponent
 	public State getTransitionListState()
 	{
 		return (transitionListState == null) ? path.getCurrentState() : transitionListState;
-		
+
 	}
-	
+
 	/**
 	 * Returns the current number of available choices.
 	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
@@ -1650,8 +1649,8 @@ public class SimulatorEngine extends PrismComponent
 	 * @throws InterruptedException if the thread is interrupted
 	 */
 	public void modelCheckExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
-			ResultsCollection resultsCollection, Expression expr, State initialState, long maxPathLength, SimulationMethod simMethod) throws PrismException,
-			InterruptedException
+			ResultsCollection resultsCollection, Expression expr, State initialState, long maxPathLength, SimulationMethod simMethod)
+			throws PrismException, InterruptedException
 	{
 		// Load model into simulator
 		createNewOnTheFlyPath(modulesFile);
@@ -1858,8 +1857,8 @@ public class SimulatorEngine extends PrismComponent
 			time_taken = (stop - start) / 1000.0;
 			mainLog.print("\nSampling complete: ");
 			mainLog.print(iters + " iterations in " + time_taken + " seconds (average " + PrismUtils.formatDouble(2, time_taken / iters) + ")\n");
-			mainLog.print("Path length statistics: average " + PrismUtils.formatDouble(2, avgPathLength) + ", min " + minPathFound + ", max " + maxPathFound
-					+ "\n");
+			mainLog.print(
+					"Path length statistics: average " + PrismUtils.formatDouble(2, avgPathLength) + ", min " + minPathFound + ", max " + maxPathFound + "\n");
 		} else {
 			mainLog.print(" ...\n\nSampling terminated early after " + iters + " iterations.\n");
 		}

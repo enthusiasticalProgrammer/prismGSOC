@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 import parser.State;
 import prism.PrismException;
 import prism.PrismLog;
@@ -42,7 +41,7 @@ import explicit.STPG;
 public class MultiLongRunStrategy implements Strategy, Serializable
 {
 	public static final long serialVersionUID = 0L;
-	
+
 	// strategy info
 	protected String info = "No information available.";
 
@@ -52,7 +51,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@XmlElementWrapper(name = "transientChoices")
 	@XmlElement(name = "distribution")
 	protected Distribution[] transChoices;
-	
+
 	@XmlElementWrapper(name = "reccurentChoices")
 	@XmlElement(name = "distribution")
 	protected Distribution[] recChoices;
@@ -60,16 +59,18 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@XmlElementWrapper(name = "switchingProbabilities")
 	protected double[] switchProb;
 	private transient boolean isTrans; //represents the single bit of memory
-	
-	private MultiLongRunStrategy() {
+
+	private MultiLongRunStrategy()
+	{
 		//for XML serialization by JAXB
 	}
-	
+
 	/**
 	 * Loads a strategy from a XML file
 	 * @param filename
 	 */
-	public static MultiLongRunStrategy loadFromFile(String filename) {
+	public static MultiLongRunStrategy loadFromFile(String filename)
+	{
 		try {
 			File file = new File(filename);
 			//InputStream inputStream = new FileInputStream(file);
@@ -81,6 +82,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			return null;
 		}
 	}
+
 	/**
 	 * 
 	 * Creates a multi-long run strategy
@@ -98,7 +100,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		this.switchProb = switchProb;
 		this.recChoices = recChoices;
 	}
-	
+
 	/**
 	 * 
 	 * Creates a multi-long run strategy which switches memory elements
@@ -134,7 +136,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		else
 			return Math.random() < this.switchProb[state];
 	}
-	
+
 	@Override
 	public void init(int state) throws InvalidStrategyStateException
 	{
@@ -169,14 +171,14 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		try {
 			JAXBContext context = JAXBContext.newInstance(MultiLongRunStrategy.class);
-			
+
 			Marshaller m = context.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			FileWriter out = new FileWriter(new File(file));			
+			FileWriter out = new FileWriter(new File(file));
 			m.marshal(this, out);
 			out.close();
 		} catch (JAXBException ex) { //TODO do something more clever
-			ex.printStackTrace(); 
+			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -203,13 +205,13 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		return buildProductFromMDPExplicit((MDPSparse) model);
 	}
-	
+
 	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-		
+
 		// construct a new STPG of size three times the original model
 		MDPSimple mdp = new MDPSimple(3 * model.getNumStates());
-		
+
 		int n = mdp.getNumStates();
 
 		List<State> oldStates = model.getStatesList();
@@ -235,14 +237,14 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		// initial distributions
 		int indx;
 		Distribution distr;
-		
+
 		distr = new Distribution();
 		if (this.switchProb[0] != 1)
 			distr.add(1, 1 - this.switchProb[0]);
 		if (this.switchProb[0] != 0)
 			distr.add(2, this.switchProb[0]);
 		mdp.addChoice(0, distr);
-		
+
 		for (int i = 1; i < oldStates.size(); i++) {
 			indx = 3 * i;
 
@@ -250,7 +252,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			distr = new Distribution();
 			distr.add(indx, 1.0);
 			mdp.addChoice(indx, distr);
-			
+
 		}
 
 		// all other states
@@ -260,7 +262,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 			Distribution distrTranState = new Distribution();
 			Distribution distrRecState = new Distribution();
-			
+
 			Distribution choicesTran = this.transChoices[i];
 			Distribution choicesRec = this.recChoices[i];
 
@@ -268,34 +270,32 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			if (choicesRec != null) { //MEC state
 				for (Entry<Integer, Double> choiceEntry : choicesRec) {
 					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while(iterator.hasNext()) {
-						Entry<Integer,Double> transitionEntry = iterator.next();
+					while (iterator.hasNext()) {
+						Entry<Integer, Double> transitionEntry = iterator.next();
 						distrRecState.add(transitionEntry.getKey(), choiceEntry.getValue() * transitionEntry.getValue());
 					}
 				}
-				
+
 				mdp.addChoice(recIndx, distrRecState);
 			}
-			
+
 			//transient states, switching to recurrent
 			if (choicesRec != null) { //MEC state
 				for (Entry<Integer, Double> choiceEntry : choicesRec) {
 					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while(iterator.hasNext()) {
-						Entry<Integer,Double> transitionEntry = iterator.next();
-						distrTranState.add(transitionEntry.getKey(),
-								switchProb[i] * choiceEntry.getValue() * transitionEntry.getValue());
+					while (iterator.hasNext()) {
+						Entry<Integer, Double> transitionEntry = iterator.next();
+						distrTranState.add(transitionEntry.getKey(), switchProb[i] * choiceEntry.getValue() * transitionEntry.getValue());
 					}
 				}
 			}
-			
+
 			//transitent states, not switching
 			for (Entry<Integer, Double> choiceEntry : choicesTran) {
 				Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-				while(iterator.hasNext()) {
-					Entry<Integer,Double> transitionEntry = iterator.next();
-					distrTranState.add(transitionEntry.getKey(),
-							(1-switchProb[i]) * choiceEntry.getValue() * transitionEntry.getValue());
+				while (iterator.hasNext()) {
+					Entry<Integer, Double> transitionEntry = iterator.next();
+					distrTranState.add(transitionEntry.getKey(), (1 - switchProb[i]) * choiceEntry.getValue() * transitionEntry.getValue());
 				}
 			}
 
@@ -355,11 +355,11 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			s.append("Stochastic update strategy.\n");
 			s.append("Memory size: 2 (transient/recurrent phase).\n");
 			s.append("Current memory element: ");
-			s.append((this.isTrans) ? "transient." : "recurrent." );
+			s.append((this.isTrans) ? "transient." : "recurrent.");
 		} else {
 			s.append("Memoryless randomised strategyy.\n");
 			s.append("Current state is ");
-			s.append((this.isTrans) ? "transient." : "recurrent." );
+			s.append((this.isTrans) ? "transient." : "recurrent.");
 		}
 		return s.toString();
 	}
@@ -379,21 +379,21 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void exportActions(PrismLog out)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void initialise(int s)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void update(Object action, int s)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -407,20 +407,27 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void clear()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void exportIndices(PrismLog out)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void exportInducedModel(PrismLog out)
 	{
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void exportDotFile(PrismLog out)
+	{
+		// TODO Auto-generated method stub
+
 	};
 }

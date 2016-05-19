@@ -71,7 +71,7 @@ public abstract class ModelExplicit implements Model
 	/** (Optionally) some labels (atomic propositions) associated with the model,
 	 * represented as a String->BitSet mapping from their names to the states that satisfy them. */
 	protected Map<String, BitSet> labels = new TreeMap<String, BitSet>();
-	
+
 	/**
 	 * (Optionally) the stored predecessor relation. Becomes inaccurate after the model is changed!
 	 */
@@ -221,8 +221,8 @@ public abstract class ModelExplicit implements Model
 		} else {
 			int i = 0;
 			while (true) {
-				if (!hasLabel(prefix+"_"+i)) {
-					label = prefix+"_"+i;
+				if (!hasLabel(prefix + "_" + i)) {
+					label = prefix + "_" + i;
 					break;
 				}
 				if (i == Integer.MAX_VALUE)
@@ -317,7 +317,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return constantValues;
 	}
-	
+
 	@Override
 	public VarList getVarList()
 	{
@@ -341,7 +341,7 @@ public abstract class ModelExplicit implements Model
 	{
 		return labels.keySet();
 	}
-	
+
 	@Override
 	public abstract int getNumTransitions();
 
@@ -495,7 +495,7 @@ public abstract class ModelExplicit implements Model
 		s += "Transitions: " + getNumTransitions() + "\n";
 		return s;
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{
@@ -510,12 +510,14 @@ public abstract class ModelExplicit implements Model
 	}
 
 	@Override
-	public boolean hasStoredPredecessorRelation() {
+	public boolean hasStoredPredecessorRelation()
+	{
 		return (predecessorRelation != null);
 	}
 
 	@Override
-	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew) {
+	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew)
+	{
 		if (predecessorRelation != null) {
 			return predecessorRelation;
 		}
@@ -529,7 +531,8 @@ public abstract class ModelExplicit implements Model
 	}
 
 	@Override
-	public void clearPredecessorRelation() {
+	public void clearPredecessorRelation()
+	{
 		predecessorRelation = null;
 	}
 

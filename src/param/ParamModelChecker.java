@@ -91,8 +91,6 @@ import prism.PrismPrintStreamLog;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
 import prism.Result;
-import edu.jas.kern.ComputerThreads;
-import explicit.Model;
 
 /**
  * Model checker for parametric Markov models.

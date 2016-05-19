@@ -34,35 +34,35 @@ import parser.type.*;
 public class ExpressionConstant extends Expression
 {
 	protected String name;
-	
+
 	// Constructors
-	
+
 	public ExpressionConstant()
 	{
 	}
-	
+
 	public ExpressionConstant(String n, Type t)
 	{
 		setType(t);
 		name = n;
 	}
-			
+
 	// Set method
-	
-	public void setName(String n) 
+
+	public void setName(String n)
 	{
 		name = n;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
-		
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -74,7 +74,7 @@ public class ExpressionConstant extends Expression
 	{
 		return true;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -83,7 +83,7 @@ public class ExpressionConstant extends Expression
 			throw new PrismLangException("Could not evaluate constant", this);
 		return res;
 	}
-	
+
 	@Override
 	public boolean returnsSingleValue()
 	{
@@ -91,13 +91,13 @@ public class ExpressionConstant extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public Expression deepCopy()
 	{
@@ -105,9 +105,9 @@ public class ExpressionConstant extends Expression
 		ret.setPosition(this);
 		return ret;
 	}
-	
+
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

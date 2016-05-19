@@ -326,7 +326,7 @@ public class ExplicitFiles2MTBDD
 
 	private void computeMaxChoicesFromFile() throws PrismException
 	{
-		BufferedReader in=null;
+		BufferedReader in = null;
 		String s, ss[];
 		int j, lineNum = 0;
 
@@ -361,12 +361,13 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
-		} finally{
+		} finally {
 			try {
-			       if (in != null) in.close();
-			     } catch (IOException io) {
-			    	 throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
-			     }
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
 	}
 
@@ -539,7 +540,7 @@ public class ExplicitFiles2MTBDD
 
 	private void buildTrans() throws PrismException
 	{
-		BufferedReader in=null;
+		BufferedReader in = null;
 		String s, ss[], a;
 		int i, j, r, c, k = 0, lineNum = 0;
 		double d;
@@ -671,12 +672,13 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
-		} finally{
+		} finally {
 			try {
-			       if (in != null) in.close();
-			     } catch (IOException io) {
-			    	 throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
-			     }
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
 	}
 

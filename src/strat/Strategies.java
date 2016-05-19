@@ -1,12 +1,5 @@
 package strat;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import javax.xml.bind.JAXBContext;
-
-
 /**
  * Class contains methods to work with strategies
  * 
@@ -68,10 +61,10 @@ public class Strategies
 		Strategy mdstrat2 = Strategies.loadStrategyFromFile(fn);
 		mdstrat2.exportToFile(fn2);
 		mdstrat = mdstrat2 = null;
-
+		
 		int[][] choices = { { 30, 1, 28, 2 }, { 25, 1, 24, 2 } };
 		int bound = 25;
-
+		
 		String sbfn = "sb.adv";
 		String sbfn2 = "sb2.adv";
 		Strategy sbstrat = new StepBoundedDeterministicStrategy(choices, bound);
@@ -90,7 +83,5 @@ public class Strategies
 		exstrat2.exportToFile(exfn2);
 		*/
 	}
-	
-	
 
 }
