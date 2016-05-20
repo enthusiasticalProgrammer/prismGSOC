@@ -66,11 +66,6 @@ public class ExpressionFunc extends Expression
 
 	// Constructors
 
-	public ExpressionFunc()
-	{
-		operands = new ArrayList<Expression>();
-	}
-
 	public ExpressionFunc(String name)
 	{
 		setName(name);
