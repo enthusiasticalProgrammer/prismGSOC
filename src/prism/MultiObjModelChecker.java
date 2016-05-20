@@ -55,7 +55,7 @@ import dv.DoubleVector;
 public class MultiObjModelChecker extends PrismComponent
 {
 	protected Prism prism;
-	protected boolean verbose;
+	protected boolean verbose; //TODO @Christopher: this seems obsolete -> dismiss
 
 	/**
 	 * Create a new MultiObjModelChecker, inherit basic state from parent (unless null).
