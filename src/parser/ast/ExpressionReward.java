@@ -34,7 +34,6 @@ import prism.OpRelOpBound;
 import prism.PrismException;
 import prism.PrismLangException;
 
-
 public class ExpressionReward extends ExpressionQuant
 {
 	//both are de facto Expressions, but the mechanically generated PrismParser temporarily
@@ -48,20 +47,13 @@ public class ExpressionReward extends ExpressionQuant
 	// The parser creates an (invisible) new-style filter around this expression
 
 	// Constructors
-	
+
 	public ExpressionReward()
 	{
 	}
-	
-	public ExpressionReward(Expression e, String relOpString, Expression p)
-	{
-		expression = e;
-		setRelOp(relOpString);
-		reward = p;
-	}
 
 	// Set methods
-	
+
 	public void setRewardStructIndex(Object o)
 	{
 		rewardStructIndex = o;
@@ -69,29 +61,28 @@ public class ExpressionReward extends ExpressionQuant
 
 	public void setReward(Expression p)
 	{
-		reward = p;
+		setBound(p);
 	}
 
 	public void setExpression(Expression e)
 	{
 		expression = e;
 	}
-	
+
 	public void setFilter(Filter f)
 	{
 		filter = f;
 	}
 
 	// Get methods
-	
+
 	public Object getRewardStructIndex()
 	{
 		return rewardStructIndex;
 	}
 
-
 	// Other methods
-	
+
 	/**
 	 * Get a string describing the type of R operator, e.g. "R=?" or "R&lt;r".
 	 */
@@ -138,7 +129,7 @@ public class ExpressionReward extends ExpressionQuant
 		}
 		return rewStruct;
 	}
-	
+
 	/**
 	 * Get the reward structure (from a model) corresponding to the index of this R operator.
 	 * Throws an exception (with explanatory message) if it cannot be found.
@@ -148,7 +139,7 @@ public class ExpressionReward extends ExpressionQuant
 		int rewardStructIndex = getRewardStructIndexByIndexObject(modelInfo, constantValues);
 		return modelInfo.getRewardStruct(rewardStructIndex);
 	}
-	
+
 	/**
 	 * Get info about the operator and bound.
 	 * @param constantValues Values for constants in order to evaluate any bound
@@ -162,26 +153,26 @@ public class ExpressionReward extends ExpressionQuant
 			return new OpRelOpBound("R", getRelOp(), null);
 		}
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	public Expression getReward()
 	{
-		return reward;
+		return getBound();
 	}
 
 	public Expression getExpression()
 	{
 		return expression;
 	}
-	
+
 	public Filter getFilter()
 	{
 		return filter;
 	}
 
 	// Methods required for Expression:
-	
+
 	/**
 	 * Is this expression constant?
 	 */
@@ -195,7 +186,7 @@ public class ExpressionReward extends ExpressionQuant
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -208,19 +199,23 @@ public class ExpressionReward extends ExpressionQuant
 		// For R=? properties, use name of reward structure where applicable
 		if (getBound() == null) {
 			String s = "E";
-			if (getRelOp() == RelOp.MIN) s = "Minimum e";
-			else if (getRelOp() == RelOp.MAX) s = "Maximum e";
-			else s = "E";
+			if (getRelOp() == RelOp.MIN)
+				s = "Minimum e";
+			else if (getRelOp() == RelOp.MAX)
+				s = "Maximum e";
+			else
+				s = "E";
 			if (rewardStructIndex instanceof String) {
 				if (rewardStructIndexDiv instanceof String)
-					s += "xpected "+rewardStructIndex + "/" + rewardStructIndexDiv;
+					s += "xpected " + rewardStructIndex + "/" + rewardStructIndexDiv;
 				else if (rewardStructIndexDiv == null)
-					s += "xpected "+rewardStructIndex;
+					s += "xpected " + rewardStructIndex;
 				else
 					s += "xpected reward";
 			}
 			// Or just call it "Expected reward"
-			else s += "xpected reward";
+			else
+				s += "xpected reward";
 			return s;
 		}
 		// For R>r etc., just use "Result"
@@ -236,7 +231,7 @@ public class ExpressionReward extends ExpressionQuant
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
@@ -250,37 +245,46 @@ public class ExpressionReward extends ExpressionQuant
 		expr.setExpression(getExpression() == null ? null : getExpression().deepCopy());
 		expr.setRelOp(getRelOp());
 		expr.setBound(getBound() == null ? null : getBound().deepCopy());
-		if (rewardStructIndex != null && rewardStructIndex instanceof Expression) expr.setRewardStructIndex(((Expression)rewardStructIndex).deepCopy());
-		else expr.setRewardStructIndex(rewardStructIndex);
-		if (rewardStructIndexDiv != null && rewardStructIndexDiv instanceof Expression) expr.setRewardStructIndexDiv(((Expression)rewardStructIndexDiv).deepCopy());
-		else expr.setRewardStructIndexDiv(rewardStructIndexDiv);
-		expr.setFilter(getFilter() == null ? null : (Filter)getFilter().deepCopy());
+		if (rewardStructIndex != null && rewardStructIndex instanceof Expression)
+			expr.setRewardStructIndex(((Expression) rewardStructIndex).deepCopy());
+		else
+			expr.setRewardStructIndex(rewardStructIndex);
+		if (rewardStructIndexDiv != null && rewardStructIndexDiv instanceof Expression)
+			expr.setRewardStructIndexDiv(((Expression) rewardStructIndexDiv).deepCopy());
+		else
+			expr.setRewardStructIndexDiv(rewardStructIndexDiv);
+		expr.setFilter(getFilter() == null ? null : (Filter) getFilter().deepCopy());
 		expr.setType(type);
 		expr.setPosition(this);
 		return expr;
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{
 		String s = "";
 		s += "R" + getModifierString();
 		if (rewardStructIndex != null) {
-			if (rewardStructIndex instanceof Expression) s += "{"+rewardStructIndex+"}";
-			else if (rewardStructIndex instanceof String) s += "{\""+rewardStructIndex+"\"}";
+			if (rewardStructIndex instanceof Expression)
+				s += "{" + rewardStructIndex + "}";
+			else if (rewardStructIndex instanceof String)
+				s += "{\"" + rewardStructIndex + "\"}";
 			if (rewardStructIndexDiv != null) {
 				s += "/";
-				if (rewardStructIndexDiv instanceof Expression) s += "{"+rewardStructIndexDiv+"}";
-				else if (rewardStructIndexDiv instanceof String) s += "{\""+rewardStructIndexDiv+"\"}";
+				if (rewardStructIndexDiv instanceof Expression)
+					s += "{" + rewardStructIndexDiv + "}";
+				else if (rewardStructIndexDiv instanceof String)
+					s += "{\"" + rewardStructIndexDiv + "\"}";
 			}
 		}
 		s += getRelOp();
-		s += (getBound()==null) ? "?" : getBound().toString();
+		s += (getBound() == null) ? "?" : getBound().toString();
 		s += " [ " + getExpression();
-		if (getFilter() != null) s += " "+getFilter();
-		s += " ]";	
+		if (getFilter() != null)
+			s += " " + getFilter();
+		s += " ]";
 		return s;
 	}
 
@@ -324,8 +328,8 @@ public class ExpressionReward extends ExpressionQuant
 
 	public void setRewardStructIndexDiv(Object rewardStructIndexDiv2)
 	{
-		rewardStructIndexDiv=rewardStructIndexDiv2;
-		
+		rewardStructIndexDiv = rewardStructIndexDiv2;
+
 	}
 }
 
