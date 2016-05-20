@@ -47,12 +47,7 @@ public class CheckValid extends ASTTraverse
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		// R operator types restricted for some models
-		if (modelType == ModelType.MDP) {
-			if (e.getOperator() == ExpressionTemporal.R_S) {
-				throw new PrismLangException("Steady-state reward properties cannot be used for MDPs");
-			}
-		}
-		else if (modelType == ModelType.PTA) {
+		if (modelType == ModelType.PTA) {
 			if (e.getOperator() == ExpressionTemporal.R_C || e.getOperator() == ExpressionTemporal.R_I || e.getOperator() == ExpressionTemporal.R_S) {
 				throw new PrismLangException("Only reachability (F) reward properties can be used for PTAs");
 			}
