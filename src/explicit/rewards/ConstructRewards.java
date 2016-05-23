@@ -129,7 +129,7 @@ public class ConstructRewards
 	 * @param rewStr The reward structure
 	 * @param constantValues Values for any undefined constants needed
 	 */
-	public MDPRewards buildMDPRewardStructure(MDP mdp, RewardStruct rewStr, Values constantValues) throws PrismException
+	public MDPReward buildMDPRewardStructure(MDP mdp, RewardStruct rewStr, Values constantValues) throws PrismException
 	{
 		List<State> statesList;
 		Expression guard;
@@ -244,7 +244,7 @@ public class ConstructRewards
 	 * @param rews The file containing state rewards (ignored if null)
 	 * @param rewt The file containing transition rewards (ignored if null)
 	 */
-	public MDPRewards buildMDPRewardsFromPrismExplicit(MDP mdp, File rews, File rewt) throws PrismException
+	public MDPReward buildMDPRewardsFromPrismExplicit(MDP mdp, File rews, File rewt) throws PrismException
 	{
 		BufferedReader in;
 		String s, ss[];

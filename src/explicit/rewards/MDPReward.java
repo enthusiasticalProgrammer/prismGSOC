@@ -32,7 +32,7 @@ import explicit.Product;
 /**
  * Classes that provide (read) access to explicit-state rewards for an MDP.
  */
-public interface MDPRewards extends Rewards
+public interface MDPReward extends Rewards
 {
 	/**
 	 * Get the state reward for state {@code s}.
@@ -45,7 +45,7 @@ public interface MDPRewards extends Rewards
 	public abstract double getTransitionReward(int s, int i);
 
 	@Override
-	public MDPRewards liftFromModel(Product<? extends Model> product);
+	public MDPReward liftFromModel(Product<? extends Model> product);
 
 	/** Returns true if this reward structure has transition rewards */
 	public boolean hasTransitionRewards();

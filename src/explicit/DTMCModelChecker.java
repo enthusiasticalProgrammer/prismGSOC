@@ -47,23 +47,10 @@ import acceptance.AcceptanceType;
 import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
-import parser.ast.Expression;
 import parser.ast.ExpressionTemporal;
 import parser.ast.ExpressionUnaryOp;
 import parser.type.TypeDouble;
-import parser.visitor.ASTTraverse;
-import prism.DRA;
-import prism.Pair;
-import prism.PrismComponent;
-import prism.PrismException;
-import prism.PrismLangException;
-import prism.PrismUtils;
-import explicit.rewards.MCRewards;
 
 /**
  * Explicit-state model checker for discrete-time Markov chains (DTMCs).
