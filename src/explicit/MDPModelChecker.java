@@ -28,6 +28,7 @@ package explicit;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ import prism.PrismComponent;
 import prism.PrismDevNullLog;
 import prism.PrismException;
 import prism.PrismFileLog;
+import prism.PrismLangException;
 import prism.PrismLog;
 import prism.PrismUtils;
 import prism.PrismSettings;
@@ -63,7 +65,7 @@ import acceptance.AcceptanceType;
 import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.MCRewardsFromMDPRewards;
-import explicit.rewards.MDPRewards;
+import explicit.rewards.MDPReward;
 import explicit.rewards.Rewards;
 import explicit.rewards.ConstructRewards;
 
@@ -82,31 +84,24 @@ public class MDPModelChecker extends ProbModelChecker
 
 	// Model checking functions
 
+	//TODO @Christopher: extend this method
 	@Override
 	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
 	{
-		boolean memoryless;
-		if (((ExpressionFunc) expr).getName().equals("multi"))
-			memoryless = false;
-		else if (((ExpressionFunc) expr).getName().equals("mlessmulti"))
-			memoryless = true;
-		else
-			throw new UnsupportedOperationException("Unsupported function: " + expr);
+		Operator operator;
+		double bound;
+
+		Collection<MDPConstraint> constraints = new ArrayList<>();
+		Collection<MDPObjective> objectives = new ArrayList<>();
+		boolean memoryless = isMemoryLess(expr);
 
 		// Make sure we are only expected to compute a value for a single state
 		if (currentFilter == null || !(currentFilter.getOperator() == Filter.FilterOperator.STATE))
 			throw new PrismException("Multi-objective model checking can only compute values from a single state");
 
-		int numObjectives = expr.getNumOperands();
-
-		ArrayList<Operator> operators = new ArrayList<Operator>();
-		ArrayList<Double> bounds = new ArrayList<Double>();
-		ArrayList<MDPRewards> rewards = new ArrayList<MDPRewards>();
-
-		int numericalCount = 0; //used to determine if we do multi-obj.
 		ArrayList<Integer> numericalIndices = new ArrayList<Integer>();
 		//extract data
-		for (int i = 0; i < numObjectives; i++) {
+		for (int i = 0; i < expr.getNumOperands(); i++) {
 			if (expr.getOperand(i) instanceof ExpressionReward) {
 				ExpressionReward operand = (ExpressionReward) expr.getOperand(i);
 				RelOp relOp = operand.getRelOp();
@@ -118,39 +113,18 @@ public class MDPModelChecker extends ProbModelChecker
 				if (eT.getOperator() != ExpressionTemporal.R_S)
 					throw new PrismException("We only support steady state (long-run) rewards.");
 
-				//comparison operator
-				Operator op;
-				if (relOp.equals(RelOp.MAX)) {
-					numericalCount++;
-					numericalIndices.add(i);
-					op = Operator.R_MAX;
-				} else if (relOp.equals(RelOp.GT)) // currently do not support
-					//relOps.add(1);
-					throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
-				else if (relOp.equals(RelOp.GEQ)) {
-					op = Operator.R_GE;
-				} else if (relOp.equals(RelOp.MIN)) {
-					numericalCount++;
-					numericalIndices.add(i);
-					op = Operator.R_MIN;
-				} else if (relOp.equals(RelOp.LT)) // currently do not support
-					//relOps.add(6);
-					throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
-				else if (relOp.equals(RelOp.LEQ)) {
-					op = Operator.R_LE;
-				} else
-					throw new PrismException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
-				operators.add(op);
+				operator = determineOperator(relOp);
+
+				if (operator.equals(Operator.R_MAX) || operator.equals(Operator.R_MIN)) {
+
+				}
+
+				numericalIndices.add(i);
 
 				// Store rewards bound
-				Expression rb = operand.getReward();
+				Expression rewardBound = operand.getReward();
 
-				if (rb != null) {
-					double p = rb.evaluateDouble(constantValues);
-					bounds.add(p);
-				} else {
-					bounds.add(-1.0);
-				}
+				bound = evaluateBound(rewardBound);
 
 				Object rs = operand.getRewardStructIndex();
 				RewardStruct rewStruct = null;
@@ -173,8 +147,14 @@ public class MDPModelChecker extends ProbModelChecker
 
 				// Build rewards
 				ConstructRewards constructRewards = new ConstructRewards(mainLog);
-				MDPRewards mdpRewards = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
-				rewards.add(mdpRewards);
+				MDPReward mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
+
+				//create objective or constraint
+				if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
+					objectives.add(new MDPObjective(mdpReward, operator));
+				} else {
+					constraints.add(new MDPConstraint(mdpReward, operator, bound));
+				}
 
 			} else {
 				throw new PrismException("Only long-run properties are supported.");
@@ -182,17 +162,17 @@ public class MDPModelChecker extends ProbModelChecker
 		}
 
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
-		MultiLongRun mlr = new MultiLongRun((MDP) model, rewards, operators, bounds, method);
+		MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
 		mlr.createMultiLongRunLP(memoryless);
-		if (numericalCount > 0 && memoryless)
+		if (objectives.size() > 0 && memoryless)
 			throw new PrismException("mlessmulti can only be used for non-numerical queries"
 					+ " (optimal memoryless strategies might not exist, and so max/min would not apply)");
-		else if (numericalCount == 0 && memoryless) {
+		else if (objectives.size() == 0 && memoryless) {
 			sv = mlr.solveMemoryless();
 			if (generateStrategy)
 				this.strategy = mlr.getStrategy(memoryless);
-		} else if (numericalCount < 2) {
+		} else if (objectives.size() < 2) {
 			sv = mlr.solveDefault();
 			if (generateStrategy)
 				this.strategy = mlr.getStrategy(memoryless);
@@ -218,13 +198,8 @@ public class MDPModelChecker extends ProbModelChecker
 				mainLog.println("The initial direction is " + direction);
 			}
 
-			boolean decided = false;
-			int iters = 0;
-			int output = 0;
-			while (iters < maxIters) {
-				iters++;
+			for (int iterations = 0; iterations < maxIters; iterations++) {
 
-				double[] result;
 				Point newPoint = mlr.solveMulti(direction);
 				numberOfPoints++;
 
@@ -249,17 +224,58 @@ public class MDPModelChecker extends ProbModelChecker
 
 				if (direction == null) {
 					//no tile could be improved
-					decided = true;
 					break;
 				}
 			}
 
-			//TODO 0 and 1 should not be hardcoded, what if we have more objectives?
+			//TODO 0 and 1 should not be hardcoded, what if we have more objectives? 
+			// In this context: drop numericalIndices afterwards
 			TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
 			sv = new StateValues(TypeVoid.getInstance(), tileList, model);
 		}
 
 		return sv;
+	}
+
+	private double evaluateBound(Expression rewardBound) throws PrismLangException
+	{
+		if (rewardBound != null) {
+			double p = rewardBound.evaluateDouble(constantValues);
+			return p;
+		} else {
+			return -1.0;
+		}
+	}
+
+	private Operator determineOperator(RelOp relOp) throws PrismException
+	{
+		if (relOp.equals(RelOp.MAX) || relOp.equals(RelOp.MIN) || relOp.equals(RelOp.LEQ)) {
+			return Operator.R_MAX;
+
+		} else if (relOp.equals(RelOp.GEQ)) {
+			return Operator.R_GE;
+		} else if (relOp.equals(RelOp.MIN)) {
+			return Operator.R_MIN;
+		} else if (relOp.equals(RelOp.LEQ)) {
+			return Operator.R_LE;
+		} else if (relOp.equals(RelOp.LT)) {
+			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+		} else if (relOp.equals(RelOp.GT)) { // currently do not support
+			//relOps.add(1);
+			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+		} else {
+			throw new PrismException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
+		}
+	}
+
+	private boolean isMemoryLess(ExpressionFunc expr)
+	{
+		if (((ExpressionFunc) expr).getName().equals("multi"))
+			return false;
+		else if (((ExpressionFunc) expr).getName().equals("mlessmulti"))
+			return true;
+		else
+			throw new UnsupportedOperationException("Unsupported function: " + expr);
 	}
 
 	@Override
@@ -343,7 +359,7 @@ public class MDPModelChecker extends ProbModelChecker
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
-		MDPRewards productRewards;
+		MDPReward productRewards;
 		StateValues rewardsProduct, rewards;
 		MDPModelChecker mcProduct;
 		LTLModelChecker.LTLProduct<MDP> product;
@@ -356,7 +372,7 @@ public class MDPModelChecker extends ProbModelChecker
 		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
 
 		// Adapt reward info to product model
-		productRewards = ((MDPRewards) modelRewards).liftFromModel(product);
+		productRewards = ((MDPReward) modelRewards).liftFromModel(product);
 
 		// Output product, if required
 		if (getExportProductTrans()) {
@@ -1383,7 +1399,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max rewards (true=min, false=max)
 	 */
-	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPRewards mdpRewards, int k, boolean min) throws PrismException
+	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPReward mdpRewards, int k, boolean min) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -1438,7 +1454,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max rewards (true=min, false=max)
 	 */
-	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min) throws PrismException
+	public ModelCheckerResult computeReachRewards(MDP mdp, MDPReward mdpRewards, BitSet target, boolean min) throws PrismException
 	{
 		return computeReachRewards(mdp, mdpRewards, target, min, null, null);
 	}
@@ -1455,7 +1471,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values).  
 	 * Also, 'known' values cannot be passed for some solution methods, e.g. policy iteration.  
 	 */
-	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min, double init[], BitSet known) throws PrismException
+	public ModelCheckerResult computeReachRewards(MDP mdp, MDPReward mdpRewards, BitSet target, boolean min, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet inf;
@@ -1613,7 +1629,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known,
+	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known,
 			int strat[]) throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1706,7 +1722,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsGaussSeidel(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[],
+	protected ModelCheckerResult computeReachRewardsGaussSeidel(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, double init[],
 			BitSet known, int strat[]) throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1794,7 +1810,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max rewards (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	protected ModelCheckerResult computeReachRewardsPolIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, int strat[])
+	protected ModelCheckerResult computeReachRewardsPolIter(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, int strat[])
 			throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1890,7 +1906,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max rewards (true=min, false=max)
 	 * @param lastSoln Vector of values from which to recompute in one iteration 
 	 */
-	public List<Integer> expReachStrategy(MDP mdp, MDPRewards mdpRewards, int state, BitSet target, boolean min, double lastSoln[]) throws PrismException
+	public List<Integer> expReachStrategy(MDP mdp, MDPReward mdpRewards, int state, BitSet target, boolean min, double lastSoln[]) throws PrismException
 	{
 		double val = mdp.mvMultRewMinMaxSingle(state, lastSoln, mdpRewards, min, null);
 		return mdp.mvMultRewMinMaxSingleChoices(state, lastSoln, mdpRewards, min, val);

@@ -40,7 +40,7 @@ import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismUtils;
 import strat.MDStrategy;
-import explicit.rewards.MDPRewards;
+import explicit.rewards.MDPReward;
 
 /**
  * Base class for explicit-state representations of an MDP.
@@ -272,7 +272,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	@Override
-	public void mvMultRewMinMax(double vect[], MDPRewards mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[])
+	public void mvMultRewMinMax(double vect[], MDPReward mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[])
 	{
 		int s;
 		// Loop depends on subset/complement arguments
@@ -289,7 +289,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	@Override
-	public double mvMultRewGSMinMax(double vect[], MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
+	public double mvMultRewGSMinMax(double vect[], MDPReward mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
 	{
 		int s;
 		double d, diff, maxDiff = 0.0;

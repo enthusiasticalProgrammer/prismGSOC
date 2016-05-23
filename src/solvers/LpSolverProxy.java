@@ -8,6 +8,7 @@ import prism.PrismException;
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
 
+//TODO @Christopher: drop name, prefer map 
 public class LpSolverProxy implements SolverProxyInterface
 {
 	private LpSolve solver;
