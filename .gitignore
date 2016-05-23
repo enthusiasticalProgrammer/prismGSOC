@@ -1,0 +1,12 @@
+*.cc
+*.form
+classes
+ext
+etc
+include
+images
+obj
+src/bin
+lib
+Makefile
+bin
