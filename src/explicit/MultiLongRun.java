@@ -33,7 +33,8 @@ import strat.MultiLongRunStrategy;
  *
  */
 //TODO @Christopher: extend this class and adjust documentation
-public class MultiLongRun
+//TODO no2: are actions and transitions confused here?
+class MultiLongRun
 {
 	private final MDP mdp;
 	private final Collection<BitSet> mecs;
@@ -133,6 +134,7 @@ public class MultiLongRun
 	 * Creates a new solver instance, based on the argument {@see #method}.
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
+	//TODO This belongs to some extend into the solver
 	private void initialiseSolver(boolean memoryless) throws PrismException
 	{
 		try { //below Class.forName throws exception if the required jar is not present
@@ -422,16 +424,16 @@ public class MultiLongRun
 	 * Adds an equation to the linear program saying that for the mec bs,
 	 * the switching probabilities in sum must be equal to the x variables in sum.
 	 * See the LICS 11 paper (equation no 3) for details.
-	 * @param bs
+	 * @param maxEndComponent
 	 * @throws PrismException
 	 */
-	private void setEqnForMECLink(BitSet bs) throws PrismException
+	private void setEqnForMECLink(BitSet maxEndComponent) throws PrismException
 	{
 		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
 
 		//TODO reimplement using nextSetBit
-		for (int state = 0; state < bs.length(); state++) {
-			if (bs.get(state)) {
+		for (int state = 0; state < maxEndComponent.length(); state++) {
+			if (maxEndComponent.get(state)) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					//X
 					for (int i = 0; i < mdp.getNumChoices(state); i++) {
@@ -446,7 +448,7 @@ public class MultiLongRun
 			}
 		}
 
-		solver.addRowFromMap(row, 0, SolverProxyInterface.EQ, "m" + bs);
+		solver.addRowFromMap(row, 0, SolverProxyInterface.EQ, "m" + maxEndComponent);
 	}
 
 	/**
@@ -783,12 +785,81 @@ public class MultiLongRun
 		}
 
 		//Reward bounds
+		//TODO Christopher: put for-loop in subroutine
 		for (MDPConstraint constraint : constraints) {
 			setEqnForConstraint(constraint);
 		}
 
+		setCommitmentForSatisfaction();
+
+		setSatisfactionForNontrivialProbability();
+
 		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
 		System.out.println("LP problem construction finished in " + time + " s.");
+	}
+
+	//Equation number 7
+	private void setSatisfactionForNontrivialProbability() throws PrismException
+	{
+		
+		for(int i=0;i<getN();i++){
+			MDPConstraint constraint=this.getConstraintNonTrivialProbabilityConstraints().get(i);
+			HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+			
+			for(int n=0;n<1<<getN();n++){
+				if((n & (1<<i))!=0){
+					for (int state = 0; state < mdp.getNumStates(); state++) {
+						for (int act = 0; act < mdp.getNumChoices(state); act++) {
+							map.put(getVarX(state,act,n), 1.0);
+						}
+					}
+				}
+			}
+			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.GE, "satisfaction for i: "+i);
+		}
+	}
+
+	//Equation number 6
+	private void setCommitmentForSatisfaction() throws PrismException
+	{
+		List<MDPConstraint> nonTrivialProbabilities = this.getConstraintNonTrivialProbabilityConstraints();
+
+		for (BitSet maxEndComponent : mecs) {
+			for (int n = 0; n < 1 << getN(); n++) {
+				for (int i = 0; i < getN(); i++) {
+					BitSet b = new BitSet(n);
+					if (b.get(i)) {
+						addSingleCommitmentToSatisfaction(maxEndComponent, n, nonTrivialProbabilities.get(i));
+					}
+				}
+			}
+		}
+	}
+
+	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, MDPConstraint mdpConstraint) throws PrismException
+	{
+		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+		for (int state = 0; state < mdp.getNumStates(); state++) {
+			if (!isMECState(state))
+				continue;
+			for (int act = 0; act < mdp.getNumChoices(state); act++) {
+				double value=mdpConstraint.reward.getStateReward(state)
+						+mdpConstraint.reward.getTransitionReward(state, act)-mdpConstraint.getBound();
+				map.put(getVarX(state,act,n),value);
+			}
+		}
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.GE, "commitment,component: "+maxEndComponent+" n:"+n+"i: "+mdpConstraint);
+	}
+
+	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()
+	{
+		List<MDPConstraint> result = new ArrayList<>();
+		for (MDPConstraint i : this.constraints) {
+			if (i.isProbabilistic()) {
+				result.add(i);
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -910,6 +981,7 @@ public class MultiLongRun
 	 * or if the strategy did not exist.
 	 * @return
 	 */
+	//TODO Christopher: adjust it
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
 		double[] resCo = solver.getVariableValues();
@@ -989,7 +1061,7 @@ public class MultiLongRun
 	public Point solveMulti(Point weights) throws PrismException
 	{
 		if (weights.getDimension() != 2) {
-			throw new UnsupportedOperationException("Multilongran can only create 2D pareto curve.");
+			throw new UnsupportedOperationException("MultiLongRun can only create 2D pareto curve.");
 		}
 		HashMap<Integer, Double> weightedMap = new HashMap<Integer, Double>();
 		//Reward bounds

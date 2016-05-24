@@ -5,8 +5,8 @@ import prism.Operator;
 
 class MDPConstraint extends MDPItem
 {
-	private final double bound;
-	private final double probability;
+	final double bound;
+	final double probability;
 
 	MDPConstraint(MDPReward reward, prism.Operator operator, double bound, double probability)
 	{
@@ -15,7 +15,7 @@ class MDPConstraint extends MDPItem
 		this.bound = bound;
 		this.probability = probability;
 	}
-	
+
 	MDPConstraint(MDPReward reward, prism.Operator operator, double bound)
 	{
 		this(reward, operator, bound, 5.0);
@@ -41,13 +41,20 @@ class MDPConstraint extends MDPItem
 		return bound;
 	}
 
+	double getProbability()
+	{
+		if (!this.isProbabilistic())
+			throw new UnsupportedOperationException();
+		return probability;
+	}
+
 	@Override
 	public boolean equals(Object object)
 	{
 		if (!super.equals(object)) {
 			return false;
 		}
-		MDPConstraint that=(MDPConstraint) object;
+		MDPConstraint that = (MDPConstraint) object;
 		if (!prism.PrismUtils.doublesAreEqual(this.bound, that.bound)) {
 			return false;
 		}
