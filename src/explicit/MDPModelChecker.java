@@ -41,6 +41,8 @@ import prism.Prism;
 import java.util.ArrayList;
 
 import parser.ast.ExpressionFunc;
+import parser.ast.ExpressionLiteral;
+import parser.ast.ExpressionProb;
 import parser.ast.ExpressionReward;
 import parser.ast.ExpressionTemporal;
 import parser.ast.RelOp;
@@ -102,62 +104,92 @@ public class MDPModelChecker extends ProbModelChecker
 		ArrayList<Integer> numericalIndices = new ArrayList<Integer>();
 		//extract data
 		for (int i = 0; i < expr.getNumOperands(); i++) {
+			ExpressionReward operand = null;
+			ExpressionProb prob = null;
 			if (expr.getOperand(i) instanceof ExpressionReward) {
-				ExpressionReward operand = (ExpressionReward) expr.getOperand(i);
-				RelOp relOp = operand.getRelOp();
+				operand = (ExpressionReward) expr.getOperand(i);
 
-				//check that the parameters are of the form we can handle
-				if (!(operand.getExpression() instanceof ExpressionTemporal))
-					throw new PrismException("The reward subexpression must be a temporal expression.");
-				ExpressionTemporal eT = (ExpressionTemporal) operand.getExpression();
-				if (eT.getOperator() != ExpressionTemporal.R_S)
-					throw new PrismException("We only support steady state (long-run) rewards.");
-
-				operator = determineOperator(relOp);
-
-				if (operator.equals(Operator.R_MAX) || operator.equals(Operator.R_MIN)) {
-
+			} else if (expr.getOperand(i) instanceof ExpressionProb) {
+				prob = (ExpressionProb) expr.getOperand(i);
+				if (prob.getRelOp() != RelOp.GEQ) {
+					throw new UnsupportedOperationException(
+							"only non-strictly lower probability bounds are allowed for solving Mulit-objective Markov processes");
 				}
-
-				numericalIndices.add(i);
-
-				// Store rewards bound
-				Expression rewardBound = operand.getReward();
-
-				bound = evaluateBound(rewardBound);
-
-				Object rs = operand.getRewardStructIndex();
-				RewardStruct rewStruct = null;
-				// Get reward info
-				if (modulesFile == null)
-					throw new PrismException("No model file to obtain reward structures");
-				if (modulesFile.getNumRewardStructs() == 0)
-					throw new PrismException("Model has no rewards specified");
-				if (rs == null) {
-					rewStruct = modulesFile.getRewardStruct(0);
-				} else if (rs instanceof Expression) {
-					i = ((Expression) rs).evaluateInt(constantValues);
-					rs = new Integer(i); // for better error reporting below
-					rewStruct = modulesFile.getRewardStruct(i - 1);
-				} else if (rs instanceof String) {
-					rewStruct = modulesFile.getRewardStructByName((String) rs);
-				}
-				if (rewStruct == null)
-					throw new PrismException("Invalid reward structure index \"" + rs + "\"");
-
-				// Build rewards
-				ConstructRewards constructRewards = new ConstructRewards(mainLog);
-				MDPReward mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
-
-				//create objective or constraint
-				if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
-					objectives.add(new MDPObjective(mdpReward, operator));
+				Expression exprChild = prob.getExpression();
+				if (exprChild instanceof ExpressionReward) {
+					operand = (ExpressionReward) exprChild;
 				} else {
-					constraints.add(new MDPConstraint(mdpReward, operator, bound));
+					throw new UnsupportedOperationException("Only long-run properties are supported");
 				}
-
 			} else {
 				throw new PrismException("Only long-run properties are supported.");
+			}
+
+			RelOp relOp = operand.getRelOp();
+
+			//check that the parameters are of the form we can handle
+			if (!(operand.getExpression() instanceof ExpressionTemporal))
+				throw new PrismException("The reward subexpression must be a temporal expression.");
+			ExpressionTemporal eT = (ExpressionTemporal) operand.getExpression();
+			if (eT.getOperator() != ExpressionTemporal.R_S)
+				throw new PrismException("We only support steady state (long-run) rewards.");
+
+			operator = determineOperator(relOp);
+
+			if (operator.equals(Operator.R_MAX) || operator.equals(Operator.R_MIN)) {
+
+			}
+
+			numericalIndices.add(i);
+
+			// Store rewards bound
+			Expression rewardBound = operand.getReward();
+
+			bound = evaluateBound(rewardBound);
+
+			Object rs = operand.getRewardStructIndex();
+			RewardStruct rewStruct = null;
+			// Get reward info
+			if (modulesFile == null)
+				throw new PrismException("No model file to obtain reward structures");
+			if (modulesFile.getNumRewardStructs() == 0)
+				throw new PrismException("Model has no rewards specified");
+			if (rs == null) {
+				rewStruct = modulesFile.getRewardStruct(0);
+			} else if (rs instanceof Expression) {
+				i = ((Expression) rs).evaluateInt(constantValues);
+				rs = new Integer(i); // for better error reporting below
+				rewStruct = modulesFile.getRewardStruct(i - 1);
+			} else if (rs instanceof String) {
+				rewStruct = modulesFile.getRewardStructByName((String) rs);
+			}
+			if (rewStruct == null)
+				throw new PrismException("Invalid reward structure index \"" + rs + "\"");
+
+			// Build rewards
+			ConstructRewards constructRewards = new ConstructRewards(mainLog);
+			MDPReward mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
+
+			//create objective or constraint
+			if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
+				objectives.add(new MDPObjective(mdpReward, operator));
+			} else {
+				if (prob == null) {
+					constraints.add(new MDPConstraint(mdpReward, operator, bound));
+				} else {
+					if (prob.getProb() instanceof ExpressionLiteral) {
+						ExpressionLiteral exprLit = (ExpressionLiteral) prob.getProb();
+						if (exprLit.getValue() instanceof Double) {
+							constraints.add(new MDPConstraint(mdpReward, operator, bound, (double) exprLit.getValue()));
+						} else {
+							throw new UnsupportedOperationException("Please only use double as type of probability bounds");
+						}
+					} else {
+						throw new UnsupportedOperationException("Please use only double as type of probability bounds");
+					}
+
+					//constraints.add(new MDPConstraint(mdpReward, operator, bound,prob.getProb()));
+				}
 			}
 		}
 
