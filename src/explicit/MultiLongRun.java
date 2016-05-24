@@ -431,20 +431,17 @@ class MultiLongRun
 	{
 		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
 
-		//TODO reimplement using nextSetBit
-		for (int state = 0; state < maxEndComponent.length(); state++) {
-			if (maxEndComponent.get(state)) {
-				for (int n = 0; n < 1 << getN(); n++) {
-					//X
-					for (int i = 0; i < mdp.getNumChoices(state); i++) {
-						int index = getVarX(state, i, n);
-						row.put(index, 1.0);
-					}
-
-					//Z
-					int index = getVarZ(state, n);
-					row.put(index, -1.0);
+		for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
+			for (int n = 0; n < 1 << getN(); n++) {
+				//X
+				for (int i = 0; i < mdp.getNumChoices(state); i++) {
+					int index = getVarX(state, i, n);
+					row.put(index, 1.0);
 				}
+
+				//Z
+				int index = getVarZ(state, n);
+				row.put(index, -1.0);
 			}
 		}
 
@@ -455,13 +452,9 @@ class MultiLongRun
 	 * These are the variables y_{state,action} from the paper. See {@see #computeOffsets()} for more details.
 	 * @param state
 	 * @param action
+	 * @param threshold
 	 * @return
 	 */
-	private int getVarX(int state, int action, Set<MDPConstraint> b)
-	{
-		return xOffsetArr[state] + action * (1 << getN()) + getConstraintThreshold(b);
-	}
-
 	private int getVarX(int state, int action, int threshold)
 	{
 
@@ -472,6 +465,7 @@ class MultiLongRun
 	 * These are the variables x_{state,action} from the paper. See {@see #computeOffsets()} for more details.
 	 * @param state
 	 * @param action
+	 * @param threshold
 	 * @return
 	 */
 	private int getVarY(int state, int action)
@@ -484,11 +478,6 @@ class MultiLongRun
 	 * @param state
 	 * @return
 	 */
-	private int getVarZ(int state, Set<MDPConstraint> c)
-	{
-		return zIndex[state] + getConstraintThreshold(c);
-	}
-
 	private int getVarZ(int state, int threshold)
 	{
 		int result = zIndex[state] + threshold;
@@ -518,9 +507,6 @@ class MultiLongRun
 		return tOffsetArr[state] + action;
 	}
 
-	/**
-	 * TODO
-	 */
 	private int getVarQ(int state)
 	{
 		return qIndex[state];
@@ -801,21 +787,21 @@ class MultiLongRun
 	//Equation number 7
 	private void setSatisfactionForNontrivialProbability() throws PrismException
 	{
-		
-		for(int i=0;i<getN();i++){
-			MDPConstraint constraint=this.getConstraintNonTrivialProbabilityConstraints().get(i);
+
+		for (int i = 0; i < getN(); i++) {
+			MDPConstraint constraint = this.getConstraintNonTrivialProbabilityConstraints().get(i);
 			HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-			
-			for(int n=0;n<1<<getN();n++){
-				if((n & (1<<i))!=0){
+
+			for (int n = 0; n < 1 << getN(); n++) {
+				if ((n & (1 << i)) != 0) {
 					for (int state = 0; state < mdp.getNumStates(); state++) {
 						for (int act = 0; act < mdp.getNumChoices(state); act++) {
-							map.put(getVarX(state,act,n), 1.0);
+							map.put(getVarX(state, act, n), 1.0);
 						}
 					}
 				}
 			}
-			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.GE, "satisfaction for i: "+i);
+			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.GE, "satisfaction for i: " + i);
 		}
 	}
 
@@ -843,12 +829,11 @@ class MultiLongRun
 			if (!isMECState(state))
 				continue;
 			for (int act = 0; act < mdp.getNumChoices(state); act++) {
-				double value=mdpConstraint.reward.getStateReward(state)
-						+mdpConstraint.reward.getTransitionReward(state, act)-mdpConstraint.getBound();
-				map.put(getVarX(state,act,n),value);
+				double value = mdpConstraint.reward.getStateReward(state) + mdpConstraint.reward.getTransitionReward(state, act) - mdpConstraint.getBound();
+				map.put(getVarX(state, act, n), value);
 			}
 		}
-		solver.addRowFromMap(map, 0.0, SolverProxyInterface.GE, "commitment,component: "+maxEndComponent+" n:"+n+"i: "+mdpConstraint);
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
 	}
 
 	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()
@@ -877,9 +862,6 @@ class MultiLongRun
 			solver.setObjFunct(row, objective.operator == Operator.R_MAX);
 		}
 
-		/*System.out.println("LP variables: " + solver.getNcolumns());
-		System.out.println("LP constraints: " + solver.getNrows());*/
-
 		double solverStartTime = System.currentTimeMillis();
 
 		solver.solve();
@@ -905,7 +887,7 @@ class MultiLongRun
 	public StateValues solveMemoryless() throws PrismException
 	{
 		if (!this.objectives.isEmpty()) {
-			throw new PrismException("Memoryless problem cannot be solved for numerical objectives (Rmin/Rmax)"); //TODO better exception type
+			throw new UnsupportedOperationException("Memoryless problem cannot be solved for numerical objectives (Rmin/Rmax)");
 		}
 
 		HashMap<Integer, Double> epsObj = new HashMap<Integer, Double>();
@@ -985,7 +967,6 @@ class MultiLongRun
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
 		double[] resCo = solver.getVariableValues();
-		;
 		double[] resSt;
 		if (memoryless) {
 			resSt = solver.getVariableValues();
@@ -998,47 +979,47 @@ class MultiLongRun
 		Distribution[] recDistr = new Distribution[numStates];
 		double[] switchProb = new double[numStates];
 
-		for (int i = 0; i < numStates; i++) {
+		for (int state = 0; state < numStates; state++) {
 			double transSum = 0;
 			double recSum = 0;
-			for (int j = 0; j < this.mdp.getNumChoices(i); j++) {
-				transSum += resSt[getVarY(i, j)];
-				if (isMECState(i)) {
+			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
+				transSum += resSt[getVarY(state, j)];
+				if (isMECState(state)) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						recSum += resCo[getVarX(i, j, n)];
+						recSum += resCo[getVarX(state, j, n)];
 					}
 				}
 			}
 
 			double switchExp = 0.0;
-			if (isMECState(i)) {
+			if (isMECState(state)) {
 				for (int n = 0; n < 1 << getN(); n++) {
-					switchExp = resSt[getVarZ(i, n)];
+					switchExp = resSt[getVarZ(state, n)];
 				}
 			}
 
-			if (transSum > 0 && (!memoryless || !isMECState(i) || recSum == 0))
-				transDistr[i] = new Distribution();
-			if (recSum > 0 && isMECState(i))
-				recDistr[i] = new Distribution();
+			if (transSum > 0 && (!memoryless || !isMECState(state) || recSum == 0))
+				transDistr[state] = new Distribution();
+			if (recSum > 0 && isMECState(state))
+				recDistr[state] = new Distribution();
 
-			assert (!memoryless || transDistr[i] == null || recDistr[i] == null); //in memoryless one will be null
+			assert (!memoryless || transDistr[state] == null || recDistr[state] == null); //in memoryless one will be null
 
-			for (int j = 0; j < this.mdp.getNumChoices(i); j++) {
-				if (transDistr[i] != null) {
-					transDistr[i].add(j, resSt[getVarY(i, j)] / transSum);
+			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
+				if (transDistr[state] != null) {
+					transDistr[state].add(j, resSt[getVarY(state, j)] / transSum);
 				}
-				if (recDistr[i] != null) {
+				if (recDistr[state] != null) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						recDistr[i].add(j, resCo[getVarX(i, j, n)] / recSum);
+						recDistr[state].add(j, resCo[getVarX(state, j, n)] / recSum);
 					}
 				}
 				if (switchExp > 0) {
-					switchProb[i] = switchExp / (transSum + switchExp);
+					switchProb[state] = switchExp / (transSum + switchExp);
 				}
 			}
 
-			System.out.println("r d for " + i + " is " + recDistr[i]);
+			System.out.println("r d for " + state + " is " + recDistr[state]);
 			//else the state is not reachable. TODO should we still do something?
 		}
 
@@ -1097,7 +1078,6 @@ class MultiLongRun
 			new Point(2);
 
 			for (int i = 0; i < weights.getDimension(); i++) {
-				System.out.println("weights.getDims: " + weights.getDimension());
 				double res = 0;
 				HashMap<Integer, Double> rewardEqn = getRowForReward(numIndices.get(i));
 				for (int j = 0; j < resultVars.length; j++) {
