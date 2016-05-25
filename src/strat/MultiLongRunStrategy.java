@@ -50,15 +50,15 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	@XmlElementWrapper(name = "transientChoices")
 	@XmlElement(name = "distribution")
-	protected Distribution[] transChoices;
+	protected Distribution[] transientChoices;
 
 	@XmlElementWrapper(name = "reccurentChoices")
 	@XmlElement(name = "distribution")
-	protected Distribution[] recChoices;
+	protected Distribution[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
 	protected double[] switchProb;
-	private transient boolean isTrans; //represents the single bit of memory
+	private transient boolean isTransient; //represents the single bit of memory
 
 	private MultiLongRunStrategy()
 	{
@@ -83,6 +83,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
+	//TODO: the doc is garbage
 	/**
 	 * 
 	 * Creates a multi-long run strategy
@@ -96,9 +97,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, double[] switchProb, Distribution[] recChoices)
 	{
-		this.transChoices = transChoices;
+		this.transientChoices = transChoices;
 		this.switchProb = switchProb;
-		this.recChoices = recChoices;
+		this.recurrentChoices = recChoices;
 	}
 
 	/**
@@ -116,8 +117,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public MultiLongRunStrategy(Distribution[] transChoices, Distribution[] recChoices)
 	{
 		this.switchProb = null;
-		this.transChoices = transChoices;
-		this.recChoices = recChoices;
+		this.transientChoices = transChoices;
+		this.recurrentChoices = recChoices;
 	}
 
 	/**
@@ -129,10 +130,10 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 	}
 
-	private boolean switchToRec(int state)
+	private boolean switchToRecurrent(int state)
 	{
 		if (this.switchProb == null)
-			return this.recChoices[state] != null;
+			return this.recurrentChoices[state] != null;
 		else
 			return Math.random() < this.switchProb[state];
 	}
@@ -140,16 +141,16 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void init(int state) throws InvalidStrategyStateException
 	{
-		isTrans = !switchToRec(state);
-		System.out.println("init to " + isTrans);
+		isTransient = !switchToRecurrent(state);
+		System.out.println("init to " + isTransient);
 		lastState = state;
 	}
 
 	@Override
 	public void updateMemory(int action, int state) throws InvalidStrategyStateException
 	{
-		if (isTrans) {
-			isTrans = !switchToRec(state);
+		if (isTransient) {
+			isTransient = !switchToRecurrent(state);
 		}
 		lastState = state;
 	}
@@ -157,7 +158,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
-		return (isTrans) ? this.transChoices[state] : this.recChoices[state];
+		return (isTransient) ? this.transientChoices[state] : this.recurrentChoices[state];
 	}
 
 	@Override
@@ -182,22 +183,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		/*try {
-			out = new FileWriter(new File(file));
-			out.write("transient: " + Arrays.toString(transChoices) + "\n");
-			out.write("reccurent: " + Arrays.toString(recChoices) + "\n");
-			out.write("switching probs: " + Arrays.toString(switchProb) + "\n");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (out != null)
-				try {
-					out.close();
-				} catch (IOException e) {
-					// do nothing
-				}
-		}*/
 	}
 
 	@Override
@@ -263,8 +248,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			Distribution distrTranState = new Distribution();
 			Distribution distrRecState = new Distribution();
 
-			Distribution choicesTran = this.transChoices[i];
-			Distribution choicesRec = this.recChoices[i];
+			Distribution choicesTran = this.transientChoices[i];
+			Distribution choicesRec = this.recurrentChoices[i];
 
 			//recurrent states
 			if (choicesRec != null) { //MEC state
@@ -335,14 +320,14 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public Object getCurrentMemoryElement()
 	{
-		return isTrans;
+		return isTransient;
 	}
 
 	@Override
 	public void setMemory(Object memory) throws InvalidStrategyStateException
 	{
 		if (memory instanceof Boolean) {
-			this.isTrans = (boolean) memory;
+			this.isTransient = (boolean) memory;
 		} else
 			throw new InvalidStrategyStateException("Memory element has to be a boolean.");
 	}
@@ -355,11 +340,11 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			s.append("Stochastic update strategy.\n");
 			s.append("Memory size: 2 (transient/recurrent phase).\n");
 			s.append("Current memory element: ");
-			s.append((this.isTrans) ? "transient." : "recurrent.");
+			s.append((this.isTransient) ? "transient." : "recurrent.");
 		} else {
 			s.append("Memoryless randomised strategyy.\n");
 			s.append("Current state is ");
-			s.append((this.isTrans) ? "transient." : "recurrent.");
+			s.append((this.isTransient) ? "transient." : "recurrent.");
 		}
 		return s.toString();
 	}
@@ -367,67 +352,66 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public int getInitialStateOfTheProduct(int s)
 	{
-		return 0;//TODO
+		throw new UnsupportedOperationException();
 	}
 
 	public void export(PrismLog out)
 	{
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportActions(PrismLog out)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public void initialise(int s)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public void update(Object action, int s)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public Object getChoiceAction()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void clear()
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public void exportIndices(PrismLog out)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public void exportInducedModel(PrismLog out)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
 	public void exportDotFile(PrismLog out)
 	{
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 
 	};
 }
