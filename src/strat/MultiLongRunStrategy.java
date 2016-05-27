@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,7 +58,11 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	protected Distribution[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
-	protected double[] switchProb;
+	/**For convenience, the first type is Integer, which stands for the state*/
+	protected Map<Integer, Distribution> switchProb;
+	
+	/**-1 for transient and 0...2^N for epsilon_{N}*/
+	private transient int strategy;
 	private transient boolean isTransient; //represents the single bit of memory
 
 	private MultiLongRunStrategy()
@@ -78,7 +83,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			Unmarshaller u = jc.createUnmarshaller();
 			return (MultiLongRunStrategy) u.unmarshal(file);
 		} catch (JAXBException ex) {
-			ex.printStackTrace(); //TODO something more clever
+			System.out.println("The following exception occurred during the loading of the Strategy.");
+			ex.printStackTrace();
 			return null;
 		}
 	}
@@ -95,7 +101,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 * @param targetValue value to be achieved by the strategy
 	 * @param model the model to provide info about players and transitions
 	 */
-	public MultiLongRunStrategy(Distribution[] transChoices, double[] switchProb, Distribution[] recChoices)
+	public MultiLongRunStrategy(Distribution[] transChoices, Map<Integer,Distribution> switchProb, Distribution[] recChoices)
 	{
 		this.transientChoices = transChoices;
 		this.switchProb = switchProb;
@@ -130,18 +136,26 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 	}
 
-	private boolean switchToRecurrent(int state)
+	private int switchToRecurrent(int state)
 	{
-		if (this.switchProb == null)
-			return this.recurrentChoices[state] != null;
-		else
-			return Math.random() < this.switchProb[state];
+		if(switchProb.get(state)==null){
+			//state not in MEC
+			return -1;
+		}
+		double rand=Math.random();
+		for(int i=0;i<switchProb.keySet().size();i++){
+			rand -= switchProb.get(state).get(i);
+			if(rand<=0.0){
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override
 	public void init(int state) throws InvalidStrategyStateException
 	{
-		isTransient = !switchToRecurrent(state);
+		strategy=switchToRecurrent(state);
 		System.out.println("init to " + isTransient);
 		lastState = state;
 	}
@@ -149,8 +163,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void updateMemory(int action, int state) throws InvalidStrategyStateException
 	{
-		if (isTransient) {
-			isTransient = !switchToRecurrent(state);
+		if (strategy==-1) {
+			strategy = switchToRecurrent(state);
 		}
 		lastState = state;
 	}
@@ -191,9 +205,10 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		return buildProductFromMDPExplicit((MDPSparse) model);
 	}
 
+	//TODO find out what this method does and adjust it
 	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-
+/*
 		// construct a new STPG of size three times the original model
 		MDPSimple mdp = new MDPSimple(3 * model.getNumStates());
 
@@ -224,9 +239,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		Distribution distr;
 
 		distr = new Distribution();
-		if (this.switchProb[0] != 1)
+		if (this.switchProb.get(0) != 1)
 			distr.add(1, 1 - this.switchProb[0]);
-		if (this.switchProb[0] != 0)
+		if (this.switchProb.get(0) != 0)
 			distr.add(2, this.switchProb[0]);
 		mdp.addChoice(0, distr);
 
@@ -290,7 +305,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		// setting initial state for the game
 		mdp.addInitialState(0);
 
-		return mdp;
+		return mdp;*/throw new UnsupportedOperationException();
 	}
 
 	@Override
