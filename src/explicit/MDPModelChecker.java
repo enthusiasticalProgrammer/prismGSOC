@@ -196,6 +196,8 @@ public class MDPModelChecker extends ProbModelChecker
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
 		MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
+		
+		//TODO: this if-else can be probably created more sophisticated
 		mlr.createMultiLongRunLP(memoryless);
 		if (objectives.size() > 0 && memoryless)
 			throw new PrismException("mlessmulti can only be used for non-numerical queries"
@@ -209,63 +211,70 @@ public class MDPModelChecker extends ProbModelChecker
 			if (generateStrategy)
 				this.strategy = mlr.getStrategy(memoryless);
 		} else {//Pareto
-			ArrayList<Point> computedPoints = new ArrayList<Point>();
-			ArrayList<Point> computedDirections = new ArrayList<Point>();
-			ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
-			Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
-			//mainLog.println("p1 " + p1);
-			Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
-			pointsForInitialTile.add(p1);
-			pointsForInitialTile.add(p2);
-			//mainLog.println("p2 " + p2);
+			if (generateStrategy) {
+				if (!memoryless)
+					sv = mlr.solveDefault();
+				else
+					sv = mlr.solveMemoryless();
+				this.strategy = mlr.getStrategy(memoryless);
+			} else {
+				ArrayList<Point> computedPoints = new ArrayList<Point>();
+				ArrayList<Point> computedDirections = new ArrayList<Point>();
+				ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+				Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
+				//mainLog.println("p1 " + p1);
+				Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
+				pointsForInitialTile.add(p1);
+				pointsForInitialTile.add(p2);
+				//mainLog.println("p2 " + p2);
 
-			int numberOfPoints = 2;
-			boolean verbose = true;
-			Tile initialTile = new Tile(pointsForInitialTile);
-			TileList tileList = new TileList(initialTile, null, 10e-3);
+				int numberOfPoints = 2;
+				boolean verbose = true;
+				Tile initialTile = new Tile(pointsForInitialTile);
+				TileList tileList = new TileList(initialTile, null, 10e-3);
 
-			Point direction = tileList.getCandidateHyperplane();
-
-			if (verbose) {
-				mainLog.println("The initial direction is " + direction);
-			}
-
-			for (int iterations = 0; iterations < maxIters; iterations++) {
-
-				Point newPoint = mlr.solveMulti(direction);
-				numberOfPoints++;
+				Point direction = tileList.getCandidateHyperplane();
 
 				if (verbose) {
-					mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
-					mainLog.println("TileList:" + tileList);
+					mainLog.println("The initial direction is " + direction);
 				}
 
-				computedPoints.add(newPoint);
-				computedDirections.add(direction);
+				for (int iterations = 0; iterations < maxIters; iterations++) {
 
-				tileList.addNewPoint(newPoint);
-				//mainLog.println("\nTiles after adding: " + tileList);
-				//compute new direction
-				direction = tileList.getCandidateHyperplane();
+					Point newPoint = mlr.solveMulti(direction);
+					numberOfPoints++;
 
-				if (verbose) {
-					mainLog.println("New direction is " + direction);
-					//mainLog.println("TileList: " + tileList);
+					if (verbose) {
+						mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
+						mainLog.println("TileList:" + tileList);
+					}
 
+					computedPoints.add(newPoint);
+					computedDirections.add(direction);
+
+					tileList.addNewPoint(newPoint);
+					//mainLog.println("\nTiles after adding: " + tileList);
+					//compute new direction
+					direction = tileList.getCandidateHyperplane();
+
+					if (verbose) {
+						mainLog.println("New direction is " + direction);
+						//mainLog.println("TileList: " + tileList);
+
+					}
+
+					if (direction == null) {
+						//no tile could be improved
+						break;
+					}
 				}
 
-				if (direction == null) {
-					//no tile could be improved
-					break;
-				}
+				//TODO 0 and 1 should not be hardcoded, what if we have more objectives? 
+				// In this context: drop numericalIndices afterwards
+				TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
+				sv = new StateValues(TypeVoid.getInstance(), tileList, model);
 			}
-
-			//TODO 0 and 1 should not be hardcoded, what if we have more objectives? 
-			// In this context: drop numericalIndices afterwards
-			TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
-			sv = new StateValues(TypeVoid.getInstance(), tileList, model);
 		}
-
 		return sv;
 	}
 

@@ -264,7 +264,7 @@ class MultiLongRun
 	 */
 	private boolean isMECState(int state)
 	{
-		return xOffsetArr[state] != Integer.MIN_VALUE;
+		return mecs.stream().anyMatch(mec->mec.get(state));
 	}
 
 	/**
@@ -905,59 +905,6 @@ class MultiLongRun
 		return sv;
 	}
 
-	private double[] computeStrategy() throws PrismException
-	{
-		if (!initialised) {
-			initialised = true;
-			computeOffsets(false);
-		}
-
-		//store old TODO what if called this twice?
-		double[] res = solver.getVariableValues();
-
-		initialiseSolver(false);
-
-		//Set bounds to between 0 and 1
-		/*for (int i = 1; i < this.numLPVars; i++) {
-			solver.setBounds(i, 0.0, 1.0);
-		}*/
-
-		nameLPVars(false);
-
-		//Flows for reaching end-components
-		setYConstraints();
-		//bscc reaching probability
-		//This is not explicitly described in the paper, one needs
-		//to find it in the proofs, and use the knowledge of Etessami's paper
-		//that is cited.
-		for (int state = 0; state < mdp.getNumStates(); state++) {
-			if (isMECState(state)) {
-				HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-				for (int n = 0; n < 1 << getN(); n++) {
-					map.put(getVarZ(state, n), 1.0);
-				}
-
-				double sum = 0;
-				for (int j = 0; j < mdp.getNumChoices(state); j++) {
-					for (int n = 0; n < 1 << getN(); n++) {
-						System.out.println("index for (" + state + "," + j + ", n=" + n + ") is" + getVarX(state, j, n));
-						sum += res[getVarX(state, j, n)];
-					}
-				}
-
-				solver.addRowFromMap(map, sum, SolverProxyInterface.EQ, "xf" + state);
-			}
-		}
-
-		solver.solve();
-
-		//TODO value
-
-		double[] stRes = solver.getVariableValues();
-
-		return stRes;
-	}
-
 	/**
 	 * Returns the strategy for the last call to solveDefault(), or null if it was never called before,
 	 * or if the strategy did not exist.
@@ -966,70 +913,90 @@ class MultiLongRun
 	//TODO Christopher: adjust it
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
-		double[] resCo = solver.getVariableValues();
-		double[] resSt;
-		if (memoryless) {
-			resSt = solver.getVariableValues();
-		} else {
-			resSt = computeStrategy();
-		}
+		double[] resultVariables = solver.getVariableValues();
+		double[] lpResult;
+		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
 
 		int numStates = this.mdp.getNumStates();
-		Distribution[] transDistr = new Distribution[numStates];
-		Distribution[] recDistr = new Distribution[numStates];
-		double[] switchProb = new double[numStates];
+		Distribution[] transientDistribution = new Distribution[numStates];
+		Distribution[] reccurrentDistribution = new Distribution[numStates];
+		Map<Integer, Distribution> switchProbability = new HashMap<>();
 
 		for (int state = 0; state < numStates; state++) {
-			double transSum = 0;
-			double recSum = 0;
+			double transientSum = 0.0;
+			double reccurentSum = 0.0;
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				transSum += resSt[getVarY(state, j)];
+				transientSum += lpResult[getVarY(state, j)];
 				if (isMECState(state)) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						recSum += resCo[getVarX(state, j, n)];
+						reccurentSum += resultVariables[getVarX(state, j, n)];
 					}
 				}
 			}
 
-			double switchExp = 0.0;
-			if (isMECState(state)) {
-				for (int n = 0; n < 1 << getN(); n++) {
-					switchExp = resSt[getVarZ(state, n)];
-				}
+			transientDistribution[state] = getTransientDistributionAt(state, memoryless, reccurentSum, transientSum, lpResult);
+			reccurrentDistribution[state] = getReccurrentDistributionAt(state, reccurentSum, resultVariables);
+
+			assert (!memoryless || transientDistribution[state] == null || reccurrentDistribution[state] == null); //in memoryless one will be null
+		}
+		
+		for (BitSet mec : mecs) {
+			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
+			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state+1)) {
+				switchProbability.put(state, mecDistribution);
 			}
-
-			if (transSum > 0 && (!memoryless || !isMECState(state) || recSum == 0))
-				transDistr[state] = new Distribution();
-			if (recSum > 0 && isMECState(state))
-				recDistr[state] = new Distribution();
-
-			assert (!memoryless || transDistr[state] == null || recDistr[state] == null); //in memoryless one will be null
-
-			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				if (transDistr[state] != null) {
-					transDistr[state].add(j, resSt[getVarY(state, j)] / transSum);
-				}
-				if (recDistr[state] != null) {
-					for (int n = 0; n < 1 << getN(); n++) {
-						recDistr[state].add(j, resCo[getVarX(state, j, n)] / recSum);
-					}
-				}
-				if (switchExp > 0) {
-					switchProb[state] = switchExp / (transSum + switchExp);
-				}
-			}
-
-			System.out.println("r d for " + state + " is " + recDistr[state]);
-			//else the state is not reachable. TODO should we still do something?
 		}
 
 		//TODO sometimes return null?
-		MultiLongRunStrategy strat;
 		if (memoryless)
-			strat = new MultiLongRunStrategy(transDistr, recDistr);
+			return new MultiLongRunStrategy(transientDistribution, reccurrentDistribution);
 		else
-			strat = new MultiLongRunStrategy(transDistr, switchProb, recDistr);
-		return strat;
+			return new MultiLongRunStrategy(transientDistribution, switchProbability, reccurrentDistribution);
+	}
+
+	//indirection: N (as number)
+	private Distribution getSwitchProbabilityAt(BitSet mec)
+	{
+		double[] inBetweenResult = new double[1 << getN()];
+		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state+1)) {
+			for (int choice = 0; choice < mdp.getNumChoices(state); choice++) {
+				for (int N = 0; N < 1 << getN(); N++){
+					inBetweenResult[N] += getVarX(state, choice, N);
+				}
+			}
+		}
+		Distribution result = new Distribution();
+		for (int i = 0; i < inBetweenResult.length; i++) {
+			result.add(i, inBetweenResult[i]);
+		}
+		return result;
+	}
+
+	//TODO: this must return an array!
+	private Distribution getReccurrentDistributionAt(int state, double reccurentSum, double[] resultVariables)
+	{
+		if (reccurentSum > 0.0 && isMECState(state)) {
+			Distribution result = new Distribution();
+			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
+				for (int n = 0; n < 1 << getN(); n++) {
+					result.add(j, resultVariables[getVarX(state, j, n)] / reccurentSum);
+				}
+			}
+		}
+		return null;
+	}
+
+	private Distribution getTransientDistributionAt(int state, boolean memoryless, double reccurentSum, double transientSum, double[] resSt)
+	{
+		if (transientSum > 0.0 && (!memoryless || !isMECState(state) || reccurentSum == 0.0)) {
+			Distribution result = new Distribution();
+
+			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
+				result.add(j, resSt[getVarY(state, j)] / transientSum);
+			}
+			return result;
+		}
+		return null;
 	}
 
 	/**
