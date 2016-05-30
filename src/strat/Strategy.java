@@ -93,6 +93,8 @@ public interface Strategy
 	 */
 	public void exportToFile(String file);
 
+	
+	//TODO: Christopher: necessary?
 	/**
 	 * Builds the product of the model and the strategy. The product is built by
 	 * adding extra integer variable to the state to represent the memory state
