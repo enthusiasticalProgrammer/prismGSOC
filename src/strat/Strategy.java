@@ -27,9 +27,14 @@
 
 package strat;
 
- * 
- * @author aistis
- * 
+import explicit.Distribution;
+import explicit.Model;
+import prism.PrismException;
+import prism.PrismLog;
+
+/**
+ * Interface for classes to store strategies (for MDPs, games, etc.),
+ * not to confuse with the homonymous Gang-of-Four pattern
  */
 public interface Strategy
 {

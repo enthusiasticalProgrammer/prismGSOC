@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import prism.Operator;
@@ -34,12 +36,12 @@ import strat.MultiLongRunStrategy;
  */
 //TODO @Christopher: extend this class and adjust documentation
 //TODO no2: are actions and transitions confused here?
-class MultiLongRun
+public class MultiLongRun
 {
-	private final MDP mdp;
-	private final Collection<BitSet> mecs;
-	private final Collection<MDPConstraint> constraints;
-	private final Collection<MDPObjective> objectives;
+	private MDP mdp;
+	private Collection<BitSet> mecs;
+	private Collection<MDPConstraint> constraints;
+	private Collection<MDPObjective> objectives;
 
 	/**
 	 * The instance providing access to the LP solver.
@@ -66,11 +68,12 @@ class MultiLongRun
 	/**
 	 * This helps maintaining BitSets over the MDPConstraints with non-trivial probability
 	 */
-	private final Map<MDPConstraint, Integer> offsetForConstraints;
+	private Map<MDPConstraint, Integer> offsetForConstraints;
 
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
+	@XmlElement
 	private int[] xOffsetArr;
 
 	/**
@@ -93,6 +96,11 @@ class MultiLongRun
 	 * qIndex[i] is the q variable for the state i (binary variable ensuring memorylessnes, not present in LICS11). 
 	 */
 	private int[] qIndex;
+
+	private MultiLongRun()
+	{
+		//neccessary for XML I/O
+	}
 
 	/**
 	 * The default constructor.
@@ -264,7 +272,7 @@ class MultiLongRun
 	 */
 	private boolean isMECState(int state)
 	{
-		return mecs.stream().anyMatch(mec->mec.get(state));
+		return mecs.stream().anyMatch(mec -> mec.get(state));
 	}
 
 	/**
@@ -455,7 +463,7 @@ class MultiLongRun
 	 * @param threshold
 	 * @return
 	 */
-	private int getVarX(int state, int action, int threshold)
+	public int getVarX(int state, int action, int threshold)
 	{
 
 		return xOffsetArr[state] + action * (1 << getN()) + threshold;
@@ -919,51 +927,50 @@ class MultiLongRun
 
 		int numStates = this.mdp.getNumStates();
 		Distribution[] transientDistribution = new Distribution[numStates];
-		Distribution[] reccurrentDistribution = new Distribution[numStates];
-		Map<Integer, Distribution> switchProbability = new HashMap<>();
+		Distribution[] switchProbability = new Distribution[numStates];
 
 		for (int state = 0; state < numStates; state++) {
 			double transientSum = 0.0;
-			double reccurentSum = 0.0;
+			double recurrentSum = 0.0;
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
 				transientSum += lpResult[getVarY(state, j)];
 				if (isMECState(state)) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						reccurentSum += resultVariables[getVarX(state, j, n)];
+						recurrentSum += resultVariables[getVarX(state, j, n)];
 					}
 				}
 			}
 
-			transientDistribution[state] = getTransientDistributionAt(state, memoryless, reccurentSum, transientSum, lpResult);
-			reccurrentDistribution[state] = getReccurrentDistributionAt(state, reccurentSum, resultVariables);
-
-			assert (!memoryless || transientDistribution[state] == null || reccurrentDistribution[state] == null); //in memoryless one will be null
+			transientDistribution[state] = getTransientDistributionAt(state, memoryless, recurrentSum, transientSum, lpResult);
 		}
-		
+
 		for (BitSet mec : mecs) {
 			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
-			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state+1)) {
-				switchProbability.put(state, mecDistribution);
+			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
+				switchProbability[state] = mecDistribution;
 			}
 		}
 
 		//TODO sometimes return null?
 		if (memoryless)
-			return new MultiLongRunStrategy(transientDistribution, reccurrentDistribution);
+			return new MultiLongRunStrategy(transientDistribution, getReccurrentDistribution());
 		else
-			return new MultiLongRunStrategy(transientDistribution, switchProbability, reccurrentDistribution);
+			return new MultiLongRunStrategy(transientDistribution, switchProbability, getReccurrentDistribution());
 	}
 
 	//indirection: N (as number)
 	private Distribution getSwitchProbabilityAt(BitSet mec)
 	{
 		double[] inBetweenResult = new double[1 << getN()];
-		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state+1)) {
+		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
 			for (int choice = 0; choice < mdp.getNumChoices(state); choice++) {
-				for (int N = 0; N < 1 << getN(); N++){
-					inBetweenResult[N] += getVarX(state, choice, N);
+				for (int N = 0; N < 1 << getN(); N++) {
+					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
 				}
 			}
+		}
+		for (int i = 0; i < inBetweenResult.length; i++) {
+			System.out.println(i + " " + inBetweenResult[i]);
 		}
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
@@ -972,23 +979,19 @@ class MultiLongRun
 		return result;
 	}
 
-	//TODO: this must return an array!
-	private Distribution getReccurrentDistributionAt(int state, double reccurentSum, double[] resultVariables)
+	private XiNStrategy[] getReccurrentDistribution()
 	{
-		if (reccurentSum > 0.0 && isMECState(state)) {
-			Distribution result = new Distribution();
-			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				for (int n = 0; n < 1 << getN(); n++) {
-					result.add(j, resultVariables[getVarX(state, j, n)] / reccurentSum);
-				}
-			}
+		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
+		for (int i = 0; i < 1 << getN(); i++) {
+			strategies[i] = new XiNStrategy(solver, mdp, this, i);
 		}
-		return null;
+
+		return strategies;
 	}
 
-	private Distribution getTransientDistributionAt(int state, boolean memoryless, double reccurentSum, double transientSum, double[] resSt)
+	private Distribution getTransientDistributionAt(int state, boolean memoryless, double recurrentSum, double transientSum, double[] resSt)
 	{
-		if (transientSum > 0.0 && (!memoryless || !isMECState(state) || reccurentSum == 0.0)) {
+		if (transientSum > 0.0 && (!memoryless || !isMECState(state) || recurrentSum == 0.0)) {
 			Distribution result = new Distribution();
 
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {

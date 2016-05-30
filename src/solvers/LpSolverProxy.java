@@ -168,12 +168,12 @@ public class LpSolverProxy implements SolverProxyInterface
 	}
 
 	@Override
-	public double[] getVariableValues() throws PrismException
+	public double[] getVariableValues()
 	{
 		try {
 			return solver.getPtrVariables();
 		} catch (LpSolveException ex) {
-			throw new PrismException("Exception thrown when working with lpsolve solver: " + ex);
+			throw new RuntimeException("Exception thrown when working with lpsolve solver: " + ex);
 		}
 	}
 }
