@@ -42,6 +42,7 @@ public class XiNStrategy implements Strategy
 	@XmlElement
 	private MultiLongRun mlr;
 
+	@SuppressWarnings("unused")
 	private XiNStrategy()
 	{
 		//needed for XML I/O

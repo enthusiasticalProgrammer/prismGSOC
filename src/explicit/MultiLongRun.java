@@ -97,6 +97,7 @@ public class MultiLongRun
 	 */
 	private int[] qIndex;
 
+	@SuppressWarnings("unused")
 	private MultiLongRun()
 	{
 		//neccessary for XML I/O

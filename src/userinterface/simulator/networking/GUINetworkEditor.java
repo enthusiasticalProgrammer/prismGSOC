@@ -66,18 +66,6 @@ import simulator.networking.SSHHost;
 import simulator.networking.SimulatorNetworkHandler;
 import userinterface.GUIPrism;
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
-
-import simulator.networking.*;
-import settings.*;
-import prism.*;
-import userinterface.*;
 import userinterface.util.*;
 
 public class GUINetworkEditor extends JDialog implements TreeSelectionListener, MouseListener, Observer, FileSelector

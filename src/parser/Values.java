@@ -36,11 +36,6 @@ import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
 import prism.ModelInfo;
-import java.util.*;
-import java.text.*;
-
-import parser.type.*;
-import parser.ast.ModulesFile;
 import prism.PrismLangException;
 
 /**
