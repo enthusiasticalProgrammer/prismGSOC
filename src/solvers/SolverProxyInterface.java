@@ -13,19 +13,20 @@ import prism.PrismException;
 public interface SolverProxyInterface
 {
 	//TODO @Christopher: make enum out of this static constants
-	public static final int EQ = 32;
-	public static final int GE = 64;
-	public static final int LE = 128;
+	public static enum Comparator{EQ,GE,LE};
+	//public static final int EQ = 32;
+	//public static final int GE = 64;
+	//public static final int LE = 128;
 
 	/**
 	 * Adds new row to the problem.
 	 * @param row Gives the left hand side, where the entry (i,d) says that column i should have constant d. Here i is indexed from 0
 	 * @param rhs Right hand side constant of the row
-	 * @param op The operator, either EQ, GE or LE
+	 * @param eq The operator, either EQ, GE or LE
 	 * @param name Name to be given t
 	 * @throws PrismException
 	 */
-	public void addRowFromMap(Map<Integer, Double> row, double rhs, int op, String name) throws PrismException;
+	public void addRowFromMap(Map<Integer, Double> row, double rhs, Comparator eq, String name) throws PrismException;
 
 	/**
 	 * Solves the LP problem, optionally stopping when positive value is found.

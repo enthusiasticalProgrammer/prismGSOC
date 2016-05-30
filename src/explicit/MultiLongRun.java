@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 
@@ -21,6 +20,7 @@ import prism.PrismException;
 import solvers.LpSolverProxy;
 import solvers.SolverProxyInterface;
 import strat.MultiLongRunStrategy;
+import strat.XiNStrategy;
 
 /**
  * This class contains functions used when solving
@@ -64,11 +64,6 @@ public class MultiLongRun
 	 * LP solver to be used
 	 */
 	private String method;
-
-	/**
-	 * This helps maintaining BitSets over the MDPConstraints with non-trivial probability
-	 */
-	private Map<MDPConstraint, Integer> offsetForConstraints;
 
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
@@ -120,30 +115,16 @@ public class MultiLongRun
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
 		this.mecs = computeMECs();
-		offsetForConstraints = computeOffsetforConstraints();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
 		}
 	}
 
-	private Map<MDPConstraint, Integer> computeOffsetforConstraints()
-	{
-		int threshold = 0;
-		Map<MDPConstraint, Integer> result = new HashMap<>();
-		for (MDPConstraint constraint : constraints) {
-			if (constraint.isProbabilistic()) {
-				result.put(constraint, threshold++);
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Creates a new solver instance, based on the argument {@see #method}.
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
-	//TODO This belongs to some extend into the solver
 	private void initialiseSolver(boolean memoryless) throws PrismException
 	{
 		try { //below Class.forName throws exception if the required jar is not present
@@ -373,7 +354,7 @@ public class MultiLongRun
 			}
 		}
 
-		solver.addRowFromMap(row, 1.0, SolverProxyInterface.EQ, "sum");
+		solver.addRowFromMap(row, 1.0, SolverProxyInterface.Comparator.EQ, "sum");
 	}
 
 	/**
@@ -412,21 +393,23 @@ public class MultiLongRun
 	 * @param item
 	 * @return
 	 */
-	private void setEqnForConstraint(MDPConstraint item) throws PrismException
+	private void setEqnForConstraints() throws PrismException
 	{
-		int op = 0;
-		if (item.operator == Operator.R_GE) {
-			op = SolverProxyInterface.GE;
-		} else if (item.operator == Operator.R_LE) {
-			op = SolverProxyInterface.LE;
-		} else {
-			throw new AssertionError("Should never occur");
+		for (MDPConstraint item : constraints) {
+			SolverProxyInterface.Comparator op;
+			if (item.operator == Operator.R_GE) {
+				op = SolverProxyInterface.Comparator.GE;
+			} else if (item.operator == Operator.R_LE) {
+				op = SolverProxyInterface.Comparator.LE;
+			} else {
+				throw new AssertionError("Should never occur");
+			}
+
+			HashMap<Integer, Double> row = getRowForReward(item);
+			double bound = item.getBound();
+
+			solver.addRowFromMap(row, bound, op, "r" + item);
 		}
-
-		HashMap<Integer, Double> row = getRowForReward(item);
-		double bound = item.getBound();
-
-		solver.addRowFromMap(row, bound, op, "r" + item);
 	}
 
 	/**
@@ -454,7 +437,7 @@ public class MultiLongRun
 			}
 		}
 
-		solver.addRowFromMap(row, 0, SolverProxyInterface.EQ, "m" + maxEndComponent);
+		solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 	}
 
 	/**
@@ -490,19 +473,6 @@ public class MultiLongRun
 	private int getVarZ(int state, int threshold)
 	{
 		int result = zIndex[state] + threshold;
-		return result;
-	}
-
-	private int getConstraintThreshold(Set<MDPConstraint> x)
-	{
-		int result = 0;
-		for (MDPConstraint constraint : x) {
-			if (offsetForConstraints.get(constraint) == null) {
-				throw new IllegalArgumentException("An input MDPConstraint is not a probabilistic");
-			} else {
-				result += (1 << offsetForConstraints.get(constraint));
-			}
-		}
 		return result;
 	}
 
@@ -586,7 +556,7 @@ public class MultiLongRun
 
 		//fill in
 		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.EQ, "x" + state);
+			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "x" + state);
 		}
 	}
 
@@ -613,7 +583,7 @@ public class MultiLongRun
 
 		//fill in
 		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.EQ, "zx" + state);
+			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "zx" + state);
 		}
 	}
 
@@ -622,7 +592,7 @@ public class MultiLongRun
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 		map.put(getVarY(state, choice), 1.0);
 		map.put(getVarS(state, choice), 1.0);
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.LE, "s" + state + "c" + choice);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.LE, "s" + state + "c" + choice);
 	}
 
 	private void setTConstraint(int state, int choice) throws PrismException
@@ -633,7 +603,7 @@ public class MultiLongRun
 		}
 		map.put(getVarT(state, choice), -1.0);
 		map.put(getVarEpsilon(), -1.0);
-		solver.addRowFromMap(map, -1.0, SolverProxyInterface.GE, "t" + state + "c" + choice);
+		solver.addRowFromMap(map, -1.0, SolverProxyInterface.Comparator.GE, "t" + state + "c" + choice);
 	}
 
 	private void setQConstraint(int state) throws PrismException
@@ -649,7 +619,7 @@ public class MultiLongRun
 		}
 		map.put(getVarQ(state), 1.0);
 
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.LE, "q" + state);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.LE, "q" + state);
 	}
 
 	private void setSTQConstraintLink(int state, int choice) throws PrismException
@@ -660,7 +630,7 @@ public class MultiLongRun
 		map.put(getVarT(state, choice), 1.0);
 		map.put(getVarQ(state), 1.0);
 
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.GE, "stq" + state);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.GE, "stq" + state);
 	}
 
 	/**
@@ -738,7 +708,7 @@ public class MultiLongRun
 		//fill in
 
 		for (int state = 0; state < mdp.getNumStates(); state++) {
-			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.EQ, "y" + state);
+			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.Comparator.EQ, "y" + state);
 		}
 	}
 
@@ -751,12 +721,9 @@ public class MultiLongRun
 	public void createMultiLongRunLP(boolean memoryless) throws PrismException
 	{
 		if (!initialised) {
-			System.out.println("Finished computing end components.");
 			computeOffsets(memoryless);
 			initialised = true;
 		}
-
-		double solverStartTime = System.currentTimeMillis();
 
 		initialiseSolver(memoryless);
 
@@ -780,17 +747,12 @@ public class MultiLongRun
 		}
 
 		//Reward bounds
-		//TODO Christopher: put for-loop in subroutine
-		for (MDPConstraint constraint : constraints) {
-			setEqnForConstraint(constraint);
-		}
+		setEqnForConstraints();
 
 		setCommitmentForSatisfaction();
 
 		setSatisfactionForNontrivialProbability();
 
-		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
-		System.out.println("LP problem construction finished in " + time + " s.");
 	}
 
 	//Equation number 7
@@ -810,7 +772,7 @@ public class MultiLongRun
 					}
 				}
 			}
-			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.GE, "satisfaction for i: " + i);
+			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.Comparator.GE, "satisfaction for i: " + i);
 		}
 	}
 
@@ -842,7 +804,7 @@ public class MultiLongRun
 				map.put(getVarX(state, act, n), value);
 			}
 		}
-		solver.addRowFromMap(map, 0.0, SolverProxyInterface.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
 	}
 
 	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()
@@ -863,7 +825,6 @@ public class MultiLongRun
 	 */
 	public StateValues solveDefault() throws PrismException
 	{
-		assert (this.objectives.size() < 2);
 
 		//Reward bounds
 		for (MDPObjective objective : objectives) {
@@ -871,11 +832,7 @@ public class MultiLongRun
 			solver.setObjFunct(row, objective.operator == Operator.R_MAX);
 		}
 
-		double solverStartTime = System.currentTimeMillis();
-
 		solver.solve();
-		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
-		System.out.println("LP solving took " + time + " s.");
 
 		if (this.objectives.size() == 0) {//We should return bool type
 			StateValues sv = new StateValues(TypeBool.getInstance(), mdp);
@@ -918,8 +875,8 @@ public class MultiLongRun
 	 * Returns the strategy for the last call to solveDefault(), or null if it was never called before,
 	 * or if the strategy did not exist.
 	 * @return
+	 * @throws PrismException 
 	 */
-	//TODO Christopher: adjust it
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
 		double[] resultVariables = solver.getVariableValues();
@@ -952,7 +909,10 @@ public class MultiLongRun
 			}
 		}
 
-		//TODO sometimes return null?
+		if(!solver.getBoolResult()){
+			//LP is infeasible => no strategy exists
+			return null;
+		}
 		if (memoryless)
 			return new MultiLongRunStrategy(transientDistribution, getReccurrentDistribution());
 		else
@@ -1032,7 +992,7 @@ public class MultiLongRun
 				numIndices.add(objective);
 			} else {
 				throw new PrismException(
-						"Only maximising rewards in Pareto curves are currently supported (note: you can multiply your rewards by 1 and change min to max"); //TODO min
+						"Only maximising rewards in Pareto curves are currently supported (note: you can multiply your rewards by -1 and change min to max");
 			}
 		}
 
@@ -1043,8 +1003,8 @@ public class MultiLongRun
 
 		Point p = new Point(2);
 
-		if (r == lpsolve.LpSolve.INFEASIBLE) {//TODO handle it better
-			throw new PrismException("the LP seems infeasible ");
+		if (r == lpsolve.LpSolve.INFEASIBLE) {
+			return null;
 		} else if (r == lpsolve.LpSolve.OPTIMAL) {
 			new Point(2);
 

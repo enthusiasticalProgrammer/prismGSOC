@@ -86,7 +86,6 @@ public class MDPModelChecker extends ProbModelChecker
 
 	// Model checking functions
 
-	//TODO @Christopher: extend this method
 	@Override
 	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
 	{
@@ -122,7 +121,7 @@ public class MDPModelChecker extends ProbModelChecker
 					throw new UnsupportedOperationException("Only long-run properties are supported");
 				}
 			} else {
-				throw new PrismException("Only long-run properties are supported.");
+				throw new UnsupportedOperationException("Only long-run properties are supported.");
 			}
 
 			RelOp relOp = operand.getRelOp();
@@ -187,8 +186,6 @@ public class MDPModelChecker extends ProbModelChecker
 					} else {
 						throw new UnsupportedOperationException("Please use only double as type of probability bounds");
 					}
-
-					//constraints.add(new MDPConstraint(mdpReward, operator, bound,prob.getProb()));
 				}
 			}
 		}
@@ -196,8 +193,7 @@ public class MDPModelChecker extends ProbModelChecker
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
 		MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
-		
-		//TODO: this if-else can be probably created more sophisticated
+
 		mlr.createMultiLongRunLP(memoryless);
 		if (objectives.size() > 0 && memoryless)
 			throw new PrismException("mlessmulti can only be used for non-numerical queries"
@@ -207,26 +203,35 @@ public class MDPModelChecker extends ProbModelChecker
 			if (generateStrategy)
 				this.strategy = mlr.getStrategy(memoryless);
 		} else if (objectives.size() < 2) {
-			sv = mlr.solveDefault();
+			if (!memoryless)
+				sv = mlr.solveDefault();
+			else
+				sv = mlr.solveMemoryless();
 			if (generateStrategy)
 				this.strategy = mlr.getStrategy(memoryless);
-		} else {//Pareto
+		} else {
 			if (generateStrategy) {
 				if (!memoryless)
 					sv = mlr.solveDefault();
 				else
 					sv = mlr.solveMemoryless();
 				this.strategy = mlr.getStrategy(memoryless);
-			} else {
+			} else {//Pareto
 				ArrayList<Point> computedPoints = new ArrayList<Point>();
 				ArrayList<Point> computedDirections = new ArrayList<Point>();
 				ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+
+				//TODO:weights might differ a bit when more objectives come into play
 				Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
 				//mainLog.println("p1 " + p1);
 				Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
+				//mainLog.println("p2 " + p2);
+
+				if (p1 == null || p2 == null) {
+					return null; //no Pareto-curve is possible
+				}
 				pointsForInitialTile.add(p1);
 				pointsForInitialTile.add(p2);
-				//mainLog.println("p2 " + p2);
 
 				int numberOfPoints = 2;
 				boolean verbose = true;
@@ -253,13 +258,13 @@ public class MDPModelChecker extends ProbModelChecker
 					computedDirections.add(direction);
 
 					tileList.addNewPoint(newPoint);
-					//mainLog.println("\nTiles after adding: " + tileList);
+
 					//compute new direction
 					direction = tileList.getCandidateHyperplane();
 
 					if (verbose) {
 						mainLog.println("New direction is " + direction);
-						//mainLog.println("TileList: " + tileList);
+						mainLog.println("TileList: " + tileList);
 
 					}
 
@@ -269,7 +274,7 @@ public class MDPModelChecker extends ProbModelChecker
 					}
 				}
 
-				//TODO 0 and 1 should not be hardcoded, what if we have more objectives? 
+				//0 and 1 hardcoded are fine, because we do not draw anything in three or more dimensions
 				// In this context: drop numericalIndices afterwards
 				TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
 				sv = new StateValues(TypeVoid.getInstance(), tileList, model);

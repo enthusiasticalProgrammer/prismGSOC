@@ -8,7 +8,6 @@ import prism.PrismException;
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
 
-//TODO @Christopher: drop name, prefer map 
 public class LpSolverProxy implements SolverProxyInterface
 {
 	private LpSolve solver;
@@ -29,7 +28,7 @@ public class LpSolverProxy implements SolverProxyInterface
 		}
 	}
 
-	public void addRowFromMap(Map<Integer, Double> row, double rhs, int op, String name) throws PrismException
+	public void addRowFromMap(Map<Integer, Double> row, double rhs, Comparator op, String name) throws PrismException
 	{
 		if (!isAddrowMode) {
 			isAddrowMode = true;
@@ -52,11 +51,11 @@ public class LpSolverProxy implements SolverProxyInterface
 				i++;
 			}
 			int opG;
-			if (op == GE)
+			if (op == SolverProxyInterface.Comparator.GE)
 				opG = LpSolve.GE;
-			else if (op == LE)
+			else if (op == SolverProxyInterface.Comparator.LE)
 				opG = LpSolve.LE;
-			else if (op == EQ)
+			else if (op == SolverProxyInterface.Comparator.EQ)
 				opG = LpSolve.EQ;
 			else
 				throw new UnsupportedOperationException("unknown comparison operator");
