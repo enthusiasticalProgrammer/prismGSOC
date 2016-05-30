@@ -33,7 +33,8 @@ import prism.PrismException;
 import prism.PrismLog;
 
 /**
- * Interface for classes to store strategies (for MDPs, games, etc.)
+ * Interface for classes to store strategies (for MDPs, games, etc.),
+ * not to confuse with the homonymous Gang-of-Four pattern
  */
 public interface Strategy
 {

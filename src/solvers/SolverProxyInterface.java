@@ -84,5 +84,5 @@ public interface SolverProxyInterface
 	/**
 	 * Gets the array of variable values. Should be called only after solve was called. 
 	 */
-	public double[] getVariableValues() throws PrismException;
+	public double[] getVariableValues();
 }
