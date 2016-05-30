@@ -1,24 +1,13 @@
 package strat;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Map.Entry;
+
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -28,16 +17,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import parser.State;
 import prism.PrismException;
 import prism.PrismLog;
 import explicit.Distribution;
-import explicit.MDPExplicit;
-import explicit.MDPSimple;
 import explicit.MDPSparse;
 import explicit.Model;
-import explicit.NondetModel;
-import explicit.STPG;
 
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable

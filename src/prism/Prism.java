@@ -3259,7 +3259,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	public void doSteadyState(int exportType, File fileOut, File fileIn) throws PrismException
 	{
 		long l = 0; // timer
-		ModelChecker mc = null;
 		StateValues probs = null;
 		explicit.StateValues probsExpl = null;
 		PrismLog tmpLog;
