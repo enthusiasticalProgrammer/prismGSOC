@@ -248,7 +248,9 @@ public class XiNStrategy implements Strategy
 	{
 		double sum = 0.0;
 		for (int action = 0; action < numChoices.get(state); action++) {
-			sum = sum + solverVariables[mlr.getVarX(state, action, N)];
+			if (mlr.isMECState(state)) {
+				sum = sum + solverVariables[mlr.getVarX(state, action, N)];
+			}
 			sum = sum + xprime(state, action);
 		}
 		return sum;
