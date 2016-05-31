@@ -41,7 +41,7 @@ public class MultiLongRun
 	private MDP mdp;
 	private Collection<BitSet> mecs;
 	private Collection<MDPConstraint> constraints;
-	private Collection<MDPObjective> objectives;
+	Collection<MDPObjective> objectives;
 
 	/**
 	 * The instance providing access to the LP solver.
@@ -177,7 +177,7 @@ public class MultiLongRun
 	 * This method does all the required initialisations that are required for the
 	 * above mentioned methods to work correctly.
 	 */
-	private void computeOffsets(boolean memoryless)
+	void computeOffsets(boolean memoryless)
 	{
 		this.xOffsetArr = new int[mdp.getNumStates()];
 		int current = 0;
@@ -252,7 +252,7 @@ public class MultiLongRun
 	/**
 	 * Returns true if the state given is in some MEC.
 	 */
-	private boolean isMECState(int state)
+	public boolean isMECState(int state)
 	{
 		return mecs.stream().anyMatch(mec -> mec.get(state));
 	}
@@ -261,7 +261,7 @@ public class MultiLongRun
 	 * Names all variables, useful for debugging.
 	 * @throws PrismException
 	 */
-	private void nameLPVars(boolean memoryless) throws PrismException
+	void nameLPVars(boolean memoryless) throws PrismException
 	{
 		int current = 0;
 
@@ -272,9 +272,9 @@ public class MultiLongRun
 						String name = "x" + i + "c" + j + "N" + n;
 						solver.setVarName(current + j, name);
 						solver.setVarBounds(current + j, 0.0, 1.0);
+						current++;
 					}
 				}
-				current += mdp.getNumChoices(i) * (1 << getN());
 			}
 		}
 
@@ -449,7 +449,8 @@ public class MultiLongRun
 	 */
 	public int getVarX(int state, int action, int threshold)
 	{
-
+		if (xOffsetArr[state] < 0)
+			return -1;
 		return xOffsetArr[state] + action * (1 << getN()) + threshold;
 	}
 
@@ -597,24 +598,26 @@ public class MultiLongRun
 
 	private void setTConstraint(int state, int choice) throws PrismException
 	{
-		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-		for (int n = 0; n < 1 << getN(); n++) {
-			map.put(getVarX(state, choice, n), 1.0);
+		if (isMECState(state)) {
+			HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+			for (int n = 0; n < 1 << getN(); n++) {
+				map.put(getVarX(state, choice, n), 1.0);
+			}
+			map.put(getVarT(state, choice), -1.0);
+			map.put(getVarEpsilon(), -1.0);
+			solver.addRowFromMap(map, -1.0, SolverProxyInterface.Comparator.GE, "t" + state + "c" + choice);
 		}
-		map.put(getVarT(state, choice), -1.0);
-		map.put(getVarEpsilon(), -1.0);
-		solver.addRowFromMap(map, -1.0, SolverProxyInterface.Comparator.GE, "t" + state + "c" + choice);
 	}
 
 	private void setQConstraint(int state) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 
-		for (int i = 0; i < mdp.getNumChoices(state); i++) {
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
 			for (int n = 0; n < 1 << getN(); n++) {
-				int index = getVarX(state, i, n);
-
-				map.put(index, 1.0);
+				if (this.isMECState(state)) {
+					map.put(getVarX(state, action, n), 1.0);
+				}
 			}
 		}
 		map.put(getVarQ(state), 1.0);
@@ -736,7 +739,7 @@ public class MultiLongRun
 		//Ensuring everything reaches an end-component
 		setZSumToOne();
 
-		if (memoryless) {//add binary contstraints ensuring memorylessness
+		if (memoryless) {//add binary constraints ensuring memorylessness
 			setZXLink();
 			setSTQConstraints();
 		} else {
@@ -767,7 +770,9 @@ public class MultiLongRun
 				if ((n & (1 << i)) != 0) {
 					for (int state = 0; state < mdp.getNumStates(); state++) {
 						for (int act = 0; act < mdp.getNumChoices(state); act++) {
-							map.put(getVarX(state, act, n), 1.0);
+							if (isMECState(state)) {
+								map.put(getVarX(state, act, n), 1.0);
+							}
 						}
 					}
 				}
@@ -909,7 +914,7 @@ public class MultiLongRun
 			}
 		}
 
-		if(!solver.getBoolResult()){
+		if (!solver.getBoolResult()) {
 			//LP is infeasible => no strategy exists
 			return null;
 		}
@@ -1029,7 +1034,7 @@ public class MultiLongRun
 	 * Objectives in Markov Decision Processes" aka the number of satisfaction bound with a
 	 * non-trivial probability
 	 */
-	private int getN()
+	int getN()
 	{
 		int result = 0;
 		for (MDPConstraint constraint : constraints) {
