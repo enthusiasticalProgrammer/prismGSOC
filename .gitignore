@@ -10,3 +10,4 @@ src/bin
 lib
 Makefile
 bin
+*.orig
