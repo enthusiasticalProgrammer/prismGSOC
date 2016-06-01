@@ -9,7 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+
+import javax.xml.bind.annotation.XmlElement;
 
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
@@ -19,6 +20,7 @@ import prism.PrismException;
 import solvers.LpSolverProxy;
 import solvers.SolverProxyInterface;
 import strat.MultiLongRunStrategy;
+import strat.XiNStrategy;
 
 /**
  * This class contains functions used when solving
@@ -34,12 +36,12 @@ import strat.MultiLongRunStrategy;
  */
 //TODO @Christopher: extend this class and adjust documentation
 //TODO no2: are actions and transitions confused here?
-class MultiLongRun
+public class MultiLongRun
 {
-	private final MDP mdp;
-	private final Collection<BitSet> mecs;
-	private final Collection<MDPConstraint> constraints;
-	private final Collection<MDPObjective> objectives;
+	private MDP mdp;
+	private Collection<BitSet> mecs;
+	private Collection<MDPConstraint> constraints;
+	Collection<MDPObjective> objectives;
 
 	/**
 	 * The instance providing access to the LP solver.
@@ -64,13 +66,9 @@ class MultiLongRun
 	private String method;
 
 	/**
-	 * This helps maintaining BitSets over the MDPConstraints with non-trivial probability
-	 */
-	private final Map<MDPConstraint, Integer> offsetForConstraints;
-
-	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
+	@XmlElement
 	private int[] xOffsetArr;
 
 	/**
@@ -94,6 +92,12 @@ class MultiLongRun
 	 */
 	private int[] qIndex;
 
+	@SuppressWarnings("unused")
+	private MultiLongRun()
+	{
+		//neccessary for XML I/O
+	}
+
 	/**
 	 * The default constructor.
 	 * @param mdp The MDP to work with
@@ -111,30 +115,16 @@ class MultiLongRun
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
 		this.mecs = computeMECs();
-		offsetForConstraints = computeOffsetforConstraints();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
 		}
 	}
 
-	private Map<MDPConstraint, Integer> computeOffsetforConstraints()
-	{
-		int threshold = 0;
-		Map<MDPConstraint, Integer> result = new HashMap<>();
-		for (MDPConstraint constraint : constraints) {
-			if (constraint.isProbabilistic()) {
-				result.put(constraint, threshold++);
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Creates a new solver instance, based on the argument {@see #method}.
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
-	//TODO This belongs to some extend into the solver
 	private void initialiseSolver(boolean memoryless) throws PrismException
 	{
 		try { //below Class.forName throws exception if the required jar is not present
@@ -187,7 +177,7 @@ class MultiLongRun
 	 * This method does all the required initialisations that are required for the
 	 * above mentioned methods to work correctly.
 	 */
-	private void computeOffsets(boolean memoryless)
+	void computeOffsets(boolean memoryless)
 	{
 		this.xOffsetArr = new int[mdp.getNumStates()];
 		int current = 0;
@@ -262,16 +252,16 @@ class MultiLongRun
 	/**
 	 * Returns true if the state given is in some MEC.
 	 */
-	private boolean isMECState(int state)
+	public boolean isMECState(int state)
 	{
-		return xOffsetArr[state] != Integer.MIN_VALUE;
+		return mecs.stream().anyMatch(mec -> mec.get(state));
 	}
 
 	/**
 	 * Names all variables, useful for debugging.
 	 * @throws PrismException
 	 */
-	private void nameLPVars(boolean memoryless) throws PrismException
+	void nameLPVars(boolean memoryless) throws PrismException
 	{
 		int current = 0;
 
@@ -282,9 +272,9 @@ class MultiLongRun
 						String name = "x" + i + "c" + j + "N" + n;
 						solver.setVarName(current + j, name);
 						solver.setVarBounds(current + j, 0.0, 1.0);
+						current++;
 					}
 				}
-				current += mdp.getNumChoices(i) * (1 << getN());
 			}
 		}
 
@@ -364,7 +354,7 @@ class MultiLongRun
 			}
 		}
 
-		solver.addRowFromMap(row, 1.0, SolverProxyInterface.EQ, "sum");
+		solver.addRowFromMap(row, 1.0, SolverProxyInterface.Comparator.EQ, "sum");
 	}
 
 	/**
@@ -403,21 +393,23 @@ class MultiLongRun
 	 * @param item
 	 * @return
 	 */
-	private void setEqnForConstraint(MDPConstraint item) throws PrismException
+	private void setEqnForConstraints() throws PrismException
 	{
-		int op = 0;
-		if (item.operator == Operator.R_GE) {
-			op = SolverProxyInterface.GE;
-		} else if (item.operator == Operator.R_LE) {
-			op = SolverProxyInterface.LE;
-		} else {
-			throw new AssertionError("Should never occur");
+		for (MDPConstraint item : constraints) {
+			SolverProxyInterface.Comparator op;
+			if (item.operator == Operator.R_GE) {
+				op = SolverProxyInterface.Comparator.GE;
+			} else if (item.operator == Operator.R_LE) {
+				op = SolverProxyInterface.Comparator.LE;
+			} else {
+				throw new AssertionError("Should never occur");
+			}
+
+			HashMap<Integer, Double> row = getRowForReward(item);
+			double bound = item.getBound();
+
+			solver.addRowFromMap(row, bound, op, "r" + item);
 		}
-
-		HashMap<Integer, Double> row = getRowForReward(item);
-		double bound = item.getBound();
-
-		solver.addRowFromMap(row, bound, op, "r" + item);
 	}
 
 	/**
@@ -445,7 +437,7 @@ class MultiLongRun
 			}
 		}
 
-		solver.addRowFromMap(row, 0, SolverProxyInterface.EQ, "m" + maxEndComponent);
+		solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 	}
 
 	/**
@@ -455,9 +447,10 @@ class MultiLongRun
 	 * @param threshold
 	 * @return
 	 */
-	private int getVarX(int state, int action, int threshold)
+	public int getVarX(int state, int action, int threshold)
 	{
-
+		if (xOffsetArr[state] < 0)
+			return -1;
 		return xOffsetArr[state] + action * (1 << getN()) + threshold;
 	}
 
@@ -481,19 +474,6 @@ class MultiLongRun
 	private int getVarZ(int state, int threshold)
 	{
 		int result = zIndex[state] + threshold;
-		return result;
-	}
-
-	private int getConstraintThreshold(Set<MDPConstraint> x)
-	{
-		int result = 0;
-		for (MDPConstraint constraint : x) {
-			if (offsetForConstraints.get(constraint) == null) {
-				throw new IllegalArgumentException("An input MDPConstraint is not a probabilistic");
-			} else {
-				result += (1 << offsetForConstraints.get(constraint));
-			}
-		}
 		return result;
 	}
 
@@ -577,7 +557,7 @@ class MultiLongRun
 
 		//fill in
 		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.EQ, "x" + state);
+			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "x" + state);
 		}
 	}
 
@@ -604,7 +584,7 @@ class MultiLongRun
 
 		//fill in
 		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.EQ, "zx" + state);
+			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "zx" + state);
 		}
 	}
 
@@ -613,34 +593,36 @@ class MultiLongRun
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 		map.put(getVarY(state, choice), 1.0);
 		map.put(getVarS(state, choice), 1.0);
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.LE, "s" + state + "c" + choice);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.LE, "s" + state + "c" + choice);
 	}
 
 	private void setTConstraint(int state, int choice) throws PrismException
 	{
-		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-		for (int n = 0; n < 1 << getN(); n++) {
-			map.put(getVarX(state, choice, n), 1.0);
+		if (isMECState(state)) {
+			HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+			for (int n = 0; n < 1 << getN(); n++) {
+				map.put(getVarX(state, choice, n), 1.0);
+			}
+			map.put(getVarT(state, choice), -1.0);
+			map.put(getVarEpsilon(), -1.0);
+			solver.addRowFromMap(map, -1.0, SolverProxyInterface.Comparator.GE, "t" + state + "c" + choice);
 		}
-		map.put(getVarT(state, choice), -1.0);
-		map.put(getVarEpsilon(), -1.0);
-		solver.addRowFromMap(map, -1.0, SolverProxyInterface.GE, "t" + state + "c" + choice);
 	}
 
 	private void setQConstraint(int state) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 
-		for (int i = 0; i < mdp.getNumChoices(state); i++) {
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
 			for (int n = 0; n < 1 << getN(); n++) {
-				int index = getVarX(state, i, n);
-
-				map.put(index, 1.0);
+				if (this.isMECState(state)) {
+					map.put(getVarX(state, action, n), 1.0);
+				}
 			}
 		}
 		map.put(getVarQ(state), 1.0);
 
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.LE, "q" + state);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.LE, "q" + state);
 	}
 
 	private void setSTQConstraintLink(int state, int choice) throws PrismException
@@ -651,7 +633,7 @@ class MultiLongRun
 		map.put(getVarT(state, choice), 1.0);
 		map.put(getVarQ(state), 1.0);
 
-		solver.addRowFromMap(map, 1.0, SolverProxyInterface.GE, "stq" + state);
+		solver.addRowFromMap(map, 1.0, SolverProxyInterface.Comparator.GE, "stq" + state);
 	}
 
 	/**
@@ -729,7 +711,7 @@ class MultiLongRun
 		//fill in
 
 		for (int state = 0; state < mdp.getNumStates(); state++) {
-			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.EQ, "y" + state);
+			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.Comparator.EQ, "y" + state);
 		}
 	}
 
@@ -742,12 +724,9 @@ class MultiLongRun
 	public void createMultiLongRunLP(boolean memoryless) throws PrismException
 	{
 		if (!initialised) {
-			System.out.println("Finished computing end components.");
 			computeOffsets(memoryless);
 			initialised = true;
 		}
-
-		double solverStartTime = System.currentTimeMillis();
 
 		initialiseSolver(memoryless);
 
@@ -760,7 +739,7 @@ class MultiLongRun
 		//Ensuring everything reaches an end-component
 		setZSumToOne();
 
-		if (memoryless) {//add binary contstraints ensuring memorylessness
+		if (memoryless) {//add binary constraints ensuring memorylessness
 			setZXLink();
 			setSTQConstraints();
 		} else {
@@ -771,17 +750,12 @@ class MultiLongRun
 		}
 
 		//Reward bounds
-		//TODO Christopher: put for-loop in subroutine
-		for (MDPConstraint constraint : constraints) {
-			setEqnForConstraint(constraint);
-		}
+		setEqnForConstraints();
 
 		setCommitmentForSatisfaction();
 
 		setSatisfactionForNontrivialProbability();
 
-		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
-		System.out.println("LP problem construction finished in " + time + " s.");
 	}
 
 	//Equation number 7
@@ -796,12 +770,14 @@ class MultiLongRun
 				if ((n & (1 << i)) != 0) {
 					for (int state = 0; state < mdp.getNumStates(); state++) {
 						for (int act = 0; act < mdp.getNumChoices(state); act++) {
-							map.put(getVarX(state, act, n), 1.0);
+							if (isMECState(state)) {
+								map.put(getVarX(state, act, n), 1.0);
+							}
 						}
 					}
 				}
 			}
-			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.GE, "satisfaction for i: " + i);
+			solver.addRowFromMap(map, constraint.getProbability(), SolverProxyInterface.Comparator.GE, "satisfaction for i: " + i);
 		}
 	}
 
@@ -833,7 +809,7 @@ class MultiLongRun
 				map.put(getVarX(state, act, n), value);
 			}
 		}
-		solver.addRowFromMap(map, 0.0, SolverProxyInterface.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
 	}
 
 	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()
@@ -854,7 +830,6 @@ class MultiLongRun
 	 */
 	public StateValues solveDefault() throws PrismException
 	{
-		assert (this.objectives.size() < 2);
 
 		//Reward bounds
 		for (MDPObjective objective : objectives) {
@@ -862,11 +837,7 @@ class MultiLongRun
 			solver.setObjFunct(row, objective.operator == Operator.R_MAX);
 		}
 
-		double solverStartTime = System.currentTimeMillis();
-
 		solver.solve();
-		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
-		System.out.println("LP solving took " + time + " s.");
 
 		if (this.objectives.size() == 0) {//We should return bool type
 			StateValues sv = new StateValues(TypeBool.getInstance(), mdp);
@@ -905,131 +876,96 @@ class MultiLongRun
 		return sv;
 	}
 
-	private double[] computeStrategy() throws PrismException
-	{
-		if (!initialised) {
-			initialised = true;
-			computeOffsets(false);
-		}
-
-		//store old TODO what if called this twice?
-		double[] res = solver.getVariableValues();
-
-		initialiseSolver(false);
-
-		//Set bounds to between 0 and 1
-		/*for (int i = 1; i < this.numLPVars; i++) {
-			solver.setBounds(i, 0.0, 1.0);
-		}*/
-
-		nameLPVars(false);
-
-		//Flows for reaching end-components
-		setYConstraints();
-		//bscc reaching probability
-		//This is not explicitly described in the paper, one needs
-		//to find it in the proofs, and use the knowledge of Etessami's paper
-		//that is cited.
-		for (int state = 0; state < mdp.getNumStates(); state++) {
-			if (isMECState(state)) {
-				HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-				for (int n = 0; n < 1 << getN(); n++) {
-					map.put(getVarZ(state, n), 1.0);
-				}
-
-				double sum = 0;
-				for (int j = 0; j < mdp.getNumChoices(state); j++) {
-					for (int n = 0; n < 1 << getN(); n++) {
-						System.out.println("index for (" + state + "," + j + ", n=" + n + ") is" + getVarX(state, j, n));
-						sum += res[getVarX(state, j, n)];
-					}
-				}
-
-				solver.addRowFromMap(map, sum, SolverProxyInterface.EQ, "xf" + state);
-			}
-		}
-
-		solver.solve();
-
-		//TODO value
-
-		double[] stRes = solver.getVariableValues();
-
-		return stRes;
-	}
-
 	/**
 	 * Returns the strategy for the last call to solveDefault(), or null if it was never called before,
 	 * or if the strategy did not exist.
 	 * @return
+	 * @throws PrismException 
 	 */
-	//TODO Christopher: adjust it
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
-		double[] resCo = solver.getVariableValues();
-		double[] resSt;
-		if (memoryless) {
-			resSt = solver.getVariableValues();
-		} else {
-			resSt = computeStrategy();
-		}
+		double[] resultVariables = solver.getVariableValues();
+		double[] lpResult;
+		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
 
 		int numStates = this.mdp.getNumStates();
-		Distribution[] transDistr = new Distribution[numStates];
-		Distribution[] recDistr = new Distribution[numStates];
-		double[] switchProb = new double[numStates];
+		Distribution[] transientDistribution = new Distribution[numStates];
+		Distribution[] switchProbability = new Distribution[numStates];
 
 		for (int state = 0; state < numStates; state++) {
-			double transSum = 0;
-			double recSum = 0;
+			double transientSum = 0.0;
+			double recurrentSum = 0.0;
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				transSum += resSt[getVarY(state, j)];
+				transientSum += lpResult[getVarY(state, j)];
 				if (isMECState(state)) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						recSum += resCo[getVarX(state, j, n)];
+						recurrentSum += resultVariables[getVarX(state, j, n)];
 					}
 				}
 			}
 
-			double switchExp = 0.0;
-			if (isMECState(state)) {
-				for (int n = 0; n < 1 << getN(); n++) {
-					switchExp = resSt[getVarZ(state, n)];
-				}
-			}
-
-			if (transSum > 0 && (!memoryless || !isMECState(state) || recSum == 0))
-				transDistr[state] = new Distribution();
-			if (recSum > 0 && isMECState(state))
-				recDistr[state] = new Distribution();
-
-			assert (!memoryless || transDistr[state] == null || recDistr[state] == null); //in memoryless one will be null
-
-			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				if (transDistr[state] != null) {
-					transDistr[state].add(j, resSt[getVarY(state, j)] / transSum);
-				}
-				if (recDistr[state] != null) {
-					for (int n = 0; n < 1 << getN(); n++) {
-						recDistr[state].add(j, resCo[getVarX(state, j, n)] / recSum);
-					}
-				}
-				if (switchExp > 0) {
-					switchProb[state] = switchExp / (transSum + switchExp);
-				}
-			}
-
-			System.out.println("r d for " + state + " is " + recDistr[state]);
-			//else the state is not reachable. TODO should we still do something?
+			transientDistribution[state] = getTransientDistributionAt(state, memoryless, recurrentSum, transientSum, lpResult);
 		}
 
-		//TODO sometimes return null?
-		MultiLongRunStrategy strat;
+		for (BitSet mec : mecs) {
+			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
+			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
+				switchProbability[state] = mecDistribution;
+			}
+		}
+
+		if (!solver.getBoolResult()) {
+			//LP is infeasible => no strategy exists
+			return null;
+		}
 		if (memoryless)
-			strat = new MultiLongRunStrategy(transDistr, recDistr);
+			return new MultiLongRunStrategy(transientDistribution, getReccurrentDistribution());
 		else
-			strat = new MultiLongRunStrategy(transDistr, switchProb, recDistr);
-		return strat;
+			return new MultiLongRunStrategy(transientDistribution, switchProbability, getReccurrentDistribution());
+	}
+
+	//indirection: N (as number)
+	private Distribution getSwitchProbabilityAt(BitSet mec)
+	{
+		double[] inBetweenResult = new double[1 << getN()];
+		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
+			for (int choice = 0; choice < mdp.getNumChoices(state); choice++) {
+				for (int N = 0; N < 1 << getN(); N++) {
+					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
+				}
+			}
+		}
+		for (int i = 0; i < inBetweenResult.length; i++) {
+			System.out.println(i + " " + inBetweenResult[i]);
+		}
+		Distribution result = new Distribution();
+		for (int i = 0; i < inBetweenResult.length; i++) {
+			result.add(i, inBetweenResult[i]);
+		}
+		return result;
+	}
+
+	private XiNStrategy[] getReccurrentDistribution()
+	{
+		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
+		for (int i = 0; i < 1 << getN(); i++) {
+			strategies[i] = new XiNStrategy(solver, mdp, this, i);
+		}
+
+		return strategies;
+	}
+
+	private Distribution getTransientDistributionAt(int state, boolean memoryless, double recurrentSum, double transientSum, double[] resSt)
+	{
+		if (transientSum > 0.0 && (!memoryless || !isMECState(state) || recurrentSum == 0.0)) {
+			Distribution result = new Distribution();
+
+			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
+				result.add(j, resSt[getVarY(state, j)] / transientSum);
+			}
+			return result;
+		}
+		return null;
 	}
 
 	/**
@@ -1061,7 +997,7 @@ class MultiLongRun
 				numIndices.add(objective);
 			} else {
 				throw new PrismException(
-						"Only maximising rewards in Pareto curves are currently supported (note: you can multiply your rewards by 1 and change min to max"); //TODO min
+						"Only maximising rewards in Pareto curves are currently supported (note: you can multiply your rewards by -1 and change min to max");
 			}
 		}
 
@@ -1072,8 +1008,8 @@ class MultiLongRun
 
 		Point p = new Point(2);
 
-		if (r == lpsolve.LpSolve.INFEASIBLE) {//TODO handle it better
-			throw new PrismException("the LP seems infeasible ");
+		if (r == lpsolve.LpSolve.INFEASIBLE) {
+			return null;
 		} else if (r == lpsolve.LpSolve.OPTIMAL) {
 			new Point(2);
 
@@ -1098,7 +1034,7 @@ class MultiLongRun
 	 * Objectives in Markov Decision Processes" aka the number of satisfaction bound with a
 	 * non-trivial probability
 	 */
-	private int getN()
+	int getN()
 	{
 		int result = 0;
 		for (MDPConstraint constraint : constraints) {

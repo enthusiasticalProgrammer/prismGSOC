@@ -110,8 +110,6 @@ public class SimulatorEngine extends PrismComponent
 	private Values mfConstants;
 
 	// Objects from model checking
-	// Reachable states
-	private List<State> reachableStates;
 	// Strategy
 	private Strategy strategy;
 
@@ -880,8 +878,7 @@ public class SimulatorEngine extends PrismComponent
 	{
 		if (strategy != null) {
 			State state = getCurrentState();
-			int s = reachableStates.indexOf(state);
-			strategy.initialise(s);
+			strategy.initialise(stateIds.get(state));
 		}
 	}
 
@@ -892,9 +889,8 @@ public class SimulatorEngine extends PrismComponent
 	{
 		if (strategy != null) {
 			State state = getCurrentState();
-			int s = reachableStates.indexOf(state);
 			Object action = path.getPreviousModuleOrAction();
-			strategy.update(action, s);
+			strategy.update(action,stateIds.get(state));
 		}
 	}
 

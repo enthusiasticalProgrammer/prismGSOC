@@ -36,8 +36,6 @@ import parser.type.*;
 
 public class ExpressionFunc extends Expression
 {
-	
-	//TODO Christopher: instead of this collection of static final int's: enum
 
 	// Built-in function name constants
 	public static final int MIN = 0;

@@ -409,7 +409,7 @@ public class StateValues implements StateVector
 			and(sv);
 			break;
 		case ExpressionBinaryOp.EQ:
-			equals(sv);
+			applyEquals(sv);
 			break;
 		case ExpressionBinaryOp.NE:
 			notEquals(sv);
@@ -500,11 +500,11 @@ public class StateValues implements StateVector
 
 		valuesB.flip(0, size);
 	}
-	
+
 	/**
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */
-	public void equals(StateValues sv) throws PrismException
+	public void applyEquals(StateValues sv) throws PrismException
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -537,6 +537,60 @@ public class StateValues implements StateVector
 		type = TypeBool.getInstance();
 		valuesI = null;
 		valuesD = null;
+	}
+
+	/**
+	 * used for testings only 
+	 */
+	public boolean equals(Object o)
+	{
+		if(! (o instanceof StateValues))
+			return false;
+		StateValues sv=(StateValues) o;
+		if (type instanceof TypeInt) {
+			if (sv.type instanceof TypeInt) {
+				for (int i = 0; i < size; i++) {
+					if(valuesI[i] != sv.valuesI[i]){
+						return false;
+					}
+				}
+				return true;
+			} else if (sv.type instanceof TypeDouble) {
+				for (int i = 0; i < size; i++) {
+					if(valuesI[i] != sv.valuesD[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+		} else if (type instanceof TypeDouble) {
+			valuesB = new BitSet();
+			if (sv.type instanceof TypeInt) {
+				for (int i = 0; i < size; i++) {
+					if(valuesD[i] != sv.valuesI[i]){
+						return false;
+					}
+				}
+				return true;
+			} else if (sv.type instanceof TypeDouble) {
+				for (int i = 0; i < size; i++) {
+					if(valuesD[i] != sv.valuesD[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+		} else if (type instanceof TypeBool) {
+			if (sv.type instanceof TypeBool) {
+				for (int i = 0; i < size; i++) {
+					if(valuesB.get(i) != sv.valuesB.get(i)){
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

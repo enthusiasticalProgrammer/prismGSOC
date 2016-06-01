@@ -33,7 +33,8 @@ import prism.PrismException;
 import prism.PrismLog;
 
 /**
- * Interface for classes to store strategies (for MDPs, games, etc.)
+ * Interface for classes to store strategies (for MDPs, games, etc.),
+ * not to confuse with the homonymous Gang-of-Four pattern
  */
 public interface Strategy
 {
@@ -92,6 +93,8 @@ public interface Strategy
 	 */
 	public void exportToFile(String file);
 
+	
+	//TODO: Christopher: necessary?
 	/**
 	 * Builds the product of the model and the strategy. The product is built by
 	 * adding extra integer variable to the state to represent the memory state

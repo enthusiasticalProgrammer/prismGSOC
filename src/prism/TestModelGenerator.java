@@ -26,8 +26,6 @@
 
 package prism;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,11 +34,8 @@ import parser.VarList;
 import parser.ast.Declaration;
 import parser.ast.DeclarationInt;
 import parser.ast.Expression;
-import parser.ast.PropertiesFile;
 import parser.type.Type;
 import parser.type.TypeInt;
-import explicit.ConstructModel;
-import explicit.DTMCModelChecker;
 
 public class TestModelGenerator extends DefaultModelGenerator
 {
