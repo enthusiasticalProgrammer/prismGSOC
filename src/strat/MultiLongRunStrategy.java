@@ -39,7 +39,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	@XmlElementWrapper(name = "reccurentChoices")
 	@XmlElement(name = "distribution")
-	protected final XiNStrategy[] recurrentChoices;
+	protected final Strategy[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
 	/**The offset is the state*/
@@ -145,6 +145,16 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			strategy = switchToRecurrent(state);
 		}
 		lastState = state;
+	}
+
+	//TODO Christopher: add some documentation
+	public void switchToApproximate()
+	{
+		for (int i = 0; i < recurrentChoices.length; i++) {
+			if (recurrentChoices[i] instanceof XiNStrategy) {
+				recurrentChoices[i] = ((XiNStrategy) recurrentChoices[i]).computeApproximation();
+			}
+		}
 	}
 
 	@Override
@@ -351,7 +361,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		if (memory instanceof Boolean) {
 			if ((boolean) memory) {
 				this.strategy = -1;
-				for (XiNStrategy rec : recurrentChoices) {
+				for (Strategy rec : recurrentChoices) {
 					rec.reset();
 				}
 			}
@@ -368,7 +378,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
 
 				this.strategy = (int) list.get(0);
-				for (XiNStrategy rec : recurrentChoices) {
+				for (Strategy rec : recurrentChoices) {
 					rec.reset();
 				}
 				recurrentChoices[strategy].setMemory(list.get(1));
@@ -415,7 +425,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void initialise(int s)
 	{
 		strategy = -1;
-		for (XiNStrategy strategy : this.recurrentChoices) {
+		for (Strategy strategy : this.recurrentChoices) {
 			strategy.initialise(s);
 		}
 

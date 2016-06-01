@@ -12,9 +12,15 @@ import explicit.Model;
 import explicit.MultiLongRun;
 import prism.PrismException;
 import prism.PrismLog;
+import prism.PrismUtils;
 import solvers.SolverProxyInterface;
 
 //TODO @Christopher: add Documentation
+/**
+ * this is more or less an in-between state, because the fact that it outputs the correct
+ * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
+ * but we can output 
+ */
 public class XiNStrategy implements Strategy
 {
 	private transient BigInteger countSteps;
@@ -58,6 +64,26 @@ public class XiNStrategy implements Strategy
 		for (int state = 0; state < mdp.getNumStates(); state++) {
 			numChoices.put(state, mdp.getNumChoices(state));
 		}
+	}
+
+	public EpsilonApproximationXiNStrategy computeApproximation()
+	{
+		setPhaseForEpsilon(PrismUtils.epsilonDouble);
+		Distribution[] result = new Distribution[numChoices.keySet().size()];
+		for (int state : numChoices.keySet()) {
+			if (mlr.isMECState(state)) {
+				try {
+					result[state] = getNextMove(state);
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException("This exception should never be thrown, because we actually check that it cannot occur.");
+				}
+			} else {
+				result[state] = null;
+			}
+		}
+		return new EpsilonApproximationXiNStrategy(result, PrismUtils.epsilonDouble);
+
 	}
 
 	@Override
@@ -233,6 +259,36 @@ public class XiNStrategy implements Strategy
 	private double M()
 	{
 		return (phase + 1) * 10.0;
+	}
+
+	/**
+	 * sets the phase large enough s.t. the strategy is at least as good as an epsilon-strategy
+	 * note that this does not interfere badly with other parts of XiNStrategy, because enlarging phase
+	 * makes the strategy better and not worse
+	 */
+	private void setPhaseForEpsilon(double epsilon)
+	{
+		while (!isEpsilonApproximation(epsilon)) {
+			phase *= 10;
+		}
+	}
+
+	/**
+	 * Check if in the current state, the strategy is an epsilon-approximation
+	 */
+	private boolean isEpsilonApproximation(double epsilon)
+	{
+		double sumXPrime = 0.0;
+		double sumX = 0.0;
+		for (int state : numChoices.keySet()) {
+			if (mlr.isMECState(state)) {
+				for (int action = 0; action < numChoices.get(state); action++) {
+					sumX = sumX + solverVariables[mlr.getVarX(state, action, N)];
+					sumXPrime += xprime(state, action);
+				}
+			}
+		}
+		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon;
 	}
 
 	/**
