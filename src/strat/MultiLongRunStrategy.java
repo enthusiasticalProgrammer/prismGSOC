@@ -47,7 +47,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/
 	private transient int strategy;
-	//private transient boolean isTransient; //represents the single bit of memory
 
 	private MultiLongRunStrategy()
 	{
@@ -139,7 +138,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public void updateMemory(int action, int state) throws InvalidStrategyStateException
+	public void updateMemory(int action, int state)
 	{
 		if (strategy == -1) {
 			strategy = switchToRecurrent(state);

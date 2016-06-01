@@ -301,7 +301,7 @@ public class MDPModelChecker extends ProbModelChecker
 		}
 	}
 
-	private Operator determineOperator(RelOp relOp) throws PrismException
+	private Operator determineOperator(RelOp relOp)
 	{
 		if (relOp.equals(RelOp.MAX) || relOp.equals(RelOp.MIN) || relOp.equals(RelOp.LEQ)) {
 			return Operator.R_MAX;
@@ -313,12 +313,11 @@ public class MDPModelChecker extends ProbModelChecker
 		} else if (relOp.equals(RelOp.LEQ)) {
 			return Operator.R_LE;
 		} else if (relOp.equals(RelOp.LT)) {
-			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
 		} else if (relOp.equals(RelOp.GT)) { // currently do not support
-			//relOps.add(1);
-			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
 		} else {
-			throw new PrismException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
+			throw new UnsupportedOperationException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
 		}
 	}
 
@@ -487,7 +486,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max probabilities (true=min, false=max)
 	 */
-	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min) throws PrismException
+	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min)
 	{
 		ModelCheckerResult res = null;
 		int n;
