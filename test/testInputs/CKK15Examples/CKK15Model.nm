@@ -8,24 +8,18 @@ const int w=3;
 
 module CKK15
     state: [0..3];
-    decision: [-1..1];//-1: no decision, 0,1: boolean decision
-                      //note that a decision can only made in some states
-                      //note further that the rewards need to be halfed, because every
-                      // other transition is a decision
-    [dec1] decision=-1 -> (decision'=0);
-    [dec2] decision=-1 -> (decision'=1);
 
-    [l] state=s & decision=0 -> 0.5 : (state'=s) & (decision'=-1) + 0.5 : (state'=u) & (decision'=-1);
-    [r] state=s & decision=1 ->  (state'=v) & (decision'=-1);
+    [l] state=s -> 0.5 : (state'=s)  + 0.5 : (state'=u);
+    [r] state=s ->  (state'=v);
 
-    [a] state=u & decision=0 -> (decision'=-1);
-    [a] state=u & decision=1 -> (decision'=-1);
+    [a] state=u -> (state'=u);
+    [a] state=u -> (state'=u);
 
-    [b] state=v & decision=0 -> (decision'=-1);
-    [c] state=v & decision=1 -> (decision'=-1) & (state'=w);
+    [b] state=v -> (state'=v);
+    [c] state=v -> (state'=w);
 
-    [d] state=w & decision=0 -> (decision'=-1);
-    [e] state=w & decision=1 -> (decision'=-1) & (state'=v);
+    [d] state=w  -> (state'=w);
+    [e] state=w  -> (state'=v);
 	
 endmodule
 
