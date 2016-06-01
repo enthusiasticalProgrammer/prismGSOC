@@ -201,6 +201,7 @@ public class MDPModelChecker extends ProbModelChecker
 	{
 		Collection<MDPConstraint> constraints = new ArrayList<>();
 		Collection<MDPObjective> objectives = new ArrayList<>();
+		Collection<MDPExpectationConstraint> expConstraints = new ArrayList<>();
 
 		//extract data
 		for (int i = 0; i < expr.getNumOperands(); i++) {
@@ -266,13 +267,12 @@ public class MDPModelChecker extends ProbModelChecker
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
 			MDPReward mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
 
-			System.out.println(("operator: "+operator));
 			//create objective or constraint
 			if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
 				objectives.add(new MDPObjective(mdpReward, operator));
 			} else {
 				if (prob == null) {
-					constraints.add(new MDPConstraint(mdpReward, operator, bound));
+					expConstraints.add(new MDPExpectationConstraint(mdpReward, operator, bound));
 				} else {
 					if (prob.getProb() instanceof ExpressionLiteral) {
 						ExpressionLiteral exprLit = (ExpressionLiteral) prob.getProb();
@@ -288,7 +288,7 @@ public class MDPModelChecker extends ProbModelChecker
 			}
 		}
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
-		return new MultiLongRun((MDP) model, constraints, objectives, method);
+		return new MultiLongRun((MDP) model, constraints, objectives, expConstraints, method);
 	}
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException
