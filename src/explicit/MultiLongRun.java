@@ -108,12 +108,13 @@ public class MultiLongRun
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, String method) throws PrismException
+	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		this.mdp = mdp;
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
+		this.expConstraints=expConstraints;
 		this.mecs = computeMECs();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
@@ -390,12 +391,11 @@ public class MultiLongRun
 	 * Adds a row to the linear program saying that reward of item must have
 	 * at least/most required value (given in the constructor to this class)
 	 * In the paper it is equation no 5
-	 * @param item
 	 * @return
 	 */
-	private void setEqnForConstraints() throws PrismException
+	private void setEqnForExpectationConstraints() throws PrismException
 	{
-		for (MDPConstraint item : constraints) {
+		for (MDPExpectationConstraint item : expConstraints) {
 			SolverProxyInterface.Comparator op;
 			if (item.operator == Operator.R_GE) {
 				op = SolverProxyInterface.Comparator.GE;
@@ -750,7 +750,7 @@ public class MultiLongRun
 		}
 
 		//Reward bounds
-		setEqnForConstraints();
+		setEqnForExpectationConstraints();
 
 		setCommitmentForSatisfaction();
 
