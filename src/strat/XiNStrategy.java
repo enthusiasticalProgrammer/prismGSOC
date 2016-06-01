@@ -95,7 +95,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void updateMemory(int action, int state) throws InvalidStrategyStateException
+	public void updateMemory(int action, int state)
 	{
 		if (stepsUntilNextPhase.equals(BigInteger.ZERO)) {
 			phase++;
@@ -109,6 +109,9 @@ public class XiNStrategy implements Strategy
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
+		if (!mlr.isMECState(state)) {
+			throw new InvalidStrategyStateException("a Xi_N strategy can only be computed for states in maximal end components");
+		}
 		Distribution result = new Distribution();
 		for (int action = 0; action < numChoices.get(state); action++) {
 			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state, action);
@@ -226,7 +229,6 @@ public class XiNStrategy implements Strategy
 
 	/**
 	 * returns n_j from paper TODO: cite
-	 * TODO: almost instantly overflows --> fix with Math.BigInt 
 	 */
 	private BigInteger n(long j)
 	{
@@ -254,9 +256,9 @@ public class XiNStrategy implements Strategy
 	}
 
 	/**
-	 * TODO howto compute it
+	 * the most important thing is: it gets larger and larger
 	 * */
-	private double M()
+	private double getM()
 	{
 		return (phase + 1) * 10.0;
 	}
@@ -297,7 +299,7 @@ public class XiNStrategy implements Strategy
 	 */
 	private double xprime(int state, int action)
 	{
-		return ((double) numChoices.get(state)) / M();
+		return ((double) numChoices.get(state)) / getM();
 	}
 
 	private double sumOfPerturbedFrequencies(int state)
@@ -315,11 +317,12 @@ public class XiNStrategy implements Strategy
 	@Override
 	public String getInfo()
 	{
-		return "";
+		throw new UnsupportedOperationException();//TODO: implement it
 	}
 
 	@Override
 	public void setInfo(String info)
 	{
+		throw new UnsupportedOperationException();
 	}
 }

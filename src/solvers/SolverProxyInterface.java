@@ -12,11 +12,7 @@ import prism.PrismException;
  */
 public interface SolverProxyInterface
 {
-	//TODO @Christopher: make enum out of this static constants
 	public static enum Comparator{EQ,GE,LE};
-	//public static final int EQ = 32;
-	//public static final int GE = 64;
-	//public static final int LE = 128;
 
 	/**
 	 * Adds new row to the problem.
