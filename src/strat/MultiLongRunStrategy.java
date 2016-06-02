@@ -36,24 +36,29 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	protected transient int lastState;
 
 	@XmlElementWrapper(name = "transientChoices")
-	@XmlElement(name = "distribution")
+	@XmlElement(name = "distribution", nillable = true)
 	protected final Distribution[] transientChoices;
 
 	/**
 	 * type is used, because xml is not happy about interfaces
 	 */
-	@XmlElementWrapper(name = "reccurentChoices")
-	@XmlElement(name = "distribution")
+	@XmlElementWrapper(name = "recurrentChoices")
+	@XmlElement(name = "One_recurrent_strategy")
 	protected final EpsilonApproximationXiNStrategy[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
-	@XmlElement(name = "distribution")
+	@XmlElement(name = "distribution", nillable = true)
 	/**The offset is the state*/
 	protected final Distribution[] switchProb;
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/
 	private transient int strategy;
 
+	/**
+	 * This constructior is important for xml-I/O, do not remove it
+	 * even it does not seem to be called
+	 */
+	@SuppressWarnings("unused")
 	private MultiLongRunStrategy()
 	{
 		this.switchProb = null;
