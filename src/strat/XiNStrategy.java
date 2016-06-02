@@ -1,8 +1,6 @@
 package strat;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
 
 import explicit.Distribution;
 import explicit.MDP;
@@ -17,54 +15,41 @@ import solvers.SolverProxyInterface;
 /**
  * this is more or less an in-between state, because the fact that it outputs the correct
  * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
- * but we can output 
+ * but we can output an approximation of it.
+ * We also ommitted some the computation of kappa and n (from the paper TODO: which paper),
+ * because it is irrelevant
  */
 public class XiNStrategy implements Strategy
 {
-	private transient BigInteger countSteps;
 
 	/**Corresponds to j in paper*/
-	private transient int phase;
+	private BigInteger phase;
 
 	/**Corresponds to N in paper (with trivial mapping [1..n] <--> 2^[1..n])*/
-	private int N;
-
-	/**theoretically it is redundant, but it is convenient in the implementation*/
-	private transient BigInteger stepsUntilNextPhase;
+	private int N; //TODO Christopher: convert to BigInteger, because it sometimes overflows
 
 	private double[] solverVariables;
 
-	/**
-	 * This is needed because the xml-I/O does not like to process the MDP, because it is an
-	 * interface.
-	 */
-	private Map<Integer, Integer> numChoices;
-
 	private MultiLongRun mlr;
 
-	@SuppressWarnings("unused")
-	private XiNStrategy()
-	{
-		//needed for XML I/O
-	}
+	private final MDP mdp;
 
 	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun mlr, int n)
 	{
 		this.solverVariables = solver.getVariableValues();
 		this.mlr = mlr;
 		this.N = n;
-
-		numChoices = new HashMap<>();
-		for (int state = 0; state < mdp.getNumStates(); state++) {
-			numChoices.put(state, mdp.getNumChoices(state));
-		}
+		this.mdp = mdp;
+		phase = BigInteger.ZERO;
 	}
 
+	//The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy
+	//states
 	public EpsilonApproximationXiNStrategy computeApproximation()
 	{
-		setPhaseForEpsilon(PrismUtils.epsilonDouble);
-		Distribution[] result = new Distribution[numChoices.keySet().size()];
-		for (int state : numChoices.keySet()) {
+		setPhaseForEpsilon(PrismUtils.epsilonDouble * 1000000.0);
+		Distribution[] result = new Distribution[mdp.getNumStates()];
+		for (int state = 0; state < mdp.getNumStates(); state++) {
 			if (mlr.isMECState(state)) {
 				try {
 					result[state] = getNextMove(state);
@@ -76,28 +61,23 @@ public class XiNStrategy implements Strategy
 				result[state] = null;
 			}
 		}
-		return new EpsilonApproximationXiNStrategy(result, PrismUtils.epsilonDouble);
+		return new EpsilonApproximationXiNStrategy(result);
 
 	}
 
 	@Override
 	public void init(int state) throws InvalidStrategyStateException
 	{
-		this.phase = 0;
-		this.countSteps = BigInteger.valueOf(0);
-		this.stepsUntilNextPhase = n(0);
+		this.phase = BigInteger.ZERO;
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
-		if (stepsUntilNextPhase.equals(BigInteger.ZERO)) {
-			phase++;
-			stepsUntilNextPhase = n(phase);
-		} else {
-			stepsUntilNextPhase = stepsUntilNextPhase.subtract(BigInteger.ONE);
-		}
-		countSteps = countSteps.add(BigInteger.ONE);
+		//Nothing to do.
+		//technically one needs to adjust the phase sometimes, but
+		//it is not neccessary, because due to readability we only return
+		//an approximated version of the strategy
 	}
 
 	@Override
@@ -107,7 +87,7 @@ public class XiNStrategy implements Strategy
 			throw new InvalidStrategyStateException("a Xi_N strategy can only be computed for states in maximal end components");
 		}
 		Distribution result = new Distribution();
-		for (int action = 0; action < numChoices.get(state); action++) {
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
 			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state, action);
 			double denominator = sumOfPerturbedFrequencies(state);
 			result.add(action, numerator / denominator);
@@ -118,9 +98,7 @@ public class XiNStrategy implements Strategy
 	@Override
 	public void reset()
 	{
-		phase = 0;
-		countSteps = BigInteger.ZERO;
-		stepsUntilNextPhase = n(0);
+		phase = BigInteger.ZERO;
 	}
 
 	@Override
@@ -148,9 +126,9 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public BigInteger getCurrentMemoryElement()
+	public Object getCurrentMemoryElement()
 	{
-		return this.countSteps;
+		return null;
 	}
 
 	@Override
@@ -198,9 +176,7 @@ public class XiNStrategy implements Strategy
 	@Override
 	public void initialise(int s)
 	{
-		this.phase = 0;
-		this.countSteps = BigInteger.ZERO;
-		this.stepsUntilNextPhase = n(0);
+		this.phase = BigInteger.ZERO;
 	}
 
 	@Override
@@ -222,39 +198,11 @@ public class XiNStrategy implements Strategy
 	}
 
 	/**
-	 * returns n_j from paper TODO: cite
-	 */
-	private BigInteger n(long j)
-	{
-		if (j < 0)
-			throw new IllegalArgumentException();
-		if (j == 0) {
-			return kappa(j + 1);
-		}
-		BigInteger result = kappa(j + 1).min(n(j - 1)).multiply(BigInteger.valueOf(2L));
-
-		for (long i = 0; i < j; i++) {
-			result = result.multiply(BigInteger.valueOf(2L));
-		}
-		return result;
-	}
-
-	/**
-	 * TODO howto compute it
-	 */
-	private BigInteger kappa(long j)
-	{
-		if (j < 0)
-			throw new IllegalArgumentException();
-		return BigInteger.valueOf(10L);
-	}
-
-	/**
 	 * the most important thing is: it gets larger and larger
 	 * */
 	private double getM()
 	{
-		return (phase + 1) * 10.0;
+		return (phase.add(BigInteger.ONE)).doubleValue() * 1000.0;
 	}
 
 	/**
@@ -265,7 +213,8 @@ public class XiNStrategy implements Strategy
 	private void setPhaseForEpsilon(double epsilon)
 	{
 		while (!isEpsilonApproximation(epsilon)) {
-			phase *= 10;
+			phase = phase.add(BigInteger.ONE);//because phase can be zero
+			phase = phase.multiply(BigInteger.TEN);
 		}
 	}
 
@@ -276,9 +225,9 @@ public class XiNStrategy implements Strategy
 	{
 		double sumXPrime = 0.0;
 		double sumX = 0.0;
-		for (int state : numChoices.keySet()) {
+		for (int state = 0; state < mdp.getNumStates(); state++) {
 			if (mlr.isMECState(state)) {
-				for (int action = 0; action < numChoices.get(state); action++) {
+				for (int action = 0; action < mdp.getNumChoices(state); action++) {
 					sumX = sumX + solverVariables[mlr.getVarX(state, action, N)];
 					sumXPrime += xprime(state, action);
 				}
@@ -293,13 +242,13 @@ public class XiNStrategy implements Strategy
 	 */
 	private double xprime(int state, int action)
 	{
-		return ((double) numChoices.get(state)) / getM();
+		return ((double) mdp.getNumChoices(state)) / getM();
 	}
 
 	private double sumOfPerturbedFrequencies(int state)
 	{
 		double sum = 0.0;
-		for (int action = 0; action < numChoices.get(state); action++) {
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
 			if (mlr.isMECState(state)) {
 				sum = sum + solverVariables[mlr.getVarX(state, action, N)];
 			}
