@@ -781,24 +781,23 @@ public class MultiLongRun
 		for (BitSet maxEndComponent : mecs) {
 			for (int n = 0; n < 1 << getN(); n++) {
 				for (int i = 0; i < getN(); i++) {
-					BitSet b = new BitSet(n);
-					if (b.get(i)) {
-						addSingleCommitmentToSatisfaction(maxEndComponent, n, nonTrivialProbabilities.get(i));
+					if ((n & (1<<i))!=0) {
+						addSingleCommitmentToSatisfaction(maxEndComponent, n, i);
 					}
 				}
 			}
 		}
 	}
 
-	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, MDPConstraint mdpConstraint) throws PrismException
+	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 		for (int state = 0; state < mdp.getNumStates(); state++) {
-			if (!isMECState(state))
-				continue;
-			for (int act = 0; act < mdp.getNumChoices(state); act++) {
-				double value = mdpConstraint.reward.getStateReward(state) + mdpConstraint.reward.getTransitionReward(state, act) - mdpConstraint.getBound();
-				map.put(getVarX(state, act, n), value);
+			if (maxEndComponent.get(state)) {
+				for (int act = 0; act < mdp.getNumChoices(state); act++) {
+					double value = constraints.get(i).reward.getStateReward(state) + constraints.get(i).reward.getTransitionReward(state, act) - constraints.get(i).getBound();
+					map.put(getVarX(state, act, n), value);
+				}
 			}
 		}
 		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);

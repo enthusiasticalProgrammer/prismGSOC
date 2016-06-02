@@ -51,4 +51,24 @@ public class TestMultiLongRunStrategy
 
 	}
 
+	@Test
+	public void testRecurrentStrategiesAreNoBusybodiesMeddlingInThingsThatOughtNotToBeMeddledIn() throws PrismException, InvalidStrategyStateException
+	{
+		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+		MultiLongRunStrategy strat = ml11.getStrategy(false);
+
+		for (int strategy = 0; strategy < strat.recurrentChoices.length; strategy++) {
+			Distribution d = strat.recurrentChoices[strategy].getNextMove(1);
+
+			for (int action = 0; action < tmlr.m1.getNumChoices(1); action++) {
+				//In this state, we have to take the respective choice anyway, so
+				//each strategy has to take it with full probability without making resistance
+				assertTrue(d.get(action) > 0.99999);
+			}
+		}
+
+	}
+
 }
