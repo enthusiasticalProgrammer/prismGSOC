@@ -19,8 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import prism.PrismException;
 import prism.PrismLog;
 import explicit.Distribution;
+import explicit.MDPSimple;
 import explicit.MDPSparse;
 import explicit.Model;
+import parser.State;
 
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
@@ -196,107 +198,76 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		return null;
 	}
 
-	//TODO find out what this method does and adjust it
+	//TODO verify under strategy is not working (but however output with strategy does)
 	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-		/*
+
 		// construct a new STPG of size three times the original model
-		MDPSimple mdp = new MDPSimple(3 * model.getNumStates());
-		
-		int n = mdp.getNumStates();
-		
+		MDPSimple mdp = new MDPSimple((recurrentChoices.length + 1) * model.getNumStates());
+
 		List<State> oldStates = model.getStatesList();
-		
+
 		// creating helper states
-		State stateInit = new State(1), stateTran = new State(1), stateRec = new State(1);
-		stateInit.setValue(0, 0); // state where memory is not yet initialised
-		stateTran.setValue(0, 1); // state where target is minimum elem
-		stateRec.setValue(0, 2); // state where target is maximum element
-		
-		// creating product state list
-		List<State> newStates = new ArrayList<State>(n);
-		for (int i = 0; i < oldStates.size(); i++) {
-			newStates.add(new State(oldStates.get(i), stateInit));
-			newStates.add(new State(oldStates.get(i), stateTran));
-			newStates.add(new State(oldStates.get(i), stateRec));
+		State[] strategyStates = new State[recurrentChoices.length + 1];
+		for (int i = 0; i < strategyStates.length; i++) {
+			strategyStates[i] = new State(1);
+			strategyStates[i].setValue(0, i);
 		}
-		
+
+		// creating product state list
+		List<State> newStates = new ArrayList<State>(mdp.getNumStates());
+		for (State oldState : oldStates) {
+			for (State strategyState : strategyStates)
+				newStates.add(new State(oldState, strategyState));
+		}
+
 		// setting the states list to STPG
 		mdp.setStatesList(newStates);
-		
-		// adding choices for the product STPG
-		// initial distributions
-		int indx;
-		Distribution distr;
-		
-		distr = new Distribution();
-		if (this.switchProb.get(0) != 1)
-			distr.add(1, 1 - this.switchProb[0]);
-		if (this.switchProb.get(0) != 0)
-			distr.add(2, this.switchProb[0]);
-		mdp.addChoice(0, distr);
-		
-		for (int i = 1; i < oldStates.size(); i++) {
-			indx = 3 * i;
-		
-			//Add self-loop only
-			distr = new Distribution();
-			distr.add(indx, 1.0);
-			mdp.addChoice(indx, distr);
-		
+
+		//take care of the transitions from the transient states
+		for (int oldState = 0; oldState < oldStates.size(); oldState++) {
+
+			//adjust indices of switch-transitions
+			Distribution distrInput = switchProb[oldState];
+			Distribution distrOutput = new Distribution();
+			for (int i = 0; i < recurrentChoices.length; i++) {
+				if (distrInput != null && distrInput.get(i) > 0.0) {
+					distrOutput.add(oldState * (recurrentChoices.length + 1) + 1 + i, distrInput.get(i));
+				}
+			}
+
+			//add transient-Choices
+			if (transientChoices[oldState] != null) {
+				Distribution newTransientChoice = new Distribution();
+				for (int i = 0; i < oldStates.size(); i++) {
+					newTransientChoice.add(i * (recurrentChoices.length + 1), transientChoices[oldState].get(i));
+				}
+
+				distrOutput.merge(newTransientChoice);
+			}
+			mdp.addChoice(oldState * (recurrentChoices.length + 1), distrOutput);
 		}
-		
-		// all other states
-		for (int i = 0; i < oldStates.size(); i++) {
-			int tranIndx = 3 * i + 1;
-			int recIndx = 3 * i + 2;
-		
-			Distribution distrTranState = new Distribution();
-			Distribution distrRecState = new Distribution();
-		
-			Distribution choicesTran = this.transientChoices[i];
-			Distribution choicesRec = this.recurrentChoices[i];
-		
-			//recurrent states
-			if (choicesRec != null) { //MEC state
-				for (Entry<Integer, Double> choiceEntry : choicesRec) {
-					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while (iterator.hasNext()) {
-						Entry<Integer, Double> transitionEntry = iterator.next();
-						distrRecState.add(transitionEntry.getKey(), choiceEntry.getValue() * transitionEntry.getValue());
-					}
+
+		//take care of the transitions from the recurrent states
+		for (int recurrentStrategy = 0; recurrentStrategy < recurrentChoices.length; recurrentStrategy++) {
+			for (int oldState = 0; oldState < oldStates.size(); oldState++) {
+				Distribution oldDistribution;
+				try {
+					oldDistribution = recurrentChoices[recurrentStrategy].getNextMove(oldState);
+				} catch (InvalidStrategyStateException e) {
+					continue; //in this case, the outgoing transitions from the respective
+								//states do not matter, because they are unreachable
 				}
-		
-				mdp.addChoice(recIndx, distrRecState);
-			}
-		
-			//transient states, switching to recurrent
-			if (choicesRec != null) { //MEC state
-				for (Entry<Integer, Double> choiceEntry : choicesRec) {
-					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while (iterator.hasNext()) {
-						Entry<Integer, Double> transitionEntry = iterator.next();
-						distrTranState.add(transitionEntry.getKey(), switchProb[i] * choiceEntry.getValue() * transitionEntry.getValue());
-					}
+				Distribution newDistribution = new Distribution();
+				for (int oldState2 = 0; oldState2 < oldStates.size(); oldState2++) {
+					newDistribution.add(oldState2 * (recurrentChoices.length + 1) + recurrentStrategy, oldDistribution.get(oldState2));
 				}
+				mdp.addChoice(oldState * (recurrentChoices.length + 1) + recurrentStrategy, newDistribution);
 			}
-		
-			//transitent states, not switching
-			for (Entry<Integer, Double> choiceEntry : choicesTran) {
-				Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-				while (iterator.hasNext()) {
-					Entry<Integer, Double> transitionEntry = iterator.next();
-					distrTranState.add(transitionEntry.getKey(), (1 - switchProb[i]) * choiceEntry.getValue() * transitionEntry.getValue());
-				}
-			}
-		
-			mdp.addChoice(tranIndx, distrTranState);
 		}
-		
-		// setting initial state for the game
+
 		mdp.addInitialState(0);
-		
-		return mdp;*/throw new UnsupportedOperationException();
+		return mdp;
 	}
 
 	@Override
