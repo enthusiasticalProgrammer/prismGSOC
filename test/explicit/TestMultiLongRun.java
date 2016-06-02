@@ -25,8 +25,8 @@ import simulator.ModulesFileModelGenerator;
 //TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	public Model m1;
-	public Model m2; //currently not used, TODO Christopher: use it or lose it
+	public MDP m1;
+	public MDP m2; //currently not used, TODO Christopher: use it or lose it
 	public MDPModelChecker mdp11;
 	public MDPModelChecker mdp12;
 	public MDPModelChecker mdp13;
@@ -61,7 +61,7 @@ public class TestMultiLongRun
 			propertiesFile3 = prism.parsePropertiesFile(modulesFile, new File("test/testInputs/CKK15Examples/CKK15PropertyFile3.props"));
 			propertiesFile3.setUndefinedConstants(null);
 
-			m1 = pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
+			m1 = (MDP) pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
 			e1 = (ExpressionFunc) propertiesFile.getProperty(0);
 
 			e2 = (ExpressionFunc) propertiesFile2.getProperty(0);
