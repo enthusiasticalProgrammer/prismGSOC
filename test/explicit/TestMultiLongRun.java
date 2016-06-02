@@ -22,17 +22,18 @@ import prism.PrismSettings;
 import prism.Result;
 import simulator.ModulesFileModelGenerator;
 
+//TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	Model m1;
-	Model m2; //currently not used
-	MDPModelChecker mdp11;
-	MDPModelChecker mdp12;
-	MDPModelChecker mdp13;
+	public Model m1;
+	public Model m2; //currently not used, TODO Christopher: use it or lose it
+	public MDPModelChecker mdp11;
+	public MDPModelChecker mdp12;
+	public MDPModelChecker mdp13;
 
-	ExpressionFunc e1;
-	ExpressionFunc e2;
-	ExpressionFunc e3;
+	public ExpressionFunc e1;
+	public ExpressionFunc e2;
+	public ExpressionFunc e3;
 
 	StateValues infeasible;
 
