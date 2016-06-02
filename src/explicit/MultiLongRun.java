@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import prism.Operator;
@@ -38,10 +36,11 @@ import strat.XiNStrategy;
 //TODO no2: are actions and transitions confused here?
 public class MultiLongRun
 {
-	private MDP mdp;
+	private final MDP mdp;
 	private Collection<BitSet> mecs;
-	private Collection<MDPConstraint> constraints;
-	Collection<MDPObjective> objectives;
+	private final Collection<MDPConstraint> constraints;
+	private final Collection<MDPExpectationConstraint> expConstraints; 
+	final Collection<MDPObjective> objectives;
 
 	/**
 	 * The instance providing access to the LP solver.
@@ -68,7 +67,6 @@ public class MultiLongRun
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
-	@XmlElement
 	private int[] xOffsetArr;
 
 	/**
@@ -91,12 +89,6 @@ public class MultiLongRun
 	 * qIndex[i] is the q variable for the state i (binary variable ensuring memorylessnes, not present in LICS11). 
 	 */
 	private int[] qIndex;
-
-	@SuppressWarnings("unused")
-	private MultiLongRun()
-	{
-		//neccessary for XML I/O
-	}
 
 	/**
 	 * The default constructor.

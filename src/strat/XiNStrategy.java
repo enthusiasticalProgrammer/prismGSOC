@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.Model;
@@ -29,23 +27,19 @@ public class XiNStrategy implements Strategy
 	private transient int phase;
 
 	/**Corresponds to N in paper (with trivial mapping [1..n] <--> 2^[1..n])*/
-	@XmlElement
 	private int N;
 
 	/**theoretically it is redundant, but it is convenient in the implementation*/
 	private transient BigInteger stepsUntilNextPhase;
 
-	@XmlElement
 	private double[] solverVariables;
 
 	/**
 	 * This is needed because the xml-I/O does not like to process the MDP, because it is an
 	 * interface.
 	 */
-	@XmlElement
 	private Map<Integer, Integer> numChoices;
 
-	@XmlElement
 	private MultiLongRun mlr;
 
 	@SuppressWarnings("unused")
