@@ -37,11 +37,15 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@XmlElement(name = "distribution")
 	protected final Distribution[] transientChoices;
 
+	/**
+	 * type is used, because xml is not happy about interfaces
+	 */
 	@XmlElementWrapper(name = "reccurentChoices")
 	@XmlElement(name = "distribution")
-	protected final Strategy[] recurrentChoices;
+	protected final EpsilonApproximationXiNStrategy[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
+	@XmlElement(name = "distribution")
 	/**The offset is the state*/
 	protected final Distribution[] switchProb;
 
@@ -61,6 +65,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public static MultiLongRunStrategy loadFromFile(String filename)
 	{
+		//TODO Christopher: adjust it
 		try {
 			File file = new File(filename);
 			//InputStream inputStream = new FileInputStream(file);
@@ -90,7 +95,10 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		this.transientChoices = transChoices;
 		this.switchProb = switchProb;
-		this.recurrentChoices = recChoices;
+		this.recurrentChoices = new EpsilonApproximationXiNStrategy[recChoices.length];
+		for(int i=0;i<recChoices.length;i++){
+			recurrentChoices[i]=recChoices[i].computeApproximation();
+		}
 	}
 
 	//TODO check if this still works
@@ -108,9 +116,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, XiNStrategy[] recChoices)
 	{
-		this.switchProb = null;
-		this.transientChoices = transChoices;
-		this.recurrentChoices = recChoices;
+		this(transChoices,null,recChoices);
 	}
 
 	private int switchToRecurrent(int state)
@@ -144,16 +150,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			strategy = switchToRecurrent(state);
 		}
 		lastState = state;
-	}
-
-	//TODO Christopher: add some documentation
-	public void switchToApproximate()
-	{
-		for (int i = 0; i < recurrentChoices.length; i++) {
-			if (recurrentChoices[i] instanceof XiNStrategy) {
-				recurrentChoices[i] = ((XiNStrategy) recurrentChoices[i]).computeApproximation();
-			}
-		}
 	}
 
 	@Override
