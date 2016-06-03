@@ -53,6 +53,25 @@ public class TestMultiLongRunStrategy
 	}
 
 	@Test
+	public void testNaNNotOccurring() throws PrismException, InvalidStrategyStateException
+	{
+		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+		MultiLongRunStrategy strat = ml11.getStrategy(false);
+
+		for (int strategy = 0; strategy < strat.recurrentChoices.length; strategy++) {
+			for (int state = 0; state < tmlr.m1.getNumStates(); state++) {
+				Distribution d = strat.recurrentChoices[strategy].getNextMove(1);
+
+				for (int action = 0; action < tmlr.m1.getNumChoices(state); action++) {
+					assertFalse(Double.isNaN(d.get(action)));
+				}
+			}
+		}
+	}
+
+	@Test
 	public void testRecurrentStrategiesAreNoBusybodiesMeddlingInThingsThatOughtNotToBeMeddledIn() throws PrismException, InvalidStrategyStateException
 	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
