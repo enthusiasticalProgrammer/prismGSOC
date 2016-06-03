@@ -88,7 +88,8 @@ public class XiNStrategy implements Strategy
 		}
 		Distribution result = new Distribution();
 		for (int action = 0; action < mdp.getNumChoices(state); action++) {
-			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state, action);
+
+			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
 			double denominator = sumOfPerturbedFrequencies(state);
 			result.add(action, numerator / denominator);
 		}
@@ -229,18 +230,19 @@ public class XiNStrategy implements Strategy
 			if (mlr.isMECState(state)) {
 				for (int action = 0; action < mdp.getNumChoices(state); action++) {
 					sumX = sumX + solverVariables[mlr.getVarX(state, action, N)];
-					sumXPrime += xprime(state, action);
+					sumXPrime += xprime(state);
 				}
 			}
 		}
-		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon;
+		//epsilonDouble is important in case sumX is zero
+		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon+PrismUtils.epsilonDouble;
 	}
 
 	/**
 	 * x'_{a} from paper, here: as function a ---> x'_{a}, dependent also on the state, on M and on
 	 * the phase
 	 */
-	private double xprime(int state, int action)
+	private double xprime(int state)
 	{
 		return ((double) mdp.getNumChoices(state)) / getM();
 	}
@@ -252,7 +254,7 @@ public class XiNStrategy implements Strategy
 			if (mlr.isMECState(state)) {
 				sum = sum + solverVariables[mlr.getVarX(state, action, N)];
 			}
-			sum = sum + xprime(state, action);
+			sum = sum + xprime(state);
 		}
 		return sum;
 	}

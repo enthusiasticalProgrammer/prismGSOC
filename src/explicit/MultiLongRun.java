@@ -413,23 +413,22 @@ public class MultiLongRun
 	 */
 	private void setEqnForMECLink(BitSet maxEndComponent) throws PrismException
 	{
-		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
+		for (int n = 0; n < 1 << getN(); n++) {
+			HashMap<Integer, Double> row = new HashMap<Integer, Double>();
 
-		for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
-			for (int n = 0; n < 1 << getN(); n++) {
+			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
+
 				//X
-				for (int i = 0; i < mdp.getNumChoices(state); i++) {
-					int index = getVarX(state, i, n);
-					row.put(index, 1.0);
+				for (int action = 0; action < mdp.getNumChoices(state); action++) {
+					row.put(getVarX(state, action, n), 1.0);
 				}
 
 				//Z
-				int index = getVarZ(state, n);
-				row.put(index, -1.0);
+				row.put(getVarZ(state, n), -1.0);
 			}
+			solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 		}
 
-		solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 	}
 
 	/**
