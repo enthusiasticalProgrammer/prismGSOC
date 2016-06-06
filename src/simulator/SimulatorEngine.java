@@ -286,20 +286,6 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Execute a transition from the current transition list, specified by its index
-	 * within the (whole) list. In addition, specify the amount of time to be spent in
-	 * the current state before this transition occurs.
-	 * [continuous-time models only]
-	 */
-	public void manualTransition(int index, double time) throws PrismException
-	{
-		TransitionList transitions = getTransitionList();
-		int i = transitions.getChoiceIndexOfTransition(index);
-		int offset = transitions.getChoiceOffsetOfTransition(index);
-		executeTimedTransition(i, offset, time, index);
-	}
-
-	/**
 	 * Select, at random, a transition from the current transition list and execute it.
 	 * For continuous-time models, the time to be spent in the state before leaving is also picked randomly.
 	 * If there is currently a deadlock, no transition is taken and the function returns false.
@@ -353,6 +339,20 @@ public class SimulatorEngine extends PrismComponent
 		}
 
 		return true;
+	}
+
+	/**
+	 * Execute a transition from the current transition list, specified by its index
+	 * within the (whole) list. In addition, specify the amount of time to be spent in
+	 * the current state before this transition occurs.
+	 * [continuous-time models only]
+	 */
+	public void manualTransition(int index, double time) throws PrismException
+	{
+		TransitionList transitions = getTransitionList();
+		int i = transitions.getChoiceIndexOfTransition(index);
+		int offset = transitions.getChoiceOffsetOfTransition(index);
+		executeTimedTransition(i, offset, time, index);
 	}
 
 	/**
@@ -802,8 +802,6 @@ public class SimulatorEngine extends PrismComponent
 		transitionListState = null;
 		// Update samplers for any loaded properties
 		updateSamplers();
-		// Update strategy (if loaded)
-		updateStrategy();
 	}
 
 	/**
@@ -907,19 +905,7 @@ public class SimulatorEngine extends PrismComponent
 	{
 		if (strategy != null) {
 			State state = getCurrentState();
-			strategy.initialise(stateIds.get(state));
-		}
-	}
-
-	/**
-	 * Update the state of the loaded strategy, if present, based on the last step that occurred.
-	 */
-	private void updateStrategy()
-	{
-		if (strategy != null) {
-			State state = getCurrentState();
-			Object action = path.getPreviousModuleOrAction();
-			strategy.update(action,stateIds.get(state));
+			strategy.init(stateIds.get(state));
 		}
 	}
 
@@ -1048,66 +1034,6 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Get the index of the action/module of a transition, specified by its index/offset.
-	 * (-i for independent in ith module, i for synchronous on ith action)
-	 * (in both cases, modules/actions are 1-indexed)
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public int getTransitionModuleOrActionIndex(int i, int offset) throws PrismException
-	{
-		TransitionList transitions = getTransitionList();
-		return transitions.getTransitionModuleOrActionIndex(transitions.getTotalIndexOfTransition(i, offset));
-	}
-
-	/**
-	 * Get the index of the action/module of a transition, specified by its index.
-	 * (-i for independent in ith module, i for synchronous on ith action)
-	 * (in both cases, modules/actions are 1-indexed)
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public int getTransitionModuleOrActionIndex(int index) throws PrismException
-	{
-		return getTransitionList().getTransitionModuleOrActionIndex(index);
-	}
-
-	/**
-	 * Get the action label of a transition as a string, specified by its index/offset.
-	 * (null for asynchronous/independent transitions)
-	 * (see also {@link #getTransitionModuleOrAction(int, int)} and {@link #getTransitionModuleOrActionIndex(int, int)})
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public String getTransitionAction(int i, int offset) throws PrismException
-	{
-		TransitionList transitions = getTransitionList();
-		int a = transitions.getTransitionModuleOrActionIndex(transitions.getTotalIndexOfTransition(i, offset));
-		return a < 0 ? null : modulesFile.getSynch(a - 1);
-	}
-
-	/**
-	 * Get the action label of a transition as a string, specified by its index.
-	 * (null for asynchronous/independent transitions)
-	 * (see also {@link #getTransitionModuleOrAction(int)} and {@link #getTransitionModuleOrActionIndex(int)})
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public String getTransitionAction(int index) throws PrismException
-	{
-		int a = getTransitionList().getTransitionModuleOrActionIndex(index);
-		return a < 0 ? null : modulesFile.getSynch(a - 1);
-	}
-
-	/**
-	 * Get the probability/rate of a transition within a choice, specified by its index/offset.
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public double getTransitionProbability(int i, int offset) throws PrismException
-	{
-		TransitionList transitions = getTransitionList();
-		double p = transitions.getChoice(i).getProbability(offset);
-		// For DTMCs, we need to normalise (over choices)
-		return (modelType == ModelType.DTMC ? p / transitions.getNumChoices() : p);
-	}
-
-	/**
 	 * Get the probability/rate of a transition, specified by its index.
 	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
 	 */
@@ -1134,43 +1060,8 @@ public class SimulatorEngine extends PrismComponent
 		return getTransitionList().getTransitionUpdateString(index, state);
 	}
 
-	/**
-	 * Get a string describing the updates making up a transition, specified by its index.
-	 * This is in full, i.e. of the form x'=x+1, rather than x'=1.
-	 * Format is: (x'=x+1) & (y'=y-1), with empty string for empty update.
-	 * Only variables updated are included in list.
-	 * Note that expressions may have been simplified from original model. 
 	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public String getTransitionUpdateStringFull(int index) throws PrismException
-	{
-		return getTransitionList().getTransitionUpdateStringFull(index);
-	}
-
-	/**
-	 * Get the target (as a new State object) of a transition within a choice, specified by its index/offset.
 	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public State computeTransitionTarget(int i, int offset) throws PrismException
-	{
-		// We need the state containing the transitions. Usually, this is the current (final) state
-		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
-		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
-		return getTransitionList().getChoice(i).computeTarget(offset, state);
-	}
-
-	/**
-	 * Get the target of a transition (as a new State object), specified by its index.
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 */
-	public State computeTransitionTarget(int index) throws PrismException
-	{
-		// We need the state containing the transitions. Usually, this is the current (final) state
-		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
-		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
-		return getTransitionList().computeTransitionTarget(index, state);
-	}
-
 	// ------------------------------------------------------------------------------
 	// Querying of current path (full or on-the-fly)
 	// ------------------------------------------------------------------------------
@@ -1201,14 +1092,6 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Returns the previous state of the current path in the simulator.
-	 */
-	public State getPreviousState()
-	{
-		return path.getPreviousState();
-	}
-
-	/**
 	 * Get the total time elapsed so far (where zero time has been spent in the current (final) state).
 	 * For discrete-time models, this is just the number of steps (but returned as a double).
 	 */
@@ -1218,13 +1101,13 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Get the total reward accumulated so far
-	 * (includes reward for previous transition but no state reward for current (final) state).
-	 * @param rsi Reward structure index
-	 */
-	public double getTotalCumulativeRewardForPath(int rsi)
+	* Get the state at a given step of the path.
+	* (Not applicable for on-the-fly paths)
+	* @param step Step index (0 = initial state/step of path)
+	*/
+	public State getStateOfPathStep(int step)
 	{
-		return path.getTotalCumulativeReward(rsi);
+		return ((PathFull) path).getState(step);
 	}
 
 	// ------------------------------------------------------------------------------
@@ -1242,69 +1125,6 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Get the value of a variable at a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param varIndex The index of the variable to look up
-	 */
-	public Object getVariableValueOfPathStep(int step, int varIndex)
-	{
-		return ((PathFull) path).getState(step).varValues[varIndex];
-	}
-
-	/**
-	 * Get the state at a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
-	public State getStateOfPathStep(int step)
-	{
-		return ((PathFull) path).getState(step);
-	}
-
-	/**
-	 * Get a state reward for the state at a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param rsi Reward structure index
-	 */
-	public double getStateRewardOfPathStep(int step, int rsi)
-	{
-		return ((PathFull) path).getStateReward(step, rsi);
-	}
-
-	/**
-	 * Get the total time spent up until entering a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
-	public double getCumulativeTimeUpToPathStep(int step)
-	{
-		return ((PathFull) path).getCumulativeTime(step);
-	}
-
-	/**
-	 * Get the total (state and transition) reward accumulated up until entering a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param rsi Reward structure index
-	 */
-	public double getCumulativeRewardUpToPathStep(int step, int rsi)
-	{
-		return ((PathFull) path).getCumulativeReward(step, rsi);
-	}
-
-	/**
-	 * Get the time spent in a state at a given step of the path.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
-	public double getTimeSpentInPathStep(int step)
-	{
-		return ((PathFull) path).getTime(step);
-	}
-
-	/**
 	 * Get the index of the choice taken for a given step.
 	 * (Not applicable for on-the-fly paths)
 	 * @param step Step index (0 = initial state/step of path)
@@ -1315,59 +1135,11 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Get the index i of the action taken for a given step.
-	 * If i>0, then i-1 is the index of an action label (0-indexed)
-	 * If i<0, then -i-1 is the index of a module (0-indexed)
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
-	public int getModuleOrActionIndexOfPathStep(int step)
-	{
-		return ((PathFull) path).getModuleOrActionIndex(step);
-	}
-
-	/**
-	 * Get a string describing the action/module of a given step.
-	 * (Not applicable for on-the-fly paths)
-	 * @param step Step index (0 = initial state/step of path)
-	 */
-	public String getModuleOrActionOfPathStep(int step)
-	{
-		return ((PathFull) path).getModuleOrAction(step);
-	}
-
-	/**
-	 * Get a transition reward associated with a given step.
-	 * @param step Step index (0 = initial state/step of path)
-	 * @param rsi Reward structure index
-	 */
-	public double getTransitionRewardOfPathStep(int step, int rsi)
-	{
-		return ((PathFull) path).getTransitionReward(step, rsi);
-	}
-
-	/**
 	 * Check whether the current path is in a deterministic loop.
 	 */
 	public boolean isPathLooping()
 	{
 		return path.isLooping();
-	}
-
-	/**
-	 * Get at which step a deterministic loop (if present) starts.
-	 */
-	public long loopStart()
-	{
-		return path.loopStart();
-	}
-
-	/**
-	 * Get at which step a deterministic loop (if present) ends.
-	 */
-	public long loopEnd()
-	{
-		return path.loopEnd();
 	}
 
 	/**

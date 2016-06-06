@@ -3969,62 +3969,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		loadPRISMModel(modulesFile);
 		return modelCheckSimulatorSimultaneously(propertiesFile, exprs, null, initialState, maxPathLength, simMethod);
 	}
-
-	/**
-	 * Old API:
-	 */
-	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
-			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
-			throws PrismException, InterruptedException
-	{
-		loadPRISMModel(modulesFile);
-		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to log. 
-	 */
-	public void doSteadyState(Model model) throws PrismException
-	{
-		doSteadyState(model, EXPORT_PLAIN, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to a file (or, if file is null, to log). 
-	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
-	 */
-	public void doSteadyState(Model model, int exportType, File file) throws PrismException
-	{
-		loadBuiltModel(model);
-		doSteadyState(exportType, file, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to log. 
-	 */
-	public void doTransient(Model model, double time) throws PrismException
-	{
-		doTransient(model, time, EXPORT_PLAIN, null, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to a file (or, if file is null, to log). 
-	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
-	 * Optionally (if non-null), read in the initial probability distribution from a file.
-	 */
-	public void doTransient(Model model, double time, int exportType, File file, File fileIn) throws PrismException
-	{
-		loadBuiltModel(model);
-		doTransient(time, exportType, file, fileIn);
-	}
 }
 
 //------------------------------------------------------------------------------
