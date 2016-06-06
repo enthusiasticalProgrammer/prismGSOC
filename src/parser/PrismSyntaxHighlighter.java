@@ -371,7 +371,9 @@ public class PrismSyntaxHighlighter
 			            else if ("\t".equals(s)) resStringBuffer.append("\\prismtab");
 			            else resStringBuffer.append(s);
 			            break;
-			case PRISMGUI: n = s.length(); for (i=0;i<n;i++) resTypeArray[resCharCount++]=WHITESPACE; break;
+			case PRISMGUI: n = s.length(); for (i=0;i<n;i++) resTypeArray[resCharCount++]=WHITESPACE; break; 
+			//TODO In the line directly above there happens sometimes an IndexArrayOutOfBoundException
+			//nondeterministically and I certainly do not know why
 			}
 			break;
 		
