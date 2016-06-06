@@ -100,10 +100,9 @@ public abstract class MDStrategy implements Strategy
 	// Temp stubs
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
-		// TODO Auto-generated method stub
-		
+		currentState=state;
 	}
 
 	@Override
