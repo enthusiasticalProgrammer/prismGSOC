@@ -99,7 +99,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	@Override
 	public Object getCurrentMemoryElement()
 	{
-		throw new UnsupportedOperationException("not yet implemented");
+		return null;
 	}
 
 	@Override

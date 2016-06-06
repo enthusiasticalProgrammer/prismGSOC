@@ -103,8 +103,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		this.transientChoices = transChoices;
 		this.switchProb = switchProb;
 		this.recurrentChoices = new EpsilonApproximationXiNStrategy[recChoices.length];
-		for(int i=0;i<recChoices.length;i++){
-			recurrentChoices[i]=recChoices[i].computeApproximation();
+		for (int i = 0; i < recChoices.length; i++) {
+			recurrentChoices[i] = recChoices[i].computeApproximation();
 		}
 	}
 
@@ -123,7 +123,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, XiNStrategy[] recChoices)
 	{
-		this(transChoices,null,recChoices);
+		this(transChoices, null, recChoices);
 	}
 
 	private int switchToRecurrent(int state)
@@ -143,7 +143,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
 		strategy = switchToRecurrent(state);
 		System.out.println("init to " + isTransient());
@@ -300,21 +300,14 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	/**
-	 * I will use for now boolean/List<Integer/BigInteger>, because depending on the complexity of the problem it could
-	 * be either boolean or BigInteger or Tuple(int,BigInteger).
-	 * This might be a bit redundant, compare to Multigain- and other paper
+	 * Integer is used for now. Note that an enum in the size [-1...2^N-1]
+	 * would suffice (N: defined in paper CKK15] for denoting, which
+	 * recurrent strategy is used (or -1 if the transient strategy is yet used
 	 */
 	@Override
-	public Object getCurrentMemoryElement()
+	public Integer getCurrentMemoryElement()
 	{
-		if (isTransient()) {
-			return true;
-		} else {
-			List<Object> result = new ArrayList<>();
-			result.add(strategy);
-			result.add(recurrentChoices[strategy].getCurrentMemoryElement());
-			return result;
-		}
+		return strategy;
 	}
 
 	private boolean isTransient()
@@ -329,32 +322,16 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void setMemory(Object memory) throws InvalidStrategyStateException
 	{
-		if (memory instanceof Boolean) {
-			if ((boolean) memory) {
-				this.strategy = -1;
-				for (Strategy rec : recurrentChoices) {
-					rec.reset();
-				}
+		if (memory instanceof Integer) {
+			int mem = (Integer) memory;
+			if(mem<-1 || mem>=recurrentChoices.length){
+				throw new IllegalArgumentException("only values from -1 to "+recurrentChoices.length+" are allowed");
 			}
-		} else {
-			if (memory instanceof List) {
-				List list = (List) memory;
-				if (list.size() != 2) {
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-				}
-				if (!(list.get(0) instanceof Integer))
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-
-				if (!(list.get(1) instanceof BigInteger))
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-
-				this.strategy = (int) list.get(0);
-				for (Strategy rec : recurrentChoices) {
-					rec.reset();
-				}
-				recurrentChoices[strategy].setMemory(list.get(1));
-			}
+			this.strategy = (int) mem;
+		}else{
+			throw new IllegalArgumentException("Integer is required as argument, current type: "+memory.getClass());
 		}
+
 	}
 
 	@Override
@@ -387,23 +364,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	@Override
 	public void exportActions(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void initialise(int s)
-	{
-		strategy = -1;
-		for (Strategy strategy : this.recurrentChoices) {
-			strategy.initialise(s);
-		}
-
-	}
-
-	@Override
-	public void update(Object action, int s)
 	{
 		throw new UnsupportedOperationException();
 
@@ -446,7 +406,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public String toString()
 	{
 		String result = "";
-		result += "transientChoices\nabc";
+		result += "transientChoices\n";
 		for (int i = 0; i < transientChoices.length; i++) {
 			result += i + "  " + transientChoices[i] + "\n";
 		}
@@ -460,6 +420,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		result += "recurrentChoices\n";
 		for (int i = 0; i < recurrentChoices.length; i++) {
 			result += i + "  " + recurrentChoices[i] + "\n";
+		}
+		if(strategy>-2){
+			throw new IllegalArgumentException();
 		}
 		return result;
 	}
