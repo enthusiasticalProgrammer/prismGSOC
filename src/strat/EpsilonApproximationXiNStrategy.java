@@ -145,18 +145,6 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public void initialise(int s)
-	{
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
-	@Override
-	public void update(Object action, int s)
-	{
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
-	@Override
 	public Object getChoiceAction()
 	{
 		throw new UnsupportedOperationException("not yet implemented");
