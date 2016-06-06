@@ -66,7 +66,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
 		this.phase = BigInteger.ZERO;
 	}
@@ -170,18 +170,6 @@ public class XiNStrategy implements Strategy
 
 	@Override
 	public void exportDotFile(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void initialise(int s)
-	{
-		this.phase = BigInteger.ZERO;
-	}
-
-	@Override
-	public void update(Object action, int s)
 	{
 		throw new UnsupportedOperationException();
 	}
