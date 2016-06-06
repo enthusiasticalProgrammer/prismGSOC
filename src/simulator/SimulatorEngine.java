@@ -138,8 +138,6 @@ public class SimulatorEngine extends PrismComponent
 
 	// Updater object for model
 	protected Updater updater;
-	// Random number generator
-	private RandomNumberGenerator rng;
 
 	// strategy information
 	private Strategy strategy;
@@ -176,7 +174,6 @@ public class SimulatorEngine extends PrismComponent
 		tmpStateRewards = null;
 		tmpTransitionRewards = null;
 		updater = null;
-		rng = new RandomNumberGenerator();
 		strategy = null;
 	}
 
@@ -253,14 +250,9 @@ public class SimulatorEngine extends PrismComponent
 		strategy = prism.getStrategy();
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
-			try {
-				if (stateIds == null || stateIds.isEmpty())
-					this.setStrategy(strategy);
-				strategy.init(stateIds.get(currentState));
-			} catch (InvalidStrategyStateException error) {
-				// TODO Auto-generated catch block
-				error.printStackTrace();
-			}
+			if (stateIds == null || stateIds.isEmpty())
+				this.setStrategy(strategy);
+			strategy.init(stateIds.get(currentState));
 			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
 		}
 
@@ -286,7 +278,8 @@ public class SimulatorEngine extends PrismComponent
 		int offset = transitions.getChoiceOffsetOfTransition(index);
 		if (modelType.continuousTime()) {
 			double r = transitions.getProbabilitySum();
-			executeTimedTransition(i, offset, rng.randomExpDouble(r), index);
+			
+			executeTimedTransition(i, offset, (-Math.log(Math.random())) / r, index);
 		} else {
 			executeTransition(i, offset, index);
 		}
@@ -337,10 +330,10 @@ public class SimulatorEngine extends PrismComponent
 			break;
 		case MDP:
 			// Pick a random choice
-			i = rng.randomUnifInt(numChoices);
+			i = (int) (Math.random()*numChoices);
 			choice = transitions.getChoice(i);
 			// Pick a random transition from this choice
-			d = rng.randomUnifDouble();
+			d = Math.random();
 			j = choice.getIndexByProbabilitySum(d);
 			// Execute
 			executeTransition(i, j, -1);
@@ -349,11 +342,11 @@ public class SimulatorEngine extends PrismComponent
 			// Get sum of all rates
 			r = transitions.getProbabilitySum();
 			// Pick a random number to determine choice/transition
-			d = rng.randomUnifDouble(r);
+			d = Math.random()*r;
 			TransitionList.Ref ref = transitions.new Ref();
 			transitions.getChoiceIndexByProbabilitySum(d, ref);
 			// Execute
-			executeTimedTransition(ref.i, ref.offset, rng.randomExpDouble(r), -1);
+			executeTimedTransition(ref.i, ref.offset, (-Math.log(Math.random())) / r, -1);
 			break;
 		default:
 			throw new AssertionError();
