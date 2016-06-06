@@ -38,7 +38,7 @@ public class MultiLongRun
 {
 	private final MDP mdp;
 	private Collection<BitSet> mecs;
-	private final Collection<MDPConstraint> constraints;
+	private final List<MDPConstraint> constraints;
 	private final Collection<MDPExpectationConstraint> expConstraints; 
 	final Collection<MDPObjective> objectives;
 
@@ -799,7 +799,7 @@ public class MultiLongRun
 				}
 			}
 		}
-		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + i);
 	}
 
 	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()
