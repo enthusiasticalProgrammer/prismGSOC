@@ -59,8 +59,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -126,7 +124,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private boolean pathActive;
 	private ModulesFile parsedModel;
 	private boolean chooseInitialState;
-	private boolean strategyGenerated = false;
 	private Strategy strategy = null;
 	private Map<State, Integer> stateIds = null;
 
@@ -301,7 +298,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		pathLengthLabel.setText(pathActive ? "" + engine.getPathSize() : "0");
 		totalTimeLabel.setText(pathActive ? formatDouble(engine.getTotalTimeForPath()) : "0");
 
-		if (strategyGenerated)
+		if (strategy!=null)
 			updateStrategyInfoPanel();
 	}
 
@@ -444,8 +441,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			displayPathLoops = true;
 
 			// check if we need to initialise a strategy
-			if (strategyGenerated && getPrism().getSettings().getString(PrismSettings.PRISM_ENGINE).equals("Explicit")
-					&& getPrism().getBuiltModelExplicit() != null ) {
+			if ( getPrism().getStrategy()!=null ) {
 				// get reference to the strategy
 				strategy = getPrism().getStrategy();
 
@@ -565,7 +561,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.automaticTransitions(noSteps, displayPathLoops);
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy!=null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -620,7 +616,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.automaticTransitions(time, displayPathLoops);
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy!=null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -653,7 +649,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.backtrackTo(time);
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -693,7 +689,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.backtrackTo(step);
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -721,7 +717,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			setComputing(true);
 			engine.backtrackTo(0);
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -748,7 +744,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		setComputing(true);
 		engine.removePrecedingStates(step);
 		// update strategy
-		if (strategyGenerated) {
+		if (strategy != null) {
 			try {
 				strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 			} catch (InvalidStrategyStateException e) {
@@ -796,7 +792,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			}
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -847,7 +843,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.loadPath(parsedModel, pathNew);
 
 			// update strategy
-			if (strategyGenerated) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -1133,15 +1129,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		currentUpdatesTable.setToolTipText(currentUpdatesTable.isEnabled() ? "Double click on an update to manually execute it" : null);
 		autoTimeCheck.setEnabled(pathActive && parsedModel != null && parsedModel.getModelType().continuousTime());
 
-
-		if (!getPrism().getSettings().getString(PrismSettings.PRISM_ENGINE).equals("Explicit"))
-			strategyGenerated = false;
-		showStrategyCheck.setEnabled(pathActive && parsedModel != null && strategyGenerated
-				&& getPrism().getSettings().getString(PrismSettings.PRISM_ENGINE).equals("Explicit"));
-		if (!strategyGenerated)
-			getPrism().getSimulator().setStrategy(null);
-
-
+		strategy=getPrism().getStrategy();
+		showStrategyCheck.setEnabled(pathActive && parsedModel != null && strategy!= null);
 
 		modelType.setEnabled(parsedModel != null);
 		modelTypeLabel.setEnabled(parsedModel != null);
@@ -1227,7 +1216,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		inputBacktrackField = new javax.swing.JTextField();
 		manualUpdatesPanel = new javax.swing.JPanel();
 		innerManualUpdatesPanel = new javax.swing.JPanel();
-		manualUpdateTableScrollPane = new javax.swing.JScrollPane();
+		manualUpdateTableScrollPanel = new javax.swing.JScrollPane();
 		currentUpdatesTable = new javax.swing.JTable();
 		currentUpdatesTable = new GUISimulatorUpdatesTable(updateTableModel, this);
 		autoTimeCheckPanel = new javax.swing.JPanel();
@@ -1581,12 +1570,12 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		innerManualUpdatesPanel.setLayout(new java.awt.BorderLayout());
 
 		innerManualUpdatesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		manualUpdateTableScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		manualUpdateTableScrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		currentUpdatesTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
 				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
-		manualUpdateTableScrollPane.setViewportView(currentUpdatesTable);
+		manualUpdateTableScrollPanel.setViewportView(currentUpdatesTable);
 
-		innerManualUpdatesPanel.add(manualUpdateTableScrollPane, java.awt.BorderLayout.CENTER);
+		innerManualUpdatesPanel.add(manualUpdateTableScrollPanel, java.awt.BorderLayout.CENTER);
 
 		autoTimeCheckPanel.setLayout(new java.awt.BorderLayout());
 
@@ -2078,8 +2067,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	 */
 	public void setStrategyGenerated(boolean strategyGenerated)
 	{
-		this.strategyGenerated = strategyGenerated;
-		getPrism().getSimulator().setStrategy(strategyGenerated ? getPrism().getStrategy() : null);
+		getPrism().getSimulator().setStrategy(strategy!= null ? getPrism().getStrategy() : null);
 	}
 
 	/**
@@ -2314,7 +2302,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private javax.swing.JPanel jPanel4;
 	private javax.swing.JSplitPane jSplitPane1;
 	private javax.swing.JPanel leftExplorePanel;
-	private javax.swing.JScrollPane manualUpdateTableScrollPane;
+	private javax.swing.JScrollPane manualUpdateTableScrollPanel;
 	private javax.swing.JPanel manualUpdatesPanel;
 	private javax.swing.JLabel modelType;
 	private javax.swing.JLabel modelTypeLabel;
@@ -2419,7 +2407,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		{
 			if (pathActive) {
 				int cols = 3;
-				if (showStrategyCheck.isSelected() && strategyGenerated)
+				if (showStrategyCheck.isSelected() && strategy!=null)
 					cols++;
 				if (parsedModel.getModelType().multiplePlayers())
 					cols++;
