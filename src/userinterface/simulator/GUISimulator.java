@@ -217,7 +217,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		lastInitialState = null;
 
 		tableScroll.setRowHeaderView(((GUISimulatorPathTable) pathTable).getPathLoopIndicator());
-		manualUpdateTableScrollPane.setRowHeaderView(((GUISimulatorUpdatesTable) currentUpdatesTable).getUpdateRowHeader());
+		manualUpdateTableScrollPanel.setRowHeaderView(((GUISimulatorUpdatesTable) currentUpdatesTable).getUpdateRowHeader());
 
 		tableScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		stateLabelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -245,7 +245,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		showStrategyCheck.setSelected(false);
 		currentUpdatesTable.requestFocus();
 
-		manualUpdateTableScrollPane.setToolTipText("Double-click or right-click below to create a new path");
+		manualUpdateTableScrollPanel.setToolTipText("Double-click or right-click below to create a new path");
 	}
 
 	public void setGUIMultiModel(GUIMultiModel guiMultiModel)
@@ -261,21 +261,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	public JList getStateLabelList()
 	{
 		return stateLabelList;
-	}
-
-	public String getTotalRewardLabelString()
-	{
-		int i, n;
-		String s;
-		n = parsedModel.getNumRewardStructs();
-		s = "<html>";
-		for (i = 0; i < n; i++) {
-			s += engine.getTotalCumulativeRewardForPath(i);
-			if (i < n - 1)
-				s += ",<br>";
-		}
-		s += "</html>";
-		return s;
 	}
 
 	/**
@@ -559,16 +544,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 				engine.computeTransitionsForCurrentState();
 			}
 			engine.automaticTransitions(noSteps, displayPathLoops);
-
-			// update strategy
-			if (strategy!=null) {
-				try {
-					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
-				} catch (InvalidStrategyStateException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
-				}
-			}
 
 			// Update model/path/tables/lists
 			pathTableModel.updatePathTable();
@@ -2251,6 +2226,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	/**
 	 * Respond to selections of rows in the path table: update transition list.
 	 */
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		try {
@@ -2442,7 +2418,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						Distribution dist = strategy.getNextMove(stateIds.get(state));
 						System.out.println("dist for state " + state + ": " + dist);
 						int choice = engine.getChoiceIndexOfTransition(rowIndex);
-						return dist.contains(choice) ? dist.get(choice) : "";
+						if(dist.contains(choice))
+							return dist.get(choice);
+						return 0.0;
 						//} finally {
 						// resetting the memory
 						//if (oldUpdate)
@@ -2450,13 +2428,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						//}
 					// Player
 					case 1:
-						/*String modAct = engine.getTransitionModuleOrAction(rowIndex);
-						int player = parsedModel.getPlayerForModule(modAct);
-						if (player == -1)
-							player = parsedModel.getPlayerForAction(modAct);
-						if (player == -1)
-							return "";
-						return parsedModel.getPlayer(player).getName();*/
 						return "dummy player"; //TODO merge with Prism-games
 					// Module/action
 					case 2:
@@ -2492,7 +2463,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			int offset = 0;
 			// Strategy choice
 			boolean hasStrategy = true;
-			if (!(showStrategyCheck.isSelected() && strategyGenerated & strategy != null && stateIds != null)) {
+			if (!(showStrategyCheck.isSelected() && strategy != null && stateIds != null)) {
 				offset++;
 				hasStrategy = false;
 				System.out.println("Has strategy");

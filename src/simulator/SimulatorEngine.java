@@ -98,6 +98,8 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
+//TODO Christopher: if impossible to make the strategic simulation completely:
+//	the GUISimulator should have the most important features
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -239,7 +241,7 @@ public class SimulatorEngine extends PrismComponent
 			if (modulesFile.getInitialStates() == null) {
 				currentState.copy(modulesFile.getDefaultInitialState());
 			} else {
-				throw new PrismException("Random choice of multiple initial states not yet supported");
+				throw new UnsupportedOperationException("Random choice of multiple initial states not yet supported");
 			}
 		}
 		updater.calculateStateRewards(currentState, tmpStateRewards);
@@ -277,7 +279,7 @@ public class SimulatorEngine extends PrismComponent
 		int offset = transitions.getChoiceOffsetOfTransition(index);
 		if (modelType.continuousTime()) {
 			double r = transitions.getProbabilitySum();
-			
+
 			executeTimedTransition(i, offset, (-Math.log(Math.random())) / r, index);
 		} else {
 			executeTransition(i, offset, index);
@@ -370,13 +372,11 @@ public class SimulatorEngine extends PrismComponent
 	 * (For discrete-time models, this just results in ceil(time) steps being executed.)
 	 * If a deadlock is found, the process stops.
 	 * The function returns the number of transitions successfully taken. 
+	 * @throws PrismException
 	 */
 	public int automaticTransitions(double time, boolean stopOnLoops) throws PrismException
 	{
-		// For discrete-time models, this just results in ceil(time) steps being executed.
-		if (!modelType.continuousTime()) {
-			return automaticTransitions((int) Math.ceil(time), false);
-		} else {
+		if (modelType.continuousTime()) {
 			int i = 0;
 			double targetTime = path.getTotalTime() + time;
 			while (path.getTotalTime() < targetTime) {
@@ -386,6 +386,8 @@ public class SimulatorEngine extends PrismComponent
 					break;
 			}
 			return i;
+		} else {
+			return automaticTransitions((int) Math.ceil(time), false);
 		}
 	}
 
@@ -486,7 +488,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForCurrentState() throws PrismException
 	{
-		updater.calculateTransitions(path.getCurrentState(), transitionList);
+		this.transitionList=updater.calculateTransitions(path.getCurrentState(), transitionList);
 		transitionListBuilt = true;
 		transitionListState = null;
 	}
@@ -740,7 +742,11 @@ public class SimulatorEngine extends PrismComponent
 		if (!onTheFly && index == -1)
 			index = transitions.getTotalIndexOfTransition(i, offset);
 		// Compute probability for transition (is normalised for a DTMC)
-		double p = (modelType == ModelType.DTMC ? choice.getProbability(offset) / transitions.getNumChoices() : choice.getProbability(offset));
+		double p = (choice.getProbability(offset));
+
+		if (modelType == ModelType.DTMC) {
+			p = p / transitions.getNumChoices();
+		}
 		// Compute its transition rewards
 		updater.calculateTransitionRewards(path.getCurrentState(), choice, tmpTransitionRewards);
 		// Compute next state. Note use of path.getCurrentState() because currentState
@@ -781,7 +787,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param time Time for transition
 	 * @param index (Optionally) index of transition within whole list (-1 if unknown)
 	 */
-	private void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
+	protected void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
@@ -815,8 +821,6 @@ public class SimulatorEngine extends PrismComponent
 		transitionListState = null;
 		// Update samplers for any loaded properties
 		updateSamplers();
-		// Update strategy (if loaded)
-		updateStrategy();
 	}
 
 	/**

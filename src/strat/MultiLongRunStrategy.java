@@ -123,35 +123,38 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		this(transChoices, null, recChoices);
 	}
 
-	private int switchToRecurrent(int state)
+	private void setRecurrency(int state)
 	{
+		if (strategy != -1)
+			return;
 		if (switchProb[state] == null) {
 			//state not in MEC
-			return -1;
-		}
-		double rand = Math.random();
-		for (int i = 0; i < switchProb.length; i++) {
-			rand -= switchProb[state].get(i);
-			if (rand <= 0.0) {
-				return i;
+			strategy = -1;
+		} else {
+			double rand = Math.random();
+			for (int i = 0; i < switchProb.length; i++) {
+				rand -= switchProb[state].get(i);
+				if (rand <= 0.0) {
+					strategy = i;
+					return;
+				}
 			}
+			strategy = -1;
 		}
-		return -1;
 	}
 
 	@Override
 	public void init(int state)
 	{
-		strategy = switchToRecurrent(state);
+		strategy=-1;
+		setRecurrency(state);
 		System.out.println("init to " + isTransient());
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
-		if (strategy == -1) {
-			strategy = switchToRecurrent(state);
-		}
+		setRecurrency(state);
 	}
 
 	@Override
