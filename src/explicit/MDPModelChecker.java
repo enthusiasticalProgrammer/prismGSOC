@@ -197,7 +197,7 @@ public class MDPModelChecker extends ProbModelChecker
 		return sv;
 	}
 
-	MultiLongRun createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
+	public MultiLongRun createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
 	{
 		Collection<MDPConstraint> constraints = new ArrayList<>();
 		Collection<MDPObjective> objectives = new ArrayList<>();

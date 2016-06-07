@@ -446,13 +446,13 @@ public class MultiLongRun
 	}
 
 	/**
-	 * These are the variables x_{state,action} from the paper. See {@see #computeOffsets()} for more details.
+	 * These are the variables y_{state,action} from the paper. See {@see #computeOffsets()} for more details.
 	 * @param state
 	 * @param action
 	 * @param threshold
 	 * @return
 	 */
-	private int getVarY(int state, int action)
+	int getVarY(int state, int action)
 	{
 		return yOffsetArr[state] + action;
 	}
@@ -462,7 +462,7 @@ public class MultiLongRun
 	 * @param state
 	 * @return
 	 */
-	private int getVarZ(int state, int threshold)
+	int getVarZ(int state, int threshold)
 	{
 		int result = zIndex[state] + threshold;
 		return result;
