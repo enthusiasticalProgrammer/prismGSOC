@@ -98,6 +98,8 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
+//TODO Christopher: if impossible to make the strategic simulation completely:
+//	the GUISimulator should have the most important features
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -140,7 +142,6 @@ public class SimulatorEngine extends PrismComponent
 	protected Updater updater;
 
 	// strategy information
-	private Strategy strategy;
 	private Map<State, Integer> stateIds;
 
 	// TODO: remove this (not in trunk any more)
@@ -240,7 +241,7 @@ public class SimulatorEngine extends PrismComponent
 			if (modulesFile.getInitialStates() == null) {
 				currentState.copy(modulesFile.getDefaultInitialState());
 			} else {
-				throw new PrismException("Random choice of multiple initial states not yet supported");
+				throw new UnsupportedOperationException("Random choice of multiple initial states not yet supported");
 			}
 		}
 		updater.calculateStateRewards(currentState, tmpStateRewards);
@@ -278,7 +279,7 @@ public class SimulatorEngine extends PrismComponent
 		int offset = transitions.getChoiceOffsetOfTransition(index);
 		if (modelType.continuousTime()) {
 			double r = transitions.getProbabilitySum();
-			
+
 			executeTimedTransition(i, offset, (-Math.log(Math.random())) / r, index);
 		} else {
 			executeTransition(i, offset, index);
@@ -304,16 +305,8 @@ public class SimulatorEngine extends PrismComponent
 			return false;
 		//throw new PrismException("Deadlock found at state " + path.getCurrentState().toString(modulesFile));
 
-		TransitionList.Ref ref;
 		switch (modelType) {
 		case DTMC:
-			// Pick a random number to determine choice/transition
-			d = rng.randomUnifDouble();
-			ref = transitions.new Ref();
-			transitions.getChoiceIndexByProbabilitySum(d, ref);
-			// Execute
-			executeTransition(ref.i, ref.offset, -1);
-			break;
 		case MDP:
 			// Pick a random choice
 			i = (int) (Math.random()*numChoices);
@@ -379,13 +372,11 @@ public class SimulatorEngine extends PrismComponent
 	 * (For discrete-time models, this just results in ceil(time) steps being executed.)
 	 * If a deadlock is found, the process stops.
 	 * The function returns the number of transitions successfully taken. 
+	 * @throws PrismException
 	 */
 	public int automaticTransitions(double time, boolean stopOnLoops) throws PrismException
 	{
-		// For discrete-time models, this just results in ceil(time) steps being executed.
-		if (!modelType.continuousTime()) {
-			return automaticTransitions((int) Math.ceil(time), false);
-		} else {
+		if (modelType.continuousTime()) {
 			int i = 0;
 			double targetTime = path.getTotalTime() + time;
 			while (path.getTotalTime() < targetTime) {
@@ -395,6 +386,8 @@ public class SimulatorEngine extends PrismComponent
 					break;
 			}
 			return i;
+		} else {
+			return automaticTransitions((int) Math.ceil(time), false);
 		}
 	}
 
@@ -439,11 +432,15 @@ public class SimulatorEngine extends PrismComponent
 		if (time > path.getTotalTime()) {
 			throw new PrismException("There is no time point " + time + " to backtrack to");
 		}
-		int step, n;
 		PathFull pathFull = (PathFull) path;
-		n = path.size();
+		// Get length (non-on-the-fly paths will never exceed length Integer.MAX_VALUE) 
+		long nLong = path.size();
+		if (nLong > Integer.MAX_VALUE)
+			throw new PrismException("PathFull cannot deal with paths over length " + Integer.MAX_VALUE);
+		int n = (int) nLong;
 		// Find the index of the step we are in at that point
 		// i.e. the first state whose cumulative time on entering exceeds 'time'
+		int step;
 		for (step = 0; step <= n && pathFull.getCumulativeTime(step) < time; step++)
 			;
 		// Then backtrack to this step
@@ -491,37 +488,9 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForCurrentState() throws PrismException
 	{
-		computeTransitionsForState(path.getCurrentState());
-	}
-
-	/**
-	 * Re-compute the transition table for a particular state.
-	 */
-	private void computeTransitionsForState(State state) throws PrismException
-	{
-		updater.calculateTransitions(state, transitionList);
+		this.transitionList=updater.calculateTransitions(path.getCurrentState(), transitionList);
 		transitionListBuilt = true;
-		transitionListState = state;
-	}
-
-	// ------------------------------------------------------------------------------
-	// Methods for loading objects from model checking: paths, strategies, etc.
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * Load the set of reachable states for the currently loaded model into the simulator.
-	 */
-	public void loadReachableStates(List<State> reachableStates)
-	{
-		this.reachableStates = reachableStates;
-	}
-
-	/**
-	 * Load a strategy for the currently loaded model into the simulator.
-	 */
-	public void loadStrategy(Strategy strategy)
-	{
-		this.strategy = strategy;
+		transitionListState = null;
 	}
 
 	/**
@@ -533,14 +502,12 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void loadPath(ModulesFile modulesFile, PathFullInfo newPath) throws PrismException
 	{
-		int i, j, numSteps, numTrans;
+		int i, j, numTrans;
+		long numSteps;
 		boolean found;
 		State state, nextState;
 		createNewPath(modulesFile);
-		long numStepsLong = newPath.size();
-		if (numStepsLong > Integer.MAX_VALUE)
-			throw new PrismException("PathFull cannot deal with paths over length " + Integer.MAX_VALUE);
-		numSteps = (int) numStepsLong;
+		numSteps = newPath.size();
 		state = newPath.getState(0);
 		initialisePath(state);
 		for (i = 0; i < numSteps; i++) {
@@ -775,7 +742,11 @@ public class SimulatorEngine extends PrismComponent
 		if (!onTheFly && index == -1)
 			index = transitions.getTotalIndexOfTransition(i, offset);
 		// Compute probability for transition (is normalised for a DTMC)
-		double p = (modelType == ModelType.DTMC ? choice.getProbability(offset) / transitions.getNumChoices() : choice.getProbability(offset));
+		double p = (choice.getProbability(offset));
+
+		if (modelType == ModelType.DTMC) {
+			p = p / transitions.getNumChoices();
+		}
 		// Compute its transition rewards
 		updater.calculateTransitionRewards(path.getCurrentState(), choice, tmpTransitionRewards);
 		// Compute next state. Note use of path.getCurrentState() because currentState
@@ -816,14 +787,14 @@ public class SimulatorEngine extends PrismComponent
 	 * @param time Time for transition
 	 * @param index (Optionally) index of transition within whole list (-1 if unknown)
 	 */
-	private void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
+	protected void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
 		Choice choice = transitions.getChoice(i);
 		if (!onTheFly && index == -1)
 			index = transitions.getTotalIndexOfTransition(i, offset);
-		// Get probability for transition
+		// Get probability for transition (no need to normalise because DTMC transitions are never timed)
 		double p = choice.getProbability(offset);
 		// Compute its transition rewards
 		updater.calculateTransitionRewards(path.getCurrentState(), choice, tmpTransitionRewards);
@@ -850,8 +821,6 @@ public class SimulatorEngine extends PrismComponent
 		transitionListState = null;
 		// Update samplers for any loaded properties
 		updateSamplers();
-		// Update strategy (if loaded)
-		updateStrategy();
 	}
 
 	/**
@@ -880,7 +849,6 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	private void recomputeSamplers() throws PrismLangException
 	{
-		int i, n;
 		resetSamplers();
 		// Get length (non-on-the-fly paths will never exceed length Integer.MAX_VALUE) 
 		long nLong = path.size();
@@ -960,8 +928,7 @@ public class SimulatorEngine extends PrismComponent
 	{
 		// Compute the current transition list, if required
 		if (!transitionListBuilt) {
-			updater.calculateTransitions(currentState, transitionList);
-			transitionListBuilt = true;
+			computeTransitionsForCurrentState();
 		}
 		return transitionList;
 	}
@@ -979,6 +946,7 @@ public class SimulatorEngine extends PrismComponent
 	/**
 	 * Returns the current number of available choices.
 	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
+	 * Returns the current number of available choices.
 	 */
 	public int getNumChoices() throws PrismException
 	{
@@ -1050,7 +1018,6 @@ public class SimulatorEngine extends PrismComponent
 	 * This is in abbreviated form, i.e. x'=1, rather than x'=x+1.
 	 * Format is: x'=1, y'=0, with empty string for empty update.
 	 * Only variables updated are included in list (even if unchanged).
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
 	 */
 	public String getTransitionUpdateString(int index) throws PrismException
 	{
@@ -1060,8 +1027,6 @@ public class SimulatorEngine extends PrismComponent
 		return getTransitionList().getTransitionUpdateString(index, state);
 	}
 
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
-	 * Usually, this is for the current (final) state of the path but, if you called {@link #computeTransitionsForStep(int step)}, it will be for this state instead.
 	// ------------------------------------------------------------------------------
 	// Querying of current path (full or on-the-fly)
 	// ------------------------------------------------------------------------------
