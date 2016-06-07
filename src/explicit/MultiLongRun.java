@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import prism.Operator;
@@ -38,10 +36,11 @@ import strat.XiNStrategy;
 //TODO no2: are actions and transitions confused here?
 public class MultiLongRun
 {
-	private MDP mdp;
+	private final MDP mdp;
 	private Collection<BitSet> mecs;
-	private Collection<MDPConstraint> constraints;
-	Collection<MDPObjective> objectives;
+	private final List<MDPConstraint> constraints;
+	private final Collection<MDPExpectationConstraint> expConstraints; 
+	final Collection<MDPObjective> objectives;
 
 	/**
 	 * The instance providing access to the LP solver.
@@ -68,7 +67,6 @@ public class MultiLongRun
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
-	@XmlElement
 	private int[] xOffsetArr;
 
 	/**
@@ -92,12 +90,6 @@ public class MultiLongRun
 	 */
 	private int[] qIndex;
 
-	@SuppressWarnings("unused")
-	private MultiLongRun()
-	{
-		//neccessary for XML I/O
-	}
-
 	/**
 	 * The default constructor.
 	 * @param mdp The MDP to work with
@@ -108,12 +100,13 @@ public class MultiLongRun
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, String method) throws PrismException
+	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		this.mdp = mdp;
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
+		this.expConstraints=expConstraints;
 		this.mecs = computeMECs();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
@@ -390,12 +383,11 @@ public class MultiLongRun
 	 * Adds a row to the linear program saying that reward of item must have
 	 * at least/most required value (given in the constructor to this class)
 	 * In the paper it is equation no 5
-	 * @param item
 	 * @return
 	 */
-	private void setEqnForConstraints() throws PrismException
+	private void setEqnForExpectationConstraints() throws PrismException
 	{
-		for (MDPConstraint item : constraints) {
+		for (MDPExpectationConstraint item : expConstraints) {
 			SolverProxyInterface.Comparator op;
 			if (item.operator == Operator.R_GE) {
 				op = SolverProxyInterface.Comparator.GE;
@@ -421,23 +413,22 @@ public class MultiLongRun
 	 */
 	private void setEqnForMECLink(BitSet maxEndComponent) throws PrismException
 	{
-		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
+		for (int n = 0; n < 1 << getN(); n++) {
+			HashMap<Integer, Double> row = new HashMap<Integer, Double>();
 
-		for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
-			for (int n = 0; n < 1 << getN(); n++) {
+			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
+
 				//X
-				for (int i = 0; i < mdp.getNumChoices(state); i++) {
-					int index = getVarX(state, i, n);
-					row.put(index, 1.0);
+				for (int action = 0; action < mdp.getNumChoices(state); action++) {
+					row.put(getVarX(state, action, n), 1.0);
 				}
 
 				//Z
-				int index = getVarZ(state, n);
-				row.put(index, -1.0);
+				row.put(getVarZ(state, n), -1.0);
 			}
+			solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 		}
 
-		solver.addRowFromMap(row, 0, SolverProxyInterface.Comparator.EQ, "m" + maxEndComponent);
 	}
 
 	/**
@@ -455,13 +446,13 @@ public class MultiLongRun
 	}
 
 	/**
-	 * These are the variables x_{state,action} from the paper. See {@see #computeOffsets()} for more details.
+	 * These are the variables y_{state,action} from the paper. See {@see #computeOffsets()} for more details.
 	 * @param state
 	 * @param action
 	 * @param threshold
 	 * @return
 	 */
-	private int getVarY(int state, int action)
+	int getVarY(int state, int action)
 	{
 		return yOffsetArr[state] + action;
 	}
@@ -471,7 +462,7 @@ public class MultiLongRun
 	 * @param state
 	 * @return
 	 */
-	private int getVarZ(int state, int threshold)
+	int getVarZ(int state, int threshold)
 	{
 		int result = zIndex[state] + threshold;
 		return result;
@@ -750,7 +741,7 @@ public class MultiLongRun
 		}
 
 		//Reward bounds
-		setEqnForConstraints();
+		setEqnForExpectationConstraints();
 
 		setCommitmentForSatisfaction();
 
@@ -789,27 +780,26 @@ public class MultiLongRun
 		for (BitSet maxEndComponent : mecs) {
 			for (int n = 0; n < 1 << getN(); n++) {
 				for (int i = 0; i < getN(); i++) {
-					BitSet b = new BitSet(n);
-					if (b.get(i)) {
-						addSingleCommitmentToSatisfaction(maxEndComponent, n, nonTrivialProbabilities.get(i));
+					if ((n & (1<<i))!=0) {
+						addSingleCommitmentToSatisfaction(maxEndComponent, n, i);
 					}
 				}
 			}
 		}
 	}
 
-	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, MDPConstraint mdpConstraint) throws PrismException
+	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 		for (int state = 0; state < mdp.getNumStates(); state++) {
-			if (!isMECState(state))
-				continue;
-			for (int act = 0; act < mdp.getNumChoices(state); act++) {
-				double value = mdpConstraint.reward.getStateReward(state) + mdpConstraint.reward.getTransitionReward(state, act) - mdpConstraint.getBound();
-				map.put(getVarX(state, act, n), value);
+			if (maxEndComponent.get(state)) {
+				for (int act = 0; act < mdp.getNumChoices(state); act++) {
+					double value = constraints.get(i).reward.getStateReward(state) + constraints.get(i).reward.getTransitionReward(state, act) - constraints.get(i).getBound();
+					map.put(getVarX(state, act, n), value);
+				}
 			}
 		}
-		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + mdpConstraint);
+		solver.addRowFromMap(map, 0.0, SolverProxyInterface.Comparator.GE, "commitment,component: " + maxEndComponent + " n:" + n + "i: " + i);
 	}
 
 	private List<MDPConstraint> getConstraintNonTrivialProbabilityConstraints()

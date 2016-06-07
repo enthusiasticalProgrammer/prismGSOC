@@ -19,20 +19,22 @@ import prism.PrismFileLog;
 import prism.PrismLangException;
 import prism.PrismLog;
 import prism.PrismSettings;
+import prism.PrismUtils;
 import prism.Result;
 import simulator.ModulesFileModelGenerator;
 
+//TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	Model m1;
-	Model m2; //currently not used
-	MDPModelChecker mdp11;
-	MDPModelChecker mdp12;
-	MDPModelChecker mdp13;
+	public MDP m1;
+	public MDP m2; //currently not used, TODO Christopher: use it or lose it
+	public MDPModelChecker mdp11;
+	public MDPModelChecker mdp12;
+	public MDPModelChecker mdp13;
 
-	ExpressionFunc e1;
-	ExpressionFunc e2;
-	ExpressionFunc e3;
+	public ExpressionFunc e1;
+	public ExpressionFunc e2;
+	public ExpressionFunc e3;
 
 	StateValues infeasible;
 
@@ -60,7 +62,7 @@ public class TestMultiLongRun
 			propertiesFile3 = prism.parsePropertiesFile(modulesFile, new File("test/testInputs/CKK15Examples/CKK15PropertyFile3.props"));
 			propertiesFile3.setUndefinedConstants(null);
 
-			m1 = pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
+			m1 = (MDP) pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
 			e1 = (ExpressionFunc) propertiesFile.getProperty(0);
 
 			e2 = (ExpressionFunc) propertiesFile2.getProperty(0);
@@ -148,5 +150,51 @@ public class TestMultiLongRun
 		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
 		ml13.computeOffsets(mdp13.isMemoryLess(e3));
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
+	}
+
+	/**
+	 * This test checks some values for LP-variables given in CKK15, example 4
+	 * @throws PrismException 
+	 */
+	@Test
+	public void testValuesOfExample4() throws PrismException
+	{
+		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+
+		double[] lpResult = ml11.solver.getVariableValues();
+
+		//test x_a for each N
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 0)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarX(1, 0, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 3)], PrismUtils.epsilonDouble);
+
+		//test x_d for each N
+		assertEquals(0.0, lpResult[ml11.getVarX(3, 0, 0)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(3, 0, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarX(3, 0, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.3, lpResult[ml11.getVarX(3, 0, 3)], PrismUtils.epsilonDouble);
+	}
+
+	/**
+	 * This test checks some values for LP-variables given in CKK15, example 5
+	 * @throws PrismException 
+	 */
+	@Test
+	public void testValuesOfExample5() throws PrismException
+	{
+		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+
+		double[] lpResult = ml11.solver.getVariableValues();
+
+		//test y_u, y_v [u=1,v=2], note that y_state is denoted as Z in the implementation
+		assertEquals(0.2, lpResult[ml11.getVarZ(1, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarZ(2, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.6, lpResult[ml11.getVarZ(2, 3)], PrismUtils.epsilonDouble);
+
 	}
 }

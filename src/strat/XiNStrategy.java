@@ -1,10 +1,6 @@
 package strat;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.bind.annotation.XmlElement;
 
 import explicit.Distribution;
 import explicit.MDP;
@@ -12,80 +8,88 @@ import explicit.Model;
 import explicit.MultiLongRun;
 import prism.PrismException;
 import prism.PrismLog;
+import prism.PrismUtils;
 import solvers.SolverProxyInterface;
 
 //TODO @Christopher: add Documentation
+/**
+ * this is more or less an in-between state, because the fact that it outputs the correct
+ * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
+ * but we can output an approximation of it.
+ * We also ommitted some the computation of kappa and n (from the paper TODO: which paper),
+ * because it is irrelevant
+ */
 public class XiNStrategy implements Strategy
 {
-	private transient BigInteger countSteps;
 
 	/**Corresponds to j in paper*/
-	private transient int phase;
+	private BigInteger phase;
 
 	/**Corresponds to N in paper (with trivial mapping [1..n] <--> 2^[1..n])*/
-	@XmlElement
-	private int N;
+	private int N; //TODO Christopher: convert to BigInteger, because it sometimes overflows
 
-	/**theoretically it is redundant, but it is convenient in the implementation*/
-	private transient BigInteger stepsUntilNextPhase;
-
-	@XmlElement
 	private double[] solverVariables;
 
-	/**
-	 * This is needed because the xml-I/O does not like to process the MDP, because it is an
-	 * interface.
-	 */
-	@XmlElement
-	private Map<Integer, Integer> numChoices;
-
-	@XmlElement
 	private MultiLongRun mlr;
 
-	@SuppressWarnings("unused")
-	private XiNStrategy()
-	{
-		//needed for XML I/O
-	}
+	private final MDP mdp;
 
 	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun mlr, int n)
 	{
 		this.solverVariables = solver.getVariableValues();
 		this.mlr = mlr;
 		this.N = n;
+		this.mdp = mdp;
+		phase = BigInteger.ZERO;
+	}
 
-		numChoices = new HashMap<>();
+	//The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy
+	//states
+	public EpsilonApproximationXiNStrategy computeApproximation()
+	{
+		setPhaseForEpsilon(PrismUtils.epsilonDouble * 1000000.0);
+		Distribution[] result = new Distribution[mdp.getNumStates()];
 		for (int state = 0; state < mdp.getNumStates(); state++) {
-			numChoices.put(state, mdp.getNumChoices(state));
+			if (mlr.isMECState(state)) {
+				try {
+					result[state] = getNextMove(state);
+				} catch (InvalidStrategyStateException e) {
+					e.printStackTrace();
+					throw new RuntimeException("This exception should never be thrown, because we actually check that it cannot occur.");
+				}
+			} else {
+				result[state] = null;
+			}
 		}
+		return new EpsilonApproximationXiNStrategy(result);
+
 	}
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
-		this.phase = 0;
-		this.countSteps = BigInteger.valueOf(0);
-		this.stepsUntilNextPhase = n(0);
+		this.phase = BigInteger.ZERO;
 	}
 
 	@Override
-	public void updateMemory(int action, int state) throws InvalidStrategyStateException
+	public void updateMemory(int action, int state)
 	{
-		if (stepsUntilNextPhase.equals(BigInteger.ZERO)) {
-			phase++;
-			stepsUntilNextPhase = n(phase);
-		} else {
-			stepsUntilNextPhase = stepsUntilNextPhase.subtract(BigInteger.ONE);
-		}
-		countSteps = countSteps.add(BigInteger.ONE);
+		//Nothing to do.
+		//technically one needs to adjust the phase sometimes, but
+		//it is not neccessary, because due to readability we only return
+		//an approximated version of the strategy
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
+		if (!mlr.isMECState(state)) {
+			throw new InvalidStrategyStateException("a Xi_N strategy can only be computed for states in maximal end components");
+		}
 		Distribution result = new Distribution();
-		for (int action = 0; action < numChoices.get(state); action++) {
-			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state, action);
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
+
+			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
 			double denominator = sumOfPerturbedFrequencies(state);
 			result.add(action, numerator / denominator);
 		}
@@ -95,9 +99,7 @@ public class XiNStrategy implements Strategy
 	@Override
 	public void reset()
 	{
-		phase = 0;
-		countSteps = BigInteger.ZERO;
-		stepsUntilNextPhase = n(0);
+		phase = BigInteger.ZERO;
 	}
 
 	@Override
@@ -125,9 +127,9 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public BigInteger getCurrentMemoryElement()
+	public Object getCurrentMemoryElement()
 	{
-		return this.countSteps;
+		return null;
 	}
 
 	@Override
@@ -173,20 +175,6 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void initialise(int s)
-	{
-		this.phase = 0;
-		this.countSteps = BigInteger.ZERO;
-		this.stepsUntilNextPhase = n(0);
-	}
-
-	@Override
-	public void update(Object action, int s)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Object getChoiceAction()
 	{
 		throw new UnsupportedOperationException();
@@ -199,59 +187,62 @@ public class XiNStrategy implements Strategy
 	}
 
 	/**
-	 * returns n_j from paper TODO: cite
-	 * TODO: almost instantly overflows --> fix with Math.BigInt 
-	 */
-	private BigInteger n(long j)
-	{
-		if (j < 0)
-			throw new IllegalArgumentException();
-		if (j == 0) {
-			return kappa(j + 1);
-		}
-		BigInteger result = kappa(j + 1).min(n(j - 1)).multiply(BigInteger.valueOf(2L));
-
-		for (long i = 0; i < j; i++) {
-			result = result.multiply(BigInteger.valueOf(2L));
-		}
-		return result;
-	}
-
-	/**
-	 * TODO howto compute it
-	 */
-	private BigInteger kappa(long j)
-	{
-		if (j < 0)
-			throw new IllegalArgumentException();
-		return BigInteger.valueOf(10L);
-	}
-
-	/**
-	 * TODO howto compute it
+	 * the most important thing is: it gets larger and larger
 	 * */
-	private double M()
+	private double getM()
 	{
-		return (phase + 1) * 10.0;
+		return (phase.add(BigInteger.ONE)).doubleValue() * 1000.0;
+	}
+
+	/**
+	 * sets the phase large enough s.t. the strategy is at least as good as an epsilon-strategy
+	 * note that this does not interfere badly with other parts of XiNStrategy, because enlarging phase
+	 * makes the strategy better and not worse
+	 */
+	private void setPhaseForEpsilon(double epsilon)
+	{
+		while (!isEpsilonApproximation(epsilon)) {
+			phase = phase.add(BigInteger.ONE);//because phase can be zero
+			phase = phase.multiply(BigInteger.TEN);
+		}
+	}
+
+	/**
+	 * Check if in the current state, the strategy is an epsilon-approximation
+	 */
+	private boolean isEpsilonApproximation(double epsilon)
+	{
+		double sumXPrime = 0.0;
+		double sumX = 0.0;
+		for (int state = 0; state < mdp.getNumStates(); state++) {
+			if (mlr.isMECState(state)) {
+				for (int action = 0; action < mdp.getNumChoices(state); action++) {
+					sumX = sumX + solverVariables[mlr.getVarX(state, action, N)];
+					sumXPrime += xprime(state);
+				}
+			}
+		}
+		//epsilonDouble is important in case sumX is zero
+		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon+PrismUtils.epsilonDouble;
 	}
 
 	/**
 	 * x'_{a} from paper, here: as function a ---> x'_{a}, dependent also on the state, on M and on
 	 * the phase
 	 */
-	private double xprime(int state, int action)
+	private double xprime(int state)
 	{
-		return ((double) numChoices.get(state)) / M();
+		return ((double) mdp.getNumChoices(state)) / getM();
 	}
 
 	private double sumOfPerturbedFrequencies(int state)
 	{
 		double sum = 0.0;
-		for (int action = 0; action < numChoices.get(state); action++) {
+		for (int action = 0; action < mdp.getNumChoices(state); action++) {
 			if (mlr.isMECState(state)) {
 				sum = sum + solverVariables[mlr.getVarX(state, action, N)];
 			}
-			sum = sum + xprime(state, action);
+			sum = sum + xprime(state);
 		}
 		return sum;
 	}
@@ -259,11 +250,12 @@ public class XiNStrategy implements Strategy
 	@Override
 	public String getInfo()
 	{
-		return "";
+		throw new UnsupportedOperationException();//TODO: implement it
 	}
 
 	@Override
 	public void setInfo(String info)
 	{
+		throw new UnsupportedOperationException();
 	}
 }

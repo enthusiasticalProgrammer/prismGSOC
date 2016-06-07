@@ -242,6 +242,22 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		return distrNew;
 	}
 
+	/**
+	 * Puts the probabilities of other inside this distribution,
+	 * such that both add up. 
+	 */
+	public void merge(Distribution other)
+	{
+		for (Entry<Integer, Double> entry : other.map.entrySet()) {
+			if (map.get(entry.getKey()) == null) {
+				map.put(entry.getKey(), entry.getValue());
+			} else {
+				map.put(entry.getKey(), entry.getValue() + map.get(entry.getKey()));
+			}
+		}
+
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

@@ -19,8 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import prism.PrismException;
 import prism.PrismLog;
 import explicit.Distribution;
+import explicit.MDPSimple;
 import explicit.MDPSparse;
 import explicit.Model;
+import parser.State;
 
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
@@ -30,25 +32,30 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	// strategy info
 	protected String info = "No information available.";
 
-	// storing last state
-	protected transient int lastState;
-
 	@XmlElementWrapper(name = "transientChoices")
-	@XmlElement(name = "distribution")
+	@XmlElement(name = "distribution", nillable = true)
 	protected final Distribution[] transientChoices;
 
-	@XmlElementWrapper(name = "reccurentChoices")
-	@XmlElement(name = "distribution")
-	protected final XiNStrategy[] recurrentChoices;
+	/**
+	 * type is used, because xml is not happy about interfaces
+	 */
+	@XmlElementWrapper(name = "recurrentChoices")
+	@XmlElement(name = "One_recurrent_strategy")
+	protected final EpsilonApproximationXiNStrategy[] recurrentChoices;
 
 	@XmlElementWrapper(name = "switchingProbabilities")
+	@XmlElement(name = "distribution", nillable = true)
 	/**The offset is the state*/
 	protected final Distribution[] switchProb;
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/
 	private transient int strategy;
-	//private transient boolean isTransient; //represents the single bit of memory
 
+	/**
+	 * This constructior is important for xml-I/O, do not remove it
+	 * even it does not seem to be called
+	 */
+	@SuppressWarnings("unused")
 	private MultiLongRunStrategy()
 	{
 		this.switchProb = null;
@@ -62,6 +69,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public static MultiLongRunStrategy loadFromFile(String filename)
 	{
+		//TODO Christopher: adjust it
 		try {
 			File file = new File(filename);
 			//InputStream inputStream = new FileInputStream(file);
@@ -91,7 +99,10 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		this.transientChoices = transChoices;
 		this.switchProb = switchProb;
-		this.recurrentChoices = recChoices;
+		this.recurrentChoices = new EpsilonApproximationXiNStrategy[recChoices.length];
+		for (int i = 0; i < recChoices.length; i++) {
+			recurrentChoices[i] = recChoices[i].computeApproximation();
+		}
 	}
 
 	//TODO check if this still works
@@ -109,42 +120,41 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, XiNStrategy[] recChoices)
 	{
-		this.switchProb = null;
-		this.transientChoices = transChoices;
-		this.recurrentChoices = recChoices;
+		this(transChoices, null, recChoices);
 	}
 
-	private int switchToRecurrent(int state)
+	private void setRecurrency(int state)
 	{
+		if (strategy != -1)
+			return;
 		if (switchProb[state] == null) {
 			//state not in MEC
-			return -1;
-		}
-		double rand = Math.random();
-		for (int i = 0; i < switchProb.length; i++) {
-			rand -= switchProb[state].get(i);
-			if (rand <= 0.0) {
-				return i;
+			strategy = -1;
+		} else {
+			double rand = Math.random();
+			for (int i = 0; i < switchProb.length; i++) {
+				rand -= switchProb[state].get(i);
+				if (rand <= 0.0) {
+					strategy = i;
+					return;
+				}
 			}
+			strategy = -1;
 		}
-		return -1;
 	}
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
-		strategy = switchToRecurrent(state);
+		strategy=-1;
+		setRecurrency(state);
 		System.out.println("init to " + isTransient());
-		lastState = state;
 	}
 
 	@Override
-	public void updateMemory(int action, int state) throws InvalidStrategyStateException
+	public void updateMemory(int action, int state)
 	{
-		if (strategy == -1) {
-			strategy = switchToRecurrent(state);
-		}
-		lastState = state;
+		setRecurrency(state);
 	}
 
 	@Override
@@ -156,7 +166,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void reset()
 	{
-		lastState = -1;
+		//nothing to do here
 	}
 
 	@Override
@@ -191,107 +201,76 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		return null;
 	}
 
-	//TODO find out what this method does and adjust it
+	//TODO verify under strategy is not working (but however output with strategy does)
 	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-		/*
+
 		// construct a new STPG of size three times the original model
-		MDPSimple mdp = new MDPSimple(3 * model.getNumStates());
-		
-		int n = mdp.getNumStates();
-		
+		MDPSimple mdp = new MDPSimple((recurrentChoices.length + 1) * model.getNumStates());
+
 		List<State> oldStates = model.getStatesList();
-		
+
 		// creating helper states
-		State stateInit = new State(1), stateTran = new State(1), stateRec = new State(1);
-		stateInit.setValue(0, 0); // state where memory is not yet initialised
-		stateTran.setValue(0, 1); // state where target is minimum elem
-		stateRec.setValue(0, 2); // state where target is maximum element
-		
-		// creating product state list
-		List<State> newStates = new ArrayList<State>(n);
-		for (int i = 0; i < oldStates.size(); i++) {
-			newStates.add(new State(oldStates.get(i), stateInit));
-			newStates.add(new State(oldStates.get(i), stateTran));
-			newStates.add(new State(oldStates.get(i), stateRec));
+		State[] strategyStates = new State[recurrentChoices.length + 1];
+		for (int i = 0; i < strategyStates.length; i++) {
+			strategyStates[i] = new State(1);
+			strategyStates[i].setValue(0, i);
 		}
-		
+
+		// creating product state list
+		List<State> newStates = new ArrayList<State>(mdp.getNumStates());
+		for (State oldState : oldStates) {
+			for (State strategyState : strategyStates)
+				newStates.add(new State(oldState, strategyState));
+		}
+
 		// setting the states list to STPG
 		mdp.setStatesList(newStates);
-		
-		// adding choices for the product STPG
-		// initial distributions
-		int indx;
-		Distribution distr;
-		
-		distr = new Distribution();
-		if (this.switchProb.get(0) != 1)
-			distr.add(1, 1 - this.switchProb[0]);
-		if (this.switchProb.get(0) != 0)
-			distr.add(2, this.switchProb[0]);
-		mdp.addChoice(0, distr);
-		
-		for (int i = 1; i < oldStates.size(); i++) {
-			indx = 3 * i;
-		
-			//Add self-loop only
-			distr = new Distribution();
-			distr.add(indx, 1.0);
-			mdp.addChoice(indx, distr);
-		
+
+		//take care of the transitions from the transient states
+		for (int oldState = 0; oldState < oldStates.size(); oldState++) {
+
+			//adjust indices of switch-transitions
+			Distribution distrInput = switchProb[oldState];
+			Distribution distrOutput = new Distribution();
+			for (int i = 0; i < recurrentChoices.length; i++) {
+				if (distrInput != null && distrInput.get(i) > 0.0) {
+					distrOutput.add(oldState * (recurrentChoices.length + 1) + 1 + i, distrInput.get(i));
+				}
+			}
+
+			//add transient-Choices
+			if (transientChoices[oldState] != null) {
+				Distribution newTransientChoice = new Distribution();
+				for (int i = 0; i < oldStates.size(); i++) {
+					newTransientChoice.add(i * (recurrentChoices.length + 1), transientChoices[oldState].get(i));
+				}
+
+				distrOutput.merge(newTransientChoice);
+			}
+			mdp.addChoice(oldState * (recurrentChoices.length + 1), distrOutput);
 		}
-		
-		// all other states
-		for (int i = 0; i < oldStates.size(); i++) {
-			int tranIndx = 3 * i + 1;
-			int recIndx = 3 * i + 2;
-		
-			Distribution distrTranState = new Distribution();
-			Distribution distrRecState = new Distribution();
-		
-			Distribution choicesTran = this.transientChoices[i];
-			Distribution choicesRec = this.recurrentChoices[i];
-		
-			//recurrent states
-			if (choicesRec != null) { //MEC state
-				for (Entry<Integer, Double> choiceEntry : choicesRec) {
-					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while (iterator.hasNext()) {
-						Entry<Integer, Double> transitionEntry = iterator.next();
-						distrRecState.add(transitionEntry.getKey(), choiceEntry.getValue() * transitionEntry.getValue());
-					}
+
+		//take care of the transitions from the recurrent states
+		for (int recurrentStrategy = 0; recurrentStrategy < recurrentChoices.length; recurrentStrategy++) {
+			for (int oldState = 0; oldState < oldStates.size(); oldState++) {
+				Distribution oldDistribution;
+				try {
+					oldDistribution = recurrentChoices[recurrentStrategy].getNextMove(oldState);
+				} catch (InvalidStrategyStateException e) {
+					continue; //in this case, the outgoing transitions from the respective
+								//states do not matter, because they are unreachable
 				}
-		
-				mdp.addChoice(recIndx, distrRecState);
-			}
-		
-			//transient states, switching to recurrent
-			if (choicesRec != null) { //MEC state
-				for (Entry<Integer, Double> choiceEntry : choicesRec) {
-					Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-					while (iterator.hasNext()) {
-						Entry<Integer, Double> transitionEntry = iterator.next();
-						distrTranState.add(transitionEntry.getKey(), switchProb[i] * choiceEntry.getValue() * transitionEntry.getValue());
-					}
+				Distribution newDistribution = new Distribution();
+				for (int oldState2 = 0; oldState2 < oldStates.size(); oldState2++) {
+					newDistribution.add(oldState2 * (recurrentChoices.length + 1) + recurrentStrategy, oldDistribution.get(oldState2));
 				}
+				mdp.addChoice(oldState * (recurrentChoices.length + 1) + recurrentStrategy, newDistribution);
 			}
-		
-			//transitent states, not switching
-			for (Entry<Integer, Double> choiceEntry : choicesTran) {
-				Iterator<Entry<Integer, Double>> iterator = model.getTransitionsIterator(i, choiceEntry.getKey());
-				while (iterator.hasNext()) {
-					Entry<Integer, Double> transitionEntry = iterator.next();
-					distrTranState.add(transitionEntry.getKey(), (1 - switchProb[i]) * choiceEntry.getValue() * transitionEntry.getValue());
-				}
-			}
-		
-			mdp.addChoice(tranIndx, distrTranState);
 		}
-		
-		// setting initial state for the game
+
 		mdp.addInitialState(0);
-		
-		return mdp;*/throw new UnsupportedOperationException();
+		return mdp;
 	}
 
 	@Override
@@ -319,21 +298,14 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	/**
-	 * I will use for now boolean/List<Integer/BigInteger>, because depending on the complexity of the problem it could
-	 * be either boolean or BigInteger or Tuple(int,BigInteger).
-	 * This might be a bit redundant, compare to Multigain- and other paper
+	 * Integer is used for now. Note that an enum in the size [-1...2^N-1]
+	 * would suffice (N: defined in paper CKK15] for denoting, which
+	 * recurrent strategy is used (or -1 if the transient strategy is yet used
 	 */
 	@Override
-	public Object getCurrentMemoryElement()
+	public Integer getCurrentMemoryElement()
 	{
-		if (isTransient()) {
-			return true;
-		} else {
-			List<Object> result = new ArrayList<>();
-			result.add(strategy);
-			result.add(recurrentChoices[strategy].getCurrentMemoryElement());
-			return result;
-		}
+		return strategy;
 	}
 
 	private boolean isTransient()
@@ -348,32 +320,16 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void setMemory(Object memory) throws InvalidStrategyStateException
 	{
-		if (memory instanceof Boolean) {
-			if ((boolean) memory) {
-				this.strategy = -1;
-				for (XiNStrategy rec : recurrentChoices) {
-					rec.reset();
-				}
+		if (memory instanceof Integer) {
+			int mem = (Integer) memory;
+			if(mem<-1 || mem>=recurrentChoices.length){
+				throw new IllegalArgumentException("only values from -1 to "+recurrentChoices.length+" are allowed");
 			}
-		} else {
-			if (memory instanceof List) {
-				List list = (List) memory;
-				if (list.size() != 2) {
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-				}
-				if (!(list.get(0) instanceof Integer))
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-
-				if (!(list.get(1) instanceof BigInteger))
-					throw new InvalidStrategyStateException("Use List only if first element is int and second one BigInteger");
-
-				this.strategy = (int) list.get(0);
-				for (XiNStrategy rec : recurrentChoices) {
-					rec.reset();
-				}
-				recurrentChoices[strategy].setMemory(list.get(1));
-			}
+			this.strategy = (int) mem;
+		}else{
+			throw new IllegalArgumentException("Integer is required as argument, current type: "+memory.getClass());
 		}
+
 	}
 
 	@Override
@@ -406,23 +362,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	@Override
 	public void exportActions(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void initialise(int s)
-	{
-		strategy = -1;
-		for (XiNStrategy strategy : this.recurrentChoices) {
-			strategy.initialise(s);
-		}
-
-	}
-
-	@Override
-	public void update(Object action, int s)
 	{
 		throw new UnsupportedOperationException();
 
@@ -465,7 +404,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public String toString()
 	{
 		String result = "";
-		result += "transientChoices\nabc";
+		result += "transientChoices\n";
 		for (int i = 0; i < transientChoices.length; i++) {
 			result += i + "  " + transientChoices[i] + "\n";
 		}
@@ -479,6 +418,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		result += "recurrentChoices\n";
 		for (int i = 0; i < recurrentChoices.length; i++) {
 			result += i + "  " + recurrentChoices[i] + "\n";
+		}
+		if(strategy>-2){
+			throw new IllegalArgumentException();
 		}
 		return result;
 	}

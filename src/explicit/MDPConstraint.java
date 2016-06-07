@@ -3,16 +3,15 @@ package explicit;
 import explicit.rewards.MDPReward;
 import prism.Operator;
 
-class MDPConstraint extends MDPItem
+
+class MDPConstraint extends MDPExpectationConstraint
 {
-	final double bound;
 	final double probability;
 
 	MDPConstraint(MDPReward reward, prism.Operator operator, double bound, double probability)
 	{
-		super(reward, operator);
+		super(reward, operator, bound);
 		checkForIllegalArguments(reward, operator, bound, probability);
-		this.bound = bound;
 		this.probability = probability;
 	}
 
@@ -36,11 +35,6 @@ class MDPConstraint extends MDPItem
 		return probability <= 1.0;
 	}
 
-	double getBound()
-	{
-		return bound;
-	}
-
 	double getProbability()
 	{
 		if (!this.isProbabilistic())
@@ -55,9 +49,6 @@ class MDPConstraint extends MDPItem
 			return false;
 		}
 		MDPConstraint that = (MDPConstraint) object;
-		if (!prism.PrismUtils.doublesAreEqual(this.bound, that.bound)) {
-			return false;
-		}
 		return (this.isProbabilistic() && that.isProbabilistic()) || (prism.PrismUtils.doublesAreEqual(this.probability, that.probability));
 	}
 }

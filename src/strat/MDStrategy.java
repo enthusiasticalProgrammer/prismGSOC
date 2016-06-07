@@ -72,18 +72,6 @@ public abstract class MDStrategy implements Strategy
 	// Methods for Strategy
 	
 	@Override
-	public void initialise(int s)
-	{
-		currentState = s;
-	}
-	
-	@Override
-	public void update(Object action, int s)
-	{
-		currentState = s;
-	}
-	
-	@Override
 	public Object getChoiceAction()
 	{
 		return getChoiceAction(currentState);
@@ -112,10 +100,9 @@ public abstract class MDStrategy implements Strategy
 	// Temp stubs
 
 	@Override
-	public void init(int state) throws InvalidStrategyStateException
+	public void init(int state)
 	{
-		// TODO Auto-generated method stub
-		
+		currentState=state;
 	}
 
 	@Override

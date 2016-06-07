@@ -197,10 +197,11 @@ public class MDPModelChecker extends ProbModelChecker
 		return sv;
 	}
 
-	MultiLongRun createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
+	public MultiLongRun createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
 	{
 		Collection<MDPConstraint> constraints = new ArrayList<>();
 		Collection<MDPObjective> objectives = new ArrayList<>();
+		Collection<MDPExpectationConstraint> expConstraints = new ArrayList<>();
 
 		//extract data
 		for (int i = 0; i < expr.getNumOperands(); i++) {
@@ -266,13 +267,12 @@ public class MDPModelChecker extends ProbModelChecker
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
 			MDPReward mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
 
-			System.out.println(("operator: "+operator));
 			//create objective or constraint
 			if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
 				objectives.add(new MDPObjective(mdpReward, operator));
 			} else {
 				if (prob == null) {
-					constraints.add(new MDPConstraint(mdpReward, operator, bound));
+					expConstraints.add(new MDPExpectationConstraint(mdpReward, operator, bound));
 				} else {
 					if (prob.getProb() instanceof ExpressionLiteral) {
 						ExpressionLiteral exprLit = (ExpressionLiteral) prob.getProb();
@@ -288,7 +288,7 @@ public class MDPModelChecker extends ProbModelChecker
 			}
 		}
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
-		return new MultiLongRun((MDP) model, constraints, objectives, method);
+		return new MultiLongRun((MDP) model, constraints, objectives, expConstraints, method);
 	}
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException
@@ -301,7 +301,7 @@ public class MDPModelChecker extends ProbModelChecker
 		}
 	}
 
-	private Operator determineOperator(RelOp relOp) throws PrismException
+	private Operator determineOperator(RelOp relOp)
 	{
 		if (relOp.equals(RelOp.MAX) || relOp.equals(RelOp.MIN) || relOp.equals(RelOp.LEQ)) {
 			return Operator.R_MAX;
@@ -313,12 +313,11 @@ public class MDPModelChecker extends ProbModelChecker
 		} else if (relOp.equals(RelOp.LEQ)) {
 			return Operator.R_LE;
 		} else if (relOp.equals(RelOp.LT)) {
-			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
 		} else if (relOp.equals(RelOp.GT)) { // currently do not support
-			//relOps.add(1);
-			throw new PrismException("Multi-objective properties can not use strict inequalities on P/R operators");
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
 		} else {
-			throw new PrismException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
+			throw new UnsupportedOperationException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
 		}
 	}
 
@@ -487,7 +486,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max probabilities (true=min, false=max)
 	 */
-	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min) throws PrismException
+	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min)
 	{
 		ModelCheckerResult res = null;
 		int n;
