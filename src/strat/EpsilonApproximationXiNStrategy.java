@@ -156,4 +156,11 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
+	public boolean equals(Object o){
+		if(o.getClass()!=this.getClass()){
+			return false;
+		}
+		EpsilonApproximationXiNStrategy other = (EpsilonApproximationXiNStrategy) o;
+		return choices.equals(other.choices);
+	}
 }
