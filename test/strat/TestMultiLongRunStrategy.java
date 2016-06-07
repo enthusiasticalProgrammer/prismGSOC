@@ -85,10 +85,24 @@ public class TestMultiLongRunStrategy
 			for (int action = 0; action < tmlr.m1.getNumChoices(1); action++) {
 				//In this state, we have to take the respective choice anyway, so
 				//each strategy has to take it with full probability without making resistance
-				assertTrue(d.get(action) > 0.99999);
+				assertEquals(1.0, d.get(action), PrismUtils.epsilonDouble);
 			}
 		}
-
 	}
 
+	@Test
+	public void testStrategyIsAlwaysDefined() throws PrismException, InvalidStrategyStateException
+	{
+		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+		MultiLongRunStrategy strat = ml11.getStrategy(false);
+
+		for (int i = 0; i < 1000; i++) {//updateMemory is nondeterministic, therefore the loop
+			strat.init(0);
+			strat.updateMemory(0, 2); //action does not matter, important is that we are in state 1
+			Distribution d = strat.getNextMove(2);
+			assertEquals(1.0, d.sum(), PrismUtils.epsilonDouble);
+		}
+	}
 }

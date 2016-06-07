@@ -19,6 +19,7 @@ import prism.PrismFileLog;
 import prism.PrismLangException;
 import prism.PrismLog;
 import prism.PrismSettings;
+import prism.PrismUtils;
 import prism.Result;
 import simulator.ModulesFileModelGenerator;
 
@@ -149,5 +150,51 @@ public class TestMultiLongRun
 		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
 		ml13.computeOffsets(mdp13.isMemoryLess(e3));
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
+	}
+
+	/**
+	 * This test checks some values for LP-variables given in CKK15, example 4
+	 * @throws PrismException 
+	 */
+	@Test
+	public void testValuesOfExample4() throws PrismException
+	{
+		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+
+		double[] lpResult = ml11.solver.getVariableValues();
+
+		//test x_a for each N
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 0)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarX(1, 0, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(1, 0, 3)], PrismUtils.epsilonDouble);
+
+		//test x_d for each N
+		assertEquals(0.0, lpResult[ml11.getVarX(3, 0, 0)], PrismUtils.epsilonDouble);
+		assertEquals(0.0, lpResult[ml11.getVarX(3, 0, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarX(3, 0, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.3, lpResult[ml11.getVarX(3, 0, 3)], PrismUtils.epsilonDouble);
+	}
+
+	/**
+	 * This test checks some values for LP-variables given in CKK15, example 5
+	 * @throws PrismException 
+	 */
+	@Test
+	public void testValuesOfExample5() throws PrismException
+	{
+		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+
+		double[] lpResult = ml11.solver.getVariableValues();
+
+		//test y_u, y_v [u=1,v=2], note that y_state is denoted as Z in the implementation
+		assertEquals(0.2, lpResult[ml11.getVarZ(1, 1)], PrismUtils.epsilonDouble);
+		assertEquals(0.2, lpResult[ml11.getVarZ(2, 2)], PrismUtils.epsilonDouble);
+		assertEquals(0.6, lpResult[ml11.getVarZ(2, 3)], PrismUtils.epsilonDouble);
+
 	}
 }
