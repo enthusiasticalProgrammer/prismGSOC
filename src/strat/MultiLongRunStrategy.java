@@ -32,9 +32,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	// strategy info
 	protected String info = "No information available.";
 
-	// storing last state
-	protected transient int lastState;
-
 	@XmlElementWrapper(name = "transientChoices")
 	@XmlElement(name = "distribution", nillable = true)
 	protected final Distribution[] transientChoices;
@@ -147,7 +144,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		strategy = switchToRecurrent(state);
 		System.out.println("init to " + isTransient());
-		lastState = state;
 	}
 
 	@Override
@@ -156,7 +152,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		if (strategy == -1) {
 			strategy = switchToRecurrent(state);
 		}
-		lastState = state;
 	}
 
 	@Override
@@ -168,7 +163,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void reset()
 	{
-		lastState = -1;
+		//nothing to do here
 	}
 
 	@Override
