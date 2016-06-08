@@ -39,7 +39,7 @@ public class MultiLongRun
 	private final MDP mdp;
 	private Collection<BitSet> mecs;
 	private final List<MDPConstraint> constraints;
-	private final Collection<MDPExpectationConstraint> expConstraints; 
+	private final Collection<MDPExpectationConstraint> expConstraints;
 	final Collection<MDPObjective> objectives;
 
 	/**
@@ -100,13 +100,14 @@ public class MultiLongRun
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		this.mdp = mdp;
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
-		this.expConstraints=expConstraints;
+		this.expConstraints = expConstraints;
 		this.mecs = computeMECs();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
@@ -775,12 +776,10 @@ public class MultiLongRun
 	//Equation number 6
 	private void setCommitmentForSatisfaction() throws PrismException
 	{
-		List<MDPConstraint> nonTrivialProbabilities = this.getConstraintNonTrivialProbabilityConstraints();
-
 		for (BitSet maxEndComponent : mecs) {
 			for (int n = 0; n < 1 << getN(); n++) {
 				for (int i = 0; i < getN(); i++) {
-					if ((n & (1<<i))!=0) {
+					if ((n & (1 << i)) != 0) {
 						addSingleCommitmentToSatisfaction(maxEndComponent, n, i);
 					}
 				}
@@ -794,7 +793,8 @@ public class MultiLongRun
 		for (int state = 0; state < mdp.getNumStates(); state++) {
 			if (maxEndComponent.get(state)) {
 				for (int act = 0; act < mdp.getNumChoices(state); act++) {
-					double value = constraints.get(i).reward.getStateReward(state) + constraints.get(i).reward.getTransitionReward(state, act) - constraints.get(i).getBound();
+					double value = constraints.get(i).reward.getStateReward(state) + constraints.get(i).reward.getTransitionReward(state, act)
+							- constraints.get(i).getBound();
 					map.put(getVarX(state, act, n), value);
 				}
 			}
@@ -874,7 +874,6 @@ public class MultiLongRun
 	 */
 	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
 	{
-		double[] resultVariables = solver.getVariableValues();
 		double[] lpResult;
 		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
 
@@ -884,17 +883,10 @@ public class MultiLongRun
 
 		for (int state = 0; state < numStates; state++) {
 			double transientSum = 0.0;
-			double recurrentSum = 0.0;
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
 				transientSum += lpResult[getVarY(state, j)];
-				if (isMECState(state)) {
-					for (int n = 0; n < 1 << getN(); n++) {
-						recurrentSum += resultVariables[getVarX(state, j, n)];
-					}
-				}
 			}
-
-			transientDistribution[state] = getTransientDistributionAt(state, memoryless, recurrentSum, transientSum, lpResult);
+			transientDistribution[state] = getTransientDistributionAt(state, transientSum, lpResult);
 		}
 
 		for (BitSet mec : mecs) {
@@ -925,12 +917,11 @@ public class MultiLongRun
 				}
 			}
 		}
-		for (int i = 0; i < inBetweenResult.length; i++) {
-			System.out.println(i + " " + inBetweenResult[i]);
-		}
+		double sumForNormalisation=0.0;
+		for(int i=0;i<inBetweenResult.length;sumForNormalisation+=inBetweenResult[i++]);
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i]);
+			result.add(i, inBetweenResult[i]/sumForNormalisation);
 		}
 		return result;
 	}
@@ -945,9 +936,10 @@ public class MultiLongRun
 		return strategies;
 	}
 
-	private Distribution getTransientDistributionAt(int state, boolean memoryless, double recurrentSum, double transientSum, double[] resSt)
+	private Distribution getTransientDistributionAt(int state, double transientSum, double[] resSt)
 	{
-		if (transientSum > 0.0 && (!memoryless || !isMECState(state) || recurrentSum == 0.0)) {
+		System.out.println("in getTransientDistributionAt, state: " + state + ",  transientSum: " + transientSum);
+		if (transientSum > 0.0) {
 			Distribution result = new Distribution();
 
 			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {

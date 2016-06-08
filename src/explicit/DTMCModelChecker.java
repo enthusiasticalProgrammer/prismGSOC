@@ -170,7 +170,6 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
-	<<<<<<< HEAD
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException

@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import explicit.Distribution;
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -736,6 +737,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	private void executeTransition(int i, int offset, int index) throws PrismException
 	{
+		//TODO Christopher: here the strategy-Problem can be solved
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
 		Choice choice = transitions.getChoice(i);
@@ -1228,6 +1230,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param initialState Initial state (if null, is selected randomly)
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
+	 * @throws InvalidStrategyStateException 
 	 */
 	public Object modelCheckSingleProperty(ModulesFile modulesFile, PropertiesFile propertiesFile, Expression expr, State initialState, long maxPathLength,
 			SimulationMethod simMethod) throws PrismException
@@ -1259,6 +1262,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param initialState Initial state (if null, is selected randomly)
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
+	 * @throws InvalidStrategyStateException 
 	 */
 	public Object[] modelCheckMultipleProperties(ModulesFile modulesFile, PropertiesFile propertiesFile, List<Expression> exprs, State initialState,
 			long maxPathLength, SimulationMethod simMethod) throws PrismException
@@ -1475,6 +1479,7 @@ public class SimulatorEngine extends PrismComponent
 	 * for all properties indicate that it is finished.
 	 * @param initialState Initial state (if null, is selected randomly)
 	 * @param maxPathLength The maximum path length for sampling
+	 * @throws InvalidStrategyStateException 
 	 */
 	private void doSampling(State initialState, long maxPathLength) throws PrismException
 	{
@@ -1629,6 +1634,8 @@ public class SimulatorEngine extends PrismComponent
 			for (State s : stateslist)
 				stateIds.put(s, i++);
 
+		} else if (strategy != null) {
+			throw new UnsupportedOperationException("wrong type of model");
 		}
 	}
 }

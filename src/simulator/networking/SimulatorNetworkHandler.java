@@ -817,6 +817,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 		return tableModel.getRowCount();
 	}
 	
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		return tableModel.getValueAt(rowIndex, columnIndex);

@@ -69,7 +69,6 @@ import automata.LTL2DA;
 
 import common.IterableStateSet;
 import prism.DRA;
-import prism.Pair;
 
 /**
  * LTL model checking functionality
