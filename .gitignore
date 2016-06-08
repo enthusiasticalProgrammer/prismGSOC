@@ -13,3 +13,8 @@ bin
 *.orig
 .classpath
 .settings/*
+.project
+build.gradle
+dtds/*
+examples/*
+install.sh
