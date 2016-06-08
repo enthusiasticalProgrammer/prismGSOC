@@ -1051,8 +1051,8 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	 */
 	public void save(File file) throws PrismException
 	{
-		try {
-			JFreeChart chart = getChart();
+		try 
+		{ 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.newDocument();
@@ -1085,7 +1085,9 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			chartFormat.setAttribute("legendFontColourG", "" + legendFontColor.getGreen());
 			chartFormat.setAttribute("legendFontColourB", "" + legendFontColor.getBlue());
 
-			switch (getLegendPosition()) {
+			
+			switch (getLegendPosition()) 
+			{ 
 			case LEFT:
 				chartFormat.setAttribute("legendPosition", "left");
 				break;

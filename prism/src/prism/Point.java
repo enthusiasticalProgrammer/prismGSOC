@@ -269,6 +269,8 @@ public class Point
 	 */
 	public Point toRealProperties(OpsAndBoundsList obl)
 	{
+		if(obl==null)
+			return this;
 		double[] oldCoords = coords.clone();
 		double[] newCoords = new double[oldCoords.length];
 

@@ -88,7 +88,7 @@ public class PrismStaTra
 	{
 		BufferedReader in;
 		String s, ss[];
-		int i, r, c, lineNum = 0;
+		int i, lineNum = 0;
 
 		try {
 			// open file for reading

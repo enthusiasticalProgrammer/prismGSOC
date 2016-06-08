@@ -852,9 +852,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), Math.max(0, (p1 - p0 - 1)));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = summaryText.getFont().getName();
 				int fsize = summaryText.getFont().getSize();
 
@@ -871,9 +868,9 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				}
 				g.setColor(Color.black);
 				g.setFont(new Font(fname, Font.PLAIN, fsize));
-			} catch (BadLocationException ex) {
-				//System.out.println("ex = "+ex);
-				//ex.printStackTrace();
+			}
+			catch(BadLocationException ex)
+			{
 			}
 			return x;
 		}
@@ -920,7 +917,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 		private synchronized userinterface.model.Style[] highlight(String s, int offset, int length)
 		{
-			//System.out.println("s = *"+s+"*");
 			userinterface.model.Style[] styles = new userinterface.model.Style[s.length()];
 			for (int i = 0; i < styles.length; i++)
 				styles[i] = PLAIN_S;
@@ -933,9 +929,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				}
 			}
 
-			//System.out.println("styles.length = "+styles.length);
-			//System.out.println("ret.length = "+length);
-			//System.out.println("offset = "+offset);
 			userinterface.model.Style[] ret = new userinterface.model.Style[length];
 			for (int i = 0; i < ret.length; i++) {
 				ret[i] = styles[i + offset];

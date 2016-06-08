@@ -109,6 +109,8 @@ public class PrismSettings implements Observer
 	public static final String PRISM_NO_DA_SIMPLIFY = "prism.noDaSimplify";
 	public static final String PRISM_EXPORT_ADV = "prism.exportAdv";
 	public static final String PRISM_EXPORT_ADV_FILENAME = "prism.exportAdvFilename";
+	public static final String PRISM_GENERATE_STRATEGY = "prism.generateStrategy";
+	public static final String PRISM_IMPLEMENT_STRATEGY = "prism.implementStrategy";
 
 	public static final String PRISM_MULTI_MAX_POINTS = "prism.multiMaxIters";
 	public static final String PRISM_PARETO_EPSILON = "prism.paretoEpsilon";
@@ -222,8 +224,8 @@ public class PrismSettings implements Observer
 			{ CHOICE_TYPE, PRISM_MDP_SOLN_METHOD, "MDP solution method", "4.0", "Value iteration",
 					"Value iteration,Gauss-Seidel,Policy iteration,Modified policy iteration,Linear programming",
 					"Which method to use when solving Markov decision processes." },
-			{ CHOICE_TYPE, PRISM_MDP_MULTI_SOLN_METHOD, "MDP multi-objective solution method", "4.0.3", "Value iteration",
-					"Value iteration,Gauss-Seidel,Linear programming",
+			{ CHOICE_TYPE, PRISM_MDP_MULTI_SOLN_METHOD, "MDP multi-objective solution method", "4.0.3", "Linear programming",
+					"Value iteration,Gauss-Seidel,Linear programming,Gurobi",
 					"Which method to use when solving multi-objective queries on Markov decision processes." },
 			{ CHOICE_TYPE, PRISM_TERM_CRIT, "Termination criteria", "2.1", "Relative", "Absolute,Relative",
 					"Criteria to use for checking termination of iterative numerical methods." },
@@ -299,7 +301,10 @@ public class PrismSettings implements Observer
 
 			{ CHOICE_TYPE, PRISM_LTL2DA_SYNTAX, "LTL syntax for external LTL->DA tool", "4.2.1", "LBT", "LBT,Spin,Spot,Rabinizer",
 					"The syntax for LTL formulas passed to the external LTL->DA tool." },
-
+			{ BOOLEAN_TYPE, PRISM_GENERATE_STRATEGY, "Generate Strategy", "4.1", new Boolean(false), "",
+					"Generate an optimal strategy when model checking an MDP/game" },
+			{ BOOLEAN_TYPE, PRISM_IMPLEMENT_STRATEGY, "Implements Strategy", "4.1", new Boolean(false), "",
+					"Model checks the property with respect to strategy." },
 			// PARAMETRIC MODEL CHECKING
 			{ BOOLEAN_TYPE, PRISM_PARAM_ENABLED, "Do parametric model checking", "4.1", new Boolean(false), "", "Perform parametric model checking." },
 			{ STRING_TYPE, PRISM_PARAM_PRECISION, "Parametric model checking precision", "4.1", "5/100", "",
@@ -683,21 +688,6 @@ public class PrismSettings implements Observer
 								} catch (SettingException ee) {
 									System.err.println("Warning: PRISM setting \"" + key + "\" has invalid value \"" + value + "\"");
 								}
-							} else {
-								// Warning for unused options disabled for now
-								// (it's a pain when you have lots of branches with lots of new options)
-								if (false) {
-									// Make sure this is not an old PRISM setting and if not print a warning
-									boolean isOld = false;
-									for (int i = 0; i < oldPropertyNames.length; i++) {
-										if (oldPropertyNames[i].equals(key)) {
-											isOld = true;
-											break;
-										}
-									}
-									if (!isOld)
-										System.err.println("Warning: PRISM setting \"" + key + "\" is unknown.");
-								}
 							}
 						}
 					}
@@ -820,6 +810,12 @@ public class PrismSettings implements Observer
 		String sw = pair.first;
 		Map<String, String> options = pair.second;
 
+		// Remove "-"
+		sw = args[i].substring(1);
+		// Remove optional second "-" (i.e. we allow switches of the form --sw too)
+		if (sw.charAt(0) == '-')
+			sw = sw.substring(1);
+
 		// Note: the order of these switches should match the -help output (just to help keep track of things).
 
 		// ENGINES/METHODS:
@@ -848,6 +844,8 @@ public class PrismSettings implements Observer
 					set(PRISM_PTA_METHOD, "Stochastic games");
 				else if (s.equals("backwards") || s.equals("bw"))
 					set(PRISM_PTA_METHOD, "Backwards reachability");
+				else if (s.equals("bisim"))
+					set(PRISM_PTA_METHOD, "Bisimulation minimisation");
 				else
 					throw new PrismException("Unrecognised option for -" + sw + " switch (options are: digital, games)");
 			} else {
@@ -906,6 +904,8 @@ public class PrismSettings implements Observer
 		} else if (sw.equals("linprog") || sw.equals("lp")) {
 			set(PRISM_MDP_SOLN_METHOD, "Linear programming");
 			set(PRISM_MDP_MULTI_SOLN_METHOD, "Linear programming");
+		} else if (sw.equals("gurobi")) {
+			set(PRISM_MDP_MULTI_SOLN_METHOD, "Gurobi");
 		}
 		// Linear equation solver over-relaxation parameter
 		else if (sw.equals("omega")) {
@@ -1172,7 +1172,14 @@ public class PrismSettings implements Observer
 		// CUDD settings
 		else if (sw.equals("cuddmaxmem")) {
 			if (i < args.length - 1) {
-				set(PRISM_CUDD_MAX_MEM, args[++i]);
+				try {
+					j = Integer.parseInt(args[++i]);
+					if (j < 0)
+						throw new NumberFormatException();
+					set(PRISM_CUDD_MAX_MEM, j);
+				} catch (NumberFormatException e) {
+					throw new PrismException("Invalid value for -" + sw + " switch");
+				}
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}

@@ -66,6 +66,8 @@ import simulator.networking.SSHHost;
 import simulator.networking.SimulatorNetworkHandler;
 import userinterface.GUIPrism;
 
+import userinterface.util.*;
+
 public class GUINetworkEditor extends JDialog implements TreeSelectionListener, MouseListener, Observer, FileSelector
 {
 	public static final int CONTINUE = 0;
@@ -397,8 +399,8 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	{
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
-		ArrayList fss = new ArrayList();
-		for (int i = 0; i < selectedPaths.length; i++) {
+		for(int i = 0; i <selectedPaths.length; i++)
+		{
 
 			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
 				SSHHost host = (SSHHost) selectedPaths[i].getLastPathComponent();
@@ -883,6 +885,16 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		choose.setSelectedFile(new File(""));
 		return choose.showOpenDialog(this);
 	}
+	public int showOpenFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
+	{
+		JFileChooser choose = GUIPrism.getGUI().getChooser();
+		choose.resetChoosableFileFilters();
+		for(int j = 0; j < ffs.length; j++)
+			choose.addChoosableFileFilter(ffs[j]);
+		choose.setFileFilter(ff);
+		choose.setSelectedFile(new File(""));
+		return choose.showOpenDialog(this);
+	}
 
 	/** A utility method to show a file saving dialog with the given file filter as a
 	 * default.
@@ -895,7 +907,6 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		JFileChooser choose = GUIPrism.getGUI().getChooser();
 		choose.resetChoosableFileFilters();
 		choose.addChoosableFileFilter(ff);
-		choose.setFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		int res = choose.showSaveDialog(this);
 		if (res != JFileChooser.APPROVE_OPTION)
@@ -910,8 +921,34 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		if (file.exists()) {
 			int selectionNo = JOptionPane.CANCEL_OPTION;
 			selectionNo = optionPane("File exists. Overwrite?", "Confirm Overwrite", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null);
-			if (selectionNo != JOptionPane.OK_OPTION)
+			if (selectionNo != JOptionPane.OK_OPTION) return JFileChooser.CANCEL_OPTION;
+		}
+		return JFileChooser.APPROVE_OPTION;
+	}
+
+public int showSaveFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
+{
+	JFileChooser choose = GUIPrism.getGUI().getChooser();
+	choose.resetChoosableFileFilters();
+	for(int j = 0; j < ffs.length; j++)
+		choose.addChoosableFileFilter(ffs[j]);
+		choose.setFileFilter(ff);
+		choose.setSelectedFile(new File(""));
+		int res = choose.showSaveDialog(this);
+		if (res != JFileChooser.APPROVE_OPTION) return res;
+		File file = choose.getSelectedFile();
+		// check file is non-null
+		if (file == null)
+		{
+			GUIPrism.getGUI().errorDialog("Error: No file selected");
 				return JFileChooser.CANCEL_OPTION;
+		}
+		// check for file overwrite
+		if(file.exists())
+		{
+			int selectionNo = JOptionPane.CANCEL_OPTION;
+			selectionNo = optionPane("File exists. Overwrite?", "Confirm Overwrite", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null);
+			if (selectionNo != JOptionPane.OK_OPTION) return JFileChooser.CANCEL_OPTION;
 		}
 		return JFileChooser.APPROVE_OPTION;
 	}

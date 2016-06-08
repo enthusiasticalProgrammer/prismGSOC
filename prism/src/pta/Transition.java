@@ -42,7 +42,6 @@ public class Transition
 	// Guard - currently a conjunction of constraints
 	private Set<Constraint> guard;
 	// Edges
-	private int numEdges;
 	private ArrayList<Edge> edges;
 
 	/**
@@ -57,7 +56,6 @@ public class Transition
 		this.src = src;
 		this.action = action;
 		guard = new LinkedHashSet<Constraint>();
-		numEdges = 0;
 		edges = new ArrayList<Edge>();
 	}
 
@@ -85,7 +83,6 @@ public class Transition
 	{
 		Edge e = new Edge(this, prob, dest);
 		edges.add(e);
-		numEdges++;
 		return e;
 	}
 
@@ -93,7 +90,6 @@ public class Transition
 	{
 		e.setParent(this);
 		edges.add(e);
-		numEdges++;
 	}
 
 	public void setParent(PTA parent)

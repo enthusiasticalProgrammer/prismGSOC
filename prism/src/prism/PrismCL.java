@@ -92,8 +92,6 @@ public class PrismCL implements PrismModelListener
 	private boolean param = false;
 	private ModelType typeOverride = null;
 	private boolean orderingOverride = false;
-	private boolean explicitbuild = false;
-	private boolean explicitbuildtest = false;
 	private boolean nobuild = false;
 	private boolean test = false;
 	private boolean testExitsOnFail = true;
@@ -116,6 +114,7 @@ public class PrismCL implements PrismModelListener
 
 	// files/filenames
 	private String mainLogFilename = "stdout";
+	private String techLogFilename = "stdout";
 	private String settingsFilename = null;
 	private String modelFilename = null;
 	private String importStatesFilename = null;
@@ -1129,19 +1128,10 @@ public class PrismCL implements PrismModelListener
 					test = true;
 					testExitsOnFail = false;
 				}
-
-				// DD Debugging options
 				else if (sw.equals("dddebug")) {
 					jdd.DebugJDD.enable();
-				} else if (sw.equals("ddtraceall")) {
-					jdd.DebugJDD.traceAll = true;
-				} else if (sw.equals("ddtracefollowcopies")) {
-					jdd.DebugJDD.traceFollowCopies = true;
-				} else if (sw.equals("dddebugwarnfatal")) {
-					jdd.DebugJDD.warningsAreFatal = true;
-				} else if (sw.equals("dddebugwarnoff")) {
-					jdd.DebugJDD.warningsOff = true;
-				} else if (sw.equals("ddtrace")) {
+				}
+				else if (sw.equals("ddtrace")) {
 					if (i < args.length - 1) {
 						String idString = args[++i];
 						try {
@@ -1649,14 +1639,6 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("zerorewardcheck")) {
 					prism.setCheckZeroLoops(true);
 				}
-				// explicit-state model construction
-				else if (sw.equals("explicitbuild")) {
-					explicitbuild = true;
-				}
-				// (hidden) option for testing of prototypical explicit-state model construction
-				else if (sw.equals("explicitbuildtest")) {
-					explicitbuildtest = true;
-				}
 
 				// MISCELLANEOUS UNDOCUMENTED/UNUSED OPTIONS:
 
@@ -1675,6 +1657,19 @@ public class PrismCL implements PrismModelListener
 						errorAndExit("No file specified for -" + sw + " switch");
 					}
 				}
+				// specify mtbdd log (hidden option)
+				else if (sw.equals("techlog")) {
+					if (i < args.length - 1) {
+						techLogFilename = args[++i];
+						log = new PrismFileLog(techLogFilename);
+						if (!log.ready()) {
+							errorAndExit("Couldn't open log file \"" + techLogFilename + "\"");
+						}
+					} else {
+						errorAndExit("No file specified for -" + sw + " switch");
+					}
+				}
+				
 				// mtbdd construction method (hidden option)
 				else if (sw.equals("c1")) {
 					prism.setConstruction(1);
@@ -1740,9 +1735,7 @@ public class PrismCL implements PrismModelListener
 	private void processImportModelSwitch(String filesOptionsString) throws PrismException
 	{
 		// Split into files/options (on :)
-		String halves[] = splitFilesAndOptions(filesOptionsString);
-		String filesString = halves[0];
-		String optionsString = halves[1];
+		String filesString=splitFilesAndOptions(filesOptionsString)[0];
 		// Split files into basename/extensions
 		int i = filesString.lastIndexOf('.');
 		if (i == -1)
@@ -1783,17 +1776,6 @@ public class PrismCL implements PrismModelListener
 			}
 		}
 		// No options supported currently
-		/*// Process options
-		String options[] = optionsString.split(",");
-		for (String opt : options) {
-			// Ignore ""
-			if (opt.equals("")) {
-			}
-			// Unknown option
-			else {
-				throw new PrismException("Unknown option \"" + opt + "\" for -importmodel switch");
-			}
-		}*/
 	}
 
 	/**
@@ -1876,18 +1858,8 @@ public class PrismCL implements PrismModelListener
 				exportType = Prism.EXPORT_MRMC;
 			} else if (opt.equals("rows")) {
 				exportType = Prism.EXPORT_ROWS;
-			} /*else if (opt.startsWith("type=")) {
-				String exportTypeString = opt.substring(5);
-				if (exportTypeString.equals("matlab")) {
-					exportType = Prism.EXPORT_MATLAB;
-				} else if (exportTypeString.equals("mrmc")) {
-					exportType = Prism.EXPORT_MRMC;
-				} else if (exportTypeString.equals("rows")) {
-					exportType = Prism.EXPORT_ROWS;
-				} else {
-					throw new PrismException("Unknown type \"" + opt + "\" for -exportmodel switch");
-				}
-				}*/
+			}
+			
 			// Unordered/ordered
 			else if (opt.equals("unordered")) {
 				exportordered = false;
@@ -2005,11 +1977,6 @@ public class PrismCL implements PrismModelListener
 			} catch (PrismException e) {
 				// Can't go wrong
 			}
-		}
-
-		// explicit overrides explicit build
-		if (prism.getExplicit()) {
-			explicitbuild = false;
 		}
 
 		// check not trying to do gauss-seidel with mtbdd engine
@@ -2414,15 +2381,6 @@ public class PrismCL implements PrismModelListener
 	{
 		prism.closeDown(true);
 		System.exit(0);
-	}
-
-	/**
-	 * Exit cleanly (with exit code i).
-	 */
-	private void exit(int i)
-	{
-		prism.closeDown(true);
-		System.exit(i);
 	}
 
 	// main method

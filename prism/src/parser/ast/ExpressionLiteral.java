@@ -52,12 +52,6 @@ public class ExpressionLiteral extends Expression
 
 	// Set Methods
 
-	public void setValue(Object value)
-	{
-		this.value = value;
-		this.string = "" + value;
-	}
-
 	public void setString(String string)
 	{
 		this.string = string;

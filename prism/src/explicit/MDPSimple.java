@@ -44,7 +44,7 @@ import common.IterableStateSet;
 import prism.PrismException;
 import prism.PrismUtils;
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPRewards;
+import explicit.rewards.MDPReward;
 
 /**
  * Simple explicit-state representation of an MDP.
@@ -848,7 +848,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 	}
 
 	@Override
-	public double mvMultRewMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
+	public double mvMultRewMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[])
 	{
 		int j, k, stratCh = -1;
 		double d, prob, minmax;
@@ -909,12 +909,12 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			d += prob * vect[k];
 		}
 		d += mcRewards.getStateReward(s);
-
+		
 		return d;
 	}
-
+	
 	@Override
-	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
+	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[])
 	{
 		int j, k, stratCh = -1;
 		double diag, d, prob, minmax;
@@ -967,7 +967,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 	}
 
 	@Override
-	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPRewards mdpRewards, boolean min, double val)
+	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPReward mdpRewards, boolean min, double val)
 	{
 		int j, k;
 		double d, prob;

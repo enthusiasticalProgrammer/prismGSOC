@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,8 @@ import parser.State;
 import parser.Values;
 import parser.ast.Expression;
 import parser.ast.ForLoop;
+import parser.ast.ConstantList;
+import parser.ast.FormulaList;
 import parser.ast.LabelList;
 import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
@@ -128,6 +131,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	public static final int MDP_MULTI_VALITER = 1;
 	public static final int MDP_MULTI_GAUSSSEIDEL = 2;
 	public static final int MDP_MULTI_LP = 3;
+	public static final int MDP_MULTI_GUROBI = 4;
 
 	// termination criterion for iterative methods
 	public static final int ABSOLUTE = 1;
@@ -261,6 +265,9 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	private explicit.Model currentModelExpl = null;
 	// Are we doing digital clocks translation for PTAs?
 	boolean digital = false;
+
+	// Info about the strategy that was generated
+	private strat.Strategy strategy;
 
 	// Info for explicit files load
 	private File explicitFilesStatesFile = null;
@@ -635,6 +642,15 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	public void setReachMethod(int reachMethod)
 	{
 		this.reachMethod = reachMethod;
+	}
+
+	/**
+	 *  Sets the strategy that will be available for this prism session
+	 * @param strat the strategy
+	 */
+	public void setStrategy(strat.Strategy strat)
+	{
+		this.strategy = strat;
 	}
 
 	// Get methods
@@ -1359,6 +1375,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
+		} finally {
+			try {
+				strModel.close();
+			} catch (IOException e) {
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 
 		modulesFile.tidyUp();
@@ -1532,6 +1554,13 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// open file
 		strProperties = new FileInputStream(file);
 
+		// if null modules file passed, create a blank one
+		if (mf == null) {
+			mf = new ModulesFile();
+			mf.setFormulaList(new FormulaList());
+			mf.setConstantList(new ConstantList());
+		}
+
 		try {
 			// obtain exclusive access to the prism parser
 			// (don't forget to release it afterwards)
@@ -1545,6 +1574,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
+		} finally {
+			try {
+				strProperties.close();
+			} catch (IOException e) {
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 
 		if (tidy)
@@ -1563,6 +1598,13 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	{
 		PrismParser prismParser;
 		PropertiesFile propertiesFile = null;
+
+		// if null modules file passed, create a blank one
+		if (mf == null) {
+			mf = new ModulesFile();
+			mf.setFormulaList(new FormulaList());
+			mf.setConstantList(new ConstantList());
+		}
 
 		try {
 			// obtain exclusive access to the prism parser
@@ -1858,6 +1900,16 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	public explicit.Model getBuiltModelExplicit()
 	{
 		return currentModelExpl;
+	}
+
+	/**
+	 * Get the currently stored strategy
+	 * 
+	 * @return
+	 */
+	public strat.Strategy getStrategy()
+	{
+		return strategy;
 	}
 
 	/**
@@ -2805,11 +2857,19 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				lastEngine = getEngine();
 				setEngine(Prism.EXPLICIT);
 			}
+		} else if (currentModelType == ModelType.MDP && Expression.containsMultiObjective(prop.getExpression())) {
+			if (settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_LP
+					&& settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
+				mainLog.printWarning("Switching to linear programming method to allow verification of the formula.");
+				settings.setChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD, Prism.MDP_MULTI_LP);
+			}
+			if (settings.getChoice(PrismSettings.PRISM_ENGINE) != Prism.EXPLICIT && !getExplicit()) {
+				mainLog.printWarning("Switching to explicit engine to allow verification of the formula.");
+				engineSwitch = true;
+				lastEngine = getEngine();
+				setEngine(Prism.EXPLICIT);
+			}
 		}
-		try {
-			// Build model, if necessary
-			buildModelIfRequired();
-
 			// Compatibility check
 			if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
 				if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
@@ -2818,13 +2878,35 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 							+ "Either switch to the explicit engine or add more action labels to the model");
 			}
 
+		try {
+			// Build model, if necessary
+			buildModelIfRequired();
+
 			// Create new model checker object and do model checking
 			if (!getExplicit()) {
 				ModelChecker mc = createModelChecker(propertiesFile);
 				res = mc.check(prop.getExpression());
 			} else {
 				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
-				res = mc.check(currentModelExpl, prop.getExpression());
+				// if implement strategy option is enabled, build a product with
+				// strategy before model checking
+				if (getSettings().getBoolean(PrismSettings.PRISM_IMPLEMENT_STRATEGY) && strategy != null) {
+					try {
+						mc.setStrategy(strategy);
+						res = mc.check(strategy.buildProduct(currentModelExpl), prop.getExpression());
+					} catch (UnsupportedOperationException e) {
+						throw new PrismException("Building the product of the model and strategy failed");
+					}
+				} else
+					res = mc.check(currentModelExpl, prop.getExpression());
+
+				// saving strategy if it was generated.
+				if (settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY)) {
+					strategy = mc.getStrategy();
+					if (strategy != null)
+						strategy.setInfo(
+								"Property: " + prop.getExpression() + "\n" + "Type: " + strategy.getType() + "\nMemory size: " + strategy.getMemorySize());
+				}
 			}
 		} finally {
 			// Undo auto-switch (if any)
@@ -3536,41 +3618,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			tmpLog.close();
 	}
 
-	public void explicitBuildTest() throws PrismException
-	{
-		/* old code...
-		String tmpFile = "";
-		try {
-			explicit.ConstructModel constructModel = new explicit.ConstructModel(getSimulator(), mainLog);
-			mainLog.println("\nConstructing model explicitly...");
-			explicit.Model modelExplicit = constructModel.constructModel(currentModulesFile);
-			tmpFile = File.createTempFile("explicitbuildtest", ".tra").getAbsolutePath();
-			tmpFile = "explicitbuildtest.tra";
-			mainLog.println("\nExporting (explicit) model to \"" + tmpFile + "1\"...");
-			modelExplicit.exportToPrismExplicitTra(tmpFile + "1");
-			mainLog.println("\nExporting (normal) model to \"" + tmpFile + "2\"...");
-			exportTransToFile(true, Prism.EXPORT_PLAIN, new File(tmpFile + "2"));
-			explicit.ModelSimple modelExplicit2 = null;
-			switch (currentModelType) {
-			case DTMC:
-				modelExplicit2 = new explicit.DTMCSimple();
-				break;
-			case CTMC:
-				modelExplicit2 = new explicit.CTMCSimple();
-				break;
-			case MDP:
-				modelExplicit2 = new explicit.MDPSimple();
-				break;
-			}
-			modelExplicit2.buildFromPrismExplicit(tmpFile + "2");
-			if (!modelExplicit.equals(modelExplicit2)) {
-				throw new PrismException("Explicit models differ");
-			}
-		} catch (IOException e) {
-			throw new PrismException("Could not create temporary file \"" + tmpFile + "\"");
-		}*/
-	}
-
 	/**
 	 * Clear the built model if needed (free/deallocate memory etc)
 	 */
@@ -3580,6 +3627,11 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			currentModel.clear();
 		/*if (currentModelExpl != null)
 			currentModelExpl.clear();*/
+
+		// nullify the strategy
+		strategy = null;
+		getSimulator().setStrategy(null);
+		// if (currentModelExpl != null) currentModelExpl.clear();
 	}
 
 	/**
@@ -3679,7 +3731,10 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// create new file log or use main log
 		PrismLog tmpLog;
 		if (file != null) {
-			tmpLog = PrismFileLog.create(file.getPath(), append);
+			tmpLog = new PrismFileLog(file.getPath(), append);
+			if (!tmpLog.ready()) {
+				throw new PrismException("Could not open file \"" + file + "\" for output");
+			}
 		} else {
 			tmpLog = mainLog;
 		}
@@ -3933,62 +3988,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	{
 		loadPRISMModel(modulesFile);
 		return modelCheckSimulatorSimultaneously(propertiesFile, exprs, null, initialState, maxPathLength, simMethod);
-	}
-
-	/**
-	 * Old API:
-	 */
-	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
-			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
-			throws PrismException, InterruptedException
-	{
-		loadPRISMModel(modulesFile);
-		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to log. 
-	 */
-	public void doSteadyState(Model model) throws PrismException
-	{
-		doSteadyState(model, EXPORT_PLAIN, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to a file (or, if file is null, to log). 
-	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
-	 */
-	public void doSteadyState(Model model, int exportType, File file) throws PrismException
-	{
-		loadBuiltModel(model);
-		doSteadyState(exportType, file, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to log. 
-	 */
-	public void doTransient(Model model, double time) throws PrismException
-	{
-		doTransient(model, time, EXPORT_PLAIN, null, null);
-	}
-
-	/**
-	 * Old API:
-	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
-	 * Output probability distribution to a file (or, if file is null, to log). 
-	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
-	 * Optionally (if non-null), read in the initial probability distribution from a file.
-	 */
-	public void doTransient(Model model, double time, int exportType, File file, File fileIn) throws PrismException
-	{
-		loadBuiltModel(model);
-		doTransient(time, exportType, file, fileIn);
 	}
 }
 

@@ -303,28 +303,6 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return getTransitionList().getChoice(index).computeTarget(offset, exploreState);
 	}
 
-	//@Override
-	public State computeTransitionTarget(int index) throws PrismException
-	{
-		return getTransitionList().computeTransitionTarget(index, exploreState);
-	}
-
-	//@Override
-	public void calculateStateRewards(State state, double[] store) throws PrismLangException
-	{
-		updater.calculateStateRewards(state, store);
-	}
-
-	//@Override
-	public void getRandomInitialState(RandomNumberGenerator rng, State initialState) throws PrismException
-	{
-		if (modulesFile.getInitialStates() == null) {
-			initialState.copy(modulesFile.getDefaultInitialState());
-		} else {
-			throw new PrismException("Random choice of multiple initial states not yet supported");
-		}
-	}
-
 	@Override
 	public boolean isLabelTrue(int i) throws PrismException
 	{

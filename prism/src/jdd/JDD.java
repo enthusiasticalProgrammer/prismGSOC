@@ -52,11 +52,8 @@ public class JDD
 	private static native void DD_SetCUDDEpsilon(double epsilon);
 
 	private static native void DD_CloseDownCUDD(boolean check);
-
-	static native void DD_Ref(long dd);
-
-	static native void DD_Deref(long dd);
-
+	private static native void DD_Ref(long dd);
+	private static native void DD_Deref(long dd);
 	private static native void DD_PrintCacheInfo();
 
 	private static native boolean DD_GetErrorFlag();
@@ -168,10 +165,7 @@ public class JDD
 	private static native long DD_SetVectorElement(long dd, long vars, int num_vars, long index, double value);
 
 	private static native long DD_SetMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long rindex, long cindex, double value);
-
-	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex,
-			long cindex, long lindex, double value);
-
+	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex, long cindex, long lindex, double value);
 	private static native double DD_GetVectorElement(long dd, long vars, int num_vars, long index);
 
 	private static native long DD_Identity(long rvars, long cvars, int num_vars);
@@ -192,10 +186,7 @@ public class JDD
 	private static native void DD_ExportDDToDotFileLabelled(long dd, String filename, List<String> var_names);
 
 	private static native void DD_ExportMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String filename);
-
-	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars,
-			String filename);
-
+	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars, String filename);
 	private static native void DD_ExportMatrixToMatlabFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String name, String filename);
 
 	private static native void DD_ExportMatrixToSpyFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, int depth, String filename);
@@ -208,8 +199,7 @@ public class JDD
 	 * DD methods. It is generally not safe to use the CUDD library after this error occurred,
 	 * so the program should quit as soon as feasible.
 	 */
-	public static class CuddOutOfMemoryException extends RuntimeException
-	{
+	public static class CuddOutOfMemoryException extends RuntimeException {
 		private static final long serialVersionUID = -3094099053041270477L;
 
 		/** Constructor */
@@ -462,7 +452,7 @@ public class JDD
 	public static JDDNode Not(JDDNode dd)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Not(dd.ptr()));
 	}
 
@@ -473,8 +463,8 @@ public class JDD
 	public static JDDNode Or(JDDNode dd1, JDDNode dd2)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 		return ptrToNode(DD_Or(dd1.ptr(), dd2.ptr()));
 	}
@@ -510,8 +500,8 @@ public class JDD
 	public static JDDNode And(JDDNode dd1, JDDNode dd2)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 
 		return ptrToNode(DD_And(dd1.ptr(), dd2.ptr()));
@@ -548,8 +538,8 @@ public class JDD
 	public static JDDNode Xor(JDDNode dd1, JDDNode dd2)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 		return ptrToNode(DD_Xor(dd1.ptr(), dd2.ptr()));
 	}
@@ -561,8 +551,8 @@ public class JDD
 	public static JDDNode Implies(JDDNode dd1, JDDNode dd2)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 		return ptrToNode(DD_Implies(dd1.ptr(), dd2.ptr()));
 	}
@@ -583,8 +573,8 @@ public class JDD
 	public static JDDNode Apply(int op, JDDNode dd1, JDDNode dd2)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 		return ptrToNode(DD_Apply(op, dd1.ptr(), dd2.ptr()));
 	}
@@ -656,7 +646,7 @@ public class JDD
 	public static JDDNode MonadicApply(int op, JDDNode dd)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MonadicApply(op, dd.ptr()));
 	}
 
@@ -667,8 +657,8 @@ public class JDD
 	public static JDDNode Restrict(JDDNode dd, JDDNode cube)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd);
-			DebugJDD.DD_Method_Argument(cube);
+			DebugJDD.decrement(dd);
+			DebugJDD.decrement(cube);
 		}
 		return ptrToNode(DD_Restrict(dd.ptr(), cube.ptr()));
 	}
@@ -680,9 +670,9 @@ public class JDD
 	public static JDDNode ITE(JDDNode dd1, JDDNode dd2, JDDNode dd3)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
-			DebugJDD.DD_Method_Argument(dd3);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
+			DebugJDD.decrement(dd3);
 		}
 		return ptrToNode(DD_ITE(dd1.ptr(), dd2.ptr(), dd3.ptr()));
 	}
@@ -730,7 +720,7 @@ public class JDD
 	public static JDDNode PermuteVariables(JDDNode dd, JDDVars old_vars, JDDVars new_vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_PermuteVariables(dd.ptr(), old_vars.array(), new_vars.array(), old_vars.n()));
 	}
 
@@ -741,7 +731,7 @@ public class JDD
 	public static JDDNode SwapVariables(JDDNode dd, JDDVars old_vars, JDDVars new_vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SwapVariables(dd.ptr(), old_vars.array(), new_vars.array(), old_vars.n()));
 	}
 
@@ -799,7 +789,7 @@ public class JDD
 	public static JDDNode ThereExists(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ThereExists(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -810,7 +800,7 @@ public class JDD
 	public static JDDNode ForAll(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ForAll(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -821,7 +811,7 @@ public class JDD
 	public static JDDNode SumAbstract(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SumAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -832,7 +822,7 @@ public class JDD
 	public static JDDNode ProductAbstract(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ProductAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -843,7 +833,7 @@ public class JDD
 	public static JDDNode MinAbstract(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MinAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -854,7 +844,7 @@ public class JDD
 	public static JDDNode MaxAbstract(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MaxAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -867,7 +857,7 @@ public class JDD
 	public static JDDNode GreaterThan(JDDNode dd, double threshold)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_GreaterThan(dd.ptr(), threshold));
 	}
 
@@ -878,7 +868,7 @@ public class JDD
 	public static JDDNode GreaterThanEquals(JDDNode dd, double threshold)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_GreaterThanEquals(dd.ptr(), threshold));
 	}
 
@@ -889,7 +879,7 @@ public class JDD
 	public static JDDNode LessThan(JDDNode dd, double threshold)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_LessThan(dd.ptr(), threshold));
 	}
 
@@ -900,7 +890,7 @@ public class JDD
 	public static JDDNode LessThanEquals(JDDNode dd, double threshold)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_LessThanEquals(dd.ptr(), threshold));
 	}
 
@@ -911,7 +901,7 @@ public class JDD
 	public static JDDNode Equals(JDDNode dd, double value)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Equals(dd.ptr(), value));
 	}
 
@@ -922,7 +912,7 @@ public class JDD
 	public static JDDNode Interval(JDDNode dd, double lower, double upper)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Interval(dd.ptr(), lower, upper));
 	}
 
@@ -933,7 +923,7 @@ public class JDD
 	public static JDDNode RoundOff(JDDNode dd, int places)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_RoundOff(dd.ptr(), places));
 	}
 
@@ -977,7 +967,7 @@ public class JDD
 	public static JDDNode RestrictToFirst(JDDNode dd, JDDVars vars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_RestrictToFirst(dd.ptr(), vars.array(), vars.n()));
 	}
 
@@ -1028,7 +1018,8 @@ public class JDD
 		minterms = GetNumMinterms(dd, num_vars);
 		if (minterms <= Long.MAX_VALUE) {
 			return "" + (long) minterms;
-		} else {
+		}
+		else {
 			return "" + minterms;
 		}
 	}
@@ -1056,13 +1047,14 @@ public class JDD
 		paths = GetNumPaths(dd);
 		if (paths <= Long.MAX_VALUE) {
 			return "" + (long) paths;
-		} else {
+		}
+		else {
 			return "" + paths;
 		}
 	}
 
 	/**
-	 * Returns {@true} if {@code dd} is a single satisfying
+	 * Returns {@true} if the {@code dd} is is a single satisfying
 	 * assignment to the variables in {@code vars}.
 	 * <br>
 	 * This is the case if there is a single path to the ONE constant
@@ -1244,7 +1236,7 @@ public class JDD
 	public static JDDNode SetVectorElement(JDDNode dd, JDDVars vars, long index, double value)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SetVectorElement(dd.ptr(), vars.array(), vars.n(), index, value));
 	}
 
@@ -1255,7 +1247,7 @@ public class JDD
 	public static JDDNode SetMatrixElement(JDDNode dd, JDDVars rvars, JDDVars cvars, long rindex, long cindex, double value)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SetMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), rindex, cindex, value));
 	}
 
@@ -1266,9 +1258,8 @@ public class JDD
 	public static JDDNode Set3DMatrixElement(JDDNode dd, JDDVars rvars, JDDVars cvars, JDDVars lvars, long rindex, long cindex, long lindex, double value)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
-		return ptrToNode(
-				DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
+			DebugJDD.decrement(dd);
+		return ptrToNode(DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
 	}
 
 	/**
@@ -1298,7 +1289,7 @@ public class JDD
 	public static JDDNode Transpose(JDDNode dd, JDDVars rvars, JDDVars cvars)
 	{
 		if (DebugJDD.debugEnabled)
-			DebugJDD.DD_Method_Argument(dd);
+			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Transpose(dd.ptr(), rvars.array(), cvars.array(), rvars.n()));
 	}
 
@@ -1309,8 +1300,8 @@ public class JDD
 	public static JDDNode MatrixMultiply(JDDNode dd1, JDDNode dd2, JDDVars vars, int method)
 	{
 		if (DebugJDD.debugEnabled) {
-			DebugJDD.DD_Method_Argument(dd1);
-			DebugJDD.DD_Method_Argument(dd2);
+			DebugJDD.decrement(dd1);
+			DebugJDD.decrement(dd2);
 		}
 		return ptrToNode(DD_MatrixMultiply(dd1.ptr(), dd2.ptr(), vars.array(), vars.n(), method));
 	}
@@ -1370,8 +1361,7 @@ public class JDD
 			log.print(" Variables: (");
 			boolean first = true;
 			for (JDDNode var : vars) {
-				if (!first)
-					log.print(",");
+				if (!first) log.print(",");
 				first = false;
 				log.print(var.getIndex());
 			}
@@ -1450,8 +1440,7 @@ public class JDD
 						if (var.getIndex() == index) {
 							// There is a var with the current index in vars, but
 							// not at the correct position
-							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = " + index
-									+ ", var index = " + var_index + ")");
+							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = "+index+", var index = "+var_index+")");
 						}
 					}
 					// otherwise, the dd depends on a variable not in vars
@@ -1645,10 +1634,9 @@ public class JDD
 			throw new CuddOutOfMemoryException();
 		}
 		if (DebugJDD.debugEnabled) {
-			return DebugJDD.ptrToNode(ptr);
-		} else {
-			return new JDDNode(ptr);
+			return new DebugJDD.DebugJDDNode(ptr, true);
 		}
+		return new JDDNode(ptr);
 	}
 
 	/**

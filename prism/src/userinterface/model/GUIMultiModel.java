@@ -41,6 +41,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -64,24 +65,31 @@ import userinterface.OptionsPanel;
 import userinterface.util.GUIComputationEvent;
 import userinterface.util.GUIEvent;
 import userinterface.util.GUIExitEvent;
+import userinterface.util.GUIPrismFileFilter;
 import userinterface.util.GUIUndoManager;
 
 @SuppressWarnings("serial")
 public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 {
 	//Constants
+	public static final boolean GM_ENABLED = false;
+
 	public static final int CONTINUE = 0;
 	public static final int CANCEL = 1;
+
+	public static final int FILTER_PRISM_MODEL = 0;
+	public static final int FILTER_PEPA_MODEL = 1;
+	public static final int FILTER_GRAPHIC_MODEL = 2;
 
 	//GUI
 	private JTextField fileTextField;
 	private JMenu modelMenu, newMenu, viewMenu, exportMenu, computeMenu, computeExportMenu;
 	private JMenu exportStatesMenu, exportTransMenu, exportStateRewardsMenu, exportTransRewardsMenu, exportLabelsMenu, exportSSMenu, exportTrMenu;
 	private AbstractAction viewStates, viewTrans, viewStateRewards, viewTransRewards, viewLabels, viewPrismCode, computeSS, computeTr, newPRISMModel,
-			newPEPAModel, loadModel, reloadModel, saveModel, saveAsModel, parseModel, buildModel, exportStatesPlain, exportStatesMatlab, exportTransPlain,
-			exportTransMatlab, exportTransDot, exportTransDotStates, exportTransMRMC, exportStateRewardsPlain, exportStateRewardsMatlab, exportStateRewardsMRMC,
-			exportTransRewardsPlain, exportTransRewardsMatlab, exportTransRewardsMRMC, exportLabelsPlain, exportLabelsMatlab, exportSSPlain, exportSSMatlab,
-			exportTrPlain, exportTrMatlab;
+			newGraphicModel, newPEPAModel, loadModel, reloadModel, saveModel, saveAsModel, parseModel, buildModel, exportStatesPlain, exportStatesMatlab,
+			exportTransPlain, exportTransMatlab, exportTransDot, exportTransDotStates, exportTransMRMC, exportStateRewardsPlain, exportStateRewardsMatlab,
+			exportStateRewardsMRMC, exportTransRewardsPlain, exportTransRewardsMatlab, exportTransRewardsMRMC, exportLabelsPlain, exportLabelsMatlab,
+			exportSSPlain, exportSSMatlab, exportTrPlain, exportTrMatlab;
 	private JPopupMenu popup;
 	//Contents
 	private GUIMultiModelHandler handler;
@@ -151,6 +159,9 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		case GUIMultiModelHandler.PEPA_MODE:
 			s += "PEPA Model File: ";
 			break;
+		case GUIMultiModelHandler.GRAPHIC_MODE:
+			s += "PRISM Graphic Model File: ";
+			break;
 		}
 		s += handler.getActiveFileName();
 		if (handler.modified())
@@ -158,6 +169,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		fileTextField.setText(s);
 		// model menu
 		newPRISMModel.setEnabled(!computing);
+		newGraphicModel.setEnabled(!computing);
 		newPEPAModel.setEnabled(!computing);
 		loadModel.setEnabled(!computing);
 		reloadModel.setEnabled(!computing && handler.hasActiveFile());
@@ -271,6 +283,14 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		if (cont == CONTINUE)
 			handler.newPEPAModel();
 	}
+
+	protected void a_newGraphicModel()
+	{
+		int cont = doModificationCheck();
+		if (cont == CONTINUE)
+			handler.newGraphicModel();
+	}
+
 
 	protected void a_openModel()
 	{
@@ -484,6 +504,38 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		}
 	}
 
+	protected void a_convertToPrismGraphicModel()
+	{
+		int cont = doModificationCheck();
+		if (cont == CONTINUE && (handler.getModelMode() != GUIMultiModelHandler.GRAPHIC_MODE)) {
+			String[] selection = { "Yes", "No", "Cancel" };
+			int selectionNo = -1;
+			selectionNo = optionPane("WARNING: This is a one way operation. Continue?", "Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+					selection, selection[0]);
+			switch (selectionNo) {
+			case 0:
+				handler.convertViewToGraphic();
+				break;
+			}
+		}
+	}
+
+	protected void a_convertToPepaGraphicModel()
+	{
+		int cont = doModificationCheck();
+		if (cont == CONTINUE && (handler.getModelMode() != GUIMultiModelHandler.PEPA_MODE)) {
+			String[] selection = { "Yes", "No", "Cancel" };
+			int selectionNo = -1;
+			selectionNo = optionPane("WARNING: This is a one way operation. Continue?", "Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+					selection, selection[0]);
+			switch (selectionNo) {
+			case 0:
+				handler.convertViewToPEPA();
+				break;
+			}
+		}
+	}
+
 	private void setupActions()
 	{
 		newPRISMModel = new AbstractAction()
@@ -500,6 +552,20 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		newPRISMModel.putValue(Action.NAME, "PRISM model");
 		newPRISMModel.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallFilePrism.png"));
 		newPRISMModel.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+		newGraphicModel = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				//modified check do later
+				a_newGraphicModel();
+			}
+		};
+		newGraphicModel.putValue(Action.LONG_DESCRIPTION, "Removes the current build, and loads a new model editor in PRISM Graphic Model mode.");
+		//newGraphicModel.putValue(Action.SHORT_DESCRIPTION, "New PRISM Graphic Model");
+		newGraphicModel.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_G));
+		newGraphicModel.putValue(Action.NAME, "Graphical PRISM model");
+		//newGraphicModel.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallFileGraphic.png"));
 
 		newPEPAModel = new AbstractAction()
 		{
@@ -1188,6 +1254,8 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		newMenu.setMnemonic('N');
 		newMenu.setIcon(GUIPrism.getIconFromImage("smallNew.png"));
 		newMenu.add(newPRISMModel);
+		if (GM_ENABLED)
+			newMenu.add(newGraphicModel);
 		newMenu.add(newPEPAModel);
 		modelMenu.add(newMenu);
 		modelMenu.add(new JSeparator());

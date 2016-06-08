@@ -42,7 +42,7 @@ import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismUtils;
 import strat.MDStrategy;
-import explicit.rewards.MDPRewards;
+import explicit.rewards.MDPReward;
 
 /**
  * Base class for explicit-state representations of an MDP.
@@ -211,7 +211,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	// Accessors (for NondetModel)
-
+	
 	@Override
 	public boolean areAllChoiceActionsUnique()
 	{
@@ -250,20 +250,11 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 			maxDiff = diff > maxDiff ? diff : maxDiff;
 			vect[s] = d;
 		}
-		// Use this code instead for backwards Gauss-Seidel
-		/*for (s = numStates - 1; s >= 0; s--) {
-			if (subset.get(s)) {
-				d = mvMultJacMinMaxSingle(s, vect, min, strat);
-				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-				maxDiff = diff > maxDiff ? diff : maxDiff;
-				vect[s] = d;
-			}
-		}*/
 		return maxDiff;
 	}
 
 	@Override
-	public void mvMultRewMinMax(double vect[], MDPRewards mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[])
+	public void mvMultRewMinMax(double vect[], MDPReward mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[])
 	{
 		for (int s : new IterableStateSet(subset, numStates, complement)) {
 			result[s] = mvMultRewMinMaxSingle(s, vect, mdpRewards, min, strat);
@@ -271,7 +262,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	@Override
-	public double mvMultRewGSMinMax(double vect[], MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
+	public double mvMultRewGSMinMax(double vect[], MDPReward mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[])
 	{
 		double d, diff, maxDiff = 0.0;
 		for (int s : new IterableStateSet(subset, numStates, complement)) {
@@ -280,15 +271,6 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 			maxDiff = diff > maxDiff ? diff : maxDiff;
 			vect[s] = d;
 		}
-		// Use this code instead for backwards Gauss-Seidel
-		/*for (s = numStates - 1; s >= 0; s--) {
-			if (subset.get(s)) {
-				d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min);
-				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-				maxDiff = diff > maxDiff ? diff : maxDiff;
-				vect[s] = d;
-			}
-		}*/
 		return maxDiff;
 	}
 

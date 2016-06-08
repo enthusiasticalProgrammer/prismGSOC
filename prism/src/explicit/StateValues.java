@@ -42,6 +42,7 @@ import parser.type.Type;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
+import parser.type.TypeVoid;
 import prism.PrismException;
 import prism.PrismLangException;
 import prism.PrismLog;
@@ -61,6 +62,7 @@ public class StateValues implements StateVector
 	protected int[] valuesI;
 	protected double[] valuesD;
 	protected BitSet valuesB;
+	protected Object valuesO;
 
 	// Model info
 	protected List<State> statesList;
@@ -152,7 +154,10 @@ public class StateValues implements StateVector
 			} else {
 				valuesB = new BitSet();
 			}
+		} else if (type instanceof TypeVoid) {
+			valuesO = init;
 		} else {
+			(new PrismException("")).printStackTrace();
 			throw new PrismLangException("Cannot create a vector of type " + type);
 		}
 	}
@@ -403,7 +408,7 @@ public class StateValues implements StateVector
 			and(sv);
 			break;
 		case ExpressionBinaryOp.EQ:
-			equals(sv);
+			applyEquals(sv);
 			break;
 		case ExpressionBinaryOp.NE:
 			notEquals(sv);
@@ -498,7 +503,7 @@ public class StateValues implements StateVector
 	/**
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */
-	public void equals(StateValues sv) throws PrismException
+	public void applyEquals(StateValues sv) throws PrismException
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -531,6 +536,60 @@ public class StateValues implements StateVector
 		type = TypeBool.getInstance();
 		valuesI = null;
 		valuesD = null;
+	}
+
+	/**
+	 * used for testings only 
+	 */
+	public boolean equals(Object o)
+	{
+		if(! (o instanceof StateValues))
+			return false;
+		StateValues sv=(StateValues) o;
+		if (type instanceof TypeInt) {
+			if (sv.type instanceof TypeInt) {
+				for (int i = 0; i < size; i++) {
+					if(valuesI[i] != sv.valuesI[i]){
+						return false;
+					}
+				}
+				return true;
+			} else if (sv.type instanceof TypeDouble) {
+				for (int i = 0; i < size; i++) {
+					if(valuesI[i] != sv.valuesD[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+		} else if (type instanceof TypeDouble) {
+			valuesB = new BitSet();
+			if (sv.type instanceof TypeInt) {
+				for (int i = 0; i < size; i++) {
+					if(valuesD[i] != sv.valuesI[i]){
+						return false;
+					}
+				}
+				return true;
+			} else if (sv.type instanceof TypeDouble) {
+				for (int i = 0; i < size; i++) {
+					if(valuesD[i] != sv.valuesD[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+		} else if (type instanceof TypeBool) {
+			if (sv.type instanceof TypeBool) {
+				for (int i = 0; i < size; i++) {
+					if(valuesB.get(i) != sv.valuesB.get(i)){
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1331,6 +1390,8 @@ public class StateValues implements StateVector
 			return valuesD[i];
 		} else if (type instanceof TypeBool) {
 			return valuesB.get(i);
+		} else if (type instanceof TypeVoid) {
+			return valuesO;
 		} else {
 			return null;
 		}

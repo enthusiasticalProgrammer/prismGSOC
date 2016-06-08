@@ -59,9 +59,6 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 
 	private boolean areModel, areProp;
 
-	private Action okAction;
-	private Action cancelAction;
-
 	private javax.swing.JButton okayButton;
 
 	private UndefinedConstants undef;

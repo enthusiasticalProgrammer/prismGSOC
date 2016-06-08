@@ -38,6 +38,7 @@ import parser.ast.ExpressionSS;
 import parser.ast.ExpressionStrategy;
 import parser.ast.ExpressionTemporal;
 import parser.ast.ExpressionUnaryOp;
+import parser.ast.ExpressionFunc;
 import parser.ast.RewardStruct;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
@@ -51,7 +52,7 @@ import prism.PrismNotSupportedException;
 import prism.PrismSettings;
 import explicit.rewards.ConstructRewards;
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPRewards;
+import explicit.rewards.MDPReward;
 import explicit.rewards.Rewards;
 import explicit.rewards.STPGRewards;
 
@@ -230,6 +231,11 @@ public class ProbModelChecker extends NonProbModelChecker
 				setExportAdv(true);
 			// PRISM_EXPORT_ADV_FILENAME
 			setExportAdvFilename(settings.getString(PrismSettings.PRISM_EXPORT_ADV_FILENAME));
+
+			// Strategy stuff
+			setGenerateStrategy(settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY));
+			setImplementStrategy(settings.getBoolean(PrismSettings.PRISM_IMPLEMENT_STRATEGY));
+
 		}
 	}
 
@@ -487,6 +493,11 @@ public class ProbModelChecker extends NonProbModelChecker
 		else if (expr instanceof ExpressionSS) {
 			res = checkExpressionSteadyState(model, (ExpressionSS) expr);
 		}
+		//Multi-objective model-checking
+		else if (expr instanceof ExpressionFunc
+				&& (((ExpressionFunc) expr).getName().equals("multi") || ((ExpressionFunc) expr).getName().equals("mlessmulti"))) {
+			res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
+		}
 		// Otherwise, use the superclass
 		else {
 			res = super.checkExpression(model, expr, statesOfInterest);
@@ -559,8 +570,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	 * @param coalition If relevant, info about which set of players this P operator refers to
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest) throws PrismException
 	{
 		// Get info from P operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
@@ -585,6 +595,11 @@ public class ProbModelChecker extends NonProbModelChecker
 			probs.clear();
 			return StateValues.createFromBitSet(sol, model);
 		}
+	}
+
+	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
+	{
+		throw new PrismException("Multi-objective model-checking is not available for this type of models");
 	}
 
 	/**
@@ -997,7 +1012,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeCumulativeRewards((CTMC) model, (MCRewards) modelRewards, timeDouble);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPRewards) modelRewards, timeInt, minMax.isMin());
+			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPReward) modelRewards, timeInt, minMax.isMin());
 			break;
 		default:
 			throw new PrismNotSupportedException(
@@ -1074,7 +1089,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeReachRewards((CTMC) model, (MCRewards) modelRewards, target);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPRewards) modelRewards, target, minMax.isMin());
+			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPReward) modelRewards, target, minMax.isMin());
 			break;
 		case STPG:
 			res = ((STPGModelChecker) this).computeReachRewards((STPG) model, (STPGRewards) modelRewards, target, minMax.isMin1(), minMax.isMin2());
@@ -1107,12 +1122,6 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Compute probabilities
 		StateValues probs = checkSteadyStateFormula(model, expr.getExpression(), minMax);
-
-		// Print out probabilities
-		if (getVerbosity() > 5) {
-			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
-			probs.print(mainLog);
-		}
 
 		// For =? properties, just return values
 		if (opInfo.isNumeric()) {

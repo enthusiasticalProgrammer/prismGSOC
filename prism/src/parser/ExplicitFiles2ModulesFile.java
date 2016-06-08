@@ -196,6 +196,12 @@ public class ExplicitFiles2ModulesFile
 			throw new PrismException("Error detected at line " + lineNum + " of states file \"" + statesFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of states file \"" + statesFile + "\"");
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) {
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 		// create modules file
 		modulesFile = new ModulesFile();
@@ -223,7 +229,7 @@ public class ExplicitFiles2ModulesFile
 	 */
 	private ModulesFile createVarInfoFromTransFile(File transFile) throws PrismException
 	{
-		BufferedReader in;
+		BufferedReader in = null;
 		String s, ss[];
 		int lineNum = 0;
 		Module m;
@@ -252,6 +258,12 @@ public class ExplicitFiles2ModulesFile
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) {
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 		// create modules file
 		modulesFile = new ModulesFile();

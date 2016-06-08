@@ -318,6 +318,9 @@ public class NondetModelChecker extends NonProbModelChecker
 			case ExpressionTemporal.R_I:
 				rewards = checkRewardInst(exprTemp, stateRewards, transRewards, minMax.isMin());
 				break;
+			case ExpressionTemporal.R_F:
+				rewards = checkRewardReach((ExpressionTemporal) expr2, stateRewards, transRewards, minMax.isMin());
+				break;
 			}
 		} else if (expr2.getType() instanceof TypePathBool || expr2.getType() instanceof TypeBool) {
 			rewards = checkRewardPathFormula(expr2, stateRewards, transRewards, minMax.isMin());
@@ -544,7 +547,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Removing actions with non-zero reward from the product for maximum cases
-		if (hasMaxReward /*& hasLTLconstraint*/) {
+		if (hasMaxReward) {
 			mcMo.removeNonZeroMecsForMax(modelProduct, mcLtl, transRewardsList, opsAndBounds, numObjectives, dra, draDDRowVars, draDDColVars);
 		}
 
@@ -669,7 +672,7 @@ public class NondetModelChecker extends NonProbModelChecker
 					TileList.storedFormulasX.add(exprs.get(0));
 					TileList.storedFormulasY.add(exprs.get(1));
 
-					TileList.storedFormulas.add(exprs);
+					TileList.storedFormulas.addAll(exprs);
 					TileList.storedTileLists.add((TileList) value);
 				}
 			} //else, i.e. in 3D, the output was treated in the algorithm itself.
@@ -895,6 +898,10 @@ public class NondetModelChecker extends NonProbModelChecker
 					probs = checkProbUntil(exprTemp, qual, min);
 				}
 			}
+			// Anything else - convert to until and recurse
+			else {
+				probs = checkProbPathFormulaSimple(exprTemp.convertToUntilForm(), qual, min);
+			}
 		}
 
 		if (probs == null)
@@ -1031,11 +1038,6 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// print out some info about num states
-		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
-		// allDDRowVars.n()));
-		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
-		// allDDRowVars.n()) + " states\n");
-
 		try {
 			probs = checkProbUntil(b1, b2, qual, min);
 		} catch (PrismException e) {
@@ -1461,8 +1463,6 @@ public class NondetModelChecker extends NonProbModelChecker
 			// For a DFA, just collect the accept states
 			mainLog.println("\nSkipping end component detection since DRA is a DFA...");
 			acc = ((AcceptanceReachDD) acceptance).getGoalStates();
-			JDD.Ref(modelProduct.getReach());
-			acc = JDD.And(acc, modelProduct.getReach());
 		} else {
 			// Usually, we have to detect end components in the product
 			mainLog.println("\nFinding accepting end components...");
@@ -2136,32 +2136,6 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		return rewards;
 	}
-
-	/**
-	 * Check whether state set represented by dd is "weak absorbing",
-	 * i.e. whether set is closed under all successors.
-	 * Note: does not deref dd.
-	 */
-	private boolean checkWeakAbsorbing(JDDNode dd, NondetModel model)
-	{
-		boolean result;
-
-		JDD.Ref(model.getTrans01());
-		JDD.Ref(dd);
-		JDDNode tmp = JDD.And(model.getTrans01(), dd);
-		tmp = JDD.SwapVariables(tmp, model.getAllDDRowVars(), model.getAllDDColVars());
-		tmp = JDD.ThereExists(tmp, model.getAllDDNondetVars());
-		tmp = JDD.ThereExists(tmp, model.getAllDDColVars());
-		JDD.Ref(model.getReach());
-		tmp = JDD.And(model.getReach(), tmp);
-		JDD.Ref(dd);
-		tmp = JDD.And(tmp, JDD.Not(dd));
-		result = tmp.equals(JDD.ZERO);
-		JDD.Deref(tmp);
-
-		return result;
-	}
-
 }
 
 // ------------------------------------------------------------------------------

@@ -206,6 +206,14 @@ public class TypeCheck extends ASTTraverse
 			}
 			e.setType(TypePathBool.getInstance());
 			break;
+		case ExpressionTemporal.R_F:
+			if (e.getOperand2() != null) {
+				type = e.getOperand2().getType();
+				if (!(type instanceof TypeBool) && !(type instanceof TypePathBool))
+					throw new PrismLangException("Type error: Argument of " + e.getOperatorSymbol() + " operator is not Boolean", e.getOperand2());
+			}
+			e.setType(TypePathDouble.getInstance());
+			break;
 		case ExpressionTemporal.R_C:
 		case ExpressionTemporal.R_I:
 		case ExpressionTemporal.R_S:
@@ -439,6 +447,22 @@ public class TypeCheck extends ASTTraverse
 			if (types[0] instanceof TypeBool)
 				e.setType(TypeBool.getInstance());
 			else if (types.length == 1 || types[1] instanceof TypeBool) //in this case type[0] is TypeDouble
+				e.setType(TypeDouble.getInstance());
+			else
+				e.setType(TypeVoid.getInstance());
+			break;
+		case ExpressionFunc.MLESSMULTI:
+			// Resulting type is determined by types of the arguments within
+			int doubleCount = 0;
+			for(Type t : types) {
+				if (t instanceof TypeDouble) {
+					doubleCount++;
+				}
+			}
+			
+			if (doubleCount == 0) //only constraints
+				e.setType(TypeBool.getInstance());
+			else if (doubleCount == 1) //numerical, possibly subject to constraint
 				e.setType(TypeDouble.getInstance());
 			else
 				e.setType(TypeVoid.getInstance());

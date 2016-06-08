@@ -214,26 +214,4 @@ public class ECComputerDefault extends ECComputer
 		}
 		return r;
 	}
-
-	private boolean isMEC(BitSet b)
-	{
-		if (b.isEmpty())
-			return false;
-
-		int state = b.nextSetBit(0);
-		while (state != -1) {
-			boolean atLeastOneAction = false;
-			for (int i = 0; i < model.getNumChoices(state); i++) {
-				if (model.allSuccessorsInSet(state, i, b)) {
-					atLeastOneAction = true;
-				}
-			}
-			if (!atLeastOneAction) {
-				return false;
-			}
-			state = b.nextSetBit(state + 1);
-		}
-
-		return true;
-	}
 }

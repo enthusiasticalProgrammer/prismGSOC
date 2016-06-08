@@ -106,9 +106,9 @@ public class ModelCheckThread extends GUIComputationThread
 			// Do model checking
 			try {
 				result = prism.modelCheck(propertiesFile, propertiesFile.getPropertyObject(i));
-			} catch (Exception e) {
+			} catch (PrismException e) {
 				result = new Result(e);
-				error(e);
+				error(e.getMessage());
 			}
 			ic.interrupt();
 			try {

@@ -670,7 +670,6 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	protected void modelCheckAbstractionProbReach(boolean min) throws PrismException
 	{
 		ModelCheckerResult res = null;
-		int i, n;
 
 		// Compute lower bounds
 		switch (abstractionType) {
@@ -818,7 +817,6 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	protected void modelCheckAbstractionExpReach(boolean min) throws PrismException
 	{
 		ModelCheckerResult res = null;
-		int i, n;
 
 		// Pass settings to model checker
 		mc.termCrit = TermCrit.RELATIVE;
@@ -1055,6 +1053,8 @@ public abstract class QuantAbstractRefine extends PrismComponent
 				lbStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, true, min, lbLastSoln);
 				ubStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, false, min, ubLastSoln);
 				break;
+			default:
+				throw new AssertionError();
 			}
 			if (lbStrat == null || ubStrat == null) {
 				String s = "Cannot generate strategy information for";

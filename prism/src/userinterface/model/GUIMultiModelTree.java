@@ -78,8 +78,9 @@ import parser.type.TypeInt;
 import prism.ModelType;
 import prism.PrismException;
 import userinterface.GUIPrism;
+import userinterface.model.computation.LoadGraphicModelThread;
+import userinterface.model.graphicModel.ModuleModel;
 
-@SuppressWarnings("serial")
 public class GUIMultiModelTree extends JPanel implements MouseListener
 {
 	//Constants
@@ -453,7 +454,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		handler.hasModified(true);
 	}
 
-	public void a_addLocalBoolean(ModuleNode m, BooleanVariable var) throws PrismException
+	public void a_addLocalBoolean(ModuleNode m, LoadGraphicModelThread.BooleanVariable var) throws PrismException
 	{
 		try {
 			Expression init;
@@ -493,7 +494,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		handler.hasModified(true);
 	}
 
-	public void a_addLocalInteger(ModuleNode m, IntegerVariable var) throws PrismException
+	public void a_addLocalInteger(ModuleNode m, LoadGraphicModelThread.IntegerVariable var) throws PrismException
 	{
 		try {
 			Expression init;
@@ -704,11 +705,15 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 						vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 						if (inTreeDec.getDeclType() instanceof DeclarationInt) {
 							DeclarationInt dt = (DeclarationInt) inTreeDec.getDeclType();
+                        vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 							vNode.setMin(dt.getLow());
 							vNode.setMax(dt.getHigh());
+                        theModel.nodesChanged(vNode, new int []
+                        {0,1,2});
 						}
-						theModel.nodesChanged(vNode, new int[] { 0, 1, 2 });
-					} else if (dNode instanceof BoolNode) {
+					}
+                    else if(dNode instanceof BoolNode)
+                    {
 						BoolNode bNode = (BoolNode) dNode;
 						bNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 						theModel.nodesChanged(bNode, new int[] { 0 });
@@ -3225,56 +3230,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	}
 
-	/*
-	class ExpressionEditor extends javax.swing.DefaultCellEditor
-	{
-	        Expression exp;
-	        int minWidth = 100;
-	 
-	        public ExpressionEditor()
-	        {
-	                super(new JTextField());
-	        }
-	 
-	        public Component getComponent()
-	        {
-	                return editorComponent;
-	        }
-	 
-	        public boolean stopCellEditing()
-	        {
-	                String str = ((JTextField)editorComponent).getText();
-	 
-	                try
-	                {
-	                        Expression s = handler.getGUIPlugin().getPrism().parseSingleExpressionString(str);
-	                        exp = s;
-	                }
-	                catch(Exception e)
-	                {
-	                        handler.getGUIPlugin().message("Error: Syntax Error");
-	                        super.fireEditingStopped();
-	                        return true;
-	                }
-	                super.fireEditingStopped();
-	                return true;
-	 
-	        }
-	 
-	        public void setBounds(Rectangle r)
-	        {
-	                r.width = Math.max(minWidth, r.width);
-	                getComponent().setBounds(r);
-	                tree.repaint();
-	        }
-	 
-	        public void setBounds(int x, int y, int w, int h)
-	        {
-	                w = Math.max(minWidth, w);
-	                getComponent().setBounds(x,y,w,h);
-	                tree.repaint();
-	        }
-	}*/
 
 	//Cell edit for ExpressionNode
 	class ExpressionEditor extends JTextField implements TreeCellEditor
@@ -3407,6 +3362,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			case CTMC:
 				sto.setSelected(true);
 				break;
+			default:
+				break;
 			}
 			theModel.nodeChanged(this);
 		}
@@ -3528,20 +3485,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		{
 			return this;
 		}
-
-		/*
-		                //make sure the JTree gives the editor enough space
-		                public void setBounds(Rectangle r)
-		                {
-		                                r.width = Math.max(minWidth, r.width);
-		                                super.setBounds(r);
-		                }
-		 
-		                public void setBounds(int x, int y, int w, int h)
-		                {
-		                                w = Math.max(minWidth, w);
-		                                super.setBounds(x,y,w,h);
-		                }*/
 
 	}
 
@@ -3669,131 +3612,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 	}
 
-	/*
-	class ModelTreeCellEditor_n implements TreeCellEditor
-	{
-	        ModelTypeEditor modelTypeEditor;
-	        ExpressionEditor expressionEditor;
-	        ModuleEditor moduleEditor;
-	        DeclarationEditor declarationEditor;
-	 
-	        CellEditor currentEditor;
-	 
-	        DefaultTreeCellEditor ttt;
-	 
-	        String[] types = new String[]
-	        {"Non-deterministic", "Probabilistic", "Stochastic"};
-	 
-	        PrismNodeRenderer renderer;
-	 
-	        public ModelTreeCellEditor_n(PrismNodeRenderer renderer)
-	        {
-	                this.renderer = renderer;
-	                modelTypeEditor = new ModelTypeEditor(types);
-	                expressionEditor = new ExpressionEditor();
-	                moduleEditor = new ModuleEditor();
-	                declarationEditor = new DeclarationEditor();
-	                currentEditor = declarationEditor;
-	        }
-	 
-	 
-	 
-	        public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
-	        {
-	                String tag = "";
-	                if(value instanceof ExpressionNode)
-	                {
-	                        currentEditor = expressionEditor;
-	//				((JTextField)expressionEditor.getComponent()).setText(((ExpressionNode)value).getValue().toString());
-	                }
-	                else if(value instanceof ModelTypeNode)
-	                {
-	                        currentEditor = modelTypeEditor;
-	                        modelTypeEditor.setSelectedType(((ModelTypeNode)value).getValue());
-	                        tag = "Type: ";
-	                }
-	                else if(value instanceof ModuleNode)
-	                {
-	                        currentEditor = moduleEditor;
-	                        moduleEditor.setText(((ModuleNode)value).getName());
-	                }
-	                else if(value instanceof DeclarationNode)
-	                {
-	                        currentEditor = declarationEditor;
-	                        declarationEditor.setText(((DeclarationNode)value).getName());
-	                }
-	                DefaultTreeCellRenderer c = (DefaultTreeCellRenderer)renderer.getTreeCellRendererComponent(tree, value, isSelected, expanded, leaf, row, true);
-	                JPanel p = new JPanel();
-	                p.setBackground(Color.white);
-	                p.setLayout(new BorderLayout());
-	                JLabel l = new JLabel(tag,c.getIcon(), JLabel.HORIZONTAL);
-	                l.setBackground(Color.white);
-	                l.setForeground(Color.blue);
-	                l.setFont(tree.getFont());
-	                p.add(l, BorderLayout.WEST);
-	                if(currentEditor instanceof ExpressionEditor)
-	                {
-	                        p.add(((ExpressionEditor)currentEditor).getComponent(), BorderLayout.CENTER);
-	                }
-	                else
-	                {
-	                        p.add((Component)currentEditor, BorderLayout.CENTER);
-	                }
-	                return p;//(Component)currentEditor;
-	        }
-	 
-	        public Object getCellEditorValue()
-	        {
-	                return currentEditor.getCellEditorValue();
-	 
-	        }
-	 
-	        public boolean isCellEditable(EventObject event)
-	        {
-	                return true;
-	                //return currentEditor.isCellEditable(event);
-	        }
-	 
-	        public boolean shouldSelectCell(EventObject event)
-	        {
-	                return currentEditor.shouldSelectCell(event);
-	        }
-	 
-	        public boolean stopCellEditing()
-	        {
-	                return currentEditor.stopCellEditing();
-	        }
-	 
-	        public void cancelCellEditing()
-	        {
-	                currentEditor.cancelCellEditing();
-	        }
-	 
-	        public void addCellEditorListener(CellEditorListener l)
-	        {
-	 
-	                modelTypeEditor.addCellEditorListener(l);
-	                expressionEditor.addCellEditorListener(l);
-	 
-	                moduleEditor.addCellEditorListener(l);
-	 
-	                declarationEditor.addCellEditorListener(l);
-	        }
-	 
-	        public void removeCellEditorListener(CellEditorListener l)
-	        {
-	                modelTypeEditor.removeCellEditorListener(l);
-	                expressionEditor.removeCellEditorListener(l);
-	 
-	                moduleEditor.removeCellEditorListener(l);
-	 
-	                declarationEditor.removeCellEditorListener(l);
-	        }
-	 
-	}
-	 
-	 */
-
 	class IconThread extends Thread
 	{
 		int index;
@@ -3831,57 +3649,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 	}
 
-	private static String removeCarriages(String line)
+	public String getParseText()
 	{
-		String lineBuffer = "";
-		for (int i = 0; i < line.length(); i++) {
-			char c = line.charAt(i);
-			if (c != '\n')
-				lineBuffer += c;
-			else
-				lineBuffer += " ";
-		}
-		return lineBuffer;
-	}
-
-	public class Variable
-	{
-		public String name;
-	}
-
-	public class IntegerVariable extends Variable
-	{
-		public String min, max, init = "0";
-
-		public IntegerVariable(String name, String min, String max, String init)
-		{
-			super.name = name;
-			this.min = min;
-			this.max = max;
-			this.init = init;
-		}
-
-		public IntegerVariable(String name, String min, String max)
-		{
-			this.name = name;
-			this.min = min;
-			this.max = max;
-		}
-	}
-
-	public class BooleanVariable extends Variable
-	{
-		public String init = "false";
-
-		public BooleanVariable(String name, String init)
-		{
-			this.init = init;
-			this.name = name;
-		}
-
-		public BooleanVariable(String name)
-		{
-			this.name = name;
-		}
+		throw new UnsupportedOperationException("I don't think this is used anymore");
 	}
 }

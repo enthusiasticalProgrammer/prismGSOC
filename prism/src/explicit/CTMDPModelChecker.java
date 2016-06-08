@@ -37,8 +37,11 @@ import prism.PrismNotSupportedException;
 
 /**
  * Explicit-state model checker for continuous-time Markov decision processes (CTMDPs).
+ * 
+ * This uses various bits of functionality of MDPModelChecker, so we inherit from that.
+ * (This way MDPModelChecker picks up any options set on this one.) 
  */
-public class CTMDPModelChecker extends ProbModelChecker
+public class CTMDPModelChecker extends MDPModelChecker
 {
 	/**
 	 * Create a new CTMDPModelChecker, inherit basic state from parent (unless null).

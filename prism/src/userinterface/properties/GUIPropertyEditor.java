@@ -304,7 +304,6 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 			} else {
 				int start = propertyText.getSelectionStart();
 				int end = propertyText.getSelectionEnd();
-				int length = propertyText.getSelectedText().length();
 				boolean shouldDo = false;
 				int open = 0;
 				int closed = 0;

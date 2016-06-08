@@ -184,6 +184,7 @@ public class PrismExplicit extends PrismComponent
 		if (file != null) {
 			tmpLog = new PrismFileLog(file.getPath());
 			if (!tmpLog.ready()) {
+				tmpLog.close();
 				throw new FileNotFoundException();
 			}
 		} else {
@@ -321,6 +322,7 @@ public class PrismExplicit extends PrismComponent
 		if (fileOut != null) {
 			tmpLog = new PrismFileLog(fileOut.getPath());
 			if (!tmpLog.ready()) {
+				tmpLog.close();
 				throw new PrismException("Could not open file \"" + fileOut + "\" for output");
 			}
 		} else {

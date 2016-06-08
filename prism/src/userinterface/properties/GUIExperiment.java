@@ -232,9 +232,9 @@ public class GUIExperiment
 					try {
 						definedMFConstants = undefinedConstants.getMFConstantValues();
 						prism.setPRISMModelConstants(definedMFConstants);
-					} catch (Exception e) {
+					} catch (PrismException e) {
 						// in case of error, report it (in log only), store as result, and go on to the next model
-						errorLog(e);
+						errorLog(e.getMessage());
 						setMultipleErrors(definedMFConstants, null, e);
 						undefinedConstants.iterateModel();
 						continue;
@@ -286,9 +286,10 @@ public class GUIExperiment
 							// update progress meter
 							// (all properties simulated simultaneously so can't get more accurate feedback at the moment anyway)
 							table.progressChanged();
-						} catch (Exception e) {
+						} catch (PrismException e) {
 							// in case of error, report it (in log only), store as result, and go on to the next model
-							errorLog(e);
+							errorLog(e.getMessage());
+
 							setMultipleErrors(definedMFConstants, null, e);
 							undefinedConstants.iterateModel();
 							continue;
@@ -324,9 +325,9 @@ public class GUIExperiment
 									res = prism.modelCheckSimulator(propertiesFile, propertyToCheck.getExpression(), definedPFConstants, initialState,
 											info.getMaxPathLength(), info.createSimulationMethod());
 								}
-							} catch (Exception e) {
+							} catch (PrismException e) {
 								// in case of error, report it (in log only), store exception as the result and proceed
-								errorLog(e);
+								errorLog(e.getMessage());
 								res = new Result(e);
 							}
 							// store result of model checking
@@ -390,6 +391,12 @@ public class GUIExperiment
 			}
 			// catch and ignore possible exception from invokeAndWait calls
 			catch (java.lang.reflect.InvocationTargetException e) {
+			}
+			try {
+				prism.getSettings().set(PrismSettings.PRISM_IMPLEMENT_STRATEGY, false);
+			} catch (PrismException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

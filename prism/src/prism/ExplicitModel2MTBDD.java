@@ -47,11 +47,6 @@ public class ExplicitModel2MTBDD
 	// Explicit-state model
 	private explicit.Model modelExpl;
 
-	// ModulesFile object, essentially just to store variable info
-	private ModulesFile modulesFile;
-
-	// model info
-
 	// type
 	private ModelType modelType; // model type (dtmc/mdp/ctmc.)
 	// vars info
@@ -66,8 +61,6 @@ public class ExplicitModel2MTBDD
 	// dds/dd vars - whole system
 	private JDDNode trans; // transition matrix dd
 	private JDDNode start; // dd for start state
-	private JDDNode stateRewards; // dd of state rewards
-	private JDDNode transRewards; // dd of transition rewards
 	private JDDVars allDDRowVars; // all dd vars (rows)
 	private JDDVars allDDColVars; // all dd vars (cols)
 	private JDDVars allDDSynchVars; // all dd vars (synchronising actions)
@@ -123,10 +116,7 @@ public class ExplicitModel2MTBDD
 		this.statesList = statesList;
 
 		// Store modules files or create dummy one if needed
-		if (statesList != null) {
-			this.modulesFile = modulesFile;
-		} else {
-			this.modulesFile = modulesFile = new ModulesFile();
+		if (statesList == null) {
 			Module m = new Module("M");
 			Declaration d = new Declaration("x", new DeclarationInt(Expression.Int(0), Expression.Int(numStates - 1)));
 			d.setStart(Expression.Int(0));
@@ -325,8 +315,10 @@ public class ExplicitModel2MTBDD
 		moduleDDColVars[0] = new JDDVars();
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
-			moduleDDRowVars[0].copyVarsFrom(varDDRowVars[i]);
-			moduleDDColVars[0].copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			moduleDDRowVars[0].addVars(varDDRowVars[i]);
+			moduleDDColVars[0].addVars(varDDColVars[i]);
 		}
 
 		// put refs for all vars in whole system together
@@ -342,8 +334,10 @@ public class ExplicitModel2MTBDD
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
 			// add to list
-			allDDRowVars.copyVarsFrom(varDDRowVars[i]);
-			allDDColVars.copyVarsFrom(varDDColVars[i]);
+			varDDRowVars[i].refAll();
+			varDDColVars[i].refAll();
+			allDDRowVars.addVars(varDDRowVars[i]);
+			allDDColVars.addVars(varDDColVars[i]);
 		}
 		if (modelType == ModelType.MDP) {
 			for (i = 0; i < ddChoiceVars.length; i++) {
@@ -374,7 +368,6 @@ public class ExplicitModel2MTBDD
 		synchs = new Vector<String>();
 		// Initialise mtbdds
 		trans = JDD.Constant(0);
-		transRewards = JDD.Constant(0);
 		if (modelType != ModelType.MDP) {
 			transPerAction = new Vector<JDDNode>();
 			transPerAction.add(JDD.Constant(0));
@@ -489,63 +482,6 @@ public class ExplicitModel2MTBDD
 		for (int r : modelExpl.getInitialStates()) {
 			start = JDD.Or(start, encodeState(r));
 		}
-	}
-
-	// read info about state rewards from states file
-
-	public void computeStateRewards() throws PrismException
-	{
-		/*BufferedReader in;
-		String s, ss[];
-		int i, j, lineNum = 0;
-		double d;
-		JDDNode tmp;
-		
-		// initialise mtbdd
-		stateRewards = JDD.Constant(0);
-		
-		if (statesFile == null)
-			return;
-		
-		try {
-			// open file for reading
-			in = new BufferedReader(new FileReader(statesFile));
-			// skip first line
-			in.readLine();
-			lineNum = 1;
-			// read remaining lines
-			s = in.readLine();
-			lineNum++;
-			while (s != null) {
-				// skip blank lines
-				s = s.trim();
-				if (s.length() > 0) {
-					// split into two/three parts
-					ss = s.split(":");
-					// determine which state this line describes
-					i = Integer.parseInt(ss[0]);
-					// if there is a state reward...
-					ss = ss[1].split("=");
-					if (ss.length == 2) {
-						// determine value
-						d = Double.parseDouble(ss[1]);
-						// construct element of vector mtbdd
-						tmp = encodeState(i);
-						// add it into mtbdd for state rewards
-						stateRewards = JDD.Apply(JDD.PLUS, stateRewards, JDD.Apply(JDD.TIMES, JDD.Constant(d), tmp));
-					}
-				}
-				// read next line
-				s = in.readLine();
-				lineNum++;
-			}
-			// close file
-			in.close();
-		} catch (IOException e) {
-			throw new PrismException("File I/O error reading from \"" + statesFile + "\"");
-		} catch (NumberFormatException e) {
-			throw new PrismException("Error detected at line " + lineNum + " of states file \"" + statesFile + "\"");
-		}*/
 	}
 
 	/**

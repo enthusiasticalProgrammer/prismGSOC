@@ -170,7 +170,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 	// Other
 
 	@Override
-	public MDPRewards buildMDPRewards()
+	public MDPReward buildMDPRewards()
 	{
 		return new MDPRewardsSimple(this);
 	}

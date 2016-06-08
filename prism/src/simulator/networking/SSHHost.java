@@ -70,8 +70,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	private int noDoneThisStint; //progress
 
 	//Feedback information
-	private boolean doFeedback = false;
-	private boolean doFeedbackResults = false;
 	private String feedbackName = "";
 	private String feedbackResults = "";
 	private String controlName = "";
@@ -146,13 +144,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		tempResults = null;
 		//deal with results TO-DO
 		setState(READY_OKAY);
-	}
-
-	private synchronized void setNoDoneThisStint(int noDone)
-	{
-		this.noDoneThisStint = noDone;
-		progressBar.repaint();
-		owner.notifyChange(this);
 	}
 
 	public void setErroneousStintToZero()
@@ -294,11 +285,8 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		noDoneThisStint = 0;
 
 		setState(RUNNING);
-		if (doFeedback || resultsFeedback) {
-			this.doFeedback = doFeedback;
-			this.doFeedbackResults = resultsFeedback;
-
-			feedbackName = "feedbackFile" + System.currentTimeMillis() + ".txt";
+		if(doFeedback || resultsFeedback)
+		{
 			if (resultsFeedback)
 				feedbackResults = "feedbackResultsFile" + System.currentTimeMillis() + ".txt";
 			feedbackThread = new StintFeedbackThread(doFeedback, resultsFeedback);
@@ -584,22 +572,27 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						// do the scp call
 						SSHHandler.scp(getUserName(), getHostName(), parameters);
 
-						try {
+						BufferedReader reader =null;
+						try
+						{
 
-							BufferedReader reader = new BufferedReader(new FileReader(localFeedback));
-							int done = Integer.parseInt(reader.readLine());
-							int total = Integer.parseInt(reader.readLine());
-							int finished = Integer.parseInt(reader.readLine());
+							reader = new BufferedReader(new FileReader(localFeedback));
 
-							noDoneThisStint = done;
 							owner.notifyChange(instance);
 						} catch (FileNotFoundException ee) {
 							//System.out.println("filenotfoundexception");
-						} catch (IOException ee) {
-							//System.out.println("ioexception");
-						} catch (NumberFormatException ee) {
-							//System.out.println("numberformatexception");
 						}
+						catch(NumberFormatException ee)
+						{
+							//System.out.println("numberformatexception");
+						}finally{
+							try {
+								reader.close();
+							} catch (IOException e) {
+								throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+						}
+						}
+						
 
 					}
 

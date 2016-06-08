@@ -1030,7 +1030,7 @@ public class AxisSettings extends Observable implements SettingOwner
 		String majorGridColourG = axis.getAttribute("majorColourG");
 		String majorGridColourB = axis.getAttribute("majorColourB");
 
-		Color majorGridColour = Graph.parseColor(majorGridColourR, majorGridColourG, majorGridColourB);
+		Graph.parseColor(majorGridColourR, majorGridColourG, majorGridColourB);
 
 		showGrid(Graph.parseBoolean(axis.getAttribute("showMajor")));
 		setScaleType(Graph.parseBoolean(axis.getAttribute("logarithmic")) ? LOGARITHMIC_SCALE : NORMAL_SCALE);

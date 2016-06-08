@@ -33,8 +33,13 @@ import acceptance.AcceptanceStreett;
 import acceptance.AcceptanceType;
 import automata.DA;
 
-public class LTL2Rabin
-{
+public class LTL2Rabin {
+	
+
+	public static prism.DRA<BitSet> ltl2dra(SimpleLTL ltlFormula) throws PrismException {
+		SimpleLTL ltl = ltlFormula.simplify();
+		return ltl2da(ltl, ltl.getAPs(),true,false).createPrismDRA();
+	}
 
 	@SuppressWarnings("unchecked")
 	public static automata.DA<BitSet, AcceptanceRabin> ltl2rabin(SimpleLTL ltlFormula) throws PrismException

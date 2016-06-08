@@ -49,8 +49,6 @@ public class Buchi
 	private BState bremoved;
 	private BScc scc_stack;
 	private int accept;
-	private int bstate_count;
-	private int btrans_count;
 	private int rank;
 
 	// the highest id used for a BState.id
@@ -153,8 +151,6 @@ public class Buchi
 		Generalized.GTrans t;
 		BTrans t1;
 		accept = g._final.size();
-		bstate_count = 0;
-		btrans_count = 0;
 
 		bstack = new BState();
 		bstack.nxt = bstack;
@@ -393,8 +389,6 @@ public class Buchi
 		s.prv = bstates;
 		s.nxt.prv = s;
 		bstates.nxt = s;
-		btrans_count += state_trans;
-		bstate_count++;
 	}
 
 	private void retargetAllBTrans()

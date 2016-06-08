@@ -277,6 +277,10 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	protected StateValues checkExpressionSteadyState(ExpressionSS expr) throws PrismException
 	{
+		Expression pb; // probability bound (expression)
+		double p = 0; // probability bound (actual value)
+		String relOp; // relational operator
+
 		// BSCC stuff
 		List<JDDNode> bsccs = null;
 		JDDNode notInBSCCs = null;
@@ -485,6 +489,10 @@ public class ProbModelChecker extends NonProbModelChecker
 				} else {
 					probs = checkProbUntil(exprTemp, qual);
 				}
+			}
+			// Anything else - convert to until and recurse
+			else {
+				probs = checkProbPathFormulaSimple(exprTemp.convertToUntilForm(), qual);
 			}
 		}
 
@@ -1884,7 +1892,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			}
 
 			// See which states in the initial distribution have non-zero prob
-			start = initDist.getBDDFromInterval(">", 0);
+			start = initDist.getBDDFromInterval(RelOp.GT, 0);
 			// Determine whether initial states are all in a single BSCC 
 			allInOneBSCC = -1;
 			for (int b = 0; b < numBSCCs; b++) {

@@ -55,11 +55,6 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	private ConstantPickerList propTable;
 	private ConstantPickerList modelTable;
 
-	private boolean areModel, areProp;
-
-	private Action okAction;
-	private Action cancelAction;
-
 	private javax.swing.JButton okayButton;
 
 	private UndefinedConstants undef;
@@ -80,8 +75,6 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	public GUIExperimentPicker(GUIPrism parent, UndefinedConstants undef, boolean areModel, boolean areProp, boolean offerGraph, boolean offerSimulation)
 	{
 		super(parent, "Define Constants", true);
-		this.areModel = areModel;
-		this.areProp = areProp;
 		this.undef = undef;
 		this.gui = parent;
 

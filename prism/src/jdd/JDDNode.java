@@ -43,7 +43,8 @@ public class JDDNode
 
 	protected static native long DDN_GetElse(long dd);
 
-	static {
+	static
+	{
 		try {
 			System.loadLibrary("jdd");
 		} catch (UnsatisfiedLinkError e) {
@@ -98,19 +99,12 @@ public class JDDNode
 	 */
 	public JDDNode getThen()
 	{
-		if (DebugJDD.debugEnabled) {
-			return DebugJDD.nodeGetThen(this);
-		}
+		assert !this.isConstant();
 
-		long thenPtr = DDN_GetThen(ptr);
-		if (thenPtr == 0) {
-			if (isConstant()) {
-				throw new RuntimeException("Trying to access the 'then' child of a constant MTBDD node");
-			} else {
-				throw new RuntimeException("getThen: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
-			}
-		}
-		return new JDDNode(thenPtr);
+		// just return the node, even if DebugJDD is enabled
+		// DDN_GetThen will return NULL if the current node is a
+		// constant, raising an Exception in the JDDNode constructor
+		return new JDDNode(DDN_GetThen(ptr));
 	}
 
 	/**
@@ -126,19 +120,12 @@ public class JDDNode
 	 */
 	public JDDNode getElse()
 	{
-		if (DebugJDD.debugEnabled) {
-			return DebugJDD.nodeGetElse(this);
-		}
+		assert !this.isConstant();
 
-		long elsePtr = DDN_GetElse(ptr);
-		if (elsePtr == 0) {
-			if (isConstant()) {
-				throw new RuntimeException("Trying to access the 'else' child of a constant MTBDD node");
-			} else {
-				throw new RuntimeException("getElse: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
-			}
-		}
-		return new JDDNode(elsePtr);
+		// just return the node, even if DebugJDD is enabled
+		// DDN_GetElse will return NULL if the current node is a
+		// constant, raising an Exception in the JDDNode constructor
+ 		return new JDDNode(DDN_GetElse(ptr));
 	}
 
 	@Override
@@ -173,13 +160,14 @@ public class JDDNode
 	 */
 	public JDDNode copy()
 	{
+		JDDNode result;
 		if (DebugJDD.debugEnabled) {
-			return DebugJDD.Copy(this);
+			result = new DebugJDD.DebugJDDNode(ptr, false);
 		} else {
-			JDDNode result = new JDDNode(ptr());
+			result = new JDDNode(ptr());
+		}
 			JDD.Ref(result);
 			return result;
-		}
 	}
 }
 

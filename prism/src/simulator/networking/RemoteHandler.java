@@ -64,12 +64,9 @@ public class RemoteHandler
 			System.out.println("started");
 			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "ERR" + args[1], proc);
 			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), "OUT" + args[1]);
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 			errorGobbler.start();
-			//outputGobbler.start();
 
-			//System.out.println("doing ssh");
 			int exitVal = proc.waitFor();
 			System.out.println("ssh returns " + exitVal);
 			errorGobbler.interrupt();
@@ -101,21 +98,16 @@ public class RemoteHandler
 			//System.out.println(proc.toString());
 
 			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "<ERROR: " + args[1], proc);
-			//StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), "OUT"+args[1]);
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 			errorGobbler.start();
-			//outputGobbler.start();
-
-			//System.out.println("doing scp");
 			int exitVal = proc.waitFor();
-			//System.out.println("scp returns "+exitVal);
 			errorGobbler.interrupt();
-			//outputGobbler.interrupt();
 			return exitVal;
 
-		} catch (IOException t) {
-			//t.printStackTrace();
+		}
+		catch(IOException t)
+		{
+			t.printStackTrace();
 			return -1;
 		}
 	}

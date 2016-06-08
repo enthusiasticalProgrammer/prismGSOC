@@ -34,8 +34,7 @@ import prism.PrismException;
  * @param DA_t the Deterministic Automaton class.
  */
 
-public class DAUnionAlgorithm
-{
+public class DAUnionAlgorithm {
 
 	/** The first DA */
 	private DRA _da_1;
@@ -52,37 +51,36 @@ public class DAUnionAlgorithm
 	/** Generate detailed descriptions? */
 	private boolean _detailed_states;
 
+
 	/** Constructor. 
 	 * @param da_1 The first DA
 	 * @param da_2 the second DA
 	 * @param trueloop_check Check for trueloops?
 	 * @param detailed_states Generate detailed descriptions of the states? */
-	public DAUnionAlgorithm(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException
-	{
+	public DAUnionAlgorithm(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException {
 		_da_1 = da_1;
 		_da_2 = da_2;
 		// _trueloop_check = trueloop_check;
 		_detailed_states = detailed_states;
 		_acceptance_calculator = new UnionAcceptanceCalculator(da_1.acceptance(), da_2.acceptance());
 
-		if (!(_da_1.getAPSet() == _da_2.getAPSet())) {
+		if (! (_da_1.getAPSet() == _da_2.getAPSet()) ) {
 			throw new PrismException("Can't create union of DAs: APSets don't match");
 		}
 
 		APSet combined_ap = da_1.getAPSet();
 
-		if (!_da_1.isCompact() || !_da_2.isCompact()) {
+		if (! _da_1.isCompact() || ! _da_2.isCompact()) {
 			throw new PrismException("Can't create union of DAs: Not compact");
 		}
-
+		
 		_result_da = new DRA(combined_ap);
 	}
 
 	/** Get the resulting DA 
 	 * @return a shared_ptr to the resulting union DA.
 	 */
-	DRA getResultDA()
-	{
+	DRA getResultDA() {
 		return _result_da;
 	}
 
@@ -91,8 +89,7 @@ public class DAUnionAlgorithm
 	 * @param elem The edge label 
 	 * @return result_t the shared_ptr of the successor state
 	 */
-	public UnionState.Result delta(UnionState from_state, APElement elem) throws PrismException
-	{
+	public UnionState.Result delta(UnionState from_state, APElement elem) throws PrismException {
 		DA_State state1_to = _da_1.get(from_state.da_state_1).edges().get(elem);
 		DA_State state2_to = _da_2.get(from_state.da_state_2).edges().get(elem);
 
@@ -100,11 +97,11 @@ public class DAUnionAlgorithm
 		return new UnionState.Result(to);
 	}
 
+
 	/** Get the start state.
 	 * @return a shared_ptr to the start state 
 	 */
-	public UnionState getStartState() throws PrismException
-	{
+	public UnionState getStartState() throws PrismException {
 		if (_da_1.getStartState() == null || _da_2.getStartState() == null) {
 			throw new PrismException("DA has no start state!");
 		}
@@ -115,14 +112,12 @@ public class DAUnionAlgorithm
 	/** Prepare the acceptance condition 
 	 * @param acceptance the acceptance condition in the result DA
 	 */
-	public void prepareAcceptance(RabinAcceptance acceptance)
-	{
+	public void prepareAcceptance(RabinAcceptance acceptance) {
 		_acceptance_calculator.prepareAcceptance(acceptance);
 	}
 
 	/** Check if the automaton is a-priori empty */
-	public boolean checkEmpty()
-	{
+	public boolean checkEmpty() {
 		return false;
 	}
 
@@ -133,8 +128,7 @@ public class DAUnionAlgorithm
 	 * @param detailed_states Generate detailed descriptions of the states?
 	 * @return shared_ptr to result DA
 	 */
-	public static DRA calculateUnion(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException
-	{
+	public static DRA calculateUnion(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException {
 		if (!da_1.isCompact()) {
 			da_1.makeCompact();
 		}
@@ -145,10 +139,11 @@ public class DAUnionAlgorithm
 
 		DAUnionAlgorithm dua = new DAUnionAlgorithm(da_1, da_2, trueloop_check, detailed_states);
 		UnionNBA2DRA generator = new UnionNBA2DRA(detailed_states);
-		generator.convert(dua, dua.getResultDA(), 0, new StateMapper<UnionState.Result, UnionState, DA_State>());
+		generator.convert(dua, dua.getResultDA(), 0, new StateMapper<UnionState.Result,UnionState,DA_State>());
 
 		return dua.getResultDA();
 	}
+
 
 	/** Calculate the union of two DA, using stuttering if possible. If the DAs are not compact, they are made compact.
 	 * @param da_1 The first DA
@@ -156,33 +151,32 @@ public class DAUnionAlgorithm
 	 * @param stutter_information information about the symbols where stuttering is allowed
 	 * @param trueloop_check Check for trueloops?
 	 * @param detailed_states Generate detailed descriptions of the states? */
-	/*	public DRA calculateUnionStuttered(DRA da_1, DRA da_2, 
-				StutterSensitivenessInformation stutter_information,
-				boolean trueloop_check, boolean detailed_states) {
-			if (!da_1.isCompact()) {
-				da_1.makeCompact();
-			}
-	
-			if (!da_2.isCompact()) {
-				da_2.makeCompact();
-			}
-	
-			DAUnionAlgorithm dua(da_1, da_2, trueloop_check, detailed_states);
-	
-			StutteredNBA2DA<DAUnionAlgorithm, DA_t> generator(detailed_states, stutter_information);
-			generator.convert(dua, dua.getResultDA(), 0);
-	
-			return dua.getResultDA();
+/*	public DRA calculateUnionStuttered(DRA da_1, DRA da_2, 
+			StutterSensitivenessInformation stutter_information,
+			boolean trueloop_check, boolean detailed_states) {
+		if (!da_1.isCompact()) {
+			da_1.makeCompact();
 		}
-	*/
-	/** Create a UnionState 
-	 * @param da_state_1
-	 * @param da_state_2
-	 * @return the corresponding UnionState
-	 */
-	private UnionState createState(int da_state_1, int da_state_2)
-	{
 
+		if (!da_2.isCompact()) {
+			da_2.makeCompact();
+		}
+
+		DAUnionAlgorithm dua(da_1, da_2, trueloop_check, detailed_states);
+
+		StutteredNBA2DA<DAUnionAlgorithm, DA_t> generator(detailed_states, stutter_information);
+		generator.convert(dua, dua.getResultDA(), 0);
+
+		return dua.getResultDA();
+	}
+*/	
+		/** Create a UnionState 
+		 * @param da_state_1
+		 * @param da_state_2
+		 * @return the corresponding UnionState
+		 */
+	private UnionState createState(int da_state_1, int da_state_2) {
+		
 		UnionState state = new UnionState(da_state_1, da_state_2, _acceptance_calculator);
 
 		// Generate detailed description
@@ -214,3 +208,4 @@ public class DAUnionAlgorithm
 }
 
 //TODO: trueloop again
+

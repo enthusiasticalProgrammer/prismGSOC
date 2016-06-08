@@ -194,12 +194,6 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public BitSet getLabelStates(String name)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public boolean hasLabel(String name)
 	{
 		throw new UnsupportedOperationException();
@@ -261,13 +255,19 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
+	public void checkForDeadlocks() throws PrismException
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void findDeadlocks(boolean fix) throws PrismException
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void exportToPrismExplicitTra(String filename) throws PrismException
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -285,31 +285,7 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public void exportToPrismExplicitTra(String filename) throws PrismException
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void exportToPrismExplicitTra(File file) throws PrismException
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void exportToPrismExplicitTra(PrismLog log)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void exportToDotFile(String filename) throws PrismException
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -320,14 +296,29 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
+	public void exportToPrismExplicitTra(PrismLog log)
+	{
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark)
 	{
 		throw new UnsupportedOperationException();
 	}
 
+	public void exportToDotFile(String filename) throws PrismException
+	{
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark, boolean showStates)
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -405,32 +396,6 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public boolean allSuccessorsInSet(int s, int i, BitSet set)
-	{
-		Iterator<Integer> successors = getSuccessorsIterator(s, i);
-		while (successors.hasNext()) {
-			Integer successor = successors.next();
-			if (!set.get(successor)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public boolean someSuccessorsInSet(int s, int i, BitSet set)
-	{
-		Iterator<Integer> successors = getSuccessorsIterator(s, i);
-		while (successors.hasNext()) {
-			Integer successor = successors.next();
-			if (set.get(successor)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public Iterator<Integer> getSuccessorsIterator(int s, int i)
 	{
 		int sOriginal = translateState(s);
@@ -444,6 +409,26 @@ public class SubNondetModel implements NondetModel
 		return succ.iterator();
 	}
 
+
+	public boolean allSuccessorsInSet(int s, int i, BitSet set)
+	{
+		s = translateState(s);
+		i = translateAction(s, i);
+		set = translateSet(set);
+
+		return model.allSuccessorsInSet(s, i, set);
+	}
+
+	@Override
+	public boolean someSuccessorsInSet(int s, int i, BitSet set)
+	{
+		s = translateState(s);
+		i = translateAction(s, i);
+		set = translateSet(set);
+
+		return model.someSuccessorsInSet(s, i, set);
+	}
+
 	private BitSet translateSet(BitSet set)
 	{
 		BitSet translatedBitSet = new BitSet();
@@ -455,7 +440,8 @@ public class SubNondetModel implements NondetModel
 
 	private void generateStatistics()
 	{
-		for (int i : new IterableStateSet(states, model.getNumStates())) {
+		for (int i = 0; i < model.getNumStates(); i++) {
+			if (states.get(i)) {
 			numTransitions += getTransitions(i);
 			numChoices += actions.get(i).cardinality();
 			maxNumChoices = Math.max(maxNumChoices, model.getNumChoices(i));
@@ -530,5 +516,11 @@ public class SubNondetModel implements NondetModel
 	public void clearPredecessorRelation()
 	{
 		predecessorRelation = null;
+	}
+
+	@Override
+	public BitSet getLabelStates(String name)
+	{
+		throw new UnsupportedOperationException();
 	}
 }

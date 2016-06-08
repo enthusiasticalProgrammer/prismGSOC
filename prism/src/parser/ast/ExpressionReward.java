@@ -36,20 +36,20 @@ import prism.PrismLangException;
 
 public class ExpressionReward extends ExpressionQuant
 {
-	protected Object rewardStructIndex = null;
-	protected Object rewardStructIndexDiv = null;
+	//both are de facto Expressions, but the mechanically generated PrismParser temporarily
+	//assigns them a String, also both are equivalent, but again the mechanically generated
+	//PrismParser uses them both
+	private Object rewardStructIndex = null;
+	private Object rewardStructIndexDiv = null;
+	Expression reward = null;
+	Expression expression = null;
+	// Note: this "old-style" filter is just for display purposes
+	// The parser creates an (invisible) new-style filter around this expression
 
 	// Constructors
 
 	public ExpressionReward()
 	{
-	}
-
-	public ExpressionReward(Expression expression, String relOpString, Expression r)
-	{
-		setExpression(expression);
-		setRelOp(relOpString);
-		setBound(r);
 	}
 
 	// Set methods
@@ -59,17 +59,19 @@ public class ExpressionReward extends ExpressionQuant
 		rewardStructIndex = o;
 	}
 
-	public void setRewardStructIndexDiv(Object o)
+	public void setReward(Expression p)
 	{
-		rewardStructIndexDiv = o;
+		setBound(p);
 	}
 
-	/**
-	 * Set the reward bound. Equivalent to {@code setBound(r)}.
-	 */
-	public void setReward(Expression r)
+	public void setExpression(Expression e)
 	{
-		setBound(r);
+		expression = e;
+	}
+
+	public void setFilter(Filter f)
+	{
+		filter = f;
 	}
 
 	// Get methods
@@ -77,19 +79,6 @@ public class ExpressionReward extends ExpressionQuant
 	public Object getRewardStructIndex()
 	{
 		return rewardStructIndex;
-	}
-
-	public Object getRewardStructIndexDiv()
-	{
-		return rewardStructIndexDiv;
-	}
-
-	/**
-	 * Get the reward bound. Equivalent to {@code getBound()}.
-	 */
-	public Expression getReward()
-	{
-		return getBound();
 	}
 
 	// Other methods
@@ -155,7 +144,6 @@ public class ExpressionReward extends ExpressionQuant
 	 * Get info about the operator and bound.
 	 * @param constantValues Values for constants in order to evaluate any bound
 	 */
-	@Override
 	public OpRelOpBound getRelopBoundInfo(Values constantValues) throws PrismException
 	{
 		if (getBound() != null) {
@@ -168,7 +156,26 @@ public class ExpressionReward extends ExpressionQuant
 
 	// Methods required for Expression:
 
-	@Override
+	public Expression getReward()
+	{
+		return getBound();
+	}
+
+	public Expression getExpression()
+	{
+		return expression;
+	}
+
+	public Filter getFilter()
+	{
+		return filter;
+	}
+
+	// Methods required for Expression:
+
+	/**
+	 * Is this expression constant?
+	 */
 	public boolean isConstant()
 	{
 		return false;
@@ -258,7 +265,6 @@ public class ExpressionReward extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
-
 		s += "R" + getModifierString();
 		if (rewardStructIndex != null) {
 			if (rewardStructIndex instanceof Expression)
@@ -279,7 +285,6 @@ public class ExpressionReward extends ExpressionQuant
 		if (getFilter() != null)
 			s += " " + getFilter();
 		s += " ]";
-
 		return s;
 	}
 
@@ -314,6 +319,17 @@ public class ExpressionReward extends ExpressionQuant
 		} else if (!rewardStructIndexDiv.equals(other.rewardStructIndexDiv))
 			return false;
 		return true;
+	}
+
+	public Object getRewardStructIndexDiv()
+	{
+		return rewardStructIndexDiv;
+	}
+
+	public void setRewardStructIndexDiv(Object rewardStructIndexDiv2)
+	{
+		rewardStructIndexDiv = rewardStructIndexDiv2;
+
 	}
 }
 

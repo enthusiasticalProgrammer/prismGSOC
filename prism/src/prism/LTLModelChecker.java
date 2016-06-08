@@ -211,6 +211,20 @@ public class LTLModelChecker extends PrismComponent
 	 * Construct the product of a DA and a DTMC/CTMC.
 	 * @param da The DA
 	 * @param model The DTMC/CTMC
+	 * @param labelDDs BDDs giving the set of states for each AP in the DA
+	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
+	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
+	 */
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy) throws PrismException
+	{
+		return constructProductMC(da, model, labelDDs, daDDRowVarsCopy, daDDColVarsCopy, true);
+	}
+
+	/**
+	 * Construct the product of a DRA and a DTMC/CTMC.
+	 * @param dra The DRA
+	 * @param model The  DTMC/CTMC
 	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
 	 */
 	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
@@ -733,8 +747,11 @@ public class LTLModelChecker extends PrismComponent
 		case GENERALIZED_RABIN:
 			return findAcceptingECStatesForGeneralizedRabin((AcceptanceGenRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
 		default:
-			throw new PrismNotSupportedException(
-					"Computing the accepting EC states for " + acceptance.getTypeName() + " acceptance is not yet implemented (symbolic engine)");
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("Computing the accepting EC states for ");
+			stringBuilder.append(acceptance.getTypeName());
+			stringBuilder.append(" acceptance is not yet implemented (symbolic engine)");
+			throw new PrismNotSupportedException(stringBuilder.toString());
 		}
 	}
 
