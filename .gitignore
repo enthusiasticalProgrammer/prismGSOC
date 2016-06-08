@@ -11,3 +11,5 @@ lib
 Makefile
 bin
 *.orig
+.classpath
+.settings/*

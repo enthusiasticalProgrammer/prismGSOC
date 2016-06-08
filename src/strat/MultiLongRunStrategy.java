@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import prism.PrismException;
 import prism.PrismLog;
+import prism.PrismUtils;
 import explicit.Distribution;
 import explicit.MDPSimple;
 import explicit.MDPSparse;
@@ -146,7 +148,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void init(int state)
 	{
-		strategy=-1;
+		strategy = -1;
 		setRecurrency(state);
 		System.out.println("init to " + isTransient());
 	}
@@ -155,11 +157,13 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void updateMemory(int action, int state)
 	{
 		setRecurrency(state);
+		System.out.println("in updateMemory,strategy: " + strategy + " state: " + state);
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
+		System.out.println("in getNextMove, strategy: " + strategy);
 		return (isTransient()) ? this.transientChoices[state] : this.recurrentChoices[strategy].getNextMove(state);
 	}
 
@@ -204,7 +208,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	//TODO verify under strategy is not working (but however output with strategy does)
 	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-
 		// construct a new STPG of size three times the original model
 		MDPSimple mdp = new MDPSimple((recurrentChoices.length + 1) * model.getNumStates());
 
@@ -229,47 +232,94 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 		//take care of the transitions from the transient states
 		for (int oldState = 0; oldState < oldStates.size(); oldState++) {
-
-			//adjust indices of switch-transitions
-			Distribution distrInput = switchProb[oldState];
-			Distribution distrOutput = new Distribution();
-			for (int i = 0; i < recurrentChoices.length; i++) {
-				if (distrInput != null && distrInput.get(i) > 0.0) {
-					distrOutput.add(oldState * (recurrentChoices.length + 1) + 1 + i, distrInput.get(i));
-				}
-			}
-
+			System.out.println("somewhere in buildProduct");
 			//add transient-Choices
 			if (transientChoices[oldState] != null) {
+				System.out.println("trans");
 				Distribution newTransientChoice = new Distribution();
-				for (int i = 0; i < oldStates.size(); i++) {
-					newTransientChoice.add(i * (recurrentChoices.length + 1), transientChoices[oldState].get(i));
+				for (int action = 0; action < model.getNumChoices(oldState); action++) {
+					System.out.println("in action");
+					Iterator<Map.Entry<Integer, Double>> iterator = model.getTransitionsIterator(oldState, action);
+					while (iterator.hasNext()) {
+						Map.Entry<Integer, Double> entry = iterator.next();
+						newTransientChoice.add(entry.getKey() * (recurrentChoices.length + 1), transientChoices[oldState].get(action) * entry.getValue());
+					}
+				}
+				System.out.println("oldState:" + oldState);
+				System.out.println("newTransientChoice:" + newTransientChoice);
+
+				Distribution newTransientChoiceWithSwitch = new Distribution();
+
+				Iterator<Map.Entry<Integer, Double>> switchIterator = newTransientChoice.iterator();
+				while (switchIterator.hasNext()) {
+					Map.Entry<Integer, Double> entry = switchIterator.next();
+					for (int strategy = 0; strategy < recurrentChoices.length; strategy++) {
+						if (switchProb[entry.getKey() / (recurrentChoices.length + 1)] != null) {
+							newTransientChoiceWithSwitch.add(entry.getKey() + strategy + 1,
+									entry.getValue() * switchProb[entry.getKey() / (recurrentChoices.length + 1)].get(strategy));
+
+							System.out.println("entry: " + entry);
+							System.out.println("strategy: " + strategy);
+							System.out.println("switch here: " + switchProb[entry.getKey() / (recurrentChoices.length + 1)].get(strategy));
+
+						}
+					}
 				}
 
-				distrOutput.merge(newTransientChoice);
+				System.out.println("oldState:" + oldState);
+				System.out.println("newTransientChoiceWithSwitch:" + newTransientChoiceWithSwitch);
+
+				//add transitions that are not switching the strategy (and give them the remaining probability)
+				for (int oldTargetState = 0; oldTargetState < model.getNumStates(); oldTargetState++) {
+					double sum = 0.0;
+					for (int i = 0; i <= recurrentChoices.length;i++){
+						 sum += newTransientChoiceWithSwitch.get(oldTargetState * (recurrentChoices.length + 1) + i);
+						 System.out.println("sum: "+sum);
+						 System.out.println("i:"+i);
+						 System.out.println("oldTargetState:"+oldTargetState);
+					}
+						;
+					System.out.println("sum: "+sum);
+					if (sum + PrismUtils.epsilonDouble <= newTransientChoice.get(oldTargetState * (recurrentChoices.length + 1))) {
+						newTransientChoiceWithSwitch.add(oldTargetState * (recurrentChoices.length + 1),
+								newTransientChoice.get(oldTargetState * (recurrentChoices.length + 1)) - sum);
+					}
+				}
+				System.out.println("oldState:" + oldState);
+				System.out.println("newTransientChoiceWithSwitch after adding:" + newTransientChoiceWithSwitch);
+				int errorCode = mdp.addChoice(oldState * (recurrentChoices.length + 1), newTransientChoiceWithSwitch);
+				if (errorCode == -1) {
+					throw new RuntimeException("something in buildProduct went wrong");
+				}
 			}
-			mdp.addChoice(oldState * (recurrentChoices.length + 1), distrOutput);
+
 		}
 
+		//TODO Christopher: does not work
 		//take care of the transitions from the recurrent states
 		for (int recurrentStrategy = 0; recurrentStrategy < recurrentChoices.length; recurrentStrategy++) {
 			for (int oldState = 0; oldState < oldStates.size(); oldState++) {
-				Distribution oldDistribution;
-				try {
-					oldDistribution = recurrentChoices[recurrentStrategy].getNextMove(oldState);
-				} catch (InvalidStrategyStateException e) {
-					continue; //in this case, the outgoing transitions from the respective
-								//states do not matter, because they are unreachable
+				Distribution newRecurrentChoice = new Distribution();
+				for (int action = 0; action < model.getNumChoices(oldState); action++) {
+					Iterator<Map.Entry<Integer, Double>> iterator = model.getTransitionsIterator(oldState, action);
+					while (iterator.hasNext()) {
+						Map.Entry<Integer, Double> entry = iterator.next();
+						try {
+							newRecurrentChoice.add(entry.getKey() * (recurrentChoices.length + 1)+recurrentStrategy+1,
+									recurrentChoices[recurrentStrategy].getNextMove(oldState).get(action) * entry.getValue());
+						} catch (InvalidStrategyStateException e) {
+							continue; //in this case, the outgoing transitions from the respective
+										//states do not matter, because they are unreachable
+						}
+					}
 				}
-				Distribution newDistribution = new Distribution();
-				for (int oldState2 = 0; oldState2 < oldStates.size(); oldState2++) {
-					newDistribution.add(oldState2 * (recurrentChoices.length + 1) + recurrentStrategy, oldDistribution.get(oldState2));
-				}
-				mdp.addChoice(oldState * (recurrentChoices.length + 1) + recurrentStrategy, newDistribution);
+
+				mdp.addChoice(oldState * (recurrentChoices.length + 1) + recurrentStrategy+1, newRecurrentChoice);
 			}
 		}
 
 		mdp.addInitialState(0);
+		System.out.println("mdp:" + mdp.toString());
 		return mdp;
 	}
 
@@ -294,13 +344,15 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public String getType()
 	{
+		//TODO overwrite
 		return "Stochastic update strategy.";
 	}
 
 	/**
 	 * Integer is used for now. Note that an enum in the size [-1...2^N-1]
 	 * would suffice (N: defined in paper CKK15] for denoting, which
-	 * recurrent strategy is used (or -1 if the transient strategy is yet used
+	 * recurrent strategy is used (or -1 if the transient strategy is yet used),
+	 * but N is not fixed).
 	 */
 	@Override
 	public Integer getCurrentMemoryElement()
@@ -322,12 +374,12 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		if (memory instanceof Integer) {
 			int mem = (Integer) memory;
-			if(mem<-1 || mem>=recurrentChoices.length){
-				throw new IllegalArgumentException("only values from -1 to "+recurrentChoices.length+" are allowed");
+			if (mem < -1 || mem >= recurrentChoices.length) {
+				throw new IllegalArgumentException("only values from -1 to " + recurrentChoices.length + " are allowed");
 			}
 			this.strategy = (int) mem;
-		}else{
-			throw new IllegalArgumentException("Integer is required as argument, current type: "+memory.getClass());
+		} else {
+			throw new IllegalArgumentException("Integer is required as argument, current type: " + memory.getClass());
 		}
 
 	}
@@ -419,7 +471,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		for (int i = 0; i < recurrentChoices.length; i++) {
 			result += i + "  " + recurrentChoices[i] + "\n";
 		}
-		if(strategy>-2){
+		if (strategy > -2) {
 			throw new IllegalArgumentException();
 		}
 		return result;

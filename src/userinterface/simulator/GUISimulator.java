@@ -299,6 +299,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	 */
 	private void repaintLists()
 	{
+		System.out.println("repainted formulae lists");
 		stateLabelList.repaint();
 		pathFormulaeList.repaint();
 	}
@@ -546,7 +547,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.automaticTransitions(noSteps, displayPathLoops);
 
 			// Update model/path/tables/lists
-			pathTableModel.updatePathTable();
+			pathTableModel.updatePathTable();//TODO: so updaten, dass "es passt"
 			int height = (int) pathTable.getPreferredSize().getHeight();
 			int width = (int) pathTable.getPreferredSize().getWidth();
 			pathTable.scrollRectToVisible(new Rectangle(0, height - 10, width, height));
@@ -566,6 +567,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	/** Explore an amount of time. */
 	public void a_autoStep(double time)
 	{
+		System.out.println("autoStep, time");
 		try {
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
 				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
@@ -1943,7 +1945,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	private void randomExplorationButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_randomExplorationButtonActionPerformed
-
+		System.out.println("in randomExplorationbuttonActionPerformed");
 		try {
 			// Simulate a specified number of steps
 			if (typeExploreCombo.getSelectedIndex() == 0) {

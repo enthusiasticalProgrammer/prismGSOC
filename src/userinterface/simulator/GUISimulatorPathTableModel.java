@@ -129,6 +129,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		if (o == view) {

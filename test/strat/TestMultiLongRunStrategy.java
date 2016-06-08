@@ -6,11 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import explicit.Distribution;
+import explicit.MDPModelChecker;
+import explicit.Model;
 import explicit.MultiLongRun;
 import explicit.TestMultiLongRun;
+import prism.ModelChecker;
 import prism.PrismException;
 import prism.PrismLangException;
 import prism.PrismUtils;
+import prism.StateModelChecker;
 
 //TODO Christopher: add documentation
 public class TestMultiLongRunStrategy
@@ -104,5 +108,16 @@ public class TestMultiLongRunStrategy
 			Distribution d = strat.getNextMove(2);
 			assertEquals(1.0, d.sum(), PrismUtils.epsilonDouble);
 		}
+	}
+	
+	@Test
+	public void testIfProductIsFeasible() throws PrismException{
+		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
+		ml11.createMultiLongRunLP(false);
+		ml11.solveDefault();
+		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		Model m=strat.buildProduct(tmlr.m1);
+		explicit.StateModelChecker mc=tmlr.mdp11.createModelChecker(m.getModelType());
+		mc.check(m, tmlr.e1);
 	}
 }
