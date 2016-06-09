@@ -39,9 +39,9 @@ public class TestMultiLongRunStrategy
 	public void testExample2Transient() throws PrismException
 	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
-		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
 		//The numbers are slightly different to example 2 of paper TODO cite paper,
 		// because the strategy in the paper is not memoryless, but ours is
@@ -60,9 +60,9 @@ public class TestMultiLongRunStrategy
 	public void testNaNNotOccurring() throws PrismException, InvalidStrategyStateException
 	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
-		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
 		for (int strategy = 0; strategy < strat.recurrentChoices.length; strategy++) {
 			for (int state = 0; state < tmlr.m1.getNumStates(); state++) {
@@ -79,9 +79,9 @@ public class TestMultiLongRunStrategy
 	public void testRecurrentStrategiesAreNoBusybodiesMeddlingInThingsThatOughtNotToBeMeddledIn() throws PrismException, InvalidStrategyStateException
 	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
-		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
 		for (int strategy = 0; strategy < strat.recurrentChoices.length; strategy++) {
 			Distribution d = strat.recurrentChoices[strategy].getNextMove(1);
@@ -98,9 +98,9 @@ public class TestMultiLongRunStrategy
 	public void testStrategyIsAlwaysDefined() throws PrismException, InvalidStrategyStateException
 	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
-		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
 		for (int i = 0; i < 1000; i++) {//updateMemory is nondeterministic, therefore the loop
 			strat.init(0);
@@ -113,11 +113,10 @@ public class TestMultiLongRunStrategy
 	@Test
 	public void testIfProductIsFeasible() throws PrismException{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
-		MultiLongRunStrategy strat = ml11.getStrategy(false);
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 		Model m=strat.buildProduct(tmlr.m1);
-		explicit.StateModelChecker mc=tmlr.mdp11.createModelChecker(m.getModelType());
-		mc.check(m, tmlr.e1);
+		tmlr.mdp11.check(m, tmlr.e1);
 	}
 }

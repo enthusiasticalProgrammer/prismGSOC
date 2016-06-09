@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,12 +15,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import prism.PrismException;
 import prism.PrismLog;
-import prism.PrismUtils;
+import explicit.DTMC;
+import explicit.DTMCProductMLRStrategyAndMDP;
 import explicit.Distribution;
-import explicit.MDPSimple;
 import explicit.MDPSparse;
 import explicit.Model;
-import parser.State;
 
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
@@ -105,24 +100,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		for (int i = 0; i < recChoices.length; i++) {
 			recurrentChoices[i] = recChoices[i].computeApproximation();
 		}
-	}
-
-	//TODO check if this still works
-	/**
-	 * 
-	 * Creates a multi-long run strategy which switches memory elements
-	 * as soon as recurrent distr is defined
-	 *
-	 * @param minStrat minimising strategy
-	 * @param minValues expected values for states for min strategy
-	 * @param maxStrat maximising strategy
-	 * @param maxValues expected value for states for max strategy
-	 * @param targetValue value to be achieved by the strategy
-	 * @param model the model to provide info about players and transitions
-	 */
-	public MultiLongRunStrategy(Distribution[] transChoices, XiNStrategy[] recChoices)
-	{
-		this(transChoices, null, recChoices);
 	}
 
 	private void setRecurrency(int state)

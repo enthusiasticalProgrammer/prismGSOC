@@ -97,103 +97,82 @@ public class MDPModelChecker extends ProbModelChecker
 		if (currentFilter == null || !(currentFilter.getOperator() == Filter.FilterOperator.STATE))
 			throw new PrismException("Multi-objective model checking can only compute values from a single state");
 
-		boolean memoryless = isMemoryLess(expr);
 		MultiLongRun mlr = createMultiLongRun(model, expr);
 		//MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
 
-		mlr.createMultiLongRunLP(memoryless);
-		if (mlr.objectives.size() > 0 && memoryless)
-			throw new PrismException("mlessmulti can only be used for non-numerical queries"
-					+ " (optimal memoryless strategies might not exist, and so max/min would not apply)");
-		else if (mlr.objectives.size() == 0 && memoryless) {
-			System.out.println("in memoryless-ness");
-			sv = mlr.solveMemoryless();
-			if (generateStrategy)
-				this.strategy = mlr.getStrategy(memoryless);
-		} else if (mlr.objectives.size() < 2) {
-			System.out.println("in objectives<2");
-			if (!memoryless)
-				sv = mlr.solveDefault();
-			else
-				sv = mlr.solveMemoryless();
-			mlr.nameLPVars(memoryless);
-			if (generateStrategy)
-				this.strategy = mlr.getStrategy(memoryless);
-		} else {
-			if (generateStrategy) {
-				if (!memoryless)
-					sv = mlr.solveDefault();
-				else
-					sv = mlr.solveMemoryless();
-				this.strategy = mlr.getStrategy(memoryless);
-			} else {//Pareto
-				ArrayList<Point> computedPoints = new ArrayList<Point>();
-				ArrayList<Point> computedDirections = new ArrayList<Point>();
-				ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+		mlr.createMultiLongRunLP();
+		sv = mlr.solveDefault();
+		if (generateStrategy) {
+			sv = mlr.solveDefault();
+			this.strategy = mlr.getStrategy();
+		} else {//Pareto
+			ArrayList<Point> computedPoints = new ArrayList<Point>();
+			ArrayList<Point> computedDirections = new ArrayList<Point>();
+			ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
 
-				//TODO:weights might differ a bit when more objectives come into play
-				Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
-				//mainLog.println("p1 " + p1);
-				Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
-				//mainLog.println("p2 " + p2);
+			//TODO:weights might differ a bit when more objectives come into play
+			Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
+			//mainLog.println("p1 " + p1);
+			Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
+			//mainLog.println("p2 " + p2);
 
-				if (p1 == null || p2 == null) {
-					mainLog.println("a Pareto-curve drawing is not possible, because a corresponding LP had no solution");
-					sv = new StateValues(TypeBool.getInstance(), model);
-					sv.setBooleanValue(model.getFirstInitialState(), false);
-					return sv;
-				}
-				pointsForInitialTile.add(p1);
-				pointsForInitialTile.add(p2);
+			if (p1 == null || p2 == null) {
+				mainLog.println("a Pareto-curve drawing is not possible, because a corresponding LP had no solution");
+				sv = new StateValues(TypeBool.getInstance(), model);
+				sv.setBooleanValue(model.getFirstInitialState(), false);
+				return sv;
+			}
+			pointsForInitialTile.add(p1);
+			pointsForInitialTile.add(p2);
 
-				int numberOfPoints = 2;
-				boolean verbose = true;
-				Tile initialTile = new Tile(pointsForInitialTile);
-				TileList tileList = new TileList(initialTile, null, 10e-3);
+			int numberOfPoints = 2;
+			boolean verbose = true;
+			Tile initialTile = new Tile(pointsForInitialTile);
+			TileList tileList = new TileList(initialTile, null, 10e-3);
 
-				Point direction = tileList.getCandidateHyperplane();
+			Point direction = tileList.getCandidateHyperplane();
+
+			if (verbose) {
+				mainLog.println("The initial direction is " + direction);
+			}
+
+			for (int iterations = 0; iterations < maxIters; iterations++) {
+
+				Point newPoint = mlr.solveMulti(direction);
+				numberOfPoints++;
 
 				if (verbose) {
-					mainLog.println("The initial direction is " + direction);
+					mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
+					mainLog.println("TileList:" + tileList);
 				}
 
-				for (int iterations = 0; iterations < maxIters; iterations++) {
+				computedPoints.add(newPoint);
+				computedDirections.add(direction);
 
-					Point newPoint = mlr.solveMulti(direction);
-					numberOfPoints++;
+				tileList.addNewPoint(newPoint);
 
-					if (verbose) {
-						mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
-						mainLog.println("TileList:" + tileList);
-					}
+				//compute new direction
+				direction = tileList.getCandidateHyperplane();
 
-					computedPoints.add(newPoint);
-					computedDirections.add(direction);
+				if (verbose) {
+					mainLog.println("New direction is " + direction);
+					mainLog.println("TileList: " + tileList);
 
-					tileList.addNewPoint(newPoint);
-
-					//compute new direction
-					direction = tileList.getCandidateHyperplane();
-
-					if (verbose) {
-						mainLog.println("New direction is " + direction);
-						mainLog.println("TileList: " + tileList);
-
-					}
-
-					if (direction == null) {
-						//no tile could be improved
-						break;
-					}
 				}
 
-				//0 and 1 hardcoded are fine, because we do not draw anything in three or more dimensions
-				// In this context: drop numericalIndices afterwards
-				TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
-				sv = new StateValues(TypeVoid.getInstance(), tileList, model);
+				if (direction == null) {
+					//no tile could be improved
+					break;
+				}
 			}
+
+			//0 and 1 hardcoded are fine, because we do not draw anything in three or more dimensions
+			// In this context: drop numericalIndices afterwards
+			TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
+			sv = new StateValues(TypeVoid.getInstance(), tileList, model);
 		}
+
 		return sv;
 	}
 
@@ -319,16 +298,6 @@ public class MDPModelChecker extends ProbModelChecker
 		} else {
 			throw new UnsupportedOperationException("Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
 		}
-	}
-
-	boolean isMemoryLess(ExpressionFunc expr)
-	{
-		if (((ExpressionFunc) expr).getName().equals("multi"))
-			return false;
-		else if (((ExpressionFunc) expr).getName().equals("mlessmulti"))
-			return true;
-		else
-			throw new UnsupportedOperationException("Unsupported function: " + expr);
 	}
 
 	@Override
