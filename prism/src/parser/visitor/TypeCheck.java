@@ -451,22 +451,6 @@ public class TypeCheck extends ASTTraverse
 			else
 				e.setType(TypeVoid.getInstance());
 			break;
-		case ExpressionFunc.MLESSMULTI:
-			// Resulting type is determined by types of the arguments within
-			int doubleCount = 0;
-			for(Type t : types) {
-				if (t instanceof TypeDouble) {
-					doubleCount++;
-				}
-			}
-			
-			if (doubleCount == 0) //only constraints
-				e.setType(TypeBool.getInstance());
-			else if (doubleCount == 1) //numerical, possibly subject to constraint
-				e.setType(TypeDouble.getInstance());
-			else
-				e.setType(TypeVoid.getInstance());
-			break;
 		}
 	}
 

@@ -495,7 +495,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 		//Multi-objective model-checking
 		else if (expr instanceof ExpressionFunc
-				&& (((ExpressionFunc) expr).getName().equals("multi") || ((ExpressionFunc) expr).getName().equals("mlessmulti"))) {
+				&& (((ExpressionFunc) expr).getName().equals("multi"))) {
 			res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
 		}
 		// Otherwise, use the superclass

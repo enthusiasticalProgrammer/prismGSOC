@@ -49,7 +49,7 @@ public class MultiLongRunDTMC extends MultiLongRun
 	}
 
 	@Override
-	public Strategy getStrategy(boolean memoryless)
+	public Strategy getStrategy()
 	{
 		int[] choices=new int[dtmc.getNumStates()];
 		for(int i=0;i<choices.length;choices[i++]=-2);

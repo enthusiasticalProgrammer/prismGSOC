@@ -46,7 +46,7 @@ public class MultiLongRunMDP extends MultiLongRun
 	}
 	
 	@Override
-	public MultiLongRunStrategy getStrategy(boolean memoryless)
+	public MultiLongRunStrategy getStrategy()
 	{
 		double[] lpResult;
 		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
@@ -78,10 +78,7 @@ public class MultiLongRunMDP extends MultiLongRun
 		} catch (PrismException e) {
 			return null;
 		}
-		if (memoryless)
-			return new MultiLongRunStrategy(transientDistribution, getReccurrentDistribution());
-		else
-			return new MultiLongRunStrategy(transientDistribution, switchProbability, getReccurrentDistribution());
+		return new MultiLongRunStrategy(transientDistribution, switchProbability, getReccurrentDistribution());
 	}
 
 	//indirection: N (as number)

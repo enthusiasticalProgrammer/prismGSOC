@@ -148,7 +148,7 @@ public class TestMultiLongRun
 	public void testGetVarXNegative() throws PrismException
 	{
 		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
-		ml13.computeOffsets(mdp13.isMemoryLess(e3));
+		ml13.computeOffsets();
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
 	}
 
@@ -160,7 +160,7 @@ public class TestMultiLongRun
 	public void testValuesOfExample4() throws PrismException
 	{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
 		double[] lpResult = ml11.solver.getVariableValues();
@@ -186,7 +186,7 @@ public class TestMultiLongRun
 	public void testValuesOfExample5() throws PrismException
 	{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
 		double[] lpResult = ml11.solver.getVariableValues();
