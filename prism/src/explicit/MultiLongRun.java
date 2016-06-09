@@ -18,6 +18,7 @@ import prism.PrismException;
 import solvers.LpSolverProxy;
 import solvers.SolverProxyInterface;
 import strat.MultiLongRunStrategy;
+import strat.Strategy;
 import strat.XiNStrategy;
 
 /**
@@ -31,13 +32,14 @@ import strat.XiNStrategy;
  * Z, not to confuse them with y_{s,a}.
  * @author vojfor
  *
+ *This class is abstract, because it can model either an MDP or a DTMC (which is computed
+ *	by taking the product of an MDP and a MultiLongRunStrategy)
  */
 //TODO @Christopher: extend this class and adjust documentation
 //TODO no2: are actions and transitions confused here?
-public class MultiLongRun
+public abstract class MultiLongRun
 {
-	private final MDP mdp;
-	private Collection<BitSet> mecs;
+	protected Collection<BitSet> mecs;
 	private final List<MDPConstraint> constraints;
 	private final Collection<MDPExpectationConstraint> expConstraints;
 	final Collection<MDPObjective> objectives;
@@ -100,15 +102,13 @@ public class MultiLongRun
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+	public MultiLongRun(Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
 			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
-		this.mdp = mdp;
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
 		this.expConstraints = expConstraints;
-		this.mecs = computeMECs();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
@@ -154,9 +154,13 @@ public class MultiLongRun
 	 * computes the set of end components and stores it in {@see #mecs}
 	 * @throws PrismException
 	 */
-	private List<BitSet> computeMECs() throws PrismException
+	protected List<BitSet> computeMECs() throws PrismException
 	{
-		ECComputer ecc = ECComputerDefault.createECComputer(null, mdp);
+		Model model=getModel();
+		if(!(model instanceof NondetModel || model instanceof MDP)){
+			model=new ArtificialNondetModelFromModel(model);
+		}
+		ECComputer ecc = ECComputerDefault.createECComputer(null, (NondetModel) model);
 		ecc.computeMECStates();
 		return ecc.getMECStates();
 	}
@@ -173,9 +177,9 @@ public class MultiLongRun
 	 */
 	void computeOffsets(boolean memoryless)
 	{
-		this.xOffsetArr = new int[mdp.getNumStates()];
+		this.xOffsetArr = new int[getNumStatesOfModel()];
 		int current = 0;
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			boolean isInMEC = false;
 			for (BitSet b : this.mecs) {
 				if (b.get(i)) {
@@ -185,21 +189,21 @@ public class MultiLongRun
 			}
 			if (isInMEC) {
 				xOffsetArr[i] = current;
-				current += mdp.getNumChoices(i) * (1 << getN());
+				current += getNumChoicesOfModel(i) * (1 << getN());
 			} else {
 				xOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
 
-		this.yOffsetArr = new int[mdp.getNumStates()];
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		this.yOffsetArr = new int[getNumStatesOfModel()];
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			yOffsetArr[i] = current;
-			current += mdp.getNumChoices(i);
+			current += getNumChoicesOfModel(i);
 		}
 
-		this.zIndex = new int[mdp.getNumStates()];
+		this.zIndex = new int[getNumStatesOfModel()];
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			zIndex[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
 		}
 
@@ -214,29 +218,29 @@ public class MultiLongRun
 
 		//binary variables
 
-		this.sOffsetArr = new int[mdp.getNumStates()];
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		this.sOffsetArr = new int[getNumStatesOfModel()];
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
 				sOffsetArr[i] = current;
-				current += mdp.getNumChoices(i);
+				current += getNumChoicesOfModel(i);
 			} else {
 				sOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
 
-		this.tOffsetArr = new int[mdp.getNumStates()];
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		this.tOffsetArr = new int[getNumStatesOfModel()];
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
 				tOffsetArr[i] = current;
-				current += mdp.getNumChoices(i);
+				current += getNumChoicesOfModel(i);
 			} else {
 				tOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
 
-		this.qIndex = new int[mdp.getNumStates()];
+		this.qIndex = new int[getNumStatesOfModel()];
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			qIndex[i] = (isMECState(i)) ? current++ : Integer.MIN_VALUE;
 		}
 
@@ -259,9 +263,9 @@ public class MultiLongRun
 	{
 		int current = 0;
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
-				for (int j = 0; j < mdp.getNumChoices(i); j++) {
+				for (int j = 0; j < getNumChoicesOfModel(i); j++) {
 					for (int n = 0; n < 1 << getN(); n++) {
 						String name = "x" + i + "c" + j + "N" + n;
 						solver.setVarName(current + j, name);
@@ -272,18 +276,18 @@ public class MultiLongRun
 			}
 		}
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
-			for (int j = 0; j < mdp.getNumChoices(i); j++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
+			for (int j = 0; j < getNumChoicesOfModel(i); j++) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					String name = "y" + i + "c" + j;
 					solver.setVarName(current + j, name);
 					solver.setVarBounds(current + j, 0.0, Double.MAX_VALUE);
 				}
 			}
-			current += mdp.getNumChoices(i) * (1 << getN());
+			current += getNumChoicesOfModel(i) * (1 << getN());
 		}
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
 				String name = "z" + i;
 				solver.setVarName(current, name);
@@ -296,29 +300,29 @@ public class MultiLongRun
 
 		solver.setVarName(current++, "eps");
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
-				for (int j = 0; j < mdp.getNumChoices(i); j++) {
+				for (int j = 0; j < getNumChoicesOfModel(i); j++) {
 					String name = "s" + i + "c" + j;
 					solver.setVarName(current + j, name);
 					solver.setVarBounds(current + j, 0.0, 1.0);
 				}
-				current += mdp.getNumChoices(i);
+				current += getNumChoicesOfModel(i);
 			}
 		}
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
-				for (int j = 0; j < mdp.getNumChoices(i); j++) {
+				for (int j = 0; j < getNumChoicesOfModel(i); j++) {
 					String name = "t" + i + "c" + j;
 					solver.setVarName(current + j, name);
 					solver.setVarBounds(current + j, 0.0, Double.MAX_VALUE);
 				}
-				current += mdp.getNumChoices(i);
+				current += getNumChoicesOfModel(i);
 			}
 		}
 
-		for (int i = 0; i < mdp.getNumStates(); i++) {
+		for (int i = 0; i < getNumStatesOfModel(); i++) {
 			if (isMECState(i)) {
 				String name = "q" + i;
 				solver.setVarName(current, name);
@@ -361,16 +365,16 @@ public class MultiLongRun
 	private HashMap<Integer, Double> getRowForReward(MDPItem constraint)
 	{
 		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (isMECState(state)) {
-				for (int i = 0; i < mdp.getNumChoices(state); i++) {
+				for (int action = 0; action < getNumChoicesOfModel(state); action++) {
 					for (int n = 0; n < 1 << getN(); n++) {
-						int index = getVarX(state, i, n);
+						int index = getVarX(state, action, n);
 						double val = 0;
 						if (row.containsKey(index))
 							val = row.get(index);
-						val += constraint.reward.getStateReward(state);
-						val += constraint.reward.getTransitionReward(state, i);
+						val += constraint.reward.getStateReward(prepareStateForReward(state));
+						val += constraint.reward.getTransitionReward(prepareStateForReward(state), action);
 						row.put(index, val);
 					}
 				}
@@ -420,7 +424,7 @@ public class MultiLongRun
 			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
 
 				//X
-				for (int action = 0; action < mdp.getNumChoices(state); action++) {
+				for (int action = 0; action < getNumChoicesOfModel(state); action++) {
 					row.put(getVarX(state, action, n), 1.0);
 				}
 
@@ -497,17 +501,17 @@ public class MultiLongRun
 	private void setXConstraints() throws PrismException
 	{
 		HashMap<Integer, HashMap<Integer, Double>> map = new HashMap<Integer, HashMap<Integer, Double>>();
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (isMECState(state))
 				map.put(state, new HashMap<Integer, Double>());
 		}
 
 		//outflow
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (!isMECState(state))
 				continue;
 
-			for (int i = 0; i < mdp.getNumChoices(state); i++) {
+			for (int i = 0; i < getNumChoicesOfModel(state); i++) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					int index = getVarX(state, i, n);
 					map.get(state).put(index, -1.0);
@@ -516,14 +520,14 @@ public class MultiLongRun
 		}
 
 		//inflow
-		for (int preState = 0; preState < mdp.getNumStates(); preState++) {
+		for (int preState = 0; preState < getNumStatesOfModel(); preState++) {
 			if (!isMECState(preState))
 				continue;
 
-			for (int i = 0; i < mdp.getNumChoices(preState); i++) {
+			for (int action = 0; action < getNumChoicesOfModel(preState); action++) {
 				for (int n = 0; n < 1 << getN(); n++) {
-					int index = getVarX(preState, i, n);
-					Iterator<Entry<Integer, Double>> it = mdp.getTransitionsIterator(preState, i);
+					int index = getVarX(preState, action, n);
+					Iterator<Entry<Integer, Double>> it = getTransitionIteratorOfModel(preState, action);
 					while (it.hasNext()) {
 						Entry<Integer, Double> en = it.next();
 
@@ -541,7 +545,6 @@ public class MultiLongRun
 							row.put(index, val + en.getValue());
 						else if (row.containsKey(index))
 							row.remove(index);
-						//System.out.println("just added " + val + "+" + en.getValue()));
 					}
 				}
 			}
@@ -556,18 +559,18 @@ public class MultiLongRun
 	private void setZXLink() throws PrismException
 	{
 		HashMap<Integer, HashMap<Integer, Double>> map = new HashMap<Integer, HashMap<Integer, Double>>();
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (isMECState(state))
 				map.put(state, new HashMap<Integer, Double>());
 		}
 
 		//outflow
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (!isMECState(state))
 				continue;
 			for (int n = 0; n < 1 << getN(); n++) {
 				map.get(state).put(getVarZ(state, n), 1.0);
-				for (int i = 0; i < mdp.getNumChoices(state); i++) {
+				for (int i = 0; i < getNumChoicesOfModel(state); i++) {
 					int index = getVarX(state, i, n);
 					map.get(state).put(index, -1.0);
 				}
@@ -605,7 +608,7 @@ public class MultiLongRun
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
 
-		for (int action = 0; action < mdp.getNumChoices(state); action++) {
+		for (int action = 0; action < getNumChoicesOfModel(state); action++) {
 			for (int n = 0; n < 1 << getN(); n++) {
 				if (this.isMECState(state)) {
 					map.put(getVarX(state, action, n), 1.0);
@@ -635,11 +638,11 @@ public class MultiLongRun
 	 */
 	private void setSTQConstraints() throws PrismException
 	{
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (!isMECState(state))
 				continue;
 
-			for (int i = 0; i < mdp.getNumChoices(state); i++) {
+			for (int i = 0; i < getNumChoicesOfModel(state); i++) {
 				setSConstraint(state, i);
 				setTConstraint(state, i);
 				setSTQConstraintLink(state, i);
@@ -656,17 +659,17 @@ public class MultiLongRun
 	 */
 	private void setYConstraints() throws PrismException
 	{
-		HashMap<Integer, Double>[] map = (HashMap<Integer, Double>[]) new HashMap[mdp.getNumStates()];
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		HashMap<Integer, Double>[] map = (HashMap<Integer, Double>[]) new HashMap[getNumStatesOfModel()];
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			map[state] = new HashMap<Integer, Double>();
 		}
 
-		int initialState = mdp.getInitialStates().iterator().next();
+		int initialState = getInitialStateOfModel();
 
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 
 			//outflow y
-			for (int i = 0; i < mdp.getNumChoices(state); i++) {
+			for (int i = 0; i < getNumChoicesOfModel(state); i++) {
 				int index = getVarY(state, i);
 				map[state].put(index, -1.0);
 			}
@@ -681,10 +684,10 @@ public class MultiLongRun
 		}
 
 		//inflow
-		for (int preState = 0; preState < mdp.getNumStates(); preState++) {
-			for (int i = 0; i < mdp.getNumChoices(preState); i++) {
+		for (int preState = 0; preState < getNumStatesOfModel(); preState++) {
+			for (int i = 0; i < getNumChoicesOfModel(preState); i++) {
 				int index = getVarY(preState, i);
-				Iterator<Entry<Integer, Double>> it = mdp.getTransitionsIterator(preState, i);
+				Iterator<Entry<Integer, Double>> it = getTransitionIteratorOfModel(preState, i);
 				while (it.hasNext()) {
 					Entry<Integer, Double> en = it.next();
 					double val = 0;
@@ -695,14 +698,13 @@ public class MultiLongRun
 						map[en.getKey()].put(index, val + en.getValue());
 					else if (map[en.getKey()].containsKey(index))
 						map[en.getKey()].remove(index);
-					//System.out.println("just added " + val + "+" + en.getValue()));
 				}
 			}
 		}
 
 		//fill in
 
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.Comparator.EQ, "y" + state);
 		}
 	}
@@ -760,8 +762,8 @@ public class MultiLongRun
 
 			for (int n = 0; n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
-					for (int state = 0; state < mdp.getNumStates(); state++) {
-						for (int act = 0; act < mdp.getNumChoices(state); act++) {
+					for (int state = 0; state < getNumStatesOfModel(); state++) {
+						for (int act = 0; act < getNumChoicesOfModel(state); act++) {
 							if (isMECState(state)) {
 								map.put(getVarX(state, act, n), 1.0);
 							}
@@ -790,10 +792,10 @@ public class MultiLongRun
 	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-		for (int state = 0; state < mdp.getNumStates(); state++) {
+		for (int state = 0; state < getNumStatesOfModel(); state++) {
 			if (maxEndComponent.get(state)) {
-				for (int act = 0; act < mdp.getNumChoices(state); act++) {
-					double value = constraints.get(i).reward.getStateReward(state) + constraints.get(i).reward.getTransitionReward(state, act)
+				for (int act = 0; act < getNumChoicesOfModel(state); act++) {
+					double value = constraints.get(i).reward.getStateReward(prepareStateForReward(state)) + constraints.get(i).reward.getTransitionReward(prepareStateForReward(state), act)
 							- constraints.get(i).getBound();
 					map.put(getVarX(state, act, n), value);
 				}
@@ -826,16 +828,15 @@ public class MultiLongRun
 			HashMap<Integer, Double> row = getRowForReward(objective);
 			solver.setObjFunct(row, objective.operator == Operator.R_MAX);
 		}
-
 		solver.solve();
 
 		if (this.objectives.size() == 0) {//We should return bool type
-			StateValues sv = new StateValues(TypeBool.getInstance(), mdp);
-			sv.setBooleanValue(mdp.getFirstInitialState(), solver.getBoolResult());
+			StateValues sv = new StateValues(TypeBool.getInstance(), getModel());
+			sv.setBooleanValue(getInitialStateOfModel(), solver.getBoolResult());
 			return sv;
 		} else {
-			StateValues sv = new StateValues(TypeDouble.getInstance(), mdp);
-			sv.setDoubleValue(mdp.getFirstInitialState(), solver.getDoubleResult());
+			StateValues sv = new StateValues(TypeDouble.getInstance(), getModel());
+			sv.setDoubleValue(getInitialStateOfModel(), solver.getDoubleResult());
 			return sv;
 		}
 	}
@@ -861,94 +862,20 @@ public class MultiLongRun
 		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
 		System.out.println("LP solving took " + time + " s.");
 
-		StateValues sv = new StateValues(TypeBool.getInstance(), mdp);
-		sv.setBooleanValue(mdp.getFirstInitialState(), value);
+		StateValues sv = new StateValues(TypeBool.getInstance(), getModel());
+		sv.setBooleanValue(getInitialStateOfModel(), value);
 		return sv;
 	}
 
 	/**
 	 * Returns the strategy for the last call to solveDefault(), or null if it was never called before,
 	 * or if the strategy did not exist.
+	 * TODO Christopher: get rid of memorylessness
 	 * @return
 	 * @throws PrismException 
 	 */
-	public MultiLongRunStrategy getStrategy(boolean memoryless) throws PrismException
-	{
-		double[] lpResult;
-		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
-
-		int numStates = this.mdp.getNumStates();
-		Distribution[] transientDistribution = new Distribution[numStates];
-		Distribution[] switchProbability = new Distribution[numStates];
-
-		for (int state = 0; state < numStates; state++) {
-			double transientSum = 0.0;
-			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				transientSum += lpResult[getVarY(state, j)];
-			}
-			transientDistribution[state] = getTransientDistributionAt(state, transientSum, lpResult);
-		}
-
-		for (BitSet mec : mecs) {
-			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
-			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
-				switchProbability[state] = mecDistribution;
-			}
-		}
-
-		if (!solver.getBoolResult()) {
-			//LP is infeasible => no strategy exists
-			return null;
-		}
-		if (memoryless)
-			return new MultiLongRunStrategy(transientDistribution, getReccurrentDistribution());
-		else
-			return new MultiLongRunStrategy(transientDistribution, switchProbability, getReccurrentDistribution());
-	}
-
-	//indirection: N (as number)
-	private Distribution getSwitchProbabilityAt(BitSet mec)
-	{
-		double[] inBetweenResult = new double[1 << getN()];
-		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
-			for (int choice = 0; choice < mdp.getNumChoices(state); choice++) {
-				for (int N = 0; N < 1 << getN(); N++) {
-					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
-				}
-			}
-		}
-		double sumForNormalisation=0.0;
-		for(int i=0;i<inBetweenResult.length;sumForNormalisation+=inBetweenResult[i++]);
-		Distribution result = new Distribution();
-		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i]/sumForNormalisation);
-		}
-		return result;
-	}
-
-	private XiNStrategy[] getReccurrentDistribution()
-	{
-		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
-		for (int i = 0; i < 1 << getN(); i++) {
-			strategies[i] = new XiNStrategy(solver, mdp, this, i);
-		}
-
-		return strategies;
-	}
-
-	private Distribution getTransientDistributionAt(int state, double transientSum, double[] resSt)
-	{
-		System.out.println("in getTransientDistributionAt, state: " + state + ",  transientSum: " + transientSum);
-		if (transientSum > 0.0) {
-			Distribution result = new Distribution();
-
-			for (int j = 0; j < this.mdp.getNumChoices(state); j++) {
-				result.add(j, resSt[getVarY(state, j)] / transientSum);
-			}
-			return result;
-		}
-		return null;
-	}
+	public abstract Strategy getStrategy(boolean memoryless);
+	
 
 	/**
 	 * For the given 2D weights, get a point p on that is maximal for these weights, i.e.
@@ -1006,6 +933,7 @@ public class MultiLongRun
 				p.setCoord(i, res);
 			}
 		} else {
+			System.out.println("this.resut: "+r);
 			throw new PrismException("Unexpected result of LP solving: " + r);
 		}
 		return p;
@@ -1026,4 +954,25 @@ public class MultiLongRun
 		}
 		return result;
 	}
+	
+	protected final int getNumStatesOfModel(){
+		return getModel().getNumStates();
+	}
+	
+	protected abstract int getNumChoicesOfModel(int state);
+	
+	protected abstract Model getModel();
+	
+	protected int getInitialStateOfModel(){
+		return getModel().getFirstInitialState();
+	}
+	
+	protected abstract Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action);
+	
+	/**
+	 * if our model is a product of MDP and strategy, then we have to slightly prepare the state-
+	 * number, because otherwise the rewards are not anymore working
+	 */
+	protected abstract int prepareStateForReward(int state);
+	
 }
