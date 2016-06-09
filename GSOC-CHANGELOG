@@ -6,6 +6,8 @@ Features:
 
 -The LP solving is done regarding the multi-quant-conjunctive case
 	-The LP deviates from paper CKK15 in equation 1, where y_s,N is ignored if s is not in a MEC.
+	-Further the LP deviates a little, because the y_{s,N} are named z in the source code to not confuse them with y_{a},
+	- y_{a} are referred as y_{s,a}, because it works better with the data-structures
 
 -expanded Strategy for full support of multi-quant-conjunctive
 	-done by one Overall-strategy, having the recurrent-strategies [which are objects] as attributes
@@ -15,13 +17,15 @@ Features:
 		extremely slowly; therefore we currently use them as an in-between-step during the strategy-construction (with a
 		reduced set of functionality)
 	-the probability for switching from transient to recurrent is in contrast to Claim 13 of CKK15 normalised in a way that
-		the probabilities of switch to a xi_N in an MEC m are summing up to 1.
+		the probabilities of switch to a xi_N in an MEC m are summing up to 1
 
 -Strategies can be inspected with the simulator-environment on the GUI, but the strategy is only visible and the simulation does not (yet)
 	behave according to the strategy
 
--buildProduct: currently under construction
-
+-buildProduct:
+	- returns a DTMC (in contrast to previous implementation returning an MDP)
+	- This DTMC is wrapped up such that it fullfills the necessary interface such that we can operate it in MultiLongRun and verify it
+	- 
 
 
 
@@ -46,3 +50,10 @@ Code Style improvements:
 		which is a bit more clean than the old approach to set unused attributes to null, if they are not used
 -dropped unused RandomNumberGenerator-class
 -dropped superfluous methods in SimulatorEngine and Strategy
+-Refactored MDPModelchecker: 
+	-put checkMultiObjectives into ProbModelChecker (such that we can perform the satisfaction-tests also for some special DTMCs)
+		TODO:can be generalised to all DTMCs 
+	-removed memorylessness [now we have the general algorithm for multi-quant, therefore it would just increase the maintenance work
+		to keep a special algorithm]
+
+	dropped memorylessness, aka mlessmulti
