@@ -5,16 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import explicit.DTMCModelChecker;
 import explicit.Distribution;
-import explicit.MDPModelChecker;
 import explicit.Model;
 import explicit.MultiLongRun;
 import explicit.TestMultiLongRun;
-import prism.ModelChecker;
 import prism.PrismException;
 import prism.PrismLangException;
+import prism.PrismSettings;
 import prism.PrismUtils;
-import prism.StateModelChecker;
 
 //TODO Christopher: add documentation
 public class TestMultiLongRunStrategy
@@ -109,14 +108,20 @@ public class TestMultiLongRunStrategy
 			assertEquals(1.0, d.sum(), PrismUtils.epsilonDouble);
 		}
 	}
-	
+
 	@Test
-	public void testIfProductIsFeasible() throws PrismException{
+	public void testIfProductIsFeasible() throws PrismException
+	{
 		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
-		Model m=strat.buildProduct(tmlr.m1);
-		tmlr.mdp11.check(m, tmlr.e1);
+
+		Model m = strat.buildProduct(tmlr.m1);
+		DTMCModelChecker mc = new DTMCModelChecker(null);
+		mc.buildInitialDistribution(m);
+		mc.setModulesFileAndPropertiesFile(tmlr.modulesFile, tmlr.propertiesFile);
+		mc.setSettings(new PrismSettings());
+		assertNotEquals(tmlr.infeasible, mc.check(m, tmlr.e1));
 	}
 }

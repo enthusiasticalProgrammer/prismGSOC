@@ -1597,6 +1597,19 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
+	 * The model is meant to be a DTMC (to be precise it has to be a DTMCFromMLRStrategyAndMDP)
+	 * The expr is some multi-objective expression.
+	 * Note that this method is mainly here, because it can verify the product of an MDP and
+	 * a multiLongRunStrategy.
+	 * 
+	 */
+	protected MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	{
+		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);
+	}
+
+	/**
 	 * Simple test program.
 	 */
 	public static void main(String args[])
