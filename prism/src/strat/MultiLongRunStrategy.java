@@ -183,121 +183,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	//TODO verify under strategy is not working (but however output with strategy does)
-	public Model buildProductFromMDPExplicit(MDPSparse model) throws PrismException
+	public DTMC buildProductFromMDPExplicit(MDPSparse model) throws PrismException
 	{
-		// construct a new STPG of size three times the original model
-		MDPSimple mdp = new MDPSimple((recurrentChoices.length + 1) * model.getNumStates());
-
-		List<State> oldStates = model.getStatesList();
-
-		// creating helper states
-		State[] strategyStates = new State[recurrentChoices.length + 1];
-		for (int i = 0; i < strategyStates.length; i++) {
-			strategyStates[i] = new State(1);
-			strategyStates[i].setValue(0, i);
-		}
-
-		// creating product state list
-		List<State> newStates = new ArrayList<State>(mdp.getNumStates());
-		for (State oldState : oldStates) {
-			for (State strategyState : strategyStates)
-				newStates.add(new State(oldState, strategyState));
-		}
-
-		// setting the states list to STPG
-		mdp.setStatesList(newStates);
-
-		//take care of the transitions from the transient states
-		for (int oldState = 0; oldState < oldStates.size(); oldState++) {
-			System.out.println("somewhere in buildProduct");
-			//add transient-Choices
-			if (transientChoices[oldState] != null) {
-				System.out.println("trans");
-				Distribution newTransientChoice = new Distribution();
-				for (int action = 0; action < model.getNumChoices(oldState); action++) {
-					System.out.println("in action");
-					Iterator<Map.Entry<Integer, Double>> iterator = model.getTransitionsIterator(oldState, action);
-					while (iterator.hasNext()) {
-						Map.Entry<Integer, Double> entry = iterator.next();
-						newTransientChoice.add(entry.getKey() * (recurrentChoices.length + 1), transientChoices[oldState].get(action) * entry.getValue());
-					}
-				}
-				System.out.println("oldState:" + oldState);
-				System.out.println("newTransientChoice:" + newTransientChoice);
-
-				Distribution newTransientChoiceWithSwitch = new Distribution();
-
-				Iterator<Map.Entry<Integer, Double>> switchIterator = newTransientChoice.iterator();
-				while (switchIterator.hasNext()) {
-					Map.Entry<Integer, Double> entry = switchIterator.next();
-					for (int strategy = 0; strategy < recurrentChoices.length; strategy++) {
-						if (switchProb[entry.getKey() / (recurrentChoices.length + 1)] != null) {
-							newTransientChoiceWithSwitch.add(entry.getKey() + strategy + 1,
-									entry.getValue() * switchProb[entry.getKey() / (recurrentChoices.length + 1)].get(strategy));
-
-							System.out.println("entry: " + entry);
-							System.out.println("strategy: " + strategy);
-							System.out.println("switch here: " + switchProb[entry.getKey() / (recurrentChoices.length + 1)].get(strategy));
-
-						}
-					}
-				}
-
-				System.out.println("oldState:" + oldState);
-				System.out.println("newTransientChoiceWithSwitch:" + newTransientChoiceWithSwitch);
-
-				//add transitions that are not switching the strategy (and give them the remaining probability)
-				for (int oldTargetState = 0; oldTargetState < model.getNumStates(); oldTargetState++) {
-					double sum = 0.0;
-					for (int i = 0; i <= recurrentChoices.length;i++){
-						 sum += newTransientChoiceWithSwitch.get(oldTargetState * (recurrentChoices.length + 1) + i);
-						 System.out.println("sum: "+sum);
-						 System.out.println("i:"+i);
-						 System.out.println("oldTargetState:"+oldTargetState);
-					}
-						;
-					System.out.println("sum: "+sum);
-					if (sum + PrismUtils.epsilonDouble <= newTransientChoice.get(oldTargetState * (recurrentChoices.length + 1))) {
-						newTransientChoiceWithSwitch.add(oldTargetState * (recurrentChoices.length + 1),
-								newTransientChoice.get(oldTargetState * (recurrentChoices.length + 1)) - sum);
-					}
-				}
-				System.out.println("oldState:" + oldState);
-				System.out.println("newTransientChoiceWithSwitch after adding:" + newTransientChoiceWithSwitch);
-				int errorCode = mdp.addChoice(oldState * (recurrentChoices.length + 1), newTransientChoiceWithSwitch);
-				if (errorCode == -1) {
-					throw new RuntimeException("something in buildProduct went wrong");
-				}
-			}
-
-		}
-
-		//TODO Christopher: does not work
-		//take care of the transitions from the recurrent states
-		for (int recurrentStrategy = 0; recurrentStrategy < recurrentChoices.length; recurrentStrategy++) {
-			for (int oldState = 0; oldState < oldStates.size(); oldState++) {
-				Distribution newRecurrentChoice = new Distribution();
-				for (int action = 0; action < model.getNumChoices(oldState); action++) {
-					Iterator<Map.Entry<Integer, Double>> iterator = model.getTransitionsIterator(oldState, action);
-					while (iterator.hasNext()) {
-						Map.Entry<Integer, Double> entry = iterator.next();
-						try {
-							newRecurrentChoice.add(entry.getKey() * (recurrentChoices.length + 1)+recurrentStrategy+1,
-									recurrentChoices[recurrentStrategy].getNextMove(oldState).get(action) * entry.getValue());
-						} catch (InvalidStrategyStateException e) {
-							continue; //in this case, the outgoing transitions from the respective
-										//states do not matter, because they are unreachable
-						}
-					}
-				}
-
-				mdp.addChoice(oldState * (recurrentChoices.length + 1) + recurrentStrategy+1, newRecurrentChoice);
-			}
-		}
-
-		mdp.addInitialState(0);
-		System.out.println("mdp:" + mdp.toString());
-		return mdp;
+		return new DTMCProductMLRStrategyAndMDP(model,this);
 	}
 
 	@Override
@@ -452,5 +340,32 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			throw new IllegalArgumentException();
 		}
 		return result;
+	}
+	
+	/**
+	 * This method is important for building the product
+	 */
+	public int getNumberOfDifferentStrategies(){
+		return recurrentChoices.length+1;
+	}
+	/**
+	 * This method returns the Distribution of a strategy in a state.
+	 * strategy number 0 is transient, strategy at 1..N+1 is recurrentStrategy[x-1] 
+	 * @throws InvalidStrategyStateException if strategy is not defined in this state
+	 * @throws IllegalArgumentException, if strategy-number is not valid
+	 */
+	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException{
+		if(strategy<0 || strategy>recurrentChoices.length){
+			throw new IllegalArgumentException("wrong strategy-number");
+		}
+		if(strategy==0){
+			return transientChoices[state]; 
+		}
+		return recurrentChoices[strategy-1].getNextMove(state);
+	}
+
+	public Distribution getSwitchProbability(int i)
+	{
+		return switchProb[i];
 	}
 }
