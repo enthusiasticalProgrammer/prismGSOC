@@ -115,7 +115,7 @@ public class ECComputerDefault extends ECComputer
 		while (changed) {
 			changed = false;
 			BitSet E = L.remove(0);
-			SubNondetModel submodel = restrict(model, E);
+			SubNondetModel submodel = restrict(E);
 			List<BitSet> sccs = translateStates(submodel, computeSCCs(submodel));
 			L = replaceEWithSCCs(L, E, sccs);
 			changed = canLBeChanged(L, E);
@@ -163,7 +163,7 @@ public class ECComputerDefault extends ECComputer
 		return L;
 	}
 
-	private SubNondetModel restrict(NondetModel model, BitSet states)
+	private SubNondetModel restrict(BitSet states)
 	{
 		Map<Integer, BitSet> actions = new HashMap<Integer, BitSet>();
 		BitSet initialStates = new BitSet();
