@@ -11,7 +11,11 @@ import explicit.Model;
 import prism.PrismException;
 import prism.PrismLog;
 
-//this strategy is memoryless
+/**
+ * This strategy is memoryless
+ * It is currently only used as part of MultiLongRunStrategy, and therefore most of the
+ * methods are not needed to be implemented
+ */
 public class EpsilonApproximationXiNStrategy implements Strategy
 {
 	/**
@@ -71,23 +75,22 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		throw new UnsupportedOperationException("not yet implemented");
 	}
 
-	//TODO Override
 	@Override
 	public String getInfo()
 	{
-		return "not yet implemented";
+		return "EpsilonApproximationXiNStrategy";
 	}
 
 	@Override
 	public void setInfo(String info)
 	{
-		throw new UnsupportedOperationException("not yet implemented");
+		throw new UnsupportedOperationException("not implemented");
 	}
 
 	@Override
 	public int getMemorySize()
 	{
-		throw new UnsupportedOperationException("not yet implemented");
+		return 0;
 	}
 
 	@Override
@@ -110,12 +113,6 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 
 	@Override
 	public String getStateDescription()
-	{
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
-	@Override
-	public int getInitialStateOfTheProduct(int s)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}
@@ -145,17 +142,6 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public Object getChoiceAction()
-	{
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
-	@Override
-	public void clear()
-	{
-		throw new UnsupportedOperationException("not yet implemented");
-	}
-
 	public boolean equals(Object o){
 		if(o.getClass()!=this.getClass()){
 			return false;

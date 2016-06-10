@@ -99,8 +99,7 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
-//TODO Christopher: if impossible to make the strategic simulation completely:
-//	the GUISimulator should have the most important features
+//TODO Christopher: if possible simulate strategies here
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -754,7 +753,6 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	private void executeTransition(int i, int offset, int index) throws PrismException
 	{
-		//TODO Christopher: here the strategy-Problem can be solved
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
 		Choice choice = transitions.getChoice(i);

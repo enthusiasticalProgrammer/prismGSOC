@@ -66,7 +66,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public static MultiLongRunStrategy loadFromFile(String filename)
 	{
-		//TODO Christopher: adjust it
 		try {
 			File file = new File(filename);
 			//InputStream inputStream = new FileInputStream(file);
@@ -267,31 +266,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public int getInitialStateOfTheProduct(int s)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	public void export(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void exportActions(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public Object getChoiceAction()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void clear()
 	{
 		throw new UnsupportedOperationException();
 

@@ -11,12 +11,11 @@ import prism.PrismLog;
 import prism.PrismUtils;
 import solvers.SolverProxyInterface;
 
-//TODO @Christopher: add Documentation
 /**
- * this is more or less an in-between state, because the fact that it outputs the correct
+ * this is more or less an in-between state of a strategy, because the fact that it outputs the correct
  * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
  * but we can output an approximation of it.
- * We also ommitted some the computation of kappa and n (from the paper TODO: which paper),
+ * We also ommitted some the computation of kappa and n (from the paper CKK15),
  * because it is irrelevant
  */
 public class XiNStrategy implements Strategy
@@ -26,7 +25,7 @@ public class XiNStrategy implements Strategy
 	private BigInteger phase;
 
 	/**Corresponds to N in paper (with trivial mapping [1..n] <--> 2^[1..n])*/
-	private int N; //TODO Christopher: convert to BigInteger, because it sometimes overflows
+	private int N;
 
 	private double[] solverVariables;
 
@@ -76,7 +75,7 @@ public class XiNStrategy implements Strategy
 	{
 		//Nothing to do.
 		//technically one needs to adjust the phase sometimes, but
-		//it is not neccessary, because due to readability we only return
+		//it is not necessary, because due to readability we only return
 		//an approximated version of the strategy
 	}
 
@@ -145,12 +144,6 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public int getInitialStateOfTheProduct(int s)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void exportActions(PrismLog out)
 	{
 		throw new UnsupportedOperationException();
@@ -170,18 +163,6 @@ public class XiNStrategy implements Strategy
 
 	@Override
 	public void exportDotFile(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object getChoiceAction()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void clear()
 	{
 		throw new UnsupportedOperationException();
 	}

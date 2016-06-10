@@ -91,7 +91,6 @@ public interface Strategy
 	public void exportToFile(String file);
 
 	
-	//TODO: Christopher: necessary?
 	/**
 	 * Builds the product of the model and the strategy. The product is built by
 	 * adding extra integer variable to the state to represent the memory state
@@ -160,34 +159,6 @@ public interface Strategy
 	 */
 	public String getStateDescription();
 
-	/**
-	 * Returns the initial memory state of the strategy for the state. It is
-	 * required by the model checker to determine which states can be treated as
-	 * initial in the product.
-	 * 
-	 * @param s
-	 *            the state for which to return initial memory element
-	 * 
-	 * @return non negative integer or -1 if product does not contain extra
-	 *         variables
-	 */
-	public int getInitialStateOfTheProduct(int s);
-
-	//	/**
-	//	 * Retrieve the expected value that this strategy will achieve from it's
-	//	 * current state
-	//	 * @return the expect value of the function, return -1 if exp values are not defined
-	//	 */
-	//	public double getExpectedValue();
-	//	
-	//	/**
-	//	 * Get expected value if a given action was taken and given state turned out to be a successor
-	//	 * @param action action
-	//	 * @param state state
-	//	 * @return expectation
-	//	 */
-	//	public double getExpectedValue(int action, int state);
-
 	// NEW METHODS:
 
 	/**
@@ -209,14 +180,4 @@ public interface Strategy
 	 * Export the strategy to a dot file (of the model showing the strategy).
 	 */
 	public void exportDotFile(PrismLog out);
-
-	/**
-	 * Get the action chosen by the strategy in the current state (assuming it is deterministic). 
-	 */
-	public Object getChoiceAction();
-
-	/**
-	 * Clear storage of the strategy.
-	 */
-	public void clear();
 }

@@ -28,13 +28,11 @@ import strat.Strategy;
  * 
  * Note that we use a bit different notation here and refer to y_s variables as
  * Z, not to confuse them with y_{s,a}.
- * @author vojfor
+ * @author vojfor+Christopher
  *
  *This class is abstract, because it can model either an MDP or a DTMC (which is computed
  *	by taking the product of an MDP and a MultiLongRunStrategy)
  */
-//TODO @Christopher: extend this class and adjust documentation
-//TODO no2: are actions and transitions confused here?
 public abstract class MultiLongRun
 {
 	protected Collection<BitSet> mecs;

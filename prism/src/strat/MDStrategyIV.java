@@ -123,11 +123,4 @@ public class MDStrategyIV extends MDStrategy
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public void clear()
-	{
-		iv.clear();
-		iv = null;
-	}
 }

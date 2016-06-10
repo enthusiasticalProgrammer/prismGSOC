@@ -107,10 +107,4 @@ public class MDStrategyArray extends MDStrategy
 	{
 		model.exportToDotFileWithStrat(out, null, choices);
 	}
-
-	@Override
-	public void clear()
-	{
-		choices = null;
-	}
 }
