@@ -43,7 +43,7 @@ public interface Strategy
 	// Types of info stored for each choice
 	public enum Choice {
 		INDEX, ACTION, UNKNOWN, ARBITRARY, UNREACHABLE;
-	};
+	}
 
 	/**
 	 * Initialises memory based on a state
