@@ -81,11 +81,6 @@ public class LpSolverProxy implements SolverProxyInterface
 		try {
 			solver.setAddRowmode(false);
 			this.result = solver.solve();
-			//solver.printLp();
-			/*double[] val =getVariableValues();
-			for (int i = 0; i < val.length; i++) {
-				System.out.print(solver.getColName(i+1) + ": " + val[i] + ", ");
-			}*/
 			return this.result;
 		} catch (LpSolveException ex) {
 			throw new PrismException("Exception thrown when working with lpsolve solver: " + ex);
