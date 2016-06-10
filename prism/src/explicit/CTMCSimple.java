@@ -97,7 +97,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 	@Override
 	public double getExitRate(int i)
 	{
-		return trans.get(i).sum();
+		return transitionList.get(i).sum();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		int i;
 		double d, max = Double.NEGATIVE_INFINITY;
 		for (i = 0; i < numStates; i++) {
-			d = trans.get(i).sum();
+			d = transitionList.get(i).sum();
 			if (d > max)
 				max = d;
 		}
@@ -119,7 +119,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		int i;
 		double d, max = Double.NEGATIVE_INFINITY;
 		for (i = subset.nextSetBit(0); i >= 0; i = subset.nextSetBit(i + 1)) {
-			d = trans.get(i).sum();
+			d = transitionList.get(i).sum();
 			if (d > max)
 				max = d;
 		}
@@ -170,7 +170,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 			dtmc.addInitialState(in);
 		}
 		for (i = 0; i < numStates; i++) {
-			distr = trans.get(i);
+			distr = transitionList.get(i);
 			d = distr.sum();
 			if (d == 0) {
 				dtmc.setProbability(i, i, 1.0);
@@ -189,7 +189,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		Distribution distr;
 		int i;
 		for (i = 0; i < numStates; i++) {
-			distr = trans.get(i);
+			distr = transitionList.get(i);
 			distr.set(i, q - distr.sumAllBut(i));
 		}
 	}
@@ -213,7 +213,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		}
 		for (i = 0; i < numStates; i++) {
 			// Add scaled off-diagonal entries
-			distr = trans.get(i);
+			distr = transitionList.get(i);
 			for (Map.Entry<Integer, Double> e : distr) {
 				dtmc.setProbability(i, e.getKey(), e.getValue() / q);
 			}
