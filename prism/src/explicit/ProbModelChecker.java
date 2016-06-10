@@ -510,8 +510,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			res = checkExpressionSteadyState(model, (ExpressionSS) expr);
 		}
 		//Multi-objective model-checking
-		else if (expr instanceof ExpressionFunc
-				&& (((ExpressionFunc) expr).getName().equals("multi"))) {
+		else if (expr instanceof ExpressionFunc && (((ExpressionFunc) expr).getName().equals("multi"))) {
 			res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
 		}
 		// Otherwise, use the superclass
@@ -586,7 +585,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	 * @param coalition If relevant, info about which set of players this P operator refers to
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
+			throws PrismException
 	{
 		// Get info from P operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
@@ -927,7 +927,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for the contents of an R operator.
 	 */
-	protected StateValues checkRewardFormula(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkRewardFormula(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		StateValues rewards = null;
 
@@ -1116,7 +1117,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		// To be overridden by subclasses
 		throw new PrismException("Computation not implemented yet");
@@ -1301,9 +1303,12 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	public MultiLongRun createMultiLongRun(@NonNull Model model, ExpressionFunc expr) throws PrismException
 	{
-		@NonNull Collection<@NonNull MDPConstraint> constraints = new ArrayList<>();
-		@NonNull Collection<@NonNull MDPObjective> objectives = new ArrayList<>();
-		@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints = new ArrayList<>();
+		@NonNull
+		Collection<@NonNull MDPConstraint> constraints = new ArrayList<>();
+		@NonNull
+		Collection<@NonNull MDPObjective> objectives = new ArrayList<>();
+		@NonNull
+		Collection<@NonNull MDPExpectationConstraint> expConstraints = new ArrayList<>();
 
 		//extract data
 		for (int i = 0; i < expr.getNumOperands(); i++) {
@@ -1367,7 +1372,8 @@ public class ProbModelChecker extends NonProbModelChecker
 
 			// Build rewards
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
-			@NonNull MDPReward mdpReward;
+			@NonNull
+			MDPReward mdpReward;
 			if (model instanceof DTMCProductMLRStrategyAndMDP) {
 				MDP mdp = ((DTMCProductMLRStrategyAndMDP) model).getMDP();
 				mdpReward = constructRewards.buildMDPRewardStructure(mdp, rewStruct, constantValues);
@@ -1396,13 +1402,14 @@ public class ProbModelChecker extends NonProbModelChecker
 			}
 		}
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
-		if(method==null)
-			method="";
+		if (method == null)
+			method = "";
 		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
 	}
 
-	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
-			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,@NonNull String method) throws PrismException
+	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
+			@NonNull String method) throws PrismException
 	{
 		throw new UnsupportedOperationException("This method has to be overwritten by its subclasses."
 				+ "\nIt has just a body, because declaring the class is not feasible, because it is sometimes used in a non-abstract way");

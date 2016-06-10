@@ -129,7 +129,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	@Override
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MCRewards productRewards;
@@ -1766,8 +1767,9 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * 
 	 */
 	@Override
-	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
-			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method) throws PrismException
+	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
+			@NonNull String method) throws PrismException
 	{
 		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);
 	}

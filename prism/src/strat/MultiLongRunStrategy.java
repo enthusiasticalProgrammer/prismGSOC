@@ -170,7 +170,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public @NonNull Model buildProduct(Model model)
 	{
-		if(model == null){
+		if (model == null) {
 			throw new NullPointerException();
 		}
 		try {
@@ -185,7 +185,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	public @NonNull DTMC buildProductFromMDPExplicit(@NonNull MDPSparse model) throws PrismException
 	{
-		return new DTMCProductMLRStrategyAndMDP(model,this);
+		return new DTMCProductMLRStrategyAndMDP(model, this);
 	}
 
 	@Override
