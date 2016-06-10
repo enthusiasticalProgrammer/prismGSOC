@@ -296,6 +296,7 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void exportToPrismExplicitTra(PrismLog log)
 	{
 		throw new UnsupportedOperationException();
@@ -307,6 +308,7 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void exportToDotFile(String filename) throws PrismException
 	{
 		throw new UnsupportedOperationException();
@@ -318,6 +320,7 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
 		throw new UnsupportedOperationException();
@@ -410,6 +413,7 @@ public class SubNondetModel implements NondetModel
 	}
 
 
+	@Override
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{
 		s = translateState(s);

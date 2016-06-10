@@ -78,7 +78,8 @@ public class Nail extends State
         return to;
     }
     
-    public boolean intersects(Rectangle2D rect)
+    @Override
+	public boolean intersects(Rectangle2D rect)
     {
         return new Ellipse2D.Double(getX()-2, getY()-2, 4, 4).intersects(rect);
     }
@@ -91,7 +92,8 @@ public class Nail extends State
     }
     
     //Override super
-    public void associateTransition(Transition t)
+    @Override
+	public void associateTransition(Transition t)
     {
         super.associateTransition(t);
         owner = t;
@@ -110,22 +112,26 @@ public class Nail extends State
         to = s;
     }
     
-    public String getClassDescriptor()
+    @Override
+	public String getClassDescriptor()
     {
         return "Point";
     }
     
-    public String getDescriptor()
+    @Override
+	public String getDescriptor()
     {
         return "";//from.getDescriptor()+"-->"+to.getDescriptor();
     }
     
-    public int getNumProperties()
+    @Override
+	public int getNumProperties()
     {
         return 2;
     }
     
-    public SingleProperty getProperty(int index)
+    @Override
+	public SingleProperty getProperty(int index)
     {
         switch(index)
         {
@@ -134,7 +140,8 @@ public class Nail extends State
         }
     }
     
-    public int getUniquePropertyID()
+    @Override
+	public int getUniquePropertyID()
     {
         return PropertyConstants.NAIL;
     }

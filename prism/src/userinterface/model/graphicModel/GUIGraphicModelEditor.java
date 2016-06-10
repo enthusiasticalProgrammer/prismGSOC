@@ -73,14 +73,16 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
         //modules = new ArrayList();
     }
     
-    public String getParseText()
+    @Override
+	public String getParseText()
     {
         String str =  tree.getParseText() + "\n" + textEditor.getParseText();
         ////System.out.println("str = \n\n"+str);
         return str;
     }
     
-    public void newModel()
+    @Override
+	public void newModel()
     {
         ////System.out.println("newModel called");
         //moduleLabel.setText("");
@@ -93,44 +95,52 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
         modPanel.newModel();
     }
     
-    public String toString()
+    @Override
+	public String toString()
     {
         return "GUIGRAPHICMODELEDITOR IS ME";
     }
     
-    public void undo()
+    @Override
+	public void undo()
     {        
                
     }
     
-    public void redo()
+    @Override
+	public void redo()
     {
     	
     }
     
-    public void copy()
+    @Override
+	public void copy()
     {
         
         modPanel.getModuleModel(modPanel.getSelectedIndex()).copy();
         
     }
     
-    public void cut()
+    @Override
+	public void cut()
     {
         modPanel.getModuleModel(modPanel.getSelectedIndex()).cut();
     }
     
-    public void paste()
+    @Override
+	public void paste()
     {
         modPanel.getModuleModel(modPanel.getSelectedIndex()).paste();
     }
     
-    public void delete()
+    @Override
+	public void delete()
     {
         modPanel.getModuleModel(modPanel.getSelectedIndex()).deleteSelected();
     }
     
-    public void selectAll()
+    @Override
+	public void selectAll()
     {
     }
     
@@ -431,7 +441,8 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
         return tree.getVariableInits(m.getCorrespondingModuleNode());
     }
     
-    public void selectionPerformed(SelectionEvent e)
+    @Override
+	public void selectionPerformed(SelectionEvent e)
     {
         ////System.out.println("SelectionPerformed detected where it should be");
         properties.setOwners(e.getSelectedItems());

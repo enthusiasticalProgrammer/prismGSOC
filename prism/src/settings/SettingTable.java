@@ -621,6 +621,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		}
 
 		@Override
+		@Override
 		public int getRowCount()
 		{
 			if (groupNames.size() == 0)

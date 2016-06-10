@@ -96,7 +96,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     }
     
     
-    public boolean isFocusable()
+    @Override
+	public boolean isFocusable()
     {
         return true;
     }
@@ -115,7 +116,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     
     
     /** Method used for printing.*/
-    public int print(Graphics g, PageFormat pf, int page) throws PrinterException
+    @Override
+	public int print(Graphics g, PageFormat pf, int page) throws PrinterException
     {
         if(page>=1) return Printable.NO_SUCH_PAGE;
         Graphics2D g2 = (Graphics2D)g;
@@ -135,7 +137,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     /** This method is required to implement the Observer interface.  It is called when
      * an update is completed in the model.
      */
-    public void update(java.util.Observable observable, Object obj)
+    @Override
+	public void update(java.util.Observable observable, Object obj)
     {
         if(obj instanceof Rectangle)
         {
@@ -154,7 +157,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
         repaint();
     }*/
     
-    public void paintComponent(Graphics g)
+    @Override
+	public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         
@@ -740,7 +744,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     /** Listener method called when the mouse is dragged.  It calls the appropriate
      * response method in the model.
      */
-    public void mouseDragged(java.awt.event.MouseEvent mouseEvent)
+    @Override
+	public void mouseDragged(java.awt.event.MouseEvent mouseEvent)
     {
         if(theModel == null) return;
         int fixX = mouseEvent.getX();
@@ -786,7 +791,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     /** Listener method called when the mouse is moved. It calls the appropriate
      * response method in the model.
      */
-    public void mouseMoved(java.awt.event.MouseEvent mouseEvent)
+    @Override
+	public void mouseMoved(java.awt.event.MouseEvent mouseEvent)
     {
         if(theModel == null) return;
         int fixX = mouseEvent.getX();
@@ -814,7 +820,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
      * response method in the model - be it a single or double click, or with the Right
      * mouse button.
      */
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
         ////System.out.println("mouseClicked");
         requestFocusInWindow();
@@ -839,13 +846,15 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     }
     
     /** Only needed to implement the MouseMotionListener interface. */
-    public void mouseEntered(MouseEvent e)
+    @Override
+	public void mouseEntered(MouseEvent e)
     {
         setAppropriateCursor();
     }
     
     /** Only needed to implement the MouseMotionListener interface. */
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
@@ -853,7 +862,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     /** Listener method called when a mousePressed event is created.  It calls the appropriate
      * response method in the model.
      */
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         requestFocusInWindow();
         if(theModel == null) return;
@@ -871,7 +881,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
     /** Listener method called when a mouseReleased event is created.  It calls the appropriate
      * response method in the model.
      */
-    public void mouseReleased(MouseEvent e)
+    @Override
+	public void mouseReleased(MouseEvent e)
     {
         requestFocusInWindow();
         if(theModel == null) return;
@@ -882,32 +893,38 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
         setAppropriateCursor();
     }
     
-    public Dimension getPreferredScrollableViewportSize()
+    @Override
+	public Dimension getPreferredScrollableViewportSize()
     {
         return new Dimension(20,20);
     }
     
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+    @Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
     {
         return 20;
     }
     
-    public boolean getScrollableTracksViewportHeight()
+    @Override
+	public boolean getScrollableTracksViewportHeight()
     {
         return false;
     }
     
-    public boolean getScrollableTracksViewportWidth()
+    @Override
+	public boolean getScrollableTracksViewportWidth()
     {
         return false;
     }
     
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+    @Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
     {
         return 40;
     }
     
-    public void keyPressed(KeyEvent e)
+    @Override
+	public void keyPressed(KeyEvent e)
     {
         ////System.out.println("keypressed");
         if(e.getKeyCode() == KeyEvent.VK_CONTROL)
@@ -920,7 +937,8 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
         }
     }
     
-    public void keyReleased(KeyEvent e)
+    @Override
+	public void keyReleased(KeyEvent e)
     {
         ////System.out.println("keyreleased");
         if(e.getKeyCode() == KeyEvent.VK_CONTROL)
@@ -929,11 +947,13 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
         }
     }
     
-    public void keyTyped(KeyEvent e)
+    @Override
+	public void keyTyped(KeyEvent e)
     {
     }
     
-    public void mouseWheelMoved(MouseWheelEvent e)
+    @Override
+	public void mouseWheelMoved(MouseWheelEvent e)
     {
         requestFocusInWindow();
         if(theModel == null) return;
@@ -948,13 +968,15 @@ public class ModuleDrawingPane extends JPanel implements Observer, MouseListener
         }
     }
     
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
         //System.out.println("Focus Gained");
     }
     
     
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
         theModel.processControlUp();
         //System.out.println("Focus Lost");

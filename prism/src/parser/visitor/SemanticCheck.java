@@ -73,12 +73,14 @@ public class SemanticCheck extends ASTTraverse
 		this.propertiesFile = propertiesFile;
 	}
 
+	@Override
 	public void visitPre(ModulesFile e) throws PrismLangException
 	{
 		// Register the fact we are entering a model
 		inModulesFile = e;
 	}
 
+	@Override
 	public void visitPost(ModulesFile e) throws PrismLangException
 	{
 		int i, j, n, n2;
@@ -122,6 +124,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public Object visit(FormulaList e) throws PrismLangException
 	{
 		// Override - don't need to do any semantic checks on formulas
@@ -130,6 +133,7 @@ public class SemanticCheck extends ASTTraverse
 		return null;
 	}
 
+	@Override
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -144,6 +148,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ConstantList e) throws PrismLangException
 	{
 		int i, n;
@@ -155,6 +160,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(Declaration e) throws PrismLangException
 	{
 		if (e.getStart() != null && !e.getStart().isConstant()) {
@@ -168,6 +174,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationInt e) throws PrismLangException
 	{
 		if (e.getLow() != null && !e.getLow().isConstant()) {
@@ -178,6 +185,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationArray e) throws PrismLangException
 	{
 		if (e.getLow() != null && !e.getLow().isConstant()) {
@@ -188,6 +196,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationClock e) throws PrismLangException
 	{
 		// Clocks are only allowed in PTA models
@@ -196,11 +205,13 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPre(Module e) throws PrismLangException
 	{
 
 	}
 
+	@Override
 	public Object visit(Module e) throws PrismLangException
 	{
 		// Override this so we can keep track of when we are in an invariant
@@ -224,11 +235,13 @@ public class SemanticCheck extends ASTTraverse
 		return null;
 	}
 
+	@Override
 	public void visitPost(Module e) throws PrismLangException
 	{
 
 	}
 
+	@Override
 	public Object visit(Command e) throws PrismLangException
 	{
 		// Override this so we can keep track of when we are in a command
@@ -241,11 +254,13 @@ public class SemanticCheck extends ASTTraverse
 		return null;
 	}
 
+	@Override
 	public void visitPre(Update e) throws PrismLangException
 	{
 
 	}
 
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;
@@ -277,6 +292,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(SystemRename e) throws PrismLangException
 	{
 		int i, n;
@@ -301,6 +317,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(SystemHide e) throws PrismLangException
 	{
 		int i, n;
@@ -323,6 +340,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(SystemParallel e) throws PrismLangException
 	{
 		int i, n;
@@ -345,6 +363,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		int op = e.getOperator();
@@ -409,6 +428,7 @@ public class SemanticCheck extends ASTTraverse
 			throw new PrismLangException("Unexpanded formula", e);
 	}
 
+	@Override
 	public void visitPost(ExpressionVar e) throws PrismLangException
 	{
 		// For PTAs, references to variables in modules have to be local
@@ -427,6 +447,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionProb e) throws PrismLangException
 	{
 		if (e.getProb() != null && !e.getProb().isConstant()) {
@@ -434,6 +455,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		if (e.getRewardStructIndex() != null) {
@@ -454,6 +476,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		if (e.getProb() != null && !e.getProb().isConstant()) {
@@ -461,6 +484,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		LabelList labelList;
@@ -480,6 +504,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionFilter e) throws PrismLangException
 	{
 		// Check filter type is valid

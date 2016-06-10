@@ -1038,6 +1038,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		ignoreNextParse = true;
 	}
 
+	@Override
 	public boolean processGUIEvent(userinterface.util.GUIEvent e)
 	{
 		if (e instanceof GUIModelEvent) {
@@ -1584,6 +1585,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		showStrategyCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		showStrategyCheck.addItemListener(new ItemListener()
 		{
+			@Override
 			public void itemStateChanged(ItemEvent itemEvent)
 			{
 				int state = itemEvent.getStateChange();

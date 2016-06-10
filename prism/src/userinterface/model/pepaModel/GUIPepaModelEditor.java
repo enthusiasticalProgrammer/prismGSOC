@@ -273,6 +273,7 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 		}
 
 		@Override
+		@Override
 		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());

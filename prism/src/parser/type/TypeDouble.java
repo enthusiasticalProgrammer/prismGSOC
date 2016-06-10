@@ -41,6 +41,7 @@ public class TypeDouble extends Type
 	{		
 	}	
 	
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeDouble);

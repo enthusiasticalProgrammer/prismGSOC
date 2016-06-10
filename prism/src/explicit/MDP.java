@@ -42,6 +42,7 @@ public interface MDP extends NondetModel
 	/**
 	 * Get the number of transitions from choice {@code i} of state {@code s}.
 	 */
+	@Override
 	public int getNumTransitions(int s, int i);
 
 	/**

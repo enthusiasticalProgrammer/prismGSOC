@@ -61,13 +61,15 @@ public class SaveGraphicModelThread extends Thread
         plug = handler.getGUIPlugin();
     }
     
-    public void run()
+    @Override
+	public void run()
     {
         try
         {
             SwingUtilities.invokeAndWait(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     plug.startProgress();
                     plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
@@ -553,7 +555,8 @@ public class SaveGraphicModelThread extends Thread
             //success
             SwingUtilities.invokeAndWait(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     plug.stopProgress();
                     plug.setTaskBarText("Saving model... done.");
@@ -571,7 +574,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -595,7 +599,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -618,7 +623,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -642,7 +648,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -664,7 +671,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -687,7 +695,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -710,7 +719,8 @@ public class SaveGraphicModelThread extends Thread
             {
                 SwingUtilities.invokeAndWait(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         plug.stopProgress();
                         plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));

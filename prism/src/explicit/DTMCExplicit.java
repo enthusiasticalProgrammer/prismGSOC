@@ -84,6 +84,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 		}
 	}
 
+	@Override
 	public String infoString()
 	{
 		String s = "";
@@ -112,6 +113,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 		}
 	}
 
+	@Override
 	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
 		int i;

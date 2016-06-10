@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,14 +21,12 @@ import prism.PrismLangException;
 import prism.PrismLog;
 import prism.PrismSettings;
 import prism.PrismUtils;
-import prism.Result;
 import simulator.ModulesFileModelGenerator;
 
 //TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	public MDP m1;
-	public MDP m2; //currently not used, TODO Christopher: use it or lose it
+	public @NonNull MDP m1;
 	public MDPModelChecker mdp11;
 	public MDPModelChecker mdp12;
 	public MDPModelChecker mdp13;
@@ -42,6 +41,10 @@ public class TestMultiLongRun
 	public PropertiesFile propertiesFile3 = null;
 
 	public StateValues infeasible;
+	
+	public TestMultiLongRun() throws PrismLangException{
+		setUp();
+	}
 
 	@Before
 	public void setUp() throws PrismLangException

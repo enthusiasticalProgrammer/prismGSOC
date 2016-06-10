@@ -41,6 +41,7 @@ public class TypeBool extends Type
 	{		
 	}
 	
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeBool);

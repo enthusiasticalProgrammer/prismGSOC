@@ -1133,7 +1133,8 @@ public class Transition implements PropertyOwner
         return aLine.intersects(nx-4, ny-4, 8, 8);
     }
     
-    public int compareTo(Object o)
+    @Override
+	public int compareTo(Object o)
     {
         if(o instanceof PropertyOwner)
         {
@@ -1145,14 +1146,16 @@ public class Transition implements PropertyOwner
         else return 0;
     }
     
-    public String getClassDescriptor()
+    @Override
+	public String getClassDescriptor()
     {
         if(to instanceof Decision) return "Branched Transition";
         else
             return "Transition";
     }
     
-    public String getDescriptor()
+    @Override
+	public String getDescriptor()
     {
         if(to instanceof Decision)
         {
@@ -1164,13 +1167,15 @@ public class Transition implements PropertyOwner
         }
     }
     
-    public int getNumProperties()
+    @Override
+	public int getNumProperties()
     {
         if(to instanceof Decision) return 2;
         else return 4;
     }
     
-    public SingleProperty getProperty(int index)
+    @Override
+	public SingleProperty getProperty(int index)
     {
         switch(index)
         {
@@ -1181,14 +1186,16 @@ public class Transition implements PropertyOwner
         }
     }
     
-    public int getUniquePropertyID()
+    @Override
+	public int getUniquePropertyID()
     {
         if(to instanceof Decision) return prism.PropertyConstants.BRANCHTRANSITION;
         else
             return prism.PropertyConstants.TRANSITION;
     }
     
-    public void registerObserver(Observer obs)
+    @Override
+	public void registerObserver(Observer obs)
     {
         guard.addObserver(obs);
         sync.addObserver(obs);

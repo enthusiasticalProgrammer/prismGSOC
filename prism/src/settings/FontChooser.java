@@ -419,7 +419,8 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		new FontChooser(new javax.swing.JFrame()).show();
 	}
 
-    @SuppressWarnings("deprecation")
+    @Override
+	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e)
     {
 		if(e.getSource() == fontBox)

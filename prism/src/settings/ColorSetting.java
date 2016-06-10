@@ -51,6 +51,7 @@ public class ColorSetting extends Setting
 	}
 
 	@Override
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;

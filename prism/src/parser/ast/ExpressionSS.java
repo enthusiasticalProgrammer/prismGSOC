@@ -58,6 +58,7 @@ public class ExpressionSS extends ExpressionQuant
 
 	// Set methods
 	
+	@Override
 	public void setRelOp(RelOp r)
 	{
 		relOp =r;
@@ -68,11 +69,13 @@ public class ExpressionSS extends ExpressionQuant
 		prob = p;
 	}
 
+	@Override
 	public void setExpression(Expression e)
 	{
 		expression = e;
 	}
 	
+	@Override
 	public void setFilter(Filter f)
 	{
 		filter = f;
@@ -94,6 +97,7 @@ public class ExpressionSS extends ExpressionQuant
 	 * Does some checks, e.g., throws an exception if probability is out of range.
 	 * @param constantValues Values for constants in order to evaluate any bound
 	 */
+	@Override
 	public OpRelOpBound getRelopBoundInfo(Values constantValues) throws PrismException
 	{
 		if (getBound() != null) {
@@ -115,11 +119,13 @@ public class ExpressionSS extends ExpressionQuant
 	}
 
 
+	@Override
 	public Expression getExpression()
 	{
 		return expression;
 	}
 	
+	@Override
 	public Filter getFilter()
 	{
 		return filter;
@@ -127,6 +133,7 @@ public class ExpressionSS extends ExpressionQuant
 
 	// Methods required for Expression:
 	
+	@Override
 	public boolean isConstant()
 	{
 		return false;

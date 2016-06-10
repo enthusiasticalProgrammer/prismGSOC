@@ -103,7 +103,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         mod.addActionListener(new ActionListener()
         {
             
-            public void actionPerformed(ActionEvent e)
+            @Override
+			public void actionPerformed(ActionEvent e)
             {
                 JCheckBoxMenuItem jcbmi = (JCheckBoxMenuItem)e.getSource();
                 if(jcbmi.isSelected())
@@ -124,7 +125,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         docker.addActionListener(new ActionListener()
         {
             
-            public void actionPerformed(ActionEvent e)
+            @Override
+			public void actionPerformed(ActionEvent e)
             {
                 JCheckBoxMenuItem jcbmi = (JCheckBoxMenuItem)e.getSource();
                 if(jcbmi.isSelected())
@@ -352,7 +354,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
             
             addModule = new AbstractAction()
             {
-                public void actionPerformed(ActionEvent e)
+                @Override
+				public void actionPerformed(ActionEvent e)
                 {
                     a_addModule();
                 }
@@ -367,7 +370,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 show.add(new JSeparator());
                 Action showAll = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_showAll();
                     }
@@ -379,7 +383,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 
                 Action hideAll = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_hideAll();
                     }
@@ -396,7 +401,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 dock.add(new JSeparator());
                 Action dockAll = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_dockAll();
                     }
@@ -408,7 +414,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 
                 Action undockAll = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_undockAll();
                     }
@@ -423,7 +430,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
             {
                 tile = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_tile();
                     }
@@ -436,7 +444,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 
                 cascade = new AbstractAction()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         a_cascade();
                     }
@@ -452,7 +461,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
                 
                 autol.addActionListener(new ActionListener()
                 {
-                    public void actionPerformed(ActionEvent e)
+                    @Override
+					public void actionPerformed(ActionEvent e)
                     {
                         JCheckBoxMenuItem source = (JCheckBoxMenuItem)e.getSource();
                         if(source.isSelected())
@@ -522,19 +532,23 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         }
     }
     
-    public void mouseClicked(MouseEvent e)
+    @Override
+	public void mouseClicked(MouseEvent e)
     {
     }
     
-    public void mouseEntered(MouseEvent e)
+    @Override
+	public void mouseEntered(MouseEvent e)
     {
     }
     
-    public void mouseExited(MouseEvent e)
+    @Override
+	public void mouseExited(MouseEvent e)
     {
     }
     
-    public void mousePressed(MouseEvent e)
+    @Override
+	public void mousePressed(MouseEvent e)
     {
         if(e.isPopupTrigger())
         {
@@ -542,7 +556,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         }
     }
     
-    public void mouseReleased(MouseEvent e)
+    @Override
+	public void mouseReleased(MouseEvent e)
     {
         if(e.isPopupTrigger())
         {
@@ -556,7 +571,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         popup.show(this, e.getX(), e.getY());
     }
     
-    public void componentHidden(ComponentEvent e)
+    @Override
+	public void componentHidden(ComponentEvent e)
     {
         if(autolayout)
         {
@@ -564,7 +580,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         }
     }
     
-    public void componentMoved(ComponentEvent e)
+    @Override
+	public void componentMoved(ComponentEvent e)
     {
         if(autolayout)
         {
@@ -615,7 +632,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         }
     }
     
-    public void componentResized(ComponentEvent e)
+    @Override
+	public void componentResized(ComponentEvent e)
     {
         
         if(autolayout)
@@ -659,7 +677,8 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
         }
     }
     
-    public void componentShown(ComponentEvent e)
+    @Override
+	public void componentShown(ComponentEvent e)
     {
         if(autolayout)
         {

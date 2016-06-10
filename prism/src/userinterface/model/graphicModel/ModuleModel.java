@@ -225,7 +225,8 @@ public class ModuleModel extends SelectionModel implements Observer
         addNailPop.setIcon(userinterface.GUIPrism.getIconFromImage("smallAddNail.png"));
         addNailPop.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 if(tempAddNailTrans != null)
                 {
@@ -252,7 +253,8 @@ public class ModuleModel extends SelectionModel implements Observer
         cut.setIcon(userinterface.GUIPrism.getIconFromImage("smallCut.png"));
         cut.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 cut();
             }
@@ -262,7 +264,8 @@ public class ModuleModel extends SelectionModel implements Observer
         copy.setIcon(userinterface.GUIPrism.getIconFromImage("smallCopy.png"));
         copy.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 copy();
             }
@@ -272,7 +275,8 @@ public class ModuleModel extends SelectionModel implements Observer
         paste.setIcon(userinterface.GUIPrism.getIconFromImage("smallPaste.png"));
         paste.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 paste();
             }
@@ -282,7 +286,8 @@ public class ModuleModel extends SelectionModel implements Observer
         delete.setIcon(userinterface.GUIPrism.getIconFromImage("smallDelete.png"));
         delete.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 deleteSelected();
             }
@@ -292,7 +297,8 @@ public class ModuleModel extends SelectionModel implements Observer
         zoomIn.setIcon(userinterface.GUIPrism.getIconFromImage("smallZoomIn.png"));
         zoomIn.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 zoom*=1.1;
                 centreX = (int)(popupX * zoom);
@@ -307,7 +313,8 @@ public class ModuleModel extends SelectionModel implements Observer
         zoomOut.setIcon(userinterface.GUIPrism.getIconFromImage("smallZoomOut.png"));
         zoomOut.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 zoom/=1.1;
                 centreX = (int)(popupX * zoom);
@@ -322,7 +329,8 @@ public class ModuleModel extends SelectionModel implements Observer
         restoreZoom.setIcon(userinterface.GUIPrism.getIconFromImage("smallZoom.png"));
         restoreZoom.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 zoom=1;
                 centreX = 0;
@@ -337,7 +345,8 @@ public class ModuleModel extends SelectionModel implements Observer
         startTransition.setIcon(userinterface.GUIPrism.getIconFromImage("smallAddTransition.png"));
         startTransition.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 if(starterState != null)
                 {
@@ -368,7 +377,8 @@ public class ModuleModel extends SelectionModel implements Observer
         addState.setIcon(userinterface.GUIPrism.getIconFromImage("smallAddState.png"));
         addState.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 if(!drawingProbTrans)
                 {
@@ -385,7 +395,8 @@ public class ModuleModel extends SelectionModel implements Observer
         addChoice.setIcon(userinterface.GUIPrism.getIconFromImage("smallAddChoice.png"));
         addChoice.addActionListener(new java.awt.event.ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent e)
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent e)
             {
                 if(!drawingProbTrans && ! drawingExtraBranches)
                     {
@@ -466,7 +477,8 @@ public class ModuleModel extends SelectionModel implements Observer
     /** Access method to return a string representation of this ModuleModel.  It in fact
      * returns "module " + moduleName.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return "module " + moduleName;
     }
@@ -3375,7 +3387,8 @@ public class ModuleModel extends SelectionModel implements Observer
     }
     
     boolean mutual = true;
-    public void update(Observable o, Object arg)
+    @Override
+	public void update(Observable o, Object arg)
     {
         if(o instanceof BooleanProperty)
         {

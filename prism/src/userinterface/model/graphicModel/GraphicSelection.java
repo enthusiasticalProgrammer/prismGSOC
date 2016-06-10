@@ -133,11 +133,13 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
     
    
     
-    public void lostOwnership(Clipboard clipboard, Transferable contents)
+    @Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents)
     {
     }
     
-    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, java.io.IOException
+    @Override
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, java.io.IOException
     {
         if(!isDataFlavorSupported(flavor))
         {
@@ -150,7 +152,8 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
         
     }
     
-    public DataFlavor[] getTransferDataFlavors()
+    @Override
+	public DataFlavor[] getTransferDataFlavors()
     {
         DataFlavor[] flavors = new DataFlavor[2];
         Class type = selection.getClass();
@@ -167,7 +170,8 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
         }
     }
     
-    public boolean isDataFlavorSupported(DataFlavor flavor)
+    @Override
+	public boolean isDataFlavorSupported(DataFlavor flavor)
     {
         return
             DataFlavor.stringFlavor.equals(flavor)
@@ -267,7 +271,8 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
             //System.out.println("Selection pair name: "+getClass().getName());
         }
         
-        public String toString()
+        @Override
+		public String toString()
         {
             return "Selection from graphic model editor";
         }

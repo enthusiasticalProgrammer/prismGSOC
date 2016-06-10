@@ -157,6 +157,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 	//ACCESS METHODS
 
 	@Override
+    @Override
 	public String getName()
 	{
 		return nameLabel.getText();

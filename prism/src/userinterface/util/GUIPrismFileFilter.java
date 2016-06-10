@@ -58,6 +58,7 @@ public class GUIPrismFileFilter extends FileFilter
 		exts.add(s);
 	}
 
+	@Override
 	public boolean accept(File f)
 	{
 		String ext;
@@ -74,6 +75,7 @@ public class GUIPrismFileFilter extends FileFilter
 		return false;
 	}
     
+	@Override
 	public String getDescription() {
 		return name;
 	}

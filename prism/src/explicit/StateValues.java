@@ -541,6 +541,7 @@ public class StateValues implements StateVector
 	/**
 	 * used for testings only 
 	 */
+	@Override
 	public boolean equals(Object o)
 	{
 		if(! (o instanceof StateValues))

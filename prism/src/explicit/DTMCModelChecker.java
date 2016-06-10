@@ -406,6 +406,8 @@ public class DTMCModelChecker extends ProbModelChecker
 		throw new PrismNotSupportedException("Not implemented yet");
 	}
 
+	@Override
+	@Override
 	// Numerical computation functions
 
 	/**
@@ -1603,6 +1605,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * a multiLongRunStrategy.
 	 * 
 	 */
+	@Override
 	protected MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
 			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{

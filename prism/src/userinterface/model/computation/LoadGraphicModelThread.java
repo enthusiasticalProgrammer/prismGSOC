@@ -57,6 +57,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 		plug = handler.getGUIPlugin(); //to communicate with rest of gui
 	}
 	
+	@Override
 	public void run()
 	{
 		// initialise editor
@@ -79,6 +80,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 			//notify interface of start of computation and start the read into textEdit
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.startProgress();
@@ -608,6 +610,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 			//If we get here, the load has been successful, notify the interface and tell the handler.
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.stopProgress();
@@ -630,6 +633,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 			{
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						plug.stopProgress();
@@ -649,6 +653,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 		}
 	}
 	
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
 	{
 		InputSource inputSource = null;

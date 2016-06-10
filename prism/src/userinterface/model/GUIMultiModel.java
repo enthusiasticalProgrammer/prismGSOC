@@ -555,6 +555,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		newGraphicModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				//modified check do later

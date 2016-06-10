@@ -64,11 +64,13 @@ public class ExpressionReward extends ExpressionQuant
 		setBound(p);
 	}
 
+	@Override
 	public void setExpression(Expression e)
 	{
 		expression = e;
 	}
 
+	@Override
 	public void setFilter(Filter f)
 	{
 		filter = f;
@@ -144,6 +146,7 @@ public class ExpressionReward extends ExpressionQuant
 	 * Get info about the operator and bound.
 	 * @param constantValues Values for constants in order to evaluate any bound
 	 */
+	@Override
 	public OpRelOpBound getRelopBoundInfo(Values constantValues) throws PrismException
 	{
 		if (getBound() != null) {
@@ -161,11 +164,13 @@ public class ExpressionReward extends ExpressionQuant
 		return getBound();
 	}
 
+	@Override
 	public Expression getExpression()
 	{
 		return expression;
 	}
 
+	@Override
 	public Filter getFilter()
 	{
 		return filter;
@@ -176,6 +181,7 @@ public class ExpressionReward extends ExpressionQuant
 	/**
 	 * Is this expression constant?
 	 */
+	@Override
 	public boolean isConstant()
 	{
 		return false;

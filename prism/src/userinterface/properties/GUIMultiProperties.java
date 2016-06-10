@@ -1396,6 +1396,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	
 	//METHODS TO IMPLEMENT GUIPlugin INTERFACE
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
@@ -2432,6 +2433,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		strategyInfo = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_showStrategyInfo();
@@ -2442,6 +2444,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		generateStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				try {
@@ -2459,6 +2462,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		implementStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (getPrism().getStrategy() == null) {
@@ -2480,6 +2484,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		strategyExperiment = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				
@@ -2493,6 +2498,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		
 		exportStratProduct = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportStratProduct();
@@ -2504,6 +2510,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportStratPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportStratPlain();
@@ -2515,6 +2522,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		importStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_importStrategy();

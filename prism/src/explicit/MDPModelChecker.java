@@ -150,6 +150,7 @@ public class MDPModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
+	@Override
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
@@ -1748,6 +1749,7 @@ public class MDPModelChecker extends ProbModelChecker
 		}
 	}
 	
+	@Override
 	protected  MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
 			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException{
 		return new MultiLongRunMDP((MDP) model, constraints, objectives, expConstraints, method);

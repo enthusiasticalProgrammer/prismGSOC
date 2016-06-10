@@ -409,7 +409,6 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 		return d;
 	}
 
-	//@Override
 	public double mvMultRewJacSingle(int s, double vect[], MCRewards mcRewards)
 	{
 		int k;

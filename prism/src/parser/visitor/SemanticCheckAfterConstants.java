@@ -44,6 +44,7 @@ public class SemanticCheckAfterConstants extends ASTTraverse
 		super();
 	}
 
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;

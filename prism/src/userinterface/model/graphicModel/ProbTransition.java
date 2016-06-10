@@ -84,7 +84,8 @@ public class ProbTransition extends Transition
     /** Access method to return the StringLabel object for the probability for this
      * branch.
      */    
-    public ExpressionLabel getProbabilityLabel()
+    @Override
+	public ExpressionLabel getProbabilityLabel()
     {
 	return probability;
     }
@@ -92,7 +93,8 @@ public class ProbTransition extends Transition
     /** Access method which states whether a given "Hot-Area" rectangle intersects this
      * branch.
      */    
-    public boolean intersects(Rectangle2D rect)
+    @Override
+	public boolean intersects(Rectangle2D rect)
     {
 	//rect.setRect(rect.getX()-3, rect.getY()-3, 6, 6);
 	boolean doesIt = false;
@@ -119,7 +121,8 @@ public class ProbTransition extends Transition
     //Update methods
     
     /** Sets the probability to the given parameter. */    
-    public void setProbability(String s)
+    @Override
+	public void setProbability(String s)
     {
 	probability.setString(s);
     }
@@ -127,7 +130,8 @@ public class ProbTransition extends Transition
     //Rendering methods
     
     /** Renders this branch the given Graphics2D context with normal style labels. */    
-    public void render(Graphics2D g2)
+    @Override
+	public void render(Graphics2D g2)
     {
 	render(g2, false);
     }
@@ -135,7 +139,8 @@ public class ProbTransition extends Transition
     /** Renders this branch the given Graphics2D context with the choice between long
      * and short labels.
      */    
-    public void render(Graphics2D g2, boolean longLines)
+    @Override
+	public void render(Graphics2D g2, boolean longLines)
     {
 	float[] dashPattern =
 	{ 5, 2 };
@@ -145,22 +150,26 @@ public class ProbTransition extends Transition
 	probability.render(g2, middle.getX(), middle.getY(), longLines);
     }
     
-     public String getClassDescriptor()
+     @Override
+	public String getClassDescriptor()
     {
         return "Probabilistic Choice";
     }
     
-    public String getDescriptor()
+    @Override
+	public String getDescriptor()
     {
         return "to "+to.getDescriptor();
     }
     
-    public int getNumProperties()
+    @Override
+	public int getNumProperties()
     {
         return 2;
     }
     
-    public SingleProperty getProperty(int index)
+    @Override
+	public SingleProperty getProperty(int index)
     {
         switch(index)
         {
@@ -169,18 +178,21 @@ public class ProbTransition extends Transition
         }
     }
     
-    public void registerObserver(Observer obs)
+    @Override
+	public void registerObserver(Observer obs)
     {
         super.registerObserver(obs);
         probability.addObserver(obs);
     }
     
-    public int getUniquePropertyID()
+    @Override
+	public int getUniquePropertyID()
     {
         return prism.PropertyConstants.PROBTRANSITION;
     }
     
-    public double getMinX()
+    @Override
+	public double getMinX()
     {
         double min = super.getMinX();
 	
@@ -190,7 +202,8 @@ public class ProbTransition extends Transition
         return min;
     }
     
-    public double getMinY()
+    @Override
+	public double getMinY()
     {
         double min = super.getMinY();
 	
@@ -200,7 +213,8 @@ public class ProbTransition extends Transition
         return min;
     }
     
-    public double getMaxX()
+    @Override
+	public double getMaxX()
     {
         
         double max = super.getMaxX();
@@ -211,7 +225,8 @@ public class ProbTransition extends Transition
         return max;
     }
     
-    public double getMaxY()
+    @Override
+	public double getMaxY()
     {
         double max = super.getMaxY();
         if(probability.getMaxY() > max) max = probability.getMaxY();

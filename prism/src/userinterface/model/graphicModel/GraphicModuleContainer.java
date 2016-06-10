@@ -89,7 +89,8 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
         
         Action hide = new AbstractAction()
         {
-            public void actionPerformed(ActionEvent e)
+            @Override
+			public void actionPerformed(ActionEvent e)
             {
                 setVisible(false);
             }
@@ -271,28 +272,35 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                 //internalFrame.setIconifiable(false);
                 internalFrame.addInternalFrameListener((new InternalFrameListener()
                 {
-                    public void internalFrameActivated(InternalFrameEvent e)
+                    @Override
+					public void internalFrameActivated(InternalFrameEvent e)
                     {}
-                    public void internalFrameClosed(InternalFrameEvent e)
+                    @Override
+					public void internalFrameClosed(InternalFrameEvent e)
                     {}
-                    public void internalFrameClosing(InternalFrameEvent e)
+                    @Override
+					public void internalFrameClosing(InternalFrameEvent e)
                     {owner.a_hide(thisgmc);}
                     
-                    public void internalFrameDeactivated(InternalFrameEvent e)
+                    @Override
+					public void internalFrameDeactivated(InternalFrameEvent e)
                     {}
                     
-                    public void internalFrameDeiconified(InternalFrameEvent e)
+                    @Override
+					public void internalFrameDeiconified(InternalFrameEvent e)
                     {
                         owner.a_show(thisgmc);
                         
                     }
                     
-                    public void internalFrameIconified(InternalFrameEvent e)
+                    @Override
+					public void internalFrameIconified(InternalFrameEvent e)
                     {
                         owner.a_hide(thisgmc);
                     }
                     
-                    public void internalFrameOpened(InternalFrameEvent e)
+                    @Override
+					public void internalFrameOpened(InternalFrameEvent e)
                     {}
                     
                     
@@ -304,7 +312,8 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                 {
                     
                     
-                    public void mousePressed(MouseEvent e)
+                    @Override
+					public void mousePressed(MouseEvent e)
                     {
                         //System.out.println("MOUSE PRESSED");
                         if(e.isPopupTrigger())
@@ -314,7 +323,8 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                         }
                     }
                     
-                    public void mouseReleased(MouseEvent e)
+                    @Override
+					public void mouseReleased(MouseEvent e)
                     {
                         //System.out.println("MOUSE RELEASED");
                         if(e.isPopupTrigger())
@@ -324,17 +334,20 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                         }
                     }
                     
-                    public void mouseClicked(MouseEvent e)
+                    @Override
+					public void mouseClicked(MouseEvent e)
                     {
                         //System.out.println("MOUSE CLICKED");
                     }
                     
-                    public void mouseEntered(MouseEvent e)
+                    @Override
+					public void mouseEntered(MouseEvent e)
                     {
                         //System.out.println("MOUSE ENTERED");
                     }
                     
-                    public void mouseExited(MouseEvent e)
+                    @Override
+					public void mouseExited(MouseEvent e)
                     {
                         //System.out.println("MOUSE EXITED");
                     }
@@ -377,35 +390,42 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                 
                 externalFrame.addWindowListener(new WindowListener()
                 {
-                    public void windowActivated(WindowEvent e)
+                    @Override
+					public void windowActivated(WindowEvent e)
                     {
                     }
                     
-                    public void windowClosed(WindowEvent e)
+                    @Override
+					public void windowClosed(WindowEvent e)
                     {
                         
                     }
                     
-                    public void windowClosing(WindowEvent e)
+                    @Override
+					public void windowClosing(WindowEvent e)
                     {
                         //////System.out.println("closing");
                         owner.a_hide(thisgmc);
                     }
                     
-                    public void windowDeactivated(WindowEvent e)
+                    @Override
+					public void windowDeactivated(WindowEvent e)
                     {
                     }
                     
-                    public void windowDeiconified(WindowEvent e)
+                    @Override
+					public void windowDeiconified(WindowEvent e)
                     {
                     }
                     
                     
-                    public void windowIconified(WindowEvent e)
+                    @Override
+					public void windowIconified(WindowEvent e)
                     {
                     }
                     
-                    public void windowOpened(WindowEvent e)
+                    @Override
+					public void windowOpened(WindowEvent e)
                     {
                     }
                     
@@ -414,12 +434,14 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
                 
                 externalFrame.addFocusListener(new FocusListener()
                 {
-                    public void focusGained(FocusEvent e)
+                    @Override
+					public void focusGained(FocusEvent e)
                     {
                         owner.desktopLoseFocus();
                     }
                     
-                    public void focusLost(FocusEvent e)
+                    @Override
+					public void focusLost(FocusEvent e)
                     {
                         owner.ensureFocusIsViewable();
                     }
@@ -617,7 +639,8 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
         return (int)scroller.getVerticalScrollBar().getModel().getValue();
     }
     
-    public void focusGained(FocusEvent e)
+    @Override
+	public void focusGained(FocusEvent e)
     {
         //        //////System.out.println("focusgained");
         //        //we need to ensure that the panel has the focus to accept key events
@@ -631,11 +654,13 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
         //        }
     }
     
-    public void focusLost(FocusEvent e)
+    @Override
+	public void focusLost(FocusEvent e)
     {
     }
     
-    public void adjustmentValueChanged(AdjustmentEvent e)
+    @Override
+	public void adjustmentValueChanged(AdjustmentEvent e)
     {
         theModel.setScrOffsetX(getViewOffsetX());
         theModel.setScrOffsetY(getViewOffsetY());

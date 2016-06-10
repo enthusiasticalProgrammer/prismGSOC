@@ -63,6 +63,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		setModelInfo(modelInfo);
 	}
 
+	@Override
 	public void setPropertiesFile(PropertiesFile propertiesFile)
 	{
 		this.propertiesFile = propertiesFile;

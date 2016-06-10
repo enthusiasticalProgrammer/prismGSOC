@@ -62,7 +62,8 @@ public class Decision extends State
      * @param i needed to override State's render method.  It is actually the State's external
      * ID number.
      */
-    public void render(Graphics2D g2, int i)
+    @Override
+	public void render(Graphics2D g2, int i)
     {
         double drawX = getX(), drawY = getY();
         //if moving and snapping, temporarily move a to a snap position
@@ -107,17 +108,20 @@ public class Decision extends State
      * ID number.
      * @param lines needed to override superclass render method.
      */
-    public void render(Graphics2D g2, int i, boolean lines)
+    @Override
+	public void render(Graphics2D g2, int i, boolean lines)
     {
         render(g2, i);
     }
     
-    public int getNumProperties()
+    @Override
+	public int getNumProperties()
     {
         return 2;
     }
     
-    public SingleProperty getProperty(int index)
+    @Override
+	public SingleProperty getProperty(int index)
     {
         switch(index)
         {
@@ -126,23 +130,27 @@ public class Decision extends State
         }
     }
     
-    public int getUniquePropertyID()
+    @Override
+	public int getUniquePropertyID()
     {
         return PropertyConstants.DECISION;
     }
     
-    public void registerObserver(java.util.Observer obs)
+    @Override
+	public void registerObserver(java.util.Observer obs)
     {
         x.addObserver(obs);
         y.addObserver(obs);
     }
     
-    public String getClassDescriptor()
+    @Override
+	public String getClassDescriptor()
     {
         return "Probability Distribution";
     }
     
-    public String getDescriptor()
+    @Override
+	public String getDescriptor()
     {
         return "";
     }

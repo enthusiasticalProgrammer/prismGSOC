@@ -87,7 +87,8 @@ public class GraphicToolBar extends JToolBar
             editMode.setToolTipText("Edit Mode");
             editMode.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+                @Override
+				public void actionPerformed(ActionEvent e)
                 {
                     if(((JToggleButton)e.getSource()).isSelected())
                     {
@@ -100,7 +101,8 @@ public class GraphicToolBar extends JToolBar
             JToggleButton zoomMode = new JToggleButton();
             zoomMode.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+                @Override
+				public void actionPerformed(ActionEvent e)
                 {
                     if(((JToggleButton)e.getSource()).isSelected())
                     {
@@ -126,7 +128,8 @@ public class GraphicToolBar extends JToolBar
 	snapToggle.setSelectedIcon(GUIPrism.getIconFromImage("gridSnapOn.png"));
 	snapToggle.addActionListener(new java.awt.event.ActionListener()
 	{
-	    public void actionPerformed(ActionEvent e)
+	    @Override
+		public void actionPerformed(ActionEvent e)
 	    {
 		setSnap(((JToggleButton)e.getSource()).isSelected());    
 	    }
@@ -142,7 +145,8 @@ public class GraphicToolBar extends JToolBar
 	gridToggle.setSelectedIcon(GUIPrism.getIconFromImage("greenGrid.png"));
 	gridToggle.addActionListener(new java.awt.event.ActionListener()
 	{
-	   public void actionPerformed(ActionEvent e)
+	   @Override
+	public void actionPerformed(ActionEvent e)
 	    {
 		setShowGrid(((JToggleButton)e.getSource()).isSelected());    
 	    }
@@ -157,7 +161,8 @@ public class GraphicToolBar extends JToolBar
 	longLabelsToggle.setSelectedIcon(GUIPrism.getIconFromImage("longLabel.png"));
 	longLabelsToggle.addActionListener(new java.awt.event.ActionListener()
 	{
-	    public void actionPerformed(ActionEvent e)
+	    @Override
+		public void actionPerformed(ActionEvent e)
 	    {
 		setLongLabels(((JToggleButton)e.getSource()).isSelected());
 	    }
@@ -174,7 +179,8 @@ public class GraphicToolBar extends JToolBar
 	lastModule.setToolTipText("Last Module");
 	lastModule.addActionListener(new java.awt.event.ActionListener()
 	{
-	    public void actionPerformed(ActionEvent e)
+	    @Override
+		public void actionPerformed(ActionEvent e)
 	    {
 		lastModule();
 	    }
@@ -187,7 +193,8 @@ public class GraphicToolBar extends JToolBar
 	nextModule.setToolTipText("Next Module");
 	nextModule.addActionListener(new java.awt.event.ActionListener()
 	{
-	    public void actionPerformed(ActionEvent e)
+	    @Override
+		public void actionPerformed(ActionEvent e)
 	    {
 		nextModule();
 	    }

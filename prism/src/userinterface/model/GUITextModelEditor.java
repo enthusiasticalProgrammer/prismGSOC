@@ -420,6 +420,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		//actionSearch.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 		insertDTMC = new AbstractAction()
+        	@Override
 		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
@@ -438,6 +439,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		insertDTMC.putValue(Action.NAME, "Probabilistic (DTMC)");
 
 		insertCTMC = new AbstractAction()
+        	@Override
 		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
@@ -456,6 +458,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		insertCTMC.putValue(Action.NAME, "Stochastic (CTMC)");
 
 		insertMDP = new AbstractAction()
+        	@Override
 		{
 			@Override
 			public void actionPerformed(ActionEvent ae)
@@ -737,6 +740,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	@Override
 	public void mousePressed(MouseEvent me)
 	{
+	@Override
 		mouseTriggered(me);
 	}
 

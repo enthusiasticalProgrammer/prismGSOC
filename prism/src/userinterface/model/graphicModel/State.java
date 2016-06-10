@@ -418,7 +418,8 @@ public class State implements PropertyOwner
         descriptor = ""+i;
     }
     
-    public int compareTo(Object o)
+    @Override
+	public int compareTo(Object o)
     {
         if(o instanceof PropertyOwner)
         {
@@ -430,22 +431,26 @@ public class State implements PropertyOwner
         else return 0;
     }
     
-    public String getClassDescriptor()
+    @Override
+	public String getClassDescriptor()
     {
         return "State";
     }
     
-    public String getDescriptor()
+    @Override
+	public String getDescriptor()
     {
         return descriptor;
     }
     
-    public int getNumProperties()
+    @Override
+	public int getNumProperties()
     {
         return 4;
     }
     
-    public SingleProperty getProperty(int index)
+    @Override
+	public SingleProperty getProperty(int index)
     {
         switch(index)
         {
@@ -456,12 +461,14 @@ public class State implements PropertyOwner
         }
     }
     
-    public int getUniquePropertyID()
+    @Override
+	public int getUniquePropertyID()
     {
         return PropertyConstants.STATE;
     }
     
-    public void registerObserver(java.util.Observer obs)
+    @Override
+	public void registerObserver(java.util.Observer obs)
     {
         comment.addObserver(obs);
         initial.addObserver(obs);
