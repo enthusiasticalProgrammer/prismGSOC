@@ -67,17 +67,6 @@ public class GraphicToolBar extends JToolBar
         initComponents();
     }
     
-    /** Create a new instance of GraphicToolBar if this toolbar is to 
-     *  belong to an undocked GraphicModuleContainer
-     */
-    public GraphicToolBar(GraphicModuleContainer mmo)
-    {
-        super("PRISM Graphic Tools");
-        isDocked = false;
-        this.mmo = mmo;
-        initComponents();
-    }
-    
     private void initComponents()
     {
         ButtonGroup modeGroup = new ButtonGroup();

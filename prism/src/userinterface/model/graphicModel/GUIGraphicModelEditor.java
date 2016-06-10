@@ -221,14 +221,6 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
         modPanel.notifyNewName(getModuleModel(n), n.getName());
     }
     
-    public void removeModule(GUIMultiModelTree.ModuleNode mn)
-    {
-	//System.out.println("removing module");
-        //modules.remove(mn);
-        //if(drawingPane.getModel() == getModuleModel(mn)) drawingPane.setModel(null);
-        modPanel.removeModule(getModuleModel(mn));
-    }
-    
     public ModuleModel getModuleModel(GUIMultiModelTree.ModuleNode mn)
     {
         for(int i = 0; i < getNumModules(); i++)
