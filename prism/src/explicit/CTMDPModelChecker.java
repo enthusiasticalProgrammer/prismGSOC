@@ -54,7 +54,7 @@ public class CTMDPModelChecker extends MDPModelChecker
 	// Model checking functions
 
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		double uTime;
 		BitSet b1, b2;

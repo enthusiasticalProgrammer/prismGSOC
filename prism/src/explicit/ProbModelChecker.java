@@ -629,7 +629,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 
 		if (useSimplePathAlgo) {
-			return checkProbPathFormulaSimple(model, expr, minMax, statesOfInterest);
+			return checkProbPathFormulaSimple(model, expr, minMax);
 		} else {
 			return checkProbPathFormulaLTL(model, expr, false, minMax, statesOfInterest);
 		}
@@ -638,7 +638,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a simple, non-LTL path operator.
 	 */
-	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr, MinMax minMax) throws PrismException
 	{
 		boolean negated = false;
 		StateValues probs = null;
@@ -657,14 +657,14 @@ public class ProbModelChecker extends NonProbModelChecker
 
 			// Next
 			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
-				probs = checkProbNext(model, exprTemp, minMax, statesOfInterest);
+				probs = checkProbNext(model, exprTemp, minMax);
 			}
 			// Until
 			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
 				if (exprTemp.hasBounds()) {
-					probs = checkProbBoundedUntil(model, exprTemp, minMax, statesOfInterest);
+					probs = checkProbBoundedUntil(model, exprTemp, minMax);
 				} else {
-					probs = checkProbUntil(model, exprTemp, minMax, statesOfInterest);
+					probs = checkProbUntil(model, exprTemp, minMax);
 				}
 			}
 		}
@@ -684,7 +684,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a next operator.
 	 */
-	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// Model check the operand for all states
 		BitSet target = checkExpression(model, expr.getOperand2(), null).getBitSet();
@@ -714,7 +714,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a bounded until operator.
 	 */
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// This method just handles discrete time
 		// Continuous-time model checkers will override this method
@@ -818,7 +818,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for an (unbounded) until operator.
 	 */
-	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// Model check operands for all states
 		BitSet remain = checkExpression(model, expr.getOperand1(), null).getBitSet();
