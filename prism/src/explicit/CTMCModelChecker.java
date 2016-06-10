@@ -29,6 +29,8 @@ package explicit;
 import java.io.File;
 import java.util.*;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.StateRewardsArray;
@@ -128,7 +130,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * Model check a time-bounded until operator; return vector of probabilities for all states.
 	 */
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;

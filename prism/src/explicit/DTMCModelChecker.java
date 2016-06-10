@@ -129,7 +129,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	@Override
-	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MCRewards productRewards;
@@ -191,6 +191,125 @@ public class DTMCModelChecker extends ProbModelChecker
 		// Mapping rewards in the original model
 		rewards = product.projectToOriginalModel(rewardsProduct);
 		rewardsProduct.clear();
+
+		return rewards;
+	}
+
+	/**
+	 * Compute probabilities for an (unbounded) until operator.
+	 */
+	protected StateValues checkProbUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
+	{
+		BitSet b1, b2;
+		StateValues probs = null;
+		ModelCheckerResult res = null;
+
+		// model check operands first
+		b1 = checkExpression(model, expr.getOperand1(), null).getBitSet();
+		b2 = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
+		// allDDRowVars.n()) + " states\n");
+
+		res = computeUntilProbs((DTMC) model, b1, b2);
+		probs = StateValues.createFromDoubleArray(res.soln, model);
+
+		return probs;
+	}
+
+	/**
+	 * Compute rewards for the contents of an R operator.
+	 */
+	protected StateValues checkRewardFormula(@NonNull Model model, MCRewards modelRewards, Expression expr) throws PrismException
+	{
+		StateValues rewards = null;
+
+		if (expr instanceof ExpressionTemporal) {
+			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
+			switch (exprTemp.getOperator()) {
+			case ExpressionTemporal.R_F:
+				rewards = checkRewardReach(model, modelRewards, exprTemp);
+				break;
+			case ExpressionTemporal.R_I:
+				rewards = checkRewardInstantaneous(model, modelRewards, exprTemp);
+				break;
+			case ExpressionTemporal.R_C:
+				rewards = checkRewardCumulative(model, modelRewards, exprTemp);
+				break;
+			default:
+				throw new PrismException("Explicit engine does not yet handle the " + exprTemp.getOperatorSymbol() + " operator in the R operator");
+			}
+		}
+
+		if (rewards == null)
+			throw new PrismException("Unrecognised operator in R operator");
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a reachability reward operator.
+	 */
+	protected StateValues checkRewardReach(@NonNull Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		BitSet b;
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// model check operand first
+		b = checkExpression(model, expr.getOperand2(), null).getBitSet();
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeReachRewards((DTMC) model, modelRewards, b);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for an instantaneous reward operator.
+	 */
+	protected StateValues checkRewardInstantaneous(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// get time bound
+		double t = expr.getUpperBound().evaluateDouble(constantValues);
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeInstantaneousRewards((DTMC) model, modelRewards, t);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
+
+		return rewards;
+	}
+
+	/**
+	 * Compute rewards for a cumulative reward operator.
+	 */
+	protected StateValues checkRewardCumulative(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	{
+		StateValues rewards = null;
+		ModelCheckerResult res = null;
+
+		// get time bound
+		double t = expr.getUpperBound().evaluateDouble(constantValues);
+
+		// print out some info about num states
+		// mainLog.print("\nb = " + JDD.GetNumMintermsString(b1,
+		// allDDRowVars.n()));
+
+		res = computeCumulativeRewards((DTMC) model, modelRewards, t);
+		rewards = StateValues.createFromDoubleArray(res.soln, model);
 
 		return rewards;
 	}
@@ -406,8 +525,49 @@ public class DTMCModelChecker extends ProbModelChecker
 		throw new PrismNotSupportedException("Not implemented yet");
 	}
 
+	// Utility methods for probability distributions
+
+	/**
+	 * Generate a probability distribution, stored as a StateValues object, from a file.
+	 * If {@code distFile} is null, so is the return value.
+	 */
 	@Override
+	public StateValues readDistributionFromFile(File distFile, Model model) throws PrismException
+	{
+		StateValues dist = null;
+
+		if (distFile != null) {
+			mainLog.println("\nImporting probability distribution from file \"" + distFile + "\"...");
+			// Build an empty vector 
+			dist = new StateValues(TypeDouble.getInstance(), model);
+			// Populate vector from file
+			dist.readFromFile(distFile);
+		}
+
+		return dist;
+	}
+
+	/**
+	 * Build a probability distribution, stored as a StateValues object,
+	 * from the initial states info of the current model: either probability 1 for
+	 * the (single) initial state or equiprobable over multiple initial states.
+	 */
 	@Override
+	public StateValues buildInitialDistribution(Model model) throws PrismException
+	{
+		StateValues dist = null;
+
+		// Build an empty vector 
+		dist = new StateValues(TypeDouble.getInstance(), model);
+		// Populate vector (equiprobable over initial states)
+		double d = 1.0 / model.getNumInitialStates();
+		for (int in : model.getInitialStates()) {
+			dist.setDoubleValue(in, d);
+		}
+
+		return dist;
+	}
+
 	// Numerical computation functions
 
 	/**
@@ -1606,8 +1766,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * 
 	 */
 	@Override
-	protected MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
+			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method) throws PrismException
 	{
 		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);
 	}

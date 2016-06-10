@@ -29,16 +29,16 @@ import strat.MultiLongRunStrategy;
  */
 public class DTMCProductMLRStrategyAndMDP implements DTMC
 {
-	private final MDP mdp;
-	private final MultiLongRunStrategy mlrs;
+	private final @NonNull MDP mdp;
+	private final @NonNull MultiLongRunStrategy mlrs;
 
-	public DTMCProductMLRStrategyAndMDP(MDP mdp, MultiLongRunStrategy mlrs)
+	public DTMCProductMLRStrategyAndMDP(@NonNull MDP mdp, @NonNull MultiLongRunStrategy mlrs)
 	{
 		this.mdp = mdp;
 		this.mlrs = mlrs;
 	}
 
-	public MDP getMDP()
+	public @NonNull MDP getMDP()
 	{
 		return mdp;
 	}
@@ -239,7 +239,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToPrismExplicit(@NotNull String baseFilename) throws PrismException
+	public void exportToPrismExplicit(String baseFilename) throws PrismException
 	{
 		exportToPrismExplicitTra(baseFilename + ".tra");
 	}
