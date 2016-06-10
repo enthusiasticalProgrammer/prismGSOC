@@ -113,13 +113,7 @@ public class Edge
 		return resets.entrySet();
 	}
 
-	/**
-	 * Perform some basic syntactic checks.
-	 */
-	public void check() throws PrismException
-	{
-	}
-
+	@Override
 	@Override
 	public String toString()
 	{

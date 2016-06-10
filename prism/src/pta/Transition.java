@@ -137,7 +137,6 @@ public class Transition
 		double prob = 0.0;
 		double err = 1e-10;
 		for (Edge e : edges) {
-			e.check();
 			prob += e.getProbability();
 		}
 		if (prob < 1.0 - err || prob > 1.0 + err)
