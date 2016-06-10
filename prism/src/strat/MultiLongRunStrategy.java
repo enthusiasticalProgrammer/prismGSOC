@@ -126,20 +126,17 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		strategy = -1;
 		setRecurrency(state);
-		System.out.println("init to " + isTransient());
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
 		setRecurrency(state);
-		System.out.println("in updateMemory,strategy: " + strategy + " state: " + state);
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
-		System.out.println("in getNextMove, strategy: " + strategy);
 		return (isTransient()) ? this.transientChoices[state] : this.recurrentChoices[strategy].getNextMove(state);
 	}
 

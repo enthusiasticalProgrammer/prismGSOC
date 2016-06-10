@@ -40,7 +40,6 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public int getNumStates()
 	{
-		System.out.println("model: "+model);
 		return model.getNumStates();
 	}
 

@@ -730,7 +730,6 @@ public abstract class MultiLongRun
 				p.setCoord(i, res);
 			}
 		} else {
-			System.out.println("this.resut: "+r);
 			throw new PrismException("Unexpected result of LP solving: " + r);
 		}
 		return p;

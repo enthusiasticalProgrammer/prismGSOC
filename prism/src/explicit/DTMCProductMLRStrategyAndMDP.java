@@ -372,7 +372,6 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 
 		Distribution oneTransitionMove = new Distribution();
 		for (Integer key : oneActionMove.getSupport()) {
-			System.out.println("state: "+state+", key: "+key);
 			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state/this.getNumStrategies(), key);
 			while (iterator.hasNext()) {
 				Entry<Integer, Double> entry = iterator.next();

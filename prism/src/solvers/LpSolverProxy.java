@@ -97,9 +97,9 @@ public class LpSolverProxy implements SolverProxyInterface
 			return false;
 		else if (this.result == lpsolve.LpSolve.OPTIMAL)
 			return true;
-		else
-			System.out.println("this.result: "+this.result);
+		else {
 			throw new PrismException("Unexpected result of LP solving, when boolean value is expected: " + this.result);
+		}
 	}
 
 	public double getDoubleResult() throws PrismException
