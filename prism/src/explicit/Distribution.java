@@ -257,6 +257,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		return true;
 	}
 
+	{
 	@Override
 	public int hashCode()
 	{

@@ -62,7 +62,7 @@ public class GUIPrismSplash extends Frame
 			System.out.println("Error in media tracker");
 		}
 
-		SplashWindow splashWindow = new SplashWindow(this, image);
+		new SplashWindow(this, image);
 	}
 
 	//Thanks to http://www.javapractices.com/Topic149.cjp for the SplashWindow class

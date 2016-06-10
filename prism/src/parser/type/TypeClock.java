@@ -28,48 +28,47 @@ package parser.type;
 
 import prism.PrismLangException;
 
-public class TypeClock extends Type 
+public class TypeClock extends Type
 {
 	private static TypeClock singleton;
-	
-	static
-	{
+
+	static {
 		singleton = new TypeClock();
 	}
-	
+
 	private TypeClock()
-	{		
-	}	
-	
+	{
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeClock);
 	}
-	
+
 	@Override
 	public String getTypeString()
 	{
 		return "clock";
 	}
-	
+
 	@Override
 	public Object defaultValue()
 	{
 		return new Double(0.0);
 	}
-	
+
 	public static TypeClock getInstance()
 	{
 		return singleton;
 	}
-	
+
 	@Override
 	public boolean canAssign(Type type)
 	{
 		return (type instanceof TypeClock);
 	}
-	
+
 	@Override
 	public Double castValueTo(Object value) throws PrismLangException
 	{

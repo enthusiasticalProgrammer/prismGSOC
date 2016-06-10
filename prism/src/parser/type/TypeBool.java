@@ -28,48 +28,47 @@ package parser.type;
 
 import prism.PrismLangException;
 
-public class TypeBool extends Type 
+public class TypeBool extends Type
 {
 	private static TypeBool singleton;
-	
-	static
-	{
+
+	static {
 		singleton = new TypeBool();
-	}	
-	
-	private TypeBool()
-	{		
 	}
-	
+
+	private TypeBool()
+	{
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeBool);
 	}
-	
+
 	@Override
 	public String getTypeString()
 	{
 		return "bool";
 	}
-	
+
 	@Override
 	public Object defaultValue()
 	{
 		return new Boolean(false);
 	}
-	
+
 	public static TypeBool getInstance()
 	{
 		return singleton;
 	}
-	
+
 	@Override
 	public boolean canAssign(Type type)
 	{
 		return (type instanceof TypeBool);
 	}
-	
+
 	@Override
 	public Boolean castValueTo(Object value) throws PrismLangException
 	{

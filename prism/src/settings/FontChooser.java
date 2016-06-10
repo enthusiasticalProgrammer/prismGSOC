@@ -67,11 +67,11 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 	}
 
 	public static FontColorPair getFont(Frame parent, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
-    {
-    	return getFontBackend(getFontChooser(parent),startFont, startColor, defaultFont, defaultColor);
-    }
+	{
+		return getFontBackend(getFontChooser(parent), startFont, startColor, defaultFont, defaultColor);
+	}
 
-    @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private static FontColorPair getFontBackend(FontChooser choose, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
 	{
 
@@ -107,10 +107,8 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String[] allFonts = ge.getAvailableFontFamilyNames();
 		//Font[]allFonts = ge.getAllFonts();
-        String [] styles =
-        { "Plain", "Bold", "Italic", "Bold Italic" };
-        String [] sizes =
-        { "8","9","10","11","12","14","16","18","20" };
+		String[] styles = { "Plain", "Bold", "Italic", "Bold Italic" };
+		String[] sizes = { "8", "9", "10", "11", "12", "14", "16", "18", "20" };
 
 		DefaultComboBoxModel fontModel = new DefaultComboBoxModel(allFonts);
 		DefaultComboBoxModel styleModel = new DefaultComboBoxModel(styles);
@@ -350,7 +348,8 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 
 		jPanel60.setLayout(new java.awt.BorderLayout());
 
-        jPanel60.setBorder(new javax.swing.border.TitledBorder(null, "Preview", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12)));
+		jPanel60.setBorder(new javax.swing.border.TitledBorder(null, "Preview", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12)));
 		previewLabel.setBackground(new java.awt.Color(255, 255, 255));
 		previewLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		previewLabel.setText("AaBbCcDdEeFf123456789!\"\u00a3$%^");
@@ -419,19 +418,16 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		new FontChooser(new javax.swing.JFrame()).show();
 	}
 
-    @Override
+	@Override
 	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e)
-    {
-		if(e.getSource() == fontBox)
-		{
-		    String str = fontBox.getText();
-		    for(int i = 0; i < fontList.getModel().getSize(); i++)
-		    {
+	{
+		if (e.getSource() == fontBox) {
+			String str = fontBox.getText();
+			for (int i = 0; i < fontList.getModel().getSize(); i++) {
 				String listStr = ((String) fontList.getModel().getElementAt(i)).toLowerCase();
 
-                if(listStr.startsWith(str.toLowerCase()))
-                {
+				if (listStr.startsWith(str.toLowerCase())) {
 					Object value = fontList.getModel().getElementAt(i);
 					fontList.setSelectedValue(value, true);
 					break;

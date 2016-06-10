@@ -37,6 +37,7 @@ import explicit.rewards.StateRewardsArray;
 import parser.ast.*;
 import parser.type.*;
 import prism.*;
+
 /**
  * Explicit-state model checker for continuous-time Markov chains (CTMCs).
  * This uses various bits of functionality of DTMCModelChecker, so we inherit from that.
@@ -51,7 +52,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		super(parent);
 	}
-	
+
 	// Model checking functions
 
 	@Override
@@ -72,7 +73,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// Now, we construct embedded DTMC and do the plain LTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().checkProbPathFormulaLTL(dtmcEmb, expr, qual, minMax, statesOfInterest);
 	}
 
@@ -95,11 +96,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 		// Construct embedded DTMC (and convert rewards for it) and do remaining computation
 		// on that with the "pure" cosafety LTL formula
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		int n = model.getNumStates();
 		StateRewardsArray rewEmb = new StateRewardsArray(n);
 		for (int i = 0; i < n; i++) {
-			rewEmb.setStateReward(i, ((MCRewards) modelRewards).getStateReward(i) / ((CTMC)model).getExitRate(i));
+			rewEmb.setStateReward(i, ((MCRewards) modelRewards).getStateReward(i) / ((CTMC) model).getExitRate(i));
 		}
 		return createDTMCModelChecker().checkRewardCoSafeLTL(dtmcEmb, rewEmb, expr, minMax, statesOfInterest);
 	}
@@ -122,7 +123,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// Now, we construct embedded DTMC and do the plain E[ LTL ] computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().checkExistsLTL(dtmcEmb, expr, statesOfInterest);
 	}
 
@@ -326,7 +327,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 		DTMC dtmcEmb = ctmc.getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeUntilProbs(dtmcEmb, remain, target);
 	}
-	
+
 	/**
 	 * @param dtmc The DTMC
 	 * @param target Target states
@@ -551,7 +552,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt,1e-300, 1e+300, acc);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
@@ -565,7 +566,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// modify the poisson probabilities to what we need for this computation
 		// first make the kth value equal to the sum of the values for 0...k
-		for (i = left+1; i <= right; i++) {
+		for (i = left + 1; i <= right; i++) {
 			weights[i - left] += weights[i - 1 - left];
 		}
 		// then subtract from 1 and divide by uniformisation constant (q) to give mixed poisson probabilities
@@ -881,7 +882,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	}
 
 	// Utility methods
-	
+
 	/**
 	 * Create a new DTMC model checker with the same settings as this one. 
 	 */
@@ -906,7 +907,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsNext(dtmcEmb, target, statesOfInterest);
 	}
 
@@ -915,7 +916,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeForAllNext(dtmcEmb, target, statesOfInterest);
 	}
 
@@ -924,7 +925,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsUntil(dtmcEmb, A, B);
 	}
 
@@ -933,7 +934,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsGlobally(dtmcEmb, A);
 	}
 
@@ -942,7 +943,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsRelease(dtmcEmb, A, B);
 	}
 

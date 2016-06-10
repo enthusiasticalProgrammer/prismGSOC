@@ -68,7 +68,7 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 	 * @param productModel the product model
 	 * @param originalModel the original model
 	 */
-	public Product(@NonNull M productModel,@NonNull M originalModel)
+	public Product(@NonNull M productModel, @NonNull M originalModel)
 	{
 		this.originalModel = originalModel;
 		this.productModel = productModel;

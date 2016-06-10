@@ -470,7 +470,7 @@ public class GenerateSimulationPath
 		boolean done;
 
 		// Print details
-		if(simPathType==PathType.SIM_PATH_DEADLOCK){
+		if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 			mainLog.println("\nGenerating random path(s) until deadlock state...");
 		}
 
@@ -487,7 +487,7 @@ public class GenerateSimulationPath
 				engine.automaticTransition();
 				i++;
 				// Check for termination (depending on type)
-				if(simPathType==PathType.SIM_PATH_DEADLOCK){
+				if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 					if (engine.queryIsDeadlock() || i >= maxPathLength)
 						done = true;
 					break;

@@ -104,9 +104,7 @@ public class RemoteHandler
 			errorGobbler.interrupt();
 			return exitVal;
 
-		}
-		catch(IOException t)
-		{
+		} catch (IOException t) {
 			t.printStackTrace();
 			return -1;
 		}

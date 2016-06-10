@@ -43,8 +43,7 @@ public class JDDNode
 
 	protected static native long DDN_GetElse(long dd);
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("jdd");
 		} catch (UnsatisfiedLinkError e) {
@@ -125,7 +124,7 @@ public class JDDNode
 		// just return the node, even if DebugJDD is enabled
 		// DDN_GetElse will return NULL if the current node is a
 		// constant, raising an Exception in the JDDNode constructor
- 		return new JDDNode(DDN_GetElse(ptr));
+		return new JDDNode(DDN_GetElse(ptr));
 	}
 
 	@Override

@@ -178,14 +178,12 @@ public class PrismXYSeries extends XYSeries
 			int indexS = super.indexOf(item.getX());
 
 			/* If in discarded items, then remove and return this. */
-			if (indexD >= 0)
-			{
+			if (indexD >= 0) {
 				discardedItems.remove(indexD);
 			}
 
 			/* If in main items, then remove and return this. (Should not be both in discarded and main items) */
-			if (indexS >= 0)
-			{
+			if (indexS >= 0) {
 				super.remove(indexS);
 			}
 

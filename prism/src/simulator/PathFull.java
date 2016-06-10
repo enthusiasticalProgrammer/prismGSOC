@@ -122,7 +122,6 @@ public class PathFull extends Path implements PathFullInfo
 		addStep(0.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList, stratState);
 	}
 
-
 	@Override
 	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
 			double[] newStateRewards, TransitionList transitionList)
@@ -473,7 +472,7 @@ public class PathFull extends Path implements PathFullInfo
 
 	public Object getStrategyState(long step)
 	{
-		return steps.get((int)step).stratState;
+		return steps.get((int) step).stratState;
 	}
 
 	// Other methods

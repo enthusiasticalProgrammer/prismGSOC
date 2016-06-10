@@ -2890,13 +2890,13 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				// if implement strategy option is enabled, build a product with
 				// strategy before model checking
 				if (getSettings().getBoolean(PrismSettings.PRISM_IMPLEMENT_STRATEGY) && strategy != null) {
-					if(currentModelExpl != null){
+					if (currentModelExpl != null) {
 						currentModelExpl = strategy.buildProduct(currentModelExpl);
 					}
 					currentModelType = currentModelExpl.getModelType();
 				}
 				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
-					res = mc.check( currentModelExpl, prop.getExpression());
+				res = mc.check(currentModelExpl, prop.getExpression());
 
 				// saving strategy if it was generated.
 				if (settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY)) {

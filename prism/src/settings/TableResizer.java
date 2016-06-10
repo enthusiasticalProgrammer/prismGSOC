@@ -68,7 +68,6 @@ public class TableResizer extends MouseInputAdapter
 	}
 
 	@Override
-    @Override
 	public void mouseMoved(MouseEvent e)
 	{
 		Point p = e.getPoint();

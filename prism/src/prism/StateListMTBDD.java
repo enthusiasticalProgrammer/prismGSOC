@@ -247,11 +247,15 @@ public class StateListMTBDD implements StateList
 			case NORMAL:
 				outputLog.print(n + ":(");
 				break;
-			case MATLAB:
-				break;
 			case DOT:
 				outputLog.print(n + " [label=\"" + n + "\\n(");
 				break;
+			case MATLAB:
+				break;
+			case STRINGS:
+				break;
+			default:
+				throw new AssertionError();
 			}
 			j = varList.getNumVars();
 			varsString = "";

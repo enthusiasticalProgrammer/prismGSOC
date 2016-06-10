@@ -166,7 +166,8 @@ public class ConstructRewards
 								if (mdpAction == null ? (action.isEmpty()) : mdpAction.equals(action)) {
 									double rew = rewStr.getReward(i).evaluateDouble(constantValues, statesList.get(state));
 									if (Double.isNaN(rew))
-										throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(state), rewStr.getReward(i));
+										throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(state),
+												rewStr.getReward(i));
 									rewSimple.addToTransitionReward(state, choice, rew);
 								}
 							}

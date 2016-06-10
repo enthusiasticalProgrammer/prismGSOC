@@ -35,7 +35,7 @@ public class GUIPrismFileFilter extends FileFilter
 {
 	private String name;
 	private Vector<String> exts;
-	
+
 	public GUIPrismFileFilter()
 	{
 		name = "";
@@ -62,7 +62,7 @@ public class GUIPrismFileFilter extends FileFilter
 	public boolean accept(File f)
 	{
 		String ext;
-		
+
 		if (f.isDirectory()) {
 			return true;
 		}
@@ -74,22 +74,23 @@ public class GUIPrismFileFilter extends FileFilter
 
 		return false;
 	}
-    
+
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return name;
 	}
 
 	public static String getFileExtension(File f)
 	{
- 		String ext = null;
+		String ext = null;
 		String s = f.getName();
 		int i = s.lastIndexOf('.');
 
 		if (i > 0 && i < s.length() - 1) {
-			ext = s.substring(i+1).toLowerCase();
+			ext = s.substring(i + 1).toLowerCase();
 		}
-		
+
 		return ext;
 	}
 }

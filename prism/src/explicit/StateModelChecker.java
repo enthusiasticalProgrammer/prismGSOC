@@ -441,7 +441,7 @@ public class StateModelChecker extends PrismComponent
 	public Result check(Model model, Expression expr) throws PrismException
 	{
 
-		if(model == null){
+		if (model == null) {
 			throw new NullPointerException();
 		}
 		ExpressionFilter exprFilter = null;
@@ -1242,7 +1242,8 @@ public class StateModelChecker extends PrismComponent
 	 * are put into the list {@code propBSs}, which should be empty when this function is called.
 	 * The names of the labels (L0, L1, etc. by default) are put into {@code propNames}, which should also be empty. 
 	 */
-	public Expression checkMaximalPropositionalFormulas(@NonNull Model model, Expression expr, List<String> propNames, List<BitSet> propBSs) throws PrismException
+	public Expression checkMaximalPropositionalFormulas(@NonNull Model model, Expression expr, List<String> propNames, List<BitSet> propBSs)
+			throws PrismException
 	{
 		Expression exprNew = (Expression) expr.accept(new CheckMaximalPropositionalFormulas(this, model, propNames, propBSs));
 		return exprNew;
@@ -1259,7 +1260,7 @@ public class StateModelChecker extends PrismComponent
 		private List<String> propNames;
 		private List<BitSet> propBSs;
 
-		public CheckMaximalPropositionalFormulas(StateModelChecker mc,@NonNull Model model, List<String> propNames, List<BitSet> propBSs)
+		public CheckMaximalPropositionalFormulas(StateModelChecker mc, @NonNull Model model, List<String> propNames, List<BitSet> propBSs)
 		{
 			this.mc = mc;
 			this.model = model;
@@ -1472,7 +1473,7 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public void exportLabels(Model model, List<String> labelNames, int exportType, PrismLog out) throws PrismException
 	{
-		if(model == null)
+		if (model == null)
 			throw new NullPointerException();
 		List<BitSet> labels = new ArrayList<BitSet>();
 		for (String labelName : labelNames) {

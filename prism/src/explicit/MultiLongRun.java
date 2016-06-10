@@ -91,7 +91,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.xOffsetArr = computeXOffsets();
 		this.yOffsetArr = computeYOffsets();
 		this.zIndex = computeZOffsets();
-		this.solver=initialiseSolver();
+		this.solver = initialiseSolver();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
@@ -104,14 +104,14 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private @NonNull SolverProxyInterface initialiseSolver() throws PrismException
 	{
-		SolverProxyInterface result=null;
+		SolverProxyInterface result = null;
 		try { //below Class.forName throws exception if the required jar is not present
 			if (method.equals("Linear programming")) {
 				//create new solver
-				result = new LpSolverProxy(zIndex[this.getMaxMECState()]+(1<<getN()), 0);
+				result = new LpSolverProxy(zIndex[this.getMaxMECState()] + (1 << getN()), 0);
 			} else if (method.equals("Gurobi")) {
 				Class<?> cl = Class.forName("solvers.GurobiProxy");
-				result = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(zIndex[this.getMaxMECState()]+(1<<getN()), 0);
+				result = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(zIndex[this.getMaxMECState()] + (1 << getN()), 0);
 			} else
 				throw new UnsupportedOperationException("The given method for solving LP programs is not supported: " + method);
 		} catch (ClassNotFoundException ex) {
@@ -132,9 +132,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 					+ "It appears that the JAR file is present, but there is some problem, because the exception of type " + e.getClass().toString()
 					+ " was thrown. Message: " + e.getMessage());
 		}
-		if(result!= null){
+		if (result != null) {
 			return result;
-		}else{
+		} else {
 			throw new NullPointerException("Unfortunately the LP-solver initialised to null.");
 		}
 	}

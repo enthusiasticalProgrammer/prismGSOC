@@ -1,4 +1,5 @@
 //==============================================================================
+
 //	
 //	Copyright (c) 2002-
 //	Authors:
@@ -25,7 +26,6 @@
 //==============================================================================
 
 package userinterface.simulator.networking;
-
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -47,10 +47,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 {
 	private SimulatorNetworkHandler network;
 	private File netFile;
-	private SimulatorEngine simulator;
 
 	//The job to be done
 	private boolean isExperiment;
+	private SimulatorEngine simulator;
 	private GUIMultiProperties properties;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
@@ -60,6 +60,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private UndefinedConstants undefinedConstants;
 	private Thread experimentThread;
 	private Expression experimentFormula;
+
 	private boolean cancelled = false;
 
 	private ArrayList propertyValues = null;
@@ -165,12 +166,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//write a summary for the summary box
 		StringBuffer summary = new StringBuffer("");
 		summary.append("Verifying " + props.size() + ((props.size() == 1) ? (" property:\n") : (" properties:\n")));
-		String constantsStr = "";
 		for (int i = 0; i < props.size(); i++) {
 			if (props.get(i) instanceof GUIProperty) {
 				GUIProperty form = (GUIProperty) props.get(i);
 				summary.append("\t" + form.getProperty().toString() + "\n");
-				constantsStr = form.getConstantsString();
 			} else {
 				summary.append("form" + props.get(i).getClass().toString());
 			}
@@ -589,7 +588,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			loadNetworkProfile(netFile);
 			doHostTable();
 		} catch (PrismException e) {
-			//TODO something
+			System.out.println("The following exception occurred: " + e);
+			System.out.println("We proceed with fingers crossed");
 		}
 	}//GEN-LAST:event_editButtonActionPerformed
 
@@ -653,7 +653,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("ewrewoioewrrew" + e.getMessage());//TODO show dialog
+				System.out.println("The following exception occurred: " + e.getMessage());//TODO show dialog
 			}
 		} else {
 			try {
@@ -839,7 +839,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 
 		@Override
-		@Override
 		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());
@@ -869,9 +868,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				}
 				g.setColor(Color.black);
 				g.setFont(new Font(fname, Font.PLAIN, fsize));
-			}
-			catch(BadLocationException ex)
-			{
+			} catch (BadLocationException ex) {
 			}
 			return x;
 		}
@@ -885,14 +882,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), Math.max(0, (p1 - p0 - 1)));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = summaryText.getFont().getName();
 				int fsize = summaryText.getFont().getSize();
 

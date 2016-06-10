@@ -44,7 +44,7 @@ public class LoadPRISMModelThread extends Thread
 	private GUITextModelEditor textEdit;
 	private boolean replace;
 	private Exception ex;
-s
+
 	/** Creates a new instance of LoadPRISMModelThread */
 	public LoadPRISMModelThread(GUIMultiModelHandler handler, GUIModelEditor edit, File f, boolean reload)
 	{
@@ -71,6 +71,9 @@ s
 		try {
 			//notify interface of start of computation and start the read into textEdit
 			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
 			{
 				@Override
 				public void run()

@@ -254,7 +254,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		//System.out.println("executable = "+executable.toString());
 
 		setState(SENDING_FILES);
-		int result = 0;
 		try {
 			String[] parameters = { "-p", "bin/" + SimulatorNetworkHandler.EXECUTABLE, //to-do proper classpath
 					getUserName() + "@" + getHostName() + ":" + owner.getInputDir() };
@@ -285,8 +284,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		noDoneThisStint = 0;
 
 		setState(RUNNING);
-		if(doFeedback || resultsFeedback)
-		{
+		if (doFeedback || resultsFeedback) {
 			if (resultsFeedback)
 				feedbackResults = "feedbackResultsFile" + System.currentTimeMillis() + ".txt";
 			feedbackThread = new StintFeedbackThread(doFeedback, resultsFeedback);
@@ -572,27 +570,23 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						// do the scp call
 						SSHHandler.scp(getUserName(), getHostName(), parameters);
 
-						BufferedReader reader =null;
-						try
-						{
+						BufferedReader reader = null;
+						try {
 
 							reader = new BufferedReader(new FileReader(localFeedback));
 
 							owner.notifyChange(instance);
 						} catch (FileNotFoundException ee) {
 							//System.out.println("filenotfoundexception");
-						}
-						catch(NumberFormatException ee)
-						{
+						} catch (NumberFormatException ee) {
 							//System.out.println("numberformatexception");
-						}finally{
+						} finally {
 							try {
 								reader.close();
 							} catch (IOException e) {
-								throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+								throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 						}
 						}
-						
 
 					}
 

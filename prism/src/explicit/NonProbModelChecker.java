@@ -246,7 +246,8 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param exprB the expression for 'b'
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ a U b ]
 	 */
-	protected StateValues checkExistsUntil(@NonNull Model model, Expression exprA, Expression exprB) throws PrismException {
+	protected StateValues checkExistsUntil(@NonNull Model model, Expression exprA, Expression exprB) throws PrismException
+	{
 		// the set of states satisfying exprA
 		BitSet A = checkExpression(model, exprA, null).getBitSet();
 		// the set of states satisfying exprB

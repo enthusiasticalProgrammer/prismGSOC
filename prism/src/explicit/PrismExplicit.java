@@ -70,7 +70,8 @@ public class PrismExplicit extends PrismComponent
 	public @NonNull Model buildModel(ModulesFile modulesFile, ModelGenerator simEngine) throws PrismException
 	{
 		long l; // timer
-		@NonNull Model modelExpl;
+		@NonNull
+		Model modelExpl;
 		ConstructModel constructModel;
 
 		if (modulesFile.getModelType() == ModelType.PTA) {

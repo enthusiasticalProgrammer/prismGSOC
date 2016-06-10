@@ -704,15 +704,12 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 						vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 						if (inTreeDec.getDeclType() instanceof DeclarationInt) {
 							DeclarationInt dt = (DeclarationInt) inTreeDec.getDeclType();
-                        vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
+							vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 							vNode.setMin(dt.getLow());
 							vNode.setMax(dt.getHigh());
-                        theModel.nodesChanged(vNode, new int []
-                        {0,1,2});
+							theModel.nodesChanged(vNode, new int[] { 0, 1, 2 });
 						}
-					}
-                    else if(dNode instanceof BoolNode)
-                    {
+					} else if (dNode instanceof BoolNode) {
 						BoolNode bNode = (BoolNode) dNode;
 						bNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 						theModel.nodesChanged(bNode, new int[] { 0 });
@@ -3228,7 +3225,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 
 	}
-
 
 	//Cell edit for ExpressionNode
 	class ExpressionEditor extends JTextField implements TreeCellEditor

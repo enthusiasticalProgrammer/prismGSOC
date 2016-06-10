@@ -83,12 +83,12 @@ public class DRA<Symbol>
 	{
 		this.apList = apList;
 	}
-	
+
 	public List<String> getAPList()
 	{
 		return apList;
 	}
-	
+
 	// Mutators
 
 	/**
@@ -241,7 +241,7 @@ public class DRA<Symbol>
 		s += size + " states (start " + start + ")";
 		if (apList != null)
 			s += ", " + apList.size() + " labels";
- 		s += ":";
+		s += ":";
 		for (i = 0; i < size; i++) {
 			for (Edge e : edges.get(i)) {
 				s += " " + i + "-" + e.label + "->" + e.dest;

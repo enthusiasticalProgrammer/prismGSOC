@@ -324,7 +324,7 @@ public class SimulatorEngine extends PrismComponent
 		case DTMC:
 		case MDP:
 			// Pick a random choice
-			i = (int) (Math.random()*numChoices);
+			i = (int) (Math.random() * numChoices);
 			choice = transitions.getChoice(i);
 			// Pick a random transition from this choice
 			d = Math.random();
@@ -336,7 +336,7 @@ public class SimulatorEngine extends PrismComponent
 			// Get sum of all rates
 			r = transitions.getProbabilitySum();
 			// Pick a random number to determine choice/transition
-			d = Math.random()*r;
+			d = Math.random() * r;
 			TransitionList.Ref ref = transitions.new Ref();
 			transitions.getChoiceIndexByProbabilitySum(d, ref);
 			// Execute
@@ -503,7 +503,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForCurrentState() throws PrismException
 	{
-		this.transitionList=updater.calculateTransitions(path.getCurrentState(), transitionList);
+		this.transitionList = updater.calculateTransitions(path.getCurrentState(), transitionList);
 		transitionListBuilt = true;
 		transitionListState = null;
 	}

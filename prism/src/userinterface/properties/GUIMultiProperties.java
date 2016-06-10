@@ -145,7 +145,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	// State
 	private boolean modified;
 	private boolean computing;
-	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification, exportLabelsAfterReceiveParseNotification;
+	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification,
+			exportLabelsAfterReceiveParseNotification;
 	private PropertiesFile parsedProperties;
 	private ArrayList<GUIProperty> propertiesToBeVerified;
 	private File activeFile;
@@ -168,8 +169,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	private JTextField fileTextField;
 	private Action newProps, openProps, saveProps, savePropsAs, insertProps, verifySelected, newProperty, editProperty, newConstant, removeConstant, newLabel,
 			removeLabel, newExperiment, deleteExperiment, stopExperiment, parametric, viewResults, plotResults, exportResultsListText, exportResultsListCSV,
-			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab,exportStratProduct, exportStratPlain, strategyInfo, generateStrategy,
-			implementStrategy, importStrategy, strategyExperiment;
+			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab, exportStratProduct, exportStratPlain,
+			strategyInfo, generateStrategy, implementStrategy, importStrategy, strategyExperiment;
 
 	private JMenu strategiesMenu;
 
@@ -968,7 +969,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				}
-			}
+		}
 
 		// For a single property with a displayable counterexample, offer to do show it
 		if (selected.length == 1) {
@@ -1326,7 +1327,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		}
 
 		// creating filters
-		GUIPrismFileFilter filter =new GUIPrismFileFilter("Explicit representation *.adv file");
+		GUIPrismFileFilter filter = new GUIPrismFileFilter("Explicit representation *.adv file");
 		filter.addExtension("adv");
 
 		// choosing file and exporting
@@ -1350,7 +1351,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			JOptionPane.showMessageDialog(this, "No model in memory, please build the model first.", "Cannot import", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		// creating filters
 		GUIPrismFileFilter[] filters = new GUIPrismFileFilter[1];
 		filters[0] = new GUIPrismFileFilter("Explicit representation *.adv file");
@@ -1361,14 +1362,14 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			final File file = getChooserFile();
 			//	 set strategies everywhere
 			try {
-				 getPrism().setStrategy(Strategies.loadStrategyFromFile(file.getAbsolutePath()));
+				getPrism().setStrategy(Strategies.loadStrategyFromFile(file.getAbsolutePath()));
 			} catch (IllegalArgumentException error) {
 				JOptionPane.showMessageDialog(this, "Problem reading the file", "Cannot import", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			simulator.setStrategyGenerated(true);
 			simulator.setStrategy(getPrism().getStrategy());
-			
+
 		}
 	}
 
@@ -1393,7 +1394,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		experimentAfterReceiveParseNotification = true;
 		notifyEventListeners(new GUIPropertiesEvent(GUIPropertiesEvent.REQUEST_MODEL_PARSE));
 	}
-	
+
 	//METHODS TO IMPLEMENT GUIPlugin INTERFACE
 
 	@Override
@@ -2018,12 +2019,12 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		// adding import menu
 		strategiesMenu.add(new JSeparator());
 		strategiesMenu.add(importStrategy);
-		
+
 		// adding export menu
 		strategiesMenu.add(new JSeparator());
 		strategiesMenu.add(exportStratPlain);
 		strategiesMenu.add(exportStratProduct);
-		
+
 		//		JMenu stratExportMenu = new JMenu("Export strategy");
 		//		stratExportMenu.setIcon(GUIPrism.getIconFromImage("smallExport.png"));
 		//		stratExportMenu.add(exportStratPlain);
@@ -2487,7 +2488,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
+
 				a_strategyExperimentSelected();
 			}
 		};
@@ -2495,7 +2496,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		strategyExperiment.putValue(Action.NAME, "Perform experiment under strategy");
 		strategyExperiment.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExperiment.png"));
 
-		
 		exportStratProduct = new AbstractAction()
 		{
 			@Override

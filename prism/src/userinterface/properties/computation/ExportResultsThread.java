@@ -107,7 +107,7 @@ public class ExportResultsThread extends Thread
 			}
 			out.flush();
 			out.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				@Override

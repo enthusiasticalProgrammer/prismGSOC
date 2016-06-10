@@ -62,7 +62,6 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 
 	private Vector fileSystems;
 
-
 	/** Creates a new instance of SimulatorNetworkHandler */
 	public SimulatorNetworkHandler()
 	{

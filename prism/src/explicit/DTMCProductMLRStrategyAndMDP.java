@@ -169,9 +169,9 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	@Override
 	public int getNumTransitions()
 	{
-		int result=0;
-		for(int state=0;state<getNumStates();state++){
-			result+=getNumTransitions(state);
+		int result = 0;
+		for (int state = 0; state < getNumStates(); state++) {
+			result += getNumTransitions(state);
 		}
 		return result;
 	}
@@ -374,7 +374,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 
 		Distribution oneTransitionMove = new Distribution();
 		for (Integer key : oneActionMove.getSupport()) {
-			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state/this.getNumStrategies(), key);
+			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state / this.getNumStrategies(), key);
 			while (iterator.hasNext()) {
 				Entry<Integer, Double> entry = iterator.next();
 				oneTransitionMove.add(entry.getKey(), entry.getValue() * oneActionMove.get(key));

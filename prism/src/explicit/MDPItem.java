@@ -14,29 +14,31 @@ abstract class MDPItem
 {
 	final @NonNull MDPReward reward; //use also min/max ....
 	final prism.Operator operator;
-	
-	MDPItem(@NonNull MDPReward reward, prism.Operator operator){
-		this.reward=reward;
-		this.operator=operator;
+
+	MDPItem(@NonNull MDPReward reward, prism.Operator operator)
+	{
+		this.reward = reward;
+		this.operator = operator;
 	}
-	
+
 	@Override
-	public boolean equals(Object object){
-		if(object==null || object.getClass()!=this.getClass()){
+	public boolean equals(Object object)
+	{
+		if (object == null || object.getClass() != this.getClass()) {
 			return false;
 		}
-		MDPItem that=(MDPConstraint) object;
-		if(!this.reward.equals(that.reward))
+		MDPItem that = (MDPConstraint) object;
+		if (!this.reward.equals(that.reward))
 			return false;
-		if(!this.operator.equals(that.operator)){
+		if (!this.operator.equals(that.operator)) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
-		return 17*reward.hashCode()+19*operator.hashCode();
+		return 17 * reward.hashCode() + 19 * operator.hashCode();
 	}
 }

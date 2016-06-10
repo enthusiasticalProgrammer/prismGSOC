@@ -204,7 +204,7 @@ public class XiNStrategy implements Strategy
 			}
 		}
 		//epsilonDouble is important in case sumX is zero
-		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon+PrismUtils.epsilonDouble;
+		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon + PrismUtils.epsilonDouble;
 	}
 
 	/**

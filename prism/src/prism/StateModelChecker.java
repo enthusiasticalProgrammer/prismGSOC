@@ -167,7 +167,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 		StateModelChecker mc = null;
 		switch (modelType) {
 		case DTMC:
-				mc = new ProbModelChecker(prism, model, propertiesFile);
+			mc = new ProbModelChecker(prism, model, propertiesFile);
 			break;
 		case MDP:
 			mc = new NondetModelChecker(prism, model, propertiesFile);

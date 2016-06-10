@@ -340,7 +340,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		doChoiceBox();
 	}
 
-
 	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
@@ -455,7 +454,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				for (int i = 0; i < settings.size(); i++) {
 					if (settings.get(i) instanceof Setting) {
 						Setting setting = (Setting) settings.get(i);
-						if(i == 0)first = setting;
+						if (i == 0)
+							first = setting;
 						values.add(setting.getValue());
 					}
 				}
@@ -572,7 +572,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				SettingOwner po = (SettingOwner) it.next();
 				if (last == null) {
 					//this is the first group
-					if(!po.getSettingOwnerName().equals(""))ownerList += "\'"+po.getSettingOwnerName()+"\'";
+					if (!po.getSettingOwnerName().equals(""))
+						ownerList += "\'" + po.getSettingOwnerName() + "\'";
 					tempName = po.getSettingOwnerClassName();
 					//groupStarts.add(new Integer(0));
 				} else if (po.getSettingOwnerID() == last.getSettingOwnerID()) {
@@ -620,7 +621,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			return groupNames.size();
 		}
 
-		@Override
 		@Override
 		public int getRowCount()
 		{

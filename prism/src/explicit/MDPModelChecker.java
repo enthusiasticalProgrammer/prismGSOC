@@ -72,10 +72,9 @@ public class MDPModelChecker extends ProbModelChecker
 
 	// Model checking functions
 
-	
-
 	@Override
-	protected StateValues checkProbPathFormulaLTL(@NonNull Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbPathFormulaLTL(@NonNull Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct, probs;
@@ -153,7 +152,8 @@ public class MDPModelChecker extends ProbModelChecker
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	@Override
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MDPReward productRewards;
@@ -1750,10 +1750,12 @@ public class MDPModelChecker extends ProbModelChecker
 			strat[s] = -3;
 		}
 	}
-	
+
 	@Override
-	protected  MultiLongRun getMultiLongRunMDP(@NonNull Model model,@NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
-			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method) throws PrismException{
+	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
+			@NonNull String method) throws PrismException
+	{
 		return new MultiLongRunMDP((MDP) model, constraints, objectives, expConstraints, method);
 	}
 

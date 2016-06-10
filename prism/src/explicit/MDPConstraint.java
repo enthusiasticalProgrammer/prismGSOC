@@ -5,7 +5,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import explicit.rewards.MDPReward;
 import prism.Operator;
 
-
 class MDPConstraint extends MDPExpectationConstraint
 {
 	final double probability;

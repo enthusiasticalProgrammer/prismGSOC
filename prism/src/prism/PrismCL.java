@@ -1127,11 +1127,9 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("testall")) {
 					test = true;
 					testExitsOnFail = false;
-				}
-				else if (sw.equals("dddebug")) {
+				} else if (sw.equals("dddebug")) {
 					jdd.DebugJDD.enable();
-				}
-				else if (sw.equals("ddtrace")) {
+				} else if (sw.equals("ddtrace")) {
 					if (i < args.length - 1) {
 						String idString = args[++i];
 						try {
@@ -1669,7 +1667,7 @@ public class PrismCL implements PrismModelListener
 						errorAndExit("No file specified for -" + sw + " switch");
 					}
 				}
-				
+
 				// mtbdd construction method (hidden option)
 				else if (sw.equals("c1")) {
 					prism.setConstruction(1);
@@ -1735,7 +1733,7 @@ public class PrismCL implements PrismModelListener
 	private void processImportModelSwitch(String filesOptionsString) throws PrismException
 	{
 		// Split into files/options (on :)
-		String filesString=splitFilesAndOptions(filesOptionsString)[0];
+		String filesString = splitFilesAndOptions(filesOptionsString)[0];
 		// Split files into basename/extensions
 		int i = filesString.lastIndexOf('.');
 		if (i == -1)
@@ -1859,7 +1857,7 @@ public class PrismCL implements PrismModelListener
 			} else if (opt.equals("rows")) {
 				exportType = Prism.EXPORT_ROWS;
 			}
-			
+
 			// Unordered/ordered
 			else if (opt.equals("unordered")) {
 				exportordered = false;

@@ -145,8 +145,9 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public boolean equals(Object o){
-		if(o.getClass()!=this.getClass()){
+	public boolean equals(Object o)
+	{
+		if (o.getClass() != this.getClass()) {
 			return false;
 		}
 		EpsilonApproximationXiNStrategy other = (EpsilonApproximationXiNStrategy) o;

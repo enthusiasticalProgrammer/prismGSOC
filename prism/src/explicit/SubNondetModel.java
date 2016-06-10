@@ -412,7 +412,6 @@ public class SubNondetModel implements NondetModel
 		return succ.iterator();
 	}
 
-
 	@Override
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{

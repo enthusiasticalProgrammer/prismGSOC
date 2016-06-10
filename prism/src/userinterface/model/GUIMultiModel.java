@@ -289,7 +289,6 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 			handler.newGraphicModel();
 	}
 
-
 	protected void a_openModel()
 	{
 		int cont = doModificationCheck();

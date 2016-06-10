@@ -267,7 +267,7 @@ public class DRA extends DA
 		BitSet bitset, bitset2;
 		RabinAcceptance acc;
 		prism.DRA<BitSet> draNew;
-		
+
 		numLabels = getAPSize();
 		numStates = size();
 		draNew = new prism.DRA<BitSet>(numStates);
@@ -293,7 +293,7 @@ public class DRA extends DA
 			}
 		}
 		// Copy acceptance pairs
-		acc = acceptance(); 
+		acc = acceptance();
 		for (i = 0; i < acc.size(); i++) {
 			bitset = new BitSet();
 			bitset.or(acc.getAcceptance_U(i));
@@ -302,7 +302,7 @@ public class DRA extends DA
 			// Note: Pairs (U_i,L_i) become (L_i,K_i) in PRISM's notation
 			draNew.addAcceptancePair(bitset, bitset2);
 		}
-		
+
 		return draNew;
 	}
 }

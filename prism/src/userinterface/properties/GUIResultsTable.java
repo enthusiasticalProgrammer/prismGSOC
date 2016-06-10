@@ -38,7 +38,6 @@ public class GUIResultsTable extends javax.swing.JDialog
 {
 	private static int noOpen = 0;
 
-
 	private GUIExperiment exp;
 
 	private JPanel topPanel;

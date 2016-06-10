@@ -34,15 +34,16 @@ public class TestMultiLongRun
 	public ExpressionFunc e1;
 	public ExpressionFunc e2;
 	public ExpressionFunc e3;
-	
+
 	public ModulesFile modulesFile = null;
 	public PropertiesFile propertiesFile = null;
 	public PropertiesFile propertiesFile2 = null;
 	public PropertiesFile propertiesFile3 = null;
 
 	public StateValues infeasible;
-	
-	public TestMultiLongRun() throws PrismLangException{
+
+	public TestMultiLongRun() throws PrismLangException
+	{
 		setUp();
 	}
 
@@ -102,10 +103,12 @@ public class TestMultiLongRun
 	}
 
 	@Test
-	public void modelIsNotNull() throws PrismException{
+	public void modelIsNotNull() throws PrismException
+	{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
 		assertNotNull(ml11.model);
 	}
+
 	/**
 	 * To check that no exception occurs 
 	 * @throws PrismException 

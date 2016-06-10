@@ -71,7 +71,6 @@ import userinterface.util.GUIUndoManager;
 import userinterface.util.PropertyTable;
 import userinterface.util.PropertyTableModel;
 
-
 @SuppressWarnings("serial")
 public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 {
@@ -337,7 +336,6 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		theModel.notifyEventListeners(new GUIModelEvent(GUIModelEvent.NEW_LOAD_NOT_RELOAD_MODEL));
 	}
 
-
 	public void newGraphicModel()
 	{
 		activeFile = null;
@@ -374,7 +372,6 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	{
 		theModel.doEnables();
 	}
-
 
 	public void convertViewToGraphic()//dummy dummy dummy
 	{

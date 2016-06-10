@@ -93,13 +93,13 @@ public abstract class MDStrategy implements Strategy
 				out.println(s + ":" + getChoiceIndex(s));
 		}
 	}
-	
+
 	// Temp stubs
 
 	@Override
 	public void init(int state)
 	{
-		currentState=state;
+		currentState = state;
 	}
 
 	@Override

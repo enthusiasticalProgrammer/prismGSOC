@@ -214,7 +214,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
-		model.exportToDotFile(filename,mark);
+		model.exportToDotFile(filename, mark);
 	}
 
 	@Override
@@ -226,13 +226,13 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark)
 	{
-		model.exportToDotFile(out,mark);
+		model.exportToDotFile(out, mark);
 	}
 
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark, boolean showStates)
 	{
-		model.exportToDotFile(out,mark,showStates);
+		model.exportToDotFile(out, mark, showStates);
 	}
 
 	@Override
@@ -311,8 +311,8 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	public int getNumTransitions(int s, int i)
 	{
 		Iterator<Integer> successors = model.getSuccessorsIterator(s);
-		int result=0;
-		for(;successors.hasNext();successors.next()){
+		int result = 0;
+		for (; successors.hasNext(); successors.next()) {
 			result++;
 		}
 		return result;
@@ -322,9 +322,9 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{
 		Iterator<Integer> successors = model.getSuccessorsIterator(s);
-		while(successors.hasNext()){
-			Integer succ=successors.next();
-			if(!set.get(succ)){
+		while (successors.hasNext()) {
+			Integer succ = successors.next();
+			if (!set.get(succ)) {
 				return false;
 			}
 		}
@@ -335,9 +335,9 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	public boolean someSuccessorsInSet(int s, int i, BitSet set)
 	{
 		Iterator<Integer> successors = model.getSuccessorsIterator(s);
-		while(successors.hasNext()){
-			Integer succ=successors.next();
-			if(set.get(succ)){
+		while (successors.hasNext()) {
+			Integer succ = successors.next();
+			if (set.get(succ)) {
 				return true;
 			}
 		}
@@ -347,7 +347,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(int s, int i)
 	{
-		if(i!=0){
+		if (i != 0) {
 			throw new IllegalArgumentException();
 		}
 		return model.getSuccessorsIterator(s);

@@ -26,7 +26,7 @@ public class MultiLongRunMDP extends MultiLongRun<MDP>
 	{
 		return state;
 	}
-	
+
 	@Override
 	public @Nullable MultiLongRunStrategy getStrategy()
 	{
@@ -74,12 +74,12 @@ public class MultiLongRunMDP extends MultiLongRun<MDP>
 				}
 			}
 		}
-		double sumForNormalisation=0.0;
-		for(int i=0;i<inBetweenResult.length;sumForNormalisation+=inBetweenResult[i++])
+		double sumForNormalisation = 0.0;
+		for (int i = 0; i < inBetweenResult.length; sumForNormalisation += inBetweenResult[i++])
 			;
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i]/sumForNormalisation);
+			result.add(i, inBetweenResult[i] / sumForNormalisation);
 		}
 		return result;
 	}
@@ -106,7 +106,7 @@ public class MultiLongRunMDP extends MultiLongRun<MDP>
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action)
 	{

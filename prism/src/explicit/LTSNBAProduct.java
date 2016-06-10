@@ -119,7 +119,7 @@ public class LTSNBAProduct extends Product<Model>
 	private BitSet acceptingStates;
 
 	/** Constructor for storing the product */
-	private LTSNBAProduct(@NonNull LTS productModel,@NonNull Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
+	private LTSNBAProduct(@NonNull LTS productModel, @NonNull Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
 	{
 		super(productModel, originalModel);
 		this.productStates = productStates;

@@ -52,8 +52,11 @@ public class JDD
 	private static native void DD_SetCUDDEpsilon(double epsilon);
 
 	private static native void DD_CloseDownCUDD(boolean check);
+
 	private static native void DD_Ref(long dd);
+
 	private static native void DD_Deref(long dd);
+
 	private static native void DD_PrintCacheInfo();
 
 	private static native boolean DD_GetErrorFlag();
@@ -165,7 +168,10 @@ public class JDD
 	private static native long DD_SetVectorElement(long dd, long vars, int num_vars, long index, double value);
 
 	private static native long DD_SetMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long rindex, long cindex, double value);
-	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex, long cindex, long lindex, double value);
+
+	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex,
+			long cindex, long lindex, double value);
+
 	private static native double DD_GetVectorElement(long dd, long vars, int num_vars, long index);
 
 	private static native long DD_Identity(long rvars, long cvars, int num_vars);
@@ -186,7 +192,10 @@ public class JDD
 	private static native void DD_ExportDDToDotFileLabelled(long dd, String filename, List<String> var_names);
 
 	private static native void DD_ExportMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String filename);
-	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars, String filename);
+
+	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars,
+			String filename);
+
 	private static native void DD_ExportMatrixToMatlabFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String name, String filename);
 
 	private static native void DD_ExportMatrixToSpyFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, int depth, String filename);
@@ -199,7 +208,8 @@ public class JDD
 	 * DD methods. It is generally not safe to use the CUDD library after this error occurred,
 	 * so the program should quit as soon as feasible.
 	 */
-	public static class CuddOutOfMemoryException extends RuntimeException {
+	public static class CuddOutOfMemoryException extends RuntimeException
+	{
 		private static final long serialVersionUID = -3094099053041270477L;
 
 		/** Constructor */
@@ -1018,8 +1028,7 @@ public class JDD
 		minterms = GetNumMinterms(dd, num_vars);
 		if (minterms <= Long.MAX_VALUE) {
 			return "" + (long) minterms;
-		}
-		else {
+		} else {
 			return "" + minterms;
 		}
 	}
@@ -1047,8 +1056,7 @@ public class JDD
 		paths = GetNumPaths(dd);
 		if (paths <= Long.MAX_VALUE) {
 			return "" + (long) paths;
-		}
-		else {
+		} else {
 			return "" + paths;
 		}
 	}
@@ -1259,7 +1267,8 @@ public class JDD
 	{
 		if (DebugJDD.debugEnabled)
 			DebugJDD.decrement(dd);
-		return ptrToNode(DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
+		return ptrToNode(
+				DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
 	}
 
 	/**
@@ -1361,7 +1370,8 @@ public class JDD
 			log.print(" Variables: (");
 			boolean first = true;
 			for (JDDNode var : vars) {
-				if (!first) log.print(",");
+				if (!first)
+					log.print(",");
 				first = false;
 				log.print(var.getIndex());
 			}
@@ -1440,7 +1450,8 @@ public class JDD
 						if (var.getIndex() == index) {
 							// There is a var with the current index in vars, but
 							// not at the correct position
-							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = "+index+", var index = "+var_index+")");
+							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = " + index
+									+ ", var index = " + var_index + ")");
 						}
 					}
 					// otherwise, the dd depends on a variable not in vars

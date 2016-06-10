@@ -94,7 +94,7 @@ public class DebugJDD
 			if (isReferenced) {
 				// increase javaRefs counter for this ptr
 				int jrefs = getJavaRefCount(ptr());
-				javaRefs.put(ptr(), jrefs+1);
+				javaRefs.put(ptr(), jrefs + 1);
 			}
 			// store to keep track of this DebugJDDNode
 			DebugJDD.addToSet(this);
@@ -128,15 +128,18 @@ public class DebugJDD
 			// Checks:
 			// (1) There is a negative number of Java references for the DdNode pointer
 			if (jrefs < 0) {
-				throw new RuntimeException("DebugJDD: The number of Java references is negative for ptr=0x"+Long.toHexString(ptr())+", ID="+getID()+", Java refs = "+jrefs+", CUDD refs = "+DebugJDD_GetRefCount(ptr()));
+				throw new RuntimeException("DebugJDD: The number of Java references is negative for ptr=0x" + Long.toHexString(ptr()) + ", ID=" + getID()
+						+ ", Java refs = " + jrefs + ", CUDD refs = " + DebugJDD_GetRefCount(ptr()));
 			}
 			// (2) There are more Java references than Cudd references
 			if (jrefs > DebugJDD_GetRefCount(ptr())) {
-				throw new RuntimeException("DebugJDD: More Java refs than CUDD refs for ptr=0x"+Long.toHexString(ptr())+", ID="+getID()+", Java refs = "+jrefs+", CUDD refs = "+DebugJDD_GetRefCount(ptr()));
+				throw new RuntimeException("DebugJDD: More Java refs than CUDD refs for ptr=0x" + Long.toHexString(ptr()) + ", ID=" + getID() + ", Java refs = "
+						+ jrefs + ", CUDD refs = " + DebugJDD_GetRefCount(ptr()));
 			}
 			// (3) This node has more refs than there are Java refs in total
 			if (jrefs < getNodeRefs()) {
-				throw new RuntimeException("DebugJDD: JDDNode has more refs than Java refs in total?! ID="+getID()+", refs = "+getNodeRefs()+", Java refs = "+jrefs+", CUDD refs = "+DebugJDD_GetRefCount(ptr()));
+				throw new RuntimeException("DebugJDD: JDDNode has more refs than Java refs in total?! ID=" + getID() + ", refs = " + getNodeRefs()
+						+ ", Java refs = " + jrefs + ", CUDD refs = " + DebugJDD_GetRefCount(ptr()));
 			}
 		}
 
@@ -172,20 +175,22 @@ public class DebugJDD
 	}
 
 	/** Activate tracing for the DebugJDDNode with ID id */
-	public static void enableTracingForID(long id) {
+	public static void enableTracingForID(long id)
+	{
 		if (traceIDs == null) {
 			traceIDs = new HashSet<Long>();
 		}
 		traceIDs.add(id);
-		System.out.println("DebugJDD: Enable tracing for "+id);
+		System.out.println("DebugJDD: Enable tracing for " + id);
 		enable(); // tracing implies debugging
 	}
+
 	/** Store a DebugJDDNode for tracking of the references */
 	protected static void addToSet(DebugJDDNode node)
 	{
 		if (nodes.put(node.getID(), node) != null) {
 			// implementation error, should not happen
-			throw new RuntimeException("DebugJDD: Adding the same JDDNode multiple times, ID="+node.getID());
+			throw new RuntimeException("DebugJDD: Adding the same JDDNode multiple times, ID=" + node.getID());
 		}
 		if (traceIDs != null && traceIDs.contains(node.id)) {
 			trace("create", node);
@@ -204,13 +209,14 @@ public class DebugJDD
 		if (dNode.getNodeRefs() == 0) {
 			// This is only a warning as currently there are places
 			// where referencing / derefencing happens across multiple JDDNodes
-			System.out.println("Warning, DebugJDD: Deref of a JDDNode that has 0 references, ID = "+dNode.getID());
+			System.out.println("Warning, DebugJDD: Deref of a JDDNode that has 0 references, ID = " + dNode.getID());
 			printStack(0);
 		}
 		dNode.decRef();
 		int cuddRefCount = DebugJDD_GetRefCount(node.ptr());
 		if (cuddRefCount <= 0) {
-			throw new RuntimeException("DebugJDD: Trying to deref a JDDNode with a non-positive CUDD ref count, ptr=0x"+Long.toHexString(dNode.ptr())+", ID = "+dNode.getID()+", Java ref = "+getJavaRefCount(dNode.ptr())+", CUDD refs = "+cuddRefCount);
+			throw new RuntimeException("DebugJDD: Trying to deref a JDDNode with a non-positive CUDD ref count, ptr=0x" + Long.toHexString(dNode.ptr())
+					+ ", ID = " + dNode.getID() + ", Java ref = " + getJavaRefCount(dNode.ptr()) + ", CUDD refs = " + cuddRefCount);
 		}
 		if (traceIDs != null && traceIDs.contains(dNode.id)) {
 			trace("deref", dNode);
@@ -258,28 +264,31 @@ public class DebugJDD
 				}
 			}
 
-			System.out.println("DdNode ptr=0x" + Long.toHexString(ptr)+", "+nodeInfo(ptr)+" has "+extRef.getValue()+" remaining external references.");
+			System.out
+					.println("DdNode ptr=0x" + Long.toHexString(ptr) + ", " + nodeInfo(ptr) + " has " + extRef.getValue() + " remaining external references.");
 			if (posRewNodes.size() > 0) {
 				System.out.println(" Candidates:");
 				for (DebugJDDNode node : posRewNodes) {
-					System.out.println("  ID="+node.getID()+" with "+node.getNodeRefs()+" references");
+					System.out.println("  ID=" + node.getID() + " with " + node.getNodeRefs() + " references");
 				}
 			} else {
 				System.out.println(" No candidates, here are all JDDNodes for that DdNode:");
 				for (DebugJDDNode node : matchingNodes) {
-					System.out.println("  ID="+node.getID()+" with "+node.getNodeRefs()+" references");
+					System.out.println("  ID=" + node.getID() + " with " + node.getNodeRefs() + " references");
 				}
 			}
 		}
 	}
 
 	/** Get the CUDD reference count for the pointer of the JDDNode */
-	public static int getRefCount(JDDNode n) {
+	public static int getRefCount(JDDNode n)
+	{
 		return DebugJDD_GetRefCount(n.ptr());
 	}
 
 	/** Get the number of DebugJDDNodes that reference the pointer */
-	private static int getJavaRefCount(long ptr) {
+	private static int getJavaRefCount(long ptr)
+	{
 		Integer jrefs = javaRefs.get(ptr);
 		if (jrefs == null)
 			return 0;
@@ -316,7 +325,8 @@ public class DebugJDD
 	/** Log information about the action performed on the DebugJDDNode */
 	private static void trace(String action, DebugJDDNode dNode)
 	{
-		System.out.println("\ntrace("+action+",ID="+dNode.getID()+") = "+dNode.getNodeRefs()+" refs (total = "+DebugJDD_GetRefCount(dNode.ptr())+", local="+javaRefs.get(dNode.ptr())+")");
+		System.out.println("\ntrace(" + action + ",ID=" + dNode.getID() + ") = " + dNode.getNodeRefs() + " refs (total = " + DebugJDD_GetRefCount(dNode.ptr())
+				+ ", local=" + javaRefs.get(dNode.ptr()) + ")");
 		printStack(0);
 	}
 

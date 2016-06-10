@@ -9,13 +9,13 @@ public class MDPExpectationConstraint extends MDPItem
 {
 
 	final double bound;
-	
+
 	MDPExpectationConstraint(@NonNull MDPReward reward, Operator operator, double bound)
 	{
 		super(reward, operator);
-		this.bound=bound;
+		this.bound = bound;
 	}
-	
+
 	@Override
 	public boolean equals(Object object)
 	{
@@ -28,7 +28,7 @@ public class MDPExpectationConstraint extends MDPItem
 		}
 		return true;
 	}
-	
+
 	double getBound()
 	{
 		return bound;

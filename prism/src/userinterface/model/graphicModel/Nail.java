@@ -32,7 +32,6 @@ package userinterface.model.graphicModel;
 import java.awt.geom.*;
 import userinterface.util.*;
 
-
 /** This class is overrides State to gain access to its drag and drop facilities.
  * It is rendered by the transition it belongs to.  It is intended to represent
  * changes in direction of a transition line.  Normal Transitions can contain any
@@ -42,110 +41,109 @@ import userinterface.util.*;
  */
 public class Nail extends State
 {
-    
-    //Attributes
-    
-    private State from;
-    private State to;
-    
-    private Transition owner;
-    
-    //Constructor
-    
-    /** Creates a new Nail object with the given c and y co-ordinates along with the
-     * state this nail's transition is coming from and going to.
-     */    
-    public Nail (double x, double y, State from, State to)
-    {
-        super(x,y);
-        width = 2;
-        height = 2;
-        this.from = from;
-        this.to = to;
-    }
-    
-    //Access Methods
-    
-    /** Returns the State object this nail's transition is coming from. */    
-    public State getFrom()
-    {
-        return from;
-    }
-    
-    /** Returns the State object this nail's transition is going to. */    
-    public State getTo()
-    {
-        return to;
-    }
-    
-    @Override
+
+	//Attributes
+
+	private State from;
+	private State to;
+
+	private Transition owner;
+
+	//Constructor
+
+	/** Creates a new Nail object with the given c and y co-ordinates along with the
+	 * state this nail's transition is coming from and going to.
+	 */
+	public Nail(double x, double y, State from, State to)
+	{
+		super(x, y);
+		width = 2;
+		height = 2;
+		this.from = from;
+		this.to = to;
+	}
+
+	//Access Methods
+
+	/** Returns the State object this nail's transition is coming from. */
+	public State getFrom()
+	{
+		return from;
+	}
+
+	/** Returns the State object this nail's transition is going to. */
+	public State getTo()
+	{
+		return to;
+	}
+
+	@Override
 	public boolean intersects(Rectangle2D rect)
-    {
-        return new Ellipse2D.Double(getX()-2, getY()-2, 4, 4).intersects(rect);
-    }
-    
-    //Update Methods
-    
-    public void delete()
-    {
-        if(owner != null)owner.deleteNail(this);
-    }
-    
-    //Override super
-    @Override
+	{
+		return new Ellipse2D.Double(getX() - 2, getY() - 2, 4, 4).intersects(rect);
+	}
+
+	//Update Methods
+
+	public void delete()
+	{
+		if (owner != null)
+			owner.deleteNail(this);
+	}
+
+	//Override super
+	@Override
 	public void associateTransition(Transition t)
-    {
-        super.associateTransition(t);
-        owner = t;
-    }
-    
-    
-    /** Sets the State this nail's transition is coming from. */    
-    public void setFrom(State s)
-    {
-        from = s;
-    }
-    
-    /** Sets the State this nail's transition is going to. */    
-    public void setTo(State s)
-    {
-        to = s;
-    }
-    
-    @Override
+	{
+		super.associateTransition(t);
+		owner = t;
+	}
+
+	/** Sets the State this nail's transition is coming from. */
+	public void setFrom(State s)
+	{
+		from = s;
+	}
+
+	/** Sets the State this nail's transition is going to. */
+	public void setTo(State s)
+	{
+		to = s;
+	}
+
+	@Override
 	public String getClassDescriptor()
-    {
-        return "Point";
-    }
-    
-    @Override
+	{
+		return "Point";
+	}
+
+	@Override
 	public String getDescriptor()
-    {
-        return "";//from.getDescriptor()+"-->"+to.getDescriptor();
-    }
-    
-    @Override
+	{
+		return "";//from.getDescriptor()+"-->"+to.getDescriptor();
+	}
+
+	@Override
 	public int getNumProperties()
-    {
-        return 2;
-    }
-    
-    @Override
+	{
+		return 2;
+	}
+
+	@Override
 	public SingleProperty getProperty(int index)
-    {
-        switch(index)
-        {
-            case 0: return x;
-            default: return y;
-        }
-    }
-    
-    @Override
+	{
+		switch (index) {
+		case 0:
+			return x;
+		default:
+			return y;
+		}
+	}
+
+	@Override
 	public int getUniquePropertyID()
-    {
-        return PropertyConstants.NAIL;
-    }
-    
-    
-    
+	{
+		return PropertyConstants.NAIL;
+	}
+
 }
