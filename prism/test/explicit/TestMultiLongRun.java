@@ -104,7 +104,7 @@ public class TestMultiLongRun
 	@Test
 	public void modelIsNotNull() throws PrismException{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		assertNotNull(ml11.getModel());
+		assertNotNull(ml11.model);
 	}
 	/**
 	 * To check that no exception occurs 
@@ -156,7 +156,6 @@ public class TestMultiLongRun
 	public void testGetVarXNegative() throws PrismException
 	{
 		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
-		ml13.computeOffsets();
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
 	}
 
