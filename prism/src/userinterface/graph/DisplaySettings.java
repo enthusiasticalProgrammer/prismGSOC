@@ -29,7 +29,6 @@ package userinterface.graph;
 import java.util.Observable;
 
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
 
 import settings.BooleanSetting;
 import settings.ColorSetting;

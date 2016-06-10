@@ -27,7 +27,6 @@
 package userinterface.simulator;
 
 import parser.ast.ModulesFile;
-import prism.PrismException;
 import simulator.GenerateSimulationPath;
 import simulator.SimulatorEngine;
 import userinterface.GUIComputationThread;

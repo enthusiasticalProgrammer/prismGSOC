@@ -32,7 +32,6 @@ import java.util.List;
 
 import mtbdd.PrismMTBDD;
 import dv.DoubleVector;
-import explicit.DTMCProductMLRStrategyAndMDP;
 import jdd.*;
 import odd.*;
 import parser.*;

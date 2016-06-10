@@ -29,8 +29,11 @@ package explicit;
 import java.io.File;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import parser.VarList;
 import parser.ast.Declaration;

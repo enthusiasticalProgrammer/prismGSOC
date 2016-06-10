@@ -36,8 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;

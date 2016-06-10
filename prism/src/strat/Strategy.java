@@ -31,10 +31,8 @@ import explicit.Distribution;
 import explicit.Model;
 import prism.PrismException;
 import prism.PrismLog;
-import javax.validation.constraints.NotNull;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Interface for classes to store strategies (for MDPs, games, etc.),

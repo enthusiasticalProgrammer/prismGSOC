@@ -37,7 +37,6 @@ import prism.*;
 import parser.type.*;
 import userinterface.util.*;
 import userinterface.model.*;
-import userinterface.model.GUIMultiModelTree.ModuleNode;
 import userinterface.model.computation.*;
 
 public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionListener

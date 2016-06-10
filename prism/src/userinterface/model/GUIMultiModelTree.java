@@ -79,7 +79,6 @@ import prism.ModelType;
 import prism.PrismException;
 import userinterface.GUIPrism;
 import userinterface.model.computation.LoadGraphicModelThread;
-import userinterface.model.graphicModel.ModuleModel;
 
 public class GUIMultiModelTree extends JPanel implements MouseListener
 {
