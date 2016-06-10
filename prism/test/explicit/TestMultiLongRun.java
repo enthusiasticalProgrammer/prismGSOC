@@ -35,17 +35,17 @@ public class TestMultiLongRun
 	public ExpressionFunc e1;
 	public ExpressionFunc e2;
 	public ExpressionFunc e3;
+	
+	public ModulesFile modulesFile = null;
+	public PropertiesFile propertiesFile = null;
+	public PropertiesFile propertiesFile2 = null;
+	public PropertiesFile propertiesFile3 = null;
 
-	StateValues infeasible;
+	public StateValues infeasible;
 
 	@Before
 	public void setUp() throws PrismLangException
 	{
-
-		ModulesFile modulesFile = null;
-		PropertiesFile propertiesFile = null;
-		PropertiesFile propertiesFile2 = null;
-		PropertiesFile propertiesFile3 = null;
 
 		try {
 			PrismLog mainLog = new PrismFileLog("stdout");
@@ -98,6 +98,11 @@ public class TestMultiLongRun
 		infeasible.setBooleanValue(m1.getFirstInitialState(), false);
 	}
 
+	@Test
+	public void modelIsNotNull() throws PrismException{
+		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		assertNotNull(ml11.getModel());
+	}
 	/**
 	 * To check that no exception occurs 
 	 * @throws PrismException 
@@ -148,7 +153,7 @@ public class TestMultiLongRun
 	public void testGetVarXNegative() throws PrismException
 	{
 		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
-		ml13.computeOffsets(mdp13.isMemoryLess(e3));
+		ml13.computeOffsets();
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
 	}
 
@@ -160,7 +165,7 @@ public class TestMultiLongRun
 	public void testValuesOfExample4() throws PrismException
 	{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
 		double[] lpResult = ml11.solver.getVariableValues();
@@ -186,7 +191,7 @@ public class TestMultiLongRun
 	public void testValuesOfExample5() throws PrismException
 	{
 		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		ml11.createMultiLongRunLP(false);
+		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
 		double[] lpResult = ml11.solver.getVariableValues();

@@ -27,7 +27,9 @@
 package explicit;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 
 import parser.ast.Coalition;
@@ -38,19 +40,27 @@ import parser.ast.ExpressionSS;
 import parser.ast.ExpressionStrategy;
 import parser.ast.ExpressionTemporal;
 import parser.ast.ExpressionUnaryOp;
+import parser.ast.RelOp;
 import parser.ast.ExpressionFunc;
+import parser.ast.ExpressionLiteral;
 import parser.ast.RewardStruct;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
+import parser.type.TypeVoid;
+import prism.Filter;
 import prism.IntegerBound;
 import prism.OpRelOpBound;
+import prism.Operator;
+import prism.Point;
 import prism.PrismComponent;
 import prism.PrismException;
+import prism.PrismLangException;
 import prism.PrismNotSupportedException;
 import prism.PrismSettings;
-
+import prism.Tile;
+import prism.TileList;
 import explicit.rewards.ConstructRewards;
 import explicit.rewards.MCRewards;
 import explicit.rewards.MDPReward;
@@ -90,6 +100,9 @@ public class ProbModelChecker extends NonProbModelChecker
 	// Adversary export
 	protected boolean exportAdv = false;
 	protected String exportAdvFilename;
+
+	/**Used for drawing the Pareto-curve of a multi-objective expression*/
+	private List<Integer> numericalIndices = new ArrayList<>();
 
 	// Enums for flags/settings
 
@@ -493,7 +506,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 		//Multi-objective model-checking
 		else if (expr instanceof ExpressionFunc
-				&& (((ExpressionFunc) expr).getName().equals("multi") || ((ExpressionFunc) expr).getName().equals("mlessmulti"))) {
+				&& (((ExpressionFunc) expr).getName().equals("multi"))) {
 			res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
 		}
 		// Otherwise, use the superclass
@@ -592,11 +605,6 @@ public class ProbModelChecker extends NonProbModelChecker
 			probs.clear();
 			return StateValues.createFromBitSet(sol, model);
 		}
-	}
-
-	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
-	{
-		throw new PrismException("Multi-objective model-checking is not available for this type of models");
 	}
 
 	/**
@@ -1192,5 +1200,235 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 
 		return dist;
+	}
+
+	/**
+	 * The following methods are there because both MDPModelChecker and DTMCModelChecker use them
+	 * during the checkMultiObjective-procedures and therefore
+	 * they belong in here (since this is the super-class) 
+	 */
+
+	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
+	{
+
+		// Make sure we are only expected to compute a value for a single state
+		if (currentFilter == null || !(currentFilter.getOperator() == Filter.FilterOperator.STATE))
+			throw new PrismException("Multi-objective model checking can only compute values from a single state");
+
+		MultiLongRun mlr = createMultiLongRun(model, expr);
+		//MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
+		StateValues sv = null;
+
+		mlr.createMultiLongRunLP();
+		if (generateStrategy || mlr.objectives.size() != 2) {
+			sv = mlr.solveDefault();
+			this.strategy = mlr.getStrategy();
+		} else {//Pareto
+			ArrayList<Point> computedPoints = new ArrayList<Point>();
+			ArrayList<Point> computedDirections = new ArrayList<Point>();
+			ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+
+			//TODO:weights might differ a bit when more objectives come into play
+			Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));
+			//mainLog.println("p1 " + p1);
+			Point p2 = mlr.solveMulti(new Point(new double[] { 0.0, 1.0 }));
+			//mainLog.println("p2 " + p2);
+
+			if (p1 == null || p2 == null) {
+				mainLog.println("a Pareto-curve drawing is not possible, because a corresponding LP had no solution");
+				sv = new StateValues(TypeBool.getInstance(), model);
+				sv.setBooleanValue(model.getFirstInitialState(), false);
+				return sv;
+			}
+			pointsForInitialTile.add(p1);
+			pointsForInitialTile.add(p2);
+
+			int numberOfPoints = 2;
+			boolean verbose = true;
+			Tile initialTile = new Tile(pointsForInitialTile);
+			TileList tileList = new TileList(initialTile, null, 10e-3);
+
+			Point direction = tileList.getCandidateHyperplane();
+
+			if (verbose) {
+				mainLog.println("The initial direction is " + direction);
+			}
+
+			for (int iterations = 0; iterations < maxIters; iterations++) {
+
+				Point newPoint = mlr.solveMulti(direction);
+				numberOfPoints++;
+
+				if (verbose) {
+					mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
+					mainLog.println("TileList:" + tileList);
+				}
+
+				computedPoints.add(newPoint);
+				computedDirections.add(direction);
+
+				tileList.addNewPoint(newPoint);
+
+				//compute new direction
+				direction = tileList.getCandidateHyperplane();
+
+				if (verbose) {
+					mainLog.println("New direction is " + direction);
+					mainLog.println("TileList: " + tileList);
+
+				}
+
+				if (direction == null) {
+					//no tile could be improved
+					break;
+				}
+			}
+
+			//0 and 1 hardcoded are fine, because we do not draw anything in three or more dimensions
+			// In this context: drop numericalIndices afterwards
+			TileList.addStoredTileList(expr, expr.getOperand(numericalIndices.get(0)), expr.getOperand(numericalIndices.get(1)), tileList);
+			sv = new StateValues(TypeVoid.getInstance(), tileList, model);
+		}
+
+		return sv;
+	}
+
+	public MultiLongRun createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
+	{
+		Collection<MDPConstraint> constraints = new ArrayList<>();
+		Collection<MDPObjective> objectives = new ArrayList<>();
+		Collection<MDPExpectationConstraint> expConstraints = new ArrayList<>();
+
+		//extract data
+		for (int i = 0; i < expr.getNumOperands(); i++) {
+			ExpressionReward operand = null;
+			ExpressionProb prob = null;
+			if (expr.getOperand(i) instanceof ExpressionReward) {
+				operand = (ExpressionReward) expr.getOperand(i);
+
+			} else if (expr.getOperand(i) instanceof ExpressionProb) {
+				prob = (ExpressionProb) expr.getOperand(i);
+				if (prob.getRelOp() != RelOp.GEQ) {
+					throw new UnsupportedOperationException(
+							"only non-strictly lower probability bounds are allowed for solving Mulit-objective Markov processes");
+				}
+				Expression exprChild = prob.getExpression();
+				if (exprChild instanceof ExpressionReward) {
+					operand = (ExpressionReward) exprChild;
+				} else {
+					throw new UnsupportedOperationException("Only long-run properties are supported");
+				}
+			} else {
+				throw new UnsupportedOperationException("Only long-run properties are supported.");
+			}
+
+			RelOp relOp = operand.getRelOp();
+
+			//check that the parameters are of the form we can handle
+			if (!(operand.getExpression() instanceof ExpressionTemporal))
+				throw new PrismException("The reward subexpression must be a temporal expression.");
+			ExpressionTemporal eT = (ExpressionTemporal) operand.getExpression();
+			if (eT.getOperator() != ExpressionTemporal.R_S)
+				throw new PrismException("We only support steady state (long-run) rewards.");
+
+			Operator operator = determineOperator(relOp);
+
+			numericalIndices.add(i);
+
+			// Store rewards bound
+			Expression rewardBound = operand.getReward();
+
+			double bound = evaluateBound(rewardBound);
+
+			Object rs = operand.getRewardStructIndex();
+			RewardStruct rewStruct = null;
+			// Get reward info
+			if (modulesFile == null)
+				throw new PrismException("No model file to obtain reward structures");
+			if (modulesFile.getNumRewardStructs() == 0)
+				throw new PrismException("Model has no rewards specified");
+			if (rs == null) {
+				rewStruct = modulesFile.getRewardStruct(0);
+			} else if (rs instanceof Expression) {
+				i = ((Expression) rs).evaluateInt(constantValues);
+				rs = new Integer(i); // for better error reporting below
+				rewStruct = modulesFile.getRewardStruct(i - 1);
+			} else if (rs instanceof String) {
+				rewStruct = modulesFile.getRewardStructByName((String) rs);
+			}
+			if (rewStruct == null)
+				throw new PrismException("Invalid reward structure index \"" + rs + "\"");
+
+			// Build rewards
+			ConstructRewards constructRewards = new ConstructRewards(mainLog);
+			MDPReward mdpReward;
+			if (model instanceof DTMCProductMLRStrategyAndMDP) {
+				MDP mdp = ((DTMCProductMLRStrategyAndMDP) model).getMDP();
+				mdpReward = constructRewards.buildMDPRewardStructure(mdp, rewStruct, constantValues);
+			} else {
+				mdpReward = constructRewards.buildMDPRewardStructure((MDP) model, rewStruct, constantValues);
+			}
+
+			//create objective or constraint
+			if (operator.equals(Operator.R_MIN) || operator.equals(Operator.R_MAX)) {
+				objectives.add(new MDPObjective(mdpReward, operator));
+			} else {
+				if (prob == null) {
+					expConstraints.add(new MDPExpectationConstraint(mdpReward, operator, bound));
+				} else {
+					if (prob.getProb() instanceof ExpressionLiteral) {
+						ExpressionLiteral exprLit = (ExpressionLiteral) prob.getProb();
+						if (exprLit.getValue() instanceof Double) {
+							constraints.add(new MDPConstraint(mdpReward, operator, bound, (double) exprLit.getValue()));
+						} else {
+							throw new UnsupportedOperationException("Please only use double as type of probability bounds");
+						}
+					} else {
+						throw new UnsupportedOperationException("Please use only double as type of probability bounds");
+					}
+				}
+			}
+		}
+		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
+		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
+	}
+
+	protected MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	{
+		throw new UnsupportedOperationException("This method has to be overwritten by its subclasses."
+				+ "\nIt has just a body, because declaring the class is not feasible, because it is sometimes used in a non-abstract way");
+
+	}
+
+	private double evaluateBound(Expression rewardBound) throws PrismLangException
+	{
+		if (rewardBound != null) {
+			double p = rewardBound.evaluateDouble(constantValues);
+			return p;
+		} else {
+			return -1.0;
+		}
+	}
+
+	private Operator determineOperator(RelOp relOp)
+	{
+		if (relOp.equals(RelOp.MAX) || relOp.equals(RelOp.MIN) || relOp.equals(RelOp.LEQ)) {
+			return Operator.R_MAX;
+
+		} else if (relOp.equals(RelOp.GEQ)) {
+			return Operator.R_GE;
+		} else if (relOp.equals(RelOp.MIN)) {
+			return Operator.R_MIN;
+		} else if (relOp.equals(RelOp.LEQ)) {
+			return Operator.R_LE;
+		} else if (relOp.equals(RelOp.LT)) {
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
+		} else if (relOp.equals(RelOp.GT)) { // currently do not support
+			throw new UnsupportedOperationException("Multi-objective properties can not use strict inequalities on P/R operators");
+		} else {
+			throw new UnsupportedOperationException(
+					"Multi-objective properties can only contain P/R operators with max/min=? or lower/upper probability bounds");
+		}
 	}
 }

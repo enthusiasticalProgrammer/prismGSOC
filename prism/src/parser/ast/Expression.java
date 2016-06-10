@@ -757,7 +757,7 @@ public abstract class Expression extends ASTElement
 			{
 				public void visitPost(ExpressionFunc e) throws PrismLangException
 				{
-					if (e.getNameCode() == ExpressionFunc.MULTI || e.getNameCode() == ExpressionFunc.MLESSMULTI)
+					if (e.getNameCode() == ExpressionFunc.MULTI)
 						throw new PrismLangException("Found one", e);
 				}
 			};
