@@ -28,6 +28,7 @@ public class LpSolverProxy implements SolverProxyInterface
 		}
 	}
 
+	@Override
 	public void addRowFromMap(Map<Integer, Double> row, double rhs, Comparator op, String name) throws PrismException
 	{
 		if (!isAddrowMode) {
@@ -91,6 +92,7 @@ public class LpSolverProxy implements SolverProxyInterface
 		}
 	}
 
+	@Override
 	public boolean getBoolResult() throws PrismException
 	{
 		if (this.result == lpsolve.LpSolve.INFEASIBLE)
@@ -102,6 +104,7 @@ public class LpSolverProxy implements SolverProxyInterface
 		}
 	}
 
+	@Override
 	public double getDoubleResult() throws PrismException
 	{
 		if (this.result == lpsolve.LpSolve.INFEASIBLE) {//TODO other results
