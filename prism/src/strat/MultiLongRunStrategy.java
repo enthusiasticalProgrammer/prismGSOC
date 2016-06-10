@@ -208,7 +208,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public String getType()
 	{
-		//TODO overwrite
 		return "Stochastic update strategy.";
 	}
 
@@ -289,11 +288,12 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void exportDotFile(PrismLog out)
 	{
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("You can use exportToFileInstead");
 
 	}
 
-	public String toString()
+	@Override
+	public @NonNull String toString()
 	{
 		String result = "";
 		result += "transientChoices\n";
@@ -311,32 +311,33 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		for (int i = 0; i < recurrentChoices.length; i++) {
 			result += i + "  " + recurrentChoices[i] + "\n";
 		}
-		if (strategy > -2) {
-			throw new IllegalArgumentException();
-		}
 		return result;
 	}
-	
+
 	/**
 	 * This method is important for building the product
 	 */
-	public int getNumberOfDifferentStrategies(){
-		return recurrentChoices.length+1;
+	public int getNumberOfDifferentStrategies()
+	{
+		return recurrentChoices.length + 1;
 	}
+
 	/**
 	 * This method returns the Distribution of a strategy in a state.
 	 * strategy number 0 is transient, strategy at 1..N+1 is recurrentStrategy[x-1] 
 	 * @throws InvalidStrategyStateException if strategy is not defined in this state
 	 * @throws IllegalArgumentException, if strategy-number is not valid
+	 * @return the transition-Distribution, and not the action-Distribution
 	 */
-	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException{
-		if(strategy<0 || strategy>recurrentChoices.length){
+	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException
+	{
+		if (strategy < 0 || strategy > recurrentChoices.length) {
 			throw new IllegalArgumentException("wrong strategy-number");
 		}
-		if(strategy==0){
-			return transientChoices[state]; 
-		}
-		return recurrentChoices[strategy-1].getNextMove(state);
+
+		if (strategy == 0)
+			return transientChoices[state];
+		return recurrentChoices[strategy - 1].getNextMove(state);
 	}
 
 	public Distribution getSwitchProbability(int i)
