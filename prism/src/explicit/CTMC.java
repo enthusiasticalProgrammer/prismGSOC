@@ -28,6 +28,8 @@ package explicit;
 
 import java.util.BitSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Interface for classes that provide (read) access to an explicit-state CTMC.
  */
@@ -79,7 +81,7 @@ public interface CTMC extends DTMC
 	 * buildImplicitEmbeddedDTMC, which will update the cached embedded
 	 * DTMC.
 	 */
-	public DTMC getImplicitEmbeddedDTMC();
+	public @NonNull DTMC getImplicitEmbeddedDTMC();
 
 	/**
 	 * Build (a new) embedded DTMC for this CTMC.

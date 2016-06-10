@@ -1,5 +1,7 @@
 package explicit;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.rewards.MDPReward;
 import prism.Operator;
 
@@ -8,14 +10,14 @@ class MDPConstraint extends MDPExpectationConstraint
 {
 	final double probability;
 
-	MDPConstraint(MDPReward reward, prism.Operator operator, double bound, double probability)
+	MDPConstraint(@NonNull MDPReward reward, prism.Operator operator, double bound, double probability)
 	{
 		super(reward, operator, bound);
 		checkForIllegalArguments(reward, operator, bound, probability);
 		this.probability = probability;
 	}
 
-	MDPConstraint(MDPReward reward, prism.Operator operator, double bound)
+	MDPConstraint(@NonNull MDPReward reward, prism.Operator operator, double bound)
 	{
 		this(reward, operator, bound, 5.0);
 	}
