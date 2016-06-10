@@ -17,6 +17,7 @@ import prism.ModelType;
 import prism.Pair;
 import prism.PrismComponent;
 import prism.PrismException;
+import prism.PrismFileLog;
 import prism.PrismLog;
 import strat.InvalidStrategyStateException;
 import strat.MultiLongRunStrategy;
@@ -166,7 +167,11 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	@Override
 	public int getNumTransitions()
 	{
-		return this.getNumStates() * getNumStates();
+		int result=0;
+		for(int state=0;state<getNumStates();state++){
+			result+=getNumTransitions(state);
+		}
+		return result;
 	}
 
 	@Override
@@ -234,29 +239,36 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToPrismExplicit(String baseFilename) throws PrismException
+	public void exportToPrismExplicit(@NotNull String baseFilename) throws PrismException
 	{
-		throw new UnsupportedOperationException();
-
+		exportToPrismExplicitTra(baseFilename + ".tra");
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(String filename) throws PrismException
 	{
-		throw new UnsupportedOperationException();
-
+		try (PrismFileLog log = PrismFileLog.create(filename)) {
+			exportToPrismExplicitTra(log);
+		}
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(File file) throws PrismException
 	{
-		throw new UnsupportedOperationException();
+		exportToPrismExplicitTra(file.getPath());
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(PrismLog log)
 	{
-		throw new UnsupportedOperationException();
+		log.println(this.getNumStates() + " " + this.getNumTransitions());
+		for (int state = 0; state < getNumStates(); state++) {
+			Iterator<Entry<Integer, Double>> iterator = this.getTransitionsIterator(state);
+			while (iterator.hasNext()) {
+				Entry<Integer, Double> entry = iterator.next();
+				log.println(state + " " + entry.getKey() + " " + entry.getValue());
+			}
+		}
 	}
 
 	@Override
@@ -348,31 +360,45 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 		int mdpState = state / mlrs.getNumberOfDifferentStrategies();
 		int strategyState = state % mlrs.getNumberOfDifferentStrategies();
 
-		Distribution oneMove;
+		Distribution oneActionMove = null;
 		try {
-			oneMove = mlrs.getDistributionOfStrategy(mdpState, strategyState);
+			oneActionMove = mlrs.getDistributionOfStrategy(mdpState, strategyState);
 		} catch (InvalidStrategyStateException e) {
 			return new ArrayList<Entry<Integer, Double>>().iterator();
 		}
-		if(oneMove==null){
+		if (oneActionMove == null) {
 			return new ArrayList<Entry<Integer, Double>>().iterator();
 		}
+
+		Distribution oneTransitionMove = new Distribution();
+		for (Integer key : oneActionMove.getSupport()) {
+			System.out.println("state: "+state+", key: "+key);
+			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state/this.getNumStrategies(), key);
+			while (iterator.hasNext()) {
+				Entry<Integer, Double> entry = iterator.next();
+				oneTransitionMove.add(entry.getKey(), entry.getValue() * oneActionMove.get(key));
+			}
+		}
+
 		Distribution afterIndexAdaption = new Distribution();
-		oneMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies(), entry.getValue()));
+		oneTransitionMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies(), entry.getValue()));
 		if (strategyState != 0) {
 			return afterIndexAdaption.iterator();
-		} else { //transient state --> we have to check some switching
-			Distribution overallResult = new Distribution();
-			for (int stateValue : afterIndexAdaption.getSupport()) {
-				Distribution switchDistribution = mlrs.getSwitchProbability(stateValue / mlrs.getNumberOfDifferentStrategies());
-				if (switchDistribution != null) {
-					for (int stateValue2 : switchDistribution.getSupport()) {
-						overallResult.set(stateValue + stateValue2, afterIndexAdaption.get(stateValue) * switchDistribution.get(stateValue2));
-					}
+		}
+
+		//transient state --> we have to check some switching
+		Distribution overallResult = new Distribution();
+		for (int stateValue : afterIndexAdaption.getSupport()) {
+			Distribution switchDistribution = mlrs.getSwitchProbability(stateValue / mlrs.getNumberOfDifferentStrategies());
+			if (switchDistribution != null) {
+				for (int stateValue2 : switchDistribution.getSupport()) {
+					overallResult.set(stateValue + stateValue2 + 1, afterIndexAdaption.get(stateValue) * switchDistribution.get(stateValue2));
+					//+1, because here strategy of 0 means the transient strategy and for switchDistribution strategy
+					// means the first recurrentDistribution
 				}
 			}
-			return overallResult.iterator();
 		}
+		return overallResult.iterator();
 	}
 
 	@Override
