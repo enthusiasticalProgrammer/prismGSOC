@@ -1,5 +1,7 @@
 package explicit;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.rewards.MDPReward;
 
 /**
@@ -10,10 +12,10 @@ import explicit.rewards.MDPReward;
  */
 abstract class MDPItem
 {
-	final MDPReward reward; //use also min/max ....
+	final @NonNull MDPReward reward; //use also min/max ....
 	final prism.Operator operator;
 	
-	MDPItem(MDPReward reward, prism.Operator operator){
+	MDPItem(@NonNull MDPReward reward, prism.Operator operator){
 		this.reward=reward;
 		this.operator=operator;
 	}

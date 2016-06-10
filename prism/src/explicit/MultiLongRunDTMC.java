@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import prism.PrismException;
 import strat.MDStrategyArray;
 import strat.Strategy;
@@ -12,24 +14,11 @@ public class MultiLongRunDTMC extends MultiLongRun
 {
 	private final DTMCProductMLRStrategyAndMDP dtmc;
 
-	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc,@NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
+			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,@NonNull String method) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method);
+		super(constraints, objectives, expConstraints, method, new ArtificialNondetModelFromModel(dtmc));
 		this.dtmc = dtmc;
-		this.mecs = computeMECs();
-	}
-
-	@Override
-	protected int getNumChoicesOfModel(int state)
-	{
-		return 1; //a dtmc has always one choice
-	}
-
-	@Override
-	protected Model getModel()
-	{
-		return dtmc;
 	}
 
 	@Override
@@ -52,7 +41,8 @@ public class MultiLongRunDTMC extends MultiLongRun
 	public Strategy getStrategy()
 	{
 		int[] choices=new int[dtmc.getNumStates()];
-		for(int i=0;i<choices.length;choices[i++]=-2);
+		for(int i=0;i<choices.length;choices[i++]=-2)
+			;
 		return new MDStrategyArray(new ArtificialNondetModelFromModel(dtmc),choices);
 	}
 	

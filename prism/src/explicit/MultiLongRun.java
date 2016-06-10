@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import prism.Operator;
@@ -33,51 +35,39 @@ import strat.Strategy;
  *This class is abstract, because it can model either an MDP or a DTMC (which is computed
  *	by taking the product of an MDP and a MultiLongRunStrategy)
  */
-public abstract class MultiLongRun
+public abstract class MultiLongRun<M extends NondetModel>
 {
-	protected Collection<BitSet> mecs;
-	private final List<MDPConstraint> constraints;
-	private final Collection<MDPExpectationConstraint> expConstraints;
-	final Collection<MDPObjective> objectives;
+	protected @NonNull Collection<@NonNull BitSet> mecs;
+	private final @NonNull List<@NonNull MDPConstraint> constraints;
+	private final @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints;
+	final @NonNull Collection<@NonNull MDPObjective> objectives;
+	final @NonNull protected M model;
 
 	/**
 	 * The instance providing access to the LP solver.
 	 */
-	SolverProxyInterface solver;
-
-	private boolean initialised = false;
-
-	/**
-	 * Number of continuous variables in the LP instance
-	 */
-	private int numRealLPVars;
-
-	/**
-	 * Number of binary in the LP instance
-	 */
-	private int numBinaryLPVars;
+	@NonNull
+	final SolverProxyInterface solver;
 
 	/**
 	 * LP solver to be used
 	 */
-	private String method;
+	private final @NonNull String method;
 
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
-	private int[] xOffsetArr;
+	private final int @NonNull [] xOffsetArr;
 
 	/**
 	 * yOffset[i] is the solver's variable (column) for the first action of state i, i.e. for y_{i,0}
 	 */
-	private int[] yOffsetArr;
-
-	private int epsilonVarIndex;
+	private final int @NonNull [] yOffsetArr;
 
 	/**
 	 * zIndex[i] is the z variable for the state i (i.e. y_i in LICS11 terminology). 
 	 */
-	private int[] zIndex;
+	private final int @NonNull [] zIndex;
 
 	/**
 	 * The default constructor.
@@ -89,13 +79,19 @@ public abstract class MultiLongRun
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints,
-			String method) throws PrismException
+	public MultiLongRun(Collection<@NonNull MDPConstraint> constraints, Collection<@NonNull MDPObjective> objectives,
+			Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method, @NonNull M m) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.method = method;
-		this.expConstraints = expConstraints;
+		this.expConstraints = new ArrayList<>(expConstraints);
+		this.model = m;
+		this.mecs = computeMECs();
+		this.xOffsetArr = computeXOffsets();
+		this.yOffsetArr = computeYOffsets();
+		this.zIndex = computeZOffsets();
+		this.solver=initialiseSolver();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
@@ -106,15 +102,16 @@ public abstract class MultiLongRun
 	 * Creates a new solver instance, based on the argument {@see #method}.
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
-	private void initialiseSolver() throws PrismException
+	private @NonNull SolverProxyInterface initialiseSolver() throws PrismException
 	{
+		SolverProxyInterface result=null;
 		try { //below Class.forName throws exception if the required jar is not present
 			if (method.equals("Linear programming")) {
 				//create new solver
-				solver = new LpSolverProxy(this.numRealLPVars, this.numBinaryLPVars);
+				result = new LpSolverProxy(zIndex[this.getMaxMECState()]+(1<<getN()), 0);
 			} else if (method.equals("Gurobi")) {
 				Class<?> cl = Class.forName("solvers.GurobiProxy");
-				solver = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(this.numRealLPVars, this.numBinaryLPVars);
+				result = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(zIndex[this.getMaxMECState()]+(1<<getN()), 0);
 			} else
 				throw new UnsupportedOperationException("The given method for solving LP programs is not supported: " + method);
 		} catch (ClassNotFoundException ex) {
@@ -135,19 +132,20 @@ public abstract class MultiLongRun
 					+ "It appears that the JAR file is present, but there is some problem, because the exception of type " + e.getClass().toString()
 					+ " was thrown. Message: " + e.getMessage());
 		}
+		if(result!= null){
+			return result;
+		}else{
+			throw new NullPointerException("Unfortunately the LP-solver initialised to null.");
+		}
 	}
 
 	/**
 	 * computes the set of end components and stores it in {@see #mecs}
 	 * @throws PrismException
 	 */
-	protected List<BitSet> computeMECs() throws PrismException
+	protected @NonNull List<@NonNull BitSet> computeMECs() throws PrismException
 	{
-		Model model = getModel();
-		if (!(model instanceof NondetModel || model instanceof MDP)) {
-			model = new ArtificialNondetModelFromModel(model);
-		}
-		ECComputer ecc = ECComputerDefault.createECComputer(null, (NondetModel) model);
+		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
 		ecc.computeMECStates();
 		return ecc.getMECStates();
 	}
@@ -159,42 +157,64 @@ public abstract class MultiLongRun
 	 * to get, for a variable y_{s,a}, y_s and x_{s,a}, respectively, in the LICS11 sense,
 	 * a corresponding variable (i.e. column) in the linear program.
 	 * 
-	 * This method does all the required initialisations that are required for the
+	 * The following three method does all the required initialisations that are required for the
 	 * above mentioned methods to work correctly.
 	 */
-	void computeOffsets() throws PrismException
+	private int @NonNull [] computeXOffsets()
 	{
-		this.xOffsetArr = new int[getNumStatesOfModel()];
+		int @NonNull [] result = new int[model.getNumStates()];
 		int current = 0;
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			boolean isInMEC = false;
 			for (BitSet b : this.mecs) {
-				if (b.get(i)) {
+				if (b.get(state)) {
 					isInMEC = true;
 					break;
 				}
 			}
 			if (isInMEC) {
-				xOffsetArr[i] = current;
-				current += getNumChoicesOfModel(i) * (1 << getN());
+				result[state] = current;
+				current += model.getNumChoices(state) * (1 << getN());
 			} else {
-				xOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
+				result[state] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
+		return result;
+	}
 
-		this.yOffsetArr = new int[getNumStatesOfModel()];
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
-			yOffsetArr[i] = current;
-			current += getNumChoicesOfModel(i);
+	private int @NonNull [] computeYOffsets()
+	{
+		int stateMax = getMaxMECState();
+		int current = this.getVarX(stateMax, model.getNumChoices(stateMax) - 1, 1 << (getN()) - 1);
+
+		int @NonNull [] result = new int[model.getNumStates()];
+		for (int i = 0; i < model.getNumStates(); i++) {
+			result[i] = current;
+			current += model.getNumChoices(i);
 		}
+		return result;
 
-		this.zIndex = new int[getNumStatesOfModel()];
+	}
 
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
+	private int @NonNull [] computeZOffsets()
+	{
+		int current = this.yOffsetArr[model.getNumStates() - 1] + model.getNumChoices(model.getNumStates() - 1);
+		int @NonNull [] result = new int[model.getNumStates()];
+
+		for (int i = 0; i < model.getNumStates(); i++) {
 			zIndex[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
 		}
+		return result;
+	}
 
-		this.numRealLPVars = current;
+	private int getMaxMECState()
+	{
+		for (int i = model.getNumStates() - 1; i >= 0; i--) {
+			if (this.isMECState(i)) {
+				return i;
+			}
+		}
+		throw new AssertionError("We should never reach here");
 	}
 
 	/**
@@ -209,13 +229,13 @@ public abstract class MultiLongRun
 	 * Names all variables, useful for debugging.
 	 * @throws PrismException
 	 */
-	void nameLPVars() throws PrismException
+	private void nameLPVars() throws PrismException
 	{
 		int current = 0;
 
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
+		for (int i = 0; i < model.getNumStates(); i++) {
 			if (isMECState(i)) {
-				for (int j = 0; j < getNumChoicesOfModel(i); j++) {
+				for (int j = 0; j < model.getNumChoices(i); j++) {
 					for (int n = 0; n < 1 << getN(); n++) {
 						String name = "x" + i + "c" + j + "N" + n;
 						solver.setVarName(current + j, name);
@@ -226,18 +246,18 @@ public abstract class MultiLongRun
 			}
 		}
 
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
-			for (int j = 0; j < getNumChoicesOfModel(i); j++) {
+		for (int i = 0; i < model.getNumStates(); i++) {
+			for (int j = 0; j < model.getNumChoices(i); j++) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					String name = "y" + i + "c" + j;
 					solver.setVarName(current + j, name);
 					solver.setVarBounds(current + j, 0.0, Double.MAX_VALUE);
 				}
 			}
-			current += getNumChoicesOfModel(i) * (1 << getN());
+			current += model.getNumChoices(i) * (1 << getN());
 		}
 
-		for (int i = 0; i < getNumStatesOfModel(); i++) {
+		for (int i = 0; i < model.getNumStates(); i++) {
 			if (isMECState(i)) {
 				String name = "z" + i;
 				solver.setVarName(current, name);
@@ -280,9 +300,9 @@ public abstract class MultiLongRun
 	private HashMap<Integer, Double> getRowForReward(MDPItem constraint)
 	{
 		HashMap<Integer, Double> row = new HashMap<Integer, Double>();
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state)) {
-				for (int action = 0; action < getNumChoicesOfModel(state); action++) {
+				for (int action = 0; action < model.getNumChoices(state); action++) {
 					for (int n = 0; n < 1 << getN(); n++) {
 						int index = getVarX(state, action, n);
 						double val = 0;
@@ -339,7 +359,7 @@ public abstract class MultiLongRun
 			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
 
 				//X
-				for (int action = 0; action < getNumChoicesOfModel(state); action++) {
+				for (int action = 0; action < model.getNumChoices(state); action++) {
 					row.put(getVarX(state, action, n), 1.0);
 				}
 
@@ -388,11 +408,6 @@ public abstract class MultiLongRun
 		return result;
 	}
 
-	private int getVarEpsilon()
-	{
-		return this.epsilonVarIndex;
-	}
-
 	/**
 	 * Adds all rows to the LP program that give requirements
 	 * on the steady-state distribution (via x variables), equation no 4
@@ -401,17 +416,17 @@ public abstract class MultiLongRun
 	private void setXConstraints() throws PrismException
 	{
 		HashMap<Integer, HashMap<Integer, Double>> map = new HashMap<Integer, HashMap<Integer, Double>>();
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state))
 				map.put(state, new HashMap<Integer, Double>());
 		}
 
 		//outflow
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			if (!isMECState(state))
 				continue;
 
-			for (int i = 0; i < getNumChoicesOfModel(state); i++) {
+			for (int i = 0; i < model.getNumChoices(state); i++) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					int index = getVarX(state, i, n);
 					map.get(state).put(index, -1.0);
@@ -420,11 +435,11 @@ public abstract class MultiLongRun
 		}
 
 		//inflow
-		for (int preState = 0; preState < getNumStatesOfModel(); preState++) {
+		for (int preState = 0; preState < model.getNumStates(); preState++) {
 			if (!isMECState(preState))
 				continue;
 
-			for (int action = 0; action < getNumChoicesOfModel(preState); action++) {
+			for (int action = 0; action < model.getNumChoices(preState); action++) {
 				for (int n = 0; n < 1 << getN(); n++) {
 					int index = getVarX(preState, action, n);
 					Iterator<Entry<Integer, Double>> it = getTransitionIteratorOfModel(preState, action);
@@ -463,17 +478,17 @@ public abstract class MultiLongRun
 	 */
 	private void setYConstraints() throws PrismException
 	{
-		HashMap<Integer, Double>[] map = (HashMap<Integer, Double>[]) new HashMap[getNumStatesOfModel()];
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		HashMap<Integer, Double>[] map = (HashMap<Integer, Double>[]) new HashMap[model.getNumStates()];
+		for (int state = 0; state < model.getNumStates(); state++) {
 			map[state] = new HashMap<Integer, Double>();
 		}
 
-		int initialState = getInitialStateOfModel();
+		int initialState = model.getFirstInitialState();
 
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 
 			//outflow y
-			for (int i = 0; i < getNumChoicesOfModel(state); i++) {
+			for (int i = 0; i < model.getNumChoices(state); i++) {
 				int index = getVarY(state, i);
 				map[state].put(index, -1.0);
 			}
@@ -488,8 +503,8 @@ public abstract class MultiLongRun
 		}
 
 		//inflow
-		for (int preState = 0; preState < getNumStatesOfModel(); preState++) {
-			for (int i = 0; i < getNumChoicesOfModel(preState); i++) {
+		for (int preState = 0; preState < model.getNumStates(); preState++) {
+			for (int i = 0; i < model.getNumChoices(preState); i++) {
 				int index = getVarY(preState, i);
 				Iterator<Entry<Integer, Double>> it = getTransitionIteratorOfModel(preState, i);
 				while (it.hasNext()) {
@@ -508,7 +523,7 @@ public abstract class MultiLongRun
 
 		//fill in
 
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			solver.addRowFromMap(map[state], (initialState == state) ? -1.0 : 0, SolverProxyInterface.Comparator.EQ, "y" + state);
 		}
 	}
@@ -521,10 +536,6 @@ public abstract class MultiLongRun
 	 */
 	public void createMultiLongRunLP() throws PrismException
 	{
-		if (!initialised) {
-			computeOffsets();
-			initialised = true;
-		}
 
 		initialiseSolver();
 
@@ -561,8 +572,8 @@ public abstract class MultiLongRun
 
 			for (int n = 0; n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
-					for (int state = 0; state < getNumStatesOfModel(); state++) {
-						for (int act = 0; act < getNumChoicesOfModel(state); act++) {
+					for (int state = 0; state < model.getNumStates(); state++) {
+						for (int act = 0; act < model.getNumChoices(state); act++) {
 							if (isMECState(state)) {
 								map.put(getVarX(state, act, n), 1.0);
 							}
@@ -591,11 +602,11 @@ public abstract class MultiLongRun
 	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
 		HashMap<Integer, Double> map = new HashMap<Integer, Double>();
-		for (int state = 0; state < getNumStatesOfModel(); state++) {
+		for (int state = 0; state < model.getNumStates(); state++) {
 			if (maxEndComponent.get(state)) {
-				for (int act = 0; act < getNumChoicesOfModel(state); act++) {
-					double value = constraints.get(i).reward.getStateReward(prepareStateForReward(state)) + constraints.get(i).reward.getTransitionReward(prepareStateForReward(state), act)
-							- constraints.get(i).getBound();
+				for (int act = 0; act < model.getNumChoices(state); act++) {
+					double value = constraints.get(i).reward.getStateReward(prepareStateForReward(state))
+							+ constraints.get(i).reward.getTransitionReward(prepareStateForReward(state), act) - constraints.get(i).getBound();
 					map.put(getVarX(state, act, n), value);
 				}
 			}
@@ -630,40 +641,14 @@ public abstract class MultiLongRun
 		solver.solve();
 
 		if (this.objectives.size() == 0) {//We should return bool type
-			StateValues sv = new StateValues(TypeBool.getInstance(), getModel());
-			sv.setBooleanValue(getInitialStateOfModel(), solver.getBoolResult());
+			StateValues sv = new StateValues(TypeBool.getInstance(), model);
+			sv.setBooleanValue(model.getFirstInitialState(), solver.getBoolResult());
 			return sv;
 		} else {
-			StateValues sv = new StateValues(TypeDouble.getInstance(), getModel());
-			sv.setDoubleValue(getInitialStateOfModel(), solver.getDoubleResult());
+			StateValues sv = new StateValues(TypeDouble.getInstance(), model);
+			sv.setDoubleValue(model.getFirstInitialState(), solver.getDoubleResult());
 			return sv;
 		}
-	}
-
-	/**
-	 * Solves the memoryless multiobjective problem for constraint only, or numerical (i.e. no Pareto) 
-	 * @return
-	 * @throws PrismException
-	 */
-	public StateValues solveMemoryless() throws PrismException
-	{
-		if (!this.objectives.isEmpty()) {
-			throw new UnsupportedOperationException("Memoryless problem cannot be solved for numerical objectives (Rmin/Rmax)");
-		}
-
-		HashMap<Integer, Double> epsObj = new HashMap<Integer, Double>();
-		epsObj.put(getVarEpsilon(), 1.0);
-		solver.setObjFunct(epsObj, true);
-
-		double solverStartTime = System.currentTimeMillis();
-
-		boolean value = solver.solveIsPositive();
-		double time = (System.currentTimeMillis() - solverStartTime) / 1000;
-		System.out.println("LP solving took " + time + " s.");
-
-		StateValues sv = new StateValues(TypeBool.getInstance(), getModel());
-		sv.setBooleanValue(getInitialStateOfModel(), value);
-		return sv;
 	}
 
 	/**
@@ -717,8 +702,6 @@ public abstract class MultiLongRun
 		if (r == lpsolve.LpSolve.INFEASIBLE) {
 			return null;
 		} else if (r == lpsolve.LpSolve.OPTIMAL) {
-			new Point(2);
-
 			for (int i = 0; i < weights.getDimension(); i++) {
 				double res = 0;
 				HashMap<Integer, Double> rewardEqn = getRowForReward(numIndices.get(i));
@@ -750,25 +733,13 @@ public abstract class MultiLongRun
 		}
 		return result;
 	}
-	
-	protected final int getNumStatesOfModel(){
-		return getModel().getNumStates();
-	}
-	
-	protected abstract int getNumChoicesOfModel(int state);
-	
-	protected abstract Model getModel();
-	
-	protected int getInitialStateOfModel(){
-		return getModel().getFirstInitialState();
-	}
-	
+
 	protected abstract Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action);
-	
+
 	/**
 	 * if our model is a product of MDP and strategy, then we have to slightly prepare the state-
 	 * number, because otherwise the rewards are not anymore working
 	 */
 	protected abstract int prepareStateForReward(int state);
-	
+
 }
