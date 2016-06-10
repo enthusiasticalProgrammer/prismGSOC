@@ -12,9 +12,9 @@ import strat.Strategy;
 
 public class MultiLongRunDTMC extends MultiLongRun
 {
-	private final DTMCProductMLRStrategyAndMDP dtmc;
+	private final @NonNull DTMCProductMLRStrategyAndMDP dtmc;
 
-	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc,@NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
+	public MultiLongRunDTMC(@NonNull DTMCProductMLRStrategyAndMDP dtmc,@NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
 			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,@NonNull String method) throws PrismException
 	{
 		super(constraints, objectives, expConstraints, method, new ArtificialNondetModelFromModel(dtmc));

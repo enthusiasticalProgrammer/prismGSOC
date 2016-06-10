@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -262,7 +264,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	private Values currentDefinedMFConstants = null;
 	// Built model storage - symbolic or explicit - at most one is non-null
 	private Model currentModel = null;
-	private explicit.Model currentModelExpl = null;
+	private explicit.Model currentModelExpl;
 	// Are we doing digital clocks translation for PTAs?
 	boolean digital = false;
 
@@ -2887,18 +2889,16 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				ModelChecker mc = createModelChecker(propertiesFile);
 				res = mc.check(prop.getExpression());
 			} else {
-				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
 				// if implement strategy option is enabled, build a product with
 				// strategy before model checking
 				if (getSettings().getBoolean(PrismSettings.PRISM_IMPLEMENT_STRATEGY) && strategy != null) {
-					try {
-						mc.setStrategy(strategy);
-						res = mc.check(strategy.buildProduct(currentModelExpl), prop.getExpression());
-					} catch (UnsupportedOperationException e) {
-						throw new PrismException("Building the product of the model and strategy failed");
+					if(currentModelExpl != null){
+						currentModelExpl = strategy.buildProduct(currentModelExpl);
 					}
-				} else
-					res = mc.check(currentModelExpl, prop.getExpression());
+					currentModelType = currentModelExpl.getModelType();
+				}
+				explicit.StateModelChecker mc = createModelCheckerExplicit(propertiesFile);
+					res = mc.check( currentModelExpl, prop.getExpression());
 
 				// saving strategy if it was generated.
 				if (settings.getBoolean(PrismSettings.PRISM_GENERATE_STRATEGY)) {

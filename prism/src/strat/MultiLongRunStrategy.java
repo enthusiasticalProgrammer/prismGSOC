@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import prism.PrismException;
 import prism.PrismLog;
 import explicit.DTMC;
@@ -165,21 +168,22 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public Model buildProduct(Model model)
+	public @NonNull Model buildProduct(Model model)
 	{
-		System.out.println("in buildProduct");
+		if(model == null){
+			throw new NullPointerException();
+		}
 		try {
 			return buildProductFromMDPExplicit((MDPSparse) model);
 		} catch (PrismException e) {
 			// TODO Auto-generated catch block
-			System.out.println("something bad happened in buildProduct");
+			System.out.println("The following error happened in buildProduct");
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
-		return null;
 	}
 
-	//TODO verify under strategy is not working (but however output with strategy does)
-	public DTMC buildProductFromMDPExplicit(MDPSparse model) throws PrismException
+	public @NonNull DTMC buildProductFromMDPExplicit(@NonNull MDPSparse model) throws PrismException
 	{
 		return new DTMCProductMLRStrategyAndMDP(model,this);
 	}

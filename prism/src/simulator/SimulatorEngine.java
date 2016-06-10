@@ -28,11 +28,11 @@ package simulator;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import explicit.Distribution;
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -142,7 +142,7 @@ public class SimulatorEngine extends PrismComponent
 	protected Updater updater;
 
 	// strategy information
-	private Map<State, Integer> stateIds;
+	private @NonNull Map<State, Integer> stateIds;
 
 	// TODO: remove this (not in trunk any more)
 	private Prism prism;
@@ -250,8 +250,6 @@ public class SimulatorEngine extends PrismComponent
 		strategy = prism.getStrategy();
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
-			if (stateIds == null || stateIds.isEmpty())
-				this.setStrategy(strategy);
 			strategy.init(stateIds.get(currentState));
 			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
 		}

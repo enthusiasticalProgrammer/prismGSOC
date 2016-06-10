@@ -27,6 +27,9 @@
 
 package strat;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import explicit.Distribution;
 import explicit.Model;
 import prism.PrismException;
@@ -124,7 +127,7 @@ public abstract class MDStrategy implements Strategy
 	}
 
 	@Override
-	public Model buildProduct(Model model) throws PrismException
+	public @NonNull Model buildProduct(@Nullable Model model) throws PrismException
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}

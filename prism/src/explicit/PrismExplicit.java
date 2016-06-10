@@ -29,6 +29,8 @@ package explicit;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.ast.Expression;
 import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
@@ -65,10 +67,10 @@ public class PrismExplicit extends PrismComponent
 	 * @param modulesFile Model to build
 	 * @param simEngine PRISM simulator engine (for model exploration)
 	 */
-	public Model buildModel(ModulesFile modulesFile, ModelGenerator simEngine) throws PrismException
+	public @NonNull Model buildModel(ModulesFile modulesFile, ModelGenerator simEngine) throws PrismException
 	{
 		long l; // timer
-		Model modelExpl;
+		@NonNull Model modelExpl;
 		ConstructModel constructModel;
 
 		if (modulesFile.getModelType() == ModelType.PTA) {
