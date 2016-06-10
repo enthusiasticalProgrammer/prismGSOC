@@ -1639,15 +1639,5 @@ public class SimulatorEngine extends PrismComponent
 	public void setStrategy(Strategy strategy)
 	{
 		this.strategy = strategy;
-		if (strategy != null && prism.getBuiltModelExplicit() != null) {
-			stateIds = new HashMap<State, Integer>();
-			java.util.List<State> stateslist = prism.getBuiltModelExplicit().getStatesList();
-			int i = 0;
-			for (State s : stateslist)
-				stateIds.put(s, i++);
-
-		} else if (strategy != null) {
-			throw new UnsupportedOperationException("wrong type of model");
-		}
 	}
 }
