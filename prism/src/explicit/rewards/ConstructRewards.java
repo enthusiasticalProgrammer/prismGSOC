@@ -137,7 +137,7 @@ public class ConstructRewards
 		Expression guard;
 		String action;
 		Object mdpAction;
-		int i, j, k, n, numStates, numChoices;
+		int i, state, choice, n, numStates, numChoices;
 
 		// Special case: constant state rewards
 		if (rewStr.getNumStateItems() == 1 && Expression.isTrue(rewStr.getStates(0)) && rewStr.getReward(0).isConstant()) {
@@ -155,28 +155,28 @@ public class ConstructRewards
 			for (i = 0; i < n; i++) {
 				guard = rewStr.getStates(i);
 				action = rewStr.getSynch(i);
-				for (j = 0; j < numStates; j++) {
+				for (state = 0; state < numStates; state++) {
 					// Is guard satisfied?
-					if (guard.evaluateBoolean(constantValues, statesList.get(j))) {
+					if (guard.evaluateBoolean(constantValues, statesList.get(state))) {
 						// Transition reward
 						if (rewStr.getRewardStructItem(i).isTransitionReward()) {
-							numChoices = mdp.getNumChoices(j);
-							for (k = 0; k < numChoices; k++) {
-								mdpAction = mdp.getAction(j, k);
+							numChoices = mdp.getNumChoices(state);
+							for (choice = 0; choice < numChoices; choice++) {
+								mdpAction = mdp.getAction(state, choice);
 								if (mdpAction == null ? (action.isEmpty()) : mdpAction.equals(action)) {
-									double rew = rewStr.getReward(i).evaluateDouble(constantValues, statesList.get(j));
+									double rew = rewStr.getReward(i).evaluateDouble(constantValues, statesList.get(state));
 									if (Double.isNaN(rew))
-										throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(j), rewStr.getReward(i));
-									rewSimple.addToTransitionReward(j, k, rew);
+										throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(state), rewStr.getReward(i));
+									rewSimple.addToTransitionReward(state, choice, rew);
 								}
 							}
 						}
 						// State reward
 						else {
-							double rew = rewStr.getReward(i).evaluateDouble(constantValues, statesList.get(j));
+							double rew = rewStr.getReward(i).evaluateDouble(constantValues, statesList.get(state));
 							if (Double.isNaN(rew))
-								throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(j), rewStr.getReward(i));
-							rewSimple.addToStateReward(j, rew);
+								throw new PrismLangException("Reward structure evaluates to NaN at state " + statesList.get(state), rewStr.getReward(i));
+							rewSimple.addToStateReward(state, rew);
 						}
 					}
 				}
