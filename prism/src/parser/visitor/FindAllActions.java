@@ -46,6 +46,7 @@ public class FindAllActions extends ASTTraverseModify
 
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new object so don't need to return it.
+	@Override
 	public void visitPost(Command e) throws PrismLangException
 	{
 		int i;
@@ -68,6 +69,7 @@ public class FindAllActions extends ASTTraverseModify
 
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new Command so don't need to return it.
+	@Override
 	public void visitPost(RewardStructItem e) throws PrismLangException
 	{
 		int i;

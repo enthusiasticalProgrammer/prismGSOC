@@ -635,12 +635,14 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		new BuildModelThread(this).start();
 	}
 
+	@Override
 	public synchronized void notifyModelBuildSuccessful()
 	{
 		// Deal with a model build success
 		// Put this in an invokeLater(...) so can be called from another thread
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				editor.modelParseSuccessful();
@@ -673,6 +675,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		}
 	}
 
+	@Override
 	public synchronized void notifyModelBuildFailed(PrismException e)
 	{
 		// Deal with a model build failure
@@ -680,6 +683,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		lastBuildError = e;
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if (lastBuildError != null && lastBuildError instanceof PrismLangException) {
@@ -1217,6 +1221,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 			this.handler = handler;
 		}
 
+		@Override
 		public void run()
 		{
 			try {

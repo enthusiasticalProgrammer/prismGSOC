@@ -221,6 +221,7 @@ public class Point
 	/**
 	 * Returns a point with the same coordinates as this point.
 	 */
+	@Override
 	public Point clone()
 	{
 		return new Point(this.coords.clone());

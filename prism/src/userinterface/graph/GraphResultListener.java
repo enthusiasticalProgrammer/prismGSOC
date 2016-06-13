@@ -66,6 +66,7 @@ public class GraphResultListener implements ResultListener
 		this.otherValues = otherValues;
 	}
 
+	@Override
 	public void notifyResult(ResultsCollection resultsCollection, Values values, Object result)
 	{
 		Object xObj = isInSeries(values);

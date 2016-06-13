@@ -53,6 +53,7 @@ public class SingleLineStringEditor implements SettingEditor, CaretListener, Foc
 		field.addFocusListener(this);
 	}
 
+	@Override
 	public Object getEditorValue()
 	{
 		if (multiDifferent && field.getText().equals("")) {
@@ -65,6 +66,7 @@ public class SingleLineStringEditor implements SettingEditor, CaretListener, Foc
 		}
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 		field.setMargin(new Insets(0, 2, 4, 2));
@@ -129,20 +131,24 @@ public class SingleLineStringEditor implements SettingEditor, CaretListener, Foc
 		return field;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 
 	}
 
+	@Override
 	public void caretUpdate(CaretEvent e)
 	{
 		field.getCaret().setVisible(true);
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		if (!valueGot && lastTable != null) {

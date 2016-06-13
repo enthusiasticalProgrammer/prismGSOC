@@ -82,16 +82,19 @@ class PrismEditorKit extends DefaultEditorKit
 		this.preferences = preferences;
 	}
 
+	@Override
 	public String getContentType()
 	{
 		return "text/prism";
 	}
 
+	@Override
 	public Document createDefaultDocument()
 	{
 		return new DefaultStyledDocument();
 	}
 
+	@Override
 	public final ViewFactory getViewFactory()
 	{
 		return getStylePreferences();
@@ -118,6 +121,7 @@ class PrismContext extends StyleContext implements ViewFactory
 		this.handler = handler;
 	}
 
+	@Override
 	public View create(Element element)
 	{
 		return new PrismView(element, handler);
@@ -138,6 +142,7 @@ class PrismView extends PlainView
 		this.handler = handler;
 	}
 
+	@Override
 	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());
@@ -189,6 +194,7 @@ class PrismView extends PlainView
 		return x;
 	}
 
+	@Override
 	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());

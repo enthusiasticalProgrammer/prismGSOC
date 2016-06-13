@@ -74,6 +74,7 @@ public class GUIClipboard extends GUIPlugin
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.addFlavorListener(new FlavorListener()
 		{
+			@Override
 			public void flavorsChanged(FlavorEvent e)
 			{
 				doClipboardEnables();
@@ -100,6 +101,7 @@ public class GUIClipboard extends GUIPlugin
 			/* get notified when enabledness of clipboard actions may change */
 			this.plugin.getSelectionChangeHandler().addListener(new GUIEventListener()
 			{
+				@Override
 				public boolean processGUIEvent(GUIEvent e)
 				{
 					doClipboardEnables();
@@ -113,6 +115,7 @@ public class GUIClipboard extends GUIPlugin
 				/* get notified when undo history may change */
 				undoManager.addListener(new GUIEventListener()
 				{
+					@Override
 					public boolean processGUIEvent(GUIEvent e)
 					{
 						if (e instanceof GUIUndoManagerEvent) {
@@ -139,44 +142,53 @@ public class GUIClipboard extends GUIPlugin
 		actionSelectAll.setEnabled(plugin != null && plugin.canDoClipBoardAction(actionSelectAll));
 	}
 
+	@Override
 	public void takeCLArgs(String args[])
 	{
 	}
 
+	@Override
 	public boolean displaysTab()
 	{
 		return false;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return editMenu;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return editToolBar;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return null;
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
 
+	@Override
 	public boolean processGUIEvent(GUIEvent e)
 	{
 		return false;
@@ -259,6 +271,7 @@ public class GUIClipboard extends GUIPlugin
 	{
 		actionUndo = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.UNDO, getFocussedComponent()));
@@ -272,6 +285,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionRedo = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.REDO, getFocussedComponent()));
@@ -285,6 +299,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionCut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.CUT, getFocussedComponent()));
@@ -298,6 +313,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionCopy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.COPY, getFocussedComponent()));
@@ -311,6 +327,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionPaste = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.PASTE, getFocussedComponent()));
@@ -324,6 +341,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionDelete = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.DELETE, getFocussedComponent()));
@@ -337,6 +355,7 @@ public class GUIClipboard extends GUIPlugin
 
 		actionSelectAll = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				notifyEventListeners(new GUIClipboardEvent(GUIClipboardEvent.SELECT_ALL, getFocussedComponent()));
@@ -349,11 +368,13 @@ public class GUIClipboard extends GUIPlugin
 		actionSelectAll.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallSelectAll.png"));
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public void notifySettings(prism.PrismSettings settings)
 	{
 	}

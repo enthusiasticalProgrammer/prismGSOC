@@ -124,11 +124,13 @@ public class StateListMTBDD implements StateList
 
 	// return size (number of states in list)
 
+	@Override
 	public int size()
 	{
 		return (size > Integer.MAX_VALUE) ? -1 : (int) Math.round(size);
 	}
 
+	@Override
 	public String sizeString()
 	{
 		return (size > Long.MAX_VALUE) ? "" + size : "" + Math.round(size);
@@ -136,6 +138,7 @@ public class StateListMTBDD implements StateList
 
 	// print/export whole list
 
+	@Override
 	public void print(PrismLog log)
 	{
 		outputFormat = OutputFormat.NORMAL;
@@ -146,6 +149,7 @@ public class StateListMTBDD implements StateList
 			outputLog.println("(none)");
 	}
 
+	@Override
 	public void printMatlab(PrismLog log)
 	{
 		outputFormat = OutputFormat.MATLAB;
@@ -154,6 +158,7 @@ public class StateListMTBDD implements StateList
 		doPrint();
 	}
 
+	@Override
 	public void printDot(PrismLog log)
 	{
 		outputFormat = OutputFormat.DOT;
@@ -162,6 +167,7 @@ public class StateListMTBDD implements StateList
 		doPrint();
 	}
 
+	@Override
 	public List<String> exportToStringList()
 	{
 		strList = new ArrayList<String>((int) size);
@@ -173,6 +179,7 @@ public class StateListMTBDD implements StateList
 
 	// print first n states of list
 
+	@Override
 	public void print(PrismLog log, int n)
 	{
 		outputFormat = OutputFormat.NORMAL;
@@ -184,6 +191,7 @@ public class StateListMTBDD implements StateList
 			outputLog.println("(none)");
 	}
 
+	@Override
 	public void printMatlab(PrismLog log, int n)
 	{
 		outputFormat = OutputFormat.MATLAB;
@@ -315,6 +323,7 @@ public class StateListMTBDD implements StateList
 	/**
 	 * Check for (partial) state inclusion - state(s) given by BDD
 	 */
+	@Override
 	public boolean includes(JDDNode state)
 	{
 		JDDNode tmp;
@@ -348,6 +357,7 @@ public class StateListMTBDD implements StateList
 
 	// get first state as Values object
 
+	@Override
 	public Values getFirstAsValues() throws PrismException
 	{
 		Values values;
@@ -399,6 +409,7 @@ public class StateListMTBDD implements StateList
 
 	// clear
 
+	@Override
 	public void clear()
 	{
 		JDD.Deref(states);

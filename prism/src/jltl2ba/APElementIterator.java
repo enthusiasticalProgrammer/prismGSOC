@@ -45,11 +45,13 @@ public class APElementIterator implements Iterator<APElement>
 		it = new APElement(size);
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		return !it.get(_size);
 	}
 
+	@Override
 	public APElement next() throws NoSuchElementException
 	{
 		if (hasNext()) {
@@ -60,6 +62,7 @@ public class APElementIterator implements Iterator<APElement>
 			throw new NoSuchElementException();
 	}
 
+	@Override
 	public void remove() throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

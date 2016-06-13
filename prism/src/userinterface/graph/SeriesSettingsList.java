@@ -47,6 +47,7 @@ public class SeriesSettingsList extends AbstractListModel implements Observer
 		this.seriesKeys = new HashMap<Integer, Graph.SeriesKey>();
 	}
 
+	@Override
 	public Object getElementAt(int index)
 	{
 		synchronized (graph.getSeriesLock()) {
@@ -61,6 +62,7 @@ public class SeriesSettingsList extends AbstractListModel implements Observer
 		}
 	}
 
+	@Override
 	public int getSize()
 	{
 		return seriesKeys.size();
@@ -87,6 +89,7 @@ public class SeriesSettingsList extends AbstractListModel implements Observer
 		fireContentsChanged(this, 0, this.getSize());
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		fireContentsChanged(this, 0, this.getSize());

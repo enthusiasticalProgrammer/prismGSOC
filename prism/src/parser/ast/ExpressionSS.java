@@ -73,6 +73,7 @@ public class ExpressionSS extends ExpressionQuant
 	 * Does some checks, e.g., throws an exception if probability is out of range.
 	 * @param constantValues Values for constants in order to evaluate any bound
 	 */
+	@Override
 	public OpRelOpBound getRelopBoundInfo(Values constantValues) throws PrismException
 	{
 		if (getBound() != null) {

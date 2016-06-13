@@ -342,6 +342,7 @@ public class StateValuesDV implements StateValues
 	 * 	Generate BDD for states in the given interval
 	 * (interval specified as lower/upper bound)
 	 */
+	@Override
 	public JDDNode getBDDFromInterval(double lo, double hi)
 	{
 		return values.getBDDFromInterval(lo, hi, vars, odd);

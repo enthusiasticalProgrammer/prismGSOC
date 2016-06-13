@@ -44,6 +44,7 @@ public class DoubleRangeConstraint implements SettingConstraint
 		this.inclusiveUpper = inclusiveUpper;
 	}
 
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
 

@@ -469,6 +469,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		jButton1.setText("Close");
 		jButton1.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				jButton1ActionPerformed(evt);
@@ -495,6 +496,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		AbstractAction addFileSystem = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addNetworkCluster();
@@ -510,6 +512,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		AbstractAction testAll = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testAll();
@@ -527,6 +530,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		AbstractAction addHost = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addHost();
@@ -540,6 +544,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		cut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_cut();
@@ -554,6 +559,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		copy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_copy();
@@ -568,6 +574,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		paste = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_paste();
@@ -582,6 +589,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		delete = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_delete();
@@ -596,6 +604,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		AbstractAction testAllHosts = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testAllHosts();
@@ -616,6 +625,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		AbstractAction testHost = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testHosts();
@@ -644,6 +654,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		newNetwork = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_new();
@@ -657,6 +668,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		open = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_open();
@@ -670,6 +682,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		save = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_save();
@@ -684,6 +697,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		saveAs = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_saveAs();
@@ -698,6 +712,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		close = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_close();
@@ -719,6 +734,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		fileMenu.add(close);
 	}
 
+	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
 		ArrayList owners = new ArrayList();
@@ -732,6 +748,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		TreePath path = networkTree.getClosestPathForLocation(e.getX(), e.getY());
@@ -752,20 +769,24 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger())
 			mousePopupTrigger(e);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger())
@@ -806,6 +827,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		return networkTree.getSelectionModel().isPathSelected(path);
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		if (arg instanceof SSHHost) {
@@ -894,6 +916,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		return JFileChooser.APPROVE_OPTION;
 	}
 
+	@Override
 	public File getFile(Frame parent, File defaultFile)
 	{
 		modified = false;
@@ -938,6 +961,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		ImageIcon ERROR_HOST = GUIPrism.getIconFromImage("smallError.png");
 		ImageIcon RUNNING_HOST = GUIPrism.getIconFromImage("smallClockAnim1.png");
 
+		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
 		{
 			super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);

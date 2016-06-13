@@ -95,16 +95,19 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 			builder.setEntityResolver(this);
 			builder.setErrorHandler(new ErrorHandler()
 			{
+				@Override
 				public void fatalError(SAXParseException e) throws SAXException
 				{
 					throw e;
 				}
 
+				@Override
 				public void error(SAXParseException e) throws SAXException
 				{
 					throw e;
 				}
 
+				@Override
 				public void warning(SAXParseException e)
 				{
 				}
@@ -129,6 +132,7 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 	 * (and since the DTD specified in the SBML files is not local)
 	 * (if validation is enabled, put the DTD file "sbml.dtd" in PRISM's "dtds" directory)
 	 */
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
 	{
 		InputSource inputSource = null;

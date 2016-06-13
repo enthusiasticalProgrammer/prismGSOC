@@ -47,6 +47,7 @@ public class FileSetting extends Setting
 			{
 				JFileChooser choose = new JFileChooser();
 
+				@Override
 				public File getFile(Frame parent, File defaultFile)
 				{
 					choose.setSelectedFile(defaultFile);
@@ -95,6 +96,7 @@ public class FileSetting extends Setting
 		selector = defaultSelector();
 	}
 
+	@Override
 	public void checkObjectWithConstraints(Object obj) throws SettingException
 	{
 		super.checkObjectWithConstraints(obj);
@@ -108,16 +110,19 @@ public class FileSetting extends Setting
 			validFile = false;
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return File.class;
@@ -137,11 +142,13 @@ public class FileSetting extends Setting
 		return validFile;
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		return new File(string);
 	}
 
+	@Override
 	public String toString()
 	{
 		if (getFileValue() == null)

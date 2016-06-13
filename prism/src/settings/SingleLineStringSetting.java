@@ -47,21 +47,25 @@ public class SingleLineStringSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return String.class;
 	}
 
+	@Override
 	public void checkObjectWithConstraints(Object obj) throws SettingException
 	{
 		super.checkObjectWithConstraints(obj);
@@ -75,11 +79,13 @@ public class SingleLineStringSetting extends Setting
 		return getValue().toString();
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		return string;
 	}
 
+	@Override
 	public String toString()
 	{
 		return getStringValue();

@@ -67,6 +67,7 @@ public class TableResizer extends MouseInputAdapter
 		this.table.removeMouseMotionListener(this);
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		Point p = e.getPoint();
@@ -80,6 +81,7 @@ public class TableResizer extends MouseInputAdapter
 		}
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		Point p = e.getPoint();
@@ -94,6 +96,7 @@ public class TableResizer extends MouseInputAdapter
 		}
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e)
 	{
 		Point p = e.getPoint();
@@ -111,6 +114,7 @@ public class TableResizer extends MouseInputAdapter
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (!active)

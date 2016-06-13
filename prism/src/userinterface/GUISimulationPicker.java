@@ -257,6 +257,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -268,6 +269,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -279,6 +281,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -317,6 +320,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		useDefaultInitialCheck.setText("Use default initial state");
 		useDefaultInitialCheck.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				useDefaultInitialCheckActionPerformed(evt);
@@ -406,6 +410,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 
 		selectSimulationMethod.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectSimulationMethodActionPerformed(evt);
@@ -415,6 +420,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
 		automaticCalculateCombo.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				automaticCalculateComboActionPerformed(evt);
@@ -443,6 +449,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		widthField.setPreferredSize(new java.awt.Dimension(65, 20));
 		widthField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				widthFieldActionPerformed(evt);
@@ -459,6 +466,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		confidenceField.setPreferredSize(new java.awt.Dimension(60, 20));
 		confidenceField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				confidenceFieldActionPerformed(evt);
@@ -475,6 +483,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		numSamplesField.setPreferredSize(new java.awt.Dimension(60, 20));
 		numSamplesField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				numSamplesFieldActionPerformed(evt);
@@ -1020,15 +1029,18 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		dispose();
 	}//GEN-LAST:event_closeDialog
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 		doEnablesAndCalculations(false);
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 
@@ -1059,16 +1071,19 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			return values.get(i);
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 3;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return values.size();
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 
@@ -1085,6 +1100,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		}
 
+		@Override
 		public String getColumnName(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -1099,6 +1115,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2)
@@ -1107,6 +1124,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 				return false;
 		}
 
+		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2) {
@@ -1117,6 +1135,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		}
 
+		@Override
 		public String toString()
 		{
 			String str = "";
@@ -1144,6 +1163,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			this.value = value;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name + "=" + value;
@@ -1157,6 +1177,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 			{
 				Component c = GreyableJTable.super.getCellRenderer(row, column).getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -1165,6 +1186,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		};
 
+		@Override
 		public TableCellRenderer getCellRenderer(int row, int column)
 		{
 			return tableCellRenderer;

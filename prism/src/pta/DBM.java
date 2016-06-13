@@ -59,6 +59,7 @@ public class DBM extends Zone
 	/**
 	 * Get parent PTA
 	 */
+	@Override
 	public PTA getPTA()
 	{
 		return pta;
@@ -69,6 +70,7 @@ public class DBM extends Zone
 	/**
 	 * Conjunction: add constraint x-y db
 	 */
+	@Override
 	public void addConstraint(int x, int y, int db)
 	{
 		// Check if this causes inconsistency (i.e. zone emptiness)
@@ -104,6 +106,7 @@ public class DBM extends Zone
 	/**
 	 * Conjunction: add constraint c
 	 */
+	@Override
 	public void addConstraint(Constraint c)
 	{
 		addConstraint(c.x, c.y, c.db);
@@ -112,6 +115,7 @@ public class DBM extends Zone
 	/**
 	 * Conjunction: add multiple constraints
 	 */
+	@Override
 	public void addConstraints(Iterable<Constraint> constraints)
 	{
 		for (Constraint c : constraints)
@@ -121,6 +125,7 @@ public class DBM extends Zone
 	/**
 	 * Conjunction: with another zone
 	 */
+	@Override
 	public void intersect(Zone z)
 	{
 		int i, j, n;
@@ -137,6 +142,7 @@ public class DBM extends Zone
 	/**
 	 * Up, i.e. let time elapse, subject to some constraints
 	 */
+	@Override
 	public void up(Iterable<Constraint> constraints)
 	{
 		int i, n;
@@ -154,6 +160,7 @@ public class DBM extends Zone
 	/**
 	 * Down, i.e. zone which can reach this one, subject to some constraints
 	 */
+	@Override
 	public void down(Iterable<Constraint> constraints)
 	{
 		int i, j, n;
@@ -175,6 +182,7 @@ public class DBM extends Zone
 	/**
 	 * Free, i.e. remove constraints on a clock
 	 */
+	@Override
 	public void free(int x)
 	{
 		int i, n;
@@ -190,6 +198,7 @@ public class DBM extends Zone
 	/**
 	 * Reset clock x
 	 */
+	@Override
 	public void reset(int x, int v)
 	{
 		int i, n;
@@ -203,6 +212,7 @@ public class DBM extends Zone
 	/**
 	 * Backward reset of clock x
 	 */
+	@Override
 	public void backReset(int x, int v)
 	{
 		// Conjunction with constraint x=v
@@ -216,6 +226,7 @@ public class DBM extends Zone
 	/**
 	 * c-Closure
 	 */
+	@Override
 	public void cClosure(int c)
 	{
 		int i, j, n;
@@ -239,6 +250,7 @@ public class DBM extends Zone
 	/**
 	 * Complement this DBM; creates a new DBM list as result.
 	 */
+	@Override
 	public DBMList createComplement()
 	{
 		DBMList list = new DBMList(pta);
@@ -271,6 +283,7 @@ public class DBM extends Zone
 	/**
 	 * Is this zone empty (i.e. inconsistent)?
 	 */
+	@Override
 	public boolean isEmpty()
 	{
 		// Internally, inconsistency is flagged by setting d[0][0] to -1.
@@ -281,6 +294,7 @@ public class DBM extends Zone
 	/**
 	 * Is constraint c satisfied by this zone (i.e does it overlap)?
 	 */
+	@Override
 	public boolean isSatisfied(Constraint c)
 	{
 		return DB.add(c.db, d[c.y][c.x]) > 0;
@@ -289,6 +303,7 @@ public class DBM extends Zone
 	/**
 	 * Is a DBM (fully) included in this zone?
 	 */
+	@Override
 	public boolean includes(DBM dbm)
 	{
 		int i, j, n;
@@ -306,6 +321,7 @@ public class DBM extends Zone
 	/**
 	 * Get the minimum value of a clock. 
 	 */
+	@Override
 	public int getClockMin(int x)
 	{
 		return -DB.getSignedDiff(d[0][x]);
@@ -314,6 +330,7 @@ public class DBM extends Zone
 	/**
 	 * Get the maximum value of a clock. 
 	 */
+	@Override
 	public int getClockMax(int x)
 	{
 		return DB.getSignedDiff(d[x][0]);
@@ -322,6 +339,7 @@ public class DBM extends Zone
 	/**
 	 * Check if a clock is unbounded (can be infinite).
 	 */
+	@Override
 	public boolean clockIsUnbounded(int x)
 	{
 		return DB.isInfty(d[x][0]);
@@ -330,6 +348,7 @@ public class DBM extends Zone
 	/**
 	 * Check if all clocks are unbounded (can be infinite).
 	 */
+	@Override
 	public boolean allClocksAreUnbounded()
 	{
 		int i, n;
@@ -347,6 +366,7 @@ public class DBM extends Zone
 	/**
 	 * Clone this zone
 	 */
+	@Override
 	public DBM deepCopy()
 	{
 		int i, j, n;
@@ -364,6 +384,7 @@ public class DBM extends Zone
 	/**
 	 * Get storage info string
 	 */
+	@Override
 	public String storageInfo()
 	{
 		return "DBM with " + pta.numClocks + " clocks";
@@ -371,6 +392,7 @@ public class DBM extends Zone
 
 	// Standard Java methods
 
+	@Override
 	public int hashCode()
 	{
 		int n = pta.numClocks + 1;
@@ -383,6 +405,7 @@ public class DBM extends Zone
 		return hash;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		DBM dbm;
@@ -406,6 +429,7 @@ public class DBM extends Zone
 
 	// To string methods
 
+	@Override
 	public String toString()
 	{
 		return toStringTextual();

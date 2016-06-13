@@ -1604,6 +1604,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	{
 		tree = new JTree(theModel)
 		{
+			@Override
 			public String getToolTipText(MouseEvent event)
 			{
 				String ret = null;
@@ -1623,6 +1624,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				return ret;
 			}
 
+			@Override
 			public boolean isPathEditable(TreePath path)
 			{
 				Object c = path.getLastPathComponent();
@@ -1653,6 +1655,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		moduleCollectionPopup = new JPopupMenu();
 		addModule = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addModule();
@@ -1666,6 +1669,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		declarationCollectionPopup = new JPopupMenu();
 		addIntegerGlobal = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addIntegerGlobal();
@@ -1674,6 +1678,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		addIntegerGlobal.putValue(Action.NAME, "Add Global Integer");
 		addBooleanGlobal = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addBooleanGlobal();
@@ -1686,6 +1691,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		constantsCollectionPopup = new JPopupMenu();
 		addIntegerConstant = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addIntegerConstant();
@@ -1694,6 +1700,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		addIntegerConstant.putValue(Action.NAME, "Add Integer Constant");
 		addBooleanConstant = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addBooleanConstant();
@@ -1702,6 +1709,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		addBooleanConstant.putValue(Action.NAME, "Add Boolean Constant");
 		addDoubleConstant = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addDoubleConstant();
@@ -1715,6 +1723,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		modulePopup = new JPopupMenu();
 		removeModule = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null && lastPopNode instanceof ModuleNode) {
@@ -1726,6 +1735,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		removeModule.putValue(Action.NAME, "Remove");
 		addBoolean = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null && lastPopNode instanceof ModuleNode) {
@@ -1738,6 +1748,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		addBoolean.putValue(Action.NAME, "Add Boolean Variable");
 		addInteger = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null && lastPopNode instanceof ModuleNode) {
@@ -1749,6 +1760,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		addInteger.putValue(Action.NAME, "Add Integer Variable");
 		renameModule = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null && lastPopNode instanceof ModuleNode) {
@@ -1767,6 +1779,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		declarationPopup = new JPopupMenu();
 		removeDeclaration = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null) {
@@ -1787,6 +1800,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		renameDeclaration = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null) {
@@ -1801,6 +1815,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		editExpression = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (lastPopNode != null) {
@@ -1830,6 +1845,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		non.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (non.isSelected())
@@ -1840,6 +1856,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		pro.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (pro.isSelected())
@@ -1850,6 +1867,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		sto.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (sto.isSelected())
@@ -1871,18 +1889,22 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		return null;
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -1992,6 +2014,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -2101,6 +2124,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	}
 
+	@Override
 	public String getToolTipText()
 	{
 		return handler.getParseErrorMessage();
@@ -2333,6 +2357,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super("", true);
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return false;
@@ -2358,6 +2383,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			remove(mod);
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -2383,6 +2409,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			remove(dec);
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -2407,6 +2434,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			remove(n);
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -2443,6 +2471,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return (String) getUserObject();
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -2459,6 +2488,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			theModel.nodeStructureChanged(this);
 		}
 
+		@Override
 		public boolean isLeaf()
 		{
 			return false;
@@ -2478,6 +2508,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super("");
 			addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent as)
 				{
 					if (stopCellEditing())
@@ -2486,11 +2517,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			});
 		}
 
+		@Override
 		public void cancelCellEditing()
 		{
 			setText("");
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			Expression exp;
@@ -2508,11 +2541,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 		}
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			return name;
 		}
 
+		@Override
 		public boolean isCellEditable(EventObject eo)
 		{
 			if ((eo == null) | ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -2521,6 +2556,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return false;
 		}
 
+		@Override
 		public boolean shouldSelectCell(EventObject eo)
 		{
 			return true;
@@ -2543,28 +2579,33 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 
 		//make sure the JTree gives the editor enough space
+		@Override
 		public void setBounds(Rectangle r)
 		{
 			r.width = Math.max(minWidth, r.width);
 			super.setBounds(r);
 		}
 
+		@Override
 		public void setBounds(int x, int y, int w, int h)
 		{
 			w = Math.max(minWidth, w);
 			super.setBounds(x, y, w, h);
 		}
 
+		@Override
 		public void addCellEditorListener(CellEditorListener l)
 		{
 			listeners.addElement(l);
 		}
 
+		@Override
 		public void removeCellEditorListener(CellEditorListener l)
 		{
 			listeners.removeElement(l);
 		}
 
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			return this;
@@ -2593,16 +2634,19 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.type = type;
 		}
 
+		@Override
 		public boolean getAllowsChildren()
 		{
 			return true;
 		}
 
+		@Override
 		public boolean isLeaf()
 		{
 			return false;
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -2618,6 +2662,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			setUserObject(str);
 		}
 
+		@Override
 		public String toString()
 		{
 			String name = getName();
@@ -2653,6 +2698,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super("");
 			addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent as)
 				{
 					if (stopCellEditing())
@@ -2661,11 +2707,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			});
 		}
 
+		@Override
 		public void cancelCellEditing()
 		{
 			setText("");
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			Expression exp;
@@ -2683,11 +2731,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 		}
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			return name;
 		}
 
+		@Override
 		public boolean isCellEditable(EventObject eo)
 		{
 			if ((eo == null) | ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -2696,6 +2746,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return false;
 		}
 
+		@Override
 		public boolean shouldSelectCell(EventObject eo)
 		{
 			return true;
@@ -2713,28 +2764,33 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 
 		//make sure the JTree gives the editor enough space
+		@Override
 		public void setBounds(Rectangle r)
 		{
 			r.width = Math.max(minWidth, r.width);
 			super.setBounds(r);
 		}
 
+		@Override
 		public void setBounds(int x, int y, int w, int h)
 		{
 			w = Math.max(minWidth, w);
 			super.setBounds(x, y, w, h);
 		}
 
+		@Override
 		public void addCellEditorListener(CellEditorListener l)
 		{
 			listeners.addElement(l);
 		}
 
+		@Override
 		public void removeCellEditorListener(CellEditorListener l)
 		{
 			listeners.addElement(l);
 		}
 
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			return this;
@@ -2806,6 +2862,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = getName() + " : [" + getMin() + ".." + getMax() + "] init " + getInitial() + ";";
@@ -2824,6 +2881,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.mn = mn;
 		}
 
+		@Override
 		public String getName()
 		{
 			return mn.getName() + "_s";
@@ -2850,6 +2908,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = getName() + " : bool init " + getInitial() + ";";
@@ -2905,6 +2964,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = "global " + getName() + " : [" + getMin() + ".." + getMax() + "] init " + getInitial() + ";";
@@ -2933,6 +2993,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = "global " + getName() + " : bool init " + getInitial() + ";";
@@ -2952,6 +3013,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		public abstract Expression getValue();
 
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (obj instanceof ConstantNode) {
@@ -2964,6 +3026,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				return false;
 		}
 
+		@Override
 		public abstract String getParseText();
 
 	}
@@ -2976,18 +3039,21 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super.add(new ExpressionNode("value: ", value, editable));
 		}
 
+		@Override
 		public void setValue(Expression e)
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			n.setUserObject(e);
 		}
 
+		@Override
 		public Expression getValue()
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = "const int " + getName();
@@ -3009,18 +3075,21 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super.add(new ExpressionNode("value: ", value, editable));
 		}
 
+		@Override
 		public void setValue(Expression e)
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			n.setUserObject(e);
 		}
 
+		@Override
 		public Expression getValue()
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = "const double " + getName();
@@ -3042,18 +3111,21 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super.add(new ExpressionNode("value: ", value, editable));
 		}
 
+		@Override
 		public void setValue(Expression e)
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			n.setUserObject(e);
 		}
 
+		@Override
 		public Expression getValue()
 		{
 			ExpressionNode n = (ExpressionNode) getChildAt(0);
 			return n.getValue();
 		}
 
+		@Override
 		public String getParseText()
 		{
 			String str = "const bool " + getName();
@@ -3077,6 +3149,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.tag = tag;
 		}
 
+		@Override
 		public String toString()
 		{
 			if (getUserObject() == null)
@@ -3085,13 +3158,16 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				return tag + getUserObject().toString();
 		}
 
+		@Override
 		public abstract boolean isEditable();
 
+		@Override
 		public boolean isLeaf()
 		{
 			return true;
 		}
 
+		@Override
 		public void setUserObject(Object obj)
 		{
 			super.setUserObject(obj);
@@ -3108,6 +3184,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.editable = editable;
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -3130,6 +3207,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.editable = editable;
 		}
 
+		@Override
 		public boolean isEditable()
 		{
 			return editable;
@@ -3210,6 +3288,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super("");
 			addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent as)
 				{
 					if (stopCellEditing())

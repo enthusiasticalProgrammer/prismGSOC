@@ -71,6 +71,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 	}
 
 	/** Override set font to set row height(s) */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -96,6 +97,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 		repaint();
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -126,6 +128,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			 setFont(header.getFont());*/
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			//setText((value == null) ? "" : value.toString());
@@ -161,6 +164,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			return this;
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			Graphics2D g2 = (Graphics2D) g;
@@ -220,11 +224,13 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 	{
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Object getElementAt(int index)
 		{
 			return "";
 		}
 
+		@Override
 		public int getSize()
 		{
 			return ptm.getRowCount();
@@ -325,6 +331,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			}
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -472,6 +479,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			PathChangeCellRenderer pctr = new PathChangeCellRenderer(this, value, isSelected, row);

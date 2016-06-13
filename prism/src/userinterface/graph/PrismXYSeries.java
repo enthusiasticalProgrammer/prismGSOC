@@ -142,6 +142,7 @@ public class PrismXYSeries extends XYSeries
 	 * This method is the one that implements some different
 	 * aspects to the XYSeries class.
 	 */
+	@Override
 	public void add(XYDataItem item, boolean notify)
 	{
 		if (checkValidity(item)) {

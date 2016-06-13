@@ -51,6 +51,7 @@ public class FindAllVars extends ASTTraverseModify
 
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new object so don't need to return it.
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, j, n;
@@ -71,6 +72,7 @@ public class FindAllVars extends ASTTraverseModify
 		}
 	}
 
+	@Override
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;
@@ -89,6 +91,7 @@ public class FindAllVars extends ASTTraverseModify
 	}
 
 	// Also re-compute info for ExpressionVar objects in case variable indices have changed
+	@Override
 	public Object visit(ExpressionVar e) throws PrismLangException
 	{
 		int i;

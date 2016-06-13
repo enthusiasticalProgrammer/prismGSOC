@@ -407,6 +407,7 @@ public class DefinedConstant
 	/** Convert to string. */
 	/*  Note that the (temorary) value is not included here */
 
+	@Override
 	public String toString()
 	{
 		String s = "";

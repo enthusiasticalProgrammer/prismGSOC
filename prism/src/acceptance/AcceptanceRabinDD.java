@@ -96,6 +96,7 @@ public class AcceptanceRabinDD extends ArrayList<AcceptanceRabinDD.RabinPairDD> 
 			return K;
 		}
 
+		@Override
 		public RabinPairDD clone()
 		{
 			return new RabinPairDD(getL(), getK());

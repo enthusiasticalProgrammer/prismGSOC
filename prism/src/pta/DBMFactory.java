@@ -33,6 +33,7 @@ public class DBMFactory implements ZoneFactory
 	/**
 	 * All clocks = 0
 	 */
+	@Override
 	public DBM createZero(PTA pta)
 	{
 		int i, j, n;
@@ -49,6 +50,7 @@ public class DBMFactory implements ZoneFactory
 	/**
 	 * All clocks any (non-negative) value
 	 */
+	@Override
 	public DBM createTrue(PTA pta)
 	{
 		int i, j, n;
@@ -70,6 +72,7 @@ public class DBMFactory implements ZoneFactory
 	/**
 	 * Zone defined by set of constraints
 	 */
+	@Override
 	public DBM createFromConstraints(PTA pta, Iterable<Constraint> constrs)
 	{
 		DBM dbm = createTrue(pta);

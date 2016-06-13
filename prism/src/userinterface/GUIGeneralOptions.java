@@ -100,6 +100,7 @@ public class GUIGeneralOptions extends OptionsPanel
 
 	}//GEN-END:initComponents
 
+	@Override
 	public void apply()
 	{
 
@@ -127,6 +128,7 @@ public class GUIGeneralOptions extends OptionsPanel
 		}
 	}
 
+	@Override
 	public void synchronizeGUI()
 	{
 		//not needed

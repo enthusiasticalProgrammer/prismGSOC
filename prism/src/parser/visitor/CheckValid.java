@@ -45,6 +45,7 @@ public class CheckValid extends ASTTraverse
 		this.modelType = modelType;
 	}
 
+	@Override
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		// R operator types restricted for some models
@@ -82,12 +83,14 @@ public class CheckValid extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionProb e) throws PrismLangException
 	{
 		if (modelType.nondeterministic() && e.getRelOp() == RelOp.EQ)
 			throw new PrismLangException("Can't use \"P=?\" for nondeterministic models; use \"Pmin=?\" or \"Pmax=?\"");
 	}
 
+	@Override
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		if (modelType.nondeterministic() && e.getRelOp() == RelOp.EQ)
@@ -96,6 +99,7 @@ public class CheckValid extends ASTTraverse
 			throw new PrismLangException("No support for ratio reward objectives yet");
 	}
 
+	@Override
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		// S operator only works for some models
@@ -109,6 +113,7 @@ public class CheckValid extends ASTTraverse
 			throw new PrismLangException("Can't use \"S=?\" for nondeterministic models; use \"Smin=?\" or \"Smax=?\"");*/
 	}
 
+	@Override
 	public void visitPost(ExpressionStrategy e) throws PrismLangException
 	{
 		if (!modelType.nondeterministic())

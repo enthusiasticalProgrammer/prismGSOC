@@ -52,6 +52,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ModulesFile e) throws PrismLangException
 	{
 		visitPre(e);
@@ -99,6 +100,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(PropertiesFile e) throws PrismLangException
 	{
 		visitPre(e);
@@ -127,6 +129,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Property e) throws PrismLangException
 	{
 		visitPre(e);
@@ -147,6 +150,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(FormulaList e) throws PrismLangException
 	{
 		visitPre(e);
@@ -171,6 +175,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(LabelList e) throws PrismLangException
 	{
 		visitPre(e);
@@ -195,6 +200,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ConstantList e) throws PrismLangException
 	{
 		visitPre(e);
@@ -219,6 +225,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Declaration e) throws PrismLangException
 	{
 		visitPre(e);
@@ -241,6 +248,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(DeclarationInt e) throws PrismLangException
 	{
 		visitPre(e);
@@ -263,6 +271,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(DeclarationBool e) throws PrismLangException
 	{
 		visitPre(e);
@@ -281,6 +290,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(DeclarationArray e) throws PrismLangException
 	{
 		visitPre(e);
@@ -305,6 +315,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(DeclarationClock e) throws PrismLangException
 	{
 		visitPre(e);
@@ -323,6 +334,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(DeclarationIntUnbounded e) throws PrismLangException
 	{
 		visitPre(e);
@@ -341,6 +353,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Module e) throws PrismLangException
 	{
 		visitPre(e);
@@ -372,6 +385,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Command e) throws PrismLangException
 	{
 		visitPre(e);
@@ -392,6 +406,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Updates e) throws PrismLangException
 	{
 		visitPre(e);
@@ -418,6 +433,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Update e) throws PrismLangException
 	{
 		visitPre(e);
@@ -442,6 +458,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(RenamedModule e) throws PrismLangException
 	{
 		visitPre(e);
@@ -460,6 +477,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(RewardStruct e) throws PrismLangException
 	{
 		visitPre(e);
@@ -484,6 +502,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(RewardStructItem e) throws PrismLangException
 	{
 		visitPre(e);
@@ -504,6 +523,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemInterleaved e) throws PrismLangException
 	{
 		visitPre(e);
@@ -527,6 +547,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemFullParallel e) throws PrismLangException
 	{
 		visitPre(e);
@@ -550,6 +571,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemParallel e) throws PrismLangException
 	{
 		visitPre(e);
@@ -570,6 +592,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemHide e) throws PrismLangException
 	{
 		visitPre(e);
@@ -589,6 +612,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemRename e) throws PrismLangException
 	{
 		visitPre(e);
@@ -608,6 +632,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemModule e) throws PrismLangException
 	{
 		visitPre(e);
@@ -626,6 +651,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemBrackets e) throws PrismLangException
 	{
 		visitPre(e);
@@ -645,6 +671,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(SystemReference e) throws PrismLangException
 	{
 		visitPre(e);
@@ -663,6 +690,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionTemporal e) throws PrismLangException
 	{
 		visitPre(e);
@@ -689,6 +717,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionITE e) throws PrismLangException
 	{
 		visitPre(e);
@@ -710,6 +739,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionBinaryOp e) throws PrismLangException
 	{
 		visitPre(e);
@@ -730,6 +760,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionUnaryOp e) throws PrismLangException
 	{
 		visitPre(e);
@@ -749,6 +780,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionFunc e) throws PrismLangException
 	{
 		visitPre(e);
@@ -772,6 +804,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		visitPre(e);
@@ -790,6 +823,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionLiteral e) throws PrismLangException
 	{
 		visitPre(e);
@@ -808,6 +842,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionConstant e) throws PrismLangException
 	{
 		visitPre(e);
@@ -826,6 +861,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionFormula e) throws PrismLangException
 	{
 		visitPre(e);
@@ -846,6 +882,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionVar e) throws PrismLangException
 	{
 		visitPre(e);
@@ -864,6 +901,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionProb e) throws PrismLangException
 	{
 		visitPre(e);
@@ -888,6 +926,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionReward e) throws PrismLangException
 	{
 		visitPre(e);
@@ -916,6 +955,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionSS e) throws PrismLangException
 	{
 		visitPre(e);
@@ -940,6 +980,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionExists e) throws PrismLangException
 	{
 		visitPre(e);
@@ -960,6 +1001,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionForAll e) throws PrismLangException
 	{
 		visitPre(e);
@@ -980,6 +1022,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionStrategy e) throws PrismLangException
 	{
 		visitPre(e);
@@ -1003,6 +1046,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		visitPre(e);
@@ -1021,6 +1065,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionProp e) throws PrismLangException
 	{
 		visitPre(e);
@@ -1039,6 +1084,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ExpressionFilter e) throws PrismLangException
 	{
 		visitPre(e);
@@ -1061,6 +1107,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(ForLoop e) throws PrismLangException
 	{
 		visitPre(e);
@@ -1085,6 +1132,7 @@ public class ASTTraverseModify implements ASTVisitor
 		defaultVisitPre(e);
 	}
 
+	@Override
 	public Object visit(Filter e) throws PrismLangException
 	{
 		visitPre(e);

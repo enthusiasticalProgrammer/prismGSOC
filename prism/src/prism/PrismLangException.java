@@ -60,6 +60,7 @@ public class PrismLangException extends PrismException
 		return e;
 	}
 
+	@Override
 	public String getMessage()
 	{
 		String msg = super.getMessage();
@@ -78,6 +79,7 @@ public class PrismLangException extends PrismException
 		return msg;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Error: " + getMessage() + ".";

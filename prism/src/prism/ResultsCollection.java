@@ -240,6 +240,7 @@ public class ResultsCollection
 	/**
 	 * Create string representation of the data
 	 */
+	@Override
 	public String toString()
 	{
 		return toString(false, ",", ",", true);
@@ -466,6 +467,7 @@ public class ResultsCollection
 		/**
 		 * Create string representation of the data
 		 */
+		@Override
 		public String toString()
 		{
 			return toString(false, ",", ",");
@@ -646,6 +648,7 @@ public class ResultsCollection
 	{
 		private Object val = null;
 
+		@Override
 		public int setResult(Values setThese, Object result)
 		{
 			int ret = (val == null) ? 1 : 0;
@@ -653,31 +656,37 @@ public class ResultsCollection
 			return ret;
 		}
 
+		@Override
 		public Object getResult(Values getThese) throws PrismException
 		{
 			return val;
 		}
 
+		@Override
 		public String toStringMatrixRec(String sep, String head)
 		{
 			return val.toString();
 		}
 
+		@Override
 		public String toStringRec(boolean pv, String sep, String eq, String head)
 		{
 			return head + eq + val + "\n";
 		}
 
+		@Override
 		public void exportRec(Values values, ResultsExporter export)
 		{
 			export.exportResult(values, val);
 		}
 
+		@Override
 		public String toStringPartialRec(Values partial, boolean first, boolean pv, String sep, String eq, String head)
 		{
 			return head + eq + val + "\n";
 		}
 
+		@Override
 		public void toArrayListRec(ArrayList<String[]> a, String line[])
 		{
 			line[rangingConstants.size()] = "" + val;

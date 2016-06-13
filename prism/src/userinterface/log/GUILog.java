@@ -86,44 +86,53 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 		}
 	}
 
+	@Override
 	public void takeCLArgs(String args[])
 	{
 	}
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return logMenu;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "Log";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
 
+	@Override
 	public boolean processGUIEvent(GUIEvent e)
 	{
 		if (e instanceof GUILogEvent) {
@@ -185,6 +194,7 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 
 		clearAction = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				((GUIWindowLog) theLog).clear();
@@ -197,6 +207,7 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 
 		saveAction = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (showSaveFileDialog(logFilter) == JFileChooser.APPROVE_OPTION) {
@@ -242,18 +253,22 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 		add(logger, BorderLayout.CENTER);
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -263,6 +278,7 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -272,11 +288,13 @@ public class GUILog extends GUIPlugin implements MouseListener, PrismSettingsLis
 		}
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		if (theLog instanceof GUIWindowLog)

@@ -153,11 +153,13 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	/**
 	 * @return The preferred size of the component.
 	 */
+	@Override
 	public Dimension getPreferredSize()
 	{
 		return new Dimension(panelWidth, textPane.getHeight());
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		// Draw the background of the panel.
@@ -198,6 +200,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	}
 
 	/** Property change listener for the text component, e.g. the font or tab size. */
+	@Override
 	public void propertyChange(PropertyChangeEvent event)
 	{
 		Object oldValue = event.getOldValue();
@@ -222,6 +225,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	/** Insert listener event for the document, updates the panel to reflect
 	 * the change.
 	 */
+	@Override
 	public void insertUpdate(DocumentEvent event)
 	{
 		documentUpdated(event);
@@ -230,6 +234,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	/** Remove listener event for the document, updates the panel to reflect
 	 * the change.
 	 */
+	@Override
 	public void removeUpdate(DocumentEvent event)
 	{
 		documentUpdated(event);
@@ -238,6 +243,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	/** Change listener event for the document, updates the panel to reflect the 
 	 * change.
 	 */
+	@Override
 	public void changedUpdate(DocumentEvent event)
 	{
 		// This event is covered by the insert and delete listeners, 

@@ -94,6 +94,7 @@ public class RangeConstraint extends NumericConstraint
 		this.inclusiveUpper = inclusiveUpper;
 	}
 
+	@Override
 	public void checkValueDouble(double value) throws SettingException
 	{
 		if (inclusiveLower) {
@@ -113,6 +114,7 @@ public class RangeConstraint extends NumericConstraint
 		}
 	}
 
+	@Override
 	public void checkValueInteger(int value) throws SettingException
 	{
 		if (inclusiveLower) {
@@ -132,6 +134,7 @@ public class RangeConstraint extends NumericConstraint
 		}
 	}
 
+	@Override
 	public void checkValueLong(long value) throws SettingException
 	{
 		if (inclusiveLower) {

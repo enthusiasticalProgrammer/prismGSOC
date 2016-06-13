@@ -255,6 +255,7 @@ public class PTA
 	{
 		return new Iterable<Transition>()
 		{
+			@Override
 			public Iterator<Transition> iterator()
 			{
 				return new TransitionsByActionIterator(loc, action);
@@ -294,6 +295,7 @@ public class PTA
 		return numClocks + " clocks, " + numLocations + " locations, " + numTransitions + " transitions";
 	}
 
+	@Override
 	public String toString()
 	{
 		int i;
@@ -456,11 +458,13 @@ public class PTA
 			computeNext();
 		}
 
+		@Override
 		public boolean hasNext()
 		{
 			return next != null;
 		}
 
+		@Override
 		public Transition next()
 		{
 			if (next == null)
@@ -470,6 +474,7 @@ public class PTA
 			return tr;
 		}
 
+		@Override
 		public void remove()
 		{
 			throw new UnsupportedOperationException();

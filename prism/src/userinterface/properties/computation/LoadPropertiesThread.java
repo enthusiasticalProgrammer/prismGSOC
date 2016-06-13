@@ -60,12 +60,14 @@ public class LoadPropertiesThread extends Thread
 		this.isInsert = isInsert;
 	}
 
+	@Override
 	public void run()
 	{
 		try {
 			//notify interface of start of computation
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					parent.startProgress();
@@ -82,6 +84,7 @@ public class LoadPropertiesThread extends Thread
 			catch (FileNotFoundException e) {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						parent.stopProgress();
@@ -95,6 +98,7 @@ public class LoadPropertiesThread extends Thread
 				ex = e;
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						parent.stopProgress();
@@ -109,6 +113,7 @@ public class LoadPropertiesThread extends Thread
 			//If we get here, the load has been successful, notify the interface and tell the handler.
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					parent.stopProgress();

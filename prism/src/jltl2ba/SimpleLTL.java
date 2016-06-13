@@ -113,6 +113,7 @@ public class SimpleLTL
 		}
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof SimpleLTL) {
@@ -182,6 +183,7 @@ public class SimpleLTL
 		return rv;
 	}
 
+	@Override
 	public SimpleLTL clone()
 	{
 		SimpleLTL rv = new SimpleLTL(kind, left != null ? left.clone() : null, right != null ? right.clone() : null, ap);
@@ -766,6 +768,7 @@ public class SimpleLTL
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		String rv = "";

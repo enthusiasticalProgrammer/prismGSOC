@@ -72,10 +72,12 @@ public class ExportResultsThread extends Thread
 		this.sep = sep;
 	}
 
+	@Override
 	public void run()
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.startProgress();
@@ -108,6 +110,7 @@ public class ExportResultsThread extends Thread
 		} catch (Exception e) {
 			SwingUtilities.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					parent.stopProgress();
@@ -121,6 +124,7 @@ public class ExportResultsThread extends Thread
 		//Computation successful, notify the user interface
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.stopProgress();

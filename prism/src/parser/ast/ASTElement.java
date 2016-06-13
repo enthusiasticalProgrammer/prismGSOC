@@ -181,6 +181,7 @@ public abstract class ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public abstract String toString();
 
 	/**

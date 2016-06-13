@@ -211,6 +211,7 @@ public class Scheduler
 		}
 
 		/** Generate the tree */
+		@Override
 		public void generateTree()
 		{
 			Tree_Rabin rabin = null;
@@ -308,6 +309,7 @@ public class Scheduler
 
 		/** Estimate the size of the automaton (use the estimate of Safra's
 		 * building block ) */
+		@Override
 		public int guestimate()
 		{
 			if (_tree_normal != null) {
@@ -317,6 +319,7 @@ public class Scheduler
 		}
 
 		/** Hook after calculation */
+		@Override
 		public void hook_after_calculate()
 		{
 			if (_tree_normal != null && _sched.flagStatNBA()) {
@@ -325,6 +328,7 @@ public class Scheduler
 		}
 
 		/** Generate the tree */
+		@Override
 		public void generateTree()
 		{
 			/* if (_options.scheck_path!="") {
@@ -385,6 +389,7 @@ public class Scheduler
 		}
 
 		/** Generate the tree */
+		@Override
 		public void generateTree()
 		{
 		}
@@ -409,6 +414,7 @@ public class Scheduler
 		}
 
 		/** Estimate the size of the DRA (returns the size of the NBA) */
+		@Override
 		public int guestimate()
 		{
 			generateNBA();
@@ -419,6 +425,7 @@ public class Scheduler
 		}
 
 		/** Translate the LTL formula to DRA using Safra's algorithm */
+		@Override
 		public void calculate(int level, int limit) throws PrismException
 		{
 			if (_options.verbose_scheduler) {
@@ -479,6 +486,7 @@ public class Scheduler
 		/**
 		 * Generate the tree
 		 */
+		@Override
 		public void generateTree()
 		{
 			Options_LTL2DRA rec_opt = _options.clone();
@@ -492,6 +500,7 @@ public class Scheduler
 		/**
 		 * Perform union construction
 		 */
+		@Override
 		public void calculate(int level, int limit) throws PrismException
 		{
 			if (_options.verbose_scheduler) {
@@ -601,6 +610,7 @@ public class Scheduler
 		}
 
 		/** Estimate automaton size (use estimate of Rabin building block) */
+		@Override
 		public int guestimate()
 		{
 			if (children.get(0) != null) {
@@ -618,6 +628,7 @@ public class Scheduler
 		}
 
 		/** Generate tree */
+		@Override
 		public void generateTree()
 		{
 			Options_LTL2DRA opt = _options;
@@ -628,6 +639,7 @@ public class Scheduler
 		}
 
 		/** Calculate */
+		@Override
 		public void calculate(int level, int limit) throws PrismException
 		{
 			if (_options.verbose_scheduler) {

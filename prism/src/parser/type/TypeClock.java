@@ -40,6 +40,7 @@ public class TypeClock extends Type
 	{
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeClock);

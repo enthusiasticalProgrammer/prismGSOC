@@ -43,6 +43,7 @@ public class GetAllFormulas extends ASTTraverse
 		this.v = v;
 	}
 
+	@Override
 	public void visitPost(ExpressionFormula e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {

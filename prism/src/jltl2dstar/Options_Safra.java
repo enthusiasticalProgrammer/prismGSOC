@@ -62,6 +62,7 @@ public class Options_Safra implements Cloneable
 		stutter_closure = false;
 	}
 
+	@Override
 	public Options_Safra clone()
 	{
 		Options_Safra rv = new Options_Safra();

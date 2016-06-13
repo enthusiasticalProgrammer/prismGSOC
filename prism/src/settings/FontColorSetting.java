@@ -50,16 +50,19 @@ public class FontColorSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return FontColorPair.class;
@@ -70,6 +73,7 @@ public class FontColorSetting extends Setting
 		return ((FontColorPair) getValue());
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		try {
@@ -89,6 +93,7 @@ public class FontColorSetting extends Setting
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		Color c = getFontColorValue().c;

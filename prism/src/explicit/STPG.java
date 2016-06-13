@@ -61,6 +61,7 @@ public interface STPG extends NondetModel
 	/**
 	 * Get the number of transitions from choice {@code i} of state {@code s}.
 	 */
+	@Override
 	public int getNumTransitions(int s, int i);
 
 	/**
@@ -220,5 +221,6 @@ public interface STPG extends NondetModel
 	 * @param set target set
 	 * @return true if all successors are, false otherwise
 	 */
+	@Override
 	public boolean allSuccessorsInSet(int s, int c, BitSet set);
 }

@@ -51,12 +51,14 @@ public class SavePropertiesThread extends Thread
 		this.f = f;
 	}
 
+	@Override
 	public void run()
 	{
 		try {
 			//notify interface of start of computation
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					parent.startProgress();
@@ -76,6 +78,7 @@ public class SavePropertiesThread extends Thread
 			catch (IOException e) {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						parent.stopProgress();
@@ -90,6 +93,7 @@ public class SavePropertiesThread extends Thread
 			//Computation successful, notify the user interface
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					parent.stopProgress();

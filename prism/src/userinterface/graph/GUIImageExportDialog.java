@@ -133,6 +133,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		setMinimumSize(new java.awt.Dimension(550, 350));
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -154,6 +155,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -165,6 +167,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -201,6 +204,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		imageTypeInputField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "JPEG", "PNG", "EPS" }));
 		imageTypeInputField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				imageTypeInputFieldActionPerformed(evt);
@@ -277,6 +281,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		return alphaInputField.isSelected();
 	}
 
+	@Override
 	public void changedUpdate(DocumentEvent e)
 	{
 		try {
@@ -294,11 +299,13 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		}
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e)
 	{
 		changedUpdate(e);
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e)
 	{
 		changedUpdate(e);

@@ -86,6 +86,7 @@ public class GUIUndoManager extends GUIEventHandler implements UndoableEditListe
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.DIED));
 	}
 
+	@Override
 	public boolean equals(Object obj)
 	{
 		return undoManager.equals(obj);
@@ -116,6 +117,7 @@ public class GUIUndoManager extends GUIEventHandler implements UndoableEditListe
 		return undoManager.getUndoPresentationName();
 	}
 
+	@Override
 	public int hashCode()
 	{
 		return undoManager.hashCode();
@@ -148,6 +150,7 @@ public class GUIUndoManager extends GUIEventHandler implements UndoableEditListe
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.LIMIT_CHANGE));
 	}
 
+	@Override
 	public String toString()
 	{
 		return undoManager.toString();
@@ -159,6 +162,7 @@ public class GUIUndoManager extends GUIEventHandler implements UndoableEditListe
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.UNDO));
 	}
 
+	@Override
 	public void undoableEditHappened(UndoableEditEvent e)
 	{
 		undoManager.undoableEditHappened(e);

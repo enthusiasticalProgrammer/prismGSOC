@@ -42,6 +42,7 @@ public class ToTreeString extends ASTTraverse
 		return buf.toString();
 	}
 
+	@Override
 	public void defaultVisitPre(ASTElement node) throws PrismLangException
 	{
 		// Don't print full toString() for multi-line objects
@@ -52,6 +53,7 @@ public class ToTreeString extends ASTTraverse
 		depth++;
 	}
 
+	@Override
 	public void defaultVisitPost(ASTElement node) throws PrismLangException
 	{
 		depth--;

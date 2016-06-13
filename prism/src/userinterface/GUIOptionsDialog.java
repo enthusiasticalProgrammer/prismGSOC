@@ -67,6 +67,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		// defunct
 	}
 
+	@Override
 	public void show()
 	{
 		super.show();
@@ -90,6 +91,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -114,6 +116,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		defaultButton.setMaximumSize(new java.awt.Dimension(220, 50));
 		defaultButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				defaultButtonActionPerformed(evt);
@@ -127,6 +130,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		saveSettingsButton.setPreferredSize(new java.awt.Dimension(120, 25));
 		saveSettingsButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				saveSettingsButtonActionPerformed(evt);
@@ -145,6 +149,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		cancelButton.setPreferredSize(new java.awt.Dimension(80, 25));
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);

@@ -43,6 +43,7 @@ public class SemanticCheck extends ASTTraverse
 	{
 	}
 
+	@Override
 	public void visitPost(ExpressionFunc e) throws PrismLangException
 	{
 		// Check function name is valid
@@ -58,6 +59,7 @@ public class SemanticCheck extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionIdent e) throws PrismLangException
 	{
 		// By the time the expression is checked, this should
@@ -65,6 +67,7 @@ public class SemanticCheck extends ASTTraverse
 		throw new PrismLangException("Undeclared identifier", e);
 	}
 
+	@Override
 	public void visitPost(ExpressionFormula e) throws PrismLangException
 	{
 		// This should have been defined or expanded by now

@@ -179,6 +179,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		return userName.getStringValue();
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Host " + getHostName();
@@ -318,6 +319,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	{
 		Thread stopThread = new Thread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if (getHostState() == RUNNING) {
@@ -368,6 +370,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	class TestThread extends Thread
 	{
 
+		@Override
 		public void run()
 		{
 			if (getHostState() != READY_UNKNOWN_STATUS && getHostState() != READY_OKAY && getHostState() != ERROR)
@@ -437,6 +440,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 			this.maxPathLength = maxPathLength;
 		}
 
+		@Override
 		public void run()
 		{
 			//Set a unique name for the binary results file on the host filesystem
@@ -551,6 +555,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 			this.results = resultsFeedback;
 		}
 
+		@Override
 		public void run()
 		{
 			File localFeedback = null;
@@ -642,36 +647,43 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 	//TreeNode Methods
 
+	@Override
 	public Enumeration children()
 	{
 		return null;
 	}
 
+	@Override
 	public boolean getAllowsChildren()
 	{
 		return false;
 	}
 
+	@Override
 	public TreeNode getChildAt(int childIndex)
 	{
 		return null;
 	}
 
+	@Override
 	public int getChildCount()
 	{
 		return 0;
 	}
 
+	@Override
 	public int getIndex(TreeNode node)
 	{
 		return -1;
 	}
 
+	@Override
 	public TreeNode getParent()
 	{
 		return owner;
 	}
 
+	@Override
 	public boolean isLeaf()
 	{
 		return true;
@@ -679,6 +691,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 	//Setting owner methods
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {
@@ -695,16 +708,19 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 	private SettingDisplay display;
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return 2;
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		switch (index) {
@@ -715,21 +731,25 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		}
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "SSH Host";
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return PropertyConstants.SSHHOST;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		return getHostName();
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		if (state == ERROR || state == READY_OKAY)
@@ -737,6 +757,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		owner.notifyChange(this);
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;

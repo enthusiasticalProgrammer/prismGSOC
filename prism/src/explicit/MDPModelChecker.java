@@ -145,6 +145,7 @@ public class MDPModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
+	@Override
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;

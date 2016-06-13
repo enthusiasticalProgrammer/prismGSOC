@@ -47,16 +47,19 @@ public class LongSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return Long.class;
@@ -67,6 +70,7 @@ public class LongSetting extends Setting
 		return ((Long) getValue()).longValue();
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		try {
@@ -76,6 +80,7 @@ public class LongSetting extends Setting
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		return "" + getLongValue();

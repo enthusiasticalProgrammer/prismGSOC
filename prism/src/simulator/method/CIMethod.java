@@ -119,14 +119,19 @@ public abstract class CIMethod extends SimulationMethod
 		}
 	}
 
+	@Override
 	public abstract void computeMissingParameterAfterSim();
 
+	@Override
 	public abstract Object getMissingParameter() throws PrismException;
 
+	@Override
 	public abstract String getParametersString();
 
+	@Override
 	public abstract boolean shouldStopNow(int iters, Sampler sampler);
 
+	@Override
 	public abstract int getProgress(int iters, Sampler sampler);
 
 	@Override

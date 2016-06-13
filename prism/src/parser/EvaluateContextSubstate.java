@@ -52,6 +52,7 @@ public class EvaluateContextSubstate implements EvaluateContext
 		this.varMap = varMap;
 	}
 
+	@Override
 	public Object getConstantValue(String name)
 	{
 		if (constantValues == null)
@@ -62,6 +63,7 @@ public class EvaluateContextSubstate implements EvaluateContext
 		return constantValues.getValue(i);
 	}
 
+	@Override
 	public Object getVarValue(String name, int index)
 	{
 		// Use indices to look up value

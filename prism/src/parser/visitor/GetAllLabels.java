@@ -43,6 +43,7 @@ public class GetAllLabels extends ASTTraverse
 		this.v = v;
 	}
 
+	@Override
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {

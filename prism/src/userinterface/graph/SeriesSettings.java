@@ -200,16 +200,19 @@ public class SeriesSettings extends Observable implements SettingOwner
 		updateSeries();
 	}
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return 7;
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		switch (index) {
@@ -232,21 +235,25 @@ public class SeriesSettings extends Observable implements SettingOwner
 		}
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "Series";
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return prism.PropertyConstants.GRAPH_DISPLAY;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		return seriesHeading.getStringValue();
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		updateSeries();
@@ -254,11 +261,13 @@ public class SeriesSettings extends Observable implements SettingOwner
 		notifyObservers(this);
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {
@@ -436,6 +445,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 		notifyObservers(this);
 	}
 
+	@Override
 	public String toString()
 	{
 		return this.seriesHeading.getStringValue();
@@ -541,6 +551,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 			this.showShapes = showShapes;
 		}
 
+		@Override
 		protected void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

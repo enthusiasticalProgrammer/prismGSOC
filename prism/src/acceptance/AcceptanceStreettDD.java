@@ -97,6 +97,7 @@ public class AcceptanceStreettDD extends ArrayList<AcceptanceStreettDD.StreettPa
 			return G;
 		}
 
+		@Override
 		public StreettPairDD clone()
 		{
 			return new StreettPairDD(getR(), getG());

@@ -173,6 +173,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	/**
 	 * Get an iterator over the entries of the map defining the distribution.
 	 */
+	@Override
 	public Iterator<Entry<Integer, Double>> iterator()
 	{
 		return map.entrySet().iterator();

@@ -36,5 +36,6 @@ public abstract class NCZone extends Zone
 
 	public abstract Zone getAZone();
 
+	@Override
 	public abstract NCZone deepCopy();
 }

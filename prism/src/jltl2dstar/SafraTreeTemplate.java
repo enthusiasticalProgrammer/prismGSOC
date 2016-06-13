@@ -56,6 +56,7 @@ public class SafraTreeTemplate implements NBA2DAResult<SafraTree>
 	}
 
 	/** Get the SafraTree */
+	@Override
 	public SafraTree getState()
 	{
 		return _safraTree;

@@ -76,6 +76,7 @@ public class GUILabel
 		return parseError == null;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "label \"" + getNameString() + "\" = " + getValueString() + ";";

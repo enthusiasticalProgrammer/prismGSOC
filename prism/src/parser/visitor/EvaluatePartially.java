@@ -42,6 +42,7 @@ public class EvaluatePartially extends ASTTraverseModify
 		this.ec = ec;
 	}
 
+	@Override
 	public Object visit(ExpressionConstant e) throws PrismLangException
 	{
 		Object val = ec.getConstantValue(e.getName());
@@ -52,6 +53,7 @@ public class EvaluatePartially extends ASTTraverseModify
 		}
 	}
 
+	@Override
 	public Object visit(ExpressionVar e) throws PrismLangException
 	{
 		Object val = ec.getVarValue(e.getName(), e.getIndex());

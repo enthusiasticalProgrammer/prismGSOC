@@ -97,6 +97,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 
 		actionMap.put("Down", new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				int selectedRow = GUISimulatorUpdatesTable.this.getSelectedRow();
@@ -111,6 +112,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 
 		actionMap.put("Up", new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				int selectedRow = GUISimulatorUpdatesTable.this.getSelectedRow();
@@ -130,6 +132,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 	}
 
 	/** Override set font to pass changes onto renderer(s) and set row height */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -140,6 +143,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 			header.setFixedCellHeight(getRowHeight());
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if (headerModel != null)
@@ -161,6 +165,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 			renderer = new JTextField("");
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			renderer.setText(value == null ? "" : value.toString());
@@ -221,6 +226,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 			selectedDisabledIcon = GUIPrism.getIconFromImage("smallItemSelectedDisabled.png");
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(null);
@@ -240,11 +246,13 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 	class UpdateHeaderListModel extends AbstractListModel
 	{
 
+		@Override
 		public Object getElementAt(int index)
 		{
 			return "" + index;
 		}
 
+		@Override
 		public int getSize()
 		{
 			return utm.getRowCount();

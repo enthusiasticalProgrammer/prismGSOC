@@ -67,6 +67,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 		this.maxPathLength = info.getMaxPathLength();
 	}
 
+	@Override
 	public void run()
 	{
 		boolean allAtOnce = prism.getSettings().getBoolean(PrismSettings.SIMULATOR_SIMULTANEOUS);
@@ -76,6 +77,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 		//Notify user interface of the start of computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.startProgress();
@@ -184,6 +186,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 		}
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.stopProgress();
@@ -214,6 +217,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 			images[7] = GUIPrism.getIconFromImage("smallClockAnim8.png");
 		}
 
+		@Override
 		public void run()
 		{
 			try {

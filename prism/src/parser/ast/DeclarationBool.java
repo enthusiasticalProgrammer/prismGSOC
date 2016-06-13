@@ -44,6 +44,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
+	@Override
 	public Expression getDefaultStart()
 	{
 		return Expression.False();
@@ -62,6 +63,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -70,6 +72,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		return "bool";
@@ -78,6 +81,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		DeclarationBool ret = new DeclarationBool();

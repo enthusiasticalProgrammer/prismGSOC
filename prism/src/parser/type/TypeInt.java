@@ -40,6 +40,7 @@ public class TypeInt extends Type
 	{
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeInt);

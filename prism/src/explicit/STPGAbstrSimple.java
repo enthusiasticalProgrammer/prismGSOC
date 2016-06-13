@@ -1043,6 +1043,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	/**
 	 * Equality check.
 	 */
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o == null || !(o instanceof STPGAbstrSimple))

@@ -106,6 +106,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		doEnables();
 	}
 
+	@Override
 	public void takeCLArgs(String args[])
 	{
 		if (args.length > 0) {
@@ -487,6 +488,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 	{
 		newPRISMModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newPRISMModel();
@@ -501,6 +503,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		newPEPAModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				//modified check do later
@@ -515,6 +518,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		loadModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				//do actions later
@@ -534,6 +538,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		reloadModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_reloadModel();
@@ -549,6 +554,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		saveModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_saveModel();
@@ -565,6 +571,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		saveAsModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_saveModelAs();
@@ -580,6 +587,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		parseModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_refreshParseTree();
@@ -593,6 +601,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		parseModel.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		buildModel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_build();
@@ -607,6 +616,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportStatesPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.STATES_EXPORT, Prism.EXPORT_PLAIN);
@@ -619,6 +629,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportStatesMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.STATES_EXPORT, Prism.EXPORT_MATLAB);
@@ -631,6 +642,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_PLAIN);
@@ -643,6 +655,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_MATLAB);
@@ -655,6 +668,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransDot = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_DOT);
@@ -667,6 +681,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransDotStates = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_DOT_STATES);
@@ -679,6 +694,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransMRMC = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_MRMC);
@@ -691,6 +707,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportStateRewardsPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.STATE_REWARDS_EXPORT, Prism.EXPORT_PLAIN);
@@ -703,6 +720,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportStateRewardsMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.STATE_REWARDS_EXPORT, Prism.EXPORT_MATLAB);
@@ -715,6 +733,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportStateRewardsMRMC = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.STATE_REWARDS_EXPORT, Prism.EXPORT_MRMC);
@@ -727,6 +746,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransRewardsPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_REWARDS_EXPORT, Prism.EXPORT_PLAIN);
@@ -739,6 +759,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransRewardsMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_REWARDS_EXPORT, Prism.EXPORT_MATLAB);
@@ -751,6 +772,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTransRewardsMRMC = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.TRANS_REWARDS_EXPORT, Prism.EXPORT_MRMC);
@@ -763,6 +785,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportLabelsPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.LABELS_EXPORT, Prism.EXPORT_PLAIN);
@@ -775,6 +798,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportLabelsMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportBuildAs(GUIMultiModelHandler.LABELS_EXPORT, Prism.EXPORT_MATLAB);
@@ -787,6 +811,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		computeSS = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_computeSteadyState();
@@ -801,6 +826,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		computeTr = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_computeTransient();
@@ -815,6 +841,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportSSPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportSteadyState(Prism.EXPORT_PLAIN);
@@ -827,6 +854,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportSSMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportSteadyState(Prism.EXPORT_MATLAB);
@@ -839,6 +867,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTrPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportTransient(Prism.EXPORT_PLAIN);
@@ -851,6 +880,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		exportTrMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportTransient(Prism.EXPORT_MATLAB);
@@ -863,6 +893,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewStates = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewBuild(GUIMultiModelHandler.STATES_EXPORT, Prism.EXPORT_PLAIN);
@@ -875,6 +906,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewTrans = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewBuild(GUIMultiModelHandler.TRANS_EXPORT, Prism.EXPORT_PLAIN);
@@ -887,6 +919,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewStateRewards = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewBuild(GUIMultiModelHandler.STATE_REWARDS_EXPORT, Prism.EXPORT_PLAIN);
@@ -899,6 +932,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewTransRewards = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewBuild(GUIMultiModelHandler.TRANS_REWARDS_EXPORT, Prism.EXPORT_PLAIN);
@@ -911,6 +945,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewLabels = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewBuild(GUIMultiModelHandler.LABELS_EXPORT, Prism.EXPORT_PLAIN);
@@ -923,6 +958,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 		viewPrismCode = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewCurrentModelBuild();
@@ -936,36 +972,43 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 	//Required to be a GUIPlugin:
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
 	}
 
+	@Override
 	public JMenu getMenu()
 	{
 		return modelMenu;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "Model";
 	}
 
+	@Override
 	public JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 
@@ -973,6 +1016,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 	// if return value is true, event should not be passed on to any more listeners
 
+	@Override
 	public boolean processGUIEvent(GUIEvent e)
 	{
 		if (e instanceof userinterface.properties.GUIPropertiesEvent) {
@@ -1195,11 +1239,13 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 		doEnables();
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		//System.out.println("model notifySettings called");

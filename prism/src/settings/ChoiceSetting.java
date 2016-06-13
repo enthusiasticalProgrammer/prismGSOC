@@ -53,6 +53,7 @@ public class ChoiceSetting extends Setting
 		this.values = values;
 	}
 
+	@Override
 	public void checkObjectWithConstraints(Object obj) throws SettingException
 	{
 		super.checkObjectWithConstraints(obj);
@@ -67,16 +68,19 @@ public class ChoiceSetting extends Setting
 			throw new SettingException("Invalid Setting: " + obj.toString() + " is not part of the enumeration.");
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return String.class;
@@ -101,11 +105,13 @@ public class ChoiceSetting extends Setting
 		setValue(values[i]);
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		return string;
 	}
 
+	@Override
 	public String toString()
 	{
 		return getStringValue();

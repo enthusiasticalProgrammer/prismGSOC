@@ -69,6 +69,7 @@ public class GUIWindowLog extends PrismLog
 		textArea = ta;
 		textArea.addCaretListener(new CaretListener()
 		{
+			@Override
 			public void caretUpdate(CaretEvent e)
 			{
 				if (GUIWindowLog.this.logPlugin != null)
@@ -79,66 +80,79 @@ public class GUIWindowLog extends PrismLog
 		updater.start();
 	}
 
+	@Override
 	public boolean ready()
 	{
 		return (textArea != null);
 	}
 
+	@Override
 	public long getFilePointer()
 	{
 		return -1;
 	}
 
+	@Override
 	public void flush()
 	{
 	}
 
+	@Override
 	public void close()
 	{
 	}
 
 	// Basic print methods
 
+	@Override
 	public void print(boolean b)
 	{
 		addToBuffer("" + b);
 	}
 
+	@Override
 	public void print(char c)
 	{
 		addToBuffer("" + c);
 	}
 
+	@Override
 	public void print(double d)
 	{
 		addToBuffer("" + d);
 	}
 
+	@Override
 	public void print(float f)
 	{
 		addToBuffer("" + f);
 	}
 
+	@Override
 	public void print(int i)
 	{
 		addToBuffer("" + i);
 	}
 
+	@Override
 	public void print(long l)
 	{
 		addToBuffer("" + l);
 	}
 
+	@Override
 	public void print(Object obj)
 	{
 		addToBuffer("" + obj);
 	}
 
+	@Override
 	public void print(String s)
 	{
 		addToBuffer(s);
 	}
 
+	@Override
 	public void println()
 	{
 		addToBuffer("\n");
@@ -220,6 +234,7 @@ public class GUIWindowLog extends PrismLog
 			maxTextLen = i;
 		}
 
+		@Override
 		public void run()
 		{
 			String s;
@@ -284,6 +299,7 @@ public class GUIWindowLog extends PrismLog
 			this.s = s;
 		}
 
+		@Override
 		public void run()
 		{
 			try {

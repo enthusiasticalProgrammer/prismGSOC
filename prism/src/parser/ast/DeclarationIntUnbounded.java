@@ -43,6 +43,7 @@ public class DeclarationIntUnbounded extends DeclarationType
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
+	@Override
 	public Expression getDefaultStart()
 	{
 		return Expression.Int(0);
@@ -64,6 +65,7 @@ public class DeclarationIntUnbounded extends DeclarationType
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);

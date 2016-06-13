@@ -33,6 +33,7 @@ public class PrismException extends Exception
 		super(s);
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Error: " + getMessage() + ".";

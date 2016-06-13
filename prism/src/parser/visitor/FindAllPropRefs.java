@@ -43,6 +43,7 @@ public class FindAllPropRefs extends ASTTraverseModify
 		this.pf = pf;
 	}
 
+	@Override
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		String name;

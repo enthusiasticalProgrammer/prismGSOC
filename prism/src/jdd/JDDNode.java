@@ -141,16 +141,19 @@ public class JDDNode
 		return new JDDNode(elsePtr);
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof JDDNode) && (((JDDNode) o).ptr == ptr);
 	}
 
+	@Override
 	public int hashCode()
 	{
 		return (int) ptr;
 	}
 
+	@Override
 	public String toString()
 	{
 		String result = "" + ptr;

@@ -243,6 +243,7 @@ public abstract class Setting
 	 *	Must be overridden to define what this setting should be written like to
 	 *	a file, so that it can be read in again
 	 */
+	@Override
 	public abstract String toString();
 
 	/**

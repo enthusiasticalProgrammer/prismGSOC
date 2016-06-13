@@ -66,6 +66,7 @@ public class BooleanProperty extends SingleProperty
 		return ((Boolean) getProperty()).booleanValue();
 	}
 
+	@Override
 	public void setProperty(Object property) throws PropertyException
 	{
 		//System.out.println("setting bool property");
@@ -82,6 +83,7 @@ public class BooleanProperty extends SingleProperty
 
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
@@ -90,6 +92,7 @@ public class BooleanProperty extends SingleProperty
 			renderer.setEnabled(enabled);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		renderer.setOpaque(true);
@@ -124,6 +127,7 @@ public class BooleanProperty extends SingleProperty
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellRendererComponentMulti(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column,
 			boolean allTheSame)
 	{
@@ -159,6 +163,7 @@ public class BooleanProperty extends SingleProperty
 	}
 
 	//THIS WILL NEED TO OVERRIDE THE EDITOR
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
 		renderer.setSelected(getBoolValue());
@@ -175,6 +180,7 @@ public class BooleanProperty extends SingleProperty
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellEditorComponentMulti(JTable table, Object value, boolean isSelected, int row, int column, boolean allTheSame)
 	{
 		if (allTheSame) {

@@ -155,6 +155,7 @@ public class ExpressionReward extends ExpressionQuant
 	 * Get info about the operator and bound.
 	 * @param constantValues Values for constants in order to evaluate any bound
 	 */
+	@Override
 	public OpRelOpBound getRelopBoundInfo(Values constantValues) throws PrismException
 	{
 		if (getBound() != null) {

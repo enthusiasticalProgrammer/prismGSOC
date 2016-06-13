@@ -276,6 +276,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	//@Override
+	@Override
 	public String getTransitionAction(int index) throws PrismException
 	{
 		int a = getTransitionList().getTransitionModuleOrActionIndex(index);

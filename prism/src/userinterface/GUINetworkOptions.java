@@ -129,6 +129,7 @@ public class GUINetworkOptions extends OptionsPanel
 		newButton.setPreferredSize(new java.awt.Dimension(96, 26));
 		newButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				newButtonActionPerformed(evt);
@@ -144,6 +145,7 @@ public class GUINetworkOptions extends OptionsPanel
 		importButton.setText("Import");
 		importButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				importButtonActionPerformed(evt);
@@ -160,6 +162,7 @@ public class GUINetworkOptions extends OptionsPanel
 		editButton.setPreferredSize(new java.awt.Dimension(96, 26));
 		editButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				editButtonActionPerformed(evt);
@@ -176,6 +179,7 @@ public class GUINetworkOptions extends OptionsPanel
 		copyButton.setPreferredSize(new java.awt.Dimension(96, 26));
 		copyButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				copyButtonActionPerformed(evt);
@@ -202,6 +206,7 @@ public class GUINetworkOptions extends OptionsPanel
 		pasteButton.setPreferredSize(new java.awt.Dimension(96, 26));
 		pasteButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				pasteButtonActionPerformed(evt);
@@ -218,6 +223,7 @@ public class GUINetworkOptions extends OptionsPanel
 		deleteButton.setPreferredSize(new java.awt.Dimension(96, 26));
 		deleteButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				deleteButtonActionPerformed(evt);
@@ -286,6 +292,7 @@ public class GUINetworkOptions extends OptionsPanel
 
 	}
 
+	@Override
 	public void apply()
 	{
 
@@ -296,6 +303,7 @@ public class GUINetworkOptions extends OptionsPanel
 
 	}
 
+	@Override
 	public void synchronizeGUI()
 	{
 

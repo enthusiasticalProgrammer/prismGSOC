@@ -903,6 +903,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		return createDTMCModelChecker().computeExistsUntil(dtmcEmb, A, B);
 	}
 
+	@Override
 	public BitSet computeExistsGlobally(Model model, BitSet A) throws PrismException
 	{
 		// Construct embedded DTMC and do CTL computation on that
@@ -911,6 +912,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		return createDTMCModelChecker().computeExistsGlobally(dtmcEmb, A);
 	}
 
+	@Override
 	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismException
 	{
 		// Construct embedded DTMC and do CTL computation on that

@@ -52,12 +52,14 @@ public class SavePEPAModelThread extends Thread
 		ex = null;
 	}
 
+	@Override
 	public void run()
 	{
 		try {
 			//notify the interface of the start of computation and save the content of editor to f
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					try {
@@ -77,6 +79,7 @@ public class SavePEPAModelThread extends Thread
 			if (ex != null) {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						plug.stopProgress();
@@ -91,6 +94,7 @@ public class SavePEPAModelThread extends Thread
 			//If we get here, the save has been successful, notify the interface and tell the handler.
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.stopProgress();

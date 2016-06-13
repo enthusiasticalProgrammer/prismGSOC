@@ -106,6 +106,7 @@ public class GUISimPathFormulaeList extends JList
 			this.pathFormulaIndex = pathFormulaIndex;
 		}
 
+		@Override
 		public String toString()
 		{
 			return pathFormula;
@@ -129,11 +130,13 @@ public class GUISimPathFormulaeList extends JList
 			lastText = "Unknown";
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return lastText;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
@@ -164,16 +167,19 @@ public class GUISimPathFormulaeList extends JList
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

@@ -60,6 +60,7 @@ public class GraphOptions extends JDialog
 
 		jb.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				gop.stopEditors();
@@ -72,6 +73,7 @@ public class GraphOptions extends JDialog
 			/**
 			 * Invoked when a component gains the keyboard focus.
 			 */
+			@Override
 			public void focusGained(FocusEvent e)
 			{
 			}
@@ -79,6 +81,7 @@ public class GraphOptions extends JDialog
 			/**
 			 * Invoked when a component loses the keyboard focus.
 			 */
+			@Override
 			public void focusLost(FocusEvent e)
 			{
 				//gop.stopEditors();

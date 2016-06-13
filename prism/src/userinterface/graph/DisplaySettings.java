@@ -84,16 +84,19 @@ public class DisplaySettings extends Observable implements SettingOwner
 		notifyObservers();
 	}
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return 2;
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		switch (index) {
@@ -106,16 +109,19 @@ public class DisplaySettings extends Observable implements SettingOwner
 		}
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "Display";
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return prism.PropertyConstants.GRAPH_DISPLAY;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		if (graph != null && graph.getName() != null)
@@ -124,6 +130,7 @@ public class DisplaySettings extends Observable implements SettingOwner
 		return "";
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		updateDisplay();
@@ -131,11 +138,13 @@ public class DisplaySettings extends Observable implements SettingOwner
 		notifyObservers(this);
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {

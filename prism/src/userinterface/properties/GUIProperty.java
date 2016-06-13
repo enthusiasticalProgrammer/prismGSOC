@@ -271,6 +271,7 @@ public class GUIProperty
 		return method;
 	}
 
+	@Override
 	public String toString()
 	{
 		return ((this.name != null) ? ("\"" + this.name + "\" : ") : "") + propString;

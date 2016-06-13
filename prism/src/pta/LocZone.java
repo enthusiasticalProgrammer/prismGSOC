@@ -119,11 +119,13 @@ public class LocZone
 
 	// Standard Java methods
 
+	@Override
 	public int hashCode()
 	{
 		return loc + zone.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		LocZone lz;
@@ -139,6 +141,7 @@ public class LocZone
 		return (zone.equals(lz.zone));
 	}
 
+	@Override
 	public String toString()
 	{
 		return "(" + zone.getPTA().getLocationNameString(loc) + "," + zone + ")";

@@ -206,6 +206,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		setResizable(false);
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -443,6 +444,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		   }*/
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == fontBox) {
@@ -574,6 +576,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		return valid;
 	}
 
+	@Override
 	public void setFont(Font f)
 	{
 		if (f != null) {
@@ -628,6 +631,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 
 	String tempValue;
 
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		if (e.getSource() == fontList) {
@@ -666,6 +670,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		}
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 		if (fontValid()) {
@@ -676,6 +681,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		}
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		if (fontValid()) {
@@ -686,6 +692,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		}
 	}
 
+	@Override
 	public void stateChanged(ChangeEvent e)
 	{
 		if (fontValid()) {

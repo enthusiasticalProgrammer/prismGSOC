@@ -34,6 +34,7 @@ public abstract class FontColorConstraint implements SettingConstraint
 	{
 	}
 
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
 		if (value instanceof FontColorPair) {

@@ -65,6 +65,7 @@ public class GUIPathPlotDialog extends JDialog
 
 	public enum SimulateChoice {
 		STEP, TIME;
+		@Override
 		public String toString()
 		{
 			switch (this) {
@@ -80,6 +81,7 @@ public class GUIPathPlotDialog extends JDialog
 
 	public enum ShowChoice {
 		ALL_STEPS, SNAPSHOTS;
+		@Override
 		public String toString()
 		{
 			switch (this) {
@@ -203,6 +205,7 @@ public class GUIPathPlotDialog extends JDialog
 				okButton.setActionCommand("OK");
 				okButton.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						okButtonActionPerformed(e);
@@ -215,6 +218,7 @@ public class GUIPathPlotDialog extends JDialog
 				cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						cancelButtonActionPerformed(e);
@@ -288,6 +292,7 @@ public class GUIPathPlotDialog extends JDialog
 				comboBoxShow = new JComboBox();
 				comboBoxShow.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						comboBoxShowActionPerformed(e);
@@ -397,6 +402,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsAll);
 							rdbtnVarsAll.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -409,6 +415,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsNone);
 							rdbtnVarsNone.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -421,6 +428,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsSelected);
 							rdbtnVarsSelected.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -602,10 +610,12 @@ public class GUIPathPlotDialog extends JDialog
 	}
 
 	// Close when Escape pressed
+	@Override
 	protected JRootPane createRootPane()
 	{
 		ActionListener actionListener = new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
 				cancelled = true;

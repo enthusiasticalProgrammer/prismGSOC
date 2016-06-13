@@ -109,6 +109,7 @@ public class Generalized
 			to = null;
 		}
 
+		@Override
 		public GTrans clone()
 		{
 			GTrans rv = new GTrans(pos, neg, _final);

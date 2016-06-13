@@ -149,6 +149,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -215,6 +216,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -226,6 +228,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -466,6 +469,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		String end;
 		String step;
 
+		@Override
 		public String toString()
 		{
 			return varName + "(" + type.getTypeString() + ") : " + isRange + "," + singleValue;

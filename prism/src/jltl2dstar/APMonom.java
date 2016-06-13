@@ -199,6 +199,7 @@ public class APMonom
 	/**
 	 * Output APMonom
 	 */
+	@Override
 	public String toString()
 	{
 		String rv = "";
@@ -334,6 +335,7 @@ public class APMonom
 				|| isTrue() && other.isTrue() || isFalse() && other.isFalse());
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		return ((other instanceof APMonom) && this.equals((APMonom) other));

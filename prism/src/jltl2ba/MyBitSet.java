@@ -47,6 +47,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 			_size = 0;
 	}
 
+	@Override
 	public int size()
 	{
 		if (_size > 0)
@@ -106,6 +107,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 		}
 	}
 
+	@Override
 	public int compareTo(BitSet o)
 	{
 		BitSet tmp1 = (BitSet) this.clone();
@@ -123,6 +125,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 	}
 
 	/* An iterator over the set bits of a bitset */
+	@Override
 	public Iterator<Integer> iterator()
 	{
 		return new MyBitSetIterator(this);
@@ -140,11 +143,13 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 			index = _bitset.nextSetBit(0);
 		}
 
+		@Override
 		public boolean hasNext()
 		{
 			return (index >= 0);
 		}
 
+		@Override
 		public Integer next()
 		{
 			Integer rv = new Integer(index);
@@ -152,6 +157,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 			return rv;
 		}
 
+		@Override
 		public void remove()
 		{
 			throw new UnsupportedOperationException();

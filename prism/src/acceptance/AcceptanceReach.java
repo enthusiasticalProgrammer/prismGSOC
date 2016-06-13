@@ -68,6 +68,7 @@ public class AcceptanceReach implements AcceptanceOmega
 	}
 
 	/** Make a copy of the acceptance condition. */
+	@Override
 	public AcceptanceReach clone()
 	{
 		return new AcceptanceReach((BitSet) goalStates.clone());

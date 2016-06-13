@@ -70,6 +70,7 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 
 	// Implementation of initialise() for abstraction-refinement loop; see superclass for details 
 
+	@Override
 	protected void initialise() throws PrismException
 	{
 		Map<String, BitSet> labels;
@@ -227,6 +228,7 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 
 	// Implementation of splitState(...) for abstraction-refinement loop; see superclass for details 
 
+	@Override
 	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates, Set<Integer> rebuildStates) throws PrismException
 	{
 		List<Set<Integer>> list, listNew;
@@ -311,6 +313,7 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 
 	// Implementation of rebuildAbstraction(...) for abstraction-refinement loop; see superclass for details 
 
+	@Override
 	protected void rebuildAbstraction(Set<Integer> rebuildStates) throws PrismException
 	{
 		for (int a : rebuildStates) {

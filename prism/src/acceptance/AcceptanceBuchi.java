@@ -68,6 +68,7 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	}
 
 	/** Make a copy of the acceptance condition. */
+	@Override
 	public AcceptanceBuchi clone()
 	{
 		return new AcceptanceBuchi((BitSet) acceptingStates.clone());

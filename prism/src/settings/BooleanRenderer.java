@@ -47,6 +47,7 @@ public class BooleanRenderer implements SettingRenderer
 		panel.add(renderer);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
 			int column)
 	{

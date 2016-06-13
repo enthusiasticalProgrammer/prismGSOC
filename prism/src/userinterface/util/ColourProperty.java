@@ -60,6 +60,7 @@ public class ColourProperty extends SingleProperty
 
 		edit.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				//editValue = chart.ChartColorChooser.showDialog(GUIPrism.getGUI(), "Choose Colour", editValue);
@@ -83,6 +84,7 @@ public class ColourProperty extends SingleProperty
 		return (Color) getProperty();
 	}
 
+	@Override
 	public void setProperty(Object property) throws PropertyException
 	{
 		if (property instanceof Color)
@@ -93,6 +95,7 @@ public class ColourProperty extends SingleProperty
 
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
@@ -106,6 +109,7 @@ public class ColourProperty extends SingleProperty
 	JPanel pan = new JPanel();
 	JPanel renderer = new JPanel();
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		if (editDocked)
@@ -133,6 +137,7 @@ public class ColourProperty extends SingleProperty
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellRendererComponentMulti(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column,
 			boolean allTheSame)
 	{
@@ -168,6 +173,7 @@ public class ColourProperty extends SingleProperty
 	boolean editDocked = false;
 
 	//THIS WILL NEED TO OVERRIDE THE EDITOR
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
 		editValue = getColor();
@@ -183,6 +189,7 @@ public class ColourProperty extends SingleProperty
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellEditorComponentMulti(JTable table, Object value, boolean isSelected, int row, int column, boolean allTheSame)
 	{
 		if (allTheSame) {

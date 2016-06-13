@@ -36,6 +36,7 @@ public abstract class ColorConstraint implements SettingConstraint
 	{
 	}
 
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
 		if (value instanceof Color) {

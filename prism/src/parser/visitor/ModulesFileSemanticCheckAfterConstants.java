@@ -50,6 +50,7 @@ public class ModulesFileSemanticCheckAfterConstants extends ASTTraverse
 		this.modulesFile = modulesFile;
 	}
 
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;

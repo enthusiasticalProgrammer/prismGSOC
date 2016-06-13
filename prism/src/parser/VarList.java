@@ -489,6 +489,7 @@ public class VarList
 	/**
 	 * Clone this list.
 	 */
+	@Override
 	public Object clone()
 	{
 		int i, n;

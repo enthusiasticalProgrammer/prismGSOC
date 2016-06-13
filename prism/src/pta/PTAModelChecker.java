@@ -119,6 +119,7 @@ public class PTAModelChecker extends PrismComponent
 		// (do this before modifications below for better error reporting)
 		expr.accept(new ASTTraverseModify()
 		{
+			@Override
 			public Object visit(ExpressionVar e) throws PrismLangException
 			{
 				if (e.getType() instanceof TypeClock) {

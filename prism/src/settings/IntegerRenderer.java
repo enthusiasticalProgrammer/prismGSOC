@@ -37,6 +37,7 @@ public class IntegerRenderer implements SettingRenderer
 	private Font font = new Font("monospaced", Font.PLAIN, 12);
 	private Font font2 = new Font("monospaced", Font.ITALIC, 12);
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
 			int column)
 	{

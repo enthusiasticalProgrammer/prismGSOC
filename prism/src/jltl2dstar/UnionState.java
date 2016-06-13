@@ -33,6 +33,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 			state = state_;
 		}
 
+		@Override
 		public UnionState getState()
 		{
 			return state;
@@ -61,6 +62,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 		description = "";
 	}
 
+	@Override
 	public int compareTo(UnionState other)
 	{
 		if (da_state_1 != other.da_state_1)
@@ -74,6 +76,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 		return ((da_state_1 == other.da_state_1) && (da_state_2 == other.da_state_2));
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof UnionState && this.equals((UnionState) o));
@@ -82,6 +85,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 	/** Copy acceptance signature for this state
 	 * @param acceptance (<b>out</b>) AcceptanceForState for the state in the result automaton 
 	 */
+	@Override
 	public void generateAcceptance(AcceptanceForState acceptance)
 	{
 		acceptance.setSignature(signature);
@@ -114,6 +118,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 	/** Generate a simple representation of this state 
 	 * @return a string with the representation
 	 */
+	@Override
 	public String toString()
 	{
 		return "(" + da_state_1 + "," + da_state_1 + ")";
@@ -122,6 +127,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 	/** Return the detailed description 
 	 * @return the detailed description
 	 */
+	@Override
 	public String toHTML()
 	{
 		return description;
@@ -137,6 +143,7 @@ public class UnionState implements Comparable<UnionState>, NBA2DAState
 	// we don't have to consider the signature as there is a 
 	// 1-on-1 mapping between <da_state_1, da_state_2> -> signature
 	// }
+	@Override
 	public int hashCode()
 	{
 		return da_state_1 + da_state_2 * 31;

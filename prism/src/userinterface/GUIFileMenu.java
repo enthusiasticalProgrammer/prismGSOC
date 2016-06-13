@@ -48,49 +48,59 @@ public class GUIFileMenu extends GUIPlugin
 		initComponents();
 	}
 
+	@Override
 	public void takeCLArgs(String args[])
 	{
 	}
 
+	@Override
 	public boolean displaysTab()
 	{
 		return false;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return menu;
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
 
+	@Override
 	public boolean processGUIEvent(GUIEvent e)
 	{
 		return false;
@@ -102,6 +112,7 @@ public class GUIFileMenu extends GUIPlugin
 		menu.setMnemonic('F');
 		exitAction = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				getGUI().exit();
@@ -116,6 +127,7 @@ public class GUIFileMenu extends GUIPlugin
 		menu.add(exitAction);
 	}
 
+	@Override
 	public void notifySettings(prism.PrismSettings settings)
 	{
 	}

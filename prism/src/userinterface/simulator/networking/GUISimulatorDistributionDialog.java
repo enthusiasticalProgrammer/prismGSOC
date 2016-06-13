@@ -310,6 +310,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		startButton.setText("Start Networking");
 		startButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				startButtonActionPerformed(evt);
@@ -322,6 +323,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		stopButton.setPreferredSize(new java.awt.Dimension(140, 25));
 		stopButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				stopButtonActionPerformed(evt);
@@ -334,6 +336,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		doneButton.setPreferredSize(new java.awt.Dimension(75, 25));
 		doneButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				doneButtonActionPerformed(evt);
@@ -345,6 +348,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -393,6 +397,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		editButton.setPreferredSize(new java.awt.Dimension(82, 19));
 		editButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				editButtonActionPerformed(evt);
@@ -410,6 +415,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		testButton.setPreferredSize(new java.awt.Dimension(78, 19));
 		testButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				testButtonActionPerformed(evt);
@@ -678,6 +684,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 	}//GEN-LAST:event_stopButtonActionPerformed
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		doEnables();
@@ -729,6 +736,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 	class ProgressBarRenderer implements TableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			//System.out.println("called getTableCelelsdikfjlinesoginweosgnoesignseoigneosi gn");
@@ -769,16 +777,19 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			preferences = prefs;
 		}
 
+		@Override
 		public String getContentType()
 		{
 			return "text/summary";
 		}
 
+		@Override
 		public Document createDefaultDocument()
 		{
 			return new PlainDocument();
 		}
 
+		@Override
 		public final ViewFactory getViewFactory()
 		{
 			return getStylePreferences();
@@ -797,6 +808,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			super();
 		}
 
+		@Override
 		public View create(Element elem)
 		{
 			return new PepaView(elem);
@@ -820,11 +832,13 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			pattern = Pattern.compile("%.*");
 		}
 
+		@Override
 		public void paint(Graphics g, Shape a)
 		{
 			super.paint(g, a);
 		}
 
+		@Override
 		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());
@@ -864,6 +878,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			return x;
 		}
 
+		@Override
 		protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());
@@ -993,11 +1008,13 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			}
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 4;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			if (props != null)
@@ -1006,6 +1023,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				return 0;
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			return data[rowIndex][columnIndex];
@@ -1023,6 +1041,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			fireTableDataChanged();
 		}
 
+		@Override
 		public String getColumnName(int column)
 		{
 			switch (column) {

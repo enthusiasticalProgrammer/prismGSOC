@@ -47,16 +47,19 @@ public class BooleanSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return Boolean.class;
@@ -67,6 +70,7 @@ public class BooleanSetting extends Setting
 		return ((Boolean) getValue()).booleanValue();
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		if (string.equals("true"))
@@ -77,6 +81,7 @@ public class BooleanSetting extends Setting
 			throw new SettingException("Error when parsing: " + string + " as a Boolean value.");
 	}
 
+	@Override
 	public String toString()
 	{
 		if (getBooleanValue())

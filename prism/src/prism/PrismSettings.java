@@ -1741,6 +1741,7 @@ public class PrismSettings implements Observer
 		return modified;
 	}
 
+	@Override
 	public void update(Observable obs, Object obj)
 	{
 		modified = true;
