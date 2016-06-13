@@ -79,7 +79,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
 	 * @throws PrismException 
 	 */
-	public MultiLongRun(Collection<@NonNull MDPConstraint> constraints, Collection<@NonNull MDPObjective> objectives,
+	protected MultiLongRun(Collection<@NonNull MDPConstraint> constraints, Collection<@NonNull MDPObjective> objectives,
 			Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method, @NonNull M m) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
@@ -143,7 +143,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * computes the set of end components and stores it in {@see #mecs}
 	 * @throws PrismException
 	 */
-	protected @NonNull List<@NonNull BitSet> computeMECs() throws PrismException
+	private @NonNull List<@NonNull BitSet> computeMECs() throws PrismException
 	{
 		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
 		ecc.computeMECStates();
