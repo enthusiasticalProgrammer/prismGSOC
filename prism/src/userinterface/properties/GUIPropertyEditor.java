@@ -766,12 +766,12 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 
 	private void andButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_andButtonActionPerformed
-		// Add your handling code here:
+			// Add your handling code here:
 	}//GEN-LAST:event_andButtonActionPerformed
 
 	private void notButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_notButtonActionPerformed
-		// Add your handling code here:
+			// Add your handling code here:
 	}//GEN-LAST:event_notButtonActionPerformed
 
 	private void okayButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_okayButtonActionPerformed

@@ -291,13 +291,6 @@ final public class ParamModelChecker extends PrismComponent
 		vals.clearExceptInit();
 		result.setResult(vals);
 
-		// Print result to log
-		String resultString = "Result";
-		if (!("Result".equals(expr.getResultName())))
-			resultString += " (" + expr.getResultName().toLowerCase() + ")";
-		resultString += ": " + result.getResultString();
-		mainLog.print("\n" + resultString);
-
 		/* // Output plot to tex file
 		if (paramLower.length == 2) {
 			try {
@@ -537,7 +530,6 @@ final public class ParamModelChecker extends PrismComponent
 
 	protected RegionValues checkExpressionFilter(ParamModel model, ExpressionFilter expr, BitSet needStates) throws PrismException
 	{
-		RegionValues resVals = null;
 		Expression filter = expr.getFilter();
 		if (filter == null) {
 			filter = Expression.True();
@@ -577,6 +569,7 @@ final public class ParamModelChecker extends PrismComponent
 		}
 
 		// Compute result according to filter type
+		RegionValues resVals = null;
 		switch (op) {
 		case PRINT:
 			// Format of print-out depends on type
@@ -620,12 +613,6 @@ final public class ParamModelChecker extends PrismComponent
 			resVals = vals.op(Region.EXISTS, bsFilter);
 			break;
 		case STATE:
-			// Check filter satisfied by exactly one state
-			if (bsFilter.cardinality() != 1) {
-				String s = "Filter should be satisfied in exactly 1 state";
-				s += " (but \"" + filter + "\" is true in " + bsFilter.cardinality() + " states)";
-				throw new PrismException(s);
-			}
 			resVals = vals.op(Region.FIRST, bsFilter);
 			break;
 		default:
@@ -729,10 +716,6 @@ final public class ParamModelChecker extends PrismComponent
 				} else {
 					probs = checkProbUntil(model, b1, b2, min, needStates);
 				}
-			}
-			// Anything else - convert to until and recurse
-			else {
-				probs = checkProbPathFormulaSimple(model, exprTemp.convertToUntilForm(), min, needStates);
 			}
 		}
 
