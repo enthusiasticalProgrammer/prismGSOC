@@ -839,5 +839,4 @@ public class LTLModelChecker extends PrismComponent
 
 		return lifted;
 	}
-
 }
