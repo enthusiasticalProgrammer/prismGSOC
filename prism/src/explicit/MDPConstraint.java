@@ -12,7 +12,7 @@ class MDPConstraint extends MDPExpectationConstraint
 	MDPConstraint(@NonNull MDPReward reward, prism.Operator operator, double bound, double probability)
 	{
 		super(reward, operator, bound);
-		checkForIllegalArguments(reward, operator, bound, probability);
+		checkForIllegalArguments(operator, probability);
 		this.probability = probability;
 	}
 
@@ -21,7 +21,7 @@ class MDPConstraint extends MDPExpectationConstraint
 		this(reward, operator, bound, 5.0);
 	}
 
-	private void checkForIllegalArguments(MDPReward reward2, Operator operator2, double bound2, double probability2)
+	private void checkForIllegalArguments(Operator operator2, double probability2)
 	{
 		if (!(operator2.equals(Operator.R_MIN) || operator2.equals(Operator.R_MAX) || operator2.equals(Operator.R_GE) || operator2.equals(Operator.R_LE))) {
 			throw new IllegalArgumentException("wrong operator in MDPSatisfactionConstraint");
