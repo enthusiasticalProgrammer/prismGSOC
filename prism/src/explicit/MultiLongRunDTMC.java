@@ -10,7 +10,7 @@ import prism.PrismException;
 import strat.MDStrategyArray;
 import strat.Strategy;
 
-public class MultiLongRunDTMC extends MultiLongRun
+class MultiLongRunDTMC extends MultiLongRun<ArtificialNondetModelFromModel>
 {
 	private final @NonNull DTMCProductMLRStrategyAndMDP dtmc;
 

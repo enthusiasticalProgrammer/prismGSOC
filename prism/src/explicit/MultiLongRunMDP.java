@@ -12,7 +12,7 @@ import prism.PrismException;
 import strat.MultiLongRunStrategy;
 import strat.XiNStrategy;
 
-public class MultiLongRunMDP extends MultiLongRun<MDP>
+class MultiLongRunMDP extends MultiLongRun<MDP>
 {
 
 	public MultiLongRunMDP(@NonNull MDP mdp, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
