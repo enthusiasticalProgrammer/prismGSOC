@@ -35,12 +35,12 @@ import prism.PrismLangException;
 public class FindAllConstants extends ASTTraverseModify
 {
 	private ConstantList constantList;
-	
+
 	public FindAllConstants(ConstantList constantList)
 	{
 		this.constantList = constantList;
 	}
-	
+
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;
@@ -48,7 +48,7 @@ public class FindAllConstants extends ASTTraverseModify
 		i = constantList.getConstantIndex(e.getName());
 		if (i != -1) {
 			// If so, replace it with an ExpressionConstant object
-			ExpressionConstant expr = new ExpressionConstant(e.getName(),  constantList.getConstantType(i));
+			ExpressionConstant expr = new ExpressionConstant(e.getName(), constantList.getConstantType(i));
 			expr.setPosition(e);
 			return expr;
 		}
@@ -56,4 +56,3 @@ public class FindAllConstants extends ASTTraverseModify
 		return e;
 	}
 }
-

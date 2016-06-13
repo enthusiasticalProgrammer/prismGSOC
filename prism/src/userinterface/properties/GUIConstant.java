@@ -37,7 +37,7 @@ class GUIConstant
 	public String constant;
 	public Type type;
 	public Exception parseError;
-	
+
 	public GUIConstant(GUIMultiProperties parent, String name, String constant, Type type)
 	{
 		this.parent = parent;
@@ -46,7 +46,7 @@ class GUIConstant
 		this.type = type;
 		this.parseError = null;
 	}
-	
+
 	public void parse()
 	{
 		Expression expr = null;
@@ -54,28 +54,40 @@ class GUIConstant
 		// See if constant definition is parseable
 		try {
 			// Check name is a valid identifier
-			try { expr = parent.getPrism().parseSingleExpressionString(name); }
-			catch (PrismLangException e) { throw new PrismException("Invalid constant name \""+name+"\""); }
-			if (expr == null || !(expr instanceof ExpressionIdent)) throw new PrismException("Invalid constant name \""+name+"\"");
+			try {
+				expr = parent.getPrism().parseSingleExpressionString(name);
+			} catch (PrismLangException e) {
+				throw new PrismException("Invalid constant name \"" + name + "\"");
+			}
+			if (expr == null || !(expr instanceof ExpressionIdent))
+				throw new PrismException("Invalid constant name \"" + name + "\"");
 			// Check (non-empty) constant definition is valid (single) expression
-			try { if (!("".equals(constant))) parent.getPrism().parseSingleExpressionString(constant); }
-			catch (PrismLangException e) { throw new PrismException("Invalid expression \""+constant+"\""); }
-		}
-		catch (PrismException e) {
+			try {
+				if (!("".equals(constant)))
+					parent.getPrism().parseSingleExpressionString(constant);
+			} catch (PrismLangException e) {
+				throw new PrismException("Invalid expression \"" + constant + "\"");
+			}
+		} catch (PrismException e) {
 			this.parseError = e;
 		}
 	}
-	
-	public boolean isParseable() { return parseError==null; }
-	
+
+	public boolean isParseable()
+	{
+		return parseError == null;
+	}
+
 	public String toString()
 	{
-		return "const "+type.getTypeString()+" "+name+getValueString()+";";
+		return "const " + type.getTypeString() + " " + name + getValueString() + ";";
 	}
-	
+
 	public String getValueString()
 	{
-		if ("".equals(constant)) return "";
-		else return " = " + constant; 
+		if ("".equals(constant))
+			return "";
+		else
+			return " = " + constant;
 	}
 }

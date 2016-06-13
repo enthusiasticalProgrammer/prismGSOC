@@ -1711,7 +1711,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// TODO: print more info 
 		//mainLog.println();
 	}
-	
+
 	/**
 	 * Set (some or all) undefined constants for the currently loaded PRISM model
 	 * (assuming they have changed since the last time this was called).
@@ -2202,7 +2202,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// Check again (in case engine was switched)
 		if (getExplicit())
 			throw new PrismNotSupportedException("Export to Dot file not yet supported by explicit engine");
-		
+
 		// Export to dot file
 		mainLog.println("\nExporting to dot file \"" + file + "\"...");
 		JDD.ExportDDToDotFileLabelled(currentModel.getTrans(), file.getPath(), currentModel.getDDVarNames());
@@ -2637,8 +2637,8 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 					new StateListMTBDD(sccComputer.getSCCs().get(i), currentModel).printMatlab(tmpLog);
 				JDD.Deref(sccComputer.getSCCs().get(i));
 			} else {
-				explicit.StateValues.createFromBitSet(sccComputerExpl.getSCCs().get(i), currentModelExpl).print(tmpLog, true, exportType == EXPORT_MATLAB,
-						true, true);
+				explicit.StateValues.createFromBitSet(sccComputerExpl.getSCCs().get(i), currentModelExpl).print(tmpLog, true, exportType == EXPORT_MATLAB, true,
+						true);
 			}
 			if (exportType == EXPORT_MATLAB)
 				tmpLog.println("];");
@@ -3937,8 +3937,8 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Old API:
 	 */
 	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
-			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod) throws PrismException,
-			InterruptedException
+			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
+			throws PrismException, InterruptedException
 	{
 		loadPRISMModel(modulesFile);
 		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);

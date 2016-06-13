@@ -41,10 +41,10 @@ import parser.type.Type;
 public abstract class DefaultModelGenerator implements ModelGenerator
 {
 	// Methods for ModelInfo interface
-	
+
 	@Override
 	public abstract ModelType getModelType();
-	
+
 	@Override
 	public void setSomeUndefinedConstants(Values someValues) throws PrismException
 	{
@@ -58,7 +58,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 		// Empty values
 		return new Values();
 	}
-	
+
 	@Override
 	public boolean containsUnboundedVariables()
 	{
@@ -67,7 +67,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 
 	@Override
 	public abstract int getNumVars();
-	
+
 	@Override
 	public abstract List<String> getVarNames();
 
@@ -85,50 +85,50 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 
 	@Override
 	public abstract List<Type> getVarTypes();
-	
+
 	@Override
 	public int getNumLabels()
 	{
-		return 0;	
+		return 0;
 	}
-	
+
 	@Override
 	public String getLabelName(int i) throws PrismException
 	{
 		throw new PrismException("Label number \"" + i + "\" not defined");
 	}
-	
+
 	public int getLabelIndex(String label)
 	{
 		return -1;
 	}
-	
+
 	@Override
 	public int getNumRewardStructs()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	public int getRewardStructIndex(String name)
 	{
 		return -1;
 	}
-	
+
 	@Override
 	public RewardStruct getRewardStruct(int i)
 	{
 		return null;
 	}
-	
+
 	// Methods for ModelGenerator interface
-	
+
 	public boolean hasSingleInitialState() throws PrismException
 	{
 		// Default to the case of a single initial state
 		return true;
 	}
-	
+
 	@Override
 	public List<State> getInitialStates() throws PrismException
 	{
@@ -188,7 +188,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 			return isLabelTrue(i);
 		}
 	}
-	
+
 	@Override
 	public boolean isLabelTrue(int i) throws PrismException
 	{

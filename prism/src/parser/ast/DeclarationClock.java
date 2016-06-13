@@ -47,20 +47,20 @@ public class DeclarationClock extends DeclarationType
 	{
 		return Expression.Double(0);
 	}
-	
+
 	/* TODO:
 	@Override
 	public Expression getStart(ModulesFile parent)
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		return start != null ? start : low;
 	}
 	*/
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */

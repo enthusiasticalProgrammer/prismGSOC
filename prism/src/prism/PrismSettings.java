@@ -53,7 +53,7 @@ public class PrismSettings implements Observer
 	public static final Font DEFAULT_FONT = new Font("monospaced", Font.PLAIN, 12);
 	public static final FontColorPair DEFAULT_FONT_COLOUR = new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black);
 	public static final File DEFAULT_FILE = null;
-	
+
 	//Type Constants
 	public static final String STRING_TYPE = "s";
 	public static final String INTEGER_TYPE = "i";
@@ -66,145 +66,130 @@ public class PrismSettings implements Observer
 	public static final String CHOICE_TYPE = "ch";
 	public static final String FONT_COLOUR_TYPE = "fct";
 	public static final String FILE_TYPE = "fi";
-	
+
 	//Property Constant Keys
 	//======================
-	
-	//PRISM
-	public static final	String PRISM_ENGINE							= "prism.engine";
-	public static final	String PRISM_VERBOSE						= "prism.verbose";
-	public static final	String PRISM_FAIRNESS						= "prism.fairness";
-	public static final	String PRISM_PRECOMPUTATION					= "prism.precomputation";
-	public static final	String PRISM_PROB0							= "prism.prob0";
-	public static final	String PRISM_PROB1							= "prism.prob1";
-	public static final	String PRISM_PRE_REL					= "prism.preRel";
-	public static final	String PRISM_FIX_DEADLOCKS					= "prism.fixDeadlocks";
-	public static final	String PRISM_DO_PROB_CHECKS					= "prism.doProbChecks";
-	public static final	String PRISM_SUM_ROUND_OFF					= "prism.sumRoundOff";
-	public static final	String PRISM_COMPACT						= "prism.compact";
-	public static final	String PRISM_LIN_EQ_METHOD					= "prism.linEqMethod";//"prism.iterativeMethod";
-	public static final	String PRISM_LIN_EQ_METHOD_PARAM			= "prism.linEqMethodParam";//"prism.overRelaxation";
-	public static final	String PRISM_MDP_SOLN_METHOD				= "prism.mdpSolnMethod";
-	public static final	String PRISM_MDP_MULTI_SOLN_METHOD			= "prism.mdpMultiSolnMethod";
-	public static final	String PRISM_TERM_CRIT						= "prism.termCrit";//"prism.termination";
-	public static final	String PRISM_TERM_CRIT_PARAM				= "prism.termCritParam";//"prism.terminationEpsilon";
-	public static final	String PRISM_MAX_ITERS						= "prism.maxIters";//"prism.maxIterations";
-	
-	public static final	String PRISM_CUDD_MAX_MEM					= "prism.cuddMaxMem";
-	public static final	String PRISM_CUDD_EPSILON					= "prism.cuddEpsilon";
-	public static final	String PRISM_NUM_SB_LEVELS					= "prism.numSBLevels";//"prism.hybridNumLevels";
-	public static final	String PRISM_SB_MAX_MEM						= "prism.SBMaxMem";//"prism.hybridMaxMemory";
-	public static final	String PRISM_NUM_SOR_LEVELS					= "prism.numSORLevels";//"prism.hybridSORLevels";
-	public static final	String PRISM_SOR_MAX_MEM					= "prism.SORMaxMem";//"prism.hybridSORMaxMemory";
-	public static final	String PRISM_DO_SS_DETECTION				= "prism.doSSDetect";
-	public static final	String PRISM_EXTRA_DD_INFO					= "prism.extraDDInfo";
-	public static final	String PRISM_EXTRA_REACH_INFO				= "prism.extraReachInfo";
-	public static final String PRISM_SCC_METHOD						= "prism.sccMethod";
-	public static final String PRISM_SYMM_RED_PARAMS					= "prism.symmRedParams";
-	public static final	String PRISM_EXACT_ENABLED					= "prism.exact.enabled";
-	public static final String PRISM_PTA_METHOD					= "prism.ptaMethod";
-	public static final String PRISM_TRANSIENT_METHOD				= "prism.transientMethod";
-	public static final String PRISM_AR_OPTIONS					= "prism.arOptions";
-	public static final String PRISM_PATH_VIA_AUTOMATA				= "prism.pathViaAutomata";
-	public static final String PRISM_NO_DA_SIMPLIFY				= "prism.noDaSimplify";
-	public static final String PRISM_EXPORT_ADV					= "prism.exportAdv";
-	public static final String PRISM_EXPORT_ADV_FILENAME			= "prism.exportAdvFilename";
-	
-	public static final	String PRISM_MULTI_MAX_POINTS				= "prism.multiMaxIters";
-	public static final	String PRISM_PARETO_EPSILON					= "prism.paretoEpsilon";
-	public static final	String PRISM_EXPORT_PARETO_FILENAME			= "prism.exportParetoFileName";
-	
-	public static final String PRISM_LTL2DA_TOOL					= "prism.ltl2daTool";
-	public static final String PRISM_LTL2DA_SYNTAX					= "prism.ltl2daSyntax";
-	
-	public static final	String PRISM_PARAM_ENABLED					= "prism.param.enabled";
-	public static final	String PRISM_PARAM_PRECISION				= "prism.param.precision";
-	public static final	String PRISM_PARAM_SPLIT					= "prism.param.split";
-	public static final	String PRISM_PARAM_BISIM					= "prism.param.bisim";
-	public static final	String PRISM_PARAM_FUNCTION					= "prism.param.function";
-	public static final	String PRISM_PARAM_ELIM_ORDER				= "prism.param.elimOrder";
-	public static final	String PRISM_PARAM_RANDOM_POINTS			= "prism.param.randomPoints";
-	public static final	String PRISM_PARAM_SUBSUME_REGIONS			= "prism.param.subsumeRegions";
-	public static final String PRISM_PARAM_DAG_MAX_ERROR			= "prism.param.functionDagMaxError";
 
-	public static final String PRISM_FAU_EPSILON					= "prism.fau.epsilon";
-	public static final String PRISM_FAU_DELTA						= "prism.fau.delta";
-	public static final String PRISM_FAU_INTERVALS					= "prism.fau.intervals";
-	public static final String PRISM_FAU_INITIVAL					= "prism.fau.initival";
-	public static final String PRISM_FAU_ARRAYTHRESHOLD				= "prism.fau.arraythreshold";
+	//PRISM
+	public static final String PRISM_ENGINE = "prism.engine";
+	public static final String PRISM_VERBOSE = "prism.verbose";
+	public static final String PRISM_FAIRNESS = "prism.fairness";
+	public static final String PRISM_PRECOMPUTATION = "prism.precomputation";
+	public static final String PRISM_PROB0 = "prism.prob0";
+	public static final String PRISM_PROB1 = "prism.prob1";
+	public static final String PRISM_PRE_REL = "prism.preRel";
+	public static final String PRISM_FIX_DEADLOCKS = "prism.fixDeadlocks";
+	public static final String PRISM_DO_PROB_CHECKS = "prism.doProbChecks";
+	public static final String PRISM_SUM_ROUND_OFF = "prism.sumRoundOff";
+	public static final String PRISM_COMPACT = "prism.compact";
+	public static final String PRISM_LIN_EQ_METHOD = "prism.linEqMethod";//"prism.iterativeMethod";
+	public static final String PRISM_LIN_EQ_METHOD_PARAM = "prism.linEqMethodParam";//"prism.overRelaxation";
+	public static final String PRISM_MDP_SOLN_METHOD = "prism.mdpSolnMethod";
+	public static final String PRISM_MDP_MULTI_SOLN_METHOD = "prism.mdpMultiSolnMethod";
+	public static final String PRISM_TERM_CRIT = "prism.termCrit";//"prism.termination";
+	public static final String PRISM_TERM_CRIT_PARAM = "prism.termCritParam";//"prism.terminationEpsilon";
+	public static final String PRISM_MAX_ITERS = "prism.maxIters";//"prism.maxIterations";
+
+	public static final String PRISM_CUDD_MAX_MEM = "prism.cuddMaxMem";
+	public static final String PRISM_CUDD_EPSILON = "prism.cuddEpsilon";
+	public static final String PRISM_NUM_SB_LEVELS = "prism.numSBLevels";//"prism.hybridNumLevels";
+	public static final String PRISM_SB_MAX_MEM = "prism.SBMaxMem";//"prism.hybridMaxMemory";
+	public static final String PRISM_NUM_SOR_LEVELS = "prism.numSORLevels";//"prism.hybridSORLevels";
+	public static final String PRISM_SOR_MAX_MEM = "prism.SORMaxMem";//"prism.hybridSORMaxMemory";
+	public static final String PRISM_DO_SS_DETECTION = "prism.doSSDetect";
+	public static final String PRISM_EXTRA_DD_INFO = "prism.extraDDInfo";
+	public static final String PRISM_EXTRA_REACH_INFO = "prism.extraReachInfo";
+	public static final String PRISM_SCC_METHOD = "prism.sccMethod";
+	public static final String PRISM_SYMM_RED_PARAMS = "prism.symmRedParams";
+	public static final String PRISM_EXACT_ENABLED = "prism.exact.enabled";
+	public static final String PRISM_PTA_METHOD = "prism.ptaMethod";
+	public static final String PRISM_TRANSIENT_METHOD = "prism.transientMethod";
+	public static final String PRISM_AR_OPTIONS = "prism.arOptions";
+	public static final String PRISM_PATH_VIA_AUTOMATA = "prism.pathViaAutomata";
+	public static final String PRISM_NO_DA_SIMPLIFY = "prism.noDaSimplify";
+	public static final String PRISM_EXPORT_ADV = "prism.exportAdv";
+	public static final String PRISM_EXPORT_ADV_FILENAME = "prism.exportAdvFilename";
+
+	public static final String PRISM_MULTI_MAX_POINTS = "prism.multiMaxIters";
+	public static final String PRISM_PARETO_EPSILON = "prism.paretoEpsilon";
+	public static final String PRISM_EXPORT_PARETO_FILENAME = "prism.exportParetoFileName";
+
+	public static final String PRISM_LTL2DA_TOOL = "prism.ltl2daTool";
+	public static final String PRISM_LTL2DA_SYNTAX = "prism.ltl2daSyntax";
+
+	public static final String PRISM_PARAM_ENABLED = "prism.param.enabled";
+	public static final String PRISM_PARAM_PRECISION = "prism.param.precision";
+	public static final String PRISM_PARAM_SPLIT = "prism.param.split";
+	public static final String PRISM_PARAM_BISIM = "prism.param.bisim";
+	public static final String PRISM_PARAM_FUNCTION = "prism.param.function";
+	public static final String PRISM_PARAM_ELIM_ORDER = "prism.param.elimOrder";
+	public static final String PRISM_PARAM_RANDOM_POINTS = "prism.param.randomPoints";
+	public static final String PRISM_PARAM_SUBSUME_REGIONS = "prism.param.subsumeRegions";
+	public static final String PRISM_PARAM_DAG_MAX_ERROR = "prism.param.functionDagMaxError";
+
+	public static final String PRISM_FAU_EPSILON = "prism.fau.epsilon";
+	public static final String PRISM_FAU_DELTA = "prism.fau.delta";
+	public static final String PRISM_FAU_INTERVALS = "prism.fau.intervals";
+	public static final String PRISM_FAU_INITIVAL = "prism.fau.initival";
+	public static final String PRISM_FAU_ARRAYTHRESHOLD = "prism.fau.arraythreshold";
 
 	//Simulator
-	public static final String SIMULATOR_DEFAULT_NUM_SAMPLES		= "simulator.defaultNumSamples";
-	public static final String SIMULATOR_DEFAULT_CONFIDENCE			= "simulator.defaultConfidence";
-	public static final String SIMULATOR_DEFAULT_WIDTH				= "simulator.defaultWidth";
-	public static final String SIMULATOR_DEFAULT_APPROX				= "simulator.defaultApprox";
-	public static final String SIMULATOR_DEFAULT_MAX_PATH			= "simulator.defaultMaxPath";
-	public static final String SIMULATOR_DECIDE 					= "simulator.decide";
-	public static final String SIMULATOR_ITERATIONS_TO_DECIDE		= "simulator.iterationsToDecide";
-	public static final String SIMULATOR_MAX_REWARD					= "simulator.maxReward";
-	public static final	String SIMULATOR_SIMULTANEOUS				= "simulator.simultaneous";
-	public static final String SIMULATOR_FIELD_CHOICE				= "simulator.fieldChoice";
-	public static final	String SIMULATOR_NEW_PATH_ASK_VIEW			= "simulator.newPathAskView";
-	public static final	String SIMULATOR_RENDER_ALL_VALUES			= "simulator.renderAllValues";
-	public static final String SIMULATOR_NETWORK_FILE				= "simulator.networkFile";
-	
+	public static final String SIMULATOR_DEFAULT_NUM_SAMPLES = "simulator.defaultNumSamples";
+	public static final String SIMULATOR_DEFAULT_CONFIDENCE = "simulator.defaultConfidence";
+	public static final String SIMULATOR_DEFAULT_WIDTH = "simulator.defaultWidth";
+	public static final String SIMULATOR_DEFAULT_APPROX = "simulator.defaultApprox";
+	public static final String SIMULATOR_DEFAULT_MAX_PATH = "simulator.defaultMaxPath";
+	public static final String SIMULATOR_DECIDE = "simulator.decide";
+	public static final String SIMULATOR_ITERATIONS_TO_DECIDE = "simulator.iterationsToDecide";
+	public static final String SIMULATOR_MAX_REWARD = "simulator.maxReward";
+	public static final String SIMULATOR_SIMULTANEOUS = "simulator.simultaneous";
+	public static final String SIMULATOR_FIELD_CHOICE = "simulator.fieldChoice";
+	public static final String SIMULATOR_NEW_PATH_ASK_VIEW = "simulator.newPathAskView";
+	public static final String SIMULATOR_RENDER_ALL_VALUES = "simulator.renderAllValues";
+	public static final String SIMULATOR_NETWORK_FILE = "simulator.networkFile";
+
 	//GUI Model
-	public static final	String MODEL_AUTO_PARSE						= "model.autoParse";
-	public static final	String MODEL_AUTO_MANUAL					= "model.autoManual";
-	public static final	String MODEL_PARSE_DELAY					= "model.parseDelay";
-	public static final	String MODEL_PRISM_EDITOR_FONT				= "model.prismEditor.font";
-	public static final	String MODEL_SHOW_LINE_NUMBERS				= "model.prismEditor.lineNumbers";
-	
+	public static final String MODEL_AUTO_PARSE = "model.autoParse";
+	public static final String MODEL_AUTO_MANUAL = "model.autoManual";
+	public static final String MODEL_PARSE_DELAY = "model.parseDelay";
+	public static final String MODEL_PRISM_EDITOR_FONT = "model.prismEditor.font";
+	public static final String MODEL_SHOW_LINE_NUMBERS = "model.prismEditor.lineNumbers";
+
 	//public static final	String MODEL_PRISM_EDITOR_FONT_COLOUR		= "model.prismEditor.fontColour";
-	public static final	String MODEL_PRISM_EDITOR_BG_COLOUR			= "model.prismEditor.bgColour";
-	public static final	String MODEL_PRISM_EDITOR_NUMERIC_COLOUR	= "model.prismEditor.numericColour";
-	public static final	String MODEL_PRISM_EDITOR_NUMERIC_STYLE		= "model.prismEditor.numericStyle";
-	public static final	String MODEL_PRISM_EDITOR_IDENTIFIER_COLOUR	  =	"model.prismEditor.identifierColour";
-	public static final	String MODEL_PRISM_EDITOR_IDENTIFIER_STYLE	  =	"model.prismEditor.identifierStyle";
-	public static final	String MODEL_PRISM_EDITOR_KEYWORD_COLOUR	= "model.prismEditor.keywordColour";
-	public static final	String MODEL_PRISM_EDITOR_KEYWORD_STYLE		= "model.prismEditor.keywordStyle";
-	public static final	String MODEL_PRISM_EDITOR_COMMENT_COLOUR	= "model.prismEditor.commentColour";
-	public static final	String MODEL_PRISM_EDITOR_COMMENT_STYLE		= "model.prismEditor.commentStyle";
-	public static final	String MODEL_PEPA_EDITOR_FONT				= "model.pepaEditor.font";
+	public static final String MODEL_PRISM_EDITOR_BG_COLOUR = "model.prismEditor.bgColour";
+	public static final String MODEL_PRISM_EDITOR_NUMERIC_COLOUR = "model.prismEditor.numericColour";
+	public static final String MODEL_PRISM_EDITOR_NUMERIC_STYLE = "model.prismEditor.numericStyle";
+	public static final String MODEL_PRISM_EDITOR_IDENTIFIER_COLOUR = "model.prismEditor.identifierColour";
+	public static final String MODEL_PRISM_EDITOR_IDENTIFIER_STYLE = "model.prismEditor.identifierStyle";
+	public static final String MODEL_PRISM_EDITOR_KEYWORD_COLOUR = "model.prismEditor.keywordColour";
+	public static final String MODEL_PRISM_EDITOR_KEYWORD_STYLE = "model.prismEditor.keywordStyle";
+	public static final String MODEL_PRISM_EDITOR_COMMENT_COLOUR = "model.prismEditor.commentColour";
+	public static final String MODEL_PRISM_EDITOR_COMMENT_STYLE = "model.prismEditor.commentStyle";
+	public static final String MODEL_PEPA_EDITOR_FONT = "model.pepaEditor.font";
 	//public static final	String MODEL_PEPA_EDITOR_FONT_COLOUR		= "model.pepaEditor.fontColour";
-	public static final	String MODEL_PEPA_EDITOR_BG_COLOUR			= "model.pepaEditor.bgColour";
-	public static final	String MODEL_PEPA_EDITOR_COMMENT_COLOUR		= "model.pepaEditor.commentColour";
-	public static final	String MODEL_PEPA_EDITOR_COMMENT_STYLE		= "model.pepaEditor.commentStyle";
-	
+	public static final String MODEL_PEPA_EDITOR_BG_COLOUR = "model.pepaEditor.bgColour";
+	public static final String MODEL_PEPA_EDITOR_COMMENT_COLOUR = "model.pepaEditor.commentColour";
+	public static final String MODEL_PEPA_EDITOR_COMMENT_STYLE = "model.pepaEditor.commentStyle";
+
 	//GUI Properties
-	public static final	String PROPERTIES_FONT						= "properties.font";
-	public static final	String PROPERTIES_SELECTION_COLOUR			= "properties.selectionColour";
-	public static final	String PROPERTIES_WARNING_COLOUR			= "properties.warningColour";
-	public static final	String PROPERTIES_ADDITION_STRATEGY			= "properties.additionStategy";
-	public static final	String PROPERTIES_CLEAR_LIST_ON_LOAD		= "properties.clearListOnLoad";
-	
+	public static final String PROPERTIES_FONT = "properties.font";
+	public static final String PROPERTIES_SELECTION_COLOUR = "properties.selectionColour";
+	public static final String PROPERTIES_WARNING_COLOUR = "properties.warningColour";
+	public static final String PROPERTIES_ADDITION_STRATEGY = "properties.additionStategy";
+	public static final String PROPERTIES_CLEAR_LIST_ON_LOAD = "properties.clearListOnLoad";
+
 	//GUI Log
-	public static final	String LOG_FONT								= "log.font";
-	public static final	String LOG_SELECTION_COLOUR					= "log.selectionColour";
-	public static final	String LOG_BG_COLOUR						= "log.bgColour";
-	public static final	String LOG_BUFFER_LENGTH					= "log.bufferLength";
-	
-	
+	public static final String LOG_FONT = "log.font";
+	public static final String LOG_SELECTION_COLOUR = "log.selectionColour";
+	public static final String LOG_BG_COLOUR = "log.bgColour";
+	public static final String LOG_BUFFER_LENGTH = "log.bufferLength";
+
 	//Defaults, types and constaints
-	
-	public static final String[] propertyOwnerNames =
-	{
-		"PRISM",
-		"Simulator",
-		"Model",
-		"Properties",
-		"Log"
-	};
-	public static final int[] propertyOwnerIDs =
-	{
-		PropertyConstants.PRISM,
-		PropertyConstants.SIMULATOR,
-		PropertyConstants.MODEL,
-		PropertyConstants.PROPERTIES,
-		PropertyConstants.LOG		
-	};
-	
-	
+
+	public static final String[] propertyOwnerNames = { "PRISM", "Simulator", "Model", "Properties", "Log" };
+	public static final int[] propertyOwnerIDs = { PropertyConstants.PRISM, PropertyConstants.SIMULATOR, PropertyConstants.MODEL, PropertyConstants.PROPERTIES,
+			PropertyConstants.LOG };
+
 	// Property table:
 	// * Datatype = type of choice (see type constants at top of this file)
 	// * Key = internal key, used programmatically; need to add this to key list above
@@ -215,334 +200,322 @@ public class PrismSettings implements Observer
 	// * Default = default value 
 	// * Constraints = limitations on possible values 
 	// * Comments = explanatory comments; used e.g. in GUI options dialog 
-	
-	public static final Object[][][] propertyData =
-	{
-		{	//Datatype:			Key:									Display name:							Version:		Default:																	Constraints:																				Comment:
+
+	public static final Object[][][] propertyData = { { //Datatype:			Key:									Display name:							Version:		Default:																	Constraints:																				Comment:
 			//====================================================================================================================================================================================================================================================================================================================================
-			
+
 			// ENGINES/METHODS:
-			{ CHOICE_TYPE,		PRISM_ENGINE,							"Engine",								"2.1",			"Hybrid",																	"MTBDD,Sparse,Hybrid,Explicit",																		
-																			"Which engine (hybrid, sparse, MTBDD, explicit) should be used for model checking." },
-			{ BOOLEAN_TYPE,		PRISM_EXACT_ENABLED,					"Do exact model checking",			"4.2.1",			new Boolean(false),															"",
-																			"Perform exact model checking." },
-																			
-			{ CHOICE_TYPE,		PRISM_PTA_METHOD,						"PTA model checking method",			"3.3",			"Stochastic games",																	"Digital clocks,Stochastic games,Backwards reachability",																
-																			"Which method to use for model checking of PTAs." },
-			{ CHOICE_TYPE,		PRISM_TRANSIENT_METHOD,					"Transient probability computation method",	"3.3",		"Uniformisation",															"Uniformisation,Fast adaptive uniformisation",																
-																			"Which method to use for computing transient probabilities in CTMCs." },
+			{ CHOICE_TYPE, PRISM_ENGINE, "Engine", "2.1", "Hybrid", "MTBDD,Sparse,Hybrid,Explicit",
+					"Which engine (hybrid, sparse, MTBDD, explicit) should be used for model checking." },
+			{ BOOLEAN_TYPE, PRISM_EXACT_ENABLED, "Do exact model checking", "4.2.1", new Boolean(false), "", "Perform exact model checking." },
+
+			{ CHOICE_TYPE, PRISM_PTA_METHOD, "PTA model checking method", "3.3", "Stochastic games", "Digital clocks,Stochastic games,Backwards reachability",
+					"Which method to use for model checking of PTAs." },
+			{ CHOICE_TYPE, PRISM_TRANSIENT_METHOD, "Transient probability computation method", "3.3", "Uniformisation",
+					"Uniformisation,Fast adaptive uniformisation", "Which method to use for computing transient probabilities in CTMCs." },
 			// NUMERICAL SOLUTION OPTIONS:
-			{ CHOICE_TYPE,		PRISM_LIN_EQ_METHOD,					"Linear equations method",				"2.1",			"Jacobi",																	"Power,Jacobi,Gauss-Seidel,Backwards Gauss-Seidel,Pseudo-Gauss-Seidel,Backwards Pseudo-Gauss-Seidel,JOR,SOR,Backwards SOR,Pseudo-SOR,Backwards Pseudo-SOR",
-																			"Which iterative method to use when solving linear equation systems." },
-			{ DOUBLE_TYPE,		PRISM_LIN_EQ_METHOD_PARAM,				"Over-relaxation parameter",			"2.1",			new Double(0.9),															"",																							
-																			"Over-relaxation parameter for iterative numerical methods such as JOR/SOR." },
-			{ CHOICE_TYPE,		PRISM_MDP_SOLN_METHOD,					"MDP solution method",				"4.0",			"Value iteration",																"Value iteration,Gauss-Seidel,Policy iteration,Modified policy iteration,Linear programming",
-																			"Which method to use when solving Markov decision processes." },
-			{ CHOICE_TYPE,		PRISM_MDP_MULTI_SOLN_METHOD,			"MDP multi-objective solution method",				"4.0.3",			"Value iteration",											"Value iteration,Gauss-Seidel,Linear programming",
-																			"Which method to use when solving multi-objective queries on Markov decision processes." },
-			{ CHOICE_TYPE,		PRISM_TERM_CRIT,						"Termination criteria",					"2.1",			"Relative",																	"Absolute,Relative",																		
-																			"Criteria to use for checking termination of iterative numerical methods." },
-			{ DOUBLE_TYPE,		PRISM_TERM_CRIT_PARAM,					"Termination epsilon",					"2.1",			new Double(1.0E-6),															"0.0,",																						
-																			"Epsilon value to use for checking termination of iterative numerical methods." },
-			{ INTEGER_TYPE,		PRISM_MAX_ITERS,						"Termination max. iterations",			"2.1",			new Integer(10000),															"0,",																						
-																			"Maximum number of iterations to perform if iterative methods do not converge." },
+			{ CHOICE_TYPE, PRISM_LIN_EQ_METHOD, "Linear equations method", "2.1", "Jacobi",
+					"Power,Jacobi,Gauss-Seidel,Backwards Gauss-Seidel,Pseudo-Gauss-Seidel,Backwards Pseudo-Gauss-Seidel,JOR,SOR,Backwards SOR,Pseudo-SOR,Backwards Pseudo-SOR",
+					"Which iterative method to use when solving linear equation systems." },
+			{ DOUBLE_TYPE, PRISM_LIN_EQ_METHOD_PARAM, "Over-relaxation parameter", "2.1", new Double(0.9), "",
+					"Over-relaxation parameter for iterative numerical methods such as JOR/SOR." },
+			{ CHOICE_TYPE, PRISM_MDP_SOLN_METHOD, "MDP solution method", "4.0", "Value iteration",
+					"Value iteration,Gauss-Seidel,Policy iteration,Modified policy iteration,Linear programming",
+					"Which method to use when solving Markov decision processes." },
+			{ CHOICE_TYPE, PRISM_MDP_MULTI_SOLN_METHOD, "MDP multi-objective solution method", "4.0.3", "Value iteration",
+					"Value iteration,Gauss-Seidel,Linear programming",
+					"Which method to use when solving multi-objective queries on Markov decision processes." },
+			{ CHOICE_TYPE, PRISM_TERM_CRIT, "Termination criteria", "2.1", "Relative", "Absolute,Relative",
+					"Criteria to use for checking termination of iterative numerical methods." },
+			{ DOUBLE_TYPE, PRISM_TERM_CRIT_PARAM, "Termination epsilon", "2.1", new Double(1.0E-6), "0.0,",
+					"Epsilon value to use for checking termination of iterative numerical methods." },
+			{ INTEGER_TYPE, PRISM_MAX_ITERS, "Termination max. iterations", "2.1", new Integer(10000), "0,",
+					"Maximum number of iterations to perform if iterative methods do not converge." },
 			// MODEL CHECKING OPTIONS:
-			{ BOOLEAN_TYPE,		PRISM_PRECOMPUTATION,					"Use precomputation",					"2.1",			new Boolean(true),															"",																							
-																			"Whether to use model checking precomputation algorithms (Prob0, Prob1, etc.), where optional." },
-			{ BOOLEAN_TYPE,		PRISM_PROB0,							"Use Prob0 precomputation",				"4.0.2",		new Boolean(true),															"",																							
-																			"Whether to use model checking precomputation algorithm Prob0 (if precomputation enabled)." },
-			{ BOOLEAN_TYPE,		PRISM_PROB1,							"Use Prob1 precomputation",				"4.0.2",		new Boolean(true),															"",																							
-																			"Whether to use model checking precomputation algorithm Prob1 (if precomputation enabled)." },
-			{ BOOLEAN_TYPE,		PRISM_PRE_REL,							"Use predecessor relation",		"4.2.1",		new Boolean(true),											"",
-																			"Whether to use a pre-computed predecessor relation in several algorithms." },
-			{ BOOLEAN_TYPE,		PRISM_FAIRNESS,							"Use fairness",							"2.1",			new Boolean(false),															"",																							
-																			"Constrain to fair adversaries when model checking MDPs." },
-			{ BOOLEAN_TYPE,		PRISM_FIX_DEADLOCKS,					"Automatically fix deadlocks",			"4.0.3",		new Boolean(true),															"",																							
-																			"Automatically fix deadlocks, where necessary, when constructing probabilistic models." },
-			{ BOOLEAN_TYPE,		PRISM_DO_PROB_CHECKS,					"Do probability/rate checks",			"2.1",			new Boolean(true),															"",																							
-																			"Perform sanity checks on model probabilities/rates when constructing probabilistic models." },
-			{ DOUBLE_TYPE,		PRISM_SUM_ROUND_OFF,					"Probability sum threshold",					"2.1",			new Double(1.0E-5),													"0.0,",
-																			"Round-off threshold for places where doubles are summed and compared to integers (e.g. checking that probabilities sum to 1 in an update)." },							
-			{ BOOLEAN_TYPE,		PRISM_DO_SS_DETECTION,					"Use steady-state detection",			"2.1",			new Boolean(true),															"0,",																						
-																			"Use steady-state detection during CTMC transient probability computation." },
-			{ CHOICE_TYPE,		PRISM_SCC_METHOD,						"SCC decomposition method",				"3.2",			"Lockstep",																	"Xie-Beerel,Lockstep,SCC-Find",																
-																			"Which algorithm to use for (symbolic) decomposition of a graph into strongly connected components (SCCs)." },
-			{ STRING_TYPE,		PRISM_SYMM_RED_PARAMS,					"Symmetry reduction parameters",		"3.2",			"",																	"",																
-																			"Parameters for symmetry reduction (format: \"i j\" where i and j are the number of modules before and after the symmetric ones; empty string means symmetry reduction disabled)." },
-			{ STRING_TYPE,		PRISM_AR_OPTIONS,						"Abstraction refinement options",		"3.3",			"",																	"",																
-																			"Various options passed to the asbtraction-refinement engine (e.g. for PTA model checking)." },
-			{ BOOLEAN_TYPE,		PRISM_PATH_VIA_AUTOMATA,				"All path formulas via automata",			"4.2.1",			new Boolean(false),									"",
-																			"Handle all path formulas via automata constructions." },
-			{ BOOLEAN_TYPE,		PRISM_NO_DA_SIMPLIFY,				"Do not simplify deterministic automata",			"4.3",			new Boolean(false),									"",
-																			"Do not attempt to simplify deterministic automata, acceptance conditions (for debugging)." },
+			{ BOOLEAN_TYPE, PRISM_PRECOMPUTATION, "Use precomputation", "2.1", new Boolean(true), "",
+					"Whether to use model checking precomputation algorithms (Prob0, Prob1, etc.), where optional." },
+			{ BOOLEAN_TYPE, PRISM_PROB0, "Use Prob0 precomputation", "4.0.2", new Boolean(true), "",
+					"Whether to use model checking precomputation algorithm Prob0 (if precomputation enabled)." },
+			{ BOOLEAN_TYPE, PRISM_PROB1, "Use Prob1 precomputation", "4.0.2", new Boolean(true), "",
+					"Whether to use model checking precomputation algorithm Prob1 (if precomputation enabled)." },
+			{ BOOLEAN_TYPE, PRISM_PRE_REL, "Use predecessor relation", "4.2.1", new Boolean(true), "",
+					"Whether to use a pre-computed predecessor relation in several algorithms." },
+			{ BOOLEAN_TYPE, PRISM_FAIRNESS, "Use fairness", "2.1", new Boolean(false), "", "Constrain to fair adversaries when model checking MDPs." },
+			{ BOOLEAN_TYPE, PRISM_FIX_DEADLOCKS, "Automatically fix deadlocks", "4.0.3", new Boolean(true), "",
+					"Automatically fix deadlocks, where necessary, when constructing probabilistic models." },
+			{ BOOLEAN_TYPE, PRISM_DO_PROB_CHECKS, "Do probability/rate checks", "2.1", new Boolean(true), "",
+					"Perform sanity checks on model probabilities/rates when constructing probabilistic models." },
+			{ DOUBLE_TYPE, PRISM_SUM_ROUND_OFF, "Probability sum threshold", "2.1", new Double(1.0E-5), "0.0,",
+					"Round-off threshold for places where doubles are summed and compared to integers (e.g. checking that probabilities sum to 1 in an update)." },
+			{ BOOLEAN_TYPE, PRISM_DO_SS_DETECTION, "Use steady-state detection", "2.1", new Boolean(true), "0,",
+					"Use steady-state detection during CTMC transient probability computation." },
+			{ CHOICE_TYPE, PRISM_SCC_METHOD, "SCC decomposition method", "3.2", "Lockstep", "Xie-Beerel,Lockstep,SCC-Find",
+					"Which algorithm to use for (symbolic) decomposition of a graph into strongly connected components (SCCs)." },
+			{ STRING_TYPE, PRISM_SYMM_RED_PARAMS, "Symmetry reduction parameters", "3.2", "", "",
+					"Parameters for symmetry reduction (format: \"i j\" where i and j are the number of modules before and after the symmetric ones; empty string means symmetry reduction disabled)." },
+			{ STRING_TYPE, PRISM_AR_OPTIONS, "Abstraction refinement options", "3.3", "", "",
+					"Various options passed to the asbtraction-refinement engine (e.g. for PTA model checking)." },
+			{ BOOLEAN_TYPE, PRISM_PATH_VIA_AUTOMATA, "All path formulas via automata", "4.2.1", new Boolean(false), "",
+					"Handle all path formulas via automata constructions." },
+			{ BOOLEAN_TYPE, PRISM_NO_DA_SIMPLIFY, "Do not simplify deterministic automata", "4.3", new Boolean(false), "",
+					"Do not attempt to simplify deterministic automata, acceptance conditions (for debugging)." },
 
 			// MULTI-OBJECTIVE MODEL CHECKING OPTIONS:
-			{ INTEGER_TYPE,		PRISM_MULTI_MAX_POINTS,					"Max. multi-objective corner points",			"4.0.3",			new Integer(50),															"0,",																						
-																			"Maximum number of corner points to explore if (value iteration based) multi-objective model checking does not converge." },
-			{ DOUBLE_TYPE,		PRISM_PARETO_EPSILON,					"Pareto approximation threshold",			"4.0.3",			new Double(1.0E-2),															"0.0,",																						
-																			"Determines to what precision the Pareto curve will be approximated." },
-			{ STRING_TYPE,		PRISM_EXPORT_PARETO_FILENAME,			"Pareto curve export filename",			"4.0.3",			"",															"0,",																						
-																			"If non-empty, any Pareto curve generated will be exported to this file." },
+			{ INTEGER_TYPE, PRISM_MULTI_MAX_POINTS, "Max. multi-objective corner points", "4.0.3", new Integer(50), "0,",
+					"Maximum number of corner points to explore if (value iteration based) multi-objective model checking does not converge." },
+			{ DOUBLE_TYPE, PRISM_PARETO_EPSILON, "Pareto approximation threshold", "4.0.3", new Double(1.0E-2), "0.0,",
+					"Determines to what precision the Pareto curve will be approximated." },
+			{ STRING_TYPE, PRISM_EXPORT_PARETO_FILENAME, "Pareto curve export filename", "4.0.3", "", "0,",
+					"If non-empty, any Pareto curve generated will be exported to this file." },
 			// OUTPUT OPTIONS:
-			{ BOOLEAN_TYPE,		PRISM_VERBOSE,							"Verbose output",						"2.1",		new Boolean(false),															"",																							
-																			"Display verbose output to log." },
-			{ BOOLEAN_TYPE,		PRISM_EXTRA_DD_INFO,					"Extra MTBDD information",				"3.1.1",		new Boolean(false),															"0,",																						
-																			"Display extra information about (MT)BDDs used during and after model construction." },
-			{ BOOLEAN_TYPE,		PRISM_EXTRA_REACH_INFO,					"Extra reachability information",		"3.1.1",		new Boolean(false),															"0,",																						
-																			"Display extra information about progress of reachability during model construction." },
+			{ BOOLEAN_TYPE, PRISM_VERBOSE, "Verbose output", "2.1", new Boolean(false), "", "Display verbose output to log." },
+			{ BOOLEAN_TYPE, PRISM_EXTRA_DD_INFO, "Extra MTBDD information", "3.1.1", new Boolean(false), "0,",
+					"Display extra information about (MT)BDDs used during and after model construction." },
+			{ BOOLEAN_TYPE, PRISM_EXTRA_REACH_INFO, "Extra reachability information", "3.1.1", new Boolean(false), "0,",
+					"Display extra information about progress of reachability during model construction." },
 			// SPARSE/HYBRID/MTBDD OPTIONS:
-			{ BOOLEAN_TYPE,		PRISM_COMPACT,							"Use compact schemes",					"2.1",			new Boolean(true),															"",																							
-																			"Use additional optimisations for compressing sparse matrices and vectors with repeated values." },
-			{ INTEGER_TYPE,		PRISM_NUM_SB_LEVELS,					"Hybrid sparse levels",					"2.1",			new Integer(-1),															"-1,",																						
-																			"Number of MTBDD levels ascended when adding sparse matrices to hybrid engine data structures (-1 means use default)." },
-			{ INTEGER_TYPE,		PRISM_SB_MAX_MEM,						"Hybrid sparse memory (KB)",			"2.1",			new Integer(1024),															"0,",																						
-																			"Maximum memory usage when adding sparse matrices to hybrid engine data structures (KB)." },
-			{ INTEGER_TYPE,		PRISM_NUM_SOR_LEVELS,					"Hybrid GS levels",						"2.1",			new Integer(-1),															"-1,",																						
-																			"Number of MTBDD levels descended for hybrid engine data structures block division with GS/SOR." },
-			{ INTEGER_TYPE,		PRISM_SOR_MAX_MEM,						"Hybrid GS memory (KB)",				"2.1",			new Integer(1024),															"0,",																						
-																			"Maximum memory usage for hybrid engine data structures block division with GS/SOR (KB)." },
-			{ STRING_TYPE,		PRISM_CUDD_MAX_MEM,						"CUDD max. memory",				"4.2.1",			new String("1g"),														"",																						
-																			"Maximum memory available to CUDD (underlying BDD/MTBDD library), e.g. 125k, 50m, 4g. Note: Restart PRISM after changing this." },
-			{ DOUBLE_TYPE,		PRISM_CUDD_EPSILON,						"CUDD epsilon",							"2.1",			new Double(1.0E-15),														"0.0,",																						
-																			"Epsilon value used by CUDD (underlying BDD/MTBDD library) for terminal cache comparisons." },
+			{ BOOLEAN_TYPE, PRISM_COMPACT, "Use compact schemes", "2.1", new Boolean(true), "",
+					"Use additional optimisations for compressing sparse matrices and vectors with repeated values." },
+			{ INTEGER_TYPE, PRISM_NUM_SB_LEVELS, "Hybrid sparse levels", "2.1", new Integer(-1), "-1,",
+					"Number of MTBDD levels ascended when adding sparse matrices to hybrid engine data structures (-1 means use default)." },
+			{ INTEGER_TYPE, PRISM_SB_MAX_MEM, "Hybrid sparse memory (KB)", "2.1", new Integer(1024), "0,",
+					"Maximum memory usage when adding sparse matrices to hybrid engine data structures (KB)." },
+			{ INTEGER_TYPE, PRISM_NUM_SOR_LEVELS, "Hybrid GS levels", "2.1", new Integer(-1), "-1,",
+					"Number of MTBDD levels descended for hybrid engine data structures block division with GS/SOR." },
+			{ INTEGER_TYPE, PRISM_SOR_MAX_MEM, "Hybrid GS memory (KB)", "2.1", new Integer(1024), "0,",
+					"Maximum memory usage for hybrid engine data structures block division with GS/SOR (KB)." },
+			{ STRING_TYPE, PRISM_CUDD_MAX_MEM, "CUDD max. memory", "4.2.1", new String("1g"), "",
+					"Maximum memory available to CUDD (underlying BDD/MTBDD library), e.g. 125k, 50m, 4g. Note: Restart PRISM after changing this." },
+			{ DOUBLE_TYPE, PRISM_CUDD_EPSILON, "CUDD epsilon", "2.1", new Double(1.0E-15), "0.0,",
+					"Epsilon value used by CUDD (underlying BDD/MTBDD library) for terminal cache comparisons." },
 			// ADVERSARIES/COUNTEREXAMPLES:
-			{ CHOICE_TYPE,		PRISM_EXPORT_ADV,						"Adversary export",						"3.3",			"None",																	"None,DTMC,MDP",																
-																			"Type of adversary to generate and export during MDP model checking" },
-			{ STRING_TYPE,		PRISM_EXPORT_ADV_FILENAME,				"Adversary export filename",			"3.3",			"adv.tra",																	"",															
-																			"Name of file for MDP adversary export (if enabled)" },
-																		
-			// LTL2DA TOOLS
-			{ STRING_TYPE,		PRISM_LTL2DA_TOOL,						"Use external LTL->DA tool",		"4.2.1",			"",		null,
-																			"If non-empty, the path to the executable for the external LTL->DA tool."},
+			{ CHOICE_TYPE, PRISM_EXPORT_ADV, "Adversary export", "3.3", "None", "None,DTMC,MDP",
+					"Type of adversary to generate and export during MDP model checking" },
+			{ STRING_TYPE, PRISM_EXPORT_ADV_FILENAME, "Adversary export filename", "3.3", "adv.tra", "", "Name of file for MDP adversary export (if enabled)" },
 
-			{ CHOICE_TYPE,		PRISM_LTL2DA_SYNTAX,					"LTL syntax for external LTL->DA tool",		"4.2.1",			"LBT",		"LBT,Spin,Spot,Rabinizer",
-																			"The syntax for LTL formulas passed to the external LTL->DA tool."},
+			// LTL2DA TOOLS
+			{ STRING_TYPE, PRISM_LTL2DA_TOOL, "Use external LTL->DA tool", "4.2.1", "", null,
+					"If non-empty, the path to the executable for the external LTL->DA tool." },
+
+			{ CHOICE_TYPE, PRISM_LTL2DA_SYNTAX, "LTL syntax for external LTL->DA tool", "4.2.1", "LBT", "LBT,Spin,Spot,Rabinizer",
+					"The syntax for LTL formulas passed to the external LTL->DA tool." },
 
 			// PARAMETRIC MODEL CHECKING
-			{ BOOLEAN_TYPE,		PRISM_PARAM_ENABLED,					"Do parametric model checking",			"4.1",			new Boolean(false),															"",
-																			"Perform parametric model checking." },
-			{ STRING_TYPE,		PRISM_PARAM_PRECISION,					"Parametric model checking precision",	"4.1",			"5/100",																	"",
-																			"Maximal volume of area to remain undecided in each step when performing parametric model checking." },
-			{ CHOICE_TYPE,		PRISM_PARAM_SPLIT,						"Parametric model checking split method",							"4.1",			"Longest",																	"Longest,All",
-																			"Strategy to use when splitting a region during parametric model checking. Either split on longest side, or split on all sides." },
-			{ CHOICE_TYPE,		PRISM_PARAM_BISIM,						"Parametric model checking bisimulation method",					"4.1",			"Weak",																		"Weak,Strong,None",
-																			"Type of bisimulation used to reduce model size during paramteric model checking. For reward-based properties, weak bisimulation cannot be used." },
-			{ CHOICE_TYPE,		PRISM_PARAM_FUNCTION,					"Parametric model checking function representation",				"4.1",			"JAS-cached",																"JAS-cached,JAS,DAG",
-																			"Type of representation for functions used during parametric model checking." },
-			{ CHOICE_TYPE,		PRISM_PARAM_ELIM_ORDER,					"Parametric model checking state elimination order",			"4.1",			"Backward",																		"Arbitrary,Forward,Forward-reversed,Backward,Backward-reversed,Random",
-																			"Order in which states are eliminated during unbounded parametric model checking analysis." },
-			{ INTEGER_TYPE,		PRISM_PARAM_RANDOM_POINTS,				"Parametric model checking random evaluations",		"4.1",			new Integer(5),																"",
-																			"Number of random points to evaluate per region to increase chance of correctness during parametric model checking." },
-			{ BOOLEAN_TYPE,		PRISM_PARAM_SUBSUME_REGIONS,			"Parametric model checking region subsumption",				"4.1",			new Boolean(true),															"",
-																			"Subsume adjacent regions during parametric model checking." },
-			{ DOUBLE_TYPE,		PRISM_PARAM_DAG_MAX_ERROR,				"Parametric model checking max. DAG error",	"4.1",			new Double(1E-100),															"",
-																			"Maximal error probability (i.e. maximum probability of of a wrong result) in DAG function representation used for parametric model checking." },
-			
+			{ BOOLEAN_TYPE, PRISM_PARAM_ENABLED, "Do parametric model checking", "4.1", new Boolean(false), "", "Perform parametric model checking." },
+			{ STRING_TYPE, PRISM_PARAM_PRECISION, "Parametric model checking precision", "4.1", "5/100", "",
+					"Maximal volume of area to remain undecided in each step when performing parametric model checking." },
+			{ CHOICE_TYPE, PRISM_PARAM_SPLIT, "Parametric model checking split method", "4.1", "Longest", "Longest,All",
+					"Strategy to use when splitting a region during parametric model checking. Either split on longest side, or split on all sides." },
+			{ CHOICE_TYPE, PRISM_PARAM_BISIM, "Parametric model checking bisimulation method", "4.1", "Weak", "Weak,Strong,None",
+					"Type of bisimulation used to reduce model size during paramteric model checking. For reward-based properties, weak bisimulation cannot be used." },
+			{ CHOICE_TYPE, PRISM_PARAM_FUNCTION, "Parametric model checking function representation", "4.1", "JAS-cached", "JAS-cached,JAS,DAG",
+					"Type of representation for functions used during parametric model checking." },
+			{ CHOICE_TYPE, PRISM_PARAM_ELIM_ORDER, "Parametric model checking state elimination order", "4.1", "Backward",
+					"Arbitrary,Forward,Forward-reversed,Backward,Backward-reversed,Random",
+					"Order in which states are eliminated during unbounded parametric model checking analysis." },
+			{ INTEGER_TYPE, PRISM_PARAM_RANDOM_POINTS, "Parametric model checking random evaluations", "4.1", new Integer(5), "",
+					"Number of random points to evaluate per region to increase chance of correctness during parametric model checking." },
+			{ BOOLEAN_TYPE, PRISM_PARAM_SUBSUME_REGIONS, "Parametric model checking region subsumption", "4.1", new Boolean(true), "",
+					"Subsume adjacent regions during parametric model checking." },
+			{ DOUBLE_TYPE, PRISM_PARAM_DAG_MAX_ERROR, "Parametric model checking max. DAG error", "4.1", new Double(1E-100), "",
+					"Maximal error probability (i.e. maximum probability of of a wrong result) in DAG function representation used for parametric model checking." },
+
 			// FAST ADAPTIVE UNIFORMISATION																
-			{ DOUBLE_TYPE,      PRISM_FAU_EPSILON,						"FAU epsilon",		 					"4.1",   	 	new Double(1E-6),     													"",
-																			"For fast adaptive uniformisation (FAU), decides how much probability may be lost due to truncation of birth process." },
-			{ DOUBLE_TYPE,      PRISM_FAU_DELTA,						"FAU cut off delta", 					"4.1",   	 	new Double(1E-12),     													"",
-																			"For fast adaptive uniformisation (FAU), states whose probability is below this value will be removed." },
-			{ INTEGER_TYPE,     PRISM_FAU_ARRAYTHRESHOLD,				"FAU array threshold", 					"4.1",   	 	new Integer(100),    	 													"",
-																			"For fast adaptive uniformisation (FAU), after this number of iterations without changes to the state space, storage is switched to a faster, fixed-size data structure." },
-			{ INTEGER_TYPE,     PRISM_FAU_INTERVALS,					"FAU time intervals",					"4.1",   	 	new Integer(1),     														"",
-																			"For fast adaptive uniformisation (FAU), the time period is split into this number of of intervals." },
-			{ DOUBLE_TYPE,      PRISM_FAU_INITIVAL,						"FAU initial time interval",			"4.1",   	 	new Double(1.0),     														"",	
-																			"For fast adaptive uniformisation (FAU), the length of initial time interval to analyse." },
-		},
-		{
-			{ INTEGER_TYPE,		SIMULATOR_DEFAULT_NUM_SAMPLES,			"Default number of samples",			"4.0",		new Integer(1000),			"1,",
-																			"Default number of samples when using approximate (simulation-based) model checking (CI/ACI/APMC methods)." },
-			{ DOUBLE_TYPE,		SIMULATOR_DEFAULT_CONFIDENCE,			"Default confidence parameter",			"4.0",		new Double(0.01),			"0,1",
-																			"Default value for the 'confidence' parameter when using approximate (simulation-based) model checking (CI/ACI/APMC/SPRT methods). For CI/ACI, this means that the corresponding 'confidence level' is 100 x (1 - confidence)%; for APMC, this is the probability of the 'approximation' being exceeded; for SPRT, this is the acceptable probability for type I/II errors." },
-			{ DOUBLE_TYPE,		SIMULATOR_DEFAULT_WIDTH,				"Default width of confidence interval",	"4.0",		new Double(0.05),			"0,",
-																			"Default (half-)width of the confidence interval when using approximate (simulation-based) model checking (CI/ACI/SPRT methods). For SPRT, this refers to the 'indifference' parameter." },
-			{ DOUBLE_TYPE,		SIMULATOR_DEFAULT_APPROX,				"Default approximation parameter",		"4.0",		new Double(0.05),			"0,",
-																			"Default value for the 'approximation' parameter when using approximate (simulation-based) model checking (APMC method)." },
-			{ LONG_TYPE,		SIMULATOR_DEFAULT_MAX_PATH,				"Default maximum path length",			"2.1",		new Long(10000),			"1,",
-																			"Default maximum path length when using approximate (simulation-based) model checking." },
-			{ BOOLEAN_TYPE,		SIMULATOR_DECIDE,						"Decide S^2=0 or not automatically",	"4.0",		new	Boolean(true),			"",
-																			"Let PRISM choose whether, after a certain number of iterations, the standard error is null or not." },
-			{ INTEGER_TYPE,		SIMULATOR_ITERATIONS_TO_DECIDE,			"Number of iterations to decide",		"4.0",		new	Integer(10000),			"1,",
-																			"Number of iterations to decide whether the standard error is null or not." },
-			{ DOUBLE_TYPE,		SIMULATOR_MAX_REWARD,					"Maximum reward",						"4.0",		new	Double(1000.0),			"1,",
-																			"Maximum reward for CI/ACI methods. It helps these methods in displaying the progress in case of rewards computation." },
-			{ BOOLEAN_TYPE,		SIMULATOR_SIMULTANEOUS,					"Check properties simultaneously",		"2.1",		new Boolean(true),			"",
-																			"Check multiple properties simultaneously over the same set of execution paths (simulator only)." },
-			{ CHOICE_TYPE,		SIMULATOR_FIELD_CHOICE,					"Values used in dialog",				"2.1",		"Last used values",			"Last used values,Always use defaults",
-																			"How to choose values for the simulation dialog: remember previously used values or revert to the defaults each time." },
-			{ BOOLEAN_TYPE,		SIMULATOR_NEW_PATH_ASK_VIEW,			"Ask for view configuration",			"2.1",		new Boolean(false),			"",
-																			"Display dialog with display options when creating a new simulation path." },
-			{ CHOICE_TYPE,		SIMULATOR_RENDER_ALL_VALUES,			"Path render style",					"3.2",		"Render all values",		"Render changes,Render all values",
-																			"Display style for paths in the simulator user interface: only show variable values when they change, or show all values regardless." },
-			{ FILE_TYPE,		SIMULATOR_NETWORK_FILE,					"Network profile",						"2.1",		new File(""),				"",
-																			"File specifying the network profile used by the distributed PRISM simulator." }
-		},
-		{
-			{ BOOLEAN_TYPE,		MODEL_AUTO_PARSE,						"Auto parse",							"2.1",			new Boolean(true),															"",																							"Parse PRISM models automatically as they are loaded/edited in the text editor." },
-			{ BOOLEAN_TYPE,		MODEL_AUTO_MANUAL,						"Manual parse for large models",		"2.1",			new Boolean(true),															"",																							"Disable automatic model parsing when loading large PRISM models." },
-			{ INTEGER_TYPE,		MODEL_PARSE_DELAY,						"Parse delay (ms)",						"2.1",			new Integer(1000),															"0,",																						"Time delay (after typing has finished) before an automatic re-parse of the model is performed." },
-			{ FONT_COLOUR_TYPE,	MODEL_PRISM_EDITOR_FONT,				"PRISM editor font",					"2.1",			new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black),		"",																							"Font used in the PRISM model text editor." },
-			{ BOOLEAN_TYPE,		MODEL_SHOW_LINE_NUMBERS,				"PRISM editor line numbers",            "3.2",    new Boolean(true),															"",																							"Enable or disable line numbers in the PRISM model text editor" },
-			{ COLOUR_TYPE,		MODEL_PRISM_EDITOR_BG_COLOUR,			"PRISM editor background",				"2.1",			new Color(255,255,255),														"",																							"Background colour for the PRISM model text editor." },
-			{ COLOUR_TYPE,		MODEL_PRISM_EDITOR_NUMERIC_COLOUR,		"PRISM editor numeric colour",			"2.1",			new Color(0,0,255),															"",																							"Syntax highlighting colour for numerical values in the PRISM model text editor." },
-			{ CHOICE_TYPE,		MODEL_PRISM_EDITOR_NUMERIC_STYLE,		"PRISM editor numeric style",			"2.1",			"Plain",																	"Plain,Italic,Bold,Bold Italic",															"Syntax highlighting style for numerical values in the PRISM model text editor." },
-			{ COLOUR_TYPE,		MODEL_PRISM_EDITOR_IDENTIFIER_COLOUR,	"PRISM editor identifier colour",		"2.1",			new Color(255,0,0),															"",																							"Syntax highlighting colour for identifiers values in the PRISM model text editor" },
-			{ CHOICE_TYPE,		MODEL_PRISM_EDITOR_IDENTIFIER_STYLE,	"PRISM editor identifier style",		"2.1",			"Plain",																	"Plain,Italic,Bold,Bold Italic",															"Syntax highlighting style for identifiers in the PRISM model text editor." },
-			{ COLOUR_TYPE,		MODEL_PRISM_EDITOR_KEYWORD_COLOUR,		"PRISM editor keyword colour",			"2.1",			new Color(0,0,0),															"",																							"Syntax highlighting colour for keywords in the PRISM model text editor" },
-			{ CHOICE_TYPE,		MODEL_PRISM_EDITOR_KEYWORD_STYLE,		"PRISM editor keyword style",			"2.1",			"Bold",																		"Plain,Italic,Bold,Bold Italic",															"Syntax highlighting style for keywords in the PRISM model text editor." },
-			{ COLOUR_TYPE,		MODEL_PRISM_EDITOR_COMMENT_COLOUR,		"PRISM editor comment colour",			"2.1",			new Color(0,99,0),															"",																							"Syntax highlighting colour for comments in the PRISM model text editor." },
-			{ CHOICE_TYPE,		MODEL_PRISM_EDITOR_COMMENT_STYLE,		"PRISM editor comment style",			"2.1",			"Italic",																	"Plain,Italic,Bold,Bold Italic",															"Syntax highlighting style for comments in the PRISM model text editor." },
-			{ FONT_COLOUR_TYPE,	MODEL_PEPA_EDITOR_FONT,					"PEPA editor font",						"2.1",			new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black),		"",																							"Font used in the PEPA model text editor." },
-			{ COLOUR_TYPE,		MODEL_PEPA_EDITOR_BG_COLOUR,			"PEPA editor background",				"2.1",			new Color(255,250,240),														"",																							"Background colour for the PEPA model text editor." },
-			{ COLOUR_TYPE,		MODEL_PEPA_EDITOR_COMMENT_COLOUR,		"PEPA editor comment colour",			"2.1",			new Color(0,99,0),															"",																							"Syntax highlighting colour for comments in the PEPA model text editor." },
-			{ CHOICE_TYPE,		MODEL_PEPA_EDITOR_COMMENT_STYLE,		"PEPA editor comment style",			"2.1",			"Italic",																	"Plain,Italic,Bold,Bold Italic",															"Syntax highlighting style for comments in the PEPA model text editor." }
-		},
-		{
-			{ FONT_COLOUR_TYPE,	PROPERTIES_FONT,						"Display font",							"2.1",			new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black),		"",																							"Font used for the properties list." },
-			{ COLOUR_TYPE,		PROPERTIES_WARNING_COLOUR,				"Warning colour",						"2.1",			new Color(255,130,130),														"",																							"Colour used to indicate that a property is invalid." },
-			{ CHOICE_TYPE,		PROPERTIES_ADDITION_STRATEGY,			"Property addition strategy",			"2.1",			"Warn when invalid",														"Warn when invalid,Do not allow invalid",													"How to deal with properties that are invalid." },
-			{ BOOLEAN_TYPE,		PROPERTIES_CLEAR_LIST_ON_LOAD,			"Clear list when load model",			"2.1",			new Boolean(true),															"",																							"Clear the properties list whenever a new model is loaded." }
-		},
-		{
-			{ FONT_COLOUR_TYPE,	LOG_FONT,								"Display font",							"2.1",			new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black),		"",																							"Font used for the log display." },
-			{ COLOUR_TYPE,		LOG_BG_COLOUR,							"Background colour",					"2.1",			new Color(255,255,255),														"",																							"Background colour for the log display." },
-			{ INTEGER_TYPE,		LOG_BUFFER_LENGTH,						"Buffer length",						"2.1",			new Integer(10000),															"1,",																						"Length of the buffer for the log display." }
-		}
-	};
-	
-	public static final String[] oldPropertyNames =  {"simulator.apmcStrategy", "simulator.engine", "simulator.newPathAskDefault"};
-	
+			{ DOUBLE_TYPE, PRISM_FAU_EPSILON, "FAU epsilon", "4.1", new Double(1E-6), "",
+					"For fast adaptive uniformisation (FAU), decides how much probability may be lost due to truncation of birth process." },
+			{ DOUBLE_TYPE, PRISM_FAU_DELTA, "FAU cut off delta", "4.1", new Double(1E-12), "",
+					"For fast adaptive uniformisation (FAU), states whose probability is below this value will be removed." },
+			{ INTEGER_TYPE, PRISM_FAU_ARRAYTHRESHOLD, "FAU array threshold", "4.1", new Integer(100), "",
+					"For fast adaptive uniformisation (FAU), after this number of iterations without changes to the state space, storage is switched to a faster, fixed-size data structure." },
+			{ INTEGER_TYPE, PRISM_FAU_INTERVALS, "FAU time intervals", "4.1", new Integer(1), "",
+					"For fast adaptive uniformisation (FAU), the time period is split into this number of of intervals." },
+			{ DOUBLE_TYPE, PRISM_FAU_INITIVAL, "FAU initial time interval", "4.1", new Double(1.0), "",
+					"For fast adaptive uniformisation (FAU), the length of initial time interval to analyse." }, },
+			{ { INTEGER_TYPE, SIMULATOR_DEFAULT_NUM_SAMPLES, "Default number of samples", "4.0", new Integer(1000), "1,",
+					"Default number of samples when using approximate (simulation-based) model checking (CI/ACI/APMC methods)." },
+					{ DOUBLE_TYPE, SIMULATOR_DEFAULT_CONFIDENCE, "Default confidence parameter", "4.0", new Double(0.01), "0,1",
+							"Default value for the 'confidence' parameter when using approximate (simulation-based) model checking (CI/ACI/APMC/SPRT methods). For CI/ACI, this means that the corresponding 'confidence level' is 100 x (1 - confidence)%; for APMC, this is the probability of the 'approximation' being exceeded; for SPRT, this is the acceptable probability for type I/II errors." },
+					{ DOUBLE_TYPE, SIMULATOR_DEFAULT_WIDTH, "Default width of confidence interval", "4.0", new Double(0.05), "0,",
+							"Default (half-)width of the confidence interval when using approximate (simulation-based) model checking (CI/ACI/SPRT methods). For SPRT, this refers to the 'indifference' parameter." },
+					{ DOUBLE_TYPE, SIMULATOR_DEFAULT_APPROX, "Default approximation parameter", "4.0", new Double(0.05), "0,",
+							"Default value for the 'approximation' parameter when using approximate (simulation-based) model checking (APMC method)." },
+					{ LONG_TYPE, SIMULATOR_DEFAULT_MAX_PATH, "Default maximum path length", "2.1", new Long(10000), "1,",
+							"Default maximum path length when using approximate (simulation-based) model checking." },
+					{ BOOLEAN_TYPE, SIMULATOR_DECIDE, "Decide S^2=0 or not automatically", "4.0", new Boolean(true), "",
+							"Let PRISM choose whether, after a certain number of iterations, the standard error is null or not." },
+					{ INTEGER_TYPE, SIMULATOR_ITERATIONS_TO_DECIDE, "Number of iterations to decide", "4.0", new Integer(10000), "1,",
+							"Number of iterations to decide whether the standard error is null or not." },
+					{ DOUBLE_TYPE, SIMULATOR_MAX_REWARD, "Maximum reward", "4.0", new Double(1000.0), "1,",
+							"Maximum reward for CI/ACI methods. It helps these methods in displaying the progress in case of rewards computation." },
+					{ BOOLEAN_TYPE, SIMULATOR_SIMULTANEOUS, "Check properties simultaneously", "2.1", new Boolean(true), "",
+							"Check multiple properties simultaneously over the same set of execution paths (simulator only)." },
+					{ CHOICE_TYPE, SIMULATOR_FIELD_CHOICE, "Values used in dialog", "2.1", "Last used values", "Last used values,Always use defaults",
+							"How to choose values for the simulation dialog: remember previously used values or revert to the defaults each time." },
+					{ BOOLEAN_TYPE, SIMULATOR_NEW_PATH_ASK_VIEW, "Ask for view configuration", "2.1", new Boolean(false), "",
+							"Display dialog with display options when creating a new simulation path." },
+					{ CHOICE_TYPE, SIMULATOR_RENDER_ALL_VALUES, "Path render style", "3.2", "Render all values", "Render changes,Render all values",
+							"Display style for paths in the simulator user interface: only show variable values when they change, or show all values regardless." },
+					{ FILE_TYPE, SIMULATOR_NETWORK_FILE, "Network profile", "2.1", new File(""), "",
+							"File specifying the network profile used by the distributed PRISM simulator." } },
+			{ { BOOLEAN_TYPE, MODEL_AUTO_PARSE, "Auto parse", "2.1", new Boolean(true), "",
+					"Parse PRISM models automatically as they are loaded/edited in the text editor." },
+					{ BOOLEAN_TYPE, MODEL_AUTO_MANUAL, "Manual parse for large models", "2.1", new Boolean(true), "",
+							"Disable automatic model parsing when loading large PRISM models." },
+					{ INTEGER_TYPE, MODEL_PARSE_DELAY, "Parse delay (ms)", "2.1", new Integer(1000), "0,",
+							"Time delay (after typing has finished) before an automatic re-parse of the model is performed." },
+					{ FONT_COLOUR_TYPE, MODEL_PRISM_EDITOR_FONT, "PRISM editor font", "2.1",
+							new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black), "", "Font used in the PRISM model text editor." },
+					{ BOOLEAN_TYPE, MODEL_SHOW_LINE_NUMBERS, "PRISM editor line numbers", "3.2", new Boolean(true), "",
+							"Enable or disable line numbers in the PRISM model text editor" },
+					{ COLOUR_TYPE, MODEL_PRISM_EDITOR_BG_COLOUR, "PRISM editor background", "2.1", new Color(255, 255, 255), "",
+							"Background colour for the PRISM model text editor." },
+					{ COLOUR_TYPE, MODEL_PRISM_EDITOR_NUMERIC_COLOUR, "PRISM editor numeric colour", "2.1", new Color(0, 0, 255), "",
+							"Syntax highlighting colour for numerical values in the PRISM model text editor." },
+					{ CHOICE_TYPE, MODEL_PRISM_EDITOR_NUMERIC_STYLE, "PRISM editor numeric style", "2.1", "Plain", "Plain,Italic,Bold,Bold Italic",
+							"Syntax highlighting style for numerical values in the PRISM model text editor." },
+					{ COLOUR_TYPE, MODEL_PRISM_EDITOR_IDENTIFIER_COLOUR, "PRISM editor identifier colour", "2.1", new Color(255, 0, 0), "",
+							"Syntax highlighting colour for identifiers values in the PRISM model text editor" },
+					{ CHOICE_TYPE, MODEL_PRISM_EDITOR_IDENTIFIER_STYLE, "PRISM editor identifier style", "2.1", "Plain", "Plain,Italic,Bold,Bold Italic",
+							"Syntax highlighting style for identifiers in the PRISM model text editor." },
+					{ COLOUR_TYPE, MODEL_PRISM_EDITOR_KEYWORD_COLOUR, "PRISM editor keyword colour", "2.1", new Color(0, 0, 0), "",
+							"Syntax highlighting colour for keywords in the PRISM model text editor" },
+					{ CHOICE_TYPE, MODEL_PRISM_EDITOR_KEYWORD_STYLE, "PRISM editor keyword style", "2.1", "Bold", "Plain,Italic,Bold,Bold Italic",
+							"Syntax highlighting style for keywords in the PRISM model text editor." },
+					{ COLOUR_TYPE, MODEL_PRISM_EDITOR_COMMENT_COLOUR, "PRISM editor comment colour", "2.1", new Color(0, 99, 0), "",
+							"Syntax highlighting colour for comments in the PRISM model text editor." },
+					{ CHOICE_TYPE, MODEL_PRISM_EDITOR_COMMENT_STYLE, "PRISM editor comment style", "2.1", "Italic", "Plain,Italic,Bold,Bold Italic",
+							"Syntax highlighting style for comments in the PRISM model text editor." },
+					{ FONT_COLOUR_TYPE, MODEL_PEPA_EDITOR_FONT, "PEPA editor font", "2.1",
+							new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black), "", "Font used in the PEPA model text editor." },
+					{ COLOUR_TYPE, MODEL_PEPA_EDITOR_BG_COLOUR, "PEPA editor background", "2.1", new Color(255, 250, 240), "",
+							"Background colour for the PEPA model text editor." },
+					{ COLOUR_TYPE, MODEL_PEPA_EDITOR_COMMENT_COLOUR, "PEPA editor comment colour", "2.1", new Color(0, 99, 0), "",
+							"Syntax highlighting colour for comments in the PEPA model text editor." },
+					{ CHOICE_TYPE, MODEL_PEPA_EDITOR_COMMENT_STYLE, "PEPA editor comment style", "2.1", "Italic", "Plain,Italic,Bold,Bold Italic",
+							"Syntax highlighting style for comments in the PEPA model text editor." } },
+			{ { FONT_COLOUR_TYPE, PROPERTIES_FONT, "Display font", "2.1", new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black), "",
+					"Font used for the properties list." },
+					{ COLOUR_TYPE, PROPERTIES_WARNING_COLOUR, "Warning colour", "2.1", new Color(255, 130, 130), "",
+							"Colour used to indicate that a property is invalid." },
+					{ CHOICE_TYPE, PROPERTIES_ADDITION_STRATEGY, "Property addition strategy", "2.1", "Warn when invalid",
+							"Warn when invalid,Do not allow invalid", "How to deal with properties that are invalid." },
+					{ BOOLEAN_TYPE, PROPERTIES_CLEAR_LIST_ON_LOAD, "Clear list when load model", "2.1", new Boolean(true), "",
+							"Clear the properties list whenever a new model is loaded." } },
+			{ { FONT_COLOUR_TYPE, LOG_FONT, "Display font", "2.1", new FontColorPair(new Font("monospaced", Font.PLAIN, 12), Color.black), "",
+					"Font used for the log display." },
+					{ COLOUR_TYPE, LOG_BG_COLOUR, "Background colour", "2.1", new Color(255, 255, 255), "", "Background colour for the log display." },
+					{ INTEGER_TYPE, LOG_BUFFER_LENGTH, "Buffer length", "2.1", new Integer(10000), "1,", "Length of the buffer for the log display." } } };
+
+	public static final String[] oldPropertyNames = { "simulator.apmcStrategy", "simulator.engine", "simulator.newPathAskDefault" };
+
 	public DefaultSettingOwner[] optionOwners;
-	private Hashtable<String,Setting> data;
+	private Hashtable<String, Setting> data;
 	private boolean modified;
-	
+
 	private ArrayList<PrismSettingsListener> settingsListeners;
-	
+
 	/**
 	 * Default constructor: set all options to default values. 
 	 */
 	public PrismSettings()
 	{
 		optionOwners = new DefaultSettingOwner[propertyOwnerIDs.length];
-		
+
 		int counter = 0;
-		
-		for(int i = 0; i < propertyOwnerIDs.length; i++)
-		{
+
+		for (int i = 0; i < propertyOwnerIDs.length; i++) {
 			optionOwners[i] = new DefaultSettingOwner(propertyOwnerNames[i], propertyOwnerIDs[i]);
-			for(int j = 0; j < propertyData[i].length; j++)
-			{
+			for (int j = 0; j < propertyData[i].length; j++) {
 				counter++;
 				Object[] setting = propertyData[i][j];
-				String key = (String)setting[1];
-				String display = (String)setting[2];
-				String version = (String)setting[3];
+				String key = (String) setting[1];
+				String display = (String) setting[2];
+				String version = (String) setting[3];
 				Object value = setting[4];
-				String constraint = (String)setting[5];
-				String comment = (String)setting[6];
-				
+				String constraint = (String) setting[5];
+				String comment = (String) setting[6];
+
 				Setting set;
-				
-				if(setting[0].equals(STRING_TYPE))
-				{
-					set = new SingleLineStringSetting(display, (String)value, comment, optionOwners[i], false);
+
+				if (setting[0].equals(STRING_TYPE)) {
+					set = new SingleLineStringSetting(display, (String) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(INTEGER_TYPE))
-				{
-					if(constraint.equals(""))
-						set = new IntegerSetting(display, (Integer)value, comment, optionOwners[i], false);
+				} else if (setting[0].equals(INTEGER_TYPE)) {
+					if (constraint.equals(""))
+						set = new IntegerSetting(display, (Integer) value, comment, optionOwners[i], false);
 					else
-						set = new IntegerSetting(display, (Integer)value, comment, optionOwners[i], false, new RangeConstraint(constraint));
+						set = new IntegerSetting(display, (Integer) value, comment, optionOwners[i], false, new RangeConstraint(constraint));
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(DOUBLE_TYPE))
-				{
+				} else if (setting[0].equals(DOUBLE_TYPE)) {
 					//DO constraints for this double
-					if(constraint.equals(""))
-						set = new DoubleSetting(display, (Double)value, comment, optionOwners[i], false);
+					if (constraint.equals(""))
+						set = new DoubleSetting(display, (Double) value, comment, optionOwners[i], false);
 					else
-						set = new DoubleSetting(display, (Double)value, comment, optionOwners[i], false, new RangeConstraint(constraint));
+						set = new DoubleSetting(display, (Double) value, comment, optionOwners[i], false, new RangeConstraint(constraint));
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(BOOLEAN_TYPE))
-				{
+				} else if (setting[0].equals(BOOLEAN_TYPE)) {
 					//DO constraints for this boolean
-					set = new BooleanSetting(display, (Boolean)value, comment, optionOwners[i], false);
+					set = new BooleanSetting(display, (Boolean) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(LONG_TYPE))
-				{
-					if(constraint.equals(""))
-						set = new LongSetting(display, (Long)value, comment, optionOwners[i], false);
+				} else if (setting[0].equals(LONG_TYPE)) {
+					if (constraint.equals(""))
+						set = new LongSetting(display, (Long) value, comment, optionOwners[i], false);
 					else
-						set = new LongSetting(display, (Long)value, comment, optionOwners[i], false, new RangeConstraint(constraint));
+						set = new LongSetting(display, (Long) value, comment, optionOwners[i], false, new RangeConstraint(constraint));
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(COLOUR_TYPE))
-				{
+				} else if (setting[0].equals(COLOUR_TYPE)) {
 					//DO constraints for this Color
-					set = new ColorSetting(display, (Color)value, comment, optionOwners[i], false);
+					set = new ColorSetting(display, (Color) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(CHOICE_TYPE))
-				{
+				} else if (setting[0].equals(CHOICE_TYPE)) {
 					//DO constraints for this choice
 					StringTokenizer tokens = new StringTokenizer(constraint, ",");
 					String[] choices = new String[tokens.countTokens()];
 					int k = 0;
-					while(tokens.hasMoreTokens())
-					{
+					while (tokens.hasMoreTokens()) {
 						choices[k++] = tokens.nextToken();
 					}
-					set = new ChoiceSetting(display, choices, (String)value, comment, optionOwners[i], false);
+					set = new ChoiceSetting(display, choices, (String) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(FONT_COLOUR_TYPE))
-				{
+				} else if (setting[0].equals(FONT_COLOUR_TYPE)) {
 					//DO constraints for this FontColorPair
-					set = new FontColorSetting(display, (FontColorPair)value, comment, optionOwners[i], false);
+					set = new FontColorSetting(display, (FontColorPair) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else if(setting[0].equals(FILE_TYPE))
-				{
-					set = new FileSetting(display, (File)value, comment, optionOwners[i], false);
+				} else if (setting[0].equals(FILE_TYPE)) {
+					set = new FileSetting(display, (File) value, comment, optionOwners[i], false);
 					set.setKey(key);
 					set.setVersion(version);
 					optionOwners[i].addSetting(set);
-				}
-				else
-				{
-					System.err.println("Fatal error when loading properties: unknown setting type "+setting[0]);
+				} else {
+					System.err.println("Fatal error when loading properties: unknown setting type " + setting[0]);
 				}
 			}
 			optionOwners[i].addObserver(this);
 		}
-		
+
 		modified = false;
-		
+
 		//populate a hash table with the keys
 		populateHashTable(counter);
 		settingsListeners = new ArrayList<PrismSettingsListener>();
 	}
-	
+
 	/**
 	 * Copy constructor. 
 	 */
@@ -552,7 +525,7 @@ public class PrismSettings implements Observer
 		// (that way, we get a fresh set of Setting objects)
 		this();
 		// Then, copy across options
-		for (Map.Entry<String,Setting> e : settings.data.entrySet()) {
+		for (Map.Entry<String, Setting> e : settings.data.entrySet()) {
 			try {
 				set(e.getKey(), e.getValue().getValue());
 			} catch (PrismException ex) {
@@ -561,102 +534,94 @@ public class PrismSettings implements Observer
 			}
 		}
 	}
-	
+
 	private void populateHashTable(int size)
 	{
-		data = new Hashtable<String,Setting>(size);
-		
-		for(int i = 0; i < optionOwners.length; i++)
-		{
-			for(int j = 0; j < optionOwners[i].getNumSettings(); j++)
-			{
+		data = new Hashtable<String, Setting>(size);
+
+		for (int i = 0; i < optionOwners.length; i++) {
+			for (int j = 0; j < optionOwners[i].getNumSettings(); j++) {
 				data.put(optionOwners[i].getSetting(j).getKey(), optionOwners[i].getSetting(j));
 			}
 		}
 	}
-	
+
 	private Setting settingFromHash(String key)
 	{
 		return data.get(key);
 	}
-	
+
 	public void addSettingsListener(PrismSettingsListener listener)
 	{
 		settingsListeners.add(listener);
 	}
-	
+
 	public void removeSettingsListener(PrismSettingsListener listener)
 	{
 		settingsListeners.remove(listener);
 	}
-	
+
 	public void notifySettingsListeners()
 	{
-		for(int i = 0; i < settingsListeners.size(); i++)
-		{
+		for (int i = 0; i < settingsListeners.size(); i++) {
 			PrismSettingsListener listener = settingsListeners.get(i);
 			listener.notifySettings(this);
 		}
 	}
-	
+
 	public File getLocationForSettingsFile()
 	{
-		return new File(System.getProperty("user.home")+File.separator+".prism");
+		return new File(System.getProperty("user.home") + File.separator + ".prism");
 	}
-	
+
 	public synchronized void saveSettingsFile() throws PrismException
 	{
 		saveSettingsFile(getLocationForSettingsFile());
 	}
-	
+
 	public synchronized void saveSettingsFile(File file) throws PrismException
 	{
-		try
-		{
+		try {
 			FileWriter out = new FileWriter(file);
-			
+
 			out.write("# PRISM settings file\n");
-			out.write("# (created by version "+Prism.getVersion()+")\n");
-			
-			for(int i = 0; i < optionOwners.length; i++)
-			{
+			out.write("# (created by version " + Prism.getVersion() + ")\n");
+
+			for (int i = 0; i < optionOwners.length; i++) {
 				out.write("\n");
-				for(int j = 0; j < optionOwners[i].getNumSettings(); j++)
-				{
+				for (int j = 0; j < optionOwners[i].getNumSettings(); j++) {
 					Setting set = optionOwners[i].getSetting(j);
 					//write the key
-					out.write(set.getKey()+"=");
+					out.write(set.getKey() + "=");
 					String value = set.toString();
-					while(value.indexOf('\n') != -1) //is multiline string
+					while (value.indexOf('\n') != -1) //is multiline string
 					{
-						out.write(value.substring(0,value.indexOf('\n')) + "\\");
-						if(value.substring(value.indexOf('\n')).length() > 0)
-							value = value.substring(value.indexOf('\n')+1);
+						out.write(value.substring(0, value.indexOf('\n')) + "\\");
+						if (value.substring(value.indexOf('\n')).length() > 0)
+							value = value.substring(value.indexOf('\n') + 1);
 						else
 							value = "";
 					}
-					
-					out.write(value+"\n");
-					
+
+					out.write(value + "\n");
+
 				}
 			}
-			
+
 			out.close();
-			
+
+		} catch (IOException e) {
+			throw new PrismException("Error exporting properties file: " + e.getMessage());
 		}
-		catch(IOException e)
-		{
-			throw new PrismException("Error exporting properties file: "+e.getMessage());
-		}
-		
+
 		modified = false;
 	}
-	
+
 	public synchronized void loadSettingsFile() throws PrismException
 	{
 		loadSettingsFile(getLocationForSettingsFile());
 	}
-	
+
 	public synchronized void loadSettingsFile(File file) throws PrismException
 	{
 		BufferedReader reader;
@@ -668,62 +633,57 @@ public class PrismSettings implements Observer
 		boolean inMulti = false;
 		String version;
 		boolean resaveNeeded = false;
-		
-		try
-		{
+
+		try {
 			// Read first two lines to extract version
 			version = null;
 			reader = new BufferedReader(new FileReader(file));
-			if (reader.ready()) line = reader.readLine();
-			if (reader.ready()) line = reader.readLine();
-			Matcher matcher =  Pattern.compile("# \\(created by version (.+)\\)").matcher(line);
-			if (matcher.find()) version = matcher.group(1);
+			if (reader.ready())
+				line = reader.readLine();
+			if (reader.ready())
+				line = reader.readLine();
+			Matcher matcher = Pattern.compile("# \\(created by version (.+)\\)").matcher(line);
+			if (matcher.find())
+				version = matcher.group(1);
 			reader.close();
-			
+
 			// Do we need to resave the file?
 			// (i.e. is the version of the saved settings (a) old? (b) unparseable?)
-			if (version == null) version = "0";
-			if (Prism.compareVersions(version, Prism.getVersion()) == -1) resaveNeeded = true;
-			
+			if (version == null)
+				version = "0";
+			if (Prism.compareVersions(version, Prism.getVersion()) == -1)
+				resaveNeeded = true;
+
 			// Read whole file
 			reader = new BufferedReader(new FileReader(file));
-			while(reader.ready())
-			{
+			while (reader.ready()) {
 				line = reader.readLine();
-				if(!inMulti)
-				{
-					if(line.startsWith("#")) continue; //ignore comments
+				if (!inMulti) {
+					if (line.startsWith("#"))
+						continue; //ignore comments
 					equalsIndex = line.indexOf('=');
-					if(equalsIndex == -1) continue; //is not a valid property line
-					else
-					{
+					if (equalsIndex == -1)
+						continue; //is not a valid property line
+					else {
 						key = line.substring(0, equalsIndex);
-						value = (equalsIndex==line.length()-1)?"":line.substring(equalsIndex+1);
-						if(value.endsWith("\\"))
-						{
+						value = (equalsIndex == line.length() - 1) ? "" : line.substring(equalsIndex + 1);
+						if (value.endsWith("\\")) {
 							inMulti = true;
-							multiline = new StringBuffer(value.substring(0, value.length()-1)); // trim the \ off
-						}
-						else
-						{
+							multiline = new StringBuffer(value.substring(0, value.length() - 1)); // trim the \ off
+						} else {
 							Setting set = settingFromHash(key);
-							if(set != null)
-							{
+							if (set != null) {
 								// If the version of the settings file is not newer than the "version" of the setting,
 								// and we are re-saving the file, overwrite the setting with the default value 
-								if (resaveNeeded && Prism.compareVersions(version, set.getVersion()) <= 0) continue;
-								try
-								{
+								if (resaveNeeded && Prism.compareVersions(version, set.getVersion()) <= 0)
+									continue;
+								try {
 									Object valObj = set.parseStringValue(value);
 									set.setValue(valObj);
+								} catch (SettingException ee) {
+									System.err.println("Warning: PRISM setting \"" + key + "\" has invalid value \"" + value + "\"");
 								}
-								catch(SettingException ee)
-								{
-									System.err.println("Warning: PRISM setting \""+key+"\" has invalid value \"" + value + "\"");
-								}
-							}
-							else
-							{
+							} else {
 								// Warning for unused options disabled for now
 								// (it's a pain when you have lots of branches with lots of new options)
 								if (false) {
@@ -741,95 +701,76 @@ public class PrismSettings implements Observer
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					//In multiline
-					if(line.endsWith("\\"))
-					{
-						multiline.append(line.substring(0, line.length()-1));
-					}
-					else
-					{
+					if (line.endsWith("\\")) {
+						multiline.append(line.substring(0, line.length() - 1));
+					} else {
 						Setting set = settingFromHash(key);
-						if(set != null)
-						{
+						if (set != null) {
 							// If the version of the settings file is not newer than the "version" of the setting,
 							// and we are re-saving the file, overwrite the setting with the default value 
-							if (resaveNeeded && Prism.compareVersions(version, set.getVersion()) <= 0) continue;
-							try
-							{
+							if (resaveNeeded && Prism.compareVersions(version, set.getVersion()) <= 0)
+								continue;
+							try {
 								Object valObj = set.parseStringValue(multiline.toString() + line);
 								set.setValue(valObj);
+							} catch (SettingException ee) {
+								System.err.println("Warning: PRISM setting \"" + key + "\" has invalid value \"" + multiline.toString() + line + "\"");
 							}
-							catch(SettingException ee)
-							{
-								System.err.println("Warning: PRISM setting \""+key+"\" has invalid value \"" + multiline.toString() + line + "\"");
-							}
+						} else {
+							System.err.println("Warning: PRISM setting \"" + key + "\" is unknown.");
 						}
-						else
-						{
-							System.err.println("Warning: PRISM setting \""+key+"\" is unknown.");
-						}
-						
+
 						inMulti = false;
 						multiline = null;
 					}
 				}
 			}
+		} catch (IOException e) {
+			throw new PrismException("Error importing properties file: " + e.getMessage());
 		}
-		catch(IOException e)
-		{
-			throw new PrismException("Error importing properties file: "+e.getMessage());
-		}
-		
+
 		modified = false;
-		
+
 		// If necessary, resave the preferences file
 		if (resaveNeeded) {
 			try {
 				saveSettingsFile();
-			}
-			catch (PrismException e) {
+			} catch (PrismException e) {
 			}
 		}
-		
+
 		notifySettingsListeners();
 	}
-	
+
 	public synchronized void loadDefaults()
 	{
-		for(int i = 0; i < propertyOwnerIDs.length; i++)
-		{
-			
-			for(int j = 0; j < propertyData[i].length; j++)
-			{
+		for (int i = 0; i < propertyOwnerIDs.length; i++) {
+
+			for (int j = 0; j < propertyData[i].length; j++) {
 				Setting set = settingFromHash(propertyData[i][j][1].toString());
-			
-				if(set != null)
-				{
-					try
-					{
+
+				if (set != null) {
+					try {
 						set.setValue(propertyData[i][j][4]);
-					}
-					catch(SettingException e)
-					{
-						System.err.println("Warning: Error with default value for PRISM setting \""+set.getName()+"\"");
+					} catch (SettingException e) {
+						System.err.println("Warning: Error with default value for PRISM setting \"" + set.getName() + "\"");
 					}
 				}
 			}
 		}
-		
+
 		notifySettingsListeners();
 	}
 
 	// HIDDEN OPTIONS
-	
+
 	// Export property automaton info?
 	protected boolean exportPropAut = false;
 	protected String exportPropAutType = "txt";
 	protected String exportPropAutFilename = "da.txt";
-	
+
 	public void setExportPropAut(boolean b) throws PrismException
 	{
 		exportPropAut = b;
@@ -873,27 +814,24 @@ public class PrismSettings implements Observer
 		String s;
 		int j;
 		double d;
-		
+
 		// Process string (remove - and extract any options) 
 		Pair<String, Map<String, String>> pair = splitSwitch(args[i]);
 		String sw = pair.first;
-		Map<String, String> options = pair.second; 
-		
+		Map<String, String> options = pair.second;
+
 		// Note: the order of these switches should match the -help output (just to help keep track of things).
-		
+
 		// ENGINES/METHODS:
-		
+
 		// Main model checking engine
 		if (sw.equals("mtbdd") || sw.equals("m")) {
 			set(PRISM_ENGINE, "MTBDD");
-		}
-		else if (sw.equals("sparse") || sw.equals("s")) {
+		} else if (sw.equals("sparse") || sw.equals("s")) {
 			set(PRISM_ENGINE, "Sparse");
-		}
-		else if (sw.equals("hybrid") || sw.equals("h")) {
+		} else if (sw.equals("hybrid") || sw.equals("h")) {
 			set(PRISM_ENGINE, "Hybrid");
-		}
-		else if (sw.equals("explicit") || sw.equals("ex")) {
+		} else if (sw.equals("explicit") || sw.equals("ex")) {
 			set(PRISM_ENGINE, "Explicit");
 		}
 		// Exact model checking
@@ -932,7 +870,7 @@ public class PrismSettings implements Observer
 		}
 
 		// NUMERICAL SOLUTION OPTIONS:
-		
+
 		// Linear equation solver + MDP soln method
 		else if (sw.equals("power") || sw.equals("pow") || sw.equals("pwr")) {
 			set(PRISM_LIN_EQ_METHOD, "Power");
@@ -985,8 +923,7 @@ public class PrismSettings implements Observer
 		// Termination criterion (iterative methods)
 		else if (sw.equals("relative") || sw.equals("rel")) {
 			set(PRISM_TERM_CRIT, "Relative");
-		}
-		else if (sw.equals("absolute") || sw.equals("abs")) {
+		} else if (sw.equals("absolute") || sw.equals("abs")) {
 			set(PRISM_TERM_CRIT, "Absolute");
 		}
 		// Termination criterion parameter
@@ -1019,17 +956,15 @@ public class PrismSettings implements Observer
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
 		}
-		
+
 		// MODEL CHECKING OPTIONS:
-		
+
 		// Precomputation algs off
 		else if (sw.equals("nopre")) {
 			set(PRISM_PRECOMPUTATION, false);
-		}
-		else if (sw.equals("noprob0")) {
+		} else if (sw.equals("noprob0")) {
 			set(PRISM_PROB0, false);
-		}
-		else if (sw.equals("noprob1")) {
+		} else if (sw.equals("noprob1")) {
 			set(PRISM_PROB1, false);
 		}
 		// Use predecessor relation? (e.g. for precomputation)
@@ -1039,15 +974,13 @@ public class PrismSettings implements Observer
 		// Fix deadlocks on/off
 		else if (sw.equals("fixdl")) {
 			set(PRISM_FIX_DEADLOCKS, true);
-		}
-		else if (sw.equals("nofixdl")) {
+		} else if (sw.equals("nofixdl")) {
 			set(PRISM_FIX_DEADLOCKS, false);
 		}
 		// Fairness on/off
 		else if (sw.equals("fair")) {
 			set(PRISM_FAIRNESS, true);
-		}
-		else if (sw.equals("nofair")) {
+		} else if (sw.equals("nofair")) {
 			set(PRISM_FAIRNESS, false);
 		}
 		// Prob/rate checks off
@@ -1119,9 +1052,8 @@ public class PrismSettings implements Observer
 			set(PRISM_NO_DA_SIMPLIFY, true);
 		}
 
-		
 		// MULTI-OBJECTIVE MODEL CHECKING OPTIONS:
-		
+
 		// Max different corner points that will be generated when performing
 		// target driven multi-obj verification.
 		else if (sw.equals("multimaxpoints")) {
@@ -1152,17 +1084,16 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("exportpareto")) {
+		} else if (sw.equals("exportpareto")) {
 			if (i < args.length - 1) {
 				set(PRISM_EXPORT_PARETO_FILENAME, args[++i]);
 			} else {
 				throw new PrismException("No file specified for -" + sw + " switch");
 			}
 		}
-		
+
 		// OUTPUT OPTIONS:
-		
+
 		// Verbosity
 		else if (sw.equals("verbose") || sw.equals("v")) {
 			set(PRISM_VERBOSE, true);
@@ -1175,9 +1106,9 @@ public class PrismSettings implements Observer
 		else if (sw.equals("extrareachinfo")) {
 			set(PRISM_EXTRA_REACH_INFO, true);
 		}
-		
+
 		// SPARSE/HYBRID/MTBDD OPTIONS:
-		
+
 		// Turn off compact option for sparse matrix storage
 		else if (sw.equals("nocompact")) {
 			set(PRISM_COMPACT, false);
@@ -1196,8 +1127,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("sbmax")) {
+		} else if (sw.equals("sbmax")) {
 			if (i < args.length - 1) {
 				try {
 					j = Integer.parseInt(args[++i]);
@@ -1225,8 +1155,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("sormax") || sw.equals("gsmax")) {
+		} else if (sw.equals("sormax") || sw.equals("gsmax")) {
 			if (i < args.length - 1) {
 				try {
 					j = Integer.parseInt(args[++i]);
@@ -1247,8 +1176,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("cuddepsilon")) {
+		} else if (sw.equals("cuddepsilon")) {
 			if (i < args.length - 1) {
 				try {
 					d = Double.parseDouble(args[++i]);
@@ -1262,9 +1190,9 @@ public class PrismSettings implements Observer
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
 		}
-		
+
 		// ADVERSARIES/COUNTEREXAMPLES:
-		
+
 		// Export adversary to file
 		else if (sw.equals("exportadv")) {
 			if (i < args.length - 1) {
@@ -1283,9 +1211,9 @@ public class PrismSettings implements Observer
 				throw new PrismException("No file specified for -" + sw + " switch");
 			}
 		}
-		
+
 		// LTL2DA TOOLS
-		
+
 		else if (sw.equals("ltl2datool")) {
 			if (i < args.length - 1) {
 				String filename = args[++i];
@@ -1293,8 +1221,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("The -" + sw + " switch requires one argument (path to the executable)");
 			}
-		}
-		else if (sw.equals("ltl2dasyntax")) {
+		} else if (sw.equals("ltl2dasyntax")) {
 			if (i < args.length - 1) {
 				String syntax = args[++i];
 				switch (syntax) {
@@ -1318,18 +1245,16 @@ public class PrismSettings implements Observer
 		}
 
 		// PARAMETRIC MODEL CHECKING:
-		
+
 		else if (sw.equals("param")) {
 			set(PRISM_PARAM_ENABLED, true);
-		}
-		else if (sw.equals("paramprecision")) {
+		} else if (sw.equals("paramprecision")) {
 			if (i < args.length - 1) {
 				set(PRISM_PARAM_PRECISION, args[++i]);
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("paramsplit")) {
+		} else if (sw.equals("paramsplit")) {
 			if (i < args.length - 1) {
 				s = args[++i];
 				if (s.equals("longest"))
@@ -1341,8 +1266,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("parambisim")) {
+		} else if (sw.equals("parambisim")) {
 			if (i < args.length - 1) {
 				s = args[++i];
 				if (s.equals("strong"))
@@ -1356,8 +1280,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("paramfunction")) {
+		} else if (sw.equals("paramfunction")) {
 			if (i < args.length - 1) {
 				s = args[++i];
 				if (s.equals("jascached"))
@@ -1371,8 +1294,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("paramelimorder")) {
+		} else if (sw.equals("paramelimorder")) {
 			if (i < args.length - 1) {
 				s = args[++i];
 				if (s.equals("arb"))
@@ -1392,8 +1314,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("paramrandompoints")) {
+		} else if (sw.equals("paramrandompoints")) {
 			try {
 				j = Integer.parseInt(args[++i]);
 				if (j < 0)
@@ -1402,12 +1323,10 @@ public class PrismSettings implements Observer
 			} catch (NumberFormatException e) {
 				throw new PrismException("Invalid value for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("paramsubsumeregions")) {
+		} else if (sw.equals("paramsubsumeregions")) {
 			boolean b = Boolean.parseBoolean(args[++i]);
 			set(PRISM_PARAM_SUBSUME_REGIONS, b);
-		}
-		else if (sw.equals("paramdagmaxerror")) {
+		} else if (sw.equals("paramdagmaxerror")) {
 			try {
 				d = Double.parseDouble(args[++i]);
 				if (d < 0)
@@ -1417,9 +1336,9 @@ public class PrismSettings implements Observer
 				throw new PrismException("Invalid value for -" + sw + " switch");
 			}
 		}
-		
+
 		// FAST ADAPTIVE UNIFORMISATION
-		
+
 		// Epsilon for fast adaptive uniformisation
 		else if (sw.equals("fauepsilon")) {
 			if (i < args.length - 1) {
@@ -1463,7 +1382,7 @@ public class PrismSettings implements Observer
 				}
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
-			}			
+			}
 		}
 		// Number of intervals for fast adaptive uniformisation
 		else if (sw.equals("fauintervals")) {
@@ -1479,8 +1398,7 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
-		}
-		else if (sw.equals("fauinitival")) {
+		} else if (sw.equals("fauinitival")) {
 			if (i < args.length - 1) {
 				try {
 					d = Double.parseDouble(args[++i]);
@@ -1496,37 +1414,37 @@ public class PrismSettings implements Observer
 		}
 
 		// HIDDEN OPTIONS
-		
+
 		// export property automaton to file (hidden option)
 		else if (sw.equals("exportpropaut")) {
 			if (i < args.length - 1) {
 				setExportPropAut(true);
 				setExportPropAutFilename(args[++i]);
-				setExportPropAutType("txt");  // default
+				setExportPropAutType("txt"); // default
 				for (Map.Entry<String, String> option : options.entrySet()) {
-				    if (option.getKey().equals("txt")) {
+					if (option.getKey().equals("txt")) {
 						setExportPropAutType("txt");
-				    } else if (option.getKey().equals("dot")) {
+					} else if (option.getKey().equals("dot")) {
 						setExportPropAutType("dot");
-				    } else if (option.getKey().equals("hoa")) {
+					} else if (option.getKey().equals("hoa")) {
 						setExportPropAutType("hoa");
-				    } else {
-				    		throw new PrismException("Unknown option \"" + option.getKey() + "\" for -" + sw + " switch"); 
-				    }
+					} else {
+						throw new PrismException("Unknown option \"" + option.getKey() + "\" for -" + sw + " switch");
+					}
 				}
 			} else {
 				throw new PrismException("No file specified for -" + sw + " switch");
 			}
 		}
-		
+
 		// unknown switch - error
 		else {
 			throw new PrismException("Invalid switch -" + sw + " (type \"prism -help\" for full list)");
 		}
-		
+
 		return i + 1;
 	}
-	
+
 	/**
 	 * Split a switch of the form -switch:options into parts.
 	 * The latter can be empty, in which case the : is optional.
@@ -1544,7 +1462,7 @@ public class PrismSettings implements Observer
 			sw = sw.substring(1);
 		// Extract options, if present
 		int i = sw.indexOf(':');
-		Map<String,String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<String, String>();
 		if (i != -1) {
 			String optionsString = sw.substring(i + 1);
 			sw = sw.substring(0, i);
@@ -1554,11 +1472,11 @@ public class PrismSettings implements Observer
 				if (j == -1) {
 					map.put(option, null);
 				} else {
-					map.put(option.substring(0,j), option.substring(j+1));
+					map.put(option.substring(0, j), option.substring(j + 1));
 				}
 			}
 		}
-		return new Pair<String, Map<String,String>>(sw, map);
+		return new Pair<String, Map<String, String>>(sw, map);
 	}
 
 	/**
@@ -1625,7 +1543,7 @@ public class PrismSettings implements Observer
 		mainLog.println("-exportadvmdp <file> ........... Export an adversary from MDP model checking (as an MDP)");
 		mainLog.println("-ltl2datool <exec> ............. Run executable <exec> to convert LTL formulas to deterministic automata");
 		mainLog.println("-ltl2dasyntax <x> .............. Specify output format for -ltl2datool switch (lbt, spin, spot, rabinizer)");
-		
+
 		mainLog.println();
 		mainLog.println("MULTI-OBJECTIVE MODEL CHECKING:");
 		mainLog.println("-linprog (or -lp) .............. Use linear programming for multi-objective model checking");
@@ -1681,7 +1599,7 @@ public class PrismSettings implements Observer
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Set the value for an option, with the option key given as a String,
 	 * and the value as an Object of appropriate type or a String to be parsed.
@@ -1692,13 +1610,12 @@ public class PrismSettings implements Observer
 		Setting set = settingFromHash(key);
 		if (set == null)
 			throw new PrismException("Property " + key + " is not valid");
-		try
-		{
+		try {
 			String oldValueString = set.toString();
 			if (value instanceof String) {
 				set.setValue(set.parseStringValue((String) value));
 			} else if (value instanceof Integer && set instanceof ChoiceSetting) {
-				int iv = ((Integer)value).intValue();
+				int iv = ((Integer) value).intValue();
 				((ChoiceSetting) set).setSelectedIndex(iv);
 			} else {
 				set.setValue(value);
@@ -1706,13 +1623,11 @@ public class PrismSettings implements Observer
 			notifySettingsListeners();
 			if (!set.toString().equals(oldValueString))
 				modified = true;
-		}
-		catch(SettingException e)
-		{
+		} catch (SettingException e) {
 			throw new PrismException(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Set the value for an option of type CHOICE_TYPE,
 	 * with the option key given as a String, and the value as an integer index.
@@ -1723,155 +1638,138 @@ public class PrismSettings implements Observer
 		// Adjust by 1
 		set(key, value - 1);
 	}
-	
+
 	public synchronized void setFileSelector(String key, FileSelector select)
 	{
 		Setting set = settingFromHash(key);
 		if (set instanceof FileSetting) {
-			FileSetting fset = (FileSetting)set;
+			FileSetting fset = (FileSetting) set;
 			fset.setFileSelector(select);
 		}
 	}
-	
+
 	public synchronized String getString(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof SingleLineStringSetting)
-		{
-			return ((SingleLineStringSetting)set).getStringValue();
-		}
-		else if(set instanceof MultipleLineStringSetting)
-		{
-			return ((MultipleLineStringSetting)set).getStringValue();
-		}
-		else if(set instanceof ChoiceSetting)
-		{
-			return ((ChoiceSetting)set).getStringValue();
-		}
-		else return DEFAULT_STRING;
+		if (set instanceof SingleLineStringSetting) {
+			return ((SingleLineStringSetting) set).getStringValue();
+		} else if (set instanceof MultipleLineStringSetting) {
+			return ((MultipleLineStringSetting) set).getStringValue();
+		} else if (set instanceof ChoiceSetting) {
+			return ((ChoiceSetting) set).getStringValue();
+		} else
+			return DEFAULT_STRING;
 	}
-	
+
 	public synchronized int getInteger(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof IntegerSetting)
-		{
-			return ((IntegerSetting)set).getIntegerValue();
-		}
-		else if(set instanceof ChoiceSetting)
-		{
-			return ((ChoiceSetting)set).getCurrentIndex();
-		}
-		else return DEFAULT_INT;
+		if (set instanceof IntegerSetting) {
+			return ((IntegerSetting) set).getIntegerValue();
+		} else if (set instanceof ChoiceSetting) {
+			return ((ChoiceSetting) set).getCurrentIndex();
+		} else
+			return DEFAULT_INT;
 	}
-	
+
 	public synchronized double getDouble(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof DoubleSetting)
-		{
-			return ((DoubleSetting)set).getDoubleValue();
-		}
-		else return DEFAULT_DOUBLE;
+		if (set instanceof DoubleSetting) {
+			return ((DoubleSetting) set).getDoubleValue();
+		} else
+			return DEFAULT_DOUBLE;
 	}
-	
+
 	public synchronized boolean getBoolean(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof BooleanSetting)
-		{
-			return ((BooleanSetting)set).getBooleanValue();
-		}
-		else return DEFAULT_BOOLEAN;
+		if (set instanceof BooleanSetting) {
+			return ((BooleanSetting) set).getBooleanValue();
+		} else
+			return DEFAULT_BOOLEAN;
 	}
-	
+
 	public synchronized long getLong(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof LongSetting)
-		{
-			return ((LongSetting)set).getLongValue();
-		}
-		else return DEFAULT_LONG;
+		if (set instanceof LongSetting) {
+			return ((LongSetting) set).getLongValue();
+		} else
+			return DEFAULT_LONG;
 	}
-	
+
 	public synchronized int getChoice(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof ChoiceSetting)
-		{
+		if (set instanceof ChoiceSetting) {
 			// Adjust by 1
-			return ((ChoiceSetting)set).getCurrentIndex() + 1;
-		}
-		else return DEFAULT_INT;
+			return ((ChoiceSetting) set).getCurrentIndex() + 1;
+		} else
+			return DEFAULT_INT;
 	}
-	
+
 	public synchronized Color getColor(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof ColorSetting)
-		{
-			return ((ColorSetting)set).getColorValue();
-		}
-		else return DEFAULT_COLOUR;
+		if (set instanceof ColorSetting) {
+			return ((ColorSetting) set).getColorValue();
+		} else
+			return DEFAULT_COLOUR;
 	}
-	
+
 	public synchronized FontColorPair getFontColorPair(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof FontColorSetting)
-		{
-			return ((FontColorSetting)set).getFontColorValue();
-		}
-		else return DEFAULT_FONT_COLOUR;
+		if (set instanceof FontColorSetting) {
+			return ((FontColorSetting) set).getFontColorValue();
+		} else
+			return DEFAULT_FONT_COLOUR;
 	}
-	
+
 	public synchronized File getFile(String key)
 	{
 		Setting set = settingFromHash(key);
-		if(set instanceof FileSetting)
-		{
-			return ((FileSetting)set).getFileValue();
-		}
-		else return DEFAULT_FILE;
+		if (set instanceof FileSetting) {
+			return ((FileSetting) set).getFileValue();
+		} else
+			return DEFAULT_FILE;
 	}
-	
+
 	public boolean isModified()
 	{
 		return modified;
 	}
-	
+
 	public void update(Observable obs, Object obj)
 	{
 		modified = true;
 		notifySettingsListeners();
 	}
-	
-	public static void main(String[]args)
+
+	public static void main(String[] args)
 	{
 		PrismSettings set = new PrismSettings();
-		
+
 		JFrame jf = new JFrame("Prism Settings");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		ArrayList<DefaultSettingOwner> owners = new ArrayList<DefaultSettingOwner>();
-		for(int i = 0; i < set.optionOwners.length; i++)
-		{
+		for (int i = 0; i < set.optionOwners.length; i++) {
 			owners.add(set.optionOwners[i]);
 		}
-		
+
 		SettingTable pt = new SettingTable(jf);
 		pt.setOwners(owners);
-		
-		for(int i = 0; i < owners.size(); i++)
-		{
-			SettingOwner a = (SettingOwner)owners.get(i);
+
+		for (int i = 0; i < owners.size(); i++) {
+			SettingOwner a = (SettingOwner) owners.get(i);
 			a.setDisplay(pt);
 		}
-		
+
 		jf.getContentPane().add(pt);
 		jf.getContentPane().setSize(100, 300);
-		
+
 		jf.pack();
 		jf.setVisible(true);
 	}

@@ -43,17 +43,17 @@ public class JDDVars implements Iterable<JDDNode>
 	private Vector<JDDNode> vars;
 	private long array;
 	private boolean arrayBuilt;
-	
+
 	private native long DDV_BuildArray();
+
 	private native void DDV_FreeArray(long a);
+
 	private native int DDV_GetIndex(long dd);
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("jdd");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -77,10 +77,11 @@ public class JDDVars implements Iterable<JDDNode>
 	public void addVar(JDDNode var)
 	{
 		vars.addElement(var);
-		if (arrayBuilt) DDV_FreeArray(array);
+		if (arrayBuilt)
+			DDV_FreeArray(array);
 		arrayBuilt = false;
 	}
-	
+
 	/**
 	 * Appends the variables of another JDDVars container to this container.
 	 * Does not increase the refcount of the JDDNodes!
@@ -88,7 +89,8 @@ public class JDDVars implements Iterable<JDDNode>
 	public void addVars(JDDVars ddv)
 	{
 		vars.addAll(ddv.vars);
-		if (arrayBuilt) DDV_FreeArray(array);
+		if (arrayBuilt)
+			DDV_FreeArray(array);
 		arrayBuilt = false;
 	}
 
@@ -110,12 +112,13 @@ public class JDDVars implements Iterable<JDDNode>
 	 * appending to this container.
 	 * Does a (referencing) copy of each of the variable JDDNodes.
 	 */
-	public void copyVarsFrom(JDDVars ddv) {
+	public void copyVarsFrom(JDDVars ddv)
+	{
 		for (JDDNode var : ddv) {
 			addVar(var.copy());
 		}
 	}
-	
+
 	/**
 	 * Copy an array of JDDVars[] by copying each JDDVars container.
 	 * The copy will have fully referenced JDDNodes.
@@ -123,7 +126,7 @@ public class JDDVars implements Iterable<JDDNode>
 	public static JDDVars[] copyArray(JDDVars[] vararray)
 	{
 		JDDVars[] result = new JDDVars[vararray.length];
-		for (int i = 0;  i< vararray.length; i++) {
+		for (int i = 0; i < vararray.length; i++) {
 			result[i] = vararray[i].copy();
 		}
 		return result;
@@ -136,7 +139,8 @@ public class JDDVars implements Iterable<JDDNode>
 	public void removeVars(JDDVars ddv)
 	{
 		vars.removeAll(ddv.vars);
-		if (arrayBuilt) DDV_FreeArray(array);
+		if (arrayBuilt)
+			DDV_FreeArray(array);
 		arrayBuilt = false;
 	}
 
@@ -152,7 +156,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public JDDNode getVar(int i)
 	{
-		return (JDDNode)vars.elementAt(i);
+		return (JDDNode) vars.elementAt(i);
 	}
 
 	/**
@@ -160,7 +164,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public long getVarPtr(int i)
 	{
-		return ((JDDNode)vars.elementAt(i)).ptr();
+		return ((JDDNode) vars.elementAt(i)).ptr();
 	}
 
 	/**
@@ -168,7 +172,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public int getVarIndex(int i)
 	{
-		return DDV_GetIndex(((JDDNode)vars.elementAt(i)).ptr());
+		return DDV_GetIndex(((JDDNode) vars.elementAt(i)).ptr());
 	}
 
 	/**
@@ -179,11 +183,13 @@ public class JDDVars implements Iterable<JDDNode>
 	{
 		int i, j, n, min;
 		n = vars.size();
-		if (n == 0) return -1;
+		if (n == 0)
+			return -1;
 		min = getVarIndex(0);
 		for (i = 1; i < n; i++) {
 			j = getVarIndex(i);
-			if (j < min) min = j;
+			if (j < min)
+				min = j;
 		}
 		return min;
 	}
@@ -196,11 +202,13 @@ public class JDDVars implements Iterable<JDDNode>
 	{
 		int i, j, n, max;
 		n = vars.size();
-		if (n == 0) return -1;
+		if (n == 0)
+			return -1;
 		max = getVarIndex(0);
 		for (i = 1; i < n; i++) {
 			j = getVarIndex(i);
-			if (j > max) max = j;
+			if (j > max)
+				max = j;
 		}
 		return max;
 	}
@@ -211,9 +219,9 @@ public class JDDVars implements Iterable<JDDNode>
 	public void refAll()
 	{
 		int i;
-		
+
 		for (i = 0; i < vars.size(); i++) {
-			JDD.Ref((JDDNode)vars.elementAt(i));
+			JDD.Ref((JDDNode) vars.elementAt(i));
 		}
 	}
 
@@ -225,7 +233,7 @@ public class JDDVars implements Iterable<JDDNode>
 		int i;
 
 		for (i = 0; i < vars.size(); i++) {
-			JDD.Deref((JDDNode)vars.elementAt(i));
+			JDD.Deref((JDDNode) vars.elementAt(i));
 		}
 	}
 
@@ -247,8 +255,7 @@ public class JDDVars implements Iterable<JDDNode>
 	{
 		if (arrayBuilt) {
 			return array;
-		}
-		else {
+		} else {
 			array = DDV_BuildArray();
 			arrayBuilt = true;
 			return array;
@@ -274,7 +281,7 @@ public class JDDVars implements Iterable<JDDNode>
 	{
 		int i;
 		String s = "{";
-		
+
 		for (i = 0; i < vars.size() - 1; i++) {
 			s = s + getVarIndex(i) + ", ";
 		}
@@ -282,11 +289,10 @@ public class JDDVars implements Iterable<JDDNode>
 			s = s + getVarIndex(vars.size() - 1);
 		}
 		s += "}";
-		
+
 		return s;
 	}
-	
-	
+
 	/**
 	 * Converts a DD cubeset (conjunction of variables)
 	 * to a corresponding JDDVars array.<br>

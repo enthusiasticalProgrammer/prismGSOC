@@ -286,8 +286,7 @@ public class GenerateSimulationPath
 				} else if (bool.equals("false")) {
 					changesFalseOptionGiven = true;
 					simPathShowChangesOnly = false;
-				}
-				else
+				} else
 					throw new PrismException("Value for \"changes\" option must \"true\" or \"false\"");
 			} else {
 				// path of fixed number of steps
@@ -308,7 +307,7 @@ public class GenerateSimulationPath
 		if (varsOptionGiven && !changesFalseOptionGiven) {
 			simPathShowChangesOnly = true;
 		}
-		
+
 		// Display warning if attempt to use "repeat=" option and not "deadlock" option
 		if (simPathRepeat > 1 && simPathType != PathType.SIM_PATH_DEADLOCK) {
 			simPathRepeat = 1;
@@ -325,7 +324,7 @@ public class GenerateSimulationPath
 		mainLog.println(" * time=<x> - generate a path of at least <x> time units");
 		mainLog.println(" * deadlock - generate a path until a deadlock is reached");
 		mainLog.println(" * repeat=<n> - try <n> paths until a deadlock is found");
-		
+
 		mainLog.println(" * sep=<val> - use <val> as column separator (space, tab, comma)");
 		mainLog.println(" * vars=<x1,x2,...> - show values for variables x1,x2,.. only");
 		mainLog.println(" * loopcheck=<true|false> - whether to detect deterministic loops");

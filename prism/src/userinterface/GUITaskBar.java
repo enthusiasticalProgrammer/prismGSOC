@@ -29,34 +29,33 @@ package userinterface;
 
 import javax.swing.*;
 
-
 /** This class is really for convienience.  It extends JLabel.  It sets up desirable properties for a
  * bar at the bottom of the screen describing what is currently going on and also
  * provides a simple method of removing text.
  */
 public class GUITaskBar extends JLabel
 {
-    //CONSTANTS
-    public static final int MINIMUM_WIDTH = 45;
-    public static final int MINIMUM_HEIGHT = 20;
-    //Constructor
-    
-    /** Creates a new GUITaskBar. */
-    public GUITaskBar()
-    {
-	super();
-	setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-	//setBorder(new javax.swing.border.EtchedBorder());
-	setMinimumSize(new java.awt.Dimension(MINIMUM_WIDTH, MINIMUM_HEIGHT));
-    }
-    
-    //Update methods
-    
-    /** Removes all text from this label. */
-    public void removeText()
-    {
-	setText(" ");
-	repaint();
-    }
-    
+	//CONSTANTS
+	public static final int MINIMUM_WIDTH = 45;
+	public static final int MINIMUM_HEIGHT = 20;
+	//Constructor
+
+	/** Creates a new GUITaskBar. */
+	public GUITaskBar()
+	{
+		super();
+		setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+		//setBorder(new javax.swing.border.EtchedBorder());
+		setMinimumSize(new java.awt.Dimension(MINIMUM_WIDTH, MINIMUM_HEIGHT));
+	}
+
+	//Update methods
+
+	/** Removes all text from this label. */
+	public void removeText()
+	{
+		setText(" ");
+		repaint();
+	}
+
 }

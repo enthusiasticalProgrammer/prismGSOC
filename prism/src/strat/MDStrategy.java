@@ -38,7 +38,7 @@ public abstract class MDStrategy implements Strategy
 	 * Current state of model
 	 */
 	protected int currentState = -1;
-	
+
 	/**
 	 * Get the number of states of the model associated with this strategy. 
 	 */
@@ -67,19 +67,19 @@ public abstract class MDStrategy implements Strategy
 	public abstract Object getChoiceAction(int s);
 
 	// Methods for Strategy
-	
+
 	@Override
 	public void initialise(int s)
 	{
 		currentState = s;
 	}
-	
+
 	@Override
 	public void update(Object action, int s)
 	{
 		currentState = s;
 	}
-	
+
 	@Override
 	public Object getChoiceAction()
 	{

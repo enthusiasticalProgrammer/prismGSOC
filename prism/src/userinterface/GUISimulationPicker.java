@@ -189,7 +189,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		// currently, we deliberately do not recall the last initial state used
 		// since it may no longer be valid due to changes in the model
 		information.setInitialState(null);
-		
+
 		// initialise
 		initComponents();
 		this.getRootPane().setDefaultButton(okayButton);
@@ -313,7 +313,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 4;
 		jPanel1.add(jPanel5, gridBagConstraints);
-		
+
 		useDefaultInitialCheck.setText("Use default initial state");
 		useDefaultInitialCheck.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -327,7 +327,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		jPanel1.add(useDefaultInitialCheck, gridBagConstraints);
-		
+
 		topPanel.setLayout(new java.awt.BorderLayout());
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -412,7 +412,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		});
 
-		automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { }));
+		automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
 		automaticCalculateCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -642,7 +642,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	{
 		double width, confidence;
 		int numSamples;
-		
+
 		// Save valid values for later
 		if (isValidDoubleOrEmpty(confidenceField.getText()))
 			lastConf = confidenceField.getText();
@@ -819,7 +819,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 			// Disable table
 			if (initValuesTable.getCellEditor() != null)
-			initValuesTable.getCellEditor().stopCellEditing();
+				initValuesTable.getCellEditor().stopCellEditing();
 			initValuesTable.getSelectionModel().clearSelection();
 			initValuesTable.setEnabled(false);
 		} else {
@@ -956,14 +956,14 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 						parameterValue = new Boolean(bool);
 					} else if (initValuesModel.getValue(i).type instanceof TypeInt) {
 						parameterValue = new Integer(initValuesModel.getValue(i).value.toString());
-					} else { 
+					} else {
 						throw new NumberFormatException();
 					}
 					newInitState.addValue(parameter, parameterValue);
 				}
 				information.setInitialState(newInitState);
 			}
-			
+
 			//information.setDistributed(distributedCheck.isSelected());
 			cancelled = false;
 			lastSimulationInformation = information;
@@ -984,7 +984,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 			// Disable table
 			if (initValuesTable.getCellEditor() != null)
-			initValuesTable.getCellEditor().stopCellEditing();
+				initValuesTable.getCellEditor().stopCellEditing();
 			initValuesTable.getSelectionModel().clearSelection();
 			initValuesTable.setEnabled(false);
 		}
@@ -1007,7 +1007,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			initValuesTable.setEnabled(true);
 		}
 	}
-	
+
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{//GEN-HEADEREND:event_cancelButtonActionPerformed
 		dispose();

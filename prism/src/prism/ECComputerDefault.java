@@ -99,11 +99,11 @@ public class ECComputerDefault extends ECComputer
 		// Go through each candidate set
 		while (!candidates.isEmpty()) {
 			JDDNode candidate = candidates.pop();
-			
+
 			// Compute its maximal stable set
 			JDD.Ref(candidate);
 			JDDNode stableSet = findMaximalStableSet(candidate);
-			
+
 			// Drop empty sets
 			if (stableSet.equals(JDD.ZERO)) {
 				JDD.Deref(stableSet);
@@ -131,7 +131,7 @@ public class ECComputerDefault extends ECComputer
 			JDD.Deref(stableSetTrans);
 			List<JDDNode> sccs = sccComputer.getSCCs();
 			JDD.Deref(sccComputer.getNotInSCCs());
-			
+
 			// If there are no SCCs, do nothing 
 			if (sccs.size() == 0) {
 			}

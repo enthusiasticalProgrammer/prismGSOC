@@ -29,30 +29,30 @@ package userinterface.util;
 
 public class GUIEvent
 {
-    private Object data;
-    private int id;
-    
-    /** Creates a new instance of GUIEvent */
-    public GUIEvent(int id)
-    {
-        this.id = id;
-    }
-    
-    public GUIEvent(int id, Object data)
-    {
-        this.data = data;
-        this.id = id;
-    }
-    
-    //ACCESS METHODS
-    
-    public int getID()
-    {
-        return id;
-    }
-    
-    public Object getData()
-    {
-        return data;
-    }   
+	private Object data;
+	private int id;
+
+	/** Creates a new instance of GUIEvent */
+	public GUIEvent(int id)
+	{
+		this.id = id;
+	}
+
+	public GUIEvent(int id, Object data)
+	{
+		this.data = data;
+		this.id = id;
+	}
+
+	//ACCESS METHODS
+
+	public int getID()
+	{
+		return id;
+	}
+
+	public Object getData()
+	{
+		return data;
+	}
 }

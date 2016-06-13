@@ -60,14 +60,14 @@ public class DBMList extends NCZone
 	{
 		// From DBM 
 		if (z instanceof DBM) {
-			DBM dbm = (DBM)z;
+			DBM dbm = (DBM) z;
 			this.pta = dbm.pta;
 			list = new ArrayList<DBM>();
 			addDBM(dbm);
 		}
 		// From DBM 
-		else { 
-			DBMList dbml = (DBMList)z;
+		else {
+			DBMList dbml = (DBMList) z;
 			this.pta = dbml.pta;
 			list = new ArrayList<DBM>();
 			for (DBM dbm : dbml.list) {
@@ -124,7 +124,7 @@ public class DBMList extends NCZone
 	/**
 	 * Get the {@code i}th DBM in the list.
 	 */
-	public DBM getDBM(int i) 
+	public DBM getDBM(int i)
 	{
 		return list.get(i);
 	}
@@ -138,7 +138,7 @@ public class DBMList extends NCZone
 	{
 		return pta;
 	}
-	
+
 	// Zone operations (modify the zone)
 
 	/**
@@ -270,7 +270,7 @@ public class DBMList extends NCZone
 	}
 
 	// Zone operations (create new zone)
-	
+
 	/**
 	 * Complement
 	 * Creates non-convex zone so creates new one,
@@ -284,7 +284,7 @@ public class DBMList extends NCZone
 	}
 
 	// Zone queries (do not modify the zone)
-	
+
 	/**
 	 * Is this zone empty (i.e. inconsistent)?
 	 */
@@ -333,7 +333,7 @@ public class DBMList extends NCZone
 		}
 		return min;
 	}
-	
+
 	/**
 	 * Get the maximum value of a clock. 
 	 */
@@ -346,7 +346,7 @@ public class DBMList extends NCZone
 		}
 		return max;
 	}
-	
+
 	/**
 	 * Check if a clock is unbounded (can be infinite).
 	 */
@@ -359,7 +359,7 @@ public class DBMList extends NCZone
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Check if all clocks are unbounded (can be infinite).
 	 */
@@ -374,9 +374,9 @@ public class DBMList extends NCZone
 		}
 		return true;
 	}
-	
+
 	// Methods required for NCZone interface
-	
+
 	/**
 	 * Conjunction: with complement of another zone
 	 */
@@ -425,12 +425,11 @@ public class DBMList extends NCZone
 	{
 		if (z instanceof DBM) {
 			addDBM((DBM) z);
-		}
-		else {
+		} else {
 			addDBMs((DBMList) z);
 		}
 	}
-	
+
 	/**
 	 * Get some (any) convex zone contained within this zone.
 	 * Returns null if this zone is empty.
@@ -439,9 +438,10 @@ public class DBMList extends NCZone
 	{
 		if (list.size() > 0)
 			return list.get(0);
-		else return null;
+		else
+			return null;
 	}
-	
+
 	/**
 	 * Get the number of DBMs in this DBMList.
 	 */
@@ -551,9 +551,9 @@ public class DBMList extends NCZone
 				list.remove(i);
 		}
 	}
-	
+
 	// Test program for complementing big DBM lists
-	
+
 	public static void main(String args[])
 	{
 		int numClocks = 7;

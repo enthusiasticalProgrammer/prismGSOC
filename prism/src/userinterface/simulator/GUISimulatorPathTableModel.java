@@ -45,7 +45,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 
 	private boolean pathActive;
 	private ModulesFile parsedModel;
-	private PathFullInfo path; 
+	private PathFullInfo path;
 
 	private RewardStructureValue rewardStructureValue;
 	private VariableValue variableValue;
@@ -540,24 +540,23 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 				// A state reward column
 				if (rewardColumn.isStateReward()) {
 					double value = path.getStateReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != path.getStateReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
+					rewardStructureValue.setChanged(rowIndex == 0 || value != path.getStateReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex > path.size()); // Never unknown
 				}
 				// A transition reward column
 				else if (rewardColumn.isTransitionReward()) {
 					double value = path.getTransitionReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != path.getTransitionReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
+					rewardStructureValue
+							.setChanged(rowIndex == 0 || value != path.getTransitionReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex >= path.size());
 				}
 				// A cumulative reward column
 				else {
 					double value = path.getCumulativeReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != (path.getCumulativeReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex())));
+					rewardStructureValue
+							.setChanged(rowIndex == 0 || value != (path.getCumulativeReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex())));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex > path.size()); // Never unknown
 				}

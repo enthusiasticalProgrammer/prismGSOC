@@ -188,12 +188,12 @@ public class MDPRewardsSimple implements MDPRewards
 	}
 
 	// Converters
-	
+
 	@Override
 	public MDPRewards liftFromModel(Product<? extends Model> product)
 	{
 		Model modelProd = product.getProductModel();
-		int numStatesProd = modelProd.getNumStates();		
+		int numStatesProd = modelProd.getNumStates();
 		MDPRewardsSimple rewardsProd = new MDPRewardsSimple(numStatesProd);
 		if (stateRewards != null) {
 			for (int s = 0; s < numStatesProd; s++) {
@@ -213,7 +213,7 @@ public class MDPRewardsSimple implements MDPRewards
 		}
 		return rewardsProd;
 	}
-	
+
 	@Override
 	public String toString()
 	{

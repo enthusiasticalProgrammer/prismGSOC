@@ -43,7 +43,7 @@ public class PermutedLexicographicComparator implements Comparator<Point>
 {
 	private int[] permutation;
 	private boolean[] increasing;
-	
+
 	/**
 	 * Creates a new instance of the comparator.
 	 * @param dimensionPermutation The order of coordinates, the length of
@@ -54,13 +54,14 @@ public class PermutedLexicographicComparator implements Comparator<Point>
 	 * @param increasing if increasing[i] is true, then the ith dimension
 	 * will be used such that the points with the smaller values go first, otherwise they go last
 	 */
-	public PermutedLexicographicComparator(int[] dimensionPermutation, boolean[] increasing) {
+	public PermutedLexicographicComparator(int[] dimensionPermutation, boolean[] increasing)
+	{
 		//check that the array is a valid permutation
 		int[] clone = dimensionPermutation.clone();
 		//TODO check size etc.
 		this.increasing = increasing;
 		Arrays.sort(clone);
-		for(int i = 0; i < clone.length; i++)
+		for (int i = 0; i < clone.length; i++)
 			if (clone[i] != i)
 				throw new IllegalArgumentException("The array is not a valid permutation");
 		this.permutation = dimensionPermutation;
@@ -70,16 +71,15 @@ public class PermutedLexicographicComparator implements Comparator<Point>
 	public int compare(Point o1, Point o2)
 	{
 		//check if the input is allowed;
-		if (o1.getDimension() > permutation.length
-				|| o2.getDimension() > permutation.length)
+		if (o1.getDimension() > permutation.length || o2.getDimension() > permutation.length)
 			throw new ClassCastException("The dimension of the point is greater that comparator's dimension");
-		
-		if(o1.isCloseTo(o2))
+
+		if (o1.isCloseTo(o2))
 			return 0;
-		
-		return compare(o1,o2,0);
+
+		return compare(o1, o2, 0);
 	}
-	
+
 	/**
 	 * Compares two points, starting with the coordinate with the
 	 * {@code i}-th highest priority. 
@@ -91,10 +91,11 @@ public class PermutedLexicographicComparator implements Comparator<Point>
 	protected int compare(Point o1, Point o2, int i)
 	{
 		int dim = this.permutation[i];
-		if ( o1.getCoord(dim) < o2.getCoord(dim))
+		if (o1.getCoord(dim) < o2.getCoord(dim))
 			return (increasing[dim]) ? -1 : 1;
 		else if (o1.getCoord(dim) > o2.getCoord(dim))
 			return (increasing[dim]) ? 1 : -1;
-		else return compare(o1, o2, i+1);
+		else
+			return compare(o1, o2, i + 1);
 	}
 }

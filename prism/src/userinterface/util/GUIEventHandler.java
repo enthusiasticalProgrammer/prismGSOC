@@ -26,6 +26,7 @@
 //==============================================================================
 
 package userinterface.util;
+
 import java.util.*;
 import userinterface.*;
 
@@ -33,38 +34,39 @@ public class GUIEventHandler
 {
 	public GUIPrism gui;
 	public ArrayList<GUIEventListener> listeners;
-	
+
 	/** Creates a new instance of GUIEventHandler */
 	public GUIEventHandler(GUIPrism gui)
 	{
 		this.gui = gui;
 		listeners = new ArrayList<GUIEventListener>();
 	}
-	
+
 	public void addListener(GUIEventListener listen)
 	{
 		listeners.add(listen);
 	}
-	
+
 	public void notifyListeners(GUIEvent e)
 	{
 		boolean res = false;
 		// notify plugins
-		for(int i = 0; i < listeners.size(); i++)
-		{
+		for (int i = 0; i < listeners.size(); i++) {
 			GUIEventListener lis = listeners.get(i);
 			res = lis.processGUIEvent(e);
-			if (res) break;
+			if (res)
+				break;
 		}
 		// notify gui itself
-		if (gui != null && !res) gui.processGUIEvent(e);
+		if (gui != null && !res)
+			gui.processGUIEvent(e);
 	}
-	
+
 	public boolean removeListener(GUIEventListener listen)
 	{
 		return listeners.remove(listen);
 	}
-	
+
 	public void clear()
 	{
 		listeners.clear();

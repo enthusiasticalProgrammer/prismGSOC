@@ -90,8 +90,7 @@ public class GUISimPathFormulaeList extends JList
 			int index = engine.addProperty(prop, propertiesFile);
 			SimPathFormula form = new SimPathFormula(str, index);
 			listModel.addElement(form);
-		}
-		catch (PrismException e) {
+		} catch (PrismException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}
@@ -135,8 +134,7 @@ public class GUISimPathFormulaeList extends JList
 			return lastText;
 		}
 
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
 			SimPathFormula l = (SimPathFormula) value;

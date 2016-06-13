@@ -52,8 +52,7 @@ public class CheckValid extends ASTTraverse
 			if (e.getOperator() == ExpressionTemporal.R_S) {
 				throw new PrismLangException("Steady-state reward properties cannot be used for MDPs");
 			}
-		}
-		else if (modelType == ModelType.PTA) {
+		} else if (modelType == ModelType.PTA) {
 			if (e.getOperator() == ExpressionTemporal.R_C || e.getOperator() == ExpressionTemporal.R_I || e.getOperator() == ExpressionTemporal.R_S) {
 				throw new PrismLangException("Only reachability (F) reward properties can be used for PTAs");
 			}
@@ -61,24 +60,20 @@ public class CheckValid extends ASTTraverse
 		// PTA only support upper time bounds
 		if (e.getLowerBound() != null) {
 			if (modelType == ModelType.PTA) {
-				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol()
-						+ " operator for PTAs");
+				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol() + " operator for PTAs");
 			}
 		}
 		// Apart from CTMCs, we only support integer time bounds
-		if ((e.getUpperBound() != null && !(e.getUpperBound().getType() instanceof TypeInt)) ||
-		    (e.getLowerBound() != null && !(e.getLowerBound().getType() instanceof TypeInt))) {
+		if ((e.getUpperBound() != null && !(e.getUpperBound().getType() instanceof TypeInt))
+				|| (e.getLowerBound() != null && !(e.getLowerBound().getType() instanceof TypeInt))) {
 			if (modelType == ModelType.DTMC) {
-				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol()
-						+ " operator must be integers for DTMCs");
+				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol() + " operator must be integers for DTMCs");
 			}
 			if (modelType == ModelType.MDP) {
-				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol()
-						+ " operator must be integers for MDPs");
+				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol() + " operator must be integers for MDPs");
 			}
 			if (modelType == ModelType.PTA) {
-				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol()
-						+ " operator must be integers for PTAs");
+				throw new PrismLangException("Time bounds on the " + e.getOperatorSymbol() + " operator must be integers for PTAs");
 			}
 		}
 		// Don't allow lower bounds on weak until - does not have intuitive semantics
@@ -92,7 +87,7 @@ public class CheckValid extends ASTTraverse
 		if (modelType.nondeterministic() && e.getRelOp() == RelOp.EQ)
 			throw new PrismLangException("Can't use \"P=?\" for nondeterministic models; use \"Pmin=?\" or \"Pmax=?\"");
 	}
-	
+
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		if (modelType.nondeterministic() && e.getRelOp() == RelOp.EQ)
@@ -100,7 +95,7 @@ public class CheckValid extends ASTTraverse
 		if (e.getRewardStructIndexDiv() != null)
 			throw new PrismLangException("No support for ratio reward objectives yet");
 	}
-	
+
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		// S operator only works for some models

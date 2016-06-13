@@ -49,9 +49,9 @@ public class PrismDevNullLog extends PrismLog
 	public void close()
 	{
 	}
-	
+
 	// Basic print methods
-	
+
 	public void print(boolean b)
 	{
 	}

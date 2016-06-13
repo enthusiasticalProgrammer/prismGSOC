@@ -41,7 +41,8 @@ import java.util.HashMap;
  * @see FunctionFactory
  * @see CachedFunction
  */
-final class CachedFunctionFactory extends FunctionFactory {
+final class CachedFunctionFactory extends FunctionFactory
+{
 	/**
 	 * Represents an entry of the operation cache.
 	 *
@@ -53,7 +54,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 		CachedFunction first;
 		/** second operand */
 		CachedFunction second;
-		
+
 		/**
 		 * Construct a new operation cache entry.
 		 * 
@@ -70,28 +71,30 @@ final class CachedFunctionFactory extends FunctionFactory {
 			this.first = first;
 			this.second = second;
 		}
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			OpCacheKey key = (OpCacheKey) obj;
 			return first == key.first && second == key.second;
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = first.getNumber();
 			hash = second.getNumber() + (hash << 6) + (hash << 16) - hash;
 			return hash;
 		}
 	}
-	
+
 	/** function factory of which we cache functions */
 	private FunctionFactory context;
 	/** maps each function from {@code context} to a unique integer */
 	private HashMap<Function, Integer> functionToNumber;
 	/** maps each integer to function from {@code context}, cf. also {@code functionToNumber} */
 	private ArrayList<Function> functions;
-	/** list of all function of this function factory */ 
+	/** list of all function of this function factory */
 	private ArrayList<CachedFunction> cachedFunctions;
 	/** next new function will be assigned this number */
 	private int nextFunctionNumber;
@@ -101,20 +104,21 @@ final class CachedFunctionFactory extends FunctionFactory {
 	private CachedFunction zero;
 	/** true iff operation cache is to be used */
 	private boolean useOpCache;
-	/** cache for additions (and indirectly subtractions) */		
+	/** cache for additions (and indirectly subtractions) */
 	private HashMap<OpCacheKey, CachedFunction> addCache;
-	/** cache for multiplications (and indirectly divisions) */	
+	/** cache for multiplications (and indirectly divisions) */
 	private HashMap<OpCacheKey, CachedFunction> multCache;
 	/** cache for star operation */
 	private HashMap<CachedFunction, CachedFunction> starCache;
-	
+
 	/**
 	 * Constructs a new cached function factory.
 	 * Will cache functions of the given {@code context}.
 	 * 
 	 * @param context function factory to cache functions of
 	 */
-	CachedFunctionFactory(FunctionFactory context) {
+	CachedFunctionFactory(FunctionFactory context)
+	{
 		super(context.parameterNames, context.lowerBounds, context.upperBounds);
 		this.context = context;
 		functionToNumber = new HashMap<Function, Integer>();
@@ -128,7 +132,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 		starCache = new HashMap<CachedFunction, CachedFunction>();
 		useOpCache = true;
 	}
-	
+
 	/**
 	 * Returns whether operations cache is used.
 	 * 
@@ -138,7 +142,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 	{
 		return useOpCache;
 	}
-	
+
 	/**
 	 * Returns the unique integer representing the given function.
 	 * In case the function already exists in the function cache, returns
@@ -162,7 +166,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 			return cachedFunction;
 		}
 	}
-	
+
 	/**
 	 * Returns integer with the given unique number.
 	 * 
@@ -173,7 +177,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 	{
 		return functions.get(number);
 	}
-	
+
 	@Override
 	public Function getOne()
 	{
@@ -190,7 +194,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 	{
 		return functions.get(((CachedFunction) cached).getNumber());
 	}
-	
+
 	Function add(Function cached1, Function cached2)
 	{
 		Function result;
@@ -243,8 +247,9 @@ final class CachedFunctionFactory extends FunctionFactory {
 		Function function2 = getFunctionFromCache(cached2);
 		return makeUnique(function1.divide(function2));
 	}
-	
-	Function star(Function cached) {
+
+	Function star(Function cached)
+	{
 		Function result;
 		if (useOpCache) {
 			result = starCache.get(cached);
@@ -270,7 +275,7 @@ final class CachedFunctionFactory extends FunctionFactory {
 		Function function = getFunctionFromCache(cached);
 		return function.evaluate(point, cancel);
 	}
-	
+
 	public BigRational evaluate(CachedFunction cached, Point point)
 	{
 		Function function = getFunctionFromCache(cached);
@@ -284,59 +289,69 @@ final class CachedFunctionFactory extends FunctionFactory {
 		return makeUnique(fn);
 	}
 
-	public BigRational asBigRational(CachedFunction cached) {
+	public BigRational asBigRational(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.asBigRational();
 	}
 
-	public boolean check(CachedFunction cached, Point point,
-			boolean strict) {
+	public boolean check(CachedFunction cached, Point point, boolean strict)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.check(point, strict);
 	}
 
-	public boolean isNaN(CachedFunction cached) {
+	public boolean isNaN(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.isNaN();
 	}
 
-	public boolean isInf(CachedFunction cached) {
+	public boolean isInf(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.isInf();
 	}
 
-	public boolean isMInf(CachedFunction cached) {
+	public boolean isMInf(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.isMInf();
 	}
 
-	public boolean isOne(CachedFunction cached) {
+	public boolean isOne(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.isOne();
 	}
 
-	public boolean isZero(CachedFunction cached) {
+	public boolean isZero(CachedFunction cached)
+	{
 		Function function = getFunctionFromCache(cached);
 		return function.isZero();
 	}
 
 	@Override
-	Function getNaN() {
+	Function getNaN()
+	{
 		return makeUnique(context.getNaN());
 	}
 
 	@Override
-	Function getInf() {
+	Function getInf()
+	{
 		return makeUnique(context.getInf());
 	}
 
 	@Override
-	Function getMInf() {
+	Function getMInf()
+	{
 		return makeUnique(context.getMInf());
 	}
 
 	@Override
-	Function getVar(int var) {
+	Function getVar(int var)
+	{
 		return makeUnique(context.getVar(var));
 	}
 }

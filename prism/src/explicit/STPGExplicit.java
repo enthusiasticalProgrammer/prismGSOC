@@ -93,7 +93,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	}
 
 	// Mutators (for ModelSimple)
-	
+
 	/**
 	 * Add a new (player 1) state and return its index.
 	 */

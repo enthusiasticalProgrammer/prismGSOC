@@ -88,7 +88,7 @@ public class DB
 		if (d == INFTY)
 			return d;
 		// TODO: probably a more efficient way to do this
-		return isStrict(d) ? createLeq(-getSignedDiff(d)) : createLt(-getSignedDiff(d)); 
+		return isStrict(d) ? createLeq(-getSignedDiff(d)) : createLt(-getSignedDiff(d));
 	}
 
 	// Get bound as a string

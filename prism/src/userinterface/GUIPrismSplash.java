@@ -25,54 +25,50 @@
 //==============================================================================
 
 package userinterface;
+
 import java.awt.*;
 import prism.*;
 import java.net.URL;
 
-public class GUIPrismSplash extends Frame 
+public class GUIPrismSplash extends Frame
 {
 	private String filename;
 	private MediaTracker mt;
 	private Image image;
-	
-	public GUIPrismSplash(String filename) 
+
+	public GUIPrismSplash(String filename)
 	{
 		this.filename = filename;
 	}
-	
-	public void display() 
+
+	public void display()
 	{
 		mt = new MediaTracker(this);
-		
+
 		URL imageURL = GUIPrismSplash.class.getClassLoader().getResource(filename);
-		if (imageURL == null) 
-		{
+		if (imageURL == null) {
 			System.out.println("Warning: Failed to load icon file \"" + filename + "\"");
 		}
-		
-		
+
 		image = Toolkit.getDefaultToolkit().getImage(imageURL);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		Rectangle frame = getBounds();
-		setLocation((screen.width - frame.width)/2, (screen.height - frame.height)/2);
-		
+		setLocation((screen.width - frame.width) / 2, (screen.height - frame.height) / 2);
+
 		mt.addImage(image, 0);
-		try 
-		{
+		try {
 			mt.waitForID(0);
-		}
-		catch(InterruptedException ie) 
-		{
+		} catch (InterruptedException ie) {
 			System.out.println("Error in media tracker");
 		}
-		
-		SplashWindow splashWindow = new SplashWindow(this,image);
+
+		SplashWindow splashWindow = new SplashWindow(this, image);
 	}
-	
+
 	//Thanks to http://www.javapractices.com/Topic149.cjp for the SplashWindow class
-	private class SplashWindow extends Window 
+	private class SplashWindow extends Window
 	{
-		SplashWindow(Frame aParent, Image aImage) 
+		SplashWindow(Frame aParent, Image aImage)
 		{
 			super(aParent);
 			fImage = aImage;
@@ -82,18 +78,19 @@ public class GUIPrismSplash extends Frame
 			setLocation((screen.width - window.width) / 2, (screen.height - window.height) / 2);
 			setVisible(true);
 		}
-		public void paint(Graphics graphics) 
+
+		public void paint(Graphics graphics)
 		{
-			if (fImage != null) 
-			{
-				graphics.drawImage(fImage,0,0,this);
-				Font theFont = new Font ("monospaced", Font.BOLD, 10);
+			if (fImage != null) {
+				graphics.drawImage(fImage, 0, 0, this);
+				Font theFont = new Font("monospaced", Font.BOLD, 10);
 				graphics.setFont(theFont);
-				int x = (int)(getBounds().width - theFont.getSize2D()*(Prism.getVersion().length()+1)*(5.0/8.0) - 10);
-				int y = (int)(getBounds().height - theFont.getSize2D() - 10);
+				int x = (int) (getBounds().width - theFont.getSize2D() * (Prism.getVersion().length() + 1) * (5.0 / 8.0) - 10);
+				int y = (int) (getBounds().height - theFont.getSize2D() - 10);
 				graphics.drawString(Prism.getVersion() + " ", x, y);
 			}
 		}
+
 		private Image fImage;
 	}
 }

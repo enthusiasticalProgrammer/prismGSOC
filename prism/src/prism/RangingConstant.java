@@ -29,60 +29,60 @@ package prism;
 
 public class RangingConstant
 {
-    private String name;
-    private int type;
-    private Object lo, hi, step;
-    
-    /** Creates a new instance of RangingConstant */
-    public RangingConstant(String name, int type, Object lo, Object hi, Object step)
-    {
-	this.name = name;
-	this.type = type;
-	this.lo = lo;
-	this.hi = hi;
-	this.step = step;
-    }
-    
-    //ACCESS METHODS
-    
-    public String getName()
-    {
-	return name;
-    }
-    
-    public int getType()
-    {
-	return type;
-    }
-    
-    public Object getLow()
-    {
-	return lo;
-    }
-    
-    public Object getHi()
-    {
-	return hi;
-    }
-    
-    public Object getStep()
-    {
-	return step;
-    }
-    
-    public int getNumSteps()
-    {
-	//dummy dummy dummy
-	return 2;
-    }
-    
-    /*	Gets the value for the constant at the index i,
-     *	eg. if we have 3..2..9, the values would be 
-     *  [3, 5, 7, 9] and so getValue(1) would return 5.
-     */
-    public Object getValue(int i)
-    {
-	return new Integer(1); //dummy dummy dummy
-    }
-    
+	private String name;
+	private int type;
+	private Object lo, hi, step;
+
+	/** Creates a new instance of RangingConstant */
+	public RangingConstant(String name, int type, Object lo, Object hi, Object step)
+	{
+		this.name = name;
+		this.type = type;
+		this.lo = lo;
+		this.hi = hi;
+		this.step = step;
+	}
+
+	//ACCESS METHODS
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public int getType()
+	{
+		return type;
+	}
+
+	public Object getLow()
+	{
+		return lo;
+	}
+
+	public Object getHi()
+	{
+		return hi;
+	}
+
+	public Object getStep()
+	{
+		return step;
+	}
+
+	public int getNumSteps()
+	{
+		//dummy dummy dummy
+		return 2;
+	}
+
+	/*	Gets the value for the constant at the index i,
+	 *	eg. if we have 3..2..9, the values would be 
+	 *  [3, 5, 7, 9] and so getValue(1) would return 5.
+	 */
+	public Object getValue(int i)
+	{
+		return new Integer(1); //dummy dummy dummy
+	}
+
 }

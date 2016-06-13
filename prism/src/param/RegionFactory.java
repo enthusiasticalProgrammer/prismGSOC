@@ -32,7 +32,8 @@ package param;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see RegionFactory
  */
-abstract class RegionFactory {
+abstract class RegionFactory
+{
 	/** function factory used to produce functions used as values of regions */
 	protected FunctionFactory functionFactory;
 	/** constraint checker to check properties of regions */
@@ -55,7 +56,7 @@ abstract class RegionFactory {
 	 * @return cover of whole parameter region
 	 */
 	abstract RegionValues completeCover(StateValues values);
-	
+
 	/**
 	 * Covers the whole parameter space with the values specified.
 	 * Assigns the same values to each state.
@@ -80,7 +81,7 @@ abstract class RegionFactory {
 	{
 		return completeCover(new StateBoolean(value));
 	}
-	
+
 	/**
 	 * Get lower bound of given parameter.
 	 * 
@@ -91,7 +92,7 @@ abstract class RegionFactory {
 	{
 		return functionFactory.getLowerBound(dim);
 	}
-	
+
 	/**
 	 * Get upper bound of given parameter.
 	 * 
@@ -102,7 +103,7 @@ abstract class RegionFactory {
 	{
 		return functionFactory.getUpperBound(dim);
 	}
-	
+
 	/**
 	 * Returns diameter of range of given variable {@code dim}.
 	 * 
@@ -113,7 +114,7 @@ abstract class RegionFactory {
 	{
 		return functionFactory.getUpperBound(dim).subtract(functionFactory.getLowerBound(dim));
 	}
-	
+
 	/**
 	 * Returns function factory used to produce functions used as values of regions.
 	 * @return function factory used to produce functions used as values of regions
@@ -122,7 +123,7 @@ abstract class RegionFactory {
 	{
 		return functionFactory;
 	}
-	
+
 	/**
 	 * Returns constraint checker to check properties of regions.
 	 * 
@@ -132,7 +133,7 @@ abstract class RegionFactory {
 	{
 		return constraintChecker;
 	}
-	
+
 	/**
 	 * Returns maximal amount of undecided area for region cover produced.
 	 * 
@@ -148,7 +149,8 @@ abstract class RegionFactory {
 	 * 
 	 * @return number of parameters
 	 */
-	int numVariables() {
+	int numVariables()
+	{
 		return functionFactory.getNumVariables();
 	}
 
@@ -161,7 +163,7 @@ abstract class RegionFactory {
 	{
 		return numStates;
 	}
-	
+
 	/**
 	 * Returns the initial state of the model this {@code RegionFactory} is used for.
 	 * 
@@ -171,7 +173,7 @@ abstract class RegionFactory {
 	{
 		return initialState;
 	}
-	
+
 	/**
 	 * Returns whether regions are to be subsumed if possible.
 	 * 

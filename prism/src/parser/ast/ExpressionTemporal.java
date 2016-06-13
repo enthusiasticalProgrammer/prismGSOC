@@ -216,7 +216,7 @@ public class ExpressionTemporal extends Expression
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{

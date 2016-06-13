@@ -47,7 +47,8 @@ import edu.jas.ufd.Quotient;
  * @see Function
  * @see JasFunctionFactory
  */
-final class JasFunction extends Function {
+final class JasFunction extends Function
+{
 	/** JAS object the function is wrapping */
 	private Quotient<BigInteger> jas;
 	/** numerator of function (stored if needed) */
@@ -60,9 +61,9 @@ final class JasFunction extends Function {
 	final static int INF = 1;
 	final static int MINF = 2;
 	final static int NAN = 3;
-	
+
 	// constructors
-	
+
 	/**
 	 * Creates a new JAS function.
 	 * 
@@ -70,7 +71,8 @@ final class JasFunction extends Function {
 	 * @param jas JAS object this function object is wrapping
 	 * @param type type of function represented
 	 */
-	JasFunction(JasFunctionFactory functionContext, Quotient<BigInteger> jas, int type) {
+	JasFunction(JasFunctionFactory functionContext, Quotient<BigInteger> jas, int type)
+	{
 		super(functionContext);
 		this.jas = jas;
 		this.num = null;
@@ -90,9 +92,10 @@ final class JasFunction extends Function {
 		}
 		return jas.toString();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof JasFunction)) {
 			return false;
 		}
@@ -108,12 +111,13 @@ final class JasFunction extends Function {
 		}
 		return jas.equals(function.jas);
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		return jas.hashCode();
 	}
-	
+
 	/**
 	 * Returns JAS object this function is wrapping.
 	 * 
@@ -123,7 +127,7 @@ final class JasFunction extends Function {
 	{
 		return jas;
 	}
-	
+
 	@Override
 	public Function add(Function other)
 	{
@@ -139,24 +143,24 @@ final class JasFunction extends Function {
 		if (this.isMInf() || other.isMInf()) {
 			return factory.getMInf();
 		}
-		return new JasFunction((JasFunctionFactory) factory, jas.sum(((JasFunction)other).jas), NORMAL);
+		return new JasFunction((JasFunctionFactory) factory, jas.sum(((JasFunction) other).jas), NORMAL);
 	}
 
 	@Override
 	public Function negate()
 	{
 		if (this.isNaN()) {
-			return factory.getNaN();			
+			return factory.getNaN();
 		}
 		if (this.isInf()) {
 			return factory.getMInf();
 		}
 		if (this.isMInf()) {
-			return factory.getMInf();			
+			return factory.getMInf();
 		}
 		return new JasFunction((JasFunctionFactory) factory, jas.negate(), NORMAL);
 	}
-	
+
 	@Override
 	public Function multiply(Function other)
 	{
@@ -173,9 +177,9 @@ final class JasFunction extends Function {
 				return factory.getInf();
 			}
 		}
-		return new JasFunction((JasFunctionFactory) factory, jas.multiply(((JasFunction) other).jas), NORMAL);		
+		return new JasFunction((JasFunctionFactory) factory, jas.multiply(((JasFunction) other).jas), NORMAL);
 	}
-	
+
 	@Override
 	public Function divide(Function other)
 	{
@@ -194,14 +198,14 @@ final class JasFunction extends Function {
 		}
 		return new JasFunction((JasFunctionFactory) factory, jas.divide(((JasFunction) other).jas), NORMAL);
 	}
-	
+
 	@Override
 	public Function star()
 	{
 		if (this.isNaN()) {
 			return factory.getNaN();
 		}
-		Quotient<BigInteger> one =  ((JasFunctionFactory) factory).getJasQuotRing().getONE();
+		Quotient<BigInteger> one = ((JasFunctionFactory) factory).getJasQuotRing().getONE();
 		Quotient<BigInteger> result = one.subtract(jas);
 		result = one.divide(result);
 		return new JasFunction((JasFunctionFactory) factory, result, NORMAL);
@@ -222,16 +226,17 @@ final class JasFunction extends Function {
 			ExpVector jasExpo = jasMono.exponent();
 			ArrayList<Integer> expo = new ArrayList<Integer>();
 			for (int var = 0; var < numVariables; var++) {
-				expo.add((int)jasExpo.getVal(var));
+				expo.add((int) jasExpo.getVal(var));
 			}
 			result.addTerm(coeff, expo);
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
-	public Function toConstraint() {
+	public Function toConstraint()
+	{
 		if (isNaN() || isInf() || isMInf()) {
 			return this;
 		}
@@ -241,7 +246,7 @@ final class JasFunction extends Function {
 		if (den == null) {
 			den = jasToPoly(jas.den);
 		}
-		BigRational[] offset = new BigRational[factory.getNumVariables()]; 
+		BigRational[] offset = new BigRational[factory.getNumVariables()];
 		for (int dim = 0; dim < factory.getNumVariables(); dim++) {
 			offset[dim] = factory.getUpperBound(dim).subtract(factory.getLowerBound(dim));
 		}
@@ -264,7 +269,8 @@ final class JasFunction extends Function {
 	}
 
 	@Override
-	public BigRational evaluate(Point point, boolean cancel) {
+	public BigRational evaluate(Point point, boolean cancel)
+	{
 		if (isNaN()) {
 			return BigRational.NAN;
 		} else if (isInf()) {
@@ -285,10 +291,11 @@ final class JasFunction extends Function {
 	}
 
 	@Override
-	public BigRational evaluate(Point point) {
+	public BigRational evaluate(Point point)
+	{
 		return evaluate(point, true);
 	}
-	
+
 	@Override
 	public boolean check(Point point, boolean strict)
 	{
@@ -298,7 +305,8 @@ final class JasFunction extends Function {
 	}
 
 	@Override
-	public BigRational asBigRational() {
+	public BigRational asBigRational()
+	{
 		if (isNaN()) {
 			return BigRational.NAN;
 		} else if (isInf()) {
@@ -314,22 +322,26 @@ final class JasFunction extends Function {
 	}
 
 	@Override
-	public boolean isNaN() {
+	public boolean isNaN()
+	{
 		return type == NAN;
 	}
 
 	@Override
-	public boolean isInf() {
+	public boolean isInf()
+	{
 		return type == INF;
 	}
 
 	@Override
-	public boolean isMInf() {
+	public boolean isMInf()
+	{
 		return type == MINF;
 	}
 
 	@Override
-	public boolean isOne() {
+	public boolean isOne()
+	{
 		if (type != NORMAL) {
 			return false;
 		}
@@ -337,7 +349,8 @@ final class JasFunction extends Function {
 	}
 
 	@Override
-	public boolean isZero() {
+	public boolean isZero()
+	{
 		if (type != NORMAL) {
 			return false;
 		}

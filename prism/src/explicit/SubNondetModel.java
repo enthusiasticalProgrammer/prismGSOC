@@ -167,7 +167,7 @@ public class SubNondetModel implements NondetModel
 	private List<State> generateSubStateList(BitSet states)
 	{
 		List<State> statesList = new ArrayList<State>();
-		for (int i : new IterableStateSet(states, model.getNumStates())){
+		for (int i : new IterableStateSet(states, model.getNumStates())) {
 			statesList.add(model.getStatesList().get(i));
 		}
 		return statesList;
@@ -186,9 +186,10 @@ public class SubNondetModel implements NondetModel
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
-	public Set<String> getLabels() {
+	public Set<String> getLabels()
+	{
 		throw new UnsupportedOperationException();
 	}
 
@@ -215,7 +216,7 @@ public class SubNondetModel implements NondetModel
 	{
 		s = translateState(s);
 		HashSet<Integer> succs = new HashSet<Integer>();
-		for (int i : new IterableStateSet(actions.get(s), model.getNumChoices(s))){
+		for (int i : new IterableStateSet(actions.get(s), model.getNumChoices(s))) {
 			Iterator<Integer> it = model.getSuccessorsIterator(s, i);
 			while (it.hasNext()) {
 				int j = it.next();
@@ -336,7 +337,7 @@ public class SubNondetModel implements NondetModel
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void exportToPrismLanguage(String filename) throws PrismException
 	{
@@ -402,7 +403,7 @@ public class SubNondetModel implements NondetModel
 		int iOriginal = translateAction(s, i);
 		return model.getNumTransitions(sOriginal, iOriginal);
 	}
-	
+
 	@Override
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{
@@ -454,7 +455,7 @@ public class SubNondetModel implements NondetModel
 
 	private void generateStatistics()
 	{
-		for (int i : new IterableStateSet(states, model.getNumStates())){
+		for (int i : new IterableStateSet(states, model.getNumStates())) {
 			numTransitions += getTransitions(i);
 			numChoices += actions.get(i).cardinality();
 			maxNumChoices = Math.max(maxNumChoices, model.getNumChoices(i));
@@ -464,7 +465,7 @@ public class SubNondetModel implements NondetModel
 	private int getTransitions(int state)
 	{
 		int transitions = 0;
-		for (int i : new IterableStateSet(actions.get(state), model.getNumChoices(state))){
+		for (int i : new IterableStateSet(actions.get(state), model.getNumChoices(state))) {
 			transitions += model.getNumTransitions(state, i);
 		}
 		return transitions;
@@ -478,11 +479,11 @@ public class SubNondetModel implements NondetModel
 
 	private void generateLookupTable(BitSet states, Map<Integer, BitSet> actions)
 	{
-		for (int i : new IterableStateSet(states, model.getNumStates())){
+		for (int i : new IterableStateSet(states, model.getNumStates())) {
 			inverseStateLookupTable.put(i, stateLookupTable.size());
 			stateLookupTable.put(stateLookupTable.size(), i);
 			Map<Integer, Integer> r = new HashMap<Integer, Integer>();
-			for (int j : new IterableStateSet(actions.get(i), model.getNumChoices(i))){
+			for (int j : new IterableStateSet(actions.get(i), model.getNumChoices(i))) {
 				r.put(r.size(), j);
 			}
 			actionLookupTable.put(actionLookupTable.size(), r);
@@ -505,12 +506,14 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public boolean hasStoredPredecessorRelation() {
+	public boolean hasStoredPredecessorRelation()
+	{
 		return (predecessorRelation != null);
 	}
 
 	@Override
-	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew) {
+	public PredecessorRelation getPredecessorRelation(prism.PrismComponent parent, boolean storeIfNew)
+	{
 		if (predecessorRelation != null) {
 			return predecessorRelation;
 		}
@@ -524,7 +527,8 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public void clearPredecessorRelation() {
+	public void clearPredecessorRelation()
+	{
 		predecessorRelation = null;
 	}
 }

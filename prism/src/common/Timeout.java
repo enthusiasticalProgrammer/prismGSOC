@@ -43,7 +43,8 @@ public class Timeout implements Runnable
 	 * Set a timeout.
 	 * Starts a (daemon) thread which checks if the timeout has elapsed.
 	 */
-	public static void setTimeout(int timeoutInSeconds, Runnable timeoutRunnable) {
+	public static void setTimeout(int timeoutInSeconds, Runnable timeoutRunnable)
+	{
 		Timeout t = new Timeout(timeoutInSeconds, timeoutRunnable);
 		Thread timeoutThread = new Thread(t);
 		// the thread should be a daemon thread, because otherwise
@@ -57,7 +58,7 @@ public class Timeout implements Runnable
 	 */
 	private Timeout(int timeoutInSeconds, Runnable timeoutRunnable)
 	{
-		timeoutTime = System.currentTimeMillis() + timeoutInSeconds*1000;
+		timeoutTime = System.currentTimeMillis() + timeoutInSeconds * 1000;
 		this.timeoutRunnable = timeoutRunnable;
 	}
 
@@ -73,7 +74,8 @@ public class Timeout implements Runnable
 			}
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 }

@@ -38,28 +38,28 @@ public abstract class StateRewards implements MCRewards, MDPRewards, STPGRewards
 	 * Get the state reward for state {@code s}.
 	 */
 	public abstract double getStateReward(int s);
-	
+
 	@Override
 	public double getTransitionReward(int s, int i)
 	{
 		return 0.0;
 	}
-	
+
 	@Override
 	public double getNestedTransitionReward(int s, int i, int j)
 	{
 		return 0.0;
 	}
-	
+
 	@Override
 	public MDPRewards buildMDPRewards()
 	{
 		return deepCopy();
 	}
-	
+
 	@Override
 	public abstract StateRewards liftFromModel(Product<? extends Model> product);
-	
+
 	/**
 	 * Perform a deep copy.
 	 */

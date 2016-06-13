@@ -108,7 +108,7 @@ public class PTAModelChecker extends PrismComponent
 		if (modulesFile.getSystemDefn() != null) {
 			throw new PrismException("The system...endsystem construct is not supported yet (try the digital clocks engine instead)");
 		}
-		
+
 		// Translate ModulesFile object into a PTA object
 		mainLog.println("\nBuilding PTA...");
 		m2pta = new Modules2PTA(this, modulesFile);
@@ -128,7 +128,7 @@ public class PTAModelChecker extends PrismComponent
 				}
 			}
 		});
-		
+
 		// Take a copy of property, since will modify
 		expr = expr.deepCopy();
 		// Remove property refs ands labels from property 
@@ -202,7 +202,7 @@ public class PTAModelChecker extends PrismComponent
 		exprTemp = (ExpressionTemporal) expr.getExpression();
 		if (exprTemp.getOperator() != ExpressionTemporal.P_F || !exprTemp.isSimplePathFormula())
 			throw new PrismException("PTA model checking currently only supports the F path operator (try the digital clocks engine instead)");
-		
+
 		// Determine locations satisfying target
 		exprTarget = exprTemp.getOperand2();
 		targetLocs = checkLocationExpression(exprTarget);

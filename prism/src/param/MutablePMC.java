@@ -40,7 +40,8 @@ import java.util.ListIterator;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see StateEliminator
  */
-final class MutablePMC {
+final class MutablePMC
+{
 	/** function factory to which functions in this object belong */
 	private FunctionFactory functionFactory;
 	/** assignment of rewards to each state */
@@ -72,12 +73,13 @@ final class MutablePMC {
 	 * @param useRewards true iff parametric Markov chain constructed shall use rewards
 	 * @param useTime true iff parametric Markov chain constructed needs time entry
 	 */
-	MutablePMC(FunctionFactory functionFactory, int numStates, boolean useRewards, boolean useTime) {
+	MutablePMC(FunctionFactory functionFactory, int numStates, boolean useRewards, boolean useTime)
+	{
 		this.numStates = numStates;
 		this.functionFactory = functionFactory;
 		transitionProbs = new ArrayList<LinkedList<Function>>(numStates);
 		transitionTargets = new ArrayList<LinkedList<Integer>>(numStates);
-		incoming = new ArrayList<LinkedList<Integer>>(numStates);		
+		incoming = new ArrayList<LinkedList<Integer>>(numStates);
 		for (int state = 0; state < numStates; state++) {
 			transitionTargets.add(new LinkedList<Integer>());
 			transitionProbs.add(new LinkedList<Function>());
@@ -100,7 +102,7 @@ final class MutablePMC {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns function factory maintaining functions used in this object.
 	 * 
@@ -110,7 +112,7 @@ final class MutablePMC {
 	{
 		return functionFactory;
 	}
-	
+
 	/**
 	 * Adds a probabilistic transition.
 	 * 
@@ -137,7 +139,7 @@ final class MutablePMC {
 			incoming.get(to).add(from);
 		}
 	}
-	
+
 	/**
 	 * Returns the probability of a given transition
 	 * 
@@ -149,7 +151,7 @@ final class MutablePMC {
 	{
 		Function prob = null;
 		ListIterator<Integer> toIter = transitionTargets.get(from).listIterator();
-		ListIterator<Function> valIter = transitionProbs.get(from).listIterator();		
+		ListIterator<Function> valIter = transitionProbs.get(from).listIterator();
 		while (toIter.hasNext()) {
 			int succ = toIter.next();
 			Function succProb = valIter.next();
@@ -158,14 +160,14 @@ final class MutablePMC {
 				break;
 			}
 		}
-		
+
 		if (prob == null) {
 			prob = functionFactory.getZero();
 		}
-		
+
 		return prob;
 	}
-	
+
 	/**
 	 * Returns probability of the self-loop in a given state.
 	 * 
@@ -175,9 +177,9 @@ final class MutablePMC {
 	Function getSelfLoopProb(int state)
 	{
 		Function loopProb = null;
-		
+
 		ListIterator<Integer> toIter = transitionTargets.get(state).listIterator();
-		ListIterator<Function> valIter = transitionProbs.get(state).listIterator();		
+		ListIterator<Function> valIter = transitionProbs.get(state).listIterator();
 		while (toIter.hasNext()) {
 			int to = toIter.next();
 			Function val = valIter.next();
@@ -189,10 +191,10 @@ final class MutablePMC {
 		if (loopProb == null) {
 			loopProb = functionFactory.getZero();
 		}
-		
+
 		return loopProb;
 	}
-	
+
 	/**
 	 * Makes a given state absorbing.
 	 * This means removing all leaving transitions and adding a self-loop
@@ -231,7 +233,7 @@ final class MutablePMC {
 	{
 		targetStates.set(state, targetState);
 	}
-	
+
 	/**
 	 * Set reward of a given state.
 	 * 
@@ -264,7 +266,7 @@ final class MutablePMC {
 	{
 		return times[state];
 	}
-	
+
 	/**
 	 * Checks whether given state is a target state.
 	 * 
@@ -285,7 +287,7 @@ final class MutablePMC {
 	{
 		return targetStates.cardinality() != 0;
 	}
-	
+
 	/**
 	 * Checks whether given state is an initial state.
 	 * 
@@ -307,7 +309,7 @@ final class MutablePMC {
 	{
 		return rewards[state];
 	}
-	
+
 	/**
 	 * Returns number of states.
 	 * 
@@ -317,7 +319,7 @@ final class MutablePMC {
 	{
 		return numStates;
 	}
-	
+
 	/**
 	 * Returns whether pmc uses rewards.
 	 * 
@@ -327,7 +329,7 @@ final class MutablePMC {
 	{
 		return useRewards;
 	}
-	
+
 	/**
 	 * Returns whether pmc uses time.
 	 * 
@@ -337,7 +339,7 @@ final class MutablePMC {
 	{
 		return useTime;
 	}
-	
+
 	/*
 	@Override
 	public String toString()

@@ -189,12 +189,8 @@ public class DebugJDD
 
 		public String toStringVerbose()
 		{
-			return "ID = " + getID()
-			       + ", CUDD ptr = " + ptrAsHex()
-			       + ", refs for this JDDNode = " + getNodeRefs()
-			       + ", refs from Java = " + getJavaRefCount(ptr())
-			       + ", refs from CUDD (including internal MTBDD refs) = "
-			       + DebugJDD_GetRefCount(ptr());
+			return "ID = " + getID() + ", CUDD ptr = " + ptrAsHex() + ", refs for this JDDNode = " + getNodeRefs() + ", refs from Java = "
+					+ getJavaRefCount(ptr()) + ", refs from CUDD (including internal MTBDD refs) = " + DebugJDD_GetRefCount(ptr());
 		}
 
 		public String ptrAsHex()
@@ -203,14 +199,14 @@ public class DebugJDD
 		}
 	}
 
-	
 	/**
 	 * A "light-weight" DebugJDDNode, for marking JDDNodes
 	 * that have been obtained by a call from getThen()/getElse()
 	 * and thus don't take part in the usual reference counting
 	 * scheme.
 	 */
-	protected static class DebugJDDNodeLight extends JDDNode {
+	protected static class DebugJDDNodeLight extends JDDNode
+	{
 		/**
 		 * Constructor, with DdNode* ptr.
 		 * <br>
@@ -341,8 +337,8 @@ public class DebugJDD
 				}
 			}
 
-			System.out.println("DdNode ptr=0x" + Long.toHexString(ptr)
-			                   + ", " + nodeInfo(ptr) + " has " + extRef.getValue() + " remaining external references.");
+			System.out
+					.println("DdNode ptr=0x" + Long.toHexString(ptr) + ", " + nodeInfo(ptr) + " has " + extRef.getValue() + " remaining external references.");
 			if (posRefNodes.size() > 0) {
 				System.out.println(" Candidates:");
 				for (DebugJDDNode node : posRefNodes) {
@@ -412,9 +408,8 @@ public class DebugJDD
 	/** Log information about the action performed on the DebugJDDNode */
 	private static void trace(String action, DebugJDDNode dNode)
 	{
-		System.out.println("\ntrace(" + action
-		                   + ", ID=" + dNode.getID() + ") => " + dNode.getNodeRefs()
-		                   + " refs for this JDDNode\n " + dNode.toStringVerbose());
+		System.out
+				.println("\ntrace(" + action + ", ID=" + dNode.getID() + ") => " + dNode.getNodeRefs() + " refs for this JDDNode\n " + dNode.toStringVerbose());
 		printStack(0);
 	}
 
@@ -457,7 +452,8 @@ public class DebugJDD
 	protected static void Ref(JDDNode node)
 	{
 		if (node instanceof DebugJDDNodeLight) {
-			throw new RuntimeException("DebugJDD: Illegal operation, trying to reference a light-weight JDDNode (obtained from getThen()/getElse()) directly. Use copy() instead");			
+			throw new RuntimeException(
+					"DebugJDD: Illegal operation, trying to reference a light-weight JDDNode (obtained from getThen()/getElse()) directly. Use copy() instead");
 		}
 
 		if (!(node instanceof DebugJDDNode)) {
@@ -487,7 +483,8 @@ public class DebugJDD
 	protected static void Deref(JDDNode node)
 	{
 		if (node instanceof DebugJDDNodeLight) {
-			throw new RuntimeException("DebugJDD: Illegal operation, trying to dereference a light-weight JDDNode (obtained from getThen()/getElse()) directly");			
+			throw new RuntimeException(
+					"DebugJDD: Illegal operation, trying to dereference a light-weight JDDNode (obtained from getThen()/getElse()) directly");
 		}
 
 		if (!(node instanceof DebugJDDNode)) {
@@ -643,7 +640,8 @@ public class DebugJDD
 	protected static void DD_Method_Argument(JDDNode node)
 	{
 		if (node instanceof DebugJDDNodeLight) {
-			throw new RuntimeException("DebugJDD: Illegal operation, trying to use a light-weight JDDNode (obtained from getThen()/getElse()) in a method call");			
+			throw new RuntimeException(
+					"DebugJDD: Illegal operation, trying to use a light-weight JDDNode (obtained from getThen()/getElse()) in a method call");
 		}
 		if (!(node instanceof DebugJDDNode)) {
 			// using a node that is not wrapped in a DebugJDDNode, but when debugging is
@@ -691,7 +689,7 @@ public class DebugJDD
 				throw new RuntimeException("getThen: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
 			}
 		}
- 		return new DebugJDDNodeLight(ptr);
+		return new DebugJDDNodeLight(ptr);
 	}
 
 	/**
@@ -717,7 +715,7 @@ public class DebugJDD
 				throw new RuntimeException("getElse: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
 			}
 		}
- 		return new DebugJDDNodeLight(ptr);
+		return new DebugJDDNodeLight(ptr);
 	}
 
 	/**

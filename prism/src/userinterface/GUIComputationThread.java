@@ -35,14 +35,14 @@ public class GUIComputationThread extends Thread
 {
 	protected GUIPlugin plug;
 	protected Prism prism;
-	
+
 	/** Creates a new instance of GUIComputationThread */
 	public GUIComputationThread(GUIPlugin plug)
 	{
 		this.plug = plug;
 		prism = plug.getPrism();
 	}
-	
+
 	/** Report an error (in log and popup dialog) */
 	public void error(String s)
 	{
@@ -54,11 +54,11 @@ public class GUIComputationThread extends Thread
 	public void error(Exception e)
 	{
 		if (e instanceof jdd.JDD.CuddOutOfMemoryException) {
-			error(e.getMessage()+".\nTry increasing the value of \"CUDD max. memory\" in the options and then restart PRISM");
+			error(e.getMessage() + ".\nTry increasing the value of \"CUDD max. memory\" in the options and then restart PRISM");
 		} else if (e instanceof PrismException) {
 			error(e.getMessage());
 		} else {
-			error(e.toString()+"\nThis is an unexpected error, it might be a good idea to restart PRISM");
+			error(e.toString() + "\nThis is an unexpected error, it might be a good idea to restart PRISM");
 		}
 	}
 
@@ -74,30 +74,96 @@ public class GUIComputationThread extends Thread
 		if (e instanceof PrismException || e instanceof jdd.JDD.CuddOutOfMemoryException) {
 			logln("\nError: " + e.getMessage() + ".");
 		} else {
-			logln("\nError: " + e.toString() +".");
+			logln("\nError: " + e.toString() + ".");
 		}
 	}
 
-	
 	// send messages to log
-	public void log(Object o) { plug.log(o); }
-	public void log(int i) { plug.log(i); }
-	public void log(double d) { plug.log(d); }
-	public void log(float f) { plug.log(f); }
-	public void log(short s) { plug.log(s); }
-	public void log(byte b) { plug.log(b); }
-	public void log(boolean b) { plug.log(b); }
-	public void logln() { plug.logln(); }
-	public void logln(Object o) { plug.logln(o); }
-	public void logln(int i) { plug.logln(i); }
-	public void logln(double d) { plug.logln(d); }
-	public void logln(float f) { plug.logln(f); }
-	public void logln(short s) { plug.logln(s); }
-	public void logln(byte b) { plug.logln(b); }
-	public void logln(boolean b) { plug.logln(b); }
-	public void logSeparator() { plug.logSeparator(); }
-	public void logWarning(String s) { plug.logWarning(s); }
-	
+	public void log(Object o)
+	{
+		plug.log(o);
+	}
+
+	public void log(int i)
+	{
+		plug.log(i);
+	}
+
+	public void log(double d)
+	{
+		plug.log(d);
+	}
+
+	public void log(float f)
+	{
+		plug.log(f);
+	}
+
+	public void log(short s)
+	{
+		plug.log(s);
+	}
+
+	public void log(byte b)
+	{
+		plug.log(b);
+	}
+
+	public void log(boolean b)
+	{
+		plug.log(b);
+	}
+
+	public void logln()
+	{
+		plug.logln();
+	}
+
+	public void logln(Object o)
+	{
+		plug.logln(o);
+	}
+
+	public void logln(int i)
+	{
+		plug.logln(i);
+	}
+
+	public void logln(double d)
+	{
+		plug.logln(d);
+	}
+
+	public void logln(float f)
+	{
+		plug.logln(f);
+	}
+
+	public void logln(short s)
+	{
+		plug.logln(s);
+	}
+
+	public void logln(byte b)
+	{
+		plug.logln(b);
+	}
+
+	public void logln(boolean b)
+	{
+		plug.logln(b);
+	}
+
+	public void logSeparator()
+	{
+		plug.logSeparator();
+	}
+
+	public void logWarning(String s)
+	{
+		plug.logWarning(s);
+	}
+
 	/** pop up an error dialog */
 	public void errorDialog(String s)
 	{

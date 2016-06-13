@@ -60,7 +60,7 @@ public class BirthProcess
 	/* whether to try to avoid birth process computations in
 	 * case all rates are the same
 	 */
-	boolean avoidBirthComputation; 
+	boolean avoidBirthComputation;
 
 	/**
 	 * Construct birth process.
@@ -181,7 +181,7 @@ public class BirthProcess
 			}
 			avoidBirthComputation = false;
 		}
-		
+
 		if (null == probs || recompute) {
 			initPoisson();
 		}
@@ -192,7 +192,7 @@ public class BirthProcess
 			}
 		} else {
 			if (avoidBirthComputation) {
-			    result = (stageNr < probs.length) ? probs[stageNr] : 0.0;
+				result = (stageNr < probs.length) ? probs[stageNr] : 0.0;
 				stageNr++;
 			} else {
 				result = compNextStageProb(rate);
@@ -205,7 +205,7 @@ public class BirthProcess
 
 	private double compNextStageProb(double rate)
 	{
-		assert(rate > 0.0);
+		assert (rate > 0.0);
 		double prob = rate / unifRate; // p = r / q
 		double omprob = 1.0 - prob; // 1-p
 		double result = 0.0;

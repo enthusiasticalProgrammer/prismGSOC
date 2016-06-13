@@ -37,13 +37,15 @@ import java.util.HashSet;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class NullLumper extends Lumper {
+final class NullLumper extends Lumper
+{
 
 	/**
 	 * Creates a new identity bisimulation lumper for given Markov chain.
 	 * @param origPmc parametric Markov chain to create lumper for
 	 */
-	NullLumper(MutablePMC origPmc) {
+	NullLumper(MutablePMC origPmc)
+	{
 		this.origPmc = origPmc;
 		this.optPmc = origPmc;
 	}
@@ -52,15 +54,16 @@ final class NullLumper extends Lumper {
 	 * Does not have to do anything.
 	 */
 	@Override
-	protected void refineBlock(HashSet<Integer> oldBlock,
-			ArrayList<HashSet<Integer>> newBlocks) {
+	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks)
+	{
 	}
 
 	/**
 	 * Does not have to do anything.
 	 */
 	@Override
-	protected void buildQuotient() {
+	protected void buildQuotient()
+	{
 	}
 
 	/**
@@ -69,7 +72,8 @@ final class NullLumper extends Lumper {
 	 * @return identity mapping
 	 */
 	@Override
-	int[] getOriginalToOptimised() {
+	int[] getOriginalToOptimised()
+	{
 		int[] result = new int[origPmc.getNumStates()];
 		for (int state = 0; state < result.length; state++) {
 			result[state] = state;

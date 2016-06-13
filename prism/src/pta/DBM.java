@@ -235,7 +235,7 @@ public class DBM extends Zone
 	}
 
 	// Zone operations (create new zone)
-	
+
 	/**
 	 * Complement this DBM; creates a new DBM list as result.
 	 */
@@ -267,7 +267,7 @@ public class DBM extends Zone
 	}
 
 	// Zone queries (do not modify the zone)
-	
+
 	/**
 	 * Is this zone empty (i.e. inconsistent)?
 	 */
@@ -310,7 +310,7 @@ public class DBM extends Zone
 	{
 		return -DB.getSignedDiff(d[0][x]);
 	}
-	
+
 	/**
 	 * Get the maximum value of a clock. 
 	 */
@@ -318,7 +318,7 @@ public class DBM extends Zone
 	{
 		return DB.getSignedDiff(d[x][0]);
 	}
-	
+
 	/**
 	 * Check if a clock is unbounded (can be infinite).
 	 */
@@ -326,7 +326,7 @@ public class DBM extends Zone
 	{
 		return DB.isInfty(d[x][0]);
 	}
-	
+
 	/**
 	 * Check if all clocks are unbounded (can be infinite).
 	 */
@@ -341,9 +341,9 @@ public class DBM extends Zone
 		}
 		return true;
 	}
-	
+
 	// Misc
-	
+
 	/**
 	 * Clone this zone
 	 */

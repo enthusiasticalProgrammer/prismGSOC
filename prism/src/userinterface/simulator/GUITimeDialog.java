@@ -36,7 +36,7 @@ import userinterface.*;
 public class GUITimeDialog extends JDialog
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	//ATTRIBUTES    
 	private double time;
 	private boolean cancelled;

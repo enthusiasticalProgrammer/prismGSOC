@@ -44,7 +44,8 @@ import jdd.JDDVars;
  *  Fin(states)  <=> F G !states
  *  Fin(!states) <=> F G states
  */
-public class AcceptanceGenericDD implements AcceptanceOmegaDD {
+public class AcceptanceGenericDD implements AcceptanceOmegaDD
+{
 
 	private ElementType kind;
 	private AcceptanceGenericDD left = null;
@@ -53,29 +54,29 @@ public class AcceptanceGenericDD implements AcceptanceOmegaDD {
 
 	public AcceptanceGenericDD(AcceptanceGeneric acceptance, JDDVars ddRowVars)
 	{
-		switch(acceptance.getKind()) {
-			case AND:
-			case OR:
-				kind = acceptance.getKind();
-				left = (AcceptanceGenericDD) acceptance.getLeft().toAcceptanceDD(ddRowVars);
-				right = (AcceptanceGenericDD) acceptance.getRight().toAcceptanceDD(ddRowVars);
-				return;
-			case TRUE:
-				kind = ElementType.TRUE;
-				return;
-			case FALSE:
-				kind = ElementType.FALSE;
-				return;
-			case INF:
-			case INF_NOT:
-			case FIN:
-			case FIN_NOT:
-				kind = acceptance.getKind();
-				states = JDD.Constant(0);
-				for (int i : IterableBitSet.getSetBits(acceptance.getStates())) {
-					states = JDD.SetVectorElement(states, ddRowVars, i, 1.0);
-				}
-				return;
+		switch (acceptance.getKind()) {
+		case AND:
+		case OR:
+			kind = acceptance.getKind();
+			left = (AcceptanceGenericDD) acceptance.getLeft().toAcceptanceDD(ddRowVars);
+			right = (AcceptanceGenericDD) acceptance.getRight().toAcceptanceDD(ddRowVars);
+			return;
+		case TRUE:
+			kind = ElementType.TRUE;
+			return;
+		case FALSE:
+			kind = ElementType.FALSE;
+			return;
+		case INF:
+		case INF_NOT:
+		case FIN:
+		case FIN_NOT:
+			kind = acceptance.getKind();
+			states = JDD.Constant(0);
+			for (int i : IterableBitSet.getSetBits(acceptance.getStates())) {
+				states = JDD.SetVectorElement(states, ddRowVars, i, 1.0);
+			}
+			return;
 		}
 		throw new UnsupportedOperationException("Unsupported operatator in generic acceptance condition");
 	}
@@ -112,14 +113,14 @@ public class AcceptanceGenericDD implements AcceptanceOmegaDD {
 	@Override
 	public boolean isBSCCAccepting(JDDNode bscc)
 	{
-		switch(kind) {
-		case TRUE: 
+		switch (kind) {
+		case TRUE:
 			return true;
-		case FALSE: 
+		case FALSE:
 			return false;
-		case AND: 
+		case AND:
 			return left.isBSCCAccepting(bscc) && right.isBSCCAccepting(bscc);
-		case OR: 
+		case OR:
 			return left.isBSCCAccepting(bscc) || right.isBSCCAccepting(bscc);
 		case INF:
 			// bscc |= G F states?
@@ -144,63 +145,70 @@ public class AcceptanceGenericDD implements AcceptanceOmegaDD {
 	}
 
 	@Override
-	public String getSizeStatistics() {
+	public String getSizeStatistics()
+	{
 		return "generic acceptance with " + countAcceptanceSets() + " acceptance sets";
 	}
 
 	@Override
-	public AcceptanceType getType() {
+	public AcceptanceType getType()
+	{
 		return AcceptanceType.GENERIC;
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 
 	@Override
-	public void clear() {
+	public void clear()
+	{
 		switch (kind) {
-			case TRUE:
-			case FALSE:
-				return;
-			case AND:
-			case OR:
-				left.clear();
-				right.clear();
-				return;
-			case INF_NOT:
-			case FIN:
-			case FIN_NOT:
-			case INF:
-				if (states != null) JDD.Deref(states);
-				states = null;
-				return;
+		case TRUE:
+		case FALSE:
+			return;
+		case AND:
+		case OR:
+			left.clear();
+			right.clear();
+			return;
+		case INF_NOT:
+		case FIN:
+		case FIN_NOT:
+		case INF:
+			if (states != null)
+				JDD.Deref(states);
+			states = null;
+			return;
 		}
 		throw new UnsupportedOperationException("Unsupported operator in generic acceptance expression");
 	}
 
 	/** Count the number of state sets in this acceptance condition */
-	public int countAcceptanceSets() {
-		switch(kind) {
-			case FALSE:
-			case TRUE:
-				return 0;
-			case INF:
-			case FIN: 
-			case INF_NOT:
-			case FIN_NOT:
-				return 1;
-			case OR:
-			case AND: 
-				return left.countAcceptanceSets() + right.countAcceptanceSets();
+	public int countAcceptanceSets()
+	{
+		switch (kind) {
+		case FALSE:
+		case TRUE:
+			return 0;
+		case INF:
+		case FIN:
+		case INF_NOT:
+		case FIN_NOT:
+			return 1;
+		case OR:
+		case AND:
+			return left.countAcceptanceSets() + right.countAcceptanceSets();
 		}
 		throw new UnsupportedOperationException("Unsupported operator in generic acceptance expression");
 	}

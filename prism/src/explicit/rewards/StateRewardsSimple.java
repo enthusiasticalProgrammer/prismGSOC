@@ -97,7 +97,7 @@ public class StateRewardsSimple extends StateRewards
 	}
 
 	// Converters
-	
+
 	@Override
 	public StateRewards liftFromModel(Product<? extends Model> product)
 	{
@@ -109,7 +109,7 @@ public class StateRewardsSimple extends StateRewards
 		}
 		return rewardsProd;
 	}
-	
+
 	// Other
 
 	@Override

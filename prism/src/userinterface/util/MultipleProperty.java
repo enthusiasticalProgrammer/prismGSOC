@@ -36,76 +36,69 @@ import javax.swing.*;
  */
 public class MultipleProperty
 {
-    private ArrayList<SingleProperty> properties;
-    
-    /** Creates a new instance of MultipleProperty */
-    public MultipleProperty(ArrayList<SingleProperty> properties)
-    {
-        this.properties = properties;
-    }
-    
-    public boolean isMultiline()
-    {
-        return getProperty(0).isMultiline();
-    }
-    
-    public SingleProperty getProperty(int i)
-    {
-        return properties.get(i);
-    }
-    
-    public int getNumProperties()
-    {
-        return properties.size();
-    }
-    
-    public boolean allTheSame()
-    {
-        String value = getProperty(0).toString();
-        
-        for(int i = 1; i < getNumProperties(); i++)
-        {
-            String temp = getProperty(i).toString();
-            if(!temp.equals(value))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    public String toString()
-    {
-        
-        String value = getProperty(0).toString();
-        
-        for(int i = 1; i < getNumProperties(); i++)
-        {
-            String temp = getProperty(i).toString();
-            if(!temp.equals(value))
-            {
-                value = "...";
-                break;
-            }
-        }
-        return value;
-    }
-    
-    public Component getTableCellRendererComponentMulti(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column)
-    {
-        return getProperty(0).getTableCellRendererComponentMulti(table, value, isSelected, hasFocus, row, column, allTheSame());
-    }
-    
-    /**
-     * Getter for property properties.
-     * @return Value of property properties.
-     */
-    public ArrayList<SingleProperty> getProperties()
-    {
-        return properties;
-    }
-    
-    
-    
+	private ArrayList<SingleProperty> properties;
+
+	/** Creates a new instance of MultipleProperty */
+	public MultipleProperty(ArrayList<SingleProperty> properties)
+	{
+		this.properties = properties;
+	}
+
+	public boolean isMultiline()
+	{
+		return getProperty(0).isMultiline();
+	}
+
+	public SingleProperty getProperty(int i)
+	{
+		return properties.get(i);
+	}
+
+	public int getNumProperties()
+	{
+		return properties.size();
+	}
+
+	public boolean allTheSame()
+	{
+		String value = getProperty(0).toString();
+
+		for (int i = 1; i < getNumProperties(); i++) {
+			String temp = getProperty(i).toString();
+			if (!temp.equals(value)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String toString()
+	{
+
+		String value = getProperty(0).toString();
+
+		for (int i = 1; i < getNumProperties(); i++) {
+			String temp = getProperty(i).toString();
+			if (!temp.equals(value)) {
+				value = "...";
+				break;
+			}
+		}
+		return value;
+	}
+
+	public Component getTableCellRendererComponentMulti(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
+		return getProperty(0).getTableCellRendererComponentMulti(table, value, isSelected, hasFocus, row, column, allTheSame());
+	}
+
+	/**
+	 * Getter for property properties.
+	 * @return Value of property properties.
+	 */
+	public ArrayList<SingleProperty> getProperties()
+	{
+		return properties;
+	}
+
 }

@@ -24,7 +24,6 @@
 //	
 //==============================================================================
 
-
 package parser.visitor;
 
 import java.util.HashMap;
@@ -47,7 +46,7 @@ public class ReplaceLabels extends ASTTraverseModify
 	/** Constructor for a single replacement */
 	public ReplaceLabels(String labelFrom, String labelTo)
 	{
-		replacements = new HashMap<String,String>();
+		replacements = new HashMap<String, String>();
 		replacements.put(labelFrom, labelTo);
 	}
 

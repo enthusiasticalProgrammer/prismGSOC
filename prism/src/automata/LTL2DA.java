@@ -102,7 +102,7 @@ public class LTL2DA extends PrismComponent
 				// checking the library first
 				result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
 				if (result != null) {
-					getLog().println("Taking "+result.getAutomataType()+" from library...");
+					getLog().println("Taking " + result.getAutomataType() + " from library...");
 				}
 			} catch (Exception e) {
 				if (containsTemporalBounds) {
@@ -225,10 +225,10 @@ public class LTL2DA extends PrismComponent
 				}
 			}
 			if (rv != 0) {
-				throw new PrismException("Call to external LTL->DA tool failed, return value = " + rv + ".\n"
-						+ "To investigate, please consult the following files:" + "\n LTL formula:                     " + ltl_file.getAbsolutePath()
-						+ "\n Automaton output:                " + da_file.getAbsolutePath() + "\n Tool output (stdout and stderr): "
-						+ tool_output.getAbsolutePath() + "\n");
+				throw new PrismException(
+						"Call to external LTL->DA tool failed, return value = " + rv + ".\n" + "To investigate, please consult the following files:"
+								+ "\n LTL formula:                     " + ltl_file.getAbsolutePath() + "\n Automaton output:                "
+								+ da_file.getAbsolutePath() + "\n Tool output (stdout and stderr): " + tool_output.getAbsolutePath() + "\n");
 			}
 
 			tool_output.delete();

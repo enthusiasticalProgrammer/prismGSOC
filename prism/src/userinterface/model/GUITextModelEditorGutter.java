@@ -78,7 +78,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	/** Colour of the border between the panel and the text pane. */
 	private final static Color BORDER_COLOR = Color.GRAY;
 	/** Colour of the background of the panel. */
-	private final static Color BACKGROUND_COLOR = new Color(204,204,204);
+	private final static Color BACKGROUND_COLOR = new Color(204, 204, 204);
 	/** The top padding for the text pane. */
 	private int textPaneTopPadding;
 	/** The distance from the text's baseline to the top of most 
@@ -127,29 +127,27 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		}
 		this.textPane = textPane;
 		setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, BORDER_COLOR));
-		
+
 		updatePaintingCache();
 		textPane.addPropertyChangeListener(this);
 		textPane.getDocument().addDocumentListener(this);
-		
+
 		this.setToolTipText("dummy");
-	}	
+	}
 
 	@Override
-	public String getToolTipText(MouseEvent event) 
+	public String getToolTipText(MouseEvent event)
 	{
-		if (errorMessages != null)
-		{
+		if (errorMessages != null) {
 			int y = event.getY();
-			
+
 			int line = lineHeights.getIndex(y);
-			if (errorMessages.containsKey(line+1))
-				return errorMessages.get(line+1);
+			if (errorMessages.containsKey(line + 1))
+				return errorMessages.get(line + 1);
 			else
-				return null;				
-		}
-		else
-			return null;	
+				return null;
+		} else
+			return null;
 	}
 
 	/**
@@ -159,7 +157,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	{
 		return new Dimension(panelWidth, textPane.getHeight());
 	}
-	
+
 	public void paintComponent(Graphics g)
 	{
 		// Draw the background of the panel.
@@ -167,7 +165,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		g.setColor(BACKGROUND_COLOR);
 		g.fillRect(drawArea.x, drawArea.y, panelWidth, drawArea.height);
 		g.setColor(getForeground());
-		
+
 		// Work out which line numbers to draw. Only want the line
 		// numbers that are currently visible.
 		int base = drawArea.y - textPaneTopPadding;
@@ -180,34 +178,31 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 			numberText = String.valueOf(i + 1);
 			int x = PADDING_LEFT + requiredLineNumbersWidth - fontMetrics.stringWidth(numberText);
 			int y = lineHeights.getPosition(i) + textFontAscent + textPaneTopPadding;
-			
+
 			boolean isErrorLine = false;
-			
-			if (errorMessages != null)
-			{
-				if (errorMessages.containsKey(new Integer(i+1)))
+
+			if (errorMessages != null) {
+				if (errorMessages.containsKey(new Integer(i + 1)))
 					isErrorLine = true;
 			}
-			
+
 			g.setColor(Color.black);
 			g.drawString(numberText, x, y);
-			
-			
-			
+
 			// If a parsing error has occurred on this line then display
 			// the error icon.
-			
+
 			if (isErrorLine)
-				g.drawImage(errorIcon.getImage(), drawArea.x, lineHeights.getPosition(i) + 3, errorIcon.getImageObserver());			
+				g.drawImage(errorIcon.getImage(), drawArea.x, lineHeights.getPosition(i) + 3, errorIcon.getImageObserver());
 		}
 	}
-	
+
 	/** Property change listener for the text component, e.g. the font or tab size. */
 	public void propertyChange(PropertyChangeEvent event)
 	{
 		Object oldValue = event.getOldValue();
 		Object newValue = event.getNewValue();
-		
+
 		// If the document has changed, reset the document listeners.
 		if ("document".equals(event.getPropertyName())) {
 			if (oldValue != null && oldValue instanceof Document) {
@@ -217,7 +212,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 				((Document) newValue).addDocumentListener(this);
 			}
 		}
-		
+
 		updatePaintingCache();
 		// The property change affects the whole document so the whole panel
 		// gets redrawn.
@@ -247,8 +242,8 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 	{
 		// This event is covered by the insert and delete listeners, 
 		// so it's not implemented.
-	}	
-	
+	}
+
 	/** Returns the height of the given line in the text pane.
 	 * 
 	 * @param lineNumber The line number
@@ -272,7 +267,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		}
 		return height;
 	}
-	
+
 	/* Copied from javax.swing.text.PlainDocument */
 	private int getAdjustedLineCount()
 	{
@@ -289,7 +284,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 
 		return count - 1;
 	}
-	
+
 	/** Updates the line heights, if needed. */
 	private void updateLineHeights()
 	{
@@ -323,7 +318,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		updateLineHeights();
 		lineCount = getAdjustedLineCount();
 		textPaneTopPadding = textPane.getInsets().top;
-		
+
 		// Update the font info
 		setFont(textPane.getFont());
 		fontMetrics = getFontMetrics(getFont());
@@ -345,7 +340,7 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		DocumentEvent.ElementChange change = event.getChange(rootElement);
 		updatePanel(line, change != null);
 	}
-	
+
 	/** Update the panel as a result of a change in the document.
 	 * 
 	 * @param updateLine The line that was updated.
@@ -360,21 +355,57 @@ public class GUITextModelEditorGutter extends JPanel implements PropertyChangeLi
 		revalidate();
 		repaint();
 	}
-	
+
 	// ----- Methods required by GUIPlugin but not needed. -----
 
-	public boolean displaysTab() {return false;}
-	public JMenu getMenu() {return null;}
-	public OptionsPanel getOptions() {return null;}
-	public String getTabText() {return null;}
-	public JToolBar getToolBar() {return null;}
-	public String getXMLIDTag() {return null;}
-	public Object getXMLSaveTree() {return null;}
-	public void loadXML(Object c) {}
-	public void takeCLArgs(String[] args) {}
-	public void notifySettings(PrismSettings settings) {}
+	public boolean displaysTab()
+	{
+		return false;
+	}
 
-	public void setParseErrors(Map<Integer, String> errorLines) 
+	public JMenu getMenu()
+	{
+		return null;
+	}
+
+	public OptionsPanel getOptions()
+	{
+		return null;
+	}
+
+	public String getTabText()
+	{
+		return null;
+	}
+
+	public JToolBar getToolBar()
+	{
+		return null;
+	}
+
+	public String getXMLIDTag()
+	{
+		return null;
+	}
+
+	public Object getXMLSaveTree()
+	{
+		return null;
+	}
+
+	public void loadXML(Object c)
+	{
+	}
+
+	public void takeCLArgs(String[] args)
+	{
+	}
+
+	public void notifySettings(PrismSettings settings)
+	{
+	}
+
+	public void setParseErrors(Map<Integer, String> errorLines)
 	{
 		this.errorMessages = errorLines;
 		repaint();

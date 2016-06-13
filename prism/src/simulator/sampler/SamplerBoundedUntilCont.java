@@ -68,7 +68,7 @@ public class SamplerBoundedUntilCont extends SamplerBoolean
 		// If the answer is already known we should do nothing
 		if (valueKnown)
 			return true;
-		
+
 		// For continuous-time bounded until, we may need to look back at previous state.
 		// So, treat first/subsequent calls to update() differently. 
 
@@ -143,10 +143,10 @@ public class SamplerBoundedUntilCont extends SamplerBoolean
 				// Otherwise, don't know
 			}
 		}
-		
+
 		return valueKnown;
 	}
-	
+
 	@Override
 	public boolean needsBoundedNumSteps()
 	{

@@ -46,16 +46,15 @@ import jdd.JDDVars;
  * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceGenRabinDD
-       extends ArrayList<AcceptanceGenRabinDD.GenRabinPairDD>
-       implements AcceptanceOmegaDD
+public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabinPairDD> implements AcceptanceOmegaDD
 {
 
 	/**
 	 * A pair in a Generalized Rabin acceptance condition, i.e., with
 	 *  (F G !"L") & (G F "K_1") & ... & (G F "K_n").
 	 **/
-	public static class GenRabinPairDD {
+	public static class GenRabinPairDD
+	{
 		/** State set L (should be visited only finitely often) */
 		private JDDNode L;
 
@@ -75,7 +74,8 @@ public class AcceptanceGenRabinDD
 		/** Clear resources of the state sets */
 		public void clear()
 		{
-			if (L!=null) JDD.Deref(L);
+			if (L != null)
+				JDD.Deref(L);
 			for (JDDNode K_j : K_list)
 				JDD.Deref(K_j);
 		}
@@ -94,7 +94,7 @@ public class AcceptanceGenRabinDD
 		{
 			return K_list.size();
 		}
-		
+
 		/** Get a referenced copy of the state set K_j.
 		 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
 		 */
@@ -214,13 +214,15 @@ public class AcceptanceGenRabinDD
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 }

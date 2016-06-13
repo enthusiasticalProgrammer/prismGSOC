@@ -81,6 +81,7 @@ public class ResultsExporter
 				return this.toString();
 			}
 		}
+
 		public static ResultsExportDestination parse(String formatName)
 		{
 			switch (formatName) {
@@ -108,7 +109,7 @@ public class ResultsExporter
 	private String exportString = "";
 
 	// Methods to create and set up a ResultsExporter  
-	
+
 	public ResultsExporter()
 	{
 		setFormat(ResultsExportFormat.PLAIN);
@@ -157,7 +158,7 @@ public class ResultsExporter
 	{
 		this.destination = destination;
 	}
-	
+
 	public void setDestinationByName(String destinationName)
 	{
 		setDestination(ResultsExportDestination.parse(destinationName));
@@ -196,7 +197,7 @@ public class ResultsExporter
 
 	// Main interface for the actual export:
 	// methods to be called by the class that has the results
-	
+
 	/**
 	 * Start the export process.
 	 */
@@ -241,7 +242,7 @@ public class ResultsExporter
 		switch (format) {
 		case PLAIN:
 		case CSV:
-			String valuesString = values.toString(printNames, separator); 
+			String valuesString = values.toString(printNames, separator);
 			exportString += valuesString + (valuesString.length() > 0 ? equals : "") + result + "\n";
 			break;
 		case COMMENT:
@@ -253,7 +254,7 @@ public class ResultsExporter
 			exportString += ": " + result + "\n";
 		}
 	}
-	
+
 	/**
 	 * Finish the export process.
 	 */
@@ -261,7 +262,7 @@ public class ResultsExporter
 	{
 		// For "comment" format, print the property at the end, if present 
 		if (property != null && format == ResultsExportFormat.COMMENT) {
-			exportString +=  property.toString() + "\n";
+			exportString += property.toString() + "\n";
 		}
 		// If writing to a string, strip off last \n before returning 
 		if (destination == ResultsExportDestination.STRING) {

@@ -48,7 +48,7 @@ public class LocZone
 		// Time successor (up)
 		zone.up(pta.getInvariantConstraints(loc));
 	}
-	
+
 	/**
 	 * Do discrete part of post operation (wrt. an edge).
 	 */
@@ -60,7 +60,7 @@ public class LocZone
 			zone.addConstraint(c);
 		}
 		// Apply clock resets in edge
-		for (Map.Entry<Integer,Integer>e : edge.getResets()) {
+		for (Map.Entry<Integer, Integer> e : edge.getResets()) {
 			zone.reset(e.getKey(), e.getValue());
 		}
 		// Intersect with invariant of target location 
@@ -78,7 +78,7 @@ public class LocZone
 		// c-Closure
 		zone.cClosure(pta.getMaxClockConstraint());
 	}
-	
+
 	/**
 	 * Do time part of predecessor operation (not including c-closure).
 	 * Note: pta is passed in just for efficiency, could find it if we wanted.
@@ -88,7 +88,7 @@ public class LocZone
 		// Time predecessor (down)
 		zone.down(pta.getInvariantConstraints(loc));
 	}
-	
+
 	/**
 	 * dPre: discrete predecessor
 	 */
@@ -96,7 +96,7 @@ public class LocZone
 	{
 		Transition tr = edge.getParent();
 		// Backwards reset of clocks from edge
-		for (Map.Entry<Integer,Integer>e : edge.getResets()) {
+		for (Map.Entry<Integer, Integer> e : edge.getResets()) {
 			zone.backReset(e.getKey(), e.getValue());
 		}
 		// Intersect with guard of edge's transition's guard 
@@ -116,18 +116,19 @@ public class LocZone
 	{
 		return new LocZone(loc, zone.deepCopy());
 	}
-	
+
 	// Standard Java methods
 
 	public int hashCode()
 	{
 		return loc + zone.hashCode();
 	}
-	
+
 	public boolean equals(Object o)
 	{
 		LocZone lz;
-		if (o == null) return false;
+		if (o == null)
+			return false;
 		try {
 			lz = (LocZone) o;
 		} catch (ClassCastException e) {

@@ -40,7 +40,7 @@ public class SavePRISMModelThread extends Thread
 	private File f;
 	private GUIPlugin plug;
 	private Exception ex;
-	
+
 	/** Creates a new instance of SavePRISMModelThread */
 	public SavePRISMModelThread(File f, GUIMultiModelHandler handler, GUIModelEditor editor)
 	{
@@ -50,51 +50,58 @@ public class SavePRISMModelThread extends Thread
 		plug = handler.getGUIPlugin();
 		ex = null;
 	}
-	
+
 	public void run()
 	{
-		try
-		{
+		try {
 			//notify the interface of the start of computation and save the contents of editor
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				try
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
 				{
-					plug.startProgress();
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
-					plug.setTaskBarText("Saving model...");
-					((GUITextModelEditor)editor).write(new FileWriter(f));
+					try {
+						plug.startProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
+						plug.setTaskBarText("Saving model...");
+						((GUITextModelEditor) editor).write(new FileWriter(f));
+					} catch (IOException e) {
+						ex = e;
+					} catch (ClassCastException e) {
+						ex = e;
+					}
 				}
-				catch(IOException e)
-				{
-					ex = e;
-				}
-				catch(ClassCastException e)
-				{
-					ex = e;
-				}
-			}});
-			
+			});
+
 			//If there was a problem with the save, notify the interface.
-			if(ex != null) {
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					plug.stopProgress(); 
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
-					plug.setTaskBarText("Saving model... error.");
-					plug.error("Could not save to file \"" + f + "\"");
-				}});
+			if (ex != null) {
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						plug.stopProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
+						plug.setTaskBarText("Saving model... error.");
+						plug.error("Could not save to file \"" + f + "\"");
+					}
+				});
 				return;
 			}
-			
+
 			//If we get here, the save has been successful, notify the interface and tell the handler.
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				plug.stopProgress(); 
-				plug.setTaskBarText("Saving model... done.");
-				plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
-				handler.prismFileWasSaved(f);
-			}});
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
+				{
+					plug.stopProgress();
+					plug.setTaskBarText("Saving model... done.");
+					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
+					handler.prismFileWasSaved(f);
+				}
+			});
 		}
 		// catch and ignore any thread exceptions
-		catch (java.lang.InterruptedException e) {}
-		catch (java.lang.reflect.InvocationTargetException e) {}
+		catch (java.lang.InterruptedException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
 	}
 }

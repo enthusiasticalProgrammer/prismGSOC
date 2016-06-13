@@ -38,15 +38,11 @@ import jltl2dstar.APMonom;
 import jltl2dstar.NBA;
 import prism.PrismException;
 
-public class SimpleLTL {
+public class SimpleLTL
+{
 
-	public enum LTLType { 
-		FALSE, TRUE,
-		AP,
-		NOT, NEXT, 
-		OR, AND, EQUIV, IMPLIES,
-		UNTIL, RELEASE,
-		GLOBALLY, FINALLY
+	public enum LTLType {
+		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FINALLY
 	};
 
 	public SimpleLTL left;
@@ -83,7 +79,7 @@ public class SimpleLTL {
 			ap = null;
 			break;
 		default:
-		//	throw new PrismException("Trying to build invalid SimpleLTL");
+			//	throw new PrismException("Trying to build invalid SimpleLTL");
 		}
 	}
 
@@ -102,7 +98,7 @@ public class SimpleLTL {
 			ap = null;
 			break;
 		default:
-		//	throw new PrismException("Trying to build invalid SimpleLTL");
+			//	throw new PrismException("Trying to build invalid SimpleLTL");
 		}
 	}
 
@@ -112,7 +108,9 @@ public class SimpleLTL {
 		left = lft;
 		right = rgt;
 		ap = null;
-		if (prop != null) { ap = prop; }
+		if (prop != null) {
+			ap = prop;
+		}
 	}
 
 	public boolean equals(Object o)
@@ -121,21 +119,30 @@ public class SimpleLTL {
 			SimpleLTL other = (SimpleLTL) o;
 			if (kind == other.kind) {
 				switch (kind) {
-				case FALSE:case TRUE:
+				case FALSE:
+				case TRUE:
 					return true;
-				case NOT:case NEXT:case GLOBALLY:case FINALLY:
+				case NOT:
+				case NEXT:
+				case GLOBALLY:
+				case FINALLY:
 					return left.equals(other.left);
-				case OR:case AND:case EQUIV:case IMPLIES:case UNTIL:case RELEASE:
+				case OR:
+				case AND:
+				case EQUIV:
+				case IMPLIES:
+				case UNTIL:
+				case RELEASE:
 					return (left.equals(other.left) && right.equals(other.right));
 				case AP:
 					return ap.equals(other.ap);
 				default:
 					return false;
 				}
-			}
-			else return false;
-		}
-		else return false;
+			} else
+				return false;
+		} else
+			return false;
 	}
 
 	public APSet getAPs()
@@ -143,19 +150,25 @@ public class SimpleLTL {
 		APSet rv;
 
 		switch (kind) {
-		case NOT:case NEXT:
-		case GLOBALLY:case FINALLY:
+		case NOT:
+		case NEXT:
+		case GLOBALLY:
+		case FINALLY:
 			rv = left.getAPs();
 			break;
-		case OR:case AND:
-		case EQUIV:case IMPLIES:
-		case UNTIL:case RELEASE:
+		case OR:
+		case AND:
+		case EQUIV:
+		case IMPLIES:
+		case UNTIL:
+		case RELEASE:
 			rv = left.getAPs();
 			for (String s : right.getAPs())
 				rv.addAP(s);
 			break;
-			// terminals
-		case FALSE:case TRUE:
+		// terminals
+		case FALSE:
+		case TRUE:
 			rv = new APSet();
 			break;
 		case AP:
@@ -164,36 +177,25 @@ public class SimpleLTL {
 			break;
 		default:
 			rv = new APSet();
-		break;
+			break;
 		}
 		return rv;
 	}
 
 	public SimpleLTL clone()
 	{
-		SimpleLTL rv = new SimpleLTL(kind,
-				left != null ? left.clone() : null,
-						right != null ? right.clone() : null,
-								ap);
+		SimpleLTL rv = new SimpleLTL(kind, left != null ? left.clone() : null, right != null ? right.clone() : null, ap);
 		return rv;
 	}
 
 	private boolean implies(SimpleLTL b)
 	{
-		return
-		(this.equals(b) ||
-				b.kind == LTLType.TRUE ||
-				kind == LTLType.FALSE ||
-				(b.kind == LTLType.AND && this.implies(b.left) && this.implies(b.right)) ||
-				(kind == LTLType.OR && left.implies(b) && right.implies(b)) ||
-				(kind == LTLType.AND && (left.implies(b) || right.implies(b))) ||
-				(b.kind == LTLType.OR && (this.implies(b.left) || this.implies(b.right))) ||
-				(b.kind == LTLType.UNTIL && this.implies(b.right)) ||
-				(kind == LTLType.RELEASE && right.implies(b)) ||
-				(kind == LTLType.UNTIL && left.implies(b) && right.implies(b)) ||
-				(b.kind == LTLType.RELEASE && this.implies(b.left) && this.implies(b.right)) ||
-				((kind == LTLType.UNTIL || kind == LTLType.RELEASE) && kind == b.kind &&
-						left.implies(b.left) && right.implies(b.right)));
+		return (this.equals(b) || b.kind == LTLType.TRUE || kind == LTLType.FALSE || (b.kind == LTLType.AND && this.implies(b.left) && this.implies(b.right))
+				|| (kind == LTLType.OR && left.implies(b) && right.implies(b)) || (kind == LTLType.AND && (left.implies(b) || right.implies(b)))
+				|| (b.kind == LTLType.OR && (this.implies(b.left) || this.implies(b.right))) || (b.kind == LTLType.UNTIL && this.implies(b.right))
+				|| (kind == LTLType.RELEASE && right.implies(b)) || (kind == LTLType.UNTIL && left.implies(b) && right.implies(b))
+				|| (b.kind == LTLType.RELEASE && this.implies(b.left) && this.implies(b.right))
+				|| ((kind == LTLType.UNTIL || kind == LTLType.RELEASE) && kind == b.kind && left.implies(b.left) && right.implies(b.right)));
 	}
 
 	/**
@@ -210,16 +212,24 @@ public class SimpleLTL {
 		}
 		return this.simplified();
 	}
-	
+
 	private SimpleLTL simplified()
 	{
 		SimpleLTL tmp, tmp2, a, b;
 		SimpleLTL rv = this;
-		
+
 		switch (kind) {
-		case AND: case OR: case IMPLIES: case EQUIV: case UNTIL: case RELEASE:
+		case AND:
+		case OR:
+		case IMPLIES:
+		case EQUIV:
+		case UNTIL:
+		case RELEASE:
 			right = right.simplified();
-		case NOT: case NEXT: case FINALLY: case GLOBALLY:
+		case NOT:
+		case NEXT:
+		case FINALLY:
+		case GLOBALLY:
 			left = left.simplified();
 		}
 
@@ -228,15 +238,15 @@ public class SimpleLTL {
 			tmp = this.pushNegation();
 			if (tmp.kind != LTLType.NOT)
 				rv = tmp.simplified();
-			else rv = tmp;
+			else
+				rv = tmp;
 			break;
-			
+
 		case FINALLY:
 			if (left.kind == LTLType.TRUE || left.kind == LTLType.FALSE) {
 				rv = left;
 				break;
-			}
-			else if (left.kind == LTLType.UNTIL) {
+			} else if (left.kind == LTLType.UNTIL) {
 				if (left.left.kind == LTLType.TRUE) {
 					rv = left;
 					break;
@@ -252,13 +262,12 @@ public class SimpleLTL {
 			if (left.kind == LTLType.FALSE || left.kind == LTLType.TRUE) {
 				rv = left;
 				break;
-			}
-			else if (left.kind == LTLType.RELEASE) {
+			} else if (left.kind == LTLType.RELEASE) {
 				if (left.left.kind == LTLType.FALSE) {
 					rv = left;
 					break;
 				}
-				left = left.right;	/* [] (p V q) = [] q */
+				left = left.right; /* [] (p V q) = [] q */
 				/* fall thru */
 			}
 			tmp = new SimpleLTL(LTLType.RELEASE, new SimpleLTL(false), left);
@@ -266,9 +275,7 @@ public class SimpleLTL {
 			break;
 
 		case UNTIL:
-			if (right.kind == LTLType.TRUE
-					|| right.kind == LTLType.FALSE
-					|| left.kind == LTLType.FALSE) {
+			if (right.kind == LTLType.TRUE || right.kind == LTLType.FALSE || left.kind == LTLType.FALSE) {
 				rv = right;
 				break;
 			}
@@ -277,7 +284,7 @@ public class SimpleLTL {
 				break;
 			}
 			/* (p U q) U p = (q U p) */
-			if (left.kind == LTLType.UNTIL && left.left.equals(right)) {	
+			if (left.kind == LTLType.UNTIL && left.left.equals(right)) {
 				left = left.right;
 				break;
 			}
@@ -287,24 +294,19 @@ public class SimpleLTL {
 			}
 			/* X p U X q == X (p U q) */
 			if (right.kind == LTLType.NEXT && left.kind == LTLType.NEXT) {
-				rv = new SimpleLTL(LTLType.NEXT, 
-						new SimpleLTL(LTLType.UNTIL, left.left, right.left));
+				rv = new SimpleLTL(LTLType.NEXT, new SimpleLTL(LTLType.UNTIL, left.left, right.left));
 				break;
 			}
 
 			/* F X p == X F p */
 			if (left.kind == LTLType.TRUE && right.kind == LTLType.NEXT) {
-				rv = new SimpleLTL(LTLType.NEXT,
-						new SimpleLTL(LTLType.UNTIL, new SimpleLTL(true), right.left));
+				rv = new SimpleLTL(LTLType.NEXT, new SimpleLTL(LTLType.UNTIL, new SimpleLTL(true), right.left));
 				break;
 			}
 
 			/* F G F p == G F p */
-			if (left.kind == LTLType.TRUE &&
-					right.kind == LTLType.RELEASE &&
-					right.left.kind == LTLType.FALSE &&
-					right.right.kind == LTLType.UNTIL &&
-					right.right.left.kind == LTLType.TRUE) {
+			if (left.kind == LTLType.TRUE && right.kind == LTLType.RELEASE && right.left.kind == LTLType.FALSE && right.right.kind == LTLType.UNTIL
+					&& right.right.left.kind == LTLType.TRUE) {
 				rv = right;
 				break;
 			}
@@ -312,20 +314,18 @@ public class SimpleLTL {
 			if (left.kind != LTLType.TRUE) {
 				tmp = new SimpleLTL(LTLType.NOT, right.clone());
 				if (tmp.pushNegation().implies(left))
-					left = new SimpleLTL(true); 
+					left = new SimpleLTL(true);
 				break;
-			}	    
+			}
 			break;
 
 		case RELEASE:
-			if (right.kind == LTLType.FALSE
-					|| right.kind == LTLType.TRUE
-					|| left.kind == LTLType.TRUE) {
+			if (right.kind == LTLType.FALSE || right.kind == LTLType.TRUE || left.kind == LTLType.TRUE) {
 				rv = right;
 				break;
 			}
 			/* p V p = p */
-			if (right.implies(left)) {	
+			if (right.implies(left)) {
 				rv = right;
 				break;
 			}
@@ -337,23 +337,17 @@ public class SimpleLTL {
 
 			/* G X p == X G p */
 			if (left.kind == LTLType.FALSE && right.kind == LTLType.NEXT) {
-				rv = new SimpleLTL(LTLType.NEXT,
-						new SimpleLTL(LTLType.RELEASE,
-								new SimpleLTL(false), right.left));
+				rv = new SimpleLTL(LTLType.NEXT, new SimpleLTL(LTLType.RELEASE, new SimpleLTL(false), right.left));
 				break;
 			}
 			/* G F G p == F G p */
-			if (left.kind == LTLType.FALSE &&
-					right.kind == LTLType.UNTIL &&
-					right.left.kind == LTLType.TRUE &&
-					right.right.kind == LTLType.RELEASE &&
-					right.right.left.kind == LTLType.FALSE) {
+			if (left.kind == LTLType.FALSE && right.kind == LTLType.UNTIL && right.left.kind == LTLType.TRUE && right.right.kind == LTLType.RELEASE
+					&& right.right.left.kind == LTLType.FALSE) {
 				rv = right;
 				break;
 			}
 
-			if (right.kind == LTLType.RELEASE
-					&& right.left.implies(left)) {
+			if (right.kind == LTLType.RELEASE && right.left.implies(left)) {
 				rv = right;
 				break;
 			}
@@ -373,18 +367,12 @@ public class SimpleLTL {
 			}
 
 			/* X G F p == G F p */
-			if (left.kind == LTLType.RELEASE &&
-					left.left.kind == LTLType.FALSE &&
-					left.right.kind == LTLType.UNTIL &&
-					left.right.left.kind == LTLType.TRUE) {
+			if (left.kind == LTLType.RELEASE && left.left.kind == LTLType.FALSE && left.right.kind == LTLType.UNTIL && left.right.left.kind == LTLType.TRUE) {
 				rv = left;
 				break;
 			}
 			/* X F G p == F G p */
-			if (left.kind == LTLType.UNTIL &&
-					left.left.kind == LTLType.TRUE &&
-					left.right.kind == LTLType.RELEASE &&
-					left.right.left.kind == LTLType.FALSE) {
+			if (left.kind == LTLType.UNTIL && left.left.kind == LTLType.TRUE && left.right.kind == LTLType.RELEASE && left.right.left.kind == LTLType.FALSE) {
 				rv = left;
 				break;
 			}
@@ -401,8 +389,7 @@ public class SimpleLTL {
 			break;
 
 		case EQUIV:
-			if (left.implies(right) &&
-					right.implies(left)) {
+			if (left.implies(right) && right.implies(left)) {
 				rv = new SimpleLTL(true);
 				break;
 			}
@@ -417,94 +404,69 @@ public class SimpleLTL {
 
 		case AND:
 			/* p && (q U p) = p */
-			if (right.kind == LTLType.UNTIL
-					&& right.right.equals(left)) {
+			if (right.kind == LTLType.UNTIL && right.right.equals(left)) {
 				rv = left;
 				break;
 			}
-			if (left.kind == LTLType.UNTIL
-					&& left.right.equals(right)) {
+			if (left.kind == LTLType.UNTIL && left.right.equals(right)) {
 				rv = right;
 				break;
 			}
 
 			/* p && (q V p) == q V p */
-			if (right.kind == LTLType.RELEASE
-					&& right.right.equals(left)) {
+			if (right.kind == LTLType.RELEASE && right.right.equals(left)) {
 				rv = right;
 				break;
 			}
-			if (left.kind == LTLType.RELEASE
-					&& left.right.equals(right)) {
+			if (left.kind == LTLType.RELEASE && left.right.equals(right)) {
 				rv = left;
 				break;
 			}
 
 			/* (p U q) && (r U q) = (p && r) U q */
-			if (right.kind == LTLType.UNTIL
-					&& left.kind == LTLType.UNTIL
-					&& right.right.equals(left.right)) {
-				rv = new SimpleLTL(LTLType.UNTIL,
-						new SimpleLTL(LTLType.AND, left.left, right.left),
-						left.right);
+			if (right.kind == LTLType.UNTIL && left.kind == LTLType.UNTIL && right.right.equals(left.right)) {
+				rv = new SimpleLTL(LTLType.UNTIL, new SimpleLTL(LTLType.AND, left.left, right.left), left.right);
 				break;
 			}
 
 			/* (p V q) && (p V r) = p V (q && r) */
-			if (right.kind == LTLType.RELEASE
-					&& left.kind == LTLType.RELEASE
-					&& right.left.equals(left.left)) {
-				rv = new SimpleLTL(LTLType.RELEASE,
-						right.left,
-						new SimpleLTL(LTLType.AND, left.right, right.right)); 
+			if (right.kind == LTLType.RELEASE && left.kind == LTLType.RELEASE && right.left.equals(left.left)) {
+				rv = new SimpleLTL(LTLType.RELEASE, right.left, new SimpleLTL(LTLType.AND, left.right, right.right));
 				break;
 			}
 
 			/* X p && X q == X (p && q) */
 			if (right.kind == LTLType.NEXT && left.kind == LTLType.NEXT) {
-				rv = new SimpleLTL(LTLType.NEXT,
-						new SimpleLTL(LTLType.AND, left.left, right.left));
+				rv = new SimpleLTL(LTLType.NEXT, new SimpleLTL(LTLType.AND, left.left, right.left));
 				break;
 			}
 
 			/* (p V q) && (r U q) == p V q */
-			if (right.kind == LTLType.UNTIL
-					&& left.kind == LTLType.RELEASE
-					&& left.right.equals(right.right)) {
+			if (right.kind == LTLType.UNTIL && left.kind == LTLType.RELEASE && left.right.equals(right.right)) {
 				rv = left;
 				break;
 			}
 
-			if (left.equals(right)	/* (p && p) == p */
-					||right.kind == LTLType.FALSE	/* (p && F) == F */
-					|| left.kind == LTLType.TRUE	/* (T && p) == p */
-					|| right.implies(left)) {	/* NEW */
+			if (left.equals(right) /* (p && p) == p */
+					|| right.kind == LTLType.FALSE /* (p && F) == F */
+					|| left.kind == LTLType.TRUE /* (T && p) == p */
+					|| right.implies(left)) { /* NEW */
 				rv = right;
 				break;
 			}
-			if (right.kind == LTLType.TRUE	/* (p && T) == p */
-					|| left.kind == LTLType.FALSE	/* (F && p) == F */
-					|| left.implies(right)) {	/* NEW */
+			if (right.kind == LTLType.TRUE /* (p && T) == p */
+					|| left.kind == LTLType.FALSE /* (F && p) == F */
+					|| left.implies(right)) { /* NEW */
 				rv = left;
 				break;
 			}
 
 			/* F G p && F G q == F G (p && q) */
-			if (left.kind == LTLType.UNTIL &&
-					left.left.kind == LTLType.TRUE &&
-					left.right.kind == LTLType.RELEASE &&
-					left.right.left.kind == LTLType.FALSE &&
-					right.kind == LTLType.UNTIL &&
-					right.left.kind == LTLType.TRUE &&
-					right.right.kind == LTLType.RELEASE &&
-					right.right.left.kind == LTLType.FALSE) {
-				rv = new SimpleLTL(LTLType.UNTIL, 
-						new SimpleLTL(true),
-						new SimpleLTL(LTLType.RELEASE, 
-								new SimpleLTL(false),
-								new SimpleLTL(LTLType.AND,
-										left.right.right,
-										right.right.right)));
+			if (left.kind == LTLType.UNTIL && left.left.kind == LTLType.TRUE && left.right.kind == LTLType.RELEASE && left.right.left.kind == LTLType.FALSE
+					&& right.kind == LTLType.UNTIL && right.left.kind == LTLType.TRUE && right.right.kind == LTLType.RELEASE
+					&& right.right.left.kind == LTLType.FALSE) {
+				rv = new SimpleLTL(LTLType.UNTIL, new SimpleLTL(true),
+						new SimpleLTL(LTLType.RELEASE, new SimpleLTL(false), new SimpleLTL(LTLType.AND, left.right.right, right.right.right)));
 				break;
 			}
 
@@ -522,75 +484,55 @@ public class SimpleLTL {
 
 		case OR:
 			/* p || (q U p) == q U p */
-			if (right.kind == LTLType.UNTIL
-					&& right.right.equals(left)) {
+			if (right.kind == LTLType.UNTIL && right.right.equals(left)) {
 				rv = right;
 				break;
 			}
 
 			/* p || (q V p) == p */
-			if (right.kind == LTLType.RELEASE
-					&& right.right.equals(left)) {
+			if (right.kind == LTLType.RELEASE && right.right.equals(left)) {
 				rv = left;
 				break;
 			}
 
 			/* (p U q) || (p U r) = p U (q || r) */
-			if (right.kind == LTLType.UNTIL
-					&& left.kind == LTLType.UNTIL
-					&& right.left.equals(left.left)) {
-				rv = new SimpleLTL(LTLType.UNTIL,
-						right.left,
-						new SimpleLTL(LTLType.OR, left.right, right.right));
+			if (right.kind == LTLType.UNTIL && left.kind == LTLType.UNTIL && right.left.equals(left.left)) {
+				rv = new SimpleLTL(LTLType.UNTIL, right.left, new SimpleLTL(LTLType.OR, left.right, right.right));
 				break;
 			}
 
-			if (left.equals(right)	/* (p || p) == p */
-					||right.kind == LTLType.FALSE	/* (p || F) == p */
-					|| left.kind == LTLType.TRUE	/* (T || p) == T */
+			if (left.equals(right) /* (p || p) == p */
+					|| right.kind == LTLType.FALSE /* (p || F) == p */
+					|| left.kind == LTLType.TRUE /* (T || p) == T */
 					|| right.implies(left)) {
 				rv = left;
 				break;
 			}
-			if (right.kind == LTLType.TRUE	/* (p || T) == T */
-					|| left.kind == LTLType.FALSE	/* (F || p) == p */
+			if (right.kind == LTLType.TRUE /* (p || T) == T */
+					|| left.kind == LTLType.FALSE /* (F || p) == p */
 					|| left.implies(right)) {
 				rv = right;
 				break;
 			}
 
 			/* (p V q) || (r V q) = (p || r) V q */
-			if (right.kind == LTLType.RELEASE
-					&& left.kind == LTLType.RELEASE
-					&& left.right.equals(right.right)) {
-				rv = new SimpleLTL(LTLType.RELEASE,
-						new SimpleLTL(LTLType.OR, left.left, right.left),
-						right.right);
+			if (right.kind == LTLType.RELEASE && left.kind == LTLType.RELEASE && left.right.equals(right.right)) {
+				rv = new SimpleLTL(LTLType.RELEASE, new SimpleLTL(LTLType.OR, left.left, right.left), right.right);
 				break;
 			}
 
 			/* (p V q) || (r U q) == r U q */
-			if (right.kind == LTLType.UNTIL
-					&& left.kind == LTLType.RELEASE
-					&& left.right.equals(right.right)) {
+			if (right.kind == LTLType.UNTIL && left.kind == LTLType.RELEASE && left.right.equals(right.right)) {
 				rv = right;
 				break;
 			}
 
 			/* G F p || G F q == G F (p || q) */
-			if (left.kind == LTLType.RELEASE &&
-					left.left.kind == LTLType.FALSE &&
-					left.right.kind == LTLType.UNTIL &&
-					left.right.left.kind == LTLType.TRUE &&
-					right.kind == LTLType.RELEASE &&
-					right.left.kind == LTLType.FALSE &&
-					right.right.kind == LTLType.UNTIL &&
-					right.right.left.kind == LTLType.TRUE) {
-				rv = new SimpleLTL(LTLType.RELEASE,
-						new SimpleLTL(false),
-						new SimpleLTL(LTLType.UNTIL,
-								new SimpleLTL(true),
-								new SimpleLTL(LTLType.OR,left.right.right,right.right.right)));
+			if (left.kind == LTLType.RELEASE && left.left.kind == LTLType.FALSE && left.right.kind == LTLType.UNTIL && left.right.left.kind == LTLType.TRUE
+					&& right.kind == LTLType.RELEASE && right.left.kind == LTLType.FALSE && right.right.kind == LTLType.UNTIL
+					&& right.right.left.kind == LTLType.TRUE) {
+				rv = new SimpleLTL(LTLType.RELEASE, new SimpleLTL(false),
+						new SimpleLTL(LTLType.UNTIL, new SimpleLTL(true), new SimpleLTL(LTLType.OR, left.right.right, right.right.right)));
 				break;
 			}
 
@@ -614,7 +556,8 @@ public class SimpleLTL {
 	 * basic set of operators:
 	 *   AP, TRUE, FALSE, AND, OR, NOT, UNTIL, FINALLY, GLOBALLY, NEXT
 	 */
-	public SimpleLTL toBasicOperators() {
+	public SimpleLTL toBasicOperators()
+	{
 		switch (kind) {
 		case AP:
 		case TRUE:
@@ -633,9 +576,7 @@ public class SimpleLTL {
 			SimpleLTL newLeft = left.toBasicOperators();
 			SimpleLTL newRight = right.toBasicOperators();
 			SimpleLTL bothTrue = new SimpleLTL(LTLType.AND, newLeft, newRight);
-			SimpleLTL bothFalse = new SimpleLTL(LTLType.AND,
-			                                    new SimpleLTL(LTLType.NOT, newLeft),
-			                                    new SimpleLTL(LTLType.NOT, newRight));
+			SimpleLTL bothFalse = new SimpleLTL(LTLType.AND, new SimpleLTL(LTLType.NOT, newLeft), new SimpleLTL(LTLType.NOT, newRight));
 			return new SimpleLTL(LTLType.OR, bothTrue, bothFalse);
 		}
 		case IMPLIES: {
@@ -651,18 +592,19 @@ public class SimpleLTL {
 		throw new UnsupportedOperationException("Unknown operator in SimpleLTL");
 	}
 
-	public SimpleLTL negate() {
+	public SimpleLTL negate()
+	{
 		return new SimpleLTL(LTLType.NOT, this);
 	}
 
 	public SimpleLTL pushNegation()
-	{	
+	{
 		SimpleLTL m;
 		boolean pushBothOperands = false;
 
 		if (kind != LTLType.NOT)
 			return this;
-			// throw new PrismException("No NOT to push!");
+		// throw new PrismException("No NOT to push!");
 
 		switch (left.kind) {
 		case TRUE:
@@ -678,7 +620,9 @@ public class SimpleLTL {
 			left = m.left;
 			right = m.right;
 			kind = m.kind;
-			if (kind == LTLType.AP) { ap = m.ap; }
+			if (kind == LTLType.AP) {
+				ap = m.ap;
+			}
 			break;
 		case RELEASE:
 			kind = LTLType.UNTIL;
@@ -737,7 +681,7 @@ public class SimpleLTL {
 		}
 		return this.rewrite();
 	}
-	
+
 	public SimpleLTL rewrite()
 	{
 		return this.rightLinked().canonical();
@@ -766,16 +710,16 @@ public class SimpleLTL {
 
 	public SimpleLTL canonical()
 	{
-		return this;	// No caches here, yet
+		return this; // No caches here, yet
 
 		/* SimpleLTL m;		// assumes input is right_linked
-
+		
 		if ((m = in_cache(n)) != ZN)
 			return m;
-
+		
 		n->rgt = canonical(n->rgt);
 		n->lft = canonical(n->lft);
-
+		
 		return cached(n);
 		 */
 	}
@@ -875,7 +819,7 @@ public class SimpleLTL {
 	// ltl2dstar stuff
 	public boolean isCoSafe()
 	{
-		switch(kind) {
+		switch (kind) {
 		case RELEASE:
 		case GLOBALLY:
 			return false;
@@ -883,10 +827,10 @@ public class SimpleLTL {
 			if (left != null && !left.isCoSafe()) {
 				return false;
 			}
-		if (right != null && !right.isCoSafe()) {
-			return false;
-		}
-		return true;
+			if (right != null && !right.isCoSafe()) {
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -922,7 +866,7 @@ public class SimpleLTL {
 	 *
 	 * The already seen SimpleLTL subtrees are tracked in {@code seen}.
 	 */
-	private boolean isTree(IdentityHashMap<SimpleLTL,SimpleLTL> seen)
+	private boolean isTree(IdentityHashMap<SimpleLTL, SimpleLTL> seen)
 	{
 		if (seen.containsKey(this)) {
 			return false;
@@ -965,17 +909,15 @@ public class SimpleLTL {
 
 				if (r.kind == LTLType.OR) {
 					SimpleLTL c, d;
-					c=r.left;
-					d=r.right;
+					c = r.left;
+					d = r.right;
 
 					SimpleLTL a_c = new SimpleLTL(LTLType.AND, a, c);
 					SimpleLTL b_c = new SimpleLTL(LTLType.AND, b, c);
 					SimpleLTL a_d = new SimpleLTL(LTLType.AND, a, d);
 					SimpleLTL b_d = new SimpleLTL(LTLType.AND, b, d);
 
-					return new SimpleLTL(LTLType.OR,
-							(new SimpleLTL(LTLType.OR, a_c, b_c)).toDNF(),
-							(new SimpleLTL(LTLType.OR, a_d, b_d)).toDNF());	  
+					return new SimpleLTL(LTLType.OR, (new SimpleLTL(LTLType.OR, a_c, b_c)).toDNF(), (new SimpleLTL(LTLType.OR, a_d, b_d)).toDNF());
 				} else {
 					SimpleLTL a_c = new SimpleLTL(LTLType.AND, a, r);
 					SimpleLTL b_c = new SimpleLTL(LTLType.AND, b, r);
@@ -1024,7 +966,7 @@ public class SimpleLTL {
 				return new APMonom(false);
 			default:
 				throw new PrismException("Formula not in DNF!");
-			}	  
+			}
 		case AP:
 			result.setValue(apset.indexOf(ap), true);
 			return result;
@@ -1070,9 +1012,9 @@ public class SimpleLTL {
 		case FALSE:
 			return;
 		}
-		throw new UnsupportedOperationException("Unknown operator in SimpleLTL formula: "+this);
+		throw new UnsupportedOperationException("Unknown operator in SimpleLTL formula: " + this);
 	}
-	
+
 	/**
 	 * Render this LTL formula in LBT syntax, i.e., in prefix notation.
 	 */
@@ -1179,7 +1121,6 @@ public class SimpleLTL {
 		return rv;
 	}
 
-	
 	/**
 	 * Render this LTL formula in Spot syntax.
 	 */
@@ -1236,13 +1177,14 @@ public class SimpleLTL {
 	/** Parse a formula in LBT (prefix format) */
 	public static SimpleLTL parseFormulaLBT(String formula) throws Exception
 	{
-		formula=formula.trim();  // remove leading, trailing spaces
+		formula = formula.trim(); // remove leading, trailing spaces
 		String[] split = formula.split("[ ]+");
 		List<String> formulaList = new ArrayList<String>();
-		for (String s : split) formulaList.add(s);
+		for (String s : split)
+			formulaList.add(s);
 
 		// set up operator -> SimpleLTL.LTLType mapping for the standard operators
-		Map<String, SimpleLTL.LTLType> unaryOps  = new HashMap<String, SimpleLTL.LTLType>();
+		Map<String, SimpleLTL.LTLType> unaryOps = new HashMap<String, SimpleLTL.LTLType>();
 		Map<String, SimpleLTL.LTLType> binaryOps = new HashMap<String, SimpleLTL.LTLType>();
 		unaryOps.put("!", SimpleLTL.LTLType.NOT);
 		unaryOps.put("F", SimpleLTL.LTLType.FINALLY);
@@ -1257,10 +1199,11 @@ public class SimpleLTL {
 
 		SimpleLTL result = parseFormulaLBT(formulaList, unaryOps, binaryOps);
 
-		if (formulaList.size()>0) {
+		if (formulaList.size() > 0) {
 			String remainingFormula = "";
-			for (String op : formulaList) remainingFormula += " "+op;
-			throw new RuntimeException("Malformed formula, extra information after end of formula: "+remainingFormula);
+			for (String op : formulaList)
+				remainingFormula += " " + op;
+			throw new RuntimeException("Malformed formula, extra information after end of formula: " + remainingFormula);
 		}
 		return result;
 	}
@@ -1272,9 +1215,8 @@ public class SimpleLTL {
 	 * @param binaryOps map for the standard binary ops
 	 * @throws RuntimeException on parse error
 	 */
-	private static SimpleLTL parseFormulaLBT(List<String> formulaList,
-	                                         Map<String, SimpleLTL.LTLType> unaryOps,
-	                                         Map<String, SimpleLTL.LTLType> binaryOps) throws RuntimeException
+	private static SimpleLTL parseFormulaLBT(List<String> formulaList, Map<String, SimpleLTL.LTLType> unaryOps, Map<String, SimpleLTL.LTLType> binaryOps)
+			throws RuntimeException
 	{
 		if (formulaList.size() == 0) {
 			throw new RuntimeException("Malformed formula, premature ending");
@@ -1300,31 +1242,25 @@ public class SimpleLTL {
 			SimpleLTL operand1 = parseFormulaLBT(formulaList, unaryOps, binaryOps);
 			SimpleLTL operand2 = parseFormulaLBT(formulaList, unaryOps, binaryOps);
 
-			SimpleLTL aAndNotb =
-			   new SimpleLTL(SimpleLTL.LTLType.AND, operand1.clone(),
-			     new SimpleLTL(SimpleLTL.LTLType.NOT, operand2.clone()));
-			
-			SimpleLTL NotaAndNotb =
-			   new SimpleLTL(SimpleLTL.LTLType.AND,
-			     new SimpleLTL(SimpleLTL.LTLType.NOT, operand1.clone()),
-			     new SimpleLTL(SimpleLTL.LTLType.NOT, operand2.clone()));
+			SimpleLTL aAndNotb = new SimpleLTL(SimpleLTL.LTLType.AND, operand1.clone(), new SimpleLTL(SimpleLTL.LTLType.NOT, operand2.clone()));
 
-			return new SimpleLTL(SimpleLTL.LTLType.NOT,
-			   new SimpleLTL(SimpleLTL.LTLType.UNTIL, aAndNotb, NotaAndNotb));
+			SimpleLTL NotaAndNotb = new SimpleLTL(SimpleLTL.LTLType.AND, new SimpleLTL(SimpleLTL.LTLType.NOT, operand1.clone()),
+					new SimpleLTL(SimpleLTL.LTLType.NOT, operand2.clone()));
+
+			return new SimpleLTL(SimpleLTL.LTLType.NOT, new SimpleLTL(SimpleLTL.LTLType.UNTIL, aAndNotb, NotaAndNotb));
 		} else if (current.equals("^")) {
 			// a xor b == !(a equiv b)
 			SimpleLTL operand1 = parseFormulaLBT(formulaList, unaryOps, binaryOps);
 			SimpleLTL operand2 = parseFormulaLBT(formulaList, unaryOps, binaryOps);
 
-			return new SimpleLTL(SimpleLTL.LTLType.NOT,
-			    new SimpleLTL(SimpleLTL.LTLType.EQUIV, operand1, operand2));
+			return new SimpleLTL(SimpleLTL.LTLType.NOT, new SimpleLTL(SimpleLTL.LTLType.EQUIV, operand1, operand2));
 		} else if (current.equals("M") || current.equals("B")) {
-			throw new RuntimeException("Operator "+current+" currently not supported.");
+			throw new RuntimeException("Operator " + current + " currently not supported.");
 		} else if (current.matches("[a-zA-Z].*")) {
 			// atomic proposition
 			return new SimpleLTL(current);
 		} else {
-			throw new RuntimeException("Illegal/unsupported operator: "+current);
+			throw new RuntimeException("Illegal/unsupported operator: " + current);
 		}
 	}
 
@@ -1347,14 +1283,15 @@ public class SimpleLTL {
 
 		return nba;
 	}
-	
+
 	public NBA toNBA() throws PrismException
 	{
 		return this.toNBA(new APSet());
 	}
 
 	/** Print a DOT representation of the syntax tree of this SimpleLTL formula */
-	public void toDot(PrintStream out) {
+	public void toDot(PrintStream out)
+	{
 		IdentityHashMap<SimpleLTL, String> map = new IdentityHashMap<SimpleLTL, String>();
 
 		out.println("digraph {");
@@ -1377,7 +1314,7 @@ public class SimpleLTL {
 
 		id = Integer.toString(seen.size());
 		seen.put(this, id);
-		out.println(id + " [label=\""+toStringLBT()+"\"]");
+		out.println(id + " [label=\"" + toStringLBT() + "\"]");
 
 		switch (kind) {
 		case AND:

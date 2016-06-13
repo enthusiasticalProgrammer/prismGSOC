@@ -36,11 +36,11 @@ import prism.PrismLangException;
 public class ExpressionSS extends ExpressionQuant
 {
 	// Constructors
-	
+
 	public ExpressionSS()
 	{
 	}
-	
+
 	public ExpressionSS(Expression expression, String relOpString, Expression p)
 	{
 		setExpression(expression);
@@ -49,7 +49,7 @@ public class ExpressionSS extends ExpressionQuant
 	}
 
 	// Set methods
-	
+
 	/**
 	 * Set the probability bound. Equivalent to {@code setBound(p)}.
 	 */
@@ -59,7 +59,7 @@ public class ExpressionSS extends ExpressionQuant
 	}
 
 	// Get methods
-	
+
 	/**
 	 * Get the probability bound. Equivalent to {@code getBound()}.
 	 */
@@ -84,9 +84,9 @@ public class ExpressionSS extends ExpressionQuant
 			return new OpRelOpBound("S", getRelOp(), null);
 		}
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -98,7 +98,7 @@ public class ExpressionSS extends ExpressionQuant
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -118,7 +118,7 @@ public class ExpressionSS extends ExpressionQuant
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
@@ -132,25 +132,26 @@ public class ExpressionSS extends ExpressionQuant
 		expr.setExpression(getExpression() == null ? null : getExpression().deepCopy());
 		expr.setRelOp(getRelOp());
 		expr.setBound(getBound() == null ? null : getBound().deepCopy());
-		expr.setFilter(getFilter() == null ? null : (Filter)getFilter().deepCopy());
+		expr.setFilter(getFilter() == null ? null : (Filter) getFilter().deepCopy());
 		expr.setType(type);
 		expr.setPosition(this);
 		return expr;
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{
 		String s = "";
-		
+
 		s += "S" + getModifierString() + getRelOp();
-		s += (getBound()==null) ? "?" : getBound().toString();
+		s += (getBound() == null) ? "?" : getBound().toString();
 		s += " [ " + getExpression();
-		if (getFilter() != null) s += " "+getFilter();
+		if (getFilter() != null)
+			s += " " + getFilter();
 		s += " ]";
-		
+
 		return s;
 	}
 }

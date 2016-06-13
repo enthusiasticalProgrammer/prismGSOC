@@ -40,7 +40,8 @@ import edu.jas.ufd.QuotientRing;
  * @see FunctionFactory
  * @see JasFunction
  */
-final class JasFunctionFactory extends FunctionFactory {
+final class JasFunctionFactory extends FunctionFactory
+{
 	private GenPolynomialRing<BigInteger> jasPolyRing;
 	private QuotientRing<BigInteger> jasQuotRing;
 	private JasFunction zero;
@@ -64,9 +65,9 @@ final class JasFunctionFactory extends FunctionFactory {
 		System.arraycopy(parameterNames, 0, pNameReversed, 0, parameterNames.length);
 		Collections.reverse(Arrays.asList(pNameReversed));
 		this.parameterNames = parameterNames;
-		
+
 		BigInteger fac = new BigInteger();
-		jasPolyRing = new GenPolynomialRing<BigInteger>(fac,pNameReversed.length,pNameReversed);
+		jasPolyRing = new GenPolynomialRing<BigInteger>(fac, pNameReversed.length, pNameReversed);
 		jasQuotRing = new QuotientRing<BigInteger>(jasPolyRing);
 		one = new JasFunction(this, jasQuotRing.getONE(), JasFunction.NORMAL);
 		zero = new JasFunction(this, jasQuotRing.getZERO(), JasFunction.NORMAL);
@@ -77,14 +78,14 @@ final class JasFunctionFactory extends FunctionFactory {
 		for (int param = 0; param < parameterNames.length; param++) {
 			parameters[param] = new JasFunction(this, jasQuotRing.parse(parameterNames[param]), JasFunction.NORMAL);
 		}
-	}	
+	}
 
 	@Override
 	public Function getOne()
 	{
 		return one;
 	}
-	
+
 	@Override
 	public Function getZero()
 	{
@@ -102,7 +103,7 @@ final class JasFunctionFactory extends FunctionFactory {
 	{
 		return inf;
 	}
-	
+
 	@Override
 	public Function getMInf()
 	{
@@ -118,7 +119,7 @@ final class JasFunctionFactory extends FunctionFactory {
 	{
 		return jasQuotRing;
 	}
-	
+
 	/**
 	 * Get JAS ring for polynomials used by this factory.
 	 * In JAS, rational functions are built on polynomial rings, and this
@@ -132,16 +133,18 @@ final class JasFunctionFactory extends FunctionFactory {
 	}
 
 	@Override
-	public Function fromBigRational(BigRational from) {
+	public Function fromBigRational(BigRational from)
+	{
 		Quotient<BigInteger> result = jasQuotRing.fromInteger(from.getNum());
 		Quotient<BigInteger> den = jasQuotRing.fromInteger(from.getDen());
 		result = result.divide(den);
-		
+
 		return new JasFunction(this, result, JasFunction.NORMAL);
 	}
 
 	@Override
-	Function getVar(int var) {
+	Function getVar(int var)
+	{
 		return parameters[var];
 	}
 }

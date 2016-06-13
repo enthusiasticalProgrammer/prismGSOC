@@ -92,17 +92,17 @@ public class BackwardsReachabilityGraph
 	{
 		initialStates.add(s);
 	}
-	
+
 	public void addTargetState(int s)
 	{
 		target.set(s);
 	}
-	
+
 	public List<Integer> getInitialStates()
 	{
-		return initialStates; 
+		return initialStates;
 	}
-		
+
 	public BitSet getTarget()
 	{
 		return target;

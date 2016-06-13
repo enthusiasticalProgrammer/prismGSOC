@@ -38,14 +38,14 @@ import userinterface.GUIPrism;
 public class GUIUndoManager extends GUIEventHandler implements UndoableEditListener
 {
 	private UndoManager undoManager;
-	
-	public GUIUndoManager(GUIPrism gui) 
+
+	public GUIUndoManager(GUIPrism gui)
 	{
-		super(gui);	
+		super(gui);
 		undoManager = new UndoManager();
 	}
 
-	public boolean addEdit(UndoableEdit anEdit) 
+	public boolean addEdit(UndoableEdit anEdit)
 	{
 		boolean result = undoManager.addEdit(anEdit);
 		if (result)
@@ -53,116 +53,122 @@ public class GUIUndoManager extends GUIEventHandler implements UndoableEditListe
 		return result;
 	}
 
-	public boolean canRedo() 
+	public boolean canRedo()
 	{
 		return undoManager.canRedo();
 	}
 
-	public boolean canUndo() 
+	public boolean canUndo()
 	{
 		return undoManager.canUndo();
 	}
 
-	public boolean canUndoOrRedo() 
+	public boolean canUndoOrRedo()
 	{
 		return undoManager.canUndoOrRedo();
 	}
 
-	public void die() 
+	public void die()
 	{
 		undoManager.die();
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.DIED));
 	}
 
-	public void discardAllEdits() 
+	public void discardAllEdits()
 	{
 		undoManager.discardAllEdits();
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.DISCARD_ALL));
 	}
 
-	public void end() 
+	public void end()
 	{
 		undoManager.end();
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.DIED));
 	}
 
-	public boolean equals(Object obj) 
+	public boolean equals(Object obj)
 	{
 		return undoManager.equals(obj);
 	}
 
-	public int getLimit() 
+	public int getLimit()
 	{
 		return undoManager.getLimit();
 	}
 
-	public String getPresentationName() 
+	public String getPresentationName()
 	{
 		return undoManager.getPresentationName();
 	}
 
-	public String getRedoPresentationName() 
+	public String getRedoPresentationName()
 	{
 		return undoManager.getRedoPresentationName();
 	}
 
-	public String getUndoOrRedoPresentationName() 
+	public String getUndoOrRedoPresentationName()
 	{
 		return undoManager.getUndoOrRedoPresentationName();
 	}
 
-	public String getUndoPresentationName() 
+	public String getUndoPresentationName()
 	{
 		return undoManager.getUndoPresentationName();
 	}
 
-	public int hashCode() 
+	public int hashCode()
 	{
 		return undoManager.hashCode();
 	}
 
-	public boolean isInProgress() 
+	public boolean isInProgress()
 	{
 		return undoManager.isInProgress();
 	}
 
-	public boolean isSignificant() 
+	public boolean isSignificant()
 	{
 		return undoManager.isSignificant();
 	}
 
-	public void redo() throws CannotRedoException {
+	public void redo() throws CannotRedoException
+	{
 		undoManager.redo();
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.REDO));
 	}
 
-	public boolean replaceEdit(UndoableEdit anEdit) {
+	public boolean replaceEdit(UndoableEdit anEdit)
+	{
 		return false;
 	}
 
-	public void setLimit(int l) {
+	public void setLimit(int l)
+	{
 		undoManager.setLimit(l);
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.LIMIT_CHANGE));
 	}
 
-	public String toString() {
+	public String toString()
+	{
 		return undoManager.toString();
 	}
 
-	public void undo() throws CannotUndoException {
+	public void undo() throws CannotUndoException
+	{
 		undoManager.undo();
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.UNDO));
 	}
 
-	public void undoableEditHappened(UndoableEditEvent e) {
+	public void undoableEditHappened(UndoableEditEvent e)
+	{
 		undoManager.undoableEditHappened(e);
 		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.UNDOABLE_EVENT));
 	}
 
-	public void undoOrRedo() throws CannotRedoException, CannotUndoException {
+	public void undoOrRedo() throws CannotRedoException, CannotUndoException
+	{
 		undoManager.undoOrRedo();
-		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.UNDO));		
+		notifyListeners(new GUIUndoManagerEvent(GUIUndoManagerEvent.UNDO));
 	}
-	
-	
+
 }

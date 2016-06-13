@@ -64,7 +64,7 @@ public class SamplerBoundedUntilDisc extends SamplerBoolean
 			lb = 0;
 		}
 		if (lb < 0) {
-			throw new PrismException("Invalid lower bound in "+expr);
+			throw new PrismException("Invalid lower bound in " + expr);
 		}
 		// Upper bound
 		if (expr.getUpperBound() != null) {
@@ -78,7 +78,7 @@ public class SamplerBoundedUntilDisc extends SamplerBoolean
 			ub = Integer.MAX_VALUE;
 		}
 		if (ub < 0) {
-			throw new PrismException("Invalid upper bound in "+expr);
+			throw new PrismException("Invalid upper bound in " + expr);
 		}
 
 		// Initialise sampler info
@@ -92,7 +92,7 @@ public class SamplerBoundedUntilDisc extends SamplerBoolean
 		// If the answer is already known we should do nothing
 		if (valueKnown)
 			return true;
-		
+
 		long pathSize = path.size();
 		// Upper bound exceeded
 		if (pathSize > ub) {
@@ -127,10 +127,10 @@ public class SamplerBoundedUntilDisc extends SamplerBoolean
 			}
 			// Otherwise, don't know
 		}
-		
+
 		return valueKnown;
 	}
-	
+
 	@Override
 	public boolean needsBoundedNumSteps()
 	{

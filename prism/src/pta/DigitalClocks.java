@@ -333,7 +333,7 @@ public class DigitalClocks
 			e.setASTElement(propertyToCheck);
 			throw e;
 		}
-		
+
 		// Bounded properties not yet handled.
 		try {
 			propertyToCheck.accept(new ASTTraverse()

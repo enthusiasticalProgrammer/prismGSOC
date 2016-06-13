@@ -242,8 +242,8 @@ public class GUIExperiment
 					if (useSimulation && !reuseInfo) {
 						try {
 							info = null;
-							info = GUISimulationPicker.defineSimulationWithDialog(guiProp.getGUI(), propertyToCheck.getExpression(), prism.getPRISMModel(), "("
-									+ definedMFConstants + ")");
+							info = GUISimulationPicker.defineSimulationWithDialog(guiProp.getGUI(), propertyToCheck.getExpression(), prism.getPRISMModel(),
+									"(" + definedMFConstants + ")");
 						} catch (Exception e) {
 							// in case of error, report it (in log only), store as result, and go on to the next model
 							errorLog(e);

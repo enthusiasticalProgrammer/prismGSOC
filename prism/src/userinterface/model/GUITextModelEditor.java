@@ -93,7 +93,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	 */
 	private JEditorPane editor;
 	private DefaultHighlighter.DefaultHighlightPainter errorHighlightPainter;
-	
+
 	/** Allows undo/redo operations to be performed on the model editor.
 	 */
 	private GUIUndoManager undoManager;
@@ -105,24 +105,24 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	 * a Prism setting change notification is issued.
 	 */
 	private boolean showLineNumbersSetting = true;
-	
+
 	/** The popup menu for the context menu. */
 	private JPopupMenu contextPopup;
-	
+
 	/** Actions for the context menu. */
 	private Action actionSearch, actionJumpToError;
-	
+
 	/** More actions */
 	private Action insertDTMC, insertCTMC, insertMDP;
-	
+
 	/* both null if not existent */
 	private PrismLangException parseError;
 	private Object parseErrorHighlightKey;
-		
+
 	/** Mouse listener to listen for when the mouse is over the editor pane. */
 	MouseListener editorMouseListener = new MouseListener()
 	{
-		
+
 		public void mouseEntered(MouseEvent e)
 		{
 			// Horrible hack to get the cursor to change to the text cursor when
@@ -130,7 +130,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 			// JEditorPane didn't work.
 			//GUIPrism.getGUI().setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
-		
+
 		public void mouseExited(MouseEvent e)
 		{
 			// Horrible hack to get the cursor to change to the text cursor when
@@ -139,14 +139,20 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 			//GUIPrism.getGUI().setCursor(Cursor.getDefaultCursor());
 		}
 
-		public void mouseClicked(MouseEvent e) {}
+		public void mouseClicked(MouseEvent e)
+		{
+		}
 
-		public void mousePressed(MouseEvent e) {}
+		public void mousePressed(MouseEvent e)
+		{
+		}
 
-		public void mouseReleased(MouseEvent e) {}
-		
+		public void mouseReleased(MouseEvent e)
+		{
+		}
+
 	};
-	
+
 	/** 
 	 * Constructor, initialises the editor components.
 	 * 
@@ -157,36 +163,33 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	{
 		this.handler = handler;
 		setLayout(new BorderLayout());
-		
+
 		// Setup the editor with it's custom editor kits. To switch between
 		// editor kits just use setContentType() for the desired content type. 
-		editor = new JEditorPane() 
-		{	
+		editor = new JEditorPane()
+		{
 			@Override
-			public String getToolTipText(MouseEvent event) 
-			{	
-				if (parseError != null)
-				{
-					try
-					{
+			public String getToolTipText(MouseEvent event)
+			{
+				if (parseError != null) {
+					try {
 						int offset = this.viewToModel(new Point(event.getX(), event.getY()));
-					
+
 						int startOffset = computeDocumentOffset(parseError.getBeginLine(), parseError.getBeginColumn());
-						int endOffset =  computeDocumentOffset(parseError.getEndLine(), parseError.getEndColumn())+1;
-						
+						int endOffset = computeDocumentOffset(parseError.getEndLine(), parseError.getEndColumn()) + 1;
+
 						if (offset >= startOffset && offset <= endOffset)
 							return parseError.getMessage();
+					} catch (BadLocationException e) {
 					}
-					catch (BadLocationException e)
-					{}
 				}
-				
+
 				return null;
 			}
 		};
-		
+
 		editor.setToolTipText("dummy");
-		
+
 		editor.setEditorKitForContentType("text/prism", new PrismEditorKit(handler));
 		editor.setEditorKitForContentType("text/pepa", new PepaEditorKit(handler));
 		// The default editor kit is the Prism one.
@@ -196,39 +199,41 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		editor.setEditable(true);
 		editor.setText(initialText);
 		editor.getDocument().addDocumentListener(this);
-		editor.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				GUITextModelEditor.this.handler.getGUIPlugin().getSelectionChangeHandler().notifyListeners(new GUIEvent(1));				
+		editor.addCaretListener(new CaretListener()
+		{
+			public void caretUpdate(CaretEvent e)
+			{
+				GUITextModelEditor.this.handler.getGUIPlugin().getSelectionChangeHandler().notifyListeners(new GUIEvent(1));
 			}
-		}); 
-		editor.getDocument().putProperty( PlainDocument.tabSizeAttribute, new Integer(4) );
-		
+		});
+		editor.getDocument().putProperty(PlainDocument.tabSizeAttribute, new Integer(4));
+
 		editor.addMouseListener(this);
-		errorHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255,192,192));
+		errorHighlightPainter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 192, 192));
 		undoManager = new GUIUndoManager(GUIPrism.getGUI());
-		undoManager.setLimit(200);		
-		
+		undoManager.setLimit(200);
+
 		// Setup the scrollpane
 		editorScrollPane = new JScrollPane(editor);
 		add(editorScrollPane, BorderLayout.CENTER);
 		gutter = new GUITextModelEditorGutter(editor);
-		
+
 		// Get the 'show line numbers' setting to determine 
 		// if the line numbers should be shown.
 		showLineNumbersSetting = handler.getGUIPlugin().getPrism().getSettings().getBoolean(PrismSettings.MODEL_SHOW_LINE_NUMBERS);
 		if (showLineNumbersSetting) {
 			editorScrollPane.setRowHeaderView(gutter);
 		}
-		
+
 		// Add a Prism settings listener to catch changes made to the 
 		// 'show line numbers' setting.
-		handler.getGUIPlugin().getPrism().getSettings().addSettingsListener(new PrismSettingsListener ()
+		handler.getGUIPlugin().getPrism().getSettings().addSettingsListener(new PrismSettingsListener()
 		{
 			public void notifySettings(PrismSettings settings)
 			{
 				// Check if the setting has changed.
 				if (settings.getBoolean(PrismSettings.MODEL_SHOW_LINE_NUMBERS) != showLineNumbersSetting) {
-					showLineNumbersSetting =! showLineNumbersSetting;
+					showLineNumbersSetting = !showLineNumbersSetting;
 					if (showLineNumbersSetting) {
 						editorScrollPane.setRowHeaderView(gutter);
 					} else {
@@ -237,26 +242,27 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 				}
 			}
 		});
-		
+
 		// initialize the actions for the context menu
 		initActions();
-		
+
 		// method to initialize the context menu popup
 		initContextMenu();
-			
-	    InputMap inputMap = editor.getInputMap();	
-	    inputMap.clear();
-	
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_undo");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_undo");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_redo");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_selectall");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_delete");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_cut");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | java.awt.event.InputEvent.SHIFT_MASK), "prism_redo");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_paste");
-	    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_jumperr");
-	    
+
+		InputMap inputMap = editor.getInputMap();
+		inputMap.clear();
+
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_undo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_undo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_redo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_selectall");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_delete");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_cut");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | java.awt.event.InputEvent.SHIFT_MASK),
+				"prism_redo");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_paste");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "prism_jumperr");
+
 		ActionMap actionMap = editor.getActionMap();
 		actionMap.put("prism_undo", GUIPrism.getClipboardPlugin().getUndoAction());
 		actionMap.put("prism_redo", GUIPrism.getClipboardPlugin().getRedoAction());
@@ -266,7 +272,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		actionMap.put("prism_paste", GUIPrism.getClipboardPlugin().getPasteAction());
 		actionMap.put("prism_delete", GUIPrism.getClipboardPlugin().getDeleteAction());
 		actionMap.put("prism_jumperr", actionJumpToError);
-		
+
 		// Attempt to programmatically allow all accelerators
 		/*ArrayList plugins = ((GUIMultiModel)handler.getGUIPlugin()).getGUI().getPlugins();
 		Iterator it = plugins.iterator();
@@ -309,24 +315,23 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 				}					
 			}
 		}*/
-		
-		
-		
+
 		editor.getDocument().addUndoableEditListener(undoManager);
-		editor.getDocument().addUndoableEditListener(new UndoableEditListener() 
+		editor.getDocument().addUndoableEditListener(new UndoableEditListener()
 		{
-			public void undoableEditHappened(UndoableEditEvent e) 
+			public void undoableEditHappened(UndoableEditEvent e)
 			{
-				System.out.println("adding undo edit");				
+				System.out.println("adding undo edit");
 			}
 		});
 	}
-	
+
 	/**
 	 * Helper method to initialize the actions used for the buttons.
 	 */
-	private void initActions() {
-		
+	private void initActions()
+	{
+
 		/*actionUndo = new AbstractAction() {
 			public void actionPerformed(ActionEvent ae) {
 				try {
@@ -367,23 +372,26 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		actionRedo.putValue(Action.NAME, "Redo");
 		actionRedo.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallRedo.png"));
 		*/
-		actionJumpToError = new AbstractAction() {
-			public void actionPerformed(ActionEvent ae) {
+		actionJumpToError = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
 				jumpToError();
 			}
 		};
-		
+
 		actionJumpToError.putValue(Action.NAME, "Jump to error");
 		actionJumpToError.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("tinyError.png"));
 		actionJumpToError.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
-		
+
 		// search and replace action
-        actionSearch = new AbstractAction() {
-        	public void actionPerformed(ActionEvent ae) {
-        		/*
-        		// System.out.println("search button pressed");
-        		if (GUIMultiModelHandler.isDoingSearch()) {
+		actionSearch = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				/*
+				// System.out.println("search button pressed");
+				if (GUIMultiModelHandler.isDoingSearch()) {
 					
 				} else {
 					try {
@@ -395,78 +403,76 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 					}
 				}
 				*/
-        	}
-        };
-        actionSearch.putValue(Action.LONG_DESCRIPTION, "Opens a find and replace dialog.");
-        //actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
-        actionSearch.putValue(Action.NAME, "Find/Replace");
-        //actionSearch.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        
-        insertDTMC = new AbstractAction() {
-        	public void actionPerformed(ActionEvent ae) {
-        		int caretPosition = editor.getCaretPosition();
-        		try
-        	    {
-        			editor.getDocument().insertString(caretPosition, "dtmc", new SimpleAttributeSet());
-        	    }
-        		catch (BadLocationException ble)
-        		{
-        		   //todo log?
-        		}
-        	}
-        };
-        
-        insertDTMC.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Discrete-Time Markov Chain\"");
-        //actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
-        insertDTMC.putValue(Action.NAME, "Probabilistic (DTMC)");
-        
-        insertCTMC = new AbstractAction() {
-        	public void actionPerformed(ActionEvent ae) {
-        		int caretPosition = editor.getCaretPosition();
-        		try
-        	    {
-        			editor.getDocument().insertString(caretPosition, "ctmc", new SimpleAttributeSet());
-        	    }
-        		catch (BadLocationException ble)
-        		{
-        		   //todo log?
-        		}
-        	}
-        };
-        
-        insertCTMC.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Continous-Time Markov Chain\"");
-        //actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
-        insertCTMC.putValue(Action.NAME, "Stochastic (CTMC)");
-       
-        insertMDP = new AbstractAction() {
-        	public void actionPerformed(ActionEvent ae) {
-        		int caretPosition = editor.getCaretPosition();
-        		try
-        	    {
-        			editor.getDocument().insertString(caretPosition, "mdp", new SimpleAttributeSet());
-        	    }
-        		catch (BadLocationException ble)
-        		{
-        		   //todo log?
-        		}
-        	}
-        };
-        
-        insertMDP.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Markov Decision Process\"");
-        //actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
-        insertMDP.putValue(Action.NAME, "Non-deterministic (MDP)");
-	
+			}
+		};
+		actionSearch.putValue(Action.LONG_DESCRIPTION, "Opens a find and replace dialog.");
+		//actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
+		actionSearch.putValue(Action.NAME, "Find/Replace");
+		//actionSearch.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+		insertDTMC = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				int caretPosition = editor.getCaretPosition();
+				try {
+					editor.getDocument().insertString(caretPosition, "dtmc", new SimpleAttributeSet());
+				} catch (BadLocationException ble) {
+					//todo log?
+				}
+			}
+		};
+
+		insertDTMC.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Discrete-Time Markov Chain\"");
+		//actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
+		insertDTMC.putValue(Action.NAME, "Probabilistic (DTMC)");
+
+		insertCTMC = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				int caretPosition = editor.getCaretPosition();
+				try {
+					editor.getDocument().insertString(caretPosition, "ctmc", new SimpleAttributeSet());
+				} catch (BadLocationException ble) {
+					//todo log?
+				}
+			}
+		};
+
+		insertCTMC.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Continous-Time Markov Chain\"");
+		//actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
+		insertCTMC.putValue(Action.NAME, "Stochastic (CTMC)");
+
+		insertMDP = new AbstractAction()
+		{
+			public void actionPerformed(ActionEvent ae)
+			{
+				int caretPosition = editor.getCaretPosition();
+				try {
+					editor.getDocument().insertString(caretPosition, "mdp", new SimpleAttributeSet());
+				} catch (BadLocationException ble) {
+					//todo log?
+				}
+			}
+		};
+
+		insertMDP.putValue(Action.LONG_DESCRIPTION, "Marks this model as a \"Markov Decision Process\"");
+		//actionSearch.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("find.png"));
+		insertMDP.putValue(Action.NAME, "Non-deterministic (MDP)");
+
 	}
-	
+
 	/**
 	 * Helper method that initializes the items for the context menu. This
 	 * menu will include cut, copy, paste, undo/redo, and find/replace
 	 * functionality.
 	 *
 	 */
-	private void initContextMenu() {
-		
-		contextPopup = new JPopupMenu();		
+	private void initContextMenu()
+	{
+
+		contextPopup = new JPopupMenu();
 		// Edit menu stuff
 		contextPopup.add(GUIPrism.getClipboardPlugin().getUndoAction());
 		contextPopup.add(GUIPrism.getClipboardPlugin().getRedoAction());
@@ -479,20 +485,18 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		contextPopup.add(GUIPrism.getClipboardPlugin().getSelectAllAction());
 		contextPopup.add(new JSeparator());
 		// Model menu stuff
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getParseModel());
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getBuildModel());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getParseModel());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getBuildModel());
 		contextPopup.add(new JSeparator());
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getExportMenu());
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getViewMenu());
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getComputeMenu());
-		contextPopup.add(((GUIMultiModel)handler.getGUIPlugin()).getComputeExportMenu());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getExportMenu());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getViewMenu());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getComputeMenu());
+		contextPopup.add(((GUIMultiModel) handler.getGUIPlugin()).getComputeExportMenu());
 		//contextPopup.add(actionJumpToError);
 		//contextPopup.add(actionSearch);
-		
-		
-		if (editor.getContentType().equals("text/prism"))
-		{
-			
+
+		if (editor.getContentType().equals("text/prism")) {
+
 			JMenu insertMenu = new JMenu("Insert elements");
 			JMenu insertModelTypeMenu = new JMenu("Model type");
 			insertMenu.add(insertModelTypeMenu);
@@ -500,7 +504,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 			insertMenu.add(insertModule);
 			JMenu insertVariable = new JMenu("Variable");
 			insertMenu.add(insertVariable);
-			
+
 			insertModelTypeMenu.add(insertDTMC);
 			insertModelTypeMenu.add(insertCTMC);
 			insertModelTypeMenu.add(insertMDP);
@@ -508,7 +512,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 			//contextPopup.add(insertMenu);
 		}
 	}
-	
+
 	/** Sets the content type of the editor, currently accepts 'text/prism' 
 	 * and 'text/pepa'. Setting the content type changes the editor kit of 
 	 * the editor to a kit that provides syntax highlighting etc for that
@@ -516,10 +520,11 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	 * 
 	 * @param contentType The content type
 	 */
-	public void setContentType(String contentType) {
+	public void setContentType(String contentType)
+	{
 		editor.setContentType(contentType);
 	}
-	
+
 	/** Loads the model editor with the text from the given stream reader, 
 	 * discards any previous content in the editor.
 	 * 
@@ -531,31 +536,31 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	public void read(Reader reader, Object object) throws IOException
 	{
 		editor.getDocument().removeUndoableEditListener(undoManager);
-		
+
 		editor.read(reader, object);
-		
+
 		// For some unknown reason the listeners have to be added both here
 		// and in the constructor, if they're not added here the editor won't
 		// be listening.
-		editor.getDocument().addDocumentListener(this);	
-		editor.getDocument().addUndoableEditListener(undoManager);	
+		editor.getDocument().addDocumentListener(this);
+		editor.getDocument().addUndoableEditListener(undoManager);
 	}
-	
+
 	public void setText(String text)
 	{
 		editor.setText(text);
 	}
-	
+
 	public void write(Writer writer) throws IOException
 	{
 		editor.write(writer);
 	}
-	
+
 	public String getTextString()
 	{
 		return editor.getText();
 	}
-	
+
 	/** Resets the model editor with a blank document.
 	 */
 	public void newModel()
@@ -563,16 +568,14 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		// Note: we use the read() method instead of setText() because
 		// this avoids triggering the listener methods and hence 
 		// unwanted autoparsing.
-		try
-		{
+		try {
 			read(new StringReader(""), "");
-		} catch (IOException ex)
-		{ 
+		} catch (IOException ex) {
 			//todo:mark
 			//GUIPrism.getGUI().getMultiLogger().logMessage(PrismLogLevel.PRISM_ERROR, ex.getMessage());
 		}
 	}
-	
+
 	/** Notifies the GUI that the document has been modified.
 	 * 
 	 * @param event Event generated by the change in the document.
@@ -582,108 +585,107 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 		// No need to notify the GUI as this event is covered by 
 		// the insert and delete update methods.
 	}
-	
+
 	/** Notifies the GUI that the document has been modified.
 	 * 
 	 * @param event Event generated by the change in the document.
 	 */
 	public void insertUpdate(DocumentEvent event)
 	{
-		if (handler != null) 
+		if (handler != null)
 			handler.hasModified(true);
 	}
-	
-	
+
 	/** Notifies the GUI that the document has been modified.
 	 * 
 	 * @param event Event generated by the change in the document.
 	 */
 	public void removeUpdate(DocumentEvent event)
 	{
-		if (handler != null) 
+		if (handler != null)
 			handler.hasModified(true);
 	}
-	
+
 	public String getParseText()
 	{
 		return editor.getText();
 	}
-	
+
 	/** Performs an undo operation on the text in the model editor.
-     */
-	public void undo() {
+	 */
+	public void undo()
+	{
 		try {
 			undoManager.undo();
 		} catch (CannotUndoException ex) {
-			
+
 			//GUIPrism.getGUI().getMultiLogger().logMessage(PrismLogLevel.PRISM_ERROR, ex.getMessage());
 		}
 	}
-	
+
 	/** Performs a redo operation on the text in the model editor.
-     */
-	public void redo() {
+	 */
+	public void redo()
+	{
 		try {
 			undoManager.redo();
 		} catch (CannotRedoException ex) {
 			//GUIPrism.getGUI().getMultiLogger().logMessage(PrismLogLevel.PRISM_ERROR, ex.getMessage());
 		}
 	}
-	
+
 	public void copy()
 	{
 		editor.copy();
 	}
-	
+
 	public void cut()
 	{
 		editor.cut();
 	}
-	
+
 	public void paste()
 	{
 		editor.paste();
 	}
-	
+
 	public void delete()
 	{
-		try
-		{
-			editor.getDocument().remove(editor.getSelectionStart(), editor.getSelectionEnd()-editor.getSelectionStart());
-		}
-		catch(BadLocationException ex)
-		{
+		try {
+			editor.getDocument().remove(editor.getSelectionStart(), editor.getSelectionEnd() - editor.getSelectionStart());
+		} catch (BadLocationException ex) {
 			//GUIPrism.getGUI().getMultiLogger().logMessage(PrismLogLevel.PRISM_ERROR, ex.getMessage());
 		}
 	}
-	
+
 	public void selectAll()
 	{
 		editor.selectAll();
 	}
-	
+
 	public boolean isEditable()
 	{
 		return editor.isEditable();
 	}
-	
+
 	public void setEditable(boolean b)
 	{
 		editor.setEditable(b);
 	}
-	
+
 	public void setEditorFont(Font f)
 	{
 		editor.setFont(f);
 	}
-	
+
 	public void setEditorBackground(Color c)
 	{
 		editor.setBackground(c);
 	}
-		
+
 	// rajk
-	public JEditorPane getEditorPane(){
+	public JEditorPane getEditorPane()
+	{
 		return this.editor;
 	}
 
@@ -696,60 +698,67 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	{
 		if (me.isPopupTrigger()) {
 			actionJumpToError.setEnabled(parseError != null && parseError.hasLineNumbers());
-			((GUIMultiModel)handler.getGUIPlugin()).doEnables();
-			
+			((GUIMultiModel) handler.getGUIPlugin()).doEnables();
+
 			contextPopup.show(me.getComponent(), me.getX(), me.getY());
-			
+
 		}
-	} 
-	 
-	public void mouseClicked(MouseEvent me) {}
-	public void mousePressed(MouseEvent me) {
-		mouseTriggered(me);		
 	}
-	public void mouseEntered(MouseEvent me) {}
-	public void mouseExited(MouseEvent me) {}
-	public void mouseReleased(MouseEvent me) {
-		mouseTriggered(me);	
+
+	public void mouseClicked(MouseEvent me)
+	{
 	}
-	
+
+	public void mousePressed(MouseEvent me)
+	{
+		mouseTriggered(me);
+	}
+
+	public void mouseEntered(MouseEvent me)
+	{
+	}
+
+	public void mouseExited(MouseEvent me)
+	{
+	}
+
+	public void mouseReleased(MouseEvent me)
+	{
+		mouseTriggered(me);
+	}
+
 	public void jumpToError()
 	{
-		if (parseError != null && parseError.hasLineNumbers() )
-		{
-			try
-			{
+		if (parseError != null && parseError.hasLineNumbers()) {
+			try {
 				int offset = computeDocumentOffset(parseError.getBeginLine(), parseError.getBeginColumn());
-				
+
 				// scroll to center as much as possible.
 				editor.setCaretPosition(offset);
 				Rectangle r1 = editor.modelToView(offset);
 				int dy = (editor.getVisibleRect().height - r1.height) / 2;
-				Rectangle r2 = new Rectangle(0, r1.y - dy,editor.getVisibleRect().width, r1.height + 2*dy);
+				Rectangle r2 = new Rectangle(0, r1.y - dy, editor.getVisibleRect().width, r1.height + 2 * dy);
 				editor.scrollRectToVisible(r2);
-			}
-			catch (BadLocationException e)
-			{
-				
+			} catch (BadLocationException e) {
+
 			}
 		}
 	}
-	
+
 	public void refreshErrorDisplay()
 	{
 		if (parseErrorHighlightKey != null)
 			editor.getHighlighter().removeHighlight(parseErrorHighlightKey);
-		
+
 		/* Mapping for gutter */
-	    Map<Integer, String> errorLines = new HashMap<Integer, String>();
-			    		
-		if (parseError != null && parseError.hasLineNumbers() )
-		{
+		Map<Integer, String> errorLines = new HashMap<Integer, String>();
+
+		if (parseError != null && parseError.hasLineNumbers()) {
 			String error = parseError.getMessage();
-		
+
 			// Just the first line.
 			errorLines.put(parseError.getBeginLine(), error);
-			
+
 			// If error spans multiple lines, this code will put
 			// an error in every line of the gutter.
 			/*for (int line = parseError.getBeginLine();
@@ -759,97 +768,82 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 				errorLines.put(line, error);
 			}*/
 		}
-		
+
 		gutter.setParseErrors(errorLines);
-		
+
 		/* Highlighting errors in editor */
-		if (parseError != null && parseError.hasLineNumbers())
-		{
+		if (parseError != null && parseError.hasLineNumbers()) {
 			/* Remove existing highlight */
-			try
-			{
-				parseErrorHighlightKey = editor.getHighlighter().addHighlight(
-				  computeDocumentOffset(parseError.getBeginLine(), parseError.getBeginColumn()), 
-				  computeDocumentOffset(parseError.getEndLine(), parseError.getEndColumn())+1, errorHighlightPainter);
+			try {
+				parseErrorHighlightKey = editor.getHighlighter().addHighlight(computeDocumentOffset(parseError.getBeginLine(), parseError.getBeginColumn()),
+						computeDocumentOffset(parseError.getEndLine(), parseError.getEndColumn()) + 1, errorHighlightPainter);
+			} catch (BadLocationException e) {
+
 			}
-			catch (BadLocationException e)
-			{
-				
-			}			
-		}		
+		}
 	}
-	
+
 	public int computeDocumentOffset(int line, int column) throws BadLocationException
 	{
-		if (line < 0 || column < 0) throw new BadLocationException("Negative line/col", -1);
-		
-		Element lineElement = editor.getDocument().getDefaultRootElement().
-		getElement(line-1);
-		
+		if (line < 0 || column < 0)
+			throw new BadLocationException("Negative line/col", -1);
+
+		Element lineElement = editor.getDocument().getDefaultRootElement().getElement(line - 1);
+
 		int beginLineOffset = lineElement.getStartOffset();
 		int endLineOffset = lineElement.getEndOffset();
-		
+
 		String text = editor.getDocument().getText(beginLineOffset, endLineOffset - beginLineOffset);
-		
+
 		int parserChar = 1;
-		int documentChar = 0;		
-		
-		while (parserChar < column)
-		{
-			if (documentChar < text.length() && text.charAt(documentChar) == '\t')
-			{
+		int documentChar = 0;
+
+		while (parserChar < column) {
+			if (documentChar < text.length() && text.charAt(documentChar) == '\t') {
 				parserChar += 8;
 				documentChar += 1;
-			}
-			else
-			{
+			} else {
 				parserChar += 1;
 				documentChar += 1;
-			}		
+			}
 		}
-				
-		return beginLineOffset+documentChar;		
+
+		return beginLineOffset + documentChar;
 	}
-	
-	public void modelParseFailed(PrismLangException parserError, boolean background) 
-	{	
-		this.parseError = parserError;		
-		refreshErrorDisplay();	
+
+	public void modelParseFailed(PrismLangException parserError, boolean background)
+	{
+		this.parseError = parserError;
+		refreshErrorDisplay();
 		if (!background)
-			jumpToError();		
+			jumpToError();
 	}
 
 	@Override
-	public void modelParseSuccessful() 
+	public void modelParseSuccessful()
 	{
 		this.parseError = null;
 		// get rid of any error highlighting
 		refreshErrorDisplay();
 	}
 
-	public GUIUndoManager getUndoManager() 
+	public GUIUndoManager getUndoManager()
 	{
 		return undoManager;
-	} 	
-	
-	public boolean canDoClipBoardAction(Action action) {
-		if (action == GUIPrism.getClipboardPlugin().getPasteAction())
-		{
+	}
+
+	public boolean canDoClipBoardAction(Action action)
+	{
+		if (action == GUIPrism.getClipboardPlugin().getPasteAction()) {
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			return (clipboard.getContents(null) != null);
-		}
-		else if (
-		  action == GUIPrism.getClipboardPlugin().getCutAction() ||
-		  action == GUIPrism.getClipboardPlugin().getCopyAction() ||
-		  action == GUIPrism.getClipboardPlugin().getDeleteAction())
-		{
+		} else if (action == GUIPrism.getClipboardPlugin().getCutAction() || action == GUIPrism.getClipboardPlugin().getCopyAction()
+				|| action == GUIPrism.getClipboardPlugin().getDeleteAction()) {
 			return (editor.getSelectedText() != null);
-		}
-		else if (action == GUIPrism.getClipboardPlugin().getSelectAllAction())
-		{
+		} else if (action == GUIPrism.getClipboardPlugin().getSelectAllAction()) {
 			return true;
 		}
-		
+
 		return handler.canDoClipBoardAction(action);
 	}
 }

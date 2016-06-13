@@ -43,7 +43,7 @@ public class PrismTest
 	{
 		new PrismTest().go(args);
 	}
-	
+
 	public void go(String args[])
 	{
 		try {
@@ -52,44 +52,42 @@ public class PrismTest
 			ModulesFile modulesFile;
 			PropertiesFile propertiesFile;
 			Result result;
-			
+
 			// Init
 			mainLog = new PrismFileLog("stdout");
 			prism = new Prism(mainLog);
 			prism.initialise();
-			
+
 			// Parse/load model 1
 			// NB: no need to build explicitly - it will be done if/when neeed
 			modulesFile = prism.parseModelFile(new File(args[0]));
 			prism.loadPRISMModel(modulesFile);
-			
+
 			// Parse a prop, check on model 1
 			propertiesFile = prism.parsePropertiesString(modulesFile, "P=?[F<=0.1 s1=1]");
 			result = prism.modelCheck(propertiesFile, propertiesFile.getPropertyObject(0));
 			System.out.println(result.getResult());
-			
+
 			// Parse another prop, check on model 1
 			propertiesFile = prism.parsePropertiesString(modulesFile, "P=?[F<=0.1 s1=1]");
 			result = prism.modelCheck(propertiesFile, propertiesFile.getPropertyObject(0));
 			System.out.println(result.getResult());
-			
+
 			// Parse/load model 2
 			modulesFile = prism.parseModelFile(new File(args[1]));
 			prism.loadPRISMModel(modulesFile);
-			
+
 			// Parse a prop, check on model 2
 			propertiesFile = prism.parsePropertiesString(modulesFile, "P=?[F<=0.1 s1=1]");
 			result = prism.modelCheck(propertiesFile, propertiesFile.getPropertyObject(0));
 			System.out.println(result.getResult());
-			
+
 			// Close down
 			prism.closeDown();
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
 			System.exit(1);
-		}
-		catch (PrismException e) {
+		} catch (PrismException e) {
 			System.out.println("Error: " + e.getMessage());
 			System.exit(1);
 		}

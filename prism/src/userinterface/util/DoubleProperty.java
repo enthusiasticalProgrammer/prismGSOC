@@ -29,77 +29,66 @@ package userinterface.util;
 
 public class DoubleProperty extends SingleProperty
 {
-    /** Creates a new instance of DoubleProperty */
-    public DoubleProperty(PropertyOwner owner,String name, double property)
-    {
-        this(owner, name, property, "");
-    }
-    
-    public DoubleProperty(PropertyOwner owner,String name, double property, String comment)
-    {
-        super(owner,name, new Double(property), "", false, comment);
-    }
-    
-    public void setValue(double property)
-    {
-        setValue(property, true);
-    }
-    
-    public void setValue(double property, boolean notifyObservers)
-    {
-        try
-        {
-            setProperty(new Double(property), notifyObservers);
-        }
-        catch(PropertyException e)
-        {
-            //This will NEVER happen! (hopefully!)
-        }
-    }
-    
-    public double getValue()
-    {
-        return ((Double)getProperty()).doubleValue();
-    }
-    
-    public void setProperty(Object property) throws PropertyException
-    {
-        setProperty(property, true);
-    }
-    
-    public void setProperty(Object property, boolean notifyObservers) throws PropertyException
-    {
-        if(property instanceof Double)
-            super.setProperty(property, notifyObservers);
-        else if(property instanceof String)
-        {
-            try
-            {
-            
-                super.setProperty(new Double(Double.parseDouble((String)property)), notifyObservers);
-                return;
-            }
-            catch(NumberFormatException e)
-            {
-                throw new PropertyException("The format of this number is incorrect: "+(String)property);
-            }
-        }
-        else 
-        {
-            throw new PropertyException("Value must be a real number");
-        }
-        
-    }
+	/** Creates a new instance of DoubleProperty */
+	public DoubleProperty(PropertyOwner owner, String name, double property)
+	{
+		this(owner, name, property, "");
+	}
 
-	
-    
-   /* public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column)
-    {
-        return new DefaultTableCellRenderer().getTableCellRendererComponent
-        (table, value, isSelected, hasFocus, row, column);
-    }*/
-    
-    //THIS WILL NEED TO OVERRIDE THE EDITOR
-    
+	public DoubleProperty(PropertyOwner owner, String name, double property, String comment)
+	{
+		super(owner, name, new Double(property), "", false, comment);
+	}
+
+	public void setValue(double property)
+	{
+		setValue(property, true);
+	}
+
+	public void setValue(double property, boolean notifyObservers)
+	{
+		try {
+			setProperty(new Double(property), notifyObservers);
+		} catch (PropertyException e) {
+			//This will NEVER happen! (hopefully!)
+		}
+	}
+
+	public double getValue()
+	{
+		return ((Double) getProperty()).doubleValue();
+	}
+
+	public void setProperty(Object property) throws PropertyException
+	{
+		setProperty(property, true);
+	}
+
+	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
+	{
+		if (property instanceof Double)
+			super.setProperty(property, notifyObservers);
+		else if (property instanceof String) {
+			try {
+
+				super.setProperty(new Double(Double.parseDouble((String) property)), notifyObservers);
+				return;
+			} catch (NumberFormatException e) {
+				throw new PropertyException("The format of this number is incorrect: " + (String) property);
+			}
+		} else {
+			throw new PropertyException("Value must be a real number");
+		}
+
+	}
+
+	/* public Component getTableCellRendererComponent(JTable table, Object value,
+	    boolean isSelected, boolean hasFocus, int row, int column)
+	{
+	    return new DefaultTableCellRenderer().getTableCellRendererComponent
+	    (table, value, isSelected, hasFocus, row, column);
+	}*/
+
+	//THIS WILL NEED TO OVERRIDE THE EDITOR
+
 }

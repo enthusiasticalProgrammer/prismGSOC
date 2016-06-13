@@ -50,11 +50,23 @@ public class ExpressionBinaryOp extends Expression
 	public static final int DIVIDE = 14;
 	// Operator symbols
 	public static final String opSymbols[] = { "", "=>", "<=>", "|", "&", "=", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/" };
+
 	// Operator type testers
-	public static boolean isLogical(int op) { return op==IMPLIES || op==IFF || op==OR || op==AND; }
-	public static boolean isRelOp(int op) { return op==EQ || op==NE || op==GT ||  op==GE || op==LT || op==LE; }
-	public static boolean isArithmetic(int op) { return op==PLUS || op==MINUS || op==TIMES ||  op==DIVIDE; }
-	
+	public static boolean isLogical(int op)
+	{
+		return op == IMPLIES || op == IFF || op == OR || op == AND;
+	}
+
+	public static boolean isRelOp(int op)
+	{
+		return op == EQ || op == NE || op == GT || op == GE || op == LT || op == LE;
+	}
+
+	public static boolean isArithmetic(int op)
+	{
+		return op == PLUS || op == MINUS || op == TIMES || op == DIVIDE;
+	}
+
 	// Operator
 	protected int op = 0;
 	// Pair of operands
@@ -223,7 +235,7 @@ public class ExpressionBinaryOp extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{
@@ -240,6 +252,7 @@ public class ExpressionBinaryOp extends Expression
 		result = prime * result + ((operand2 == null) ? 0 : operand2.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj)
 	{

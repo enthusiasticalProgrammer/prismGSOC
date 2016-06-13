@@ -37,14 +37,16 @@ import java.util.Map.Entry;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class StrongLumper extends Lumper {
+final class StrongLumper extends Lumper
+{
 
 	/**
 	 * Construct a new strong bisimulation lumper.
 	 * 
 	 * @param origPmc Markov chain to construct lumper for
 	 */
-	StrongLumper(MutablePMC origPmc) {
+	StrongLumper(MutablePMC origPmc)
+	{
 		super(origPmc);
 	}
 
@@ -74,7 +76,7 @@ final class StrongLumper extends Lumper {
 		}
 		return signature;
 	}
-	
+
 	/**
 	 * Refines a given block to a list of new blocks for strong bisimulation.
 	 * Each block will consist of the states with the same signature.
@@ -83,7 +85,8 @@ final class StrongLumper extends Lumper {
 	 * @param newBlocks list of new blocks generated
 	 */
 	@Override
-	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks) {
+	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks)
+	{
 		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>>();
 		for (int state : oldBlock) {
 			HashMap<HashSet<Integer>, Function> signature = stateSignature(state);
@@ -105,7 +108,8 @@ final class StrongLumper extends Lumper {
 	 * of an arbitrary state for each block.
 	 */
 	@Override
-	protected void buildQuotient() {
+	protected void buildQuotient()
+	{
 		optPmc = new MutablePMC(origPmc.getFunctionFactory(), blocks.size(), origPmc.isUseRewards(), origPmc.isUseTime());
 		for (int newState = 0; newState < blocks.size(); newState++) {
 			HashSet<Integer> fromBlock = blocks.get(newState);
@@ -117,7 +121,7 @@ final class StrongLumper extends Lumper {
 			if (origPmc.isUseRewards()) {
 				optPmc.setReward(newState, origPmc.getReward(someOriginalState));
 				if (optPmc.getReward(newState).equals(origPmc.getFunctionFactory().getZero())) {
-					optPmc.setTargetState(newState, true);					
+					optPmc.setTargetState(newState, true);
 				}
 				if (origPmc.isUseTime()) {
 					optPmc.setTime(newState, origPmc.getTime(someOriginalState));

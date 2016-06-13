@@ -33,13 +33,13 @@ import prism.PrismLangException;
 
 public class RewardStruct extends ASTElement
 {
-	private String name;		// name (optional)
-	private Vector<RewardStructItem> items;		// list of items
-	private int numStateItems;	// how may of the items are state rewards
-	private int numTransItems;	// how may of the items are transition rewards
-	
+	private String name; // name (optional)
+	private Vector<RewardStructItem> items; // list of items
+	private int numStateItems; // how may of the items are state rewards
+	private int numTransItems; // how may of the items are transition rewards
+
 	// Constructor
-	
+
 	public RewardStruct()
 	{
 		name = "";
@@ -54,69 +54,78 @@ public class RewardStruct extends ASTElement
 	}
 
 	// Set methods
-	
+
 	public void addItem(String synch, Expression states, Expression reward)
 	{
 		addItem(new RewardStructItem(synch, states, reward));
 	}
-	
+
 	public void addItem(RewardStructItem rsi)
 	{
 		items.add(rsi);
-		if (rsi.isTransitionReward()) numTransItems++; else numStateItems++;
+		if (rsi.isTransitionReward())
+			numTransItems++;
+		else
+			numStateItems++;
 	}
 
 	public void setRewardStructItem(int i, RewardStructItem rsi)
 	{
-		if (getRewardStructItem(i).isTransitionReward()) numTransItems--; else numStateItems--;
+		if (getRewardStructItem(i).isTransitionReward())
+			numTransItems--;
+		else
+			numStateItems--;
 		items.set(i, rsi);
-		if (rsi.isTransitionReward()) numTransItems++; else numStateItems++;
+		if (rsi.isTransitionReward())
+			numTransItems++;
+		else
+			numStateItems++;
 	}
 
 	// Get methods
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public int getNumItems()
 	{
 		return items.size();
 	}
-	
+
 	public int getNumStateItems()
 	{
 		return numStateItems;
 	}
-	
+
 	public int getNumTransItems()
 	{
 		return numTransItems;
 	}
-	
+
 	public RewardStructItem getRewardStructItem(int i)
 	{
 		return items.elementAt(i);
 	}
-	
+
 	public String getSynch(int i)
 	{
 		return getRewardStructItem(i).getSynch();
 	}
-	
+
 	public Expression getStates(int i)
 	{
 		return getRewardStructItem(i).getStates();
 	}
-	
+
 	public Expression getReward(int i)
 	{
 		return getRewardStructItem(i).getReward();
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
@@ -124,7 +133,7 @@ public class RewardStruct extends ASTElement
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
@@ -132,19 +141,20 @@ public class RewardStruct extends ASTElement
 	{
 		int i, n;
 		String s = "";
-		
+
 		s += "rewards";
-		if (name != null && name.length() > 0) s += " \""+name+"\"";
+		if (name != null && name.length() > 0)
+			s += " \"" + name + "\"";
 		s += " \n\n";
 		n = getNumItems();
 		for (i = 0; i < n; i++) {
 			s += "\t" + getRewardStructItem(i) + "\n";
 		}
 		s += "\nendrewards\n";
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
@@ -155,7 +165,7 @@ public class RewardStruct extends ASTElement
 		ret.setName(name);
 		n = getNumItems();
 		for (i = 0; i < n; i++) {
-			ret.addItem((RewardStructItem)getRewardStructItem(i).deepCopy());
+			ret.addItem((RewardStructItem) getRewardStructItem(i).deepCopy());
 		}
 		ret.setPosition(this);
 		return ret;

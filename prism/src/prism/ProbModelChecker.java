@@ -212,7 +212,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		// Get info from R operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
-		
+
 		// Get rewards
 		Object rs = expr.getRewardStructIndex();
 		JDDNode stateRewards = getStateRewardsByIndexObject(rs, model, constantValues);
@@ -246,7 +246,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		} else if (expr2.getType() instanceof TypePathBool || expr2.getType() instanceof TypeBool) {
 			rewards = checkRewardPathFormula(expr2, stateRewards, transRewards);
 		}
-		
+
 		if (rewards == null)
 			throw new PrismException("Unrecognised operator in R operator");
 
@@ -444,9 +444,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		// and whether we want to use the corresponding algorithms
 		boolean useSimplePathAlgo = expr.isSimplePathFormula();
 
-		if (useSimplePathAlgo &&
-		    prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA) &&
-		    LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
+		if (useSimplePathAlgo && prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA)
+				&& LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
 			// If PRISM_PATH_VIA_AUTOMATA is true, we want to use the LTL engine
 			// whenever possible
 			useSimplePathAlgo = false;
@@ -467,10 +466,9 @@ public class ProbModelChecker extends NonProbModelChecker
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
 
 		// Negation
-		if (expr instanceof ExpressionUnaryOp &&
-		    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
+		if (expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.NOT) {
 			negated = true;
-			expr = ((ExpressionUnaryOp)expr).getOperand();
+			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
 
 		if (expr instanceof ExpressionTemporal) {
@@ -514,17 +512,13 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDDVars daDDRowVars, daDDColVars;
 		int i;
 
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH,
-				AcceptanceType.GENERIC
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERIC };
 		mcLtl = new LTLModelChecker(prism);
 		da = mcLtl.constructDAForLTLFormula(this, model, expr, labelDDs, allowedAcceptance);
 
 		// Build product of Markov chain and automaton
 		// (note: might be a CTMC - StochModelChecker extends this class)
-		mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MC-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		modelProduct = mcLtl.constructProductMC(da, model, labelDDs, daDDRowVars, daDDColVars);
@@ -644,7 +638,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			lowerBound = 0;
 		}
 
-		Integer windowSize = null;  // unbounded
+		Integer windowSize = null; // unbounded
 		if (bounds.hasUpperBound()) {
 			windowSize = bounds.getHighestInteger() - lowerBound;
 		}
@@ -819,13 +813,12 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		if (Expression.isReach(expr)) {
 			return checkRewardReach((ExpressionTemporal) expr, stateRewards, transRewards);
-		}
-		else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
+		} else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
 			return checkRewardCoSafeLTL(expr, stateRewards, transRewards);
 		}
 		throw new PrismException("R operator contains a path formula that is not syntactically co-safe: " + expr);
 	}
-	
+
 	// reach reward
 
 	protected StateValues checkRewardReach(ExpressionTemporal expr, JDDNode stateRewards, JDDNode transRewards) throws PrismException
@@ -837,7 +830,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		if (expr.hasBounds()) {
 			throw new PrismNotSupportedException("R operator cannot contain a bounded F operator: " + expr);
 		}
-		
+
 		// model check operand first
 		b = checkExpressionDD(expr.getOperand2());
 
@@ -877,7 +870,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			if (model.getModelType().continuousTime()) {
-				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType()+".");
+				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType() + ".");
 			}
 
 			if (!expr.isSimplePathFormula()) {
@@ -901,12 +894,9 @@ public class ProbModelChecker extends NonProbModelChecker
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
 		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
-		mainLog.println(da.getAutomataType()+" has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics()+".");
+		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for deterministic automaton translation: " + l / 1000.0 + " seconds.");
 		// If required, export DA 
@@ -920,7 +910,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Build product of Markov chain and automaton
 		// (note: might be a CTMC - StochModelChecker extends this class)
-		mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MC-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		l = System.currentTimeMillis();
@@ -952,7 +942,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDD.Ref(transRewards);
 		JDD.Ref(modelProduct.getTrans01());
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
-		
+
 		// Find accepting states + compute reachability rewards
 		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
 		JDDNode acc = null;

@@ -32,40 +32,40 @@ import prism.*;
 
 public abstract class OptionsPanel extends JPanel
 {
-    
-    private String tab;
-    
-    public OptionsPanel(String tab)
-    {
-        this.tab = tab;
-    }
-    
-    //Applies the state of the options panel to the data stored in PrismSettings
-    public abstract void apply() throws PrismException;
-    
-    //Sets up the gui to reflect the data stored in 
-    public abstract void synchronizeGUI();
-    
-    //The following methods are now irrelevent:
-    //      All loading/saving is now done in PrismSettings.java
-    //      Default settings are handled in PrismSettings.java
-    //      and validity is now handled in the apply() method
-    
-    //public abstract void defaultGUI();
-    
-    //public abstract boolean valid() throws GUIException;
-    
-    //public abstract Element saveXMLElement(Document doc) throws DOMException;
-    
-    //public abstract void loadXMLElement(Document doc, Element element);
-    
-    //public abstract void saveProperties(Properties properties);
-    
-    //public abstract void loadProperties(Properties properties);
-    
-    public String getTabText()
-    {
-        return tab;
-    }
-    
+
+	private String tab;
+
+	public OptionsPanel(String tab)
+	{
+		this.tab = tab;
+	}
+
+	//Applies the state of the options panel to the data stored in PrismSettings
+	public abstract void apply() throws PrismException;
+
+	//Sets up the gui to reflect the data stored in 
+	public abstract void synchronizeGUI();
+
+	//The following methods are now irrelevent:
+	//      All loading/saving is now done in PrismSettings.java
+	//      Default settings are handled in PrismSettings.java
+	//      and validity is now handled in the apply() method
+
+	//public abstract void defaultGUI();
+
+	//public abstract boolean valid() throws GUIException;
+
+	//public abstract Element saveXMLElement(Document doc) throws DOMException;
+
+	//public abstract void loadXMLElement(Document doc, Element element);
+
+	//public abstract void saveProperties(Properties properties);
+
+	//public abstract void loadProperties(Properties properties);
+
+	public String getTabText()
+	{
+		return tab;
+	}
+
 }

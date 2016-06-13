@@ -41,14 +41,14 @@ public class Filter extends ASTElement
 	private boolean maxReq = false;
 
 	// Constructor
-	
+
 	public Filter(Expression expr)
 	{
 		this.expr = expr;
 	}
 
 	// Set methods
-	
+
 	public void setExpression(Expression expr)
 	{
 		this.expr = expr;
@@ -63,9 +63,9 @@ public class Filter extends ASTElement
 	{
 		maxReq = b;
 	}
-	
+
 	// Get methods
-	
+
 	public Expression getExpression()
 	{
 		return expr;
@@ -93,9 +93,9 @@ public class Filter extends ASTElement
 			return maxReq ? "max" : "state";
 		}
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
@@ -103,7 +103,7 @@ public class Filter extends ASTElement
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
@@ -111,11 +111,13 @@ public class Filter extends ASTElement
 	{
 		String s = "";
 		s += "{" + expr + "}";
-		if (minReq) s += "{min}";
-		if (maxReq) s += "{max}";
+		if (minReq)
+			s += "{min}";
+		if (maxReq)
+			s += "{max}";
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */

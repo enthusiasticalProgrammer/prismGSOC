@@ -81,7 +81,7 @@ public abstract class ECComputer extends PrismComponent
 	 * @param accept BitSet for the set of accepting states
 	 */
 	public abstract void computeMECStates(BitSet restrict, BitSet accept) throws PrismException;
-	
+
 	/**
 	 * Get the list of states for computed MECs.
 	 */

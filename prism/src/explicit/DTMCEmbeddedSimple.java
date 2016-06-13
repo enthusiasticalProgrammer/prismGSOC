@@ -75,7 +75,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	{
 		throw new PrismNotSupportedException("Not supported");
 	}
-	
+
 	// Accessors (for Model)
 
 	public ModelType getModelType()
@@ -117,12 +117,12 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	{
 		return ctmc.getStatesList();
 	}
-	
+
 	public Values getConstantValues()
 	{
 		return ctmc.getConstantValues();
 	}
-	
+
 	public int getNumTransitions()
 	{
 		return ctmc.getNumTransitions() + numExtraTransitions;
@@ -139,7 +139,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			return ctmc.getSuccessorsIterator(s);
 		}
 	}
-	
+
 	public boolean isSuccessor(int s1, int s2)
 	{
 		return exitRates[s1] == 0 ? (s1 == s2) : ctmc.isSuccessor(s1, s2);
@@ -147,12 +147,12 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
-		return exitRates[s] == 0 ? set.get(s) : ctmc.allSuccessorsInSet(s, set); 
+		return exitRates[s] == 0 ? set.get(s) : ctmc.allSuccessorsInSet(s, set);
 	}
 
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
-		return exitRates[s] == 0 ? set.get(s) : ctmc.someSuccessorsInSet(s, set); 
+		return exitRates[s] == 0 ? set.get(s) : ctmc.someSuccessorsInSet(s, set);
 	}
 
 	public int getNumChoices(int s)
@@ -229,19 +229,20 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 		}
 	}
 
-	public Iterator<Entry<Integer,Double>> getTransitionsIterator(int s)
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s)
 	{
 		if (exitRates[s] == 0) {
 			// return prob-1 self-loop
-			Map<Integer,Double> m = new TreeMap<Integer,Double>();
+			Map<Integer, Double> m = new TreeMap<Integer, Double>();
 			m.put(s, 1.0);
 			return m.entrySet().iterator();
 		} else {
-			final Iterator<Entry<Integer,Double>> ctmcIterator = ctmc.getTransitionsIterator(s);
-			
+			final Iterator<Entry<Integer, Double>> ctmcIterator = ctmc.getTransitionsIterator(s);
+
 			// return iterator over entries, with probabilities divided by exitRates[s]
 			final double er = exitRates[s];
-			return new Iterator<Entry<Integer,Double>>() {
+			return new Iterator<Entry<Integer, Double>>()
+			{
 				@Override
 				public boolean hasNext()
 				{
@@ -252,8 +253,9 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 				public Entry<Integer, Double> next()
 				{
 					final Entry<Integer, Double> ctmcEntry = ctmcIterator.next();
-					
-					return new Entry<Integer, Double>() {
+
+					return new Entry<Integer, Double>()
+					{
 						@Override
 						public Integer getKey()
 						{
@@ -354,7 +356,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			}
 			d /= (er - diag);
 		}
-		
+
 		return d;
 	}
 
@@ -417,7 +419,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			}
 			d /= (er - diag);
 		}
-		
+
 		return d;
 	}
 
@@ -427,7 +429,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 		int i, j;
 		double prob, er;
 		Distribution distr;
-		
+
 		// Initialise result to 0
 		for (j = 0; j < numStates; j++) {
 			result[j] = 0;

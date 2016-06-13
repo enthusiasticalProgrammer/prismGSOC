@@ -39,27 +39,31 @@ import java.util.HashMap;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-class ConstraintChecker {
+class ConstraintChecker
+{
 	/**
 	 * Class to store keys for the cache of the decision procedure.
 	 */
-	class DecisionEntryKey {
+	class DecisionEntryKey
+	{
 		/** constraint to be stored (representing "constraint >=/> 0") */
 		Function constraint;
 		/** whether constraint should be strictly larger than zero */
 		boolean strict;
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			if (!(obj instanceof DecisionEntryKey)) {
 				return false;
 			}
 			DecisionEntryKey other = (DecisionEntryKey) obj;
 			return this.constraint.equals(other.constraint) && (this.strict == other.strict);
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = 0;
 			hash = constraint.hashCode() + (hash << 6) + (hash << 16) - hash;
 			hash = (strict ? 13 : 17) + (hash << 6) + (hash << 16) - hash;
@@ -67,27 +71,30 @@ class ConstraintChecker {
 			return hash;
 		}
 	}
-	
+
 	/**
 	 * Class to store keys for the cache of the decision procedure.
 	 */
-	class DecisionEntryValue {
+	class DecisionEntryValue
+	{
 		/** region this result is valid for */
 		Region region;
 		/** result, that is whether corresponding constraint holds in region */
 		boolean result;
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			if (!(obj instanceof DecisionEntryValue)) {
 				return false;
 			}
 			DecisionEntryValue other = (DecisionEntryValue) obj;
 			return this.region.equals(other.region) && (this.result == other.result);
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = 0;
 			hash = region.hashCode() + (hash << 6) + (hash << 16) - hash;
 			hash = (result ? 13 : 17) + (hash << 6) + (hash << 16) - hash;
@@ -99,16 +106,17 @@ class ConstraintChecker {
 	/** number of random points to evaluate in decision procedure */
 	private int numRandomPoints;
 	/** decision cache */
-	protected HashMap<DecisionEntryKey,ArrayList<DecisionEntryValue>> decisions;
-	
+	protected HashMap<DecisionEntryKey, ArrayList<DecisionEntryValue>> decisions;
+
 	/**
 	 * Constructs a new constraint checker.
 	 * 
 	 * @param numRandomPoints number of inner points to evaluate in addition to border points
 	 */
-	ConstraintChecker(int numRandomPoints) {
+	ConstraintChecker(int numRandomPoints)
+	{
 		this.numRandomPoints = numRandomPoints;
-		decisions = new HashMap<DecisionEntryKey,ArrayList<DecisionEntryValue>>();
+		decisions = new HashMap<DecisionEntryKey, ArrayList<DecisionEntryValue>>();
 	}
 
 	/**
@@ -149,10 +157,10 @@ class ConstraintChecker {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Checks whether constraint holds in given region.
 	 * 
@@ -179,7 +187,7 @@ class ConstraintChecker {
 				}
 			}
 		}
-		
+
 		boolean result = preCheck(region, constr, strict);
 		if (result) {
 			result = mainCheck(region, constr, strict);

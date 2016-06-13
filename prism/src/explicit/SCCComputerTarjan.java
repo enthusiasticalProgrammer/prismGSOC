@@ -86,7 +86,7 @@ public class SCCComputerTarjan extends SCCComputer
 		tarjan();
 		// Now remove trivial SCCs
 		notInSCCs = new BitSet();
-		for (Iterator<BitSet> it = sccs.iterator(); it.hasNext(); ) {
+		for (Iterator<BitSet> it = sccs.iterator(); it.hasNext();) {
 			BitSet scc = it.next();
 			if (scc.cardinality() == 1) {
 				int s = scc.nextSetBit(0);
@@ -131,7 +131,7 @@ public class SCCComputerTarjan extends SCCComputer
 	{
 		return notInSCCs;
 	}
-	
+
 	@Override
 	public List<BitSet> getBSCCs()
 	{
@@ -143,7 +143,7 @@ public class SCCComputerTarjan extends SCCComputer
 	{
 		return notInBSCCs;
 	}
-	
+
 	// SCC Computation
 
 	/**

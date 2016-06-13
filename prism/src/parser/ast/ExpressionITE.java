@@ -93,7 +93,7 @@ public class ExpressionITE extends Expression
 	{
 		return operand1.isProposition() && operand2.isProposition() && operand3.isProposition();
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -124,7 +124,7 @@ public class ExpressionITE extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

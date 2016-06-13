@@ -68,7 +68,7 @@ public abstract class Expression extends ASTElement
 	 * when evaluated during model checking?
 	 */
 	public abstract boolean returnsSingleValue();
-	
+
 	// Overrided version of deepCopy() from superclass ASTElement (to reduce casting).
 
 	/**
@@ -136,8 +136,7 @@ public abstract class Expression extends ASTElement
 			if (getType() == null) {
 				this.typeCheck();
 			}
-			if (getType() == TypePathBool.getInstance() ||
-			    getType() == TypeBool.getInstance()) {
+			if (getType() == TypePathBool.getInstance() || getType() == TypeBool.getInstance()) {
 				if (!allowNestedOperators) {
 					if (this.computeProbNesting() >= 1) {
 						return false;
@@ -621,7 +620,8 @@ public abstract class Expression extends ASTElement
 		return new ExpressionUnaryOp(ExpressionUnaryOp.PARENTH, expr);
 	}
 
-	public static ExpressionTemporal Next(Expression expr) {
+	public static ExpressionTemporal Next(Expression expr)
+	{
 		return new ExpressionTemporal(ExpressionTemporal.P_X, null, expr);
 	}
 
@@ -654,8 +654,7 @@ public abstract class Expression extends ASTElement
 
 	public static boolean isAnd(Expression expr)
 	{
-		return expr instanceof ExpressionBinaryOp
-				&& ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.AND;
+		return expr instanceof ExpressionBinaryOp && ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.AND;
 	}
 
 	public static boolean isOr(Expression expr)
@@ -665,26 +664,22 @@ public abstract class Expression extends ASTElement
 
 	public static boolean isIff(Expression expr)
 	{
-		return expr instanceof ExpressionBinaryOp
-				&& ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.IFF;
+		return expr instanceof ExpressionBinaryOp && ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.IFF;
 	}
 
 	public static boolean isImplies(Expression expr)
 	{
-		return expr instanceof ExpressionBinaryOp
-				&& ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.IMPLIES;
+		return expr instanceof ExpressionBinaryOp && ((ExpressionBinaryOp) expr).getOperator() == ExpressionBinaryOp.IMPLIES;
 	}
 
 	public static boolean isParenth(Expression expr)
 	{
-		return expr instanceof ExpressionUnaryOp
-				&& ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.PARENTH;
+		return expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.PARENTH;
 	}
 
 	public static boolean isRelOp(Expression expr)
 	{
-		return expr instanceof ExpressionBinaryOp
-				&& ExpressionBinaryOp.isRelOp(((ExpressionBinaryOp) expr).getOperator());
+		return expr instanceof ExpressionBinaryOp && ExpressionBinaryOp.isRelOp(((ExpressionBinaryOp) expr).getOperator());
 	}
 
 	/**
@@ -702,11 +697,9 @@ public abstract class Expression extends ASTElement
 	{
 		if (expr instanceof ExpressionProb) {
 			return ((ExpressionProb) expr).getProb() == null;
-		}
-		else if (expr instanceof ExpressionReward) {
+		} else if (expr instanceof ExpressionReward) {
 			return ((ExpressionReward) expr).getReward() == null;
-		}
-		else if (expr instanceof ExpressionSS) {
+		} else if (expr instanceof ExpressionSS) {
 			return ((ExpressionSS) expr).getProb() == null;
 		}
 		return false;
@@ -745,7 +738,7 @@ public abstract class Expression extends ASTElement
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Test if an expression contains a multi(...) property within 
 	 */
@@ -766,7 +759,7 @@ public abstract class Expression extends ASTElement
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Test if an expression is an LTL formula and is in positive normal form,
 	 * i.e. where negation only occurs at the level of state formulae.
@@ -789,8 +782,7 @@ public abstract class Expression extends ASTElement
 			default:
 				return isPositiveNormalFormLTL(exprUnOp.getOperand());
 			}
-		}
-		else if (expr instanceof ExpressionBinaryOp) {
+		} else if (expr instanceof ExpressionBinaryOp) {
 			ExpressionBinaryOp exprBinOp = (ExpressionBinaryOp) expr;
 			int op = exprBinOp.getOperator();
 			switch (op) {
@@ -801,8 +793,7 @@ public abstract class Expression extends ASTElement
 			default:
 				return isPositiveNormalFormLTL(exprBinOp.getOperand1()) && isPositiveNormalFormLTL(exprBinOp.getOperand2());
 			}
-		}
-		else if (expr instanceof ExpressionTemporal) {
+		} else if (expr instanceof ExpressionTemporal) {
 			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
 			if (exprTemp.getOperand1() != null && !isPositiveNormalFormLTL(exprTemp.getOperand1())) {
 				return false;
@@ -815,7 +806,7 @@ public abstract class Expression extends ASTElement
 		// If we get here, it is probably not even LTL
 		return false;
 	}
-	
+
 	/**
 	 * Test if an expression is a co-safe LTL formula, detected syntactically
 	 * (i.e. if it is in positive normal form and only uses X, F and U).
@@ -892,7 +883,7 @@ public abstract class Expression extends ASTElement
 				negated = !negated;
 				expr = exprUnary.getOperand();
 			} else {
-				throw new PrismLangException("Expression is not a simple path formula: Unexpected unary operator "+exprUnary.getOperatorSymbol());
+				throw new PrismLangException("Expression is not a simple path formula: Unexpected unary operator " + exprUnary.getOperatorSymbol());
 			}
 		}
 
@@ -902,11 +893,11 @@ public abstract class Expression extends ASTElement
 			// Next
 			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
 				if (negated) {
-					if (exprTemp.hasBounds()) throw new PrismLangException("Next-Step operator should not have bounds!");
+					if (exprTemp.hasBounds())
+						throw new PrismLangException("Next-Step operator should not have bounds!");
 
 					// ! X expr  <=> X ! expr
-					return new ExpressionTemporal(ExpressionTemporal.P_X, null,
-					                              Expression.Not(Expression.Parenth(exprTemp.getOperand2())));
+					return new ExpressionTemporal(ExpressionTemporal.P_X, null, Expression.Not(Expression.Parenth(exprTemp.getOperand2())));
 				} else {
 					// X expr
 					return exprTemp;
@@ -919,14 +910,13 @@ public abstract class Expression extends ASTElement
 				expr = exprTemp.convertToUntilForm();
 			}
 		} else {
-			throw new PrismLangException("Expression is not a simple path formula: Unsupported expression "+expr.toString());
+			throw new PrismLangException("Expression is not a simple path formula: Unsupported expression " + expr.toString());
 		}
 
 		if (negated) {
-			if (expr instanceof ExpressionUnaryOp &&
-			    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
+			if (expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.NOT) {
 				// remove the outer negation
-				return ((ExpressionUnaryOp)expr).getOperand();
+				return ((ExpressionUnaryOp) expr).getOperand();
 			} else {
 				// negate
 				return Expression.Not(expr);

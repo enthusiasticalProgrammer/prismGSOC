@@ -37,15 +37,16 @@ import prism.PrismException;
 public class NDSparseMatrix
 {
 	// JNI methods
-	
+
 	private static native int PS_NDGetActionIndex(long ptr, int s, int i);
 
 	private static native long PS_BuildNDSparseMatrix(long trans, long odd, long rv, int nrv, long cv, int ncv, long ndv, int nndv);
 
 	private static native long PS_BuildSubNDSparseMatrix(long trans, long odd, long rv, int nrv, long cv, int ncv, long ndv, int nndv, long rewards);
 
-	private static native void PS_AddActionsToNDSparseMatrix(long trans, long trans_actions, long odd, long rv, int nrv, long cv, int ncv, long ndv, int nndv, long ndsm);
-	
+	private static native void PS_AddActionsToNDSparseMatrix(long trans, long trans_actions, long odd, long rv, int nrv, long cv, int ncv, long ndv, int nndv,
+			long ndsm);
+
 	private static native void PS_DeleteNDSparseMatrix(long ptr_matrix);
 
 	static {
@@ -83,7 +84,7 @@ public class NDSparseMatrix
 	{
 		return PS_NDGetActionIndex(ptr, s, i);
 	}
-	
+
 	/**
 	 * Deletes the matrix.
 	 */
@@ -111,8 +112,10 @@ public class NDSparseMatrix
 		return new NDSparseMatrix(ptr);
 	}
 
-	public static void AddActionsToNDSparseMatrix(JDDNode trans, JDDNode transActions, ODDNode odd, JDDVars rows, JDDVars cols, JDDVars nondet, NDSparseMatrix ndsm) throws PrismException
+	public static void AddActionsToNDSparseMatrix(JDDNode trans, JDDNode transActions, ODDNode odd, JDDVars rows, JDDVars cols, JDDVars nondet,
+			NDSparseMatrix ndsm) throws PrismException
 	{
-		PS_AddActionsToNDSparseMatrix(trans.ptr(), transActions.ptr(), odd.ptr(), rows.array(), rows.n(), cols.array(), cols.n(), nondet.array(), nondet.n(), ndsm.getPtr());
+		PS_AddActionsToNDSparseMatrix(trans.ptr(), transActions.ptr(), odd.ptr(), rows.array(), rows.n(), cols.array(), cols.n(), nondet.array(), nondet.n(),
+				ndsm.getPtr());
 	}
 }

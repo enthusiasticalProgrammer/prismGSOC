@@ -81,7 +81,7 @@ public class DistributionSet extends LinkedHashSet<Distribution>
 		}
 		return false;
 	}
-	
+
 	public String toString()
 	{
 		return (action == null ? "" : "\"" + action + "\":") + super.toString();

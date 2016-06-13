@@ -36,7 +36,7 @@ public class ComputeProbNesting extends ASTTraverse
 {
 	private int currentNesting;
 	private int maxNesting;
-	
+
 	public ComputeProbNesting()
 	{
 		currentNesting = 0;
@@ -47,7 +47,7 @@ public class ComputeProbNesting extends ASTTraverse
 	{
 		return maxNesting;
 	}
-	
+
 	public void visitPre(ExpressionProb e) throws PrismLangException
 	{
 		currentNesting++;
@@ -75,10 +75,9 @@ public class ComputeProbNesting extends ASTTraverse
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
-	
+
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		currentNesting--;
 	}
 }
-

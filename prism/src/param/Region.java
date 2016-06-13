@@ -36,7 +36,8 @@ import java.util.ArrayList;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see RegionFactory
  */
-abstract class Region {
+abstract class Region
+{
 	static final int IMPLIES = 1;
 	static final int IFF = 2;
 	static final int OR = 3;
@@ -59,13 +60,14 @@ abstract class Region {
 	static final int PARENTH = 20;
 	static final int FORALL = 21;
 	static final int EXISTS = 22;
-	static final String opSymbols[] = { "", "=>", "<=>", "|", "&", "=", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/", "1st", "avg", "-", "!", "()", "forall", "exists"};
+	static final String opSymbols[] = { "", "=>", "<=>", "|", "&", "=", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/", "1st", "avg", "-", "!", "()", "forall",
+			"exists" };
 
 	/** region factory to which this region belongs */
 	protected RegionFactory factory;
-	
+
 	abstract int getDimensions();
-	
+
 	/**
 	 * Get lower bound of the volume of the region.
 	 * The volumes of disjoint region which cover the whole parameter
@@ -75,7 +77,7 @@ abstract class Region {
 	 * @return lower bound of the volume of this region
 	 */
 	abstract BigRational volume();
-	
+
 	/**
 	 * Checks whether this region contains the point {@code point}.
 	 * 
@@ -83,7 +85,7 @@ abstract class Region {
 	 * @return true if the point is contained in this region, false else
 	 */
 	abstract boolean contains(Point point);
-	
+
 	/**
 	 * Checks whether region {@code other} is contained in this region.
 	 * 
@@ -91,7 +93,7 @@ abstract class Region {
 	 * @return true iff {@code other} is contained in this region
 	 */
 	abstract boolean contains(Region other);
-	
+
 	abstract RegionValues binaryOp(int op, StateValues values1, StateValues values2);
 
 	/**
@@ -103,7 +105,7 @@ abstract class Region {
 	 * @return
 	 */
 	abstract ArrayList<Region> split(Function constraint);
-	
+
 	abstract ArrayList<Point> specialPoints();
 
 	abstract Point randomPoint();
@@ -113,7 +115,8 @@ abstract class Region {
 	 * 
 	 * @return region factory of this region
 	 */
-	RegionFactory getFactory() {
+	RegionFactory getFactory()
+	{
 		return factory;
 	}
 
@@ -125,7 +128,8 @@ abstract class Region {
 	 * @param opString string to convert to operator
 	 * @return operator from string
 	 */
-	static int getOp(String opString) {
+	static int getOp(String opString)
+	{
 		for (int symNr = 0; symNr < Region.opSymbols.length; symNr++) {
 			if (opString.equals(Region.opSymbols[symNr])) {
 				return symNr;

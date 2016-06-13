@@ -43,16 +43,16 @@ public class ChoiceList implements Choice
 	protected List<List<Update>> updates;
 	protected List<Double> probability;
 	protected List<Command> command;
-	
+
 	public ChoiceList(int n)
 	{
 		updates = new ArrayList<List<Update>>(n);
 		probability = new ArrayList<Double>(n);
 		command = new ArrayList<Command>(n);
 	}
-	
+
 	// Set methods
-	
+
 	public void setAction(String action)
 	{
 		this.action = action;
@@ -91,7 +91,7 @@ public class ChoiceList implements Choice
 			return;
 		this.command.set(i, command);
 	}
-	
+
 	@Override
 	public void scaleProbabilitiesBy(double d)
 	{
@@ -103,7 +103,7 @@ public class ChoiceList implements Choice
 	}
 
 	// Get methods
-	
+
 	public int getModuleOrActionIndex()
 	{
 		return 0; // TODO
@@ -123,7 +123,7 @@ public class ChoiceList implements Choice
 	{
 		return probability.size();
 	}
-	
+
 	public String getUpdateString(int i, State currentState) throws PrismLangException
 	{
 		String s = "(";
@@ -132,12 +132,12 @@ public class ChoiceList implements Choice
 		s += ")";
 		return s;
 	}
-	
+
 	public String getUpdateStringFull(int i)
 	{
 		return null;
 	}
-	
+
 	public State computeTarget(State oldState) throws PrismLangException
 	{
 		return computeTarget(0, oldState);
@@ -165,7 +165,7 @@ public class ChoiceList implements Choice
 		for (Update up : updates.get(i))
 			up.update(oldState, newState);
 	}
-	
+
 	public double getProbability()
 	{
 		return getProbability(0);
@@ -175,7 +175,7 @@ public class ChoiceList implements Choice
 	{
 		if (i < 0 || i >= size())
 			return -1;
-			//throw new PrismLangException("Invalid grouped transition index " + i);
+		//throw new PrismLangException("Invalid grouped transition index " + i);
 		return probability.get(i);
 	}
 
@@ -196,7 +196,7 @@ public class ChoiceList implements Choice
 	{
 		if (i < 0 || i >= size())
 			return null;
-			//throw new PrismLangException("Invalid grouped transition index " + i);
+		//throw new PrismLangException("Invalid grouped transition index " + i);
 		return command.get(i);
 	}
 
@@ -212,19 +212,19 @@ public class ChoiceList implements Choice
 		}
 		return i - 1;
 	}
-	
+
 	@Override
 	public void checkValid(ModelType modelType) throws PrismException
 	{
 		// TODO
 	}
-	
+
 	@Override
 	public void checkForErrors(State currentState, VarList varList) throws PrismException
 	{
 		// TODO
 	}
-	
+
 	public String toString()
 	{
 		int i, n;
@@ -235,8 +235,8 @@ public class ChoiceList implements Choice
 			if (first)
 				first = false;
 			else
-				s+= " + ";
-			s += getProbability(i)+":"+updates.get(i);
+				s += " + ";
+			s += getProbability(i) + ":" + updates.get(i);
 		}
 		return s;
 	}

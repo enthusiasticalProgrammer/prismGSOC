@@ -45,16 +45,15 @@ import jdd.JDDVars;
  * The Rabin condition is accepting if at least one of the pairs is accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceRabin
-       extends ArrayList<AcceptanceRabin.RabinPair>
-       implements AcceptanceOmega
+public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implements AcceptanceOmega
 {
 
 	/**
 	 * A pair in a Rabin acceptance condition, i.e., with
 	 *  (F G !"L")  &  (G F "K")
 	 **/
-	public static class RabinPair {
+	public static class RabinPair
+	{
 		/** State set L (should be visited only finitely often) */
 		private BitSet L;
 
@@ -65,7 +64,8 @@ public class AcceptanceRabin
 		 * Constructor with L and K state sets.
 		 *  (F G !"L")  &  (G F "K")
 		 */
-		public RabinPair(BitSet L, BitSet K) {
+		public RabinPair(BitSet L, BitSet K)
+		{
 			this.L = L;
 			this.K = K;
 		}
@@ -104,9 +104,9 @@ public class AcceptanceRabin
 
 		public AcceptanceGeneric toAcceptanceGeneric()
 		{
-			AcceptanceGeneric genericL = new AcceptanceGeneric(AcceptanceGeneric.ElementType.FIN, (BitSet)L.clone());
-			AcceptanceGeneric genericK = new AcceptanceGeneric(AcceptanceGeneric.ElementType.INF, (BitSet)K.clone());
-			
+			AcceptanceGeneric genericL = new AcceptanceGeneric(AcceptanceGeneric.ElementType.FIN, (BitSet) L.clone());
+			AcceptanceGeneric genericK = new AcceptanceGeneric(AcceptanceGeneric.ElementType.INF, (BitSet) K.clone());
+
 			//      F G ! "L" & G F "K"
 			// <=>  Fin(L) & Inf(K)
 			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.AND, genericL, genericK);
@@ -121,9 +121,9 @@ public class AcceptanceRabin
 		public String getSignatureForState(int stateIndex, int pairIndex)
 		{
 			if (L.get(stateIndex)) {
-				return "-"+pairIndex;
+				return "-" + pairIndex;
 			} else if (K.get(stateIndex)) {
-				return "+"+pairIndex;
+				return "+" + pairIndex;
 			} else {
 				return "";
 			}
@@ -132,12 +132,13 @@ public class AcceptanceRabin
 		@Override
 		public RabinPair clone()
 		{
-			return new RabinPair((BitSet)L.clone(), (BitSet)K.clone());
+			return new RabinPair((BitSet) L.clone(), (BitSet) K.clone());
 		}
 
 		/** Returns a textual representation of this Rabin pair. */
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "(" + L + "," + K + ")";
 		}
 	}
@@ -169,7 +170,8 @@ public class AcceptanceRabin
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter) {
+	public void lift(LiftBitSet lifter)
+	{
 		for (RabinPair pair : this) {
 			pair.L = lifter.lift(pair.L);
 			pair.K = lifter.lift(pair.K);
@@ -263,9 +265,9 @@ public class AcceptanceRabin
 	{
 		String result = "";
 
-		for (int pairIndex=0; pairIndex<size(); pairIndex++) {
+		for (int pairIndex = 0; pairIndex < size(); pairIndex++) {
 			RabinPair pair = get(pairIndex);
-			result += pair.getSignatureForState(stateIndex,  pairIndex);
+			result += pair.getSignatureForState(stateIndex, pairIndex);
 		}
 
 		return result;
@@ -276,23 +278,22 @@ public class AcceptanceRabin
 	{
 		String result = "";
 
-		for (int pairIndex=0; pairIndex<size(); pairIndex++) {
+		for (int pairIndex = 0; pairIndex < size(); pairIndex++) {
 			RabinPair pair = get(pairIndex);
 			if (pair.getL().get(stateIndex)) {
-				result += (result.isEmpty() ? "" : " ") + pairIndex*2;
+				result += (result.isEmpty() ? "" : " ") + pairIndex * 2;
 			}
 			if (pair.getK().get(stateIndex)) {
-				result += (result.isEmpty() ? "" : " ") + (pairIndex*2+1);
+				result += (result.isEmpty() ? "" : " ") + (pairIndex * 2 + 1);
 			}
 		}
 
 		if (!result.isEmpty())
-			result = "{"+result+"}";
+			result = "{" + result + "}";
 
 		return result;
 	}
 
-	
 	/** Returns a textual representation of this acceptance condition. */
 	@Override
 	public String toString()
@@ -318,29 +319,32 @@ public class AcceptanceRabin
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 
 	@Override
 	public void outputHOAHeader(PrintStream out)
 	{
-		out.println("acc-name: Rabin "+size());
-		out.print("Acceptance: " + (size()*2)+" ");
+		out.println("acc-name: Rabin " + size());
+		out.print("Acceptance: " + (size() * 2) + " ");
 		if (size() == 0) {
 			out.println("f");
 			return;
 		}
 
 		for (int pair = 0; pair < size(); pair++) {
-			if (pair > 0) out.print(" | ");
-			out.print("( Fin(" + 2*pair + ") & Inf(" + (2*pair+1) +") )");
+			if (pair > 0)
+				out.print(" | ");
+			out.print("( Fin(" + 2 * pair + ") & Inf(" + (2 * pair + 1) + ") )");
 		}
 		out.println();
 	}

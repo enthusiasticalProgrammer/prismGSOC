@@ -88,7 +88,8 @@ public class LTL2RabinLibrary
 	 * @param ltl the LTL formula
 	 * @param constants values for constants in the formula (may be {@code null})
 	 */
-	public static DA<BitSet, ? extends AcceptanceOmega> getDAforLTL(Expression ltl, Values constants, AcceptanceType... allowedAcceptance) throws PrismException {
+	public static DA<BitSet, ? extends AcceptanceOmega> getDAforLTL(Expression ltl, Values constants, AcceptanceType... allowedAcceptance) throws PrismException
+	{
 		// first try Rabin ...
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN)) {
 			return getDRAforLTL(ltl, constants);
@@ -127,7 +128,8 @@ public class LTL2RabinLibrary
 	 * @param ltl the LTL formula
 	 * @param constants values for constants in the formula (may be {@code null})
 	 */
-	public static DA<BitSet, AcceptanceRabin> getDRAforLTL(Expression ltl, Values constants) throws PrismException {
+	public static DA<BitSet, AcceptanceRabin> getDRAforLTL(Expression ltl, Values constants) throws PrismException
+	{
 		// Get list of labels appearing
 		labels = new ArrayList<String>();
 		ltl.accept(new ASTTraverse()
@@ -160,28 +162,26 @@ public class LTL2RabinLibrary
 		// handle simple until formula with time bounds
 		if (Expression.containsTemporalTimeBounds(ltl)) {
 			if (!ltl.isSimplePathFormula()) {
-				throw new PrismNotSupportedException("Unsupported LTL formula with time bounds: "+ltl);
+				throw new PrismNotSupportedException("Unsupported LTL formula with time bounds: " + ltl);
 			}
 
 			ltl = Expression.convertSimplePathFormulaToCanonicalForm(ltl);
 			boolean negated = false;
 
-			if (ltl instanceof ExpressionUnaryOp &&
-			    ((ExpressionUnaryOp)ltl).getOperator() == ExpressionUnaryOp.NOT) {
+			if (ltl instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) ltl).getOperator() == ExpressionUnaryOp.NOT) {
 				// negated
 				negated = true;
-				ltl = ((ExpressionUnaryOp)ltl).getOperand();
+				ltl = ((ExpressionUnaryOp) ltl).getOperand();
 			}
 
-			if (ltl instanceof ExpressionTemporal &&
-			    ((ExpressionTemporal)ltl).getOperator() == ExpressionTemporal.P_U) {
-				return constructDRAForSimpleUntilFormula((ExpressionTemporal)ltl, constants, negated);				
+			if (ltl instanceof ExpressionTemporal && ((ExpressionTemporal) ltl).getOperator() == ExpressionTemporal.P_U) {
+				return constructDRAForSimpleUntilFormula((ExpressionTemporal) ltl, constants, negated);
 			} else {
 				// should not be reached
 				throw new PrismException("Implementation error");
 			}
 		}
-		
+
 		// No time-bounded operators, do not convert using the library
 		return null;
 	}
@@ -189,7 +189,8 @@ public class LTL2RabinLibrary
 	/** Helper class for storing info about an operand of a simple Until formula:
 	 *  Can be either TRUE, FALSE, a label or a negated label
 	 */
-	static class OperandInfo {
+	static class OperandInfo
+	{
 		private String label;
 		private boolean notNegated;
 
@@ -221,15 +222,14 @@ public class LTL2RabinLibrary
 		public static OperandInfo constructFrom(Expression expr) throws PrismException
 		{
 			if (expr instanceof ExpressionLabel) {
-				return new OperandInfo(((ExpressionLabel)expr).getName(), true);
+				return new OperandInfo(((ExpressionLabel) expr).getName(), true);
 			} else if (Expression.isNot(expr)) {
-				return constructFrom(((ExpressionUnaryOp)expr).getOperand()).negated();
-			} else if (expr instanceof ExpressionLiteral &&
-			           ((ExpressionLiteral) expr).getValue() instanceof Boolean) {
-				boolean b = (Boolean)((ExpressionLiteral)expr).getValue();
+				return constructFrom(((ExpressionUnaryOp) expr).getOperand()).negated();
+			} else if (expr instanceof ExpressionLiteral && ((ExpressionLiteral) expr).getValue() instanceof Boolean) {
+				boolean b = (Boolean) ((ExpressionLiteral) expr).getValue();
 				return new OperandInfo(b);
 			} else {
-				throw new PrismException("Unsupported expression "+expr+" in formula.");
+				throw new PrismException("Unsupported expression " + expr + " in formula.");
 			}
 		}
 
@@ -254,14 +254,14 @@ public class LTL2RabinLibrary
 		/** Get the label. Check first that {@code isProperLabel() == true}*/
 		public String getLabel()
 		{
-			assert(label != null);
+			assert (label != null);
 			return label;
 		}
 
 		/** Operand = !label? Check first that {@code isProperLabel() == true}*/
 		public boolean isLabelNegated()
 		{
-			assert(label != null);
+			assert (label != null);
 			return !notNegated;
 		}
 
@@ -281,10 +281,11 @@ public class LTL2RabinLibrary
 	 * @param constants values for constants (in bounds)
 	 * @param negated create DRA for the complement, i.e., !(A U B)
 	 */
-	public static DA<BitSet,AcceptanceRabin> constructDRAForSimpleUntilFormula(ExpressionTemporal expr, Values constants, boolean negated) throws PrismException
+	public static DA<BitSet, AcceptanceRabin> constructDRAForSimpleUntilFormula(ExpressionTemporal expr, Values constants, boolean negated)
+			throws PrismException
 	{
 		IntegerBound bounds;
-		DA<BitSet,AcceptanceRabin> dra;
+		DA<BitSet, AcceptanceRabin> dra;
 
 		if (expr.getOperator() != ExpressionTemporal.P_U) {
 			throw new PrismException("ConstructDRAForSimpleUntilFormula: Not an Until operator!");
@@ -344,8 +345,7 @@ public class LTL2RabinLibrary
 				dra = constructDRAForTrue(opA.getLabel());
 				negated = !negated;
 			} else {
-				if ((!bounds.hasLowerBound()) ||
-					(bounds.isInBounds(0))) {
+				if ((!bounds.hasLowerBound()) || (bounds.isInBounds(0))) {
 					// A U_bounds true <=> true if there is no lower bound
 					// or if lower bound is >=0
 					dra = constructDRAForTrue(opA.getLabel());
@@ -355,30 +355,28 @@ public class LTL2RabinLibrary
 					// <=> !(F<lower !A)
 
 					// newBounds: >=lower becomes <lower
-					IntegerBound newBounds = new IntegerBound(null, false,
-					                                            bounds.getLowestInteger(), true);
+					IntegerBound newBounds = new IntegerBound(null, false, bounds.getLowestInteger(), true);
 					dra = constructDRAForFinally(opA.getLabel(), !opA.isLabelNegated(), newBounds);
 					negated = !negated;
 				}
 			}
 		} else {
 			// the general case, A U_bounds B
-			dra = constructDRAForUntil(opA.getLabel(), opA.isLabelNegated(),
-			                           opB.getLabel(), opB.isLabelNegated(), bounds);
+			dra = constructDRAForUntil(opA.getLabel(), opA.isLabelNegated(), opB.getLabel(), opB.isLabelNegated(), bounds);
 		}
 
 		if (negated) {
 			// the constructed DRAs can be complemented by switching L and K
 			BitSet accL = (BitSet) dra.getAcceptance().get(0).getL().clone();
 			BitSet accK = (BitSet) dra.getAcceptance().get(0).getK().clone();
-			
+
 			dra.getAcceptance().get(0).getL().clear();
 			dra.getAcceptance().get(0).getL().or(accK);
-			
+
 			dra.getAcceptance().get(0).getK().clear();
 			dra.getAcceptance().get(0).getK().or(accL);
 		}
-		
+
 		return dra;
 	}
 
@@ -420,7 +418,7 @@ public class LTL2RabinLibrary
 			apList.add(labelB);
 		}
 
-		dra = new DA<BitSet,AcceptanceRabin>(states);
+		dra = new DA<BitSet, AcceptanceRabin>(states);
 		dra.setAcceptance(new AcceptanceRabin());
 		dra.setAPList(apList);
 		dra.setStartState(0);
@@ -428,9 +426,9 @@ public class LTL2RabinLibrary
 		if (labelA.equals(labelB)) {
 			// special treatment if the labels of a and b are the same...
 			if (aNegated == bNegated) {
-				edge_ab = new BitSet();  // !a & !b <=> !a
+				edge_ab = new BitSet(); // !a & !b <=> !a
 				edge_ab.set(0, aNegated ? true : false);
-				edge_AB = new BitSet();  //  a &  b <=> a
+				edge_AB = new BitSet(); //  a &  b <=> a
 				edge_AB.set(0, aNegated ? false : true);
 
 				// the other edges are contradictory, we set them to null
@@ -438,28 +436,28 @@ public class LTL2RabinLibrary
 				edge_Ab = null;
 				edge_aB = null;
 			} else {
-				edge_aB = new BitSet();  // !a & b <=> !a
+				edge_aB = new BitSet(); // !a & b <=> !a
 				edge_aB.set(0, aNegated ? true : false);
-				edge_Ab = new BitSet();  //  a & !b <=> a
+				edge_Ab = new BitSet(); //  a & !b <=> a
 				edge_Ab.set(0, aNegated ? false : true);
 
 				// the other edges are contradictory, we set them to null
 				// to ensure that they are ignored below
 			}
 		} else {
-			edge_ab = new BitSet();  // !a & !b
+			edge_ab = new BitSet(); // !a & !b
 			edge_ab.set(0, aNegated ? true : false);
 			edge_ab.set(1, bNegated ? true : false);
-			
-			edge_Ab = new BitSet();  //  a & !b
+
+			edge_Ab = new BitSet(); //  a & !b
 			edge_Ab.set(0, aNegated ? false : true);
 			edge_Ab.set(1, bNegated ? true : false);
-			
-			edge_aB = new BitSet();  // !a &  b
+
+			edge_aB = new BitSet(); // !a &  b
 			edge_aB.set(0, aNegated ? true : false);
 			edge_aB.set(1, bNegated ? false : true);
 
-			edge_AB = new BitSet();  //  a &  b
+			edge_AB = new BitSet(); //  a &  b
 			edge_AB.set(0, aNegated ? false : true);
 			edge_AB.set(1, bNegated ? false : true);
 		}
@@ -472,40 +470,57 @@ public class LTL2RabinLibrary
 		// generate the counter states for [0..saturation]
 		for (int counter = 0; counter <= saturation; counter++) {
 			int next_counter = counter + 1;
-			if (next_counter > saturation) next_counter = saturation;
+			if (next_counter > saturation)
+				next_counter = saturation;
 
 			if (bounds.isInBounds(counter)) {
 				// B => yes
-				if (edge_aB != null) dra.addEdge(counter, edge_aB, yes_state);
-				if (edge_AB != null) dra.addEdge(counter, edge_AB, yes_state);
+				if (edge_aB != null)
+					dra.addEdge(counter, edge_aB, yes_state);
+				if (edge_AB != null)
+					dra.addEdge(counter, edge_AB, yes_state);
 
 				// !A & !B => no
-				if (edge_ab != null) dra.addEdge(counter, edge_ab, no_state);
+				if (edge_ab != null)
+					dra.addEdge(counter, edge_ab, no_state);
 
 				// A & !B => next_counter
-				if (edge_Ab != null) dra.addEdge(counter, edge_Ab, next_counter);
+				if (edge_Ab != null)
+					dra.addEdge(counter, edge_Ab, next_counter);
 			} else {
 				// !A => no
-				if (edge_aB != null) dra.addEdge(counter, edge_aB, no_state);
-				if (edge_ab != null) dra.addEdge(counter, edge_ab, no_state);
+				if (edge_aB != null)
+					dra.addEdge(counter, edge_aB, no_state);
+				if (edge_ab != null)
+					dra.addEdge(counter, edge_ab, no_state);
 
 				// A => next_counter
-				if (edge_Ab != null) dra.addEdge(counter, edge_Ab, next_counter);
-				if (edge_AB != null) dra.addEdge(counter, edge_AB, next_counter);
+				if (edge_Ab != null)
+					dra.addEdge(counter, edge_Ab, next_counter);
+				if (edge_AB != null)
+					dra.addEdge(counter, edge_AB, next_counter);
 			}
 		}
 
 		// yes state = true loop
-		if (edge_ab != null) dra.addEdge(yes_state, edge_ab, yes_state);
-		if (edge_aB != null) dra.addEdge(yes_state, edge_aB, yes_state);
-		if (edge_Ab != null) dra.addEdge(yes_state, edge_Ab, yes_state);
-		if (edge_AB != null) dra.addEdge(yes_state, edge_AB, yes_state);
+		if (edge_ab != null)
+			dra.addEdge(yes_state, edge_ab, yes_state);
+		if (edge_aB != null)
+			dra.addEdge(yes_state, edge_aB, yes_state);
+		if (edge_Ab != null)
+			dra.addEdge(yes_state, edge_Ab, yes_state);
+		if (edge_AB != null)
+			dra.addEdge(yes_state, edge_AB, yes_state);
 
 		// no state = true loop
-		if (edge_ab != null) dra.addEdge(no_state, edge_ab, no_state);
-		if (edge_aB != null) dra.addEdge(no_state, edge_aB, no_state);
-		if (edge_Ab != null) dra.addEdge(no_state, edge_Ab, no_state);
-		if (edge_AB != null) dra.addEdge(no_state, edge_AB, no_state);
+		if (edge_ab != null)
+			dra.addEdge(no_state, edge_ab, no_state);
+		if (edge_aB != null)
+			dra.addEdge(no_state, edge_aB, no_state);
+		if (edge_Ab != null)
+			dra.addEdge(no_state, edge_Ab, no_state);
+		if (edge_AB != null)
+			dra.addEdge(no_state, edge_AB, no_state);
 
 		// acceptance =
 		//   infinitely often yes_state,
@@ -526,32 +541,32 @@ public class LTL2RabinLibrary
 	 * Construct a DRA for LTL formula "F_bounds a".
 	 * If {@code negateA == true}, constructs DRA for "F_bounds !a".
 	 * Can be complemented by switching the acceptance sets. */
-	public static DA<BitSet,AcceptanceRabin> constructDRAForFinally(String labelA, boolean negateA, IntegerBound bounds)
+	public static DA<BitSet, AcceptanceRabin> constructDRAForFinally(String labelA, boolean negateA, IntegerBound bounds)
 	{
-		DA<BitSet,AcceptanceRabin> dra;
+		DA<BitSet, AcceptanceRabin> dra;
 		List<String> apList = new ArrayList<String>();
 		BitSet edge_no, edge_yes;
 		BitSet accL, accK;
 
 		int saturation = bounds.getMaximalInterestingValue();
-		
+
 		// [0,saturation] + yes
 		int states = saturation + 2;
-		
+
 		apList.add(labelA);
-		
-		dra = new DA<BitSet,AcceptanceRabin>(states);
+
+		dra = new DA<BitSet, AcceptanceRabin>(states);
 		dra.setAcceptance(new AcceptanceRabin());
 		dra.setAPList(apList);
 		dra.setStartState(0);
-		
+
 		// edge labeled with the target label
-		edge_yes  = new BitSet();
+		edge_yes = new BitSet();
 		// edge not labeled with the target label
 		edge_no = new BitSet();
-		
+
 		if (negateA) {
-			edge_no.set(0);  // no = a, yes = !a
+			edge_no.set(0); // no = a, yes = !a
 		} else {
 			edge_yes.set(0); // yes = a, no = !a
 		}
@@ -560,12 +575,13 @@ public class LTL2RabinLibrary
 
 		for (int counter = 0; counter <= saturation; counter++) {
 			int next_counter = counter + 1;
-			if (next_counter > saturation) next_counter = saturation;
-		
+			if (next_counter > saturation)
+				next_counter = saturation;
+
 			if (bounds.isInBounds(counter)) {
 				// yes => yes_state
 				dra.addEdge(counter, edge_yes, yes_state);
-			
+
 				// no => next_counter
 				dra.addEdge(counter, edge_no, next_counter);
 			} else {
@@ -599,7 +615,8 @@ public class LTL2RabinLibrary
 	 * there is a single label in the set of atomic propositions.
 	 * Can be complemented by switching the acceptance sets.
 	 */
-	public static DA<BitSet,AcceptanceRabin> constructDRAForTrue(String label) throws PrismException {
+	public static DA<BitSet, AcceptanceRabin> constructDRAForTrue(String label) throws PrismException
+	{
 		if (label != null) {
 			List<String> labels = new ArrayList<String>();
 			labels.add(label);
@@ -614,13 +631,16 @@ public class LTL2RabinLibrary
 	 * If {@code negatedLabel == true} then automaton accepts if the word starts with the negated label.
 	 * Can be complemented by switching the acceptance sets.
 	 */
-	public static DA<BitSet,AcceptanceRabin> constructDRAForInitialStateLabel(String label, boolean negatedLabel) throws PrismException {
+	public static DA<BitSet, AcceptanceRabin> constructDRAForInitialStateLabel(String label, boolean negatedLabel) throws PrismException
+	{
 		List<String> labels = new ArrayList<String>();
 		labels.add(label);
 		if (negatedLabel) {
-			return createDRAFromString("3 states (start 0), 1 labels: 0-{ }->1 0-{0}->2 1-{0}->1 1-{ }->1 2-{}->2 2-{0}->2; 1 acceptance pairs: ({2},{1})", labels);
+			return createDRAFromString("3 states (start 0), 1 labels: 0-{ }->1 0-{0}->2 1-{0}->1 1-{ }->1 2-{}->2 2-{0}->2; 1 acceptance pairs: ({2},{1})",
+					labels);
 		} else {
-			return createDRAFromString("3 states (start 0), 1 labels: 0-{0}->1 0-{ }->2 1-{ }->1 1-{0}->1 2-{}->2 2-{0}->2; 1 acceptance pairs: ({2},{1})", labels);
+			return createDRAFromString("3 states (start 0), 1 labels: 0-{0}->1 0-{ }->2 1-{ }->1 1-{0}->1 2-{}->2 2-{0}->2; 1 acceptance pairs: ({2},{1})",
+					labels);
 		}
 	}
 
@@ -628,18 +648,18 @@ public class LTL2RabinLibrary
 	 * Create a DRA from a string, e.g.:
 	 * "2 states (start 0), 1 labels: 0-{0}->1 0-{}->0 1-{0}->1 1-{}->0; 1 acceptance pairs: ({},{1})"
 	 */
-	private static DA<BitSet,AcceptanceRabin> createDRAFromString(String s, List<String> labels) throws PrismException
+	private static DA<BitSet, AcceptanceRabin> createDRAFromString(String s, List<String> labels) throws PrismException
 	{
 		int ptr = 0, i, j, k, n, from, to;
 		String bs;
-		DA<BitSet,AcceptanceRabin> draNew;
+		DA<BitSet, AcceptanceRabin> draNew;
 		AcceptanceRabin acceptance = new AcceptanceRabin();
 
 		try {
 			// Num states
 			j = s.indexOf("states", ptr);
 			n = Integer.parseInt(s.substring(0, j).trim());
-			draNew = new DA<BitSet,AcceptanceRabin>(n);
+			draNew = new DA<BitSet, AcceptanceRabin>(n);
 			draNew.setAcceptance(acceptance);
 			draNew.setAPList(labels);
 			// Start state
@@ -669,7 +689,7 @@ public class LTL2RabinLibrary
 				k = s.indexOf("})", j);
 				BitSet L = createBitSetFromString(s.substring(i + 2, j));
 				BitSet K = createBitSetFromString(s.substring(j + 3, k));
-				acceptance.add(new AcceptanceRabin.RabinPair(L,K));
+				acceptance.add(new AcceptanceRabin.RabinPair(L, K));
 				i = s.indexOf("({", k);
 			}
 		} catch (NumberFormatException e) {
@@ -698,15 +718,15 @@ public class LTL2RabinLibrary
 	}
 
 	// Example: manual creation of DRA for: !(F ("L0"&(X "L1")))
-	public static DA<BitSet,AcceptanceRabin> draForNotFaCb(String l0, String l1) throws PrismException
+	public static DA<BitSet, AcceptanceRabin> draForNotFaCb(String l0, String l1) throws PrismException
 	{
 		int numStates;
 		List<String> apList;
-		DA<BitSet,AcceptanceRabin> draNew;
+		DA<BitSet, AcceptanceRabin> draNew;
 
 		// 4 states (start 3), 2 labels: 0-{1}->0 0-{0, 1}->1 0-{}->0 0-{0}->1 1-{1}->2 1-{0, 1}->2 1-{}->0 1-{0}->1 2-{1}->2 2-{0, 1}->2 2-{}->2 2-{0}->2 3-{1}->0 3-{0, 1}->1 3-{}->0 3-{0}->1; 1 acceptance pairs: ({2},{0, 1})
 		numStates = 4;
-		draNew = new DA<BitSet,AcceptanceRabin>(numStates);
+		draNew = new DA<BitSet, AcceptanceRabin>(numStates);
 		draNew.setAcceptance(new AcceptanceRabin());
 		// AP set
 		apList = new ArrayList<String>(2);
@@ -770,11 +790,11 @@ public class LTL2RabinLibrary
 			System.out.println(ltl);
 			System.out.println(expr.toString());
 			System.out.println(ltl.equals(expr.toString()));
-			DA<BitSet,AcceptanceRabin> dra1 = jltl2dstar.LTL2Rabin.ltl2rabin(expr.convertForJltl2ba());
+			DA<BitSet, AcceptanceRabin> dra1 = jltl2dstar.LTL2Rabin.ltl2rabin(expr.convertForJltl2ba());
 			System.out.println(dra1);
-			DA<BitSet,AcceptanceRabin> dra2 = getDRAforLTL(expr, null);
+			DA<BitSet, AcceptanceRabin> dra2 = getDRAforLTL(expr, null);
 			if (dra2 == null) {
-			    dra2 = jltl2dstar.LTL2Rabin.ltl2rabin(expr.convertForJltl2ba());
+				dra2 = jltl2dstar.LTL2Rabin.ltl2rabin(expr.convertForJltl2ba());
 			}
 			System.out.println(dra2);
 			System.out.println(dra1.toString().equals(dra2.toString()));

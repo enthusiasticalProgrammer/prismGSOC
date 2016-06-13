@@ -86,7 +86,7 @@ public class ProgressDisplay
 		if (ready())
 			update(count);
 	}
-	
+
 	/**
 	 * Display an update, if anything changed.
 	 */

@@ -38,8 +38,9 @@ import prism.PrismException;
 //typename StateMapper_t=StateMapper<typename Algorithm_t::result_t,
 //typename Algorithm_t::state_t,
 //typename DA_t::state_type> >
-public class SafraNBA2DRA {
-	
+public class SafraNBA2DRA
+{
+
 	/** Save detailed information on the Safra trees in the states? */
 	private boolean _detailed_states;
 
@@ -47,7 +48,8 @@ public class SafraNBA2DRA {
 	 * Constructor
 	 * detailedStates default = false 
 	 */
-	public SafraNBA2DRA(boolean detailedStates) {
+	public SafraNBA2DRA(boolean detailedStates)
+	{
 		_detailed_states = detailedStates;
 	}
 
@@ -60,7 +62,9 @@ public class SafraNBA2DRA {
 	 *        (has to have same APSet as the nba)
 	 * @param limit a limit for the number of states (0 disables the limit - default).
 	 */
-	public void convert(SafrasAlgorithm algo, DRA da_result, int limit, StateMapperInterface<SafraTreeTemplate,SafraTree,DA_State> state_mapper) throws PrismException {
+	public void convert(SafrasAlgorithm algo, DRA da_result, int limit, StateMapperInterface<SafraTreeTemplate, SafraTree, DA_State> state_mapper)
+			throws PrismException
+	{
 
 		APSet ap_set = da_result.getAPSet();
 
@@ -69,9 +73,9 @@ public class SafraNBA2DRA {
 			return;
 		}
 
-//		typedef typename DA_t::state_type da_state_t;
-//		typedef typename Algorithm_t::state_t algo_state_t;
-//		typedef typename Algorithm_t::result_t algo_result_t;
+		//		typedef typename DA_t::state_type da_state_t;
+		//		typedef typename Algorithm_t::state_t algo_state_t;
+		//		typedef typename Algorithm_t::result_t algo_result_t;
 
 		algo.prepareAcceptance(da_result.acceptance());
 
@@ -94,9 +98,9 @@ public class SafraNBA2DRA {
 
 			SafraTree cur = top.algo_state;
 			DA_State from = top.da_state;
-			
+
 			// System.out.println("Powerset size " + ap_set.powersetSize());
-			for (APElementIterator it_elem = new APElementIterator(ap_set.size()); it_elem.hasNext(); ) {
+			for (APElementIterator it_elem = new APElementIterator(ap_set.size()); it_elem.hasNext();) {
 				APElement elem = it_elem.next();
 				SafraTreeTemplate result = algo.delta(cur, elem);
 				DA_State to = state_mapper.find(result);
@@ -118,16 +122,15 @@ public class SafraNBA2DRA {
 
 	}
 
-	private class unprocessed_value {
+	private class unprocessed_value
+	{
 		public SafraTree algo_state;
 		public DA_State da_state;
-		
-		public unprocessed_value(SafraTree _algo_state, DA_State _da_state) {
+
+		public unprocessed_value(SafraTree _algo_state, DA_State _da_state)
+		{
 			algo_state = _algo_state;
 			da_state = _da_state;
 		}
 	}
 }
-
-
-

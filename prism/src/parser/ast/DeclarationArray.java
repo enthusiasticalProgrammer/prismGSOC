@@ -90,20 +90,20 @@ public class DeclarationArray extends DeclarationType
 		// TODO: what should be the default?
 		return null;
 	}
-	
+
 	/* TODO
 	@Override
 	public Expression getStart(ModulesFile parent)
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		// TODO: what should be the default?
 		return start != null ? start : null;
 	}*/
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */

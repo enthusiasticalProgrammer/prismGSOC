@@ -142,8 +142,7 @@ public class PrismStaTra
 		} catch (IOException e) {
 			throw new PrismException("File I/O error reading from \"" + transFile + "\"");
 		} catch (NumberFormatException e) {
-			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile
-					+ "\"");
+			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		}
 	}
 

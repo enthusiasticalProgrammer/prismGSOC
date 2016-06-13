@@ -164,7 +164,7 @@ public class FormulaList extends ASTElement
 		FormulaList ret = new FormulaList();
 		n = size();
 		for (i = 0; i < n; i++) {
-			ret.addFormula((ExpressionIdent)getFormulaNameIdent(i).deepCopy(), getFormula(i).deepCopy());
+			ret.addFormula((ExpressionIdent) getFormulaNameIdent(i).deepCopy(), getFormula(i).deepCopy());
 		}
 		ret.setPosition(this);
 		return ret;

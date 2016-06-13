@@ -29,5 +29,6 @@ package prism;
 public interface PrismModelListener
 {
 	public void notifyModelBuildSuccessful();
+
 	public void notifyModelBuildFailed(PrismException e);
 }

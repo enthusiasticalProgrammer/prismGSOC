@@ -31,11 +31,11 @@ import java.util.Map.Entry;
 /**
  * Simple class to store a pair of values.
  */
-public class Pair<X,Y> implements Entry<X, Y>
+public class Pair<X, Y> implements Entry<X, Y>
 {
 	public X first;
 	public Y second;
-	
+
 	public Pair(X first, Y second)
 	{
 		this.first = first;
@@ -43,24 +43,27 @@ public class Pair<X,Y> implements Entry<X, Y>
 	}
 
 	@Override
-	public X getKey() {
+	public X getKey()
+	{
 		return first;
 	}
 
 	@Override
-	public Y getValue() {
+	public Y getValue()
+	{
 		return second;
 	}
 
 	@Override
-	public Y setValue(Y value) {
+	public Y setValue(Y value)
+	{
 		second = value;
 		return second;
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "(" + first + "," + second + ")"; 
+		return "(" + first + "," + second + ")";
 	}
 }

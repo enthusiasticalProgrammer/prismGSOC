@@ -66,7 +66,7 @@ public class ExportBuiltModelThread extends GUIComputationThread
 	{
 		this.propertiesFile = propertiesFile;
 	}
-	
+
 	public void run()
 	{
 		try {

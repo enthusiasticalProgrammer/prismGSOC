@@ -192,7 +192,7 @@ public class DTMCFromMDPMemorylessAdversary extends DTMCExplicit
 			return mdp.getTransitionsIterator(s, adv[s]);
 		} else {
 			// Empty iterator
-			return Collections.<Entry<Integer,Double>>emptyIterator(); 
+			return Collections.<Entry<Integer, Double>> emptyIterator();
 		}
 	}
 
@@ -203,7 +203,7 @@ public class DTMCFromMDPMemorylessAdversary extends DTMCExplicit
 			return new DTMCExplicit.AddDefaultActionToTransitionsIterator(mdp.getTransitionsIterator(s, adv[s]), mdp.getAction(s, adv[s]));
 		} else {
 			// Empty iterator
-			return Collections.<Entry<Integer,Pair<Double, Object>>>emptyIterator(); 
+			return Collections.<Entry<Integer, Pair<Double, Object>>> emptyIterator();
 		}
 	}
 

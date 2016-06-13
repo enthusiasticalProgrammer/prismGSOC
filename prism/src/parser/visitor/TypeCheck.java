@@ -375,11 +375,11 @@ public class TypeCheck extends ASTTraverse
 			boolean seenBoolean = false;
 			for (i = 0; i < n; i++) {
 				if (!(types[i] instanceof TypeBool || types[i] instanceof TypeDouble)) {
-					throw new PrismLangException("Type error: non-Boolean/Double argument to  function \"" + e.getName()
-							+ "\"", e.getOperand(i));
+					throw new PrismLangException("Type error: non-Boolean/Double argument to  function \"" + e.getName() + "\"", e.getOperand(i));
 				}
 				if (seenBoolean && types[i] instanceof TypeDouble) {
-					throw new PrismLangException("Type error: in the function \"" + e.getName() + "\", any Double arguments must come before any Boolean arguments.");
+					throw new PrismLangException(
+							"Type error: in the function \"" + e.getName() + "\", any Double arguments must come before any Boolean arguments.");
 				}
 				if (types[i] instanceof TypeBool) {
 					seenBoolean = true;

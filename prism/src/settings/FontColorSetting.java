@@ -29,79 +29,72 @@ package settings;
 import java.util.*;
 import java.awt.*;
 
-public class FontColorSetting extends Setting 
+public class FontColorSetting extends Setting
 {
-    private static FontColorRenderer renderer;
-    private static FontColorEditor editor;
-    
-    static
-    {
-        renderer = new FontColorRenderer();
-        editor = new FontColorEditor();
-    }
-    
-    
-    /** Creates a new instance of FontColorSetting */
+	private static FontColorRenderer renderer;
+	private static FontColorEditor editor;
+
+	static {
+		renderer = new FontColorRenderer();
+		editor = new FontColorEditor();
+	}
+
+	/** Creates a new instance of FontColorSetting */
 	public FontColorSetting(String name, FontColorPair value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
-    public FontColorSetting(String name, FontColorPair value, String comment, SettingOwner owner, boolean editableWhenMultiple, FontColorConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return FontColorPair.class;
-    }
-    
-    public FontColorPair getFontColorValue()
-    {
-        return ((FontColorPair)getValue());
-    }
-    
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	public FontColorSetting(String name, FontColorPair value, String comment, SettingOwner owner, boolean editableWhenMultiple, FontColorConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	public Class getValueClass()
+	{
+		return FontColorPair.class;
+	}
+
+	public FontColorPair getFontColorValue()
+	{
+		return ((FontColorPair) getValue());
+	}
+
 	public Object parseStringValue(String string) throws SettingException
 	{
-		try
-        {
-            StringTokenizer tokens = new StringTokenizer(string, ",");
-            String name = tokens.nextToken();
-            int size = Integer.parseInt(tokens.nextToken());
-            int style = Integer.parseInt(tokens.nextToken());
+		try {
+			StringTokenizer tokens = new StringTokenizer(string, ",");
+			String name = tokens.nextToken();
+			int size = Integer.parseInt(tokens.nextToken());
+			int style = Integer.parseInt(tokens.nextToken());
 			int r = Integer.parseInt(tokens.nextToken());
 			int g = Integer.parseInt(tokens.nextToken());
 			int b = Integer.parseInt(tokens.nextToken());
-            
-            return new FontColorPair(new Font(name, style, size), new Color(r,g,b));
-        }
-        catch(NumberFormatException e)
-        {
-            throw new SettingException("Error when parsing: "+string+" as a FontColorPair value.");
-        }
-        catch(NoSuchElementException e)
-        {
-            throw new SettingException("Error when parsing: "+string+" as a FontColorPair value.");
-        }
+
+			return new FontColorPair(new Font(name, style, size), new Color(r, g, b));
+		} catch (NumberFormatException e) {
+			throw new SettingException("Error when parsing: " + string + " as a FontColorPair value.");
+		} catch (NoSuchElementException e) {
+			throw new SettingException("Error when parsing: " + string + " as a FontColorPair value.");
+		}
 	}
-	
+
 	public String toString()
 	{
 		Color c = getFontColorValue().c;
 		Font f = getFontColorValue().f;
-		
-		return f.getName()+","+f.getSize()+","+f.getStyle()+","+c.getRed()+","+c.getGreen()+","+c.getBlue();
+
+		return f.getName() + "," + f.getSize() + "," + f.getStyle() + "," + c.getRed() + "," + c.getGreen() + "," + c.getBlue();
 	}
-	
+
 }

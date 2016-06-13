@@ -26,64 +26,59 @@
 
 package settings;
 
-public class IntegerSetting extends Setting 
+public class IntegerSetting extends Setting
 {
-    private static IntegerRenderer renderer;
-    private static IntegerEditor editor;
-    
-    static
-    {
-        renderer = new IntegerRenderer();
-        editor = new IntegerEditor();
-    }
-    
-    
-    /** Creates a new instance of DoubleSetting */
+	private static IntegerRenderer renderer;
+	private static IntegerEditor editor;
+
+	static {
+		renderer = new IntegerRenderer();
+		editor = new IntegerEditor();
+	}
+
+	/** Creates a new instance of DoubleSetting */
 	public IntegerSetting(String name, Integer value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
-    public IntegerSetting(String name, Integer value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return Integer.class;
-    }
-    
-    public int getIntegerValue()
-    {
-        return ((Integer)getValue()).intValue();
-    }
-    
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	public IntegerSetting(String name, Integer value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	public Class getValueClass()
+	{
+		return Integer.class;
+	}
+
+	public int getIntegerValue()
+	{
+		return ((Integer) getValue()).intValue();
+	}
+
 	public Object parseStringValue(String string) throws SettingException
 	{
-		try
-		{
+		try {
 			return new Integer(string);
-		}
-		catch(NumberFormatException e)
-		{
-			throw new SettingException("Error when parsing: "+string+" as an Integer value.");
+		} catch (NumberFormatException e) {
+			throw new SettingException("Error when parsing: " + string + " as an Integer value.");
 		}
 	}
-	
+
 	public String toString()
 	{
-		return ""+getIntegerValue();
+		return "" + getIntegerValue();
 	}
-	
+
 }

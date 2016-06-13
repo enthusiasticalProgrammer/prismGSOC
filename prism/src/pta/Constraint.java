@@ -55,7 +55,7 @@ public class Constraint
 	{
 		this(c.x, c.y, c.db);
 	}
-	
+
 	public int hashCode()
 	{
 		return (((db * 7) + x) * 7) + y;
@@ -169,7 +169,7 @@ public class Constraint
 	{
 		return new Constraint(y, x, DB.createLt(0));
 	}
-	
+
 	/**
 	 * Build constraint x - y <= v.
 	 */

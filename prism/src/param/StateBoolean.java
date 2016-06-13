@@ -33,40 +33,43 @@ package param;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class StateBoolean extends StateValue {
+final class StateBoolean extends StateValue
+{
 	private boolean value;
 
 	public StateBoolean()
 	{
 		value = new Boolean(false);
 	}
-	
+
 	public StateBoolean(boolean value)
 	{
 		this.value = value;
 	}
-	
+
 	boolean getValue()
 	{
 		return value;
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return value ? "true" : "false";
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof StateBoolean)) {
 			return false;
 		}
 		return this.value == ((StateBoolean) obj).value;
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		return value ? 17 : 13;
 	}
 }

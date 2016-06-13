@@ -722,13 +722,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 					if (notTreeDec.getType() instanceof TypeInt) {
 						if (notTreeDec.getDeclType() instanceof DeclarationInt) {
 							DeclarationInt declInt = (DeclarationInt) notTreeDec.getDeclType();
-							VarNode newVariable = new VarNode(notTreeDec.getName(),
-									parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, declInt.getLow(), declInt.getHigh(), false);
+							VarNode newVariable = new VarNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null,
+									declInt.getLow(), declInt.getHigh(), false);
 							inTreeNode.add(newVariable);
 							cIndices[j] = getVarTreeIndexOf(notTreeDec, inTreeNode);
 						} else {
-							VarNode newVariable = new VarNode(notTreeDec.getName(),
-									parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, null, null, false);
+							VarNode newVariable = new VarNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null,
+									null, null, false);
 							inTreeNode.add(newVariable);
 							cIndices[j] = getVarTreeIndexOf(notTreeDec, inTreeNode);
 						}
@@ -785,8 +785,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 									declInt.getLow(), declInt.getHigh(), false);
 							newNode.add(newVariable);
 						} else {
-							VarNode newVariable = new VarNode(aDec.getName(), parsedModel.getSystemDefn() == null ? aDec.getStartOrDefault() : null, null,
-									null, false);
+							VarNode newVariable = new VarNode(aDec.getName(), parsedModel.getSystemDefn() == null ? aDec.getStartOrDefault() : null, null, null,
+									false);
 							newNode.add(newVariable);
 						}
 					} else if (aDec.getType() instanceof TypeBool) {
@@ -880,12 +880,12 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				if (notTreeDec.getType() instanceof TypeInt) {
 					if (notTreeDec.getDeclType() instanceof DeclarationInt) {
 						DeclarationInt declInt = (DeclarationInt) notTreeDec.getDeclType();
-						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault()
-								: null, declInt.getLow(), declInt.getHigh(), false);
+						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(),
+								parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, declInt.getLow(), declInt.getHigh(), false);
 						declarations.add(newVariable);
 					} else {
-						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault()
-								: null, null, null, false);
+						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(),
+								parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, null, null, false);
 						declarations.add(newVariable);
 					}
 					cIndices[i] = getIndexOfDec(notTreeDec);
@@ -1300,13 +1300,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 					if (notTreeDec.getType() instanceof TypeInt) {
 						if (notTreeDec.getDeclType() instanceof DeclarationInt) {
 							DeclarationInt declInt = (DeclarationInt) notTreeDec.getDeclType();
-							VarNode newVariable = new VarNode(notTreeDec.getName(),
-									parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, declInt.getLow(), declInt.getHigh(), false);
+							VarNode newVariable = new VarNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null,
+									declInt.getLow(), declInt.getHigh(), false);
 							inTreeNode.add(newVariable);
 							cIndices[j] = getVarTreeIndexOf(notTreeDec, inTreeNode);
 						} else {
-							VarNode newVariable = new VarNode(notTreeDec.getName(),
-									parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, null, null, false);
+							VarNode newVariable = new VarNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null,
+									null, null, false);
 							inTreeNode.add(newVariable);
 							cIndices[j] = getVarTreeIndexOf(notTreeDec, inTreeNode);
 						}
@@ -1358,8 +1358,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 									declInt.getLow(), declInt.getHigh(), false);
 							newNode.add(newVariable);
 						} else {
-							VarNode newVariable = new VarNode(aDec.getName(), parsedModel.getSystemDefn() == null ? aDec.getStartOrDefault() : null, null,
-									null, false);
+							VarNode newVariable = new VarNode(aDec.getName(), parsedModel.getSystemDefn() == null ? aDec.getStartOrDefault() : null, null, null,
+									false);
 							newNode.add(newVariable);
 						}
 					} else if (aDec.getType() instanceof TypeBool) {
@@ -1443,18 +1443,18 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				if (notTreeDec.getType() instanceof TypeInt) {
 					if (notTreeDec.getDeclType() instanceof DeclarationInt) {
 						DeclarationInt declInt = (DeclarationInt) notTreeDec.getDeclType();
-						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault()
-								: null, declInt.getLow(), declInt.getHigh(), false);
+						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(),
+								parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, declInt.getLow(), declInt.getHigh(), false);
 						declarations.add(newVariable);
 					} else {
-						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault()
-								: null, null, null, false);
+						GlobalNode newVariable = new GlobalNode(notTreeDec.getName(),
+								parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, null, null, false);
 						declarations.add(newVariable);
 					}
 					cIndices[i] = getIndexOfDec(notTreeDec);
 				} else if (notTreeDec.getType() instanceof TypeBool) {
-					GlobalBoolNode newVariable = new GlobalBoolNode(notTreeDec.getName(), parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault()
-							: null, false);
+					GlobalBoolNode newVariable = new GlobalBoolNode(notTreeDec.getName(),
+							parsedModel.getSystemDefn() == null ? notTreeDec.getStartOrDefault() : null, false);
 					declarations.add(newVariable);
 					cIndices[i] = getIndexOfDec(notTreeDec);
 				}
@@ -3769,11 +3769,11 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	{
 		public String name;
 	}
-	
+
 	public class IntegerVariable extends Variable
 	{
-		public String min, max, init="0";
-		
+		public String min, max, init = "0";
+
 		public IntegerVariable(String name, String min, String max, String init)
 		{
 			super.name = name;
@@ -3781,7 +3781,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.max = max;
 			this.init = init;
 		}
-		
+
 		public IntegerVariable(String name, String min, String max)
 		{
 			this.name = name;
@@ -3789,17 +3789,17 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			this.max = max;
 		}
 	}
-	
+
 	public class BooleanVariable extends Variable
 	{
 		public String init = "false";
-		
+
 		public BooleanVariable(String name, String init)
 		{
 			this.init = init;
 			this.name = name;
 		}
-		
+
 		public BooleanVariable(String name)
 		{
 			this.name = name;

@@ -33,25 +33,26 @@ import userinterface.util.*;
 
 public class GUIClipboardEvent extends GUIEvent
 {
-    public static final int COPY = 0;
-    public static final int CUT = 1;
-    public static final int PASTE = 2;
-    public static final int DELETE = 3;
-    public static final int SELECT_ALL = 4;
-    public static final int UNDO = 5;
-    public static final int REDO = 6;    
-    
-    static int counter =0;
-    /** Creates a new instance of GUIClipboardEvent */
-    public GUIClipboardEvent(int id, GUIPlugin comp)
-    {
-        super(id, comp);
-        counter++;
-        //System.out.println("clipboard event "+counter);
-    }
-    
-    public Component getComponent()
-    {
-        return (GUIPlugin)getData();
-    }
+	public static final int COPY = 0;
+	public static final int CUT = 1;
+	public static final int PASTE = 2;
+	public static final int DELETE = 3;
+	public static final int SELECT_ALL = 4;
+	public static final int UNDO = 5;
+	public static final int REDO = 6;
+
+	static int counter = 0;
+
+	/** Creates a new instance of GUIClipboardEvent */
+	public GUIClipboardEvent(int id, GUIPlugin comp)
+	{
+		super(id, comp);
+		counter++;
+		//System.out.println("clipboard event "+counter);
+	}
+
+	public Component getComponent()
+	{
+		return (GUIPlugin) getData();
+	}
 }

@@ -372,7 +372,7 @@ public abstract class PrismLog implements Closeable, AutoCloseable
 	{
 		println("\n---------------------------------------------------------------------");
 	}
-	
+
 	/**
 	 * Prints a warning message {@code s}, preceded by "\nWarning: " and followed by a newline character.
 	 * <br>

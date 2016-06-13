@@ -37,7 +37,8 @@ import jltl2ba.APSet;
  * Provides conversion from deterministic Büchi to 
  * deterministic Rabin.
  */
-public class DBA2DRA {
+public class DBA2DRA
+{
 	/**
 	 * Convert a deterministic Büchi automaton
 	 * (a nondeterministic Büchi automaton NBA, where every transition
@@ -55,7 +56,8 @@ public class DBA2DRA {
 	 * @param complement complement the DBA?
 	 * @return a shared_ptr to the created DRA
 	 */
-	public static DRA dba2dra(NBA nba, boolean complement) throws PrismException {
+	public static DRA dba2dra(NBA nba, boolean complement) throws PrismException
+	{
 		APSet ap_set = nba.getAPSet();
 		DRA dra = new DRA(ap_set);
 
@@ -84,12 +86,12 @@ public class DBA2DRA {
 
 		DA_State sink_state = null;
 
-		for (int i = 0; i < nba.size();	i++) {
+		for (int i = 0; i < nba.size(); i++) {
 			NBA_State nba_state = nba.get(i);
 			DA_State dra_from = dra.get(i);
 
-			for (Iterator<APElement> it = ap_set.elementIterator(); it.hasNext(); ) {
-				APElement label = it.next(); 
+			for (Iterator<APElement> it = ap_set.elementIterator(); it.hasNext();) {
+				APElement label = it.next();
 				BitSet to = nba_state.getEdge(label);
 
 				int to_cardinality = 0;
@@ -108,7 +110,7 @@ public class DBA2DRA {
 						// L_0 
 						if (complement) {
 							sink_state.acceptance().addTo_L(0);
-						}	    
+						}
 					}
 					dra_to = sink_state;
 				} else if (to_cardinality == 1) {
@@ -129,7 +131,7 @@ public class DBA2DRA {
 		if (sink_state != null) {
 			// there is a sink state
 			// make true-loop from sink state to itself
-			for (Iterator<APElement> it = ap_set.elementIterator(); it.hasNext(); ) {
+			for (Iterator<APElement> it = ap_set.elementIterator(); it.hasNext();) {
 				sink_state.edges().put(it.next(), sink_state);
 			}
 		}

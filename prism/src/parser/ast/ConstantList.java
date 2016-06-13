@@ -48,9 +48,9 @@ public class ConstantList extends ASTElement
 	// We also store an ExpressionIdent to match each name.
 	// This is to just to provide positional info.
 	private Vector<ExpressionIdent> nameIdents;
-	
+
 	// Constructor
-	
+
 	public ConstantList()
 	{
 		// initialise
@@ -59,9 +59,9 @@ public class ConstantList extends ASTElement
 		types = new Vector<Type>();
 		nameIdents = new Vector<ExpressionIdent>();
 	}
-	
+
 	// Set methods
-	
+
 	public void addConstant(ExpressionIdent n, Expression c, Type t)
 	{
 		names.addElement(n.getName());
@@ -69,12 +69,12 @@ public class ConstantList extends ASTElement
 		types.addElement(t);
 		nameIdents.addElement(n);
 	}
-	
+
 	public void setConstant(int i, Expression c)
 	{
 		constants.setElementAt(c, i);
 	}
-	
+
 	// Get methods
 
 	public int size()
@@ -86,17 +86,17 @@ public class ConstantList extends ASTElement
 	{
 		return names.elementAt(i);
 	}
-	
+
 	public Expression getConstant(int i)
 	{
 		return constants.elementAt(i);
 	}
-	
+
 	public Type getConstantType(int i)
 	{
 		return types.elementAt(i);
 	}
-	
+
 	public ExpressionIdent getConstantNameIdent(int i)
 	{
 		return nameIdents.elementAt(i);
@@ -138,7 +138,7 @@ public class ConstantList extends ASTElement
 			throw new PrismLangException(s, getConstant(firstCycle));
 		}
 	}
-	
+
 	/**
 	 * Get the number of undefined constants in the list.
 	 */
@@ -146,7 +146,7 @@ public class ConstantList extends ASTElement
 	{
 		int i, n, res;
 		Expression e;
-		
+
 		res = 0;
 		n = constants.size();
 		for (i = 0; i < n; i++) {
@@ -155,10 +155,10 @@ public class ConstantList extends ASTElement
 				res++;
 			}
 		}
-		
+
 		return res;
 	}
-	
+
 	/**
 	 * Get a list of the undefined constants in the list.
 	 */
@@ -167,7 +167,7 @@ public class ConstantList extends ASTElement
 		int i, n;
 		Expression e;
 		Vector<String> v;
-		
+
 		v = new Vector<String>();
 		n = constants.size();
 		for (i = 0; i < n; i++) {
@@ -176,10 +176,10 @@ public class ConstantList extends ASTElement
 				v.addElement(getConstantName(i));
 			}
 		}
-		
+
 		return v;
 	}
-	
+
 	/**
 	 * Check if {@code name} is a *defined* constants in the list,
 	 * i.e. a constant whose value was *not* left unspecified in the model/property.
@@ -191,7 +191,7 @@ public class ConstantList extends ASTElement
 			return false;
 		return (getConstant(i) != null);
 	}
-	
+
 	/**
 	 * Set values for *all* undefined constants, evaluate values for *all* constants
 	 * and return a Values object with values for *all* constants.
@@ -202,7 +202,7 @@ public class ConstantList extends ASTElement
 	{
 		return evaluateSomeOrAllConstants(someValues, otherValues, true);
 	}
-	
+
 	/**
 	 * Set values for *some* undefined constants, evaluate values for constants where possible
 	 * and return a Values object with values for all constants that could be evaluated.
@@ -213,7 +213,7 @@ public class ConstantList extends ASTElement
 	{
 		return evaluateSomeOrAllConstants(someValues, otherValues, false);
 	}
-	
+
 	/**
 	 * Set values for *some* or *all* undefined constants, evaluate values for constants where possible
 	 * and return a Values object with values for all constants that could be evaluated.
@@ -230,7 +230,7 @@ public class ConstantList extends ASTElement
 		Type t = null;
 		ExpressionIdent s;
 		Object val;
-		
+
 		// Create new copy of this ConstantList
 		// (copy existing constant definitions, add new ones where undefined)
 		cl = new ConstantList();
@@ -240,7 +240,7 @@ public class ConstantList extends ASTElement
 			e = getConstant(i);
 			t = getConstantType(i);
 			if (e != null) {
-				cl.addConstant((ExpressionIdent)s.deepCopy(), e.deepCopy(), t);
+				cl.addConstant((ExpressionIdent) s.deepCopy(), e.deepCopy(), t);
 			} else {
 				// Create new literal expression using values passed in (if possible and needed)
 				if (someValues != null && (j = someValues.getIndexOf(s.getName())) != -1) {
@@ -252,7 +252,7 @@ public class ConstantList extends ASTElement
 			}
 		}
 		numToEvaluate = cl.size();
-		
+
 		// Now add constants corresponding to the 'otherValues' argument to the new constant list
 		if (otherValues != null) {
 			n = otherValues.getNumValues();
@@ -261,13 +261,13 @@ public class ConstantList extends ASTElement
 				cl.addConstant(new ExpressionIdent(otherValues.getName(i)), new ExpressionLiteral(iType, iType.castValueTo(otherValues.getValue(i))), iType);
 			}
 		}
-		
+
 		// Go trough and expand definition of each constant
 		// (i.e. replace other constant references with their definitions)
 		// Note: work with new copy of constant list, don't need to expand 'otherValues' ones.
 		for (i = 0; i < numToEvaluate; i++) {
 			try {
-				e = (Expression)cl.getConstant(i).expandConstants(cl);
+				e = (Expression) cl.getConstant(i).expandConstants(cl);
 				cl.setConstant(i, e);
 			} catch (PrismLangException ex) {
 				if (all) {
@@ -277,7 +277,7 @@ public class ConstantList extends ASTElement
 				}
 			}
 		}
-		
+
 		// Evaluate constants and store in new Values object (again, ignoring 'otherValues' ones)		
 		allValues = new Values();
 		for (i = 0; i < numToEvaluate; i++) {
@@ -286,7 +286,7 @@ public class ConstantList extends ASTElement
 				allValues.addValue(cl.getConstantName(i), val);
 			}
 		}
-		
+
 		return allValues;
 	}
 
@@ -296,14 +296,14 @@ public class ConstantList extends ASTElement
 	 * Argument 'someValues' contains values for undefined ones, can be null if all already defined.
 	 * Argument 'otherValues' contains any other values which may be needed, null if none.
 	 */
-	public Map<String,Expression> evaluateConstantsPartially(Values someValues, Values otherValues) throws PrismLangException
+	public Map<String, Expression> evaluateConstantsPartially(Values someValues, Values otherValues) throws PrismLangException
 	{
 		ConstantList cl;
 		Expression e;
 		int i, j, n, numToEvaluate;
 		Type t = null;
 		ExpressionIdent s;
-		
+
 		// Create new copy of this ConstantList
 		// (copy existing constant definitions, add new ones where undefined)
 		cl = new ConstantList();
@@ -313,7 +313,7 @@ public class ConstantList extends ASTElement
 			e = getConstant(i);
 			t = getConstantType(i);
 			if (e != null) {
-				cl.addConstant((ExpressionIdent)s.deepCopy(), e.deepCopy(), t);
+				cl.addConstant((ExpressionIdent) s.deepCopy(), e.deepCopy(), t);
 			} else {
 				// Create new literal expression using values passed in (if possible and needed)
 				if (someValues != null && (j = someValues.getIndexOf(s.getName())) != -1) {
@@ -322,7 +322,7 @@ public class ConstantList extends ASTElement
 			}
 		}
 		numToEvaluate = cl.size();
-		
+
 		// Now add constants corresponding to the 'otherValues' argument to the new constant list
 		if (otherValues != null) {
 			n = otherValues.getNumValues();
@@ -331,32 +331,32 @@ public class ConstantList extends ASTElement
 				cl.addConstant(new ExpressionIdent(otherValues.getName(i)), new ExpressionLiteral(iType, iType.castValueTo(otherValues.getValue(i))), iType);
 			}
 		}
-		
+
 		// Go trough and expand definition of each constant
 		// (i.e. replace other constant references with their definitions)
 		// Note: work with new copy of constant list, don't need to expand 'otherValues' ones.
 		for (i = 0; i < numToEvaluate; i++) {
 			try {
-				e = (Expression)cl.getConstant(i).expandConstants(cl);
+				e = (Expression) cl.getConstant(i).expandConstants(cl);
 				cl.setConstant(i, e);
 			} catch (PrismLangException ex) {
 				cl.setConstant(i, null);
 			}
 		}
-		
+
 		// Store final expressions for each constant in a map and return
-		Map<String,Expression> constExprs = new HashMap<>();
+		Map<String, Expression> constExprs = new HashMap<>();
 		for (i = 0; i < numToEvaluate; i++) {
 			if (cl.getConstant(i) != null) {
 				constExprs.put(cl.getConstantName(i), cl.getConstant(i).deepCopy());
 			}
 		}
-		
+
 		return constExprs;
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
@@ -364,7 +364,7 @@ public class ConstantList extends ASTElement
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
@@ -373,7 +373,7 @@ public class ConstantList extends ASTElement
 		String s = "";
 		int i, n;
 		Expression e;
-		
+
 		n = constants.size();
 		for (i = 0; i < n; i++) {
 			s += "const ";
@@ -385,10 +385,10 @@ public class ConstantList extends ASTElement
 			}
 			s += ";\n";
 		}
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
@@ -399,7 +399,7 @@ public class ConstantList extends ASTElement
 		n = size();
 		for (i = 0; i < n; i++) {
 			Expression constantNew = (getConstant(i) == null) ? null : getConstant(i).deepCopy();
-			ret.addConstant((ExpressionIdent)getConstantNameIdent(i).deepCopy(), constantNew, getConstantType(i));
+			ret.addConstant((ExpressionIdent) getConstantNameIdent(i).deepCopy(), constantNew, getConstantType(i));
 		}
 		ret.setPosition(this);
 		return ret;

@@ -134,7 +134,7 @@ public class Updates extends ASTElement
 		Expression p = probs.get(i);
 		return (p == null) ? 1.0 : p.evaluateDouble(state);
 	}
-			
+
 	/**
 	 * Get the Command to which this Updates object belongs.
 	 */

@@ -74,8 +74,8 @@ public abstract class SCCComputer extends PrismComponent
 	/**
 	 * Static method to create a new SCCComputer object, depending on requested method.
 	 */
-	public static SCCComputer createSCCComputer(PrismComponent parent, int sccMethod, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars)
-			throws PrismException
+	public static SCCComputer createSCCComputer(PrismComponent parent, int sccMethod, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars,
+			JDDVars allDDColVars) throws PrismException
 	{
 		SCCComputer sccComputer;
 		switch (sccMethod) {

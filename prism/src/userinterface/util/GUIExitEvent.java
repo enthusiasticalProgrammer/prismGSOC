@@ -29,13 +29,13 @@ package userinterface.util;
 
 public class GUIExitEvent extends GUIEvent
 {
-    // CONSTANTS
-    public static final int REQUEST_EXIT = 0;
-    public static final int CANCEL_EXIT = 1;
-    
-    /** Creates a new instance of GUIExitEvent */
-    public GUIExitEvent(int id)
-    {
-        super(id);
-    }
+	// CONSTANTS
+	public static final int REQUEST_EXIT = 0;
+	public static final int CANCEL_EXIT = 1;
+
+	/** Creates a new instance of GUIExitEvent */
+	public GUIExitEvent(int id)
+	{
+		super(id);
+	}
 }

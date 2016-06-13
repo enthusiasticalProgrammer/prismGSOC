@@ -70,9 +70,9 @@ public class AcceptanceReach implements AcceptanceOmega
 	/** Make a copy of the acceptance condition. */
 	public AcceptanceReach clone()
 	{
-		return new AcceptanceReach((BitSet)goalStates.clone());
+		return new AcceptanceReach((BitSet) goalStates.clone());
 	}
-	
+
 	@Override
 	public boolean isBSCCAccepting(BitSet bscc_states)
 	{
@@ -137,7 +137,7 @@ public class AcceptanceReach implements AcceptanceOmega
 	@Override
 	public void lift(LiftBitSet lifter)
 	{
-		goalStates=lifter.lift(goalStates);
+		goalStates = lifter.lift(goalStates);
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class AcceptanceReach implements AcceptanceOmega
 	{
 		return goalStates.get(i) ? "!" : " ";
 	}
-	
+
 	@Override
 	public String getSignatureForStateHOA(int stateIndex)
 	{
@@ -178,7 +178,7 @@ public class AcceptanceReach implements AcceptanceOmega
 	@Override
 	public String getSizeStatistics()
 	{
-		return goalStates.cardinality()+" goal states";
+		return goalStates.cardinality() + " goal states";
 	}
 
 	@Override
@@ -189,13 +189,15 @@ public class AcceptanceReach implements AcceptanceOmega
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 

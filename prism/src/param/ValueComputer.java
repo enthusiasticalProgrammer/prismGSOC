@@ -40,18 +40,17 @@ import java.util.Map.Entry;
 final class ValueComputer
 {
 	private enum PropType {
-		REACH,
-		STEADY
+		REACH, STEADY
 	};
 
 	class SchedulerCacheKey
-	{		
+	{
 		final private PropType propType;
 		final private BitSet b1;
 		final private BitSet b2;
 		final private boolean min;
 		final private ParamRewardStruct rew;
-		
+
 		SchedulerCacheKey(PropType propType, StateValues b1, StateValues b2, boolean min, ParamRewardStruct rew, Region region)
 		{
 			this.propType = propType;
@@ -64,9 +63,10 @@ final class ValueComputer
 			this.min = min;
 			this.rew = rew;
 		}
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			if (!(obj instanceof SchedulerCacheKey)) {
 				return false;
 			}
@@ -89,16 +89,17 @@ final class ValueComputer
 			if ((rew != null) && !this.rew.equals(other.rew)) {
 				return false;
 			}
-			if (this.min != other.min){
+			if (this.min != other.min) {
 				return false;
 			}
 			return true;
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = 0;
-			
+
 			switch (propType) {
 			case REACH:
 				hash = 13;
@@ -113,7 +114,7 @@ final class ValueComputer
 			}
 			hash = ((min) ? 13 : 17) + (hash << 6) + (hash << 16) - hash;
 			hash = ((rew == null) ? 0 : rew.hashCode()) + (hash << 6) + (hash << 16) - hash;
-			
+
 			return hash;
 		}
 	}
@@ -126,7 +127,7 @@ final class ValueComputer
 		final private ParamRewardStruct rew;
 		final private Scheduler sched;
 		final private boolean min;
-		
+
 		ResultCacheKey(PropType propType, StateValues b1, StateValues b2, ParamRewardStruct rew, Scheduler sched, boolean min)
 		{
 			this.propType = propType;
@@ -140,9 +141,10 @@ final class ValueComputer
 			this.sched = sched;
 			this.min = min;
 		}
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			if (!(obj instanceof ResultCacheKey)) {
 				return false;
 			}
@@ -168,16 +170,17 @@ final class ValueComputer
 			if (!this.sched.equals(other.sched)) {
 				return false;
 			}
-			if (this.min != other.min){
+			if (this.min != other.min) {
 				return false;
 			}
 			return true;
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			int hash = 0;
-			
+
 			switch (propType) {
 			case REACH:
 				hash = 13;
@@ -193,27 +196,27 @@ final class ValueComputer
 			hash = (rew == null ? 0 : rew.hashCode()) + (hash << 6) + (hash << 16) - hash;
 			hash = sched.hashCode() + (hash << 6) + (hash << 16) - hash;
 			hash = (min ? 13 : 17) + (hash << 6) + (hash << 16) - hash;
-			
+
 			return hash;
 		}
 	}
-	
+
 	class ResultCacheEntry
 	{
 		final private StateValues values;
 		final private Function[] compare;
-		
+
 		ResultCacheEntry(StateValues values, Function[] compare)
 		{
 			this.values = values;
 			this.compare = compare;
 		}
-		
+
 		StateValues getValues()
 		{
 			return values;
 		}
-		
+
 		Function[] getCompare()
 		{
 			return compare;
@@ -225,24 +228,27 @@ final class ValueComputer
 	private FunctionFactory functionFactory;
 	private ConstraintChecker constraintChecker;
 	private BigRational precision;
-	private HashMap<SchedulerCacheKey,ArrayList<Scheduler>> schedCache;
-	private HashMap<ResultCacheKey,ResultCacheEntry> resultCache;
+	private HashMap<SchedulerCacheKey, ArrayList<Scheduler>> schedCache;
+	private HashMap<ResultCacheKey, ResultCacheEntry> resultCache;
 	private StateEliminator.EliminationOrder eliminationOrder;
 	private Lumper.BisimType bisimType;
 
-	ValueComputer(ParamModel model, RegionFactory regionFactory, BigRational precision, StateEliminator.EliminationOrder eliminationOrder, Lumper.BisimType bisimType) {
+	ValueComputer(ParamModel model, RegionFactory regionFactory, BigRational precision, StateEliminator.EliminationOrder eliminationOrder,
+			Lumper.BisimType bisimType)
+	{
 		this.model = model;
 		this.regionFactory = regionFactory;
 		this.functionFactory = regionFactory.getFunctionFactory();
 		this.constraintChecker = regionFactory.getConstraintChecker();
 		this.precision = precision;
-		this.schedCache = new HashMap<SchedulerCacheKey,ArrayList<Scheduler>>();
-		this.resultCache = new HashMap<ResultCacheKey,ResultCacheEntry>();
+		this.schedCache = new HashMap<SchedulerCacheKey, ArrayList<Scheduler>>();
+		this.resultCache = new HashMap<ResultCacheKey, ResultCacheEntry>();
 		this.eliminationOrder = eliminationOrder;
 		this.bisimType = bisimType;
 	}
 
-	RegionValues computeUnbounded(RegionValues b1, RegionValues b2, boolean min, ParamRewardStruct rew) {
+	RegionValues computeUnbounded(RegionValues b1, RegionValues b2, boolean min, ParamRewardStruct rew)
+	{
 		RegionValues result = new RegionValues(regionFactory);
 		RegionValuesIntersections co = new RegionValuesIntersections(b1, b2);
 		for (RegionIntersection inter : co) {
@@ -257,14 +263,14 @@ final class ValueComputer
 
 	private RegionValues computeUnbounded(Region region, StateValues b1, StateValues b2, boolean min, ParamRewardStruct rew)
 	{
-		BigRational requiredVolume = region.volume().multiply(BigRational.ONE.subtract(precision));		
+		BigRational requiredVolume = region.volume().multiply(BigRational.ONE.subtract(precision));
 		RegionValues result = new RegionValues(regionFactory);
 		RegionsTODO todo = new RegionsTODO();
 		todo.add(region);
 		BigRational volume = BigRational.ZERO;
 		while (volume.compareTo(requiredVolume) == -1) {
 			Region currentRegion = todo.poll();
-			Point midPoint = ((BoxRegion)currentRegion).getMidPoint();
+			Point midPoint = ((BoxRegion) currentRegion).getMidPoint();
 			Scheduler scheduler = computeOptConcreteReachScheduler(midPoint, model, b1, b2, min, rew);
 			ResultCacheEntry resultCacheEntry = lookupValues(PropType.REACH, b1, b2, rew, scheduler, min);
 			Function[] compare;
@@ -296,19 +302,18 @@ final class ValueComputer
 
 		return result;
 	}
-	
-	private Function[] computeCompare(StateValues b1, StateValues b2,
-			ParamRewardStruct rew, Scheduler scheduler, boolean min,
-			StateValues values) {
+
+	private Function[] computeCompare(StateValues b1, StateValues b2, ParamRewardStruct rew, Scheduler scheduler, boolean min, StateValues values)
+	{
 		HashSet<Function> allValues = new HashSet<Function>();
-		
+
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (!b1.getStateValueAsBoolean(state) || b2.getStateValueAsBoolean(state)) {
 				continue;
 			}
 			Function stateValue = values.getStateValueAsFunction(state);
 			for (int altChoice = model.stateBegin(state); altChoice < model.stateEnd(state); altChoice++) {
-				Function choiceValue = (rew == null) ? functionFactory.getZero()  : rew.getReward(altChoice);
+				Function choiceValue = (rew == null) ? functionFactory.getZero() : rew.getReward(altChoice);
 				for (int succ = model.choiceBegin(altChoice); succ < model.choiceEnd(altChoice); succ++) {
 					int succState = model.succState(succ);
 					Function weighted = model.succProb(succ).multiply(values.getStateValueAsFunction(succState));
@@ -322,15 +327,16 @@ final class ValueComputer
 		return allValues.toArray(new Function[0]);
 	}
 
-	private void storeValues(PropType propType, StateValues b1, StateValues b2,
-			ParamRewardStruct rew, Scheduler scheduler, boolean min, StateValues values, Function[] compare) {
+	private void storeValues(PropType propType, StateValues b1, StateValues b2, ParamRewardStruct rew, Scheduler scheduler, boolean min, StateValues values,
+			Function[] compare)
+	{
 		ResultCacheKey cacheKey = new ResultCacheKey(propType, b1, b2, rew, scheduler, min);
 		ResultCacheEntry resultCacheEntry = new ResultCacheEntry(values, compare);
 		resultCache.put(cacheKey, resultCacheEntry);
 	}
 
-	private ResultCacheEntry lookupValues(PropType propType, StateValues b1, StateValues b2,
-			ParamRewardStruct rew, Scheduler scheduler, boolean min) {
+	private ResultCacheEntry lookupValues(PropType propType, StateValues b1, StateValues b2, ParamRewardStruct rew, Scheduler scheduler, boolean min)
+	{
 		ResultCacheKey cacheKey = new ResultCacheKey(propType, b1, b2, rew, scheduler, min);
 		ResultCacheEntry resultCacheEntry = resultCache.get(cacheKey);
 		return resultCacheEntry;
@@ -343,7 +349,7 @@ final class ValueComputer
 		if (rew != null) {
 			rewConcrete = rew.instantiate(point);
 		}
-		
+
 		Scheduler scheduler = lookupScheduler(point, concrete, PropType.REACH, b1, b2, min, rewConcrete);
 		if (scheduler != null) {
 			return scheduler;
@@ -358,7 +364,7 @@ final class ValueComputer
 			for (int state = 0; state < concrete.getNumStates(); state++) {
 				values[state] = fnValues.getStateValueAsFunction(state).asBigRational();
 			}
-					
+
 			changed = false;
 			for (int state = 0; state < concrete.getNumStates(); state++) {
 				if (!b1.getStateValueAsBoolean(state) || b2.getStateValueAsBoolean(state)) {
@@ -389,20 +395,19 @@ final class ValueComputer
 
 		return scheduler;
 	}
-	
-	private void storeScheduler(PropType propType, StateValues b1, StateValues b2, boolean min,
-			ParamRewardStruct rew, Scheduler scheduler) {
+
+	private void storeScheduler(PropType propType, StateValues b1, StateValues b2, boolean min, ParamRewardStruct rew, Scheduler scheduler)
+	{
 		SchedulerCacheKey cacheKey = new SchedulerCacheKey(propType, b1, b2, min, rew, null);
 		ArrayList<Scheduler> schedulers = schedCache.get(cacheKey);
 		if (schedulers == null) {
 			schedulers = new ArrayList<Scheduler>();
 			schedCache.put(cacheKey, schedulers);
 		}
-		schedulers.add(scheduler);		
+		schedulers.add(scheduler);
 	}
 
-	private Scheduler lookupScheduler(Point point, ParamModel concrete, PropType propType, StateValues b1, StateValues b2,
-			boolean min, ParamRewardStruct rew)
+	private Scheduler lookupScheduler(Point point, ParamModel concrete, PropType propType, StateValues b1, StateValues b2, boolean min, ParamRewardStruct rew)
 	{
 		SchedulerCacheKey cacheKey = new SchedulerCacheKey(propType, b1, b2, min, rew, null);
 		ArrayList<Scheduler> schedulers = schedCache.get(cacheKey);
@@ -419,13 +424,13 @@ final class ValueComputer
 		return null;
 	}
 
-	private boolean checkScheduler(final Point point, final PropType propType, final StateValues b1, final StateValues b2,
-			final boolean min, final ParamRewardStruct rew, final Scheduler scheduler)
+	private boolean checkScheduler(final Point point, final PropType propType, final StateValues b1, final StateValues b2, final boolean min,
+			final ParamRewardStruct rew, final Scheduler scheduler)
 	{
 		ResultCacheKey resultKey = new ResultCacheKey(propType, b1, b2, rew, scheduler, min);
 		ResultCacheEntry resultCacheEntry = resultCache.get(resultKey);
-		
-		Function compare[] = resultCacheEntry.getCompare();		
+
+		Function compare[] = resultCacheEntry.getCompare();
 		for (Function entry : compare) {
 			if (entry.evaluate(point, false).signum() == -1) {
 				return false;
@@ -504,7 +509,7 @@ final class ValueComputer
 			}
 		}
 	}
-	
+
 	private MutablePMC buildAlterablePMCForReach(ParamModel model, StateValues b1, StateValues b2, Scheduler scheduler, ParamRewardStruct rew)
 	{
 		MutablePMC pmc = new MutablePMC(functionFactory, model.getNumStates(), rew != null, false);
@@ -532,7 +537,7 @@ final class ValueComputer
 				}
 			}
 		}
-		
+
 		return pmc;
 	}
 
@@ -554,7 +559,7 @@ final class ValueComputer
 			}
 			pmc.setTime(state, functionFactory.getOne().divide(sumLeaving));
 		}
-		
+
 		return pmc;
 	}
 
@@ -571,17 +576,17 @@ final class ValueComputer
 		case WEAK:
 			if (pmc.isUseRewards()) {
 				lumper = new StrongLumper(pmc);
-			} else{
+			} else {
 				lumper = new WeakLumper(pmc);
 			}
 			break;
 		default:
-			throw new RuntimeException("invalid bisimulation method"); 
+			throw new RuntimeException("invalid bisimulation method");
 		}
 		if (lumper instanceof WeakLumper && pmc.isUseTime()) {
 			lumper = new StrongLumper(pmc);
 		}
-		
+
 		MutablePMC quot = lumper.getQuotient();
 		StateEliminator eliminator = new StateEliminator(quot, eliminationOrder);
 		eliminator.eliminate();
@@ -611,7 +616,6 @@ final class ValueComputer
 		return result;
 	}
 
-	
 	public RegionValues computeSteadyState(RegionValues b, boolean min, ParamRewardStruct rew)
 	{
 		RegionValues result = new RegionValues(regionFactory);
@@ -619,7 +623,7 @@ final class ValueComputer
 			Region region = entry.getKey();
 			StateValues value = entry.getValue();
 			RegionValues val = computeSteadyState(region, value, min, rew);
-			result.addAll(val);			
+			result.addAll(val);
 		}
 		return result;
 	}

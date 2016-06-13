@@ -590,7 +590,7 @@ public class GUIPathPlotDialog extends JDialog
 			gui.errorDialog("Invalid maximum path length \"" + textFieldMaxLen.getText() + "\"");
 			return;
 		}
-		
+
 		cancelled = false;
 		dispose();
 	}

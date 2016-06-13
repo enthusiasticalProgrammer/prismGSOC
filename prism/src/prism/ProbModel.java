@@ -518,7 +518,7 @@ public class ProbModel implements Model
 		if (this.start != null)
 			JDD.Deref(this.start);
 		this.start = start;
-		
+
 		// work out number of initial states
 		numStartStates = JDD.GetNumMinterms(start, allDDRowVars.n());
 	}
@@ -608,7 +608,7 @@ public class ProbModel implements Model
 		// find reachable states with no transitions
 		JDD.Ref(reach);
 		deadlocks = JDD.And(reach, JDD.Not(deadlocks));
-		
+
 		if (fix && !deadlocks.equals(JDD.ZERO)) {
 			// remove deadlocks by adding self-loops
 			// also update transPerAction info, if present

@@ -159,7 +159,7 @@ public final class CIiterations extends CIMethod
 			return 0;
 		return 10 * ((int) (100.0 * (double) (iters + 1) / (sampler.getVariance() * squaredQuantile / (width * width))) / 10);
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

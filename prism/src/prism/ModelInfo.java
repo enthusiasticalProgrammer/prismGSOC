@@ -67,12 +67,12 @@ public interface ModelInfo
 	 * Get the number of variables in the model. 
 	 */
 	public int getNumVars();
-	
+
 	/**
 	 * Get the names of all the variables in the model.
 	 */
 	public List<String> getVarNames();
-	
+
 	/**
 	 * Get the types of all the variables in the model.
 	 */
@@ -98,22 +98,22 @@ public interface ModelInfo
 	 * Get the number of labels (atomic propositions) defined for the model. 
 	 */
 	public int getNumLabels();
-	
+
 	/**
 	 * Get the name of the {@code i}th label of the model.
 	 */
 	public String getLabelName(int i) throws PrismException;
-	
+
 	/**
 	 * Get the index of the label with name {@code label}. Returns -1 if none exists.
 	 */
 	public int getLabelIndex(String label);
-	
+
 	/**
 	 * Get the number of reward structures in the model.
 	 */
 	public int getNumRewardStructs();
-	
+
 	/**
 	 * Get the index of a module by its name
 	 * (indexed from 0, not from 1 like at the user (property language) level).

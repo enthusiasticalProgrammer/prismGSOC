@@ -42,13 +42,13 @@ public class FindAllVars extends ASTTraverseModify
 {
 	private List<String> varIdents;
 	private List<Type> varTypes;
-	
+
 	public FindAllVars(List<String> varIdents, List<Type> varTypes)
 	{
 		this.varIdents = varIdents;
 		this.varTypes = varTypes;
 	}
-	
+
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new object so don't need to return it.
 	public void visitPost(Update e) throws PrismLangException
@@ -70,7 +70,7 @@ public class FindAllVars extends ASTTraverseModify
 			e.setVarIndex(i, j);
 		}
 	}
-	
+
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;
@@ -87,7 +87,7 @@ public class FindAllVars extends ASTTraverseModify
 		// Otherwise, leave it unchanged
 		return e;
 	}
-	
+
 	// Also re-compute info for ExpressionVar objects in case variable indices have changed
 	public Object visit(ExpressionVar e) throws PrismLangException
 	{
@@ -103,4 +103,3 @@ public class FindAllVars extends ASTTraverseModify
 		throw new PrismLangException("Unknown variable " + e.getName() + " in ExpressionVar object", e);
 	}
 }
-

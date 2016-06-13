@@ -425,7 +425,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		throw new RuntimeException("Not yet supported");
 	}
-	
+
 	@Override
 	public void exportToPrismLanguage(String filename) throws PrismException
 	{
@@ -501,7 +501,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		return trans.get(s).get(i).containsOneOf(set);
 	}
-	
+
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(final int s, final int i)
 	{
@@ -542,7 +542,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		throw new RuntimeException("Not implemented");
 	}
-	
+
 	@Override
 	public boolean isChoiceNested(int s, int i)
 	{

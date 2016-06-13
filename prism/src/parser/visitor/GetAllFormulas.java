@@ -37,12 +37,12 @@ import prism.PrismLangException;
 public class GetAllFormulas extends ASTTraverse
 {
 	private Vector<String> v;
-	
+
 	public GetAllFormulas(Vector<String> v)
 	{
 		this.v = v;
 	}
-	
+
 	public void visitPost(ExpressionFormula e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {
@@ -50,4 +50,3 @@ public class GetAllFormulas extends ASTTraverse
 		}
 	}
 }
-

@@ -31,20 +31,22 @@ package jdd;
 public class JDDNode
 {
 	private long ptr;
-	
+
 	// native methods (jni)
 	protected static native boolean DDN_IsConstant(long dd);
+
 	protected static native int DDN_GetIndex(long dd);
+
 	protected static native double DDN_GetValue(long dd);
+
 	protected static native long DDN_GetThen(long dd);
+
 	protected static native long DDN_GetElse(long dd);
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("jdd");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -59,7 +61,7 @@ public class JDDNode
 	{
 		ptr = p;
 	}
-	
+
 	public long ptr()
 	{
 		return ptr;
@@ -71,7 +73,7 @@ public class JDDNode
 	}
 
 	public int getIndex()
-	{	
+	{
 		return DDN_GetIndex(ptr);
 	}
 
@@ -143,17 +145,18 @@ public class JDDNode
 	{
 		return (o instanceof JDDNode) && (((JDDNode) o).ptr == ptr);
 	}
-	
+
 	public int hashCode()
 	{
-		return (int)ptr; 
+		return (int) ptr;
 	}
-	
+
 	public String toString()
 	{
 		String result = "" + ptr;
 		if (ptr != 0) {
-			if (this.isConstant()) result += " value=" + this.getValue();
+			if (this.isConstant())
+				result += " value=" + this.getValue();
 			result += " references=" + DebugJDD.getRefCount(this);
 		}
 		return result;

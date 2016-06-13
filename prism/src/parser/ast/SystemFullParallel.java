@@ -35,46 +35,46 @@ public class SystemFullParallel extends SystemDefn
 {
 	// Vector of operands
 	private Vector<SystemDefn> operands;
-	
+
 	// Constructor
-	
+
 	public SystemFullParallel()
 	{
 		operands = new Vector<SystemDefn>();
 	}
-	
+
 	// Set methods
-	
+
 	public void addOperand(SystemDefn s)
 	{
 		operands.addElement(s);
 	}
-		
+
 	public void setOperand(int i, SystemDefn s)
 	{
 		operands.setElementAt(s, i);
 	}
-			
+
 	// Get methods
-	
+
 	public int getNumOperands()
 	{
 		return operands.size();
 	}
-	
+
 	public SystemDefn getOperand(int i)
 	{
 		return operands.elementAt(i);
 	}
-		
+
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void getModules(Vector<String> v)
 	{
 		int i, n;
-		
+
 		n = getNumOperands();
 		for (i = 0; i < n; i++) {
 			getOperand(i).getModules(v);
@@ -85,7 +85,7 @@ public class SystemFullParallel extends SystemDefn
 	public void getModules(Vector<String> v, ModulesFile modulesFile)
 	{
 		int i, n;
-		
+
 		n = getNumOperands();
 		for (i = 0; i < n; i++) {
 			getOperand(i).getModules(v, modulesFile);
@@ -97,24 +97,24 @@ public class SystemFullParallel extends SystemDefn
 	public void getSynchs(Vector<String> v)
 	{
 		int i, n;
-		
+
 		n = getNumOperands();
 		for (i = 0; i < n; i++) {
 			getOperand(i).getSynchs(v);
 		}
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v, ModulesFile modulesFile)
 	{
 		int i, n;
-		
+
 		n = getNumOperands();
 		for (i = 0; i < n; i++) {
 			getOperand(i).getSynchs(v, modulesFile);
 		}
 	}
-	
+
 	@Override
 	public void getReferences(Vector<String> v)
 	{
@@ -123,32 +123,32 @@ public class SystemFullParallel extends SystemDefn
 			getOperand(i).getReferences(v);
 		}
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		int i, n;
 		String s = "";
-		
+
 		n = getNumOperands();
-		for (i = 0; i < n-1; i++) {
+		for (i = 0; i < n - 1; i++) {
 			s = s + getOperand(i) + " || ";
 		}
 		if (n > 0) {
-			s = s + getOperand(n-1);
+			s = s + getOperand(n - 1);
 		}
-		
+
 		return s;
 	}
-	
+
 	@Override
 	public SystemDefn deepCopy()
 	{

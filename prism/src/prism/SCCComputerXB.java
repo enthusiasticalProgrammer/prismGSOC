@@ -43,21 +43,21 @@ public class SCCComputerXB extends SCCComputer
 	{
 		super(parent, reach, trans01, allDDRowVars, allDDColVars);
 	}
-	
+
 	// Methods for SCCComputer
 
 	@Override
 	public void computeSCCs()
 	{
 		JDDNode v, s, back;
-		
+
 		mainLog.println("\nComputing (B)SCCs...");
-		
+
 		// vector to be filled with SCCs
 		sccs = new Vector<JDDNode>();
 		// BDD of non-SCC states (initially zero BDD)
 		notInSCCs = JDD.Constant(0);
-		
+
 		// Compute all SCCs
 		// (using algorithm of xie/beerel'99)
 		JDD.Ref(reach);
@@ -71,7 +71,7 @@ public class SCCComputerXB extends SCCComputer
 		}
 		JDD.Deref(v);
 	}
-	
+
 	@Override
 	public void computeSCCs(JDDNode filter) throws PrismException
 	{
@@ -79,16 +79,16 @@ public class SCCComputerXB extends SCCComputer
 		// TODO: why is filter ignored here?
 		// computeSCCs();
 	}
-	
+
 	// Computation
-	
+
 	// pick a random (actually the first) state from set (set not empty)
-	
+
 	protected JDDNode pickRandomState(JDDNode set)
 	{
 		int i, n;
 		JDDNode tmp, tmp2, res, var;
-		
+
 		JDD.Ref(set);
 		tmp = set;
 		res = JDD.Constant(1);
@@ -104,8 +104,7 @@ public class SCCComputerXB extends SCCComputer
 				tmp = tmp2;
 				JDD.Ref(var);
 				res = JDD.And(res, JDD.Not(var));
-			}
-			else {
+			} else {
 				JDD.Deref(tmp2);
 				JDD.Ref(var);
 				tmp = JDD.And(tmp, var);
@@ -114,19 +113,19 @@ public class SCCComputerXB extends SCCComputer
 			}
 			JDD.Deref(var);
 		}
-		
+
 		JDD.Deref(tmp);
-		
+
 		return res;
 	}
-	
+
 	// find backward set of state s restricted to set v
-	
+
 	protected JDDNode computeBackwardSet(JDDNode s, JDDNode v)
 	{
 		JDDNode back, tmp;
 		boolean done = false;
-		
+
 		// do one step of loop first (s not nec. in forward set of s)
 		JDD.Ref(s);
 		JDD.Ref(trans01);
@@ -143,34 +142,34 @@ public class SCCComputerXB extends SCCComputer
 			tmp = JDD.Or(tmp, back);
 			JDD.Ref(v);
 			tmp = JDD.And(v, tmp);
-			
+
 			if (tmp.equals(back)) {
 				done = true;
 			}
-			
+
 			JDD.Deref(back);
 			back = tmp;
 		}
-		
+
 		return back;
 	}
-	
+
 	// find forward set of state s restricted to set v
-	
+
 	protected JDDNode computeForwardSet(JDDNode s, JDDNode v)
 	{
 		JDDNode forw, v2, tmp;
 		boolean done = false;
-		
+
 		// do one step of loop first (s not nec. in forward set of s)
 		JDD.Ref(s);
 		JDD.Ref(trans01);
 		forw = JDD.ThereExists(JDD.And(s, trans01), allDDRowVars);
-		
+
 		// transpose a copy of v
 		JDD.Ref(v);
 		v2 = JDD.PermuteVariables(v, allDDRowVars, allDDColVars);
-		
+
 		// fixpoint
 		while (!done) {
 			JDD.Ref(forw);
@@ -182,33 +181,33 @@ public class SCCComputerXB extends SCCComputer
 			tmp = JDD.Or(tmp, forw);
 			JDD.Ref(v2);
 			tmp = JDD.And(v2, tmp);
-			
+
 			if (tmp.equals(forw)) {
 				done = true;
 			}
-			
+
 			JDD.Deref(forw);
 			forw = tmp;
 		}
-		
+
 		// tidy up
 		JDD.Deref(v2);
-		
+
 		return JDD.PermuteVariables(forw, allDDColVars, allDDRowVars);
 	}
-	
+
 	// compute fmd (finite maximum distance) predecessors of set w
-	
+
 	protected JDDNode computeFMDPred(JDDNode w, JDDNode u)
 	{
 		JDDNode pred, front, bound, x, y;
-		
+
 		pred = JDD.Constant(0);
 		JDD.Ref(w);
 		front = w;
 		JDD.Ref(u);
 		bound = u;
-		
+
 		while (!front.equals(JDD.ZERO)) {
 			JDD.Ref(trans01);
 			JDD.Ref(bound);
@@ -225,27 +224,26 @@ public class SCCComputerXB extends SCCComputer
 			JDD.Ref(front);
 			bound = JDD.And(bound, JDD.And(reach, JDD.Not(front)));
 		}
-		
+
 		JDD.Deref(front);
 		JDD.Deref(bound);
-		
+
 		return pred;
 	}
-	
+
 	// recursively compute SCCs in back
 	// (store SCCs in first vector,
 	//  store states not in an SCC in first element of second vector)
-	
+
 	protected void computeSCCsRec(JDDNode s, JDDNode back)
 	{
 		JDDNode forw, x, r, y, ip, s2, back2, tmp;
-		
+
 		forw = computeForwardSet(s, back);
 		if (forw.equals(JDD.ZERO)) {
 			JDD.Ref(s);
 			notInSCCs = JDD.Or(notInSCCs, s);
-		}
-		else {
+		} else {
 			JDD.Ref(forw);
 			sccs.addElement(forw);
 		}
@@ -267,7 +265,7 @@ public class SCCComputerXB extends SCCComputer
 		tmp = JDD.Or(y, x);
 		ip = computeBackwardSet(tmp, r);
 		JDD.Deref(tmp);
-		
+
 		while (!r.equals(JDD.ZERO)) {
 			s2 = pickRandomState(ip);
 			back2 = computeBackwardSet(s2, r);
@@ -283,7 +281,7 @@ public class SCCComputerXB extends SCCComputer
 			JDD.Deref(s2);
 			JDD.Deref(back2);
 		}
-		
+
 		JDD.Deref(forw);
 		JDD.Deref(x);
 		JDD.Deref(r);

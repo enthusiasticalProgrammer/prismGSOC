@@ -20,17 +20,18 @@
 
 package jltl2dstar;
 
-public interface StateMapperInterface<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State> {
+public interface StateMapperInterface<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State>
+{
 
 	/** Clear the mapping */
 	public abstract void clear();
-	
+
 	/** Add a mapping. 
 	 * @param key the key
 	 * @param state the state
 	 */
 	public abstract void add(K key, S state);
-	
+
 	/** Find a mapping using ResultType. 
 	 * @param result
 	 * @return the state (or the NULL pointer if not found)

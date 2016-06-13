@@ -188,7 +188,7 @@ public class PTA
 	{
 		this.locationNameVars = locationNameVars;
 	}
-	
+
 	// Getters
 
 	public int getNumClocks()
@@ -221,7 +221,7 @@ public class PTA
 	{
 		Object name = locationNames.get(loc);
 		if (name instanceof State && locationNameVars != null)
-			return ((State)name).toString(locationNameVars);
+			return ((State) name).toString(locationNameVars);
 		else
 			return name.toString();
 	}

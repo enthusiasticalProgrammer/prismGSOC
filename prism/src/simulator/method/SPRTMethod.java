@@ -230,10 +230,11 @@ public final class SPRTMethod extends SimulationMethod
 	}
 
 	@Override
-	public String getResultExplanation(Sampler sampler){
+	public String getResultExplanation(Sampler sampler)
+	{
 		return computedIterations + " samples needed to decide property " + h0true;
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

@@ -38,27 +38,27 @@ public interface Strategy
 	public enum Choice {
 		INDEX, ACTION, UNKNOWN, ARBITRARY, UNREACHABLE;
 	};
-	
+
 	/**
 	 * Export the strategy to a PrismLog, displaying strategy choices as action names.
 	 */
 	public void exportActions(PrismLog out);
-	
+
 	/**
 	 * Export the strategy to a PrismLog, displaying strategy choices as indices.
 	 */
 	public void exportIndices(PrismLog out);
-	
+
 	/**
 	 * Export the model induced by this strategy to a PrismLog.
 	 */
 	public void exportInducedModel(PrismLog out);
-	
+
 	/**
 	 * Export the strategy to a dot file (of the model showing the strategy).
 	 */
 	public void exportDotFile(PrismLog out);
-	
+
 	/**
 	 * Initialise the strategy, based on an initial model state.
 	 * @param s Initial state of the model
@@ -71,12 +71,12 @@ public interface Strategy
 	 * @param s The new state of the model
 	 */
 	public void update(Object action, int s);
-	
+
 	/**
 	 * Get the action chosen by the strategy in the current state (assuming it is deterministic). 
 	 */
 	public Object getChoiceAction();
-	
+
 	/**
 	 * Clear storage of the strategy.
 	 */

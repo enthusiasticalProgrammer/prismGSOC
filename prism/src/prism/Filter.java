@@ -35,36 +35,37 @@ public class Filter
 	public enum FilterOperator {
 		STATE;
 	};
+
 	// Filter operator
 	private FilterOperator op = null;
 	// State of interest
-	private int stateIndex = -1; 
+	private int stateIndex = -1;
 
 	// Constructors
-	
+
 	public Filter(FilterOperator op, int stateIndex)
 	{
 		setOperator(op);
 		setStateIndex(stateIndex);
 	}
-	
+
 	// Getters/setters
-	
+
 	public FilterOperator getOperator()
 	{
 		return op;
 	}
-	
+
 	public int getStateIndex()
 	{
 		return stateIndex;
 	}
-	
+
 	public void setOperator(FilterOperator op)
 	{
 		this.op = op;
 	}
-	
+
 	public void setStateIndex(int stateIndex)
 	{
 		this.stateIndex = stateIndex;

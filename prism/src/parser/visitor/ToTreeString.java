@@ -33,7 +33,7 @@ public class ToTreeString extends ASTTraverse
 {
 	private int depth = 0;
 	private StringBuffer buf = new StringBuffer();
-	
+
 	/**
 	 * Get the created string representing the tree.
 	 */
@@ -41,16 +41,17 @@ public class ToTreeString extends ASTTraverse
 	{
 		return buf.toString();
 	}
-	
+
 	public void defaultVisitPre(ASTElement node) throws PrismLangException
 	{
 		// Don't print full toString() for multi-line objects
 		String s = node.toString();
-		if (s.indexOf('\n') != -1) s = "";
+		if (s.indexOf('\n') != -1)
+			s = "";
 		print(node.getClass().getName() + " : " + s);
 		depth++;
 	}
-	
+
 	public void defaultVisitPost(ASTElement node) throws PrismLangException
 	{
 		depth--;
@@ -61,8 +62,8 @@ public class ToTreeString extends ASTTraverse
 	 */
 	private void print(String s)
 	{
-		for (int i = 0; i < depth; i++) buf.append(" ");
+		for (int i = 0; i < depth; i++)
+			buf.append(" ");
 		buf.append(s + "\n");
 	}
 }
-

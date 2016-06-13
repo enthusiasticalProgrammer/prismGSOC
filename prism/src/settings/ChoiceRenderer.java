@@ -33,113 +33,93 @@ import java.util.*;
 
 public class ChoiceRenderer implements SettingRenderer
 {
-    private JPanel panel;
-    private JLabel renderer;
-    private Font font = new Font("monospaced", Font.PLAIN, 12);
-    private Font font2 = new Font("monospaced", Font.ITALIC, 12);
-    
-    public ChoiceRenderer()
-    {
-        panel = new JPanel();
-        renderer = new JLabel();
-        
-        panel.setLayout(new BorderLayout());
-        panel.add(renderer, BorderLayout.CENTER);
-    }
-    
-    public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row, int column)
-    {
-        //renderer.setMargin(new Insets(0, 2, 4, 2));
-        
-        if (isSelected)
-        {
-            renderer.setForeground(table.getSelectionForeground());
-            renderer.setBackground(table.getSelectionBackground());
-            panel.setBackground(table.getSelectionBackground());
-        }
-        else
-        {
-            renderer.setForeground(table.getForeground());
-            renderer.setBackground(table.getBackground());
-            panel.setBackground(table.getBackground());
-        }
-        
-        if(hasFocus)
-        {
-            renderer.setBorder( UIManager.getBorder("Table.focusCellHighlightBorder") );
-        }
-        else
-        {
-            renderer.setBorder(new EmptyBorder(1, 2, 2, 1));
-        }
-        
-        if(value instanceof String)
-        {
-            String str = (String)value;
-            
-            renderer.setText(str);
+	private JPanel panel;
+	private JLabel renderer;
+	private Font font = new Font("monospaced", Font.PLAIN, 12);
+	private Font font2 = new Font("monospaced", Font.ITALIC, 12);
 
-	    renderer.setEnabled(isEnabled);
-            
-            renderer.setFont(font);
-            
-            
-        }
-        else if(value instanceof ArrayList)
-        {
-			ArrayList<?> values = (ArrayList<?>)value;
-            if(values.size() > 0)
-            {
-                //if we have multiple properties selected.
-                String last = null;
-                boolean allSame = true;
-                for(int i = 0; i < values.size(); i++)
-                {
-                    if(values.get(i) instanceof String)
-                    {
-                        String str = (String)values.get(i);
-                        if(last != null)
-                        {
-                            if(!str.equals(last))
-                            {
-                                allSame = false; break;
-                            }
-                            last = str;
-                        }
-                        else
-                        {
-                            last = str;
-                        }
-                    }
-                }
-                if(allSame)
-                {
-                    
-                    renderer.setText(last);
+	public ChoiceRenderer()
+	{
+		panel = new JPanel();
+		renderer = new JLabel();
 
-                    renderer.setEnabled(isEnabled);
-            
-                    renderer.setFont(font);
-                }
-                else
-                {
-                    
-                    renderer.setText("(Different Values)");
+		panel.setLayout(new BorderLayout());
+		panel.add(renderer, BorderLayout.CENTER);
+	}
 
-                    renderer.setEnabled(isEnabled);
-            
-                    renderer.setFont(font2);
-                    
-                    panel.setBackground(Color.lightGray);
-                    
-                   
-                    
-                }
-                
-            }
-        }
-        
-        return panel;
-    }
-    
+	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
+			int column)
+	{
+		//renderer.setMargin(new Insets(0, 2, 4, 2));
+
+		if (isSelected) {
+			renderer.setForeground(table.getSelectionForeground());
+			renderer.setBackground(table.getSelectionBackground());
+			panel.setBackground(table.getSelectionBackground());
+		} else {
+			renderer.setForeground(table.getForeground());
+			renderer.setBackground(table.getBackground());
+			panel.setBackground(table.getBackground());
+		}
+
+		if (hasFocus) {
+			renderer.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+		} else {
+			renderer.setBorder(new EmptyBorder(1, 2, 2, 1));
+		}
+
+		if (value instanceof String) {
+			String str = (String) value;
+
+			renderer.setText(str);
+
+			renderer.setEnabled(isEnabled);
+
+			renderer.setFont(font);
+
+		} else if (value instanceof ArrayList) {
+			ArrayList<?> values = (ArrayList<?>) value;
+			if (values.size() > 0) {
+				//if we have multiple properties selected.
+				String last = null;
+				boolean allSame = true;
+				for (int i = 0; i < values.size(); i++) {
+					if (values.get(i) instanceof String) {
+						String str = (String) values.get(i);
+						if (last != null) {
+							if (!str.equals(last)) {
+								allSame = false;
+								break;
+							}
+							last = str;
+						} else {
+							last = str;
+						}
+					}
+				}
+				if (allSame) {
+
+					renderer.setText(last);
+
+					renderer.setEnabled(isEnabled);
+
+					renderer.setFont(font);
+				} else {
+
+					renderer.setText("(Different Values)");
+
+					renderer.setEnabled(isEnabled);
+
+					renderer.setFont(font2);
+
+					panel.setBackground(Color.lightGray);
+
+				}
+
+			}
+		}
+
+		return panel;
+	}
+
 }

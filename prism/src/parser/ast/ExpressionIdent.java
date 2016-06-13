@@ -33,34 +33,34 @@ import prism.PrismLangException;
 public class ExpressionIdent extends Expression
 {
 	protected String name;
-	
+
 	// Constructors
-	
+
 	public ExpressionIdent()
 	{
 	}
-	
+
 	public ExpressionIdent(String n)
 	{
 		name = n;
 	}
-	
+
 	// Set method
-	
+
 	public void setName(String n)
 	{
 		name = n;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
 
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -74,7 +74,7 @@ public class ExpressionIdent extends Expression
 		// Don't know - err on the side of caution
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -91,13 +91,13 @@ public class ExpressionIdent extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public Expression deepCopy()
 	{
@@ -108,7 +108,7 @@ public class ExpressionIdent extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

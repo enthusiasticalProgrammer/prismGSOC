@@ -41,7 +41,7 @@ public class SystemBrackets extends SystemDefn
 	private SystemDefn operand;
 
 	// Constructors
-	
+
 	public SystemBrackets()
 	{
 	}
@@ -52,21 +52,21 @@ public class SystemBrackets extends SystemDefn
 	}
 
 	// Set method
-	
+
 	public void setOperand(SystemDefn s)
 	{
 		operand = s;
 	}
-	
+
 	// Get method
-	
+
 	public SystemDefn getOperand()
 	{
 		return operand;
 	}
-	
+
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void getModules(Vector<String> v)
@@ -86,33 +86,33 @@ public class SystemBrackets extends SystemDefn
 	{
 		operand.getSynchs(v);
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v, ModulesFile modulesFile)
 	{
 		operand.getSynchs(v, modulesFile);
 	}
-	
+
 	@Override
 	public void getReferences(Vector<String> v)
 	{
 		operand.getReferences(v);
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return "(" + operand + ")";
 	}
-	
+
 	@Override
 	public SystemDefn deepCopy()
 	{

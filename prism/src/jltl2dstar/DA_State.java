@@ -28,13 +28,14 @@ import jltl2ba.APElement;
  * A state of a deterministic omega-automaton.
  * For a description of the template parameters, see class DA.
  */
-	
-public class DA_State {
+
+public class DA_State
+{
 
 	/** The automaton of which this state is a part. */
-	private	DA _graph;
-	
-	private int _name; 
+	private DA _graph;
+
+	private int _name;
 
 	/** The edges */
 	private HashMap<APElement, DA_State> _edges;
@@ -52,35 +53,35 @@ public class DA_State {
 		_edges = new HashMap<APElement, DA_State>();
 		_description = "";
 	}
-  
+
 	/** Get the EdgeContainer to access the edges. */
 	public HashMap<APElement, DA_State> edges()
 	{
 		return _edges;
 	}
-  
+
 	/** Get the name (index) of this state. */
-	public int getName() 
+	public int getName()
 	{
 		// return _graph.getIndexForState(this);
 		return _name;
 	}
 
 	/** Set the name (index) of this state. */
-	public void setName(int name) 
+	public void setName(int name)
 	{
 		// return _graph.getIndexForState(this);
 		_name = name;
 	}
 
 	/** Print the name of the state on an output stream. */
-	public String toString() 
+	public String toString()
 	{
 		return Integer.toString(getName());
 	}
- 
+
 	/** Set an description for the state */
-	public void setDescription(String s) 
+	public void setDescription(String s)
 	{
 		_description = s;
 	}
@@ -90,7 +91,7 @@ public class DA_State {
 	 * Should only be called after verifying that the state hasDescription()
 	 * @return a const string ref to the description
 	 */
-	public String getDescription() 
+	public String getDescription()
 	{
 		return _description;
 	}
@@ -98,7 +99,7 @@ public class DA_State {
 	/**
 	 * Check whether the state has a description.
 	 */
-	public boolean hasDescription() 
+	public boolean hasDescription()
 	{
 		return _description != "";
 	}
@@ -107,10 +108,9 @@ public class DA_State {
 	 * Checks if all transitions originating in this state
 	 * leed back to itself. 
 	 */
-	public boolean hasOnlySelfLoop() 
+	public boolean hasOnlySelfLoop()
 	{
-		for (DA_State dest : edges().values())
-		{
+		for (DA_State dest : edges().values()) {
 			if (dest != this) {
 				return false;
 			}
@@ -119,7 +119,8 @@ public class DA_State {
 	}
 
 	/** Get the AcceptanceForState access functor for this state */
-	public AcceptanceForState acceptance() {
+	public AcceptanceForState acceptance()
+	{
 		AcceptanceForState acc = new AcceptanceForState(_graph.acceptance(), this.getName());
 		return acc;
 	}

@@ -91,7 +91,7 @@ public abstract class SamplerDouble extends Sampler
 			double mean = valueSum / numSamples;
 			return (valueSumSq - numSamples * mean * mean) / (numSamples - 1.0);
 		}
-		
+
 		// An alternative, below, would be to use the empirical mean
 		// (this is not equivalent (or unbiased) but, asymptotically, is the same)
 		//double mean = valueSum / numSamples;

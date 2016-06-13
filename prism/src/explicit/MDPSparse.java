@@ -1007,7 +1007,7 @@ public class MDPSparse extends MDPExplicit
 		d += mcRewards.getStateReward(s);
 		return d;
 	}
-	
+
 	@Override
 	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
 	{

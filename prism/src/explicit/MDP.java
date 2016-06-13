@@ -102,7 +102,7 @@ public interface MDP extends NondetModel
 	 * @param v Set of states {@code v}
 	 */
 	public boolean prob1stepSingle(int s, int i, BitSet u, BitSet v);
-	
+
 	/**
 	 * Do a matrix-vector multiplication followed by min/max, i.e. one step of value iteration,
 	 * i.e. for all s: result[s] = min/max_k { sum_j P_k(s,j)*vect[j] }

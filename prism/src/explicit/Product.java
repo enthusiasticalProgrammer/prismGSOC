@@ -24,7 +24,6 @@
 //	
 //==============================================================================
 
-
 package explicit;
 
 import java.util.BitSet;
@@ -64,7 +63,7 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 
 	/**
 	 * Constructor.
- 	 * @param originalModel the original model
+	 * @param originalModel the original model
 	 */
 	public Product(M originalModel)
 	{
@@ -73,8 +72,8 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 
 	/**
 	 * Constructor.
- 	 * @param productModel the product model
- 	 * @param originalModel the original model
+	 * @param productModel the product model
+	 * @param originalModel the original model
 	 */
 	public Product(M productModel, M originalModel)
 	{
@@ -169,7 +168,7 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 			} else if (sv.type instanceof TypeDouble) {
 				result.setDoubleValue(modelState, (Double) sv.getValue(productState));
 			} else {
-				throw new PrismNotSupportedException("Handling for type "+sv.type+" not implemented.");
+				throw new PrismNotSupportedException("Handling for type " + sv.type + " not implemented.");
 			}
 		}
 

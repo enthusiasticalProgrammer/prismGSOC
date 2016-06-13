@@ -293,8 +293,8 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 				}
 			} else if (value instanceof VariableValue) {
 				VariableValue variableValue = (VariableValue) value;
-				stringValue = (variableValue.getValue() instanceof Double) ? (simulator.formatDouble(((Double) variableValue.getValue()))) : variableValue
-						.getValue().toString();
+				stringValue = (variableValue.getValue() instanceof Double) ? (simulator.formatDouble(((Double) variableValue.getValue())))
+						: variableValue.getValue().toString();
 
 				this.setToolTipText("Value of variable \"" + variableValue.getVariable().getName() + "\" in state " + (row));
 			} else if (value instanceof RewardStructureValue) {
@@ -309,8 +309,8 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 					if (rewardValue.getRewardStructureColumn().isStateReward())
 						this.setToolTipText("State reward of reward structure " + rewardName + " in state " + (row) + " (not yet known)");
 					if (rewardValue.getRewardStructureColumn().isTransitionReward())
-						this.setToolTipText("Transition reward of reward structure " + rewardName + " from state " + (row) + " to " + (row + 1)
-								+ " (not yet known)");
+						this.setToolTipText(
+								"Transition reward of reward structure " + rewardName + " from state " + (row) + " to " + (row + 1) + " (not yet known)");
 				} else {
 					stringValue = simulator.formatDouble(rewardValue.getRewardValue());
 

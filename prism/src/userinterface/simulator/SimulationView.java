@@ -290,8 +290,8 @@ public class SimulationView extends Observable
 						rewardName = null;
 					}
 
-					RewardStructure rewardStructure = new RewardStructure(r, rewardName, parsedModel.getRewardStruct(r).getNumStateItems() == 0, parsedModel
-							.getRewardStruct(r).getNumTransItems() == 0);
+					RewardStructure rewardStructure = new RewardStructure(r, rewardName, parsedModel.getRewardStruct(r).getNumStateItems() == 0,
+							parsedModel.getRewardStruct(r).getNumTransItems() == 0);
 
 					if (!rewardStructure.isStateEmpty() || !rewardStructure.isTransitionEmpty())
 						rewards.add(rewardStructure);

@@ -108,7 +108,7 @@ public class SCCComputerSCCFind extends SCCComputer
 	}
 
 	// Computation
-	
+
 	// Return the image of nodes in edges
 	// Refs: result
 	// Derefs: edges, nodes

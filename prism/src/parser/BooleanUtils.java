@@ -92,7 +92,7 @@ public class BooleanUtils
 		// Then do conversion to +ve normal form
 		return doConversionToPositiveNormalForm(removeImpliesIffAndParentheses(expr), false);
 	}
-	
+
 	/**
 	 * Convert an LTL formula to positive normal form,
 	 * i.e., remove any instances of =>, <=> or () and then push
@@ -108,7 +108,7 @@ public class BooleanUtils
 		// Then do conversion to +ve normal form
 		return doConversionToPositiveNormalForm(removeImpliesIffAndParentheses(expr), true);
 	}
-	
+
 	/**
 	 * Remove any instances of =>, <=> or () by expanding/deleting as appropriate.
 	 */
@@ -153,7 +153,7 @@ public class BooleanUtils
 		}
 		return exprMod;
 	}
-	
+
 	/**
 	 * Do the main part of the conversion of a Boolean expression to positive normal form,
 	 * i.e., push all negation inwards to the propositions. If {@code ltl} is false, it is assumed
@@ -211,11 +211,11 @@ public class BooleanUtils
 						// !(a U b)  ==  !a R !b
 						return new ExpressionTemporal(ExpressionTemporal.P_R, aNeg, bNeg);
 					case ExpressionTemporal.P_F:
-						 bNeg = doConversionToPositiveNormalForm(Expression.Not(b), ltl);
+						bNeg = doConversionToPositiveNormalForm(Expression.Not(b), ltl);
 						// !(F b)  ==  G !b
 						return new ExpressionTemporal(ExpressionTemporal.P_G, null, bNeg);
 					case ExpressionTemporal.P_G:
-						 bNeg = doConversionToPositiveNormalForm(Expression.Not(b), ltl);
+						bNeg = doConversionToPositiveNormalForm(Expression.Not(b), ltl);
 						// !(G b)  ==  F !b
 						return new ExpressionTemporal(ExpressionTemporal.P_F, null, bNeg);
 					case ExpressionTemporal.P_W:
@@ -254,7 +254,7 @@ public class BooleanUtils
 		}
 		// Preserve temporal operators
 		if (ltl && expr instanceof ExpressionTemporal) {
-			Expression a = ((ExpressionTemporal) expr).getOperand1(); 
+			Expression a = ((ExpressionTemporal) expr).getOperand1();
 			Expression b = ((ExpressionTemporal) expr).getOperand2();
 			Expression aConv = (a == null) ? null : doConversionToPositiveNormalForm(a, ltl);
 			Expression bConv = (b == null) ? null : doConversionToPositiveNormalForm(b, ltl);
@@ -381,7 +381,7 @@ public class BooleanUtils
 	}
 
 	// Methods to convert And/Or classes to Expressions
-	
+
 	public static Expression convertDNFListsToExpression(List<List<Expression>> dnf)
 	{
 		Expression ret = convertConjunctionListToExpression(dnf.get(0));
@@ -419,7 +419,7 @@ public class BooleanUtils
 	}
 
 	// Test code
-	
+
 	public static void main(String args[])
 	{
 		PrismParser parser = new PrismParser();

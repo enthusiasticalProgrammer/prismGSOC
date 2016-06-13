@@ -49,7 +49,7 @@ public class GUIWindowLog extends PrismLog
 
 	public GUIWindowLog()
 	{
-		
+
 		buffer = "";
 		clearFlag = false;
 		textArea = null;
@@ -67,11 +67,13 @@ public class GUIWindowLog extends PrismLog
 	{
 		this.logPlugin = logPlugin;
 		textArea = ta;
-		textArea.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
+		textArea.addCaretListener(new CaretListener()
+		{
+			public void caretUpdate(CaretEvent e)
+			{
 				if (GUIWindowLog.this.logPlugin != null)
 					GUIWindowLog.this.logPlugin.getSelectionChangeHandler().notifyListeners(new GUIEvent(1));
-			}			
+			}
 		});
 		updater = new GUIWindowLogUpdater(this, textArea);
 		updater.start();
@@ -96,7 +98,7 @@ public class GUIWindowLog extends PrismLog
 	}
 
 	// Basic print methods
-	
+
 	public void print(boolean b)
 	{
 		addToBuffer("" + b);
@@ -158,14 +160,14 @@ public class GUIWindowLog extends PrismLog
 	}
 
 	// add string to buffer
-	
+
 	public synchronized void addToBuffer(String s)
 	{
 		buffer += s;
 	}
 
 	// remove contents of buffer
-	
+
 	public synchronized String takeBuffer()
 	{
 		String s = buffer;
@@ -174,14 +176,14 @@ public class GUIWindowLog extends PrismLog
 	}
 
 	// set clear flag
-	
+
 	public synchronized void setClearFlag()
 	{
 		clearFlag = true;
 	}
 
 	// get (and reset) clear flag
-	
+
 	public synchronized boolean getClearFlag()
 	{
 		boolean b = clearFlag;
@@ -190,7 +192,7 @@ public class GUIWindowLog extends PrismLog
 	}
 
 	// thread which periodically checks for any pending input to log and adds it to window
-	
+
 	class GUIWindowLogUpdater extends Thread
 	{
 		private GUIWindowLog gwl;
@@ -199,10 +201,10 @@ public class GUIWindowLog extends PrismLog
 		private int textLen = 0;
 		private int maxTextLen = 10000;
 		private int updateDelay = 1000;
-		
+
 		public GUIWindowLogUpdater(GUIWindowLog gwl, JTextArea textArea)
 		{
-			super(); 
+			super();
 			this.gwl = gwl;
 			this.textArea = textArea;
 			text = "";
@@ -215,19 +217,22 @@ public class GUIWindowLog extends PrismLog
 
 		public void setMaxTextLength(int i)
 		{
-			maxTextLen  = i;
+			maxTextLen = i;
 		}
 
 		public void run()
 		{
 			String s;
 			int newStart, i;
-			
+
 			while (true) {
-			
+
 				// sleep
-				try { Thread.sleep(updateDelay); } catch (InterruptedException e) {}
-				
+				try {
+					Thread.sleep(updateDelay);
+				} catch (InterruptedException e) {
+				}
+
 				// clear log if asked to
 				if (gwl.getClearFlag()) {
 					// remove (but don't display) and input pending
@@ -238,7 +243,7 @@ public class GUIWindowLog extends PrismLog
 					// update text area
 					SwingUtilities.invokeLater(new SetWindowLogText(textArea, text));
 				}
-				
+
 				// get any new input to log
 				s = gwl.takeBuffer();
 				// if there actually is any...
@@ -252,7 +257,8 @@ public class GUIWindowLog extends PrismLog
 						newStart = textLen - maxTextLen;
 						// remove any partial line at start (i.e. cut to next new line)
 						i = text.indexOf('\n', newStart);
-						if (i != -1) newStart = i + 1;
+						if (i != -1)
+							newStart = i + 1;
 						text = text.substring(newStart);
 						textLen = text.length();
 					}
@@ -265,31 +271,31 @@ public class GUIWindowLog extends PrismLog
 
 	// inner class to actually write to the text area
 	// must be done as a thread because code is called using invokeLater
-	
+
 	private class SetWindowLogText extends Thread
 	{
 		private JTextArea textArea;
 		private String s;
-		
+
 		public SetWindowLogText(JTextArea textArea, String s)
 		{
 			super();
 			this.textArea = textArea;
 			this.s = s;
 		}
-		
+
 		public void run()
 		{
 			try {
 				// replace all current contents with string s
-				textArea.replaceRange(s, 0, textArea.getLineEndOffset(textArea.getLineCount()-1));
+				textArea.replaceRange(s, 0, textArea.getLineEndOffset(textArea.getLineCount() - 1));
+			} catch (BadLocationException e) {
 			}
-			catch (BadLocationException e) {}
 		}
 	}
 
 	// receive notification of settings info
-	
+
 	public void notifySettings(PrismSettings settings)
 	{
 		textArea.setFont(settings.getFontColorPair(PrismSettings.LOG_FONT).f);
@@ -298,21 +304,21 @@ public class GUIWindowLog extends PrismLog
 		setMaxTextLength(settings.getInteger(PrismSettings.LOG_BUFFER_LENGTH));
 	}
 
-	public boolean hasSelectedText() 
-	{		
+	public boolean hasSelectedText()
+	{
 		return (textArea != null && textArea.getSelectedText() != null);
 	}
-	
-	public void copy() 
-	{		
+
+	public void copy()
+	{
 		if (textArea != null)
 			textArea.copy();
 	}
 
-	public void selectAll() 
+	public void selectAll()
 	{
 		if (textArea != null)
-			textArea.selectAll();		
+			textArea.selectAll();
 	}
 }
 

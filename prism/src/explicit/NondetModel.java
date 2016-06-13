@@ -63,12 +63,12 @@ public interface NondetModel extends Model
 	 * Do all choices in in each state have a unique action label?
 	 */
 	public boolean areAllChoiceActionsUnique();
-	
+
 	/**
 	 * Get the number of transitions from choice {@code i} of state {@code s}.
 	 */
 	public int getNumTransitions(int s, int i);
-	
+
 	/**
 	 * Check if all the successor states from choice {@code i} of state {@code s} are in the set {@code set}.
 	 * @param s The state to check
@@ -76,7 +76,7 @@ public interface NondetModel extends Model
 	 * @param set The set to test for inclusion
 	 */
 	public boolean allSuccessorsInSet(int s, int i, BitSet set);
-	
+
 	/**
 	 * Check if some successor state from choice {@code i} of state {@code s} is in the set {@code set}.
 	 * @param s The state to check
@@ -84,14 +84,14 @@ public interface NondetModel extends Model
 	 * @param set The set to test for inclusion
 	 */
 	public boolean someSuccessorsInSet(int s, int i, BitSet set);
-	
+
 	/**
 	 * Get an iterator over the successor states from choice {@code i} of state {@code s}.
 	 * @param s The state
 	 * @param i Choice index
 	 */
 	public Iterator<Integer> getSuccessorsIterator(int s, int i);
-	
+
 	/**
 	 * Construct a model that is induced by applying strategy {@code strat} to this model.
 	 * Note that the "new" model may be just an implicit (read-only) representation. 

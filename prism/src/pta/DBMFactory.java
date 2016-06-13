@@ -56,9 +56,12 @@ public class DBMFactory implements ZoneFactory
 		n = pta.numClocks;
 		for (i = 0; i < n + 1; i++) {
 			for (j = 0; j < n + 1; j++) {
-				if (i == j) dbm.d[i][j] = DB.LEQ_ZERO;
-				else if (i == 0) dbm.d[i][j] = DB.LEQ_ZERO;
-				else  dbm.d[i][j] = DB.INFTY;
+				if (i == j)
+					dbm.d[i][j] = DB.LEQ_ZERO;
+				else if (i == 0)
+					dbm.d[i][j] = DB.LEQ_ZERO;
+				else
+					dbm.d[i][j] = DB.INFTY;
 			}
 		}
 		return dbm;

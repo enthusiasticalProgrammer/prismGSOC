@@ -31,12 +31,12 @@ package settings;
  */
 public interface SettingConstraint
 {
-    
-    /*
-     *  This method checks that the value parameter is valid for the
-     *  constraint.  It can also be used to adjust other settings, so that they
-     *  become valid for the given parameter.
-     */
-    public void checkValue(Object value) throws SettingException;
-    
+
+	/*
+	 *  This method checks that the value parameter is valid for the
+	 *  constraint.  It can also be used to adjust other settings, so that they
+	 *  become valid for the given parameter.
+	 */
+	public void checkValue(Object value) throws SettingException;
+
 }

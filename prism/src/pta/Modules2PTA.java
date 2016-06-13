@@ -109,7 +109,7 @@ public class Modules2PTA extends PrismComponent
 				}
 			}
 		});
-		
+
 		// Clone the model file, replace any constants with values,
 		// and simplify any expressions as much as possible.
 		modulesFile = (ModulesFile) modulesFile.deepCopy().replaceConstants(constantValues).simplify();

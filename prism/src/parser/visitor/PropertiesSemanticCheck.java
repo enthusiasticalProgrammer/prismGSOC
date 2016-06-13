@@ -85,7 +85,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		// (and we shouldn't check them - e.g. clock vars appearing in errors would show as an error)
 		return null;
 	}
-	
+
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -203,7 +203,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		if ("deadlock".equals(name) || "init".equals(name))
 			return;
 		// Otherwise check if it exists
-		if (modelInfo != null && modelInfo.getLabelIndex(name) != -1) { 
+		if (modelInfo != null && modelInfo.getLabelIndex(name) != -1) {
 			return;
 		} else if (propertiesFile != null) {
 			LabelList labelList = propertiesFile.getCombinedLabelList();

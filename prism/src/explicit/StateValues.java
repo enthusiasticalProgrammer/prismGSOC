@@ -494,7 +494,7 @@ public class StateValues implements StateVector
 
 		valuesB.flip(0, size);
 	}
-	
+
 	/**
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */

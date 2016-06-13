@@ -34,35 +34,39 @@ import userinterface.util.GUIUndoManager;
 
 @SuppressWarnings("serial")
 public abstract class GUIModelEditor extends JPanel
-{    
-    public abstract String getParseText();
-    
-    public abstract void newModel();
-    
-    public abstract void undo();
-    
-    public abstract void redo();
-        
-    public abstract void cut();
-    
-    public abstract void copy();
-    
-    public abstract void paste();
-    
-    public abstract void delete();
-    
-    public abstract void selectAll();
-    
-    public void modelParseFailed(PrismLangException parserError, boolean background) {}
+{
+	public abstract String getParseText();
 
-    public void modelParseSuccessful() {}
-    
-    public GUIUndoManager getUndoManager()
-    {
-    	return null;
-    }
-    
-    public boolean canDoClipBoardAction(Action action)
+	public abstract void newModel();
+
+	public abstract void undo();
+
+	public abstract void redo();
+
+	public abstract void cut();
+
+	public abstract void copy();
+
+	public abstract void paste();
+
+	public abstract void delete();
+
+	public abstract void selectAll();
+
+	public void modelParseFailed(PrismLangException parserError, boolean background)
+	{
+	}
+
+	public void modelParseSuccessful()
+	{
+	}
+
+	public GUIUndoManager getUndoManager()
+	{
+		return null;
+	}
+
+	public boolean canDoClipBoardAction(Action action)
 	{
 		return false;
 	}

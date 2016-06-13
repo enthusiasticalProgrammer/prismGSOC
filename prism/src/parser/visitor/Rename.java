@@ -35,26 +35,26 @@ import prism.PrismLangException;
 public class Rename extends ASTTraverseModify
 {
 	private RenamedModule rm;
-	
+
 	public Rename(RenamedModule rm)
 	{
 		this.rm = rm;
 	}
-	
+
 	public void visitPost(ModulesFile e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
 		// at the level of an individual module (and below)
 		throw new PrismLangException("ModulesFile should never be renamed");
 	}
-	
+
 	public void visitPost(PropertiesFile e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
 		// at the level of an individual module (and below)
 		throw new PrismLangException("PropertiesFile should never be renamed");
 	}
-	
+
 	public void visitPost(Declaration e) throws PrismLangException
 	{
 		// Get new name for variable
@@ -66,20 +66,21 @@ public class Rename extends ASTTraverseModify
 			throw new PrismLangException("Definition of module \"" + rm.getName() + "\" must rename variable \"" + e.getName() + "\"", rm);
 		}
 	}
-	
+
 	public void visitPost(Module e) throws PrismLangException
 	{
 		// New name for module is specied in RenamedModule
 		e.setName(rm.getName());
 	}
-	
+
 	public void visitPost(Command e) throws PrismLangException
 	{
 		// Rename synchronising action of command
 		String s = rm.getNewName(e.getSynch());
-		if (s != null) e.setSynch(s);
+		if (s != null)
+			e.setSynch(s);
 	}
-	
+
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;
@@ -88,7 +89,8 @@ public class Rename extends ASTTraverseModify
 		n = e.getNumElements();
 		for (i = 0; i < n; i++) {
 			s = rm.getNewName(e.getVar(i));
-			if (s != null) e.setVar(i, new ExpressionIdent(s));
+			if (s != null)
+				e.setVar(i, new ExpressionIdent(s));
 		}
 	}
 
@@ -103,14 +105,16 @@ public class Rename extends ASTTraverseModify
 	{
 		// Rename function name (if necessary)
 		String s = rm.getNewName(e.getName());
-		if (s != null) e.setName(s);
+		if (s != null)
+			e.setName(s);
 	}
 
 	public void visitPost(ExpressionIdent e) throws PrismLangException
 	{
 		// Rename identifier (if necessary)
 		String s = rm.getNewName(e.getName());
-		if (s != null) e.setName(s);
+		if (s != null)
+			e.setName(s);
 	}
 
 	public void visitPost(ExpressionProb e) throws PrismLangException
@@ -155,4 +159,3 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException(e.getOperatorString() + " operator should never be renamed");
 	}
 }
-

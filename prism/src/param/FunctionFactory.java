@@ -34,7 +34,8 @@ import java.util.HashMap;
  * @see Function
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-abstract class FunctionFactory {
+abstract class FunctionFactory
+{
 	/** names of parameters */
 	protected String[] parameterNames;
 	/** lower bounds of parameters */
@@ -45,7 +46,7 @@ abstract class FunctionFactory {
 	 * {@code lowerBounds} and {@code upperBounds}
 	 */
 	protected HashMap<String, Integer> varnameToInt;
-	
+
 	/**
 	 * Creates a new function factory.
 	 * {@code parameterNames}, {@code lowerBounds}, {@code upperBounds} all
@@ -58,7 +59,8 @@ abstract class FunctionFactory {
 	 * @param lowerBounds lower bounds of parameters
 	 * @param upperBounds upper bounds of parameters
 	 */
-	FunctionFactory(String[] parameterNames, BigRational[] lowerBounds, BigRational[] upperBounds) {
+	FunctionFactory(String[] parameterNames, BigRational[] lowerBounds, BigRational[] upperBounds)
+	{
 		this.parameterNames = parameterNames;
 		this.lowerBounds = lowerBounds;
 		this.upperBounds = upperBounds;
@@ -73,7 +75,7 @@ abstract class FunctionFactory {
 	 * @return function representing the number one
 	 */
 	abstract Function getOne();
-	
+
 	/**
 	 * Returns a function representing the number zero.
 	 * @return function representing the number zero
@@ -85,19 +87,19 @@ abstract class FunctionFactory {
 	 * @return function representing not-a-number
 	 */
 	abstract Function getNaN();
-	
+
 	/**
 	 * Returns a function representing positive infinity.
 	 * @return function representing the positive infinity
 	 */
 	abstract Function getInf();
-	
+
 	/**
 	 * Returns a function representing negative infinity.
 	 * @return function representing the negative infinity
 	 */
 	abstract Function getMInf();
-	
+
 	/**
 	 * Returns a new function which represents the same value as the
 	 * {@code BigRational} {@code bigRat}.
@@ -106,7 +108,7 @@ abstract class FunctionFactory {
 	 * @return function representing the same value as {@code bigRat}
 	 */
 	abstract Function fromBigRational(BigRational bigRat);
-	
+
 	/**
 	 * Returns a function representing a single variable. 
 	 * 
@@ -115,24 +117,25 @@ abstract class FunctionFactory {
 	 */
 	abstract Function getVar(int var);
 
-
 	/**
 	 * Returns a function representing a single variable. 
 	 * 
 	 * @param var name of the variable to create a function of
 	 * @return function consisting only in one variable
 	 */
-	Function getVar(String var) {
+	Function getVar(String var)
+	{
 		return getVar(varnameToInt.get(var));
 	}
-	
+
 	/**
 	 * Returns name of variable with the given index.
 	 * 
 	 * @param var index of the variable to obtain name of
 	 * @return name of {@code var}
 	 */
-	String getParameterName(int var) {
+	String getParameterName(int var)
+	{
 		return parameterNames[var];
 	}
 
@@ -142,35 +145,39 @@ abstract class FunctionFactory {
 	 * @param var index of the variable to obtain lower bound of
 	 * @return lower bound of {@code var}
 	 */
-	BigRational getLowerBound(int var) {
+	BigRational getLowerBound(int var)
+	{
 		return lowerBounds[var];
 	}
-	
+
 	/**
 	 * Returns upper bound of variable with the given index.
 	 * 
 	 * @param var index of the variable to obtain upper bound of
 	 * @return upper bound of {@code var}
 	 */
-	BigRational getUpperBound(int var) {
+	BigRational getUpperBound(int var)
+	{
 		return upperBounds[var];
 	}
-	
+
 	/**
 	 * Returns number of variables used in this function factory.
 	 * @return
 	 */
-	public int getNumVariables() {
+	public int getNumVariables()
+	{
 		return parameterNames.length;
 	}
-	
+
 	/**
 	 * Returns a function representing the value of the given number.
 	 * 
 	 * @param from number to create function of
 	 * @return function representing the number {@code from}
 	 */
-	Function fromLong(long from) {
+	Function fromLong(long from)
+	{
 		return fromBigRational(new BigRational(from));
 	}
 }

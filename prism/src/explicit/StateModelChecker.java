@@ -95,7 +95,7 @@ public class StateModelChecker extends PrismComponent
 	// Export target state info?
 	protected boolean exportTarget = false;
 	protected String exportTargetFilename = null;
-	
+
 	// Export product model info?
 	protected boolean exportProductTrans = false;
 	protected String exportProductTransFilename = null;
@@ -103,7 +103,7 @@ public class StateModelChecker extends PrismComponent
 	protected String exportProductStatesFilename = null;
 	protected boolean exportProductVector = false;
 	protected String exportProductVectorFilename = null;
-	
+
 	// Store the final results vector after model checking?
 	protected boolean storeVector = false;
 
@@ -813,7 +813,7 @@ public class StateModelChecker extends PrismComponent
 			}
 		}
 		throw new PrismException("Unknown label \"" + expr.getName() + "\"");
-}
+	}
 
 	// Check property ref
 
@@ -1121,7 +1121,6 @@ public class StateModelChecker extends PrismComponent
 		return resVals;
 	}
 
-	
 	/**
 	 * Method for handling the recursive part of PCTL* checking, i.e.,
 	 * recursively checking maximal state subformulas and replacing them
@@ -1146,8 +1145,8 @@ public class StateModelChecker extends PrismComponent
 		Expression exprNew = ltlMC.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
 
 		HashMap<String, String> labelReplacements = new HashMap<String, String>();
-		for (int i=0; i < labelBS.size(); i++) {
-			String currentLabel = "L"+i;
+		for (int i = 0; i < labelBS.size(); i++) {
+			String currentLabel = "L" + i;
 			// Attach satisfaction set for Li to the model, record necessary
 			// label renaming
 			String newLabel = model.addUniqueLabel("phi", labelBS.get(i));
@@ -1390,7 +1389,7 @@ public class StateModelChecker extends PrismComponent
 		}
 		exportLabels(model, labels, labelNames, exportType, out);
 	}
-	
+
 	/**
 	 * Export a set of labels and the states that satisfy them.
 	 * @param model The model
@@ -1403,7 +1402,7 @@ public class StateModelChecker extends PrismComponent
 	{
 		String matlabVarName = "l";
 		int numStates = model.getNumStates();
-		
+
 		// Print list of labels
 		int numLabels = labels.size();
 		if (exportType == Prism.EXPORT_MRMC) {
@@ -1426,7 +1425,7 @@ public class StateModelChecker extends PrismComponent
 		if (exportType == Prism.EXPORT_MRMC) {
 			out.println("#END");
 		}
-		
+
 		// Go through states and print satisfying label indices for each one
 		for (int s = 0; s < numStates; s++) {
 			boolean first = true;
@@ -1446,15 +1445,15 @@ public class StateModelChecker extends PrismComponent
 						first = false;
 					}
 					switch (exportType) {
-						case Prism.EXPORT_PLAIN:
-							out.print(" " + i);
-							break;
-						case Prism.EXPORT_MATLAB:
-							out.println(matlabVarName + "_" + labelNames.get(i) + "(" + (s + 1) + ")=1;");
-							break;
-						case Prism.EXPORT_MRMC:
-							out.print(" " + labelNames.get(i));
-							break;
+					case Prism.EXPORT_PLAIN:
+						out.print(" " + i);
+						break;
+					case Prism.EXPORT_MATLAB:
+						out.println(matlabVarName + "_" + labelNames.get(i) + "(" + (s + 1) + ")=1;");
+						break;
+					case Prism.EXPORT_MRMC:
+						out.print(" " + labelNames.get(i));
+						break;
 					}
 				}
 			}

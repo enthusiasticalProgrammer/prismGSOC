@@ -36,13 +36,13 @@ public class FindAllPropRefs extends ASTTraverseModify
 {
 	private ModulesFile mf;
 	private PropertiesFile pf;
-	
+
 	public FindAllPropRefs(ModulesFile mf, PropertiesFile pf)
 	{
 		this.mf = mf;
 		this.pf = pf;
 	}
-	
+
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		String name;
@@ -65,4 +65,3 @@ public class FindAllPropRefs extends ASTTraverseModify
 		return e;
 	}
 }
-
