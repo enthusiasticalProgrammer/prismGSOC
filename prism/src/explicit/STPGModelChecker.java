@@ -28,8 +28,11 @@
 package explicit;
 
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import common.IterableBitSet;
 
@@ -946,5 +949,13 @@ public class STPGModelChecker extends ProbModelChecker
 		} catch (PrismException e) {
 			System.out.println(e);
 		}
+	}
+
+	@Override
+	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
+			@NonNull String method) throws PrismException
+	{
+		throw new UnsupportedOperationException("STPG does not support multi-long-run properties.");
 	}
 }

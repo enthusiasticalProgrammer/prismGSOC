@@ -145,12 +145,12 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	/**
 	 * Default constructor.
 	 */
-	public QuantAbstractRefine(PrismComponent parent) throws PrismException
+	public QuantAbstractRefine(PrismComponent parent)
 	{
 		super(parent);
 		// Create dummy model checker to store options
 		try {
-			mcOptions = new ProbModelChecker(null);
+			mcOptions = new MDPModelChecker(null);
 		} catch (PrismException e) {
 			// Won't happen
 		}

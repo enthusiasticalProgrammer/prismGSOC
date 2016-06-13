@@ -72,7 +72,7 @@ import explicit.rewards.STPGRewards;
 /**
  * Super class for explicit-state probabilistic model checkers.
  */
-public class ProbModelChecker extends NonProbModelChecker
+public abstract class ProbModelChecker extends NonProbModelChecker
 {
 	// Flags/settings
 	// (NB: defaults do not necessarily coincide with PRISM)
@@ -1407,14 +1407,9 @@ public class ProbModelChecker extends NonProbModelChecker
 		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
 	}
 
-	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+	protected abstract MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
 			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method) throws PrismException
-	{
-		throw new UnsupportedOperationException("This method has to be overwritten by its subclasses."
-				+ "\nIt has just a body, because declaring the class is not feasible, because it is sometimes used in a non-abstract way");
-
-	}
+			@NonNull String method) throws PrismException;
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException
 	{
