@@ -426,6 +426,7 @@ public class PrismExplicit extends PrismComponent
 		if (fileOut != null) {
 			tmpLog = new PrismFileLog(fileOut.getPath());
 			if (!tmpLog.ready()) {
+				tmpLog.close();
 				throw new PrismException("Could not open file \"" + fileOut + "\" for output");
 			}
 		} else {

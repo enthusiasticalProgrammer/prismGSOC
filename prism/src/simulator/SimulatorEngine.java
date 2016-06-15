@@ -302,24 +302,6 @@ public class SimulatorEngine extends PrismComponent
 			return false;
 		//throw new PrismException("Deadlock found at state " + path.getCurrentState().toString(modulesFile));
 
-	 * Select, at random, a transition from the current transition list and execute it.
-	 * For continuous-time models, the time to be spent in the state before leaving is also picked randomly.
-	 * If there is currently a deadlock, no transition is taken and the function returns false.
-	 * Otherwise, the function returns true indicating that a transition was successfully taken. 
-	 */
-	public boolean automaticTransition() throws PrismException
-	{
-		Choice choice;
-		int numChoices, i, j;
-		double d, r;
-
-		TransitionList transitions = getTransitionList();
-		// Check for deadlock; if so, stop and return false
-		numChoices = transitions.getNumChoices();
-		if (numChoices == 0)
-			return false;
-		//throw new PrismException("Deadlock found at state " + path.getCurrentState().toString(modulesFile));
-
 		switch (modelType) {
 		case DTMC:
 		case MDP:
@@ -781,7 +763,7 @@ public class SimulatorEngine extends PrismComponent
 			((PathFull) path).addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions,
 					strategy.getCurrentMemoryElement());
 		} else
-		path.addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
+			path.addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
 		// Reset transition list 
 		transitionListBuilt = false;
 		transitionListState = null;
@@ -829,7 +811,7 @@ public class SimulatorEngine extends PrismComponent
 			((PathFull) path).addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions,
 					strategy.getCurrentMemoryElement());
 		} else
-		path.addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
+			path.addStep(time, index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
 		// Reset transition list 
 		transitionListBuilt = false;
 		transitionListState = null;

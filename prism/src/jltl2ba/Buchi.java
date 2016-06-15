@@ -320,7 +320,6 @@ public class Buchi
 
 	private void makeBTrans(BState s)
 	{ /* creates all the transitions from a state */
-		int state_trans = 0;
 		Generalized.GTrans t;
 		BTrans t1;
 		BState s1;
@@ -340,7 +339,6 @@ public class Buchi
 						if (free == s.trans)
 							s.trans = t1;
 						free = null;
-						state_trans--;
 					} else if ((t1.to == to) && t.pos.containsAll(t1.pos) && t.neg.containsAll(t1.neg)) /* t is redundant */
 						break;
 					else
@@ -354,7 +352,6 @@ public class Buchi
 					trans.neg = (MyBitSet) t.neg.clone();
 					trans.nxt = s.trans.nxt;
 					s.trans.nxt = trans;
-					state_trans++;
 				}
 			}
 

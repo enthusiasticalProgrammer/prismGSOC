@@ -55,7 +55,6 @@ public class LongSetting extends Setting
 
 	@Override
 	public SettingRenderer getSettingRenderer()
-	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}

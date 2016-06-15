@@ -195,7 +195,7 @@ public class DebugJDD
 		if (traceIDs != null && traceIDs.contains(node.id)) {
 			trace("create", node);
 		}
-		}
+	}
 
 	/** Notification from JDD.Deref(node) */
 	protected static void decrement(JDDNode node)

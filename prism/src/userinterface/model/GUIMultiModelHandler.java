@@ -658,27 +658,27 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	public int saveToFile(File f)
 	{
 		if (currentMode == PRISM_MODE || currentMode == PEPA_MODE) {
-		try {
-			theModel.setTaskBarText("Saving model...");
+			try {
+				theModel.setTaskBarText("Saving model...");
+				if (currentMode == PRISM_MODE)
+					((GUITextModelEditor) editor).write(new FileWriter(f));
+				else
+					((GUIPepaModelEditor) editor).write(new FileWriter(f));
+			} catch (IOException e) {
+				theModel.setTaskBarText("Saving model... error.");
+				theModel.error("Could not save to file \"" + f + "\"");
+				return GUIMultiModel.CANCEL;
+			} catch (ClassCastException e) {
+				theModel.setTaskBarText("Saving model... error.");
+				theModel.error("Could not save to file \"" + f + "\"");
+				return GUIMultiModel.CANCEL;
+			}
+			theModel.setTaskBarText("Saving model... done.");
 			if (currentMode == PRISM_MODE)
-				((GUITextModelEditor) editor).write(new FileWriter(f));
+				prismFileWasSaved(f);
 			else
-				((GUIPepaModelEditor) editor).write(new FileWriter(f));
-		} catch (IOException e) {
-			theModel.setTaskBarText("Saving model... error.");
-			theModel.error("Could not save to file \"" + f + "\"");
-			return GUIMultiModel.CANCEL;
-		} catch (ClassCastException e) {
-			theModel.setTaskBarText("Saving model... error.");
-			theModel.error("Could not save to file \"" + f + "\"");
-			return GUIMultiModel.CANCEL;
-		}
-		theModel.setTaskBarText("Saving model... done.");
-		if (currentMode == PRISM_MODE)
-			prismFileWasSaved(f);
-		else
-			pepaFileWasSaved(f);
-		return GUIMultiModel.CONTINUE;
+				pepaFileWasSaved(f);
+			return GUIMultiModel.CONTINUE;
 		} else {
 			new SaveGraphicModelThread(f, this, editor).start();
 			return GUIMultiModel.CONTINUE;
@@ -1129,14 +1129,10 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	 */
 	public synchronized boolean isAutoParse()
 	{
-		return autoParse;
+		return autoParseFast;
 	}
 
-	/**
-	 * Update whether auto-parsing is currently enabled,
-	 * based on current PRISM settings (and the current model size).
-	 */
-	public synchronized void updateAutoParse()
+	public synchronized void setAutoParse(boolean b)
 	{
 		// Set flag
 		//isAutoParse = b;
@@ -1146,26 +1142,26 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		} catch (PrismException e) {
 
 		}
-
 		// If the flag has just been switched ON, do a parse...
 		if (!b)
 			return;
-			tree.makeNotUpToDate();
-			theModel.notifyEventListeners(new GUIModelEvent(GUIModelEvent.MODIFIED_SINCE_SAVE));
-			if (!parsing) {
-				if (isAutoParse()) {
-					if (waiter != null) {
-						waiter.interrupt();
-					}
-				waiter = new WaitParseThread(DEFAULT_WAIT, this);
-					waiter.start();
-				//Funky thread waiting stuff
+		tree.makeNotUpToDate();
+		theModel.notifyEventListeners(new GUIModelEvent(GUIModelEvent.MODIFIED_SINCE_SAVE));
+
+		if (!parsing) {
+			if (isAutoParse()) {
+				if (waiter != null) {
+					waiter.interrupt();
 				}
-			} else {
-				parseAfterParse = true;
+				waiter = new WaitParseThread(DEFAULT_WAIT, this);
+				waiter.start();
+				//Funky thread waiting stuff
 			}
-			theModel.doEnables();
+		} else {
+			parseAfterParse = true;
 		}
+		theModel.doEnables();
+	}
 
 	/**
 	 * Should auto=parsing be disabled for large models?

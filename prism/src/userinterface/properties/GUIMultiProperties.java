@@ -968,7 +968,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			} catch (PrismException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				}
+			}
 		}
 
 		// For a single property with a displayable counterexample, offer to do show it
@@ -1305,7 +1305,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			final File file = getChooserFile();
 			Thread t = new Thread()
 			{
-	@Override
+				@Override
 				public void run()
 				{
 					try {

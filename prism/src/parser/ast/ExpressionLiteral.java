@@ -33,7 +33,7 @@ import parser.type.*;
 
 public class ExpressionLiteral extends Expression
 {
-	Object value; // Value
+	final Object value; // Value
 	String string; // Optionally, keep original string to preserve user formatting
 
 	// Constructor

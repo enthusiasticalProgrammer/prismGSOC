@@ -103,7 +103,7 @@ public class ExplicitFiles2ModulesFile
 	 */
 	private ModulesFile createVarInfoFromStatesFile(File statesFile) throws PrismException
 	{
-		BufferedReader in;
+		BufferedReader in = null;
 		String s, ss[];
 		int i, j, lineNum = 0;
 		Module m;

@@ -79,9 +79,6 @@ public class JDDNode
 
 	public double getValue()
 	{
-		if (DebugJDD.debugEnabled) {
-			return DebugJDD.nodeGetValue(this);
-		}
 		return DDN_GetValue(ptr);
 	}
 
@@ -165,8 +162,8 @@ public class JDDNode
 		} else {
 			result = new JDDNode(ptr());
 		}
-			JDD.Ref(result);
-			return result;
+		JDD.Ref(result);
+		return result;
 	}
 }
 

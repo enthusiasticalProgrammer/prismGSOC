@@ -465,7 +465,7 @@ public class StateModelChecker extends PrismComponent
 			if (expr.getType() instanceof TypeBool) {
 				// Result is true iff true for all initial states
 				exprFilter = new ExpressionFilter("forall", expr, new ExpressionLabel("init"));
-		}
+			}
 			// Non-Boolean (double or integer) expressions...
 			else {
 				// Result is for the initial state, if there is just one,
@@ -495,7 +495,7 @@ public class StateModelChecker extends PrismComponent
 			// Compute type of new filter expression (will be same as child)
 			exprFilter.typeCheck();
 			// Store as expression to be model checked
-		expr = exprFilter;
+			expr = exprFilter;
 		}
 
 		// If required, do bisimulation minimisation

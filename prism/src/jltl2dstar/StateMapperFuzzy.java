@@ -141,10 +141,5 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 		{
 			return (o.getClass() == this.getClass()) && this.equals((AbstractedKeyType) o);
 		}
-
-		public boolean lessThan(AbstractedKeyType other)
-		{
-			return CandidateMatcher.abstract_less_than(_key, other._key);
-		}
 	}
 }

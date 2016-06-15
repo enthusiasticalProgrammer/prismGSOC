@@ -74,9 +74,6 @@ public class LoadPRISMModelThread extends Thread
 			{
 				@Override
 				public void run()
-			{
-				@Override
-				public void run()
 				{
 					try {
 						plug.startProgress();

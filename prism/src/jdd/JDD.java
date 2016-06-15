@@ -356,11 +356,9 @@ public class JDD
 		if (ptr == 0) {
 			throw new CuddOutOfMemoryException();
 		}
-		if (DebugJDD.debugEnabled) {
-			DebugJDD.Ref(dd);
-		} else {
-			DD_Ref(ptr);
-		}
+		if (DebugJDD.debugEnabled)
+			DebugJDD.increment(dd);
+		DD_Ref(ptr);
 	}
 
 	/**
@@ -377,11 +375,9 @@ public class JDD
 		if (ptr == 0) {
 			throw new CuddOutOfMemoryException();
 		}
-		if (DebugJDD.debugEnabled) {
-			DebugJDD.Deref(dd);
-		} else {
-			DD_Deref(ptr);
-		}
+		if (DebugJDD.debugEnabled)
+			DebugJDD.decrement(dd);
+		DD_Deref(ptr);
 	}
 
 	/**

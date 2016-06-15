@@ -590,8 +590,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					groupNames.add(tempName);
 					//System.out.println("adding: "+tempName);
 					//groupSizes.add(new Integer(currGroupCount));
-					currGroupCount = 0;
-					currGroupCount++;
 					ownerList += "\'" + po.getSettingOwnerName() + "\'";
 					if (!po.getSettingOwnerName().equals(""))
 						tempName = po.getSettingOwnerClassName() + " \'" + po.getSettingOwnerName() + "\'";

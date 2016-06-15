@@ -92,7 +92,7 @@ public class TileList
 	 */
 	protected static List<Expression> storedFormulasX;
 	protected static List<Expression> storedFormulasY;
-	protected static List<List<Expression>> storedFormulas;
+	protected static List<Expression> storedFormulas;
 
 	public static List<Expression> getStoredFormulasX()
 	{

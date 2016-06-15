@@ -1053,7 +1053,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	public SimulatorEngine getSimulator()
 	{
 		if (theSimulator == null) {
-			theSimulator = new SimulatorEngine(this);
+			theSimulator = new SimulatorEngine(this, this);
 		}
 		return theSimulator;
 	}
@@ -1531,7 +1531,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param modelInfo Accompanying model info (null if not needed)
 	 * @param file File to read in
 	 */
-	public PropertiesFile parsePropertiesFile(ModelInfo modelInfo, File file) throws FileNotFoundException, PrismLangException
+	public PropertiesFile parsePropertiesFile(ModulesFile modelInfo, File file) throws FileNotFoundException, PrismLangException
 	{
 		return parsePropertiesFile(modelInfo, file, true);
 	}
@@ -1545,7 +1545,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param file File to read in
 	 * @param tidy Whether or not to do "tidy" (post-parse checks and processing)
 	 */
-	public PropertiesFile parsePropertiesFile(ModelInfo modelInfo, File file, boolean tidy) throws FileNotFoundException, PrismLangException
+	public PropertiesFile parsePropertiesFile(ModulesFile mf, File file, boolean tidy) throws FileNotFoundException, PrismLangException
 	{
 		FileInputStream strProperties;
 		PrismParser prismParser;
@@ -1567,7 +1567,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			prismParser = getPrismParser();
 			try {
 				// parse file
-				propertiesFile = prismParser.parsePropertiesFile(modelInfo, strProperties);
+				propertiesFile = prismParser.parsePropertiesFile(mf, strProperties);
 			} finally {
 				// release prism parser
 				releasePrismParser();
@@ -1594,7 +1594,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param modelInfo Accompanying model info (null if not needed)
 	 * @param s String to parse
 	 */
-	public PropertiesFile parsePropertiesString(ModelInfo modelInfo, String s) throws PrismLangException
+	public PropertiesFile parsePropertiesString(ModulesFile mf, String s) throws PrismLangException
 	{
 		PrismParser prismParser;
 		PropertiesFile propertiesFile = null;
@@ -1612,7 +1612,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			prismParser = getPrismParser();
 			try {
 				// parse string
-				propertiesFile = prismParser.parsePropertiesFile(modelInfo, new ByteArrayInputStream(s.getBytes()));
+				propertiesFile = prismParser.parsePropertiesFile(mf, new ByteArrayInputStream(s.getBytes()));
 			} finally {
 				// release prism parser
 				releasePrismParser();
@@ -2870,13 +2870,13 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				setEngine(Prism.EXPLICIT);
 			}
 		}
-			// Compatibility check
-			if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
-				if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
-					throw new PrismException("Cannot generate strategies with the current engine "
-							+ "because some state of the model do not have unique action labels for each choice. "
-							+ "Either switch to the explicit engine or add more action labels to the model");
-			}
+		// Compatibility check
+		if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
+			if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
+				throw new PrismException("Cannot generate strategies with the current engine "
+						+ "because some state of the model do not have unique action labels for each choice. "
+						+ "Either switch to the explicit engine or add more action labels to the model");
+		}
 
 		try {
 			// Build model, if necessary

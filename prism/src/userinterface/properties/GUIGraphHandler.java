@@ -303,15 +303,16 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (plug.showSaveFileDialog(matlabFilter) != JFileChooser.APPROVE_OPTION)
-					return;
-				Graph mgm = models.get(theTabs.getSelectedIndex());
-
+				/*	if (plug.showSaveFileDialog(OpenDocumentChartFilter, OpenDocumentChartFilter[0]) != JFileChooser.APPROVE_OPTION)
+				return;
+				GraphView mgv = (GraphView)views.get(
+				theTabs.getSelectedIndex()
+				);
 				try {
-					mgm.exportToMatlab(plug.getChooserFile());
-				} catch (IOException ex) {
-					plug.error("Could not export Matlab file:\n" + ex.getMessage());
-				}
+				mgv.doExportToOpenDocumentChart(plug.getChooserFile());
+				} catch(ChartException ex) {
+				plug.error("Could not export OpenDocument Chart file:\n" + ex.getMessage());
+				}*/
 			}
 		};
 		exportMatlab.putValue(Action.NAME, "Matlab file (*.m)");

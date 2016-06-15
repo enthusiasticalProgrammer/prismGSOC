@@ -159,19 +159,10 @@ public class ExplicitModel2MTBDD
 		// Calculate BDD for initial state
 		buildInit();
 
-		// Compute state rewards
-		computeStateRewards();
-
 		int numModules = 1; // just one module
 		String moduleNames[] = modulesFile.getModuleNames(); // whose name is stored here
 		Values constantValues = new Values(); // no constants
 
-		/*JDDNode stateRewardsArray[] = new JDDNode[1];
-		stateRewardsArray[0] = stateRewards;
-		JDDNode transRewardsArray[] = new JDDNode[1];
-		transRewardsArray[0] = transRewards;
-		String rewardStructNames[] = new String[1];
-		rewardStructNames[0] = "";*/
 		JDDNode stateRewardsArray[] = new JDDNode[0];
 		JDDNode transRewardsArray[] = new JDDNode[0];
 		String rewardStructNames[] = new String[0];

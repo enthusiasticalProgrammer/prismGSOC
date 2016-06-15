@@ -26,6 +26,7 @@ import jltl2ba.APElement;
 import jltl2ba.APSet;
 import jltl2ba.MyBitSet;
 import jltl2ba.MyBitSet.MyBitSetIterator;
+
 /** @file
  * Provides class NBA_State for storing a state of a nondeterministic Büchi automaton.
  */

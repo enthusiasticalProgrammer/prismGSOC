@@ -445,9 +445,10 @@ public class SubNondetModel implements NondetModel
 	{
 		for (int i = 0; i < model.getNumStates(); i++) {
 			if (states.get(i)) {
-			numTransitions += getTransitions(i);
-			numChoices += actions.get(i).cardinality();
-			maxNumChoices = Math.max(maxNumChoices, model.getNumChoices(i));
+				numTransitions += getTransitions(i);
+				numChoices += actions.get(i).cardinality();
+				maxNumChoices = Math.max(maxNumChoices, model.getNumChoices(i));
+			}
 		}
 	}
 

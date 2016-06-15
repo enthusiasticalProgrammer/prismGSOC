@@ -585,7 +585,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 								reader.close();
 							} catch (IOException e) {
 								throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
-						}
+							}
 						}
 
 					}

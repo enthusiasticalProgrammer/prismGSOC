@@ -213,7 +213,7 @@ public class BackwardsReachabilityGraph
 		if (i == dests.length) {
 			//log.print(src + "/" + tr);
 			Distribution distr = new Distribution();
-			double prob, rest = 0;
+			double prob;
 			if (dests.length > 0) {
 				for (int j = 0; j < dests.length; j++) {
 					prob = pta.getTransitions(states.get(src).loc).get(tr).getEdges().get(j).getProbability();

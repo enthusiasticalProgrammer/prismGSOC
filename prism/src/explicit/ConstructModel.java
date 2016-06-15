@@ -123,16 +123,6 @@ public class ConstructModel extends PrismComponent
 	}
 
 	/**
-	 * Build the set of reachable states for a model and return it.
-	 * @param modelGen The ModelGenerator interface providing the model 
-	 */
-	public List<State> computeReachableStates(ModelGenerator modelGen) throws PrismException
-	{
-		constructModel(modelGen, true);
-		return getStatesList();
-	}
-
-	/**
 	 * Construct an explicit-state model and return it.
 	 * @param modelGen The ModelGenerator interface providing the model 
 	 */
