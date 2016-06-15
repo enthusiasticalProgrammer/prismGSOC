@@ -1223,7 +1223,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		if (currentFilter == null || !(currentFilter.getOperator() == Filter.FilterOperator.STATE))
 			throw new PrismException("Multi-objective model checking can only compute values from a single state");
 
-		MultiLongRun mlr = createMultiLongRun(model, expr);
+		MultiLongRun<? extends NondetModel> mlr = createMultiLongRun(model, expr);
 		//MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
 
@@ -1301,7 +1301,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		return sv;
 	}
 
-	public MultiLongRun createMultiLongRun(@NonNull Model model, ExpressionFunc expr) throws PrismException
+	public MultiLongRun<? extends NondetModel> createMultiLongRun(@NonNull Model model, ExpressionFunc expr) throws PrismException
 	{
 		@NonNull
 		Collection<@NonNull MDPConstraint> constraints = new ArrayList<>();
@@ -1407,7 +1407,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
 	}
 
-	protected abstract MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+	protected abstract MultiLongRun<?> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
 			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
 			@NonNull String method) throws PrismException;
 

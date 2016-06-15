@@ -105,7 +105,7 @@ public class TestMultiLongRun
 	@Test
 	public void modelIsNotNull() throws PrismException
 	{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
 		assertNotNull(ml11.model);
 	}
 
@@ -137,7 +137,7 @@ public class TestMultiLongRun
 	@Test
 	public void testTwoObjectives() throws PrismException
 	{
-		MultiLongRun ml12 = mdp12.createMultiLongRun(m1, e2);
+		MultiLongRun<?> ml12 = mdp12.createMultiLongRun(m1, e2);
 		assertEquals(2, ml12.objectives.size());
 	}
 
@@ -147,7 +147,7 @@ public class TestMultiLongRun
 	@Test
 	public void testGetN() throws PrismException
 	{
-		MultiLongRun ml12 = mdp12.createMultiLongRun(m1, e2);
+		MultiLongRun<?> ml12 = mdp12.createMultiLongRun(m1, e2);
 		assertEquals(2, ml12.getN());
 	}
 
@@ -158,7 +158,7 @@ public class TestMultiLongRun
 	@Test
 	public void testGetVarXNegative() throws PrismException
 	{
-		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
+		MultiLongRun<?> ml13 = mdp13.createMultiLongRun(m1, e3);
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
 	}
 
@@ -169,7 +169,7 @@ public class TestMultiLongRun
 	@Test
 	public void testValuesOfExample4() throws PrismException
 	{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
@@ -195,7 +195,7 @@ public class TestMultiLongRun
 	@Test
 	public void testValuesOfExample5() throws PrismException
 	{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 

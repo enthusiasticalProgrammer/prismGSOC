@@ -952,7 +952,7 @@ public class STPGModelChecker extends ProbModelChecker
 	}
 
 	@Override
-	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+	protected MultiLongRun<?> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
 			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
 			@NonNull String method) throws PrismException
 	{

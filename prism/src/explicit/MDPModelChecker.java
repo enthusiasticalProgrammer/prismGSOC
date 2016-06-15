@@ -1756,7 +1756,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * The input model should be an MDP. 
 	 */
 	@Override
-	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+	protected MultiLongRun<MDP> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
 			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
 			@NonNull String method) throws PrismException
 	{

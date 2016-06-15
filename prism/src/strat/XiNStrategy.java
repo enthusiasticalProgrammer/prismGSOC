@@ -31,11 +31,11 @@ public class XiNStrategy implements Strategy
 
 	private double[] solverVariables;
 
-	private MultiLongRun mlr;
+	private MultiLongRun<?> mlr;
 
 	private final MDP mdp;
 
-	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun mlr, int n)
+	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun<?> mlr, int n)
 	{
 		this.solverVariables = solver.getVariableValues();
 		this.mlr = mlr;
