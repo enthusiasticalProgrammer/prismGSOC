@@ -142,7 +142,7 @@ public class GUIGeneralOptions extends OptionsPanel
 
 	}
 
-	public boolean valid() throws GUIException
+	public boolean valid()
 	{
 		return true;
 	}
@@ -150,22 +150,6 @@ public class GUIGeneralOptions extends OptionsPanel
 	public Element saveXMLElement(Document doc) throws DOMException
 	{
 		return doc.createElement("dummy");
-	}
-
-	public void loadXMLElement(Element element)
-	{
-	}
-
-	public void loadProperties(java.util.Properties properties)
-	{
-	}
-
-	public void loadXMLElement(Document doc, Element element)
-	{
-	}
-
-	public void saveProperties(java.util.Properties properties)
-	{
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
