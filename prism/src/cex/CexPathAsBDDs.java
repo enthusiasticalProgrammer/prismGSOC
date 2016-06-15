@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import jdd.JDD;
 import jdd.JDDNode;
 import parser.State;
-import simulator.PathFullInfo;;
+import simulator.PathFullInfo;
 
 /**
  * Class to store a counterexample/witness comprising a single path, as a list of BDDs.

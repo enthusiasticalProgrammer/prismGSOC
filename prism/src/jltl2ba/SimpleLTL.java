@@ -43,7 +43,7 @@ public class SimpleLTL
 
 	public enum LTLType {
 		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FINALLY
-	};
+	}
 
 	public SimpleLTL left;
 	public SimpleLTL right;

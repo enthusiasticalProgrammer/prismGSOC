@@ -50,7 +50,7 @@ public class GenerateSimulationPath
 	// Enums
 	private enum PathType {
 		SIM_PATH_NUM_STEPS, SIM_PATH_TIME, SIM_PATH_DEADLOCK
-	};
+	}
 
 	// Basic info needed for path
 	private ModulesFile modulesFile;

@@ -481,7 +481,6 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 			if (e.getSource() != this) //see whether they have dropped one window on top of another
 			{
 				int index = -1;
-				;
 				//Find out which one is being moved
 				for (int i = 0; i < containers.size(); i++) {
 					GraphicModuleContainer gme = (GraphicModuleContainer) containers.get(i);

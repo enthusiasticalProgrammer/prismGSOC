@@ -40,7 +40,7 @@ public class RabinAcceptance implements Iterable<Integer>
 	/** The 3 different colors for RabinAcceptance */
 	public enum RabinColor {
 		RABIN_WHITE, RABIN_GREEN, RABIN_RED
-	};
+	}
 
 	/** A vector of MyBitSet* representing the L part of the acceptance pairs. */
 	private Vector<MyBitSet> _acceptance_L;
@@ -195,7 +195,6 @@ public class RabinAcceptance implements Iterable<Integer>
 	public void addState(int state_index)
 	{
 		// TODO: Assert that state_index > highest set bit
-		;
 	}
 
 	// ---- Rabin/Streett acceptance specific

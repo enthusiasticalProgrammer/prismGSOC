@@ -273,7 +273,6 @@ public class DRAOptimizations
 
 		public AcceptanceSignature()
 		{
-			;
 		}
 	}
 

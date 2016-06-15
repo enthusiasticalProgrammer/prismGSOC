@@ -493,9 +493,7 @@ public class ModuleDrawingPane extends JPanel
 				double fromX = theModel.getTempProbFrom().getX() + 3;
 				double fromY = theModel.getTempProbFrom().getY() + 3;
 				double probDecX = theModel.getTempProbFrom().getX() + 3;
-				;
 				double probDecY = theModel.getTempProbFrom().getY() + 3;
-				;
 				//if(!theModel.isTempProbNailDown()) //if there is no nail down
 				/*{
 				    double mix = fromX;

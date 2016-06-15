@@ -51,7 +51,7 @@ public abstract class SCCComputer extends PrismComponent
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	/**
 	 * Static method to create a new SCCComputer object, depending on current settings.

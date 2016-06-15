@@ -41,7 +41,7 @@ final class ValueComputer
 {
 	private enum PropType {
 		REACH, STEADY
-	};
+	}
 
 	class SchedulerCacheKey
 	{

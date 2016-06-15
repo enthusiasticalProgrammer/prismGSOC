@@ -313,7 +313,6 @@ public class UndefinedConstants
 		// constants from model file
 		for (i = 0; i < mfNumConsts; i++) {
 			mfConsts.get(i).clear();
-			;
 		}
 		// constants from properties file
 		for (i = 0; i < pfNumConsts; i++) {

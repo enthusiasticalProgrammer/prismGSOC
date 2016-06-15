@@ -1005,7 +1005,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 								return Double.compare(o1.getCoord(1), o2.getCoord(1));
 							else
 								return Double.compare(o1.getCoord(0), o2.getCoord(0));
-						};
+						}
 					};
 
 					Collections.sort(l, c);

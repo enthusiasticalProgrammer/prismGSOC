@@ -67,7 +67,7 @@ public class ResultsExporter
 				return ResultsExportFormat.PLAIN;
 			}
 		}
-	};
+	}
 
 	// Possible destinations for export
 	public enum ResultsExportDestination {
@@ -92,7 +92,7 @@ public class ResultsExporter
 				return ResultsExportDestination.STRING;
 			}
 		}
-	};
+	}
 
 	private List<DefinedConstant> rangingConstants;
 	private Values nonRangingConstantValues;

@@ -77,7 +77,7 @@ public class GUIPathPlotDialog extends JDialog
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	public enum ShowChoice {
 		ALL_STEPS, SNAPSHOTS;
@@ -93,7 +93,7 @@ public class GUIPathPlotDialog extends JDialog
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	// Static instance
 	private static GUIPathPlotDialog instance = null;

@@ -14,7 +14,7 @@ public interface SolverProxyInterface
 {
 	public static enum Comparator {
 		EQ, GE, LE
-	};
+	}
 
 	/**
 	 * Adds new row to the problem.

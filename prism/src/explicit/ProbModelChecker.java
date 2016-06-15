@@ -132,7 +132,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	// Method used for solving MDPs
 	public enum MDPSolnMethod {
@@ -154,22 +154,22 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	// Iterative numerical method termination criteria
 	public enum TermCrit {
 		ABSOLUTE, RELATIVE
-	};
+	}
 
 	// Direction of convergence for value iteration (lfp/gfp)
 	public enum ValIterDir {
 		BELOW, ABOVE
-	};
+	}
 
 	// Method used for numerical solution
 	public enum SolnMethod {
 		VALUE_ITERATION, GAUSS_SEIDEL, POLICY_ITERATION, MODIFIED_POLICY_ITERATION, LINEAR_PROGRAMMING
-	};
+	}
 
 	/**
 	 * Create a new ProbModelChecker, inherit basic state from parent (unless null).

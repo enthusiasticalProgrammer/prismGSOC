@@ -107,7 +107,7 @@ public class IterableStateSet implements Iterable<Integer>
 		{
 			throw new UnsupportedOperationException();
 		}
-	};
+	}
 
 	/** Implementation of an Iterator that iterates over the empty state set */
 	private class NoStatesIterator implements Iterator<Integer>
@@ -129,7 +129,7 @@ public class IterableStateSet implements Iterable<Integer>
 		{
 			throw new UnsupportedOperationException();
 		}
-	};
+	}
 
 	@Override
 	public Iterator<Integer> iterator()
