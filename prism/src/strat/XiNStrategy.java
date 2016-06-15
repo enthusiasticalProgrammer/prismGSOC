@@ -2,6 +2,8 @@ package strat;
 
 import java.math.BigInteger;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.Model;
@@ -108,7 +110,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public Model buildProduct(Model model) throws PrismException
+	public @NonNull Model buildProduct(Model model) throws PrismException
 	{
 		throw new UnsupportedOperationException();
 	}

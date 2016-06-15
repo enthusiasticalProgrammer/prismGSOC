@@ -51,16 +51,12 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 	//The job to be done
 	private boolean isExperiment;
-	private SimulatorEngine simulator;
-	private GUIMultiProperties properties;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
 	private ArrayList props;
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
-	private Thread experimentThread;
-	private Expression experimentFormula;
 
 	private boolean cancelled = false;
 
@@ -75,8 +71,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	{
 		super(parent, modal);
 		setTitle("PRISM Distributed Simulator");
-
-		this.simulator = simulator;
 
 		initComponents();
 		setLocationRelativeTo(getParent()); // centre
@@ -99,10 +93,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		this.isExperiment = true;
 		this.modulesFile = modulesFile;
 		this.propertiesFile = properties;
-		this.experimentFormula = propertyToCheck;
 		this.expr = expr;
 		this.info = info;
-		this.experimentThread = exprThread;
 		this.undefinedConstants = undefinedConstants;
 		//setup the interface
 		PrismSettings settings = GUIPrism.getGUI().getPrism().getSettings();
@@ -153,7 +145,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			throws PrismException
 	{
 		this.isExperiment = false;
-		this.properties = properties;
 		this.modulesFile = modulesFile;
 		this.propertiesFile = propertiesFile;
 		this.props = props;
