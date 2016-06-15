@@ -1751,6 +1751,10 @@ public class MDPModelChecker extends ProbModelChecker
 		}
 	}
 
+	/**
+	 * This returns the multiLongRun, which is used for checking multi-objective-properties.
+	 * The input model should be an MDP. 
+	 */
 	@Override
 	protected MultiLongRun getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
 			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,

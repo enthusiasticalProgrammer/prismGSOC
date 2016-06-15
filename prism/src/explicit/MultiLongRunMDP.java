@@ -12,6 +12,9 @@ import prism.PrismException;
 import strat.MultiLongRunStrategy;
 import strat.XiNStrategy;
 
+/**
+ * This class verifies multi-long-run properties for MDPs. 
+ */
 class MultiLongRunMDP extends MultiLongRun<MDP>
 {
 

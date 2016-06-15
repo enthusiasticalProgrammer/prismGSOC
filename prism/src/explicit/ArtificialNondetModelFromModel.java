@@ -17,7 +17,8 @@ import strat.MDStrategy;
 
 /**
  * Basically this class tries to take a model and it emulates it as nondeterministic model,
- * it est it supports the choices etc. in a way such that there is only one choice.
+ * it est it supports the nondeterministic choices etc. in a way such that
+ * there are choices, but only one.
  */
 public class ArtificialNondetModelFromModel implements NondetModel
 {

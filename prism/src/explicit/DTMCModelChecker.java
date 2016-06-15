@@ -1757,7 +1757,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
-	 * The model is meant to be a DTMC (to be precise it has to be a DTMCFromMLRStrategyAndMDP)
+	 * The model is meant to be a DTMC (to be precise it has to be a DTMCFromMLRStrategyAndMDP),
+	 * but we have to write it as model, because it has to override the super-method.
 	 * The expr is some multi-objective expression.
 	 * Note that this method is mainly here, because it can verify the product of an MDP and
 	 * a multiLongRunStrategy.

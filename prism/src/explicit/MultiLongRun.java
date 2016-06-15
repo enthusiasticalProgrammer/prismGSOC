@@ -25,10 +25,10 @@ import strat.Strategy;
  * This class contains functions used when solving
  * multi-objective mean-payoff (=long run, steady state)
  * problem for MDPs. It provides a LP encoding taken from
- * http://qav.cs.ox.ac.uk/bibitem.php?key=BBC+11 
- * (Two views on Multiple Mean-Payoff Objectives in Markov Decision Processes).
+ * CKK15
+ * (Unifying two views on Multiple Mean-Payoff Objectives in Markov Decision Processes).
  * 
- * Note that we use a bit different notation here and refer to y_s variables as
+ * Note that we use a bit different notation here and refer to y_{s,N} variables as
  * Z, not to confuse them with y_{s,a}.
  * @author vojfor+Christopher
  *
@@ -50,7 +50,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	final SolverProxyInterface solver;
 
 	/**
-	 * LP solver to be used
+	 * method for LP solving to be used TODO drop it
 	 */
 	private final @NonNull String method;
 
@@ -71,12 +71,14 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * The default constructor.
-	 * @param mdp The MDP to work with
-	 * @param rewards Rewards for the MDP
-	 * @param operators The operators for the rewards, instances of {@see prism.Operator}
-	 * @param bounds Lower/upper bounds for the rewards, if operators are >= or <=
-	 * @param method Method to use, should be a valid value for
+	 * @param constraints: MLR-constraints of the form P[ R{x} >= bound [S]]
+	 * @param objectives: MLR-objectives of the form R{x}max=?
+	 * @param expConstraints: objectives of the form R{x} >= bound as expectation value
+	 * @param method: the method of LP solving, either "Linear programming" or "Gurobi"
 	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
+	 * @param method Method to use, should be a valid value for
+	 * @param M: a nondeterministic model, it should be either an MDP or a DTMCFromMDPAndMDStrategy,
+	 * 		because currently these are the only classes for which currently multi-objectives are used. 
 	 * @throws PrismException 
 	 */
 	protected MultiLongRun(Collection<@NonNull MDPConstraint> constraints, Collection<@NonNull MDPObjective> objectives,
@@ -151,10 +153,10 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * The LICS11 paper considers variables y_{s,a}, y_s and x_{s,a}. The solvers mostly
+	 * The LICS11 paper considers variables z_{s,N}, y_{s,a}, y_s and x_{s,a,N}. The solvers mostly
 	 * access variables just by numbers, starting from 0 or so. We use
-	 * {@see #getVarY(int, int)}, {@see #getVarZ(int)} and {@see #getVarX(int, int)}
-	 * to get, for a variable y_{s,a}, y_s and x_{s,a}, respectively, in the LICS11 sense,
+	 * {@see #getVarY(int, int)}, {@see #getVarZ(int, int)} and {@see #getVarX(int, int, int)}
+	 * to get, for a variable y_{s,a}, y_s and x_{s,a,N}, respectively, in the LICS11 sense,
 	 * a corresponding variable (i.e. column) in the linear program.
 	 * 
 	 * The following three method does all the required initialisations that are required for the
@@ -268,7 +270,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * Adds a row to the linear program, saying
-	 * "all switching probabilities z must sum to 1". See LICS11 paper (equation no 2) for details
+	 * "all switching probabilities z must sum to 1". See CKK15 (equation no 2) for details
 	 * @throws PrismException
 	 */
 	private void setZSumToOne() throws PrismException
@@ -291,7 +293,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * Returns a hashmap giving a left hand side for the equation for a reward {@code idx}.
+	 * Returns a Map giving a left hand side for the equation for a reward.
 	 * (i,d) in the hashmap says that variable i is multiplied by d. If key i is not
 	 * present, it means 0.
 	 * @param constraint
@@ -322,7 +324,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	/**
 	 * Adds a row to the linear program saying that reward of item must have
 	 * at least/most required value (given in the constructor to this class)
-	 * In the paper it is equation no 5
+	 * In the paper CKK15 it is equation no 5
 	 * @return
 	 */
 	private void setEqnForExpectationConstraints() throws PrismException
@@ -345,9 +347,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * Adds an equation to the linear program saying that for the mec bs,
+	 * Adds an equation to the linear program saying that for the mec bmaxEndComponent,
 	 * the switching probabilities in sum must be equal to the x variables in sum.
-	 * See the LICS 11 paper (equation no 3) for details.
+	 * See the CKK15 paper (equation no 3) for details.
 	 * @param maxEndComponent
 	 * @throws PrismException
 	 */
@@ -372,7 +374,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * These are the variables y_{state,action} from the paper. See {@see #computeOffsets()} for more details.
+	 * These are the variables x_{state,action,N} from the paper.
 	 * @param state
 	 * @param action
 	 * @param threshold
@@ -386,10 +388,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * These are the variables y_{state,action} from the paper. See {@see #computeOffsets()} for more details.
+	 * These are the variables y_{state,action} from the paper.
 	 * @param state
 	 * @param action
-	 * @param threshold
 	 * @return
 	 */
 	int getVarY(int state, int action)
@@ -398,8 +399,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * These are the variables y_state from the paper. See {@see #computeOffsets()} for more details.
+	 * These are the variables y_{state,N} from the paper.
 	 * @param state
+	 * @param threshold
 	 * @return
 	 */
 	int getVarZ(int state, int threshold)
@@ -410,7 +412,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * Adds all rows to the LP program that give requirements
-	 * on the steady-state distribution (via x variables), equation no 4
+	 * on the steady-state distribution (via x variables). This method
+	 * correspond to equation 4 of CKK15.
 	 * @throws PrismException
 	 */
 	private void setXConstraints() throws PrismException
@@ -562,7 +565,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	}
 
-	//Equation number 7
+	/**
+	 * This method corresponds to equation 7 of paper CKK15 
+	 */
 	private void setSatisfactionForNontrivialProbability() throws PrismException
 	{
 
@@ -585,7 +590,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 		}
 	}
 
-	//Equation number 6
+	/**
+	 * This method corresponds to equation 6 of paper CKK15 
+	 */
 	private void setCommitmentForSatisfaction() throws PrismException
 	{
 		for (BitSet maxEndComponent : mecs) {
@@ -719,8 +726,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * This returns the number n from the paper "Unifying Two Views on Multiple Mean-Payoff
-	 * Objectives in Markov Decision Processes" aka the number of satisfaction bound with a
+	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
 	 * non-trivial probability
 	 */
 	int getN()
@@ -738,7 +744,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * if our model is a product of MDP and strategy, then we have to slightly prepare the state-
-	 * number, because otherwise the rewards are not anymore working
+	 * number by sometimes adjusting some offsets
 	 */
 	protected abstract int prepareStateForReward(int state);
 

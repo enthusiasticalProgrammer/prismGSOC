@@ -5,6 +5,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import explicit.rewards.MDPReward;
 import prism.Operator;
 
+/**
+ * This class corresponds to a multi-long-run property of the form R{"reward"} >= bound 
+ */
 public class MDPExpectationConstraint extends MDPItem
 {
 

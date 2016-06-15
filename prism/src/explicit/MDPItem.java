@@ -5,10 +5,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import explicit.rewards.MDPReward;
 
 /**
- * This class stores a satisfaction constraint for an MDP.
- * It has as attributes the operator (LEQ/GEQ),
- * the bound as double, and the probability, for which it has to hold.
- * A probability >1.0 means that the constraint should hold always.
+ * This abstract class stores a multi-long-run satisfaction constraint for an MDP.
+ * The operator can be max/geq/..., and the reward is a certain reward.
  */
 abstract class MDPItem
 {

@@ -27,6 +27,7 @@ import strat.MultiLongRunStrategy;
 /**
  * This class simulates a product between an MDP and a MultiLongRunStrategy,
  * which satisfies a multi-objective property. The product is computed implicitely.
+ * It can be outputted in a .tra-file.
  * 
  */
 public class DTMCProductMLRStrategyAndMDP implements DTMC
@@ -163,9 +164,6 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 		return false;
 	}
 
-	/**
-	 * Some transititons are traversed with probability 0.0
-	 */
 	@Override
 	public int getNumTransitions()
 	{
@@ -407,6 +405,9 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	{
 		return null; //no actions, I guess
 	}
+
+	//From here on, the methods are not needed (I hope). The class is only designed to output
+	// somehow the Product of an MDP and a strategy.
 
 	@Override
 	public void prob0step(BitSet subset, BitSet u, BitSet result)
