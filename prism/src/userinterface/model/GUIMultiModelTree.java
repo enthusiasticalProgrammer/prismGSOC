@@ -3247,11 +3247,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			});
 		}
 
+		@Override
 		public void cancelCellEditing()
 		{
 			setText("");
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			String str = getText();
@@ -3267,11 +3269,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 		}
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			return exp;
 		}
 
+		@Override
 		public boolean isCellEditable(EventObject eo)
 		{
 			if ((eo == null) | ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -3283,6 +3287,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return false;
 		}
 
+		@Override
 		public boolean shouldSelectCell(EventObject eo)
 		{
 			if ((eo == null) | ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -3306,6 +3311,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 
 		//make sure the JTree gives the editor enough space
+		@Override
 		public void setBounds(Rectangle r)
 		{
 			r.width = Math.max(minWidth, r.width);
@@ -3313,6 +3319,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			tree.repaint();
 		}
 
+		@Override
 		public void setBounds(int x, int y, int w, int h)
 		{
 			w = Math.max(minWidth, w);
@@ -3320,16 +3327,19 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			tree.repaint();
 		}
 
+		@Override
 		public void addCellEditorListener(CellEditorListener l)
 		{
 			listeners.addElement(l);
 		}
 
+		@Override
 		public void removeCellEditorListener(CellEditorListener l)
 		{
 			listeners.addElement(l);
 		}
 
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			return this;
@@ -3363,6 +3373,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			theModel.nodeChanged(this);
 		}
 
+		@Override
 		public void setUserObject(Object obj)
 		{
 			super.setUserObject(obj);
@@ -3391,6 +3402,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					if (stopCellEditing())
@@ -3410,10 +3422,12 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 		}
 
+		@Override
 		public void cancelCellEditing()
 		{
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			try {
@@ -3428,11 +3442,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 		}
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			return value;
 		}
 
+		@Override
 		public boolean isCellEditable(EventObject eo)
 		{
 			if ((eo == null) || ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -3444,6 +3460,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return false;
 		}
 
+		@Override
 		public boolean shouldSelectCell(EventObject eo)
 		{
 			if ((eo == null) | ((eo instanceof MouseEvent) && (((MouseEvent) eo).isMetaDown()))) {
@@ -3455,11 +3472,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return false;
 		}
 
+		@Override
 		public void addCellEditorListener(CellEditorListener cel)
 		{
 			listeners.addElement(cel);
 		}
 
+		@Override
 		public void removeCellEditorListener(CellEditorListener cel)
 		{
 			listeners.removeElement(cel);
@@ -3476,6 +3495,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 		}
 
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			return this;
@@ -3495,6 +3515,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		ImageIcon OUT_OF_SYNCH = GUIPrism.getIconFromImage("smallFilePrism.png");
 		ImageIcon CLOCK = GUIPrism.getIconFromImage("smallClockAnim1.png");
 
+		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
 		{
 			super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
@@ -3564,6 +3585,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			realEditor = declarationEditor;
 		}
 
+		@Override
 		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			if (value instanceof ExpressionNode) {
@@ -3583,6 +3605,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			return super.getTreeCellEditorComponent(tree, value, isSelected, expanded, leaf, row);
 		}
 
+		@Override
 		public void addCellEditorListener(CellEditorListener l)
 		{
 
@@ -3595,6 +3618,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			super.addCellEditorListener(l);
 		}
 
+		@Override
 		public void removeCellEditorListener(CellEditorListener l)
 		{
 			modelTypeEditor.removeCellEditorListener(l);
@@ -3627,6 +3651,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			images[7] = GUIPrism.getIconFromImage("smallClockAnim8.png");
 		}
 
+		@Override
 		public void run()
 		{
 			try {
