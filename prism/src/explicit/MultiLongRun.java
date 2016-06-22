@@ -50,6 +50,11 @@ public abstract class MultiLongRun<M extends NondetModel>
 	final SolverProxyInterface solver;
 
 	/**
+	 * Number of continuous variables in the LP instance
+	 */
+	private int numRealLPVars;
+
+	/**
 	 * method for LP solving to be used TODO drop it
 	 */
 	private final @NonNull String method;
@@ -57,17 +62,17 @@ public abstract class MultiLongRun<M extends NondetModel>
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
-	private final int @NonNull [] xOffsetArr;
+	private int @NonNull [] xOffsetArr;
 
 	/**
 	 * yOffset[i] is the solver's variable (column) for the first action of state i, i.e. for y_{i,0}
 	 */
-	private final int @NonNull [] yOffsetArr;
+	private int @NonNull [] yOffsetArr;
 
 	/**
 	 * zIndex[i] is the z variable for the state i (i.e. y_i in LICS11 terminology). 
 	 */
-	private final int @NonNull [] zIndex;
+	private int @NonNull [] zIndex;
 
 	/**
 	 * The default constructor.
@@ -81,8 +86,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * 		because currently these are the only classes for which currently multi-objectives are used. 
 	 * @throws PrismException 
 	 */
-	protected MultiLongRun(Collection<@NonNull MDPConstraint> constraints, Collection<@NonNull MDPObjective> objectives,
-			Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method, @NonNull M m) throws PrismException
+	protected MultiLongRun(final Collection<@NonNull MDPConstraint> constraints, final Collection<@NonNull MDPObjective> objectives,
+			final Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull final String method, @NonNull final M m) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
@@ -90,9 +95,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.expConstraints = new ArrayList<>(expConstraints);
 		this.model = m;
 		this.mecs = computeMECs();
-		this.xOffsetArr = computeXOffsets();
-		this.yOffsetArr = computeYOffsets();
-		this.zIndex = computeZOffsets();
+		computeOffsets();
 		this.solver = initialiseSolver();
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
@@ -110,10 +113,10 @@ public abstract class MultiLongRun<M extends NondetModel>
 		try { //below Class.forName throws exception if the required jar is not present
 			if (method.equals("Linear programming")) {
 				//create new solver
-				result = new LpSolverProxy(zIndex[this.getMaxMECState()] + (1 << getN()), 0);
+				result = new LpSolverProxy(this.numRealLPVars, 0);
 			} else if (method.equals("Gurobi")) {
 				Class<?> cl = Class.forName("solvers.GurobiProxy");
-				result = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(zIndex[this.getMaxMECState()] + (1 << getN()), 0);
+				result = (SolverProxyInterface) cl.getConstructor(int.class, int.class).newInstance(this.numRealLPVars, 0);
 			} else
 				throw new UnsupportedOperationException("The given method for solving LP programs is not supported: " + method);
 		} catch (ClassNotFoundException ex) {
@@ -153,60 +156,48 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * The LICS11 paper considers variables z_{s,N}, y_{s,a}, y_s and x_{s,a,N}. The solvers mostly
+	 * The LICS11 paper considers variables y_{s,a}, y_s and x_{s,a}. The solvers mostly
 	 * access variables just by numbers, starting from 0 or so. We use
-	 * {@see #getVarY(int, int)}, {@see #getVarZ(int, int)} and {@see #getVarX(int, int, int)}
-	 * to get, for a variable y_{s,a}, y_s and x_{s,a,N}, respectively, in the LICS11 sense,
+	 * {@see #getVarY(int, int)}, {@see #getVarZ(int)} and {@see #getVarX(int, int)}
+	 * to get, for a variable y_{s,a}, y_s and x_{s,a}, respectively, in the LICS11 sense,
 	 * a corresponding variable (i.e. column) in the linear program.
 	 * 
-	 * The following three method does all the required initialisations that are required for the
+	 * This method does all the required initialisations that are required for the
 	 * above mentioned methods to work correctly.
 	 */
-	private int @NonNull [] computeXOffsets()
+	void computeOffsets() throws PrismException
 	{
-		int @NonNull [] result = new int[model.getNumStates()];
+		this.xOffsetArr = new int[model.getNumStates()];
 		int current = 0;
-		for (int state = 0; state < model.getNumStates(); state++) {
+		for (int i = 0; i < model.getNumStates(); i++) {
 			boolean isInMEC = false;
 			for (BitSet b : this.mecs) {
-				if (b.get(state)) {
+				if (b.get(i)) {
 					isInMEC = true;
 					break;
 				}
 			}
 			if (isInMEC) {
-				result[state] = current;
-				current += model.getNumChoices(state) * (1 << getN());
+				xOffsetArr[i] = current;
+				current += model.getNumChoices(i) * (1 << getN());
 			} else {
-				result[state] = Integer.MIN_VALUE; //so that when used in array, we get exception
+				xOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
-		return result;
-	}
 
-	private int @NonNull [] computeYOffsets()
-	{
-		int stateMax = getMaxMECState();
-		int current = this.getVarX(stateMax, model.getNumChoices(stateMax) - 1, 1 << (getN()) - 1);
-
-		int @NonNull [] result = new int[model.getNumStates()];
+		this.yOffsetArr = new int[model.getNumStates()];
 		for (int i = 0; i < model.getNumStates(); i++) {
-			result[i] = current;
+			yOffsetArr[i] = current;
 			current += model.getNumChoices(i);
 		}
-		return result;
 
-	}
-
-	private int @NonNull [] computeZOffsets()
-	{
-		int current = this.yOffsetArr[model.getNumStates() - 1] + model.getNumChoices(model.getNumStates() - 1);
-		int @NonNull [] result = new int[model.getNumStates()];
+		this.zIndex = new int[model.getNumStates()];
 
 		for (int i = 0; i < model.getNumStates(); i++) {
-			result[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
+			zIndex[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
 		}
-		return result;
+
+		this.numRealLPVars = current;
 	}
 
 	private int getMaxMECState()
@@ -539,9 +530,6 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	public void createMultiLongRunLP() throws PrismException
 	{
-
-		initialiseSolver();
-
 		nameLPVars();
 
 		//Transient flow
