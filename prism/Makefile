@@ -58,14 +58,13 @@ endif
 # Architecture #
 ################
 
-# For Linux, we use uname to see if we are on a 64-bit (AMD64 or Itanium) machine
-ifeq ($(OSTYPE),linux)
-	ifneq (,$(findstring 86_64, $(shell uname -m)))
-		ARCH = amd64
-	endif
-	ifneq (,$(findstring ia64, $(shell uname -m)))
-		ARCH = ia64
-	endif
+# To build on AMD64 or Itanium machines, ARCH should be set.
+# We attempt to auto-detect this here.
+ifneq (,$(findstring 86_64, $(shell uname -m)))
+	ARCH = amd64
+endif
+ifneq (,$(findstring ia64, $(shell uname -m)))
+	ARCH = ia64
 endif
 # For Mac/Windows, we decide whether to build in 64-bit mode based on
 # whether java is 32/64-bit (since these need to match)
@@ -111,11 +110,6 @@ else
     JAVA_DIR = $(shell dirname "$(DETECT_JAVAC)" | sed 's/\/Commands//')
   endif
 endif
-
-# As a backup way of detecting JAVA_DIR, run java_home
-JAVA_DIR_BACKUP = $(shell \
-	if [ -f /usr/libexec/java_home ]; then /usr/libexec/java_home; \
-	else echo ""; fi )
 
 #JAVA_DIR =	/usr/java
 #JAVA_DIR =	/usr/java/j2sdk1.4.2
@@ -179,7 +173,7 @@ ifeq ($(OSTYPE),linux)
 	endif
 	endif
 	BIN_TARGETS=prism.linux xprism.linux
-	JFLAGS = -encoding UTF8
+	JFLAGS =
 	SHARED = -shared
 	#SHARED = -G
 	EXE =
@@ -196,7 +190,7 @@ ifeq ($(OSTYPE),solaris)
 	LDFLAGS = $(CUDD_XCFLAGS) $(OPTIMISE)
 	BINDISTSUFFIX = solaris
 	BIN_TARGETS=prism.linux xprism.linux
-	JFLAGS = -encoding UTF8
+	JFLAGS =
 	SHARED = -shared -mimpure-text
 	EXE =
 	LIBPREFIX = lib
@@ -251,7 +245,7 @@ ifeq ($(OSTYPE),darwin)
 		BINDISTSUFFIX = osx32
 		BIN_TARGETS=prism.darwin32 xprism.linux
 	endif
-	JFLAGS = -encoding UTF8
+	JFLAGS =
 	SHARED = -dynamiclib
 	EXE =
 	LIBPREFIX = lib
@@ -284,8 +278,6 @@ INCLUDE_DIR =	include
 JAVA_JNI_H_DIR = $(shell \
 	if [ -f "$(JAVA_DIR)"/include/jni.h ]; then echo "$(JAVA_DIR)"/include; \
 	elif [ -f "$(JAVA_DIR)"/Headers/jni.h ]; then echo "$(JAVA_DIR)"/Headers; \
-	elif [ -f "$(JAVA_DIR_BACKUP)"/include/jni.h ]; then echo "$(JAVA_DIR_BACKUP)"/include; \
-	elif [ -f "$(JAVA_DIR_BACKUP)"/Headers/jni.h ]; then echo "$(JAVA_DIR_BACKUP)"/Headers; \
 	else echo ""; fi )
 JAVA_JNI_MD_H_DIR = $(shell (ls "$(JAVA_JNI_H_DIR)"/jni_md.h "$(JAVA_JNI_H_DIR)"/*/jni_md.h | head -n 1 | sed 's/\/jni_md.h//') 2>/dev/null)
 JAVA_INCLUDES = -I $(JAVA_JNI_H_DIR) -I $(JAVA_JNI_MD_H_DIR)
@@ -294,9 +286,9 @@ JAVA_INCLUDES = -I $(JAVA_JNI_H_DIR) -I $(JAVA_JNI_MD_H_DIR)
 # Main part of Makefile #
 #########################
 
-MAKE_DIRS = dd jdd odd dv prism mtbdd sparse hybrid parser settings userinterface pepa/compiler simulator jltl2ba jltl2dstar explicit pta param strat automata
+MAKE_DIRS = dd jdd odd dv prism mtbdd sparse hybrid parser settings userinterface pepa/compiler simulator jltl2ba jltl2dstar explicit pta param strat
 
-EXT_PACKAGES = lpsolve55 lp_solve_5.5_java
+EXT_PACKAGES = lpsolve55 lp_solve_5.5_java gurobi
 
 .PHONY: clean javadoc tests
 
@@ -323,40 +315,40 @@ cuddpackageforce: checks
 	  $(MAKE) C="$(C)" CC="$(C)" CPP="$(CPP)" \
 	  XCFLAGS="$(CUDD_XCFLAGS)";
 
-# use this to force a rebuild (with javacc) of the main parser
-parser:
-	@echo Making parser ...; \
-	cd src/parser && \
-	$(MAKE) SRC_DIR="$(SRC_DIR)" touch && \
-	$(MAKE) \
-	SRC_DIR="$(SRC_DIR)" \
-	CLASSES_DIR="$(CLASSES_DIR)" \
-	JAVAC="$(JAVAC) $(JFLAGS)" \
-	JAVACC="$(JAVACC)" \
-	JAVAH="$(JAVAH) $(JFLAGS)" \
-	CLASSPATHSEP="$(CLASSPATHSEP)"
-
 extpackages: checks
+	@mkdir -p classes;
 	@for ext in $(EXT_PACKAGES); do \
 	  echo Making $$ext ...; \
 	  (cd ext/$$ext && \
 	  $(MAKE) \
-	  OSTYPE="$(OSTYPE)" \
-	  ARCH="$(ARCH)" \
+          OSTYPE="$(OSTYPE)" \
+          ARCH="$(ARCH)" \
+	  CUDD_DIR="$(CUDD_DIR)" \
+	  SRC_DIR="$(SRC_DIR)" \
+	  CLASSES_DIR="$(CLASSES_DIR)" \
+	  OBJ_DIR="$(OBJ_DIR)" \
+	  LIB_DIR="$(LIB_DIR)" \
+	  INCLUDE_DIR="$(INCLUDE_DIR)" \
+	  JAVA_INCLUDES="$(JAVA_INCLUDES)" \
+	  JAVA_JNI_H_DIR="$(JAVA_JNI_H_DIR)" \
+	  JAVA_JNI_MD_H_DIR="$(JAVA_JNI_MD_H_DIR)" \
 	  C="$(C)" \
 	  CPP="$(CPP)" \
 	  LD="$(LD)" \
+	  JAVAC="$(JAVAC) $(JFLAGS)" \
+	  JAVACC="$(JAVACC)" \
+	  JAVAH="$(JAVAH)" \
 	  CFLAGS="$(CFLAGS)" \
 	  CPPFLAGS="$(CPPFLAGS)" \
 	  LDFLAGS="$(LDFLAGS)" \
 	  SHARED="$(SHARED)" \
+	  EXE="$(EXE)" \
 	  LIBPREFIX="$(LIBPREFIX)" \
 	  LIBSUFFIX="$(LIBSUFFIX)" \
 	  LIBMATH="$(LIBMATH)" \
-	  BINDISTSUFFIX="$(BINDISTSUFFIX)" \
-	  JAVA_DIR="$(JAVA_DIR)" \
-	  JAVA_JNI_H_DIR="$(JAVA_JNI_H_DIR)" \
-	  JAVA_JNI_MD_H_DIR="$(JAVA_JNI_MD_H_DIR)" \
+	  CLASSPATHSEP="$(CLASSPATHSEP)" \
+          BINDISTSUFFIX="$(BINDISTSUFFIX)" \
+          JAVA_DIR="$(JAVA_DIR)" \
 	  ) || exit 1; \
 	done
 
@@ -382,7 +374,7 @@ make_dirs:
 	  LD="$(LD)" \
 	  JAVAC="$(JAVAC) $(JFLAGS)" \
 	  JAVACC="$(JAVACC)" \
-	  JAVAH="$(JAVAH) $(JFLAGS)" \
+	  JAVAH="$(JAVAH)" \
 	  CFLAGS="$(CFLAGS)" \
 	  CPPFLAGS="$(CPPFLAGS)" \
 	  LDFLAGS="$(LDFLAGS)" \
@@ -401,15 +393,15 @@ make_dirs:
 	fi
 
 tests: testslocal
-	@if [ -d ~/prism/prism-tests ]; then \
-	  cd ~/prism/prism-tests && $(PWD)/etc/scripts/prism-auto -t -m . -p $(PWD)/bin/prism --nailgun --ngprism $(PWD)/bin/ngprism; \
+	@if [ -d ~/prism-tests ]; then \
+	  cd ~/prism-tests && $(PWD)/etc/scripts/prism-auto -t -m . -p $(PWD)/bin/prism; \
 	else \
 	  echo "Skipping tests"; \
 	fi
 
 testslocal:
 	@if [ -d tests ]; then \
-	  cd tests && $(PWD)/etc/scripts/prism-auto -t -m . -p $(PWD)/bin/prism --nailgun --ngprism $(PWD)/bin/ngprism; \
+	  cd tests && $(PWD)/etc/scripts/prism-auto -t -m . -p $(PWD)/bin/prism; \
 	else \
 	  echo "Skipping local tests"; \
 	fi
@@ -420,8 +412,6 @@ bin_scripts:
 	  echo Copying "$(SRC_DIR)/bin/$$target -> bin/$$target_trunc" && \
 	  cp $(SRC_DIR)/bin/$$target bin/$$target_trunc; \
 	done;
-	@echo Copying "$(OBJ_DIR)/prism/ngprism$(EXE) -> bin/ngprism$(EXE)" && \
-	cp $(OBJ_DIR)/prism/ngprism$(EXE) bin/ngprism$(EXE)
 	@./install.sh silent
 
 # Unless VERSION has been passed in (as VERSION=xxx),
@@ -438,14 +428,14 @@ add_rev:
 
 dist_src: dist_check_version dist_copy clean_all dist_tidy
 
-dist_bin: JFLAGS += -source 1.7 -target 1.7
+# dist_bin: JFLAGS += -source 1.6 -target 1.6
 dist_bin: dist_check_version all binary dist_tidy dist_bin_copy
 
 dist_check_version:
 	@if [ "$(VERSION)" = "" ]; then echo "Usage: make dist_src/dist_bin VERSION=3.1"; exit 1; fi
 
 # Unless already present, copy cudd/examples/doc to this dir
-# By default, cudd/examples from svn trunk and doc from ~/prism/prism-doc; other options commented out below
+# By default, cudd/examples from svn trunk and doc from ~/prism-doc; other options commented out below
 dist_copy:
 	@if [ -e cudd ]; then \
 	  echo "Warning: Not copying cudd since directory already exists"; \
@@ -462,10 +452,10 @@ dist_copy:
 	@if [ -e doc ]; then \
 	  echo "Warning: Not copying manual since directory doc already exists"; \
 	else \
-	  echo "Installing manual from ~/prism/prism-doc..."; \
+	  echo "Installing manual from ~/prism-doc..."; \
 	  mkdir doc; \
-	  (SRC_DIST_DIR=`/bin/pwd`; cd ~/prism/prism-doc; tar cf - manual | tar xf - -C "$$SRC_DIST_DIR"/doc); \
-	  cp ~/prism/prism-doc/manual.pdf doc; \
+	  (SRC_DIST_DIR=`/bin/pwd`; cd ~/prism-doc; tar cf - manual | tar xf - -C "$$SRC_DIST_DIR"/doc); \
+	  cp ~/prism-doc/manual.pdf doc; \
 	fi
 
 dist_bin_copy:
@@ -516,13 +506,10 @@ tarcf:
 	echo Building tar file "../"$$TARCF_DIR".tar.gz" && \
 	(cd ..; tar cfz $$TARCF_DIR".tar.gz" $$TARCF_DIR)
 
-count_loc:
-	find $(SRC_DIR) -name '*.java' -o -name '*.cc' | xargs wc -l
-
-PRISM_CLASSPATH = "$(CLASSES_DIR)$(CLASSPATHSEP)$(LIB_DIR)/*"
+PRISM_CLASSPATH = "$(THIS_DIR)/$(PRISM_DIR_REL)/$(CLASSES_DIR)$(CLASSPATHSEP)$(THIS_DIR)/$(PRISM_DIR_REL)/lib/*"
 
 javadoc:
-	@JAVADOC_DIRS=`echo $(MAKE_DIRS) | sed 's/\//./g' | sed 's/ /:/g'` && \mkdir -p javadoc; javadoc $(JFLAGS) -d javadoc -overview $(SRC_DIR)/overview.html -sourcepath $(SRC_DIR) -classpath $(SRC_DIR)$(CLASSPATHSEP)$(PRISM_CLASSPATH) -subpackages $$JAVADOC_DIRS -exclude parser
+	@JAVADOC_DIRS=`echo $(MAKE_DIRS) | sed 's/\//./g' | sed 's/ /:/g'` && \mkdir -p javadoc; javadoc -d javadoc -overview $(SRC_DIR)/overview.html -sourcepath $(SRC_DIR) -classpath $(SRC_DIR)$(CLASSPATHSEP)$(PRISM_CLASSPATH) -subpackages $$JAVADOC_DIRS
 
 clean: checks
 	@(for dir in $(MAKE_DIRS); do \
@@ -587,7 +574,7 @@ clean_strat: checks
 
 checks:
 	@(if [ "$(OSTYPE)" != "linux" -a "$(OSTYPE)" != "solaris" -a "$(OSTYPE)" != "cygwin" -a "$(OSTYPE)" != "darwin" ]; then \
-	  echo "\033[33mTo compile PRISM, the environment variable OSTYPE"; \
+	  echo "To compile PRISM, the environment variable OSTYPE"; \
 	  echo "must be set to one of: linux, solaris, cygwin or darwin,"; \
 	  echo "depending on which operating system you are using."; \
 	  echo "This is not the case on your system. Please specify"; \
@@ -598,11 +585,10 @@ checks:
 	  echo "Alternatively, if you wish, you can set the environment"; \
 	  echo "variable yourself (using setenv or export) or you"; \
 	  echo "can edit the value of OSTYPE directly in the Makefile."; \
-	  echo "\033[0m"; \
 	  exit 1; \
 	fi; \
 	if [ "$(JAVA_DIR)" = "" ]; then \
-	  echo "\033[33mPRISM was unable to find the directory which contains"; \
+	  echo "PRISM was unable to find the directory which contains"; \
 	  echo "your Java distribution. Please specify this manually to"; \
 	  echo "make, as in these examples:"; \
 	  echo; \
@@ -614,30 +600,25 @@ checks:
 	  echo "Alternatively, if you wish, you can set the environment"; \
 	  echo "variable yourself (using setenv or export) or you"; \
 	  echo "can edit the value of JAVA_DIR directly in the Makefile."; \
-	  echo "\033[0m"; \
 	  exit 1; \
 	fi; \
 	if [ ! -d "$(JAVA_DIR)" ]; then \
-	  echo "\033[33mJava directory \"$(JAVA_DIR)\" does not exist."; \
-	  echo "\033[0m"; \
+	  echo "Java directory \"$(JAVA_DIR)\" does not exist."; \
 	  exit 1; \
 	fi; \
 	if [ ! -f "$(JAVA_JNI_H_DIR)"/jni.h ]; then \
-	  echo "\033[33mCould not locate JNI header jni.h within \"$(JAVA_DIR)\"."; \
+	  echo "Could not locate JNI header jni.h within \"$(JAVA_DIR)\"."; \
 	  echo "You may need to set JAVA_DIR by hand. See the PRISM manual for details."; \
-	  echo "\033[0m"; \
 	  exit 1; \
 	fi; \
 	if [ ! -f "$(JAVA_JNI_MD_H_DIR)"/jni_md.h ]; then \
-	  echo "\033[33mCould not locate JNI header jni_md.h within \"$(JAVA_DIR)\"."; \
+	  echo "Could not locate JNI header jni_md.h within \"$(JAVA_DIR)\"."; \
 	  echo "You may need to set JAVA_DIR by hand. See the PRISM manual for details."; \
-	  echo "\033[0m"; \
 	  exit 1; \
 	fi; \
 	echo "VERSION: $(VERSION)"; \
 	echo "OSTYPE/ARCH: $(OSTYPE) $(ARCH)"; \
 	echo "JAVA_DIR: $(JAVA_DIR)"; \
-	echo "JAVA_DIR_BACKUP: $(JAVA_DIR_BACKUP)"; \
 	echo "JAVAC: "`which $(JAVAC)` \
 	)
 
