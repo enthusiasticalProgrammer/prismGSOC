@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
@@ -129,6 +132,17 @@ public class TestMultiLongRun
 	{
 		StateValues sv = mdp13.checkExpressionMultiObjective(m1, e3);
 		assertNotEquals(infeasible, sv);
+	}
+
+	@Test
+	public void isFeasibleWithNoConstraints() throws PrismException
+	{
+		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<@NonNull MDPConstraint>(), new HashSet<@NonNull MDPObjective>(),
+				new HashSet<@NonNull MDPExpectationConstraint>(), "Linear programming");
+		mlr.createMultiLongRunLP();
+		mlr.solveDefault();
+		assertNotNull(mlr.getStrategy());
+
 	}
 
 	/** 
