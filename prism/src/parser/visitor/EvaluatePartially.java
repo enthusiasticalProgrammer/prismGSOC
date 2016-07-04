@@ -28,7 +28,6 @@ package parser.visitor;
 
 import parser.*;
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Evaluate partially: replace some constants and variables with actual values. 
@@ -43,7 +42,7 @@ public class EvaluatePartially extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionConstant e) throws PrismLangException
+	public Object visit(ExpressionConstant e)
 	{
 		Object val = ec.getConstantValue(e.getName());
 		if (val == null) {
@@ -54,7 +53,7 @@ public class EvaluatePartially extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionVar e) throws PrismLangException
+	public Object visit(ExpressionVar e)
 	{
 		Object val = ec.getVarValue(e.getName(), e.getIndex());
 		if (val == null) {

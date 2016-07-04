@@ -27,7 +27,6 @@
 package prism;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -91,7 +90,7 @@ public class Tile
 	 * Returns true if {@code point} lies strictly above the hyperplane given
 	 * by this tile.
 	 */
-	protected boolean pointAboveHyperplane(Point point) throws PrismException
+	protected boolean pointAboveHyperplane(Point point)
 	{
 		//System.out.println("t: " + this);
 		for (Point cp : this.cornerPoints) {
@@ -164,7 +163,7 @@ public class Tile
 	 * which is {@code tolerance} far from the original tiles, the new tile will
 	 * be considered finished.
 	 */
-	public List<Tile> splitByPoint(Point point, List<Point> otherPoints, double tolerance) throws PrismException
+	public List<Tile> splitByPoint(Point point, List<Point> otherPoints, double tolerance)
 	{
 		Point weights = Tile.getWeightsForTile(this);
 		double pointWeight = 0;

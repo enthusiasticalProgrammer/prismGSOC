@@ -506,7 +506,7 @@ public class PathFull extends Path implements PathFullInfo
 	 * Pass the path to a PathDisplayer object, running in a new thread. 
 	 * @param displayer The PathDisplayer
 	 */
-	public void displayThreaded(PathDisplayer displayer) throws PrismException
+	public void displayThreaded(PathDisplayer displayer)
 	{
 		// In the absence of model info, do nothing
 		if (modulesFile == null) {
@@ -536,7 +536,7 @@ public class PathFull extends Path implements PathFullInfo
 	 * Plot path on a graph.
 	 * @param graphModel Graph on which to plot path
 	 */
-	public void plotOnGraph(Graph graphModel) throws PrismException
+	public void plotOnGraph(Graph graphModel)
 	{
 		PathToGraph displayer = new PathToGraph(graphModel, modulesFile);
 		displayThreaded(displayer);

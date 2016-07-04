@@ -118,7 +118,7 @@ public class ModuleDrawingPane extends JPanel
 
 	/** Method used for printing.*/
 	@Override
-	public int print(Graphics g, PageFormat pf, int page) throws PrinterException
+	public int print(Graphics g, PageFormat pf, int page)
 	{
 		if (page >= 1)
 			return Printable.NO_SUCH_PAGE;

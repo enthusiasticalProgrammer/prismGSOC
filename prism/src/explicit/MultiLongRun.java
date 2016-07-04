@@ -97,6 +97,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.mecs = computeMECs();
 		computeOffsets();
 		this.solver = initialiseSolver();
+
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
 					"The problem you want to solve requires to solve an LP with 2^30>=one billion variables. This is more than we are supporting");
@@ -122,6 +123,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		} catch (ClassNotFoundException ex) {
 			throw new PrismException("Cannot load the class required for LP solving. Was gurobi.jar file present in compilation time and is it present now?");
 		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
 			throw new PrismException(
 					"Cannot load the class required for LP solving, it seems that gurobi.jar file is missing. Is GUROBI_HOME variable set properly?");
 		} catch (InvocationTargetException e) {
@@ -165,7 +167,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * This method does all the required initialisations that are required for the
 	 * above mentioned methods to work correctly.
 	 */
-	void computeOffsets() throws PrismException
+	void computeOffsets()
 	{
 		this.xOffsetArr = new int[model.getNumStates()];
 		int current = 0;

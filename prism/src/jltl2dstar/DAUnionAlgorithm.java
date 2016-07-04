@@ -91,7 +91,7 @@ public class DAUnionAlgorithm
 	 * @param elem The edge label 
 	 * @return result_t the shared_ptr of the successor state
 	 */
-	public UnionState.Result delta(UnionState from_state, APElement elem) throws PrismException
+	public UnionState.Result delta(UnionState from_state, APElement elem)
 	{
 		DA_State state1_to = _da_1.get(from_state.da_state_1).edges().get(elem);
 		DA_State state2_to = _da_2.get(from_state.da_state_2).edges().get(elem);

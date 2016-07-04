@@ -106,7 +106,7 @@ public class ChoiceSetting extends Setting
 	}
 
 	@Override
-	public Object parseStringValue(String string) throws SettingException
+	public Object parseStringValue(String string)
 	{
 		return string;
 	}

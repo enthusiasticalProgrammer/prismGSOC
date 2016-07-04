@@ -1254,7 +1254,7 @@ public class Modules2MTBDD
 		return sysDDs;
 	}
 
-	private ComponentDDs translateSynchronising(ComponentDDs compDDs1, ComponentDDs compDDs2) throws PrismException
+	private ComponentDDs translateSynchronising(ComponentDDs compDDs1, ComponentDDs compDDs2)
 	{
 		ComponentDDs compDDs;
 
@@ -2233,7 +2233,7 @@ public class Modules2MTBDD
 		mainLog.println("Symmetry complete: " + (numSymmModules - i) + " iterations, " + numSwaps + " swaps, " + clock / 1000.0 + " seconds");
 	}
 
-	private void computeSymmetryFilters(JDDNode reach) throws PrismException
+	private void computeSymmetryFilters(JDDNode reach)
 	{
 		int i;
 		JDDNode tmp;

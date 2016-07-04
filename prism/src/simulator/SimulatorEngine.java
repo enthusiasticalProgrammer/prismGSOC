@@ -822,7 +822,7 @@ public class SimulatorEngine extends PrismComponent
 	/**
 	 * Reset samplers for any loaded properties.
 	 */
-	private void resetSamplers() throws PrismLangException
+	private void resetSamplers()
 	{
 		for (Sampler sampler : propertySamplers) {
 			sampler.reset();
@@ -907,7 +907,7 @@ public class SimulatorEngine extends PrismComponent
 	 * Returns the index of a variable name, as stored by the simulator for the current model.
 	 * Returns -1 if the action name does not exist. 
 	 */
-	public int getIndexOfVar(String name) throws PrismException
+	public int getIndexOfVar(String name)
 	{
 		return varList.getIndex(name);
 	}
@@ -1147,7 +1147,7 @@ public class SimulatorEngine extends PrismComponent
 	 * Plot the current path on a Graph.
 	 * @param graphModel Graph on which to plot path
 	 */
-	public void plotPath(Graph graphModel) throws PrismException
+	public void plotPath(Graph graphModel)
 	{
 		((PathFull) path).plotOnGraph(graphModel);
 	}

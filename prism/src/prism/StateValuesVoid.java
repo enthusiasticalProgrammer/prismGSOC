@@ -36,7 +36,7 @@ import jdd.JDDVars;
 /**
  * Dummy class implementing StateValues to return miscellaneous (single valued) results, typically of type "void".
  */
-public class StateValuesVoid implements StateValues
+public final class StateValuesVoid implements StateValues
 {
 	/** The stored object */
 	private Object value = null;
@@ -84,7 +84,7 @@ public class StateValuesVoid implements StateValues
 	}
 
 	@Override
-	public void readFromFile(File file) throws PrismException
+	public void readFromFile(File file)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -186,7 +186,7 @@ public class StateValuesVoid implements StateValues
 	}
 
 	@Override
-	public StateValues sumOverDDVars(JDDVars sumVars, Model newModel) throws PrismException
+	public StateValues sumOverDDVars(JDDVars sumVars, Model newModel)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -222,37 +222,37 @@ public class StateValuesVoid implements StateValues
 	}
 
 	@Override
-	public void print(PrismLog log) throws PrismException
+	public void print(PrismLog log)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates) throws PrismException
+	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices) throws PrismException
+	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public StateValues deepCopy() throws PrismException
+	public StateValues deepCopy()
 	{
 		throw new UnsupportedOperationException();
 	}

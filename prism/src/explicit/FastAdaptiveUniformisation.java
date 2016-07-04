@@ -463,7 +463,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	/**
 	 * Constructor.
 	 */
-	public FastAdaptiveUniformisation(PrismComponent parent, ModelGenerator modelGen) throws PrismException
+	public FastAdaptiveUniformisation(PrismComponent parent, ModelGenerator modelGen)
 	{
 		super(parent);
 

@@ -517,8 +517,6 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 					return;
 				try {
 					graph.exportToEPS(plug.getChooserFile(), imageDialog.getExportWidth(), imageDialog.getExportHeight());
-				} catch (GraphException ex) {
-					plug.error("Could not export EPS file:\n" + ex.getMessage());
 				} catch (IOException ex) {
 					plug.error("Could not export EPS file:\n" + ex.getMessage());
 				}

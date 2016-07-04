@@ -263,7 +263,7 @@ public class GUIPrism extends JFrame
 	 *	  <LI>Status Bar at the bottom
 	 *  </UL>
 	 */
-	private void initComponents() throws GUIException
+	private void initComponents()
 	{
 		JMenuBar menuBar = new JMenuBar();
 		JPanel toolPanel = new JPanel();

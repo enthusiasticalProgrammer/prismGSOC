@@ -48,7 +48,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 			transientDistribution[state] = getTransientDistributionAt(state, transientSum, lpResult);
 		}
 
-		for (BitSet mec : mecs) {
+		for (BitSet mec : this.mecs) {
 			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
 			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
 				switchProbability[state] = mecDistribution;

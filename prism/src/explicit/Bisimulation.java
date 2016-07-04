@@ -53,7 +53,7 @@ public class Bisimulation extends PrismComponent
 	/**
 	 * Construct a new Bisimulation object.
 	 */
-	public Bisimulation(PrismComponent parent) throws PrismException
+	public Bisimulation(PrismComponent parent)
 	{
 		super(parent);
 	}

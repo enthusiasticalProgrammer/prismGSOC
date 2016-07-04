@@ -48,7 +48,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	/**
 	 * Create a new CTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public CTMCModelChecker(PrismComponent parent) throws PrismException
+	public CTMCModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 	}
@@ -333,7 +333,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * @param target Target states
 	 */
 	@Override
-	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target) throws PrismException
+	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target)
 	{
 		mainLog.println("Building embedded DTMC...");
 		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
@@ -886,7 +886,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	/**
 	 * Create a new DTMC model checker with the same settings as this one. 
 	 */
-	private DTMCModelChecker createDTMCModelChecker() throws PrismException
+	private DTMCModelChecker createDTMCModelChecker() throws PrismNotSupportedException
 	{
 		DTMCModelChecker mcDTMC = new DTMCModelChecker(this);
 		mcDTMC.inheritSettings(this);
@@ -903,7 +903,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	// compute... methods to use a DTMCModelChecker for the computations instead
 
 	@Override
-	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
@@ -921,7 +921,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	}
 
 	@Override
-	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
@@ -939,7 +939,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	}
 
 	@Override
-	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");

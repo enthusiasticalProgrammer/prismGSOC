@@ -49,7 +49,7 @@ public class PrismNG
 	 * <br/>
 	 * Sets the working directory to that of the client.
 	 */
-	public synchronized static void nailMain(NGContext context) throws InterruptedException
+	public synchronized static void nailMain(NGContext context)
 	{
 		currentNailGunContext = context;
 		if (PrismNative.setWorkingDirectory(context.getWorkingDirectory()) != 0) {

@@ -445,7 +445,7 @@ public abstract class ModelExplicit implements Model
 	public abstract void exportToPrismLanguage(String filename) throws PrismException;
 
 	@Override
-	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException
+	public void exportStates(int exportType, VarList varList, PrismLog log)
 	{
 		if (statesList == null)
 			return;

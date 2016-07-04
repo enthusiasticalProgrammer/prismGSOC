@@ -503,7 +503,7 @@ public class StateValues implements StateVector
 	/**
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */
-	public void applyEquals(StateValues sv) throws PrismException
+	public void applyEquals(StateValues sv)
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -596,7 +596,7 @@ public class StateValues implements StateVector
 	/**
 	 * Modify the vector by applying 'not-equals' with operand {@code sv}.
 	 */
-	public void notEquals(StateValues sv) throws PrismException
+	public void notEquals(StateValues sv)
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -1740,7 +1740,7 @@ public class StateValues implements StateVector
 	/**
 	 * Make a (deep) copy of this vector
 	 */
-	public StateValues deepCopy() throws PrismException
+	public StateValues deepCopy()
 	{
 		StateValues sv = new StateValues();
 		sv.type = type;

@@ -34,7 +34,6 @@ import mtbdd.*;
 import sparse.*;
 import hybrid.*;
 import parser.ast.*;
-import parser.type.*;
 
 /*
  * Model checker for CTMCs.

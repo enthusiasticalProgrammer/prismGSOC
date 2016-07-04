@@ -761,17 +761,17 @@ public class PrismSettings implements Observer
 	protected String exportPropAutType = "txt";
 	protected String exportPropAutFilename = "da.txt";
 
-	public void setExportPropAut(boolean b) throws PrismException
+	public void setExportPropAut(boolean b)
 	{
 		exportPropAut = b;
 	}
 
-	public void setExportPropAutType(String s) throws PrismException
+	public void setExportPropAutType(String s)
 	{
 		exportPropAutType = s;
 	}
 
-	public void setExportPropAutFilename(String s) throws PrismException
+	public void setExportPropAutFilename(String s)
 	{
 		exportPropAutFilename = s;
 	}
@@ -1460,7 +1460,7 @@ public class PrismSettings implements Observer
 	 * 
 	 * @return a pair containing the switch name and a mapping from options to values.  
 	 */
-	private static Pair<String, Map<String, String>> splitSwitch(String sw) throws PrismException
+	private static Pair<String, Map<String, String>> splitSwitch(String sw)
 	{
 		// Remove "-"
 		sw = sw.substring(1);

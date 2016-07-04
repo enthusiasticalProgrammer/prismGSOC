@@ -103,7 +103,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 	}
 
 	@Override
-	public Object visit(FormulaList e) throws PrismLangException
+	public Object visit(FormulaList e)
 	{
 		// Override - don't need to do any semantic checks on formulas
 		// (they will have been expanded in place, where needed)
@@ -184,7 +184,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 	}
 
 	@Override
-	public void visitPre(Module e) throws PrismLangException
+	public void visitPre(Module e)
 	{
 		// Register the fact we are entering a module
 		//inModule = e;
@@ -215,7 +215,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 	}
 
 	@Override
-	public void visitPost(Module e) throws PrismLangException
+	public void visitPost(Module e)
 	{
 		// Register the fact we are leaving a module
 		//inModule = null;
@@ -235,7 +235,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 	}
 
 	@Override
-	public void visitPre(Update e) throws PrismLangException
+	public void visitPre(Update e)
 	{
 		// Register the fact we are entering an update
 		//inUpdate = e;

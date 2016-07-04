@@ -74,7 +74,7 @@ public class SemanticCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPre(ModulesFile e) throws PrismLangException
+	public void visitPre(ModulesFile e)
 	{
 		// Register the fact we are entering a model
 		inModulesFile = e;
@@ -125,7 +125,7 @@ public class SemanticCheck extends ASTTraverse
 	}
 
 	@Override
-	public Object visit(FormulaList e) throws PrismLangException
+	public Object visit(FormulaList e)
 	{
 		// Override - don't need to do any semantic checks on formulas
 		// (they will have been expanded in place, where needed)
@@ -206,7 +206,7 @@ public class SemanticCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPre(Module e) throws PrismLangException
+	public void visitPre(Module e)
 	{
 
 	}
@@ -236,7 +236,7 @@ public class SemanticCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(Module e) throws PrismLangException
+	public void visitPost(Module e)
 	{
 
 	}
@@ -255,7 +255,7 @@ public class SemanticCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPre(Update e) throws PrismLangException
+	public void visitPre(Update e)
 	{
 
 	}

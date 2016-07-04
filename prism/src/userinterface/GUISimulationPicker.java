@@ -725,8 +725,6 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 					}
 				} catch (NumberFormatException e) {
 					// Any problems, don't update text field
-				} catch (PrismException e) {
-					// Any problems, don't update text field
 				}
 				// If method changes, display last valid values
 				if (autoChange) {

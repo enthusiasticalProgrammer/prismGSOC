@@ -33,7 +33,6 @@ import javax.swing.border.*;
 import java.util.*;
 
 import prism.*;
-import parser.type.*;
 import userinterface.*;
 
 public class GUIExperimentPicker extends javax.swing.JDialog

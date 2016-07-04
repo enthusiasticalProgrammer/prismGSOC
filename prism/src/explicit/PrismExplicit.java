@@ -107,7 +107,7 @@ public class PrismExplicit extends PrismComponent
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws PrismException
 	{
 		// can only do ordered version of export for explicit engine
 		if (!ordered) {

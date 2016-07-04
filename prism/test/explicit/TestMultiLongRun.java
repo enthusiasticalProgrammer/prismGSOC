@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNull;

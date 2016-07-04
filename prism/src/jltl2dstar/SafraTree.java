@@ -271,7 +271,7 @@ public class SafraTree implements NBA2DAState
 			} else {
 				if (_nodes.get(i).lessThan(other._nodes.get(i))) {
 					return true;
-				} else if ( ! _nodes.get(i).equals(other._nodes.get(i))) {
+				} else if (!_nodes.get(i).equals(other._nodes.get(i))) {
 					return false;
 				}
 			}

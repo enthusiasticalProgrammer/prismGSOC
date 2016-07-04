@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import explicit.Distribution;
 import explicit.Model;
-import prism.PrismException;
 import prism.PrismLog;
 
 /**
@@ -73,7 +72,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public @NonNull Model buildProduct(@Nullable Model model) throws PrismException
+	public @NonNull Model buildProduct(@Nullable Model model)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}

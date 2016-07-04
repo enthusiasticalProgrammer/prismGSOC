@@ -27,7 +27,6 @@
 
 package userinterface.model.graphicModel;
 
-import java.io.*;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -139,14 +138,6 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 
 	@Override
 	public void selectAll()
-	{
-	}
-
-	public void load(File f) throws PrismException, IOException, FileNotFoundException
-	{
-	}
-
-	public void save(File f) throws PrismException, IOException, FileNotFoundException
 	{
 	}
 

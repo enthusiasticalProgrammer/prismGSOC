@@ -216,7 +216,7 @@ public class Simplify extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionFormula e) throws PrismLangException
+	public Object visit(ExpressionFormula e)
 	{
 		// If formula has an attached definition, just replace it with that
 		return e.getDefinition() != null ? e.getDefinition() : e;

@@ -657,7 +657,7 @@ public class ResultsCollection
 		}
 
 		@Override
-		public Object getResult(Values getThese) throws PrismException
+		public Object getResult(Values getThese)
 		{
 			return val;
 		}

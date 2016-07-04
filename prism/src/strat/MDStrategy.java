@@ -32,7 +32,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import explicit.Distribution;
 import explicit.Model;
-import prism.PrismException;
 import prism.PrismLog;
 
 /**
@@ -103,13 +102,13 @@ public abstract class MDStrategy implements Strategy
 	}
 
 	@Override
-	public void updateMemory(int action, int state) throws InvalidStrategyStateException
+	public void updateMemory(int action, int state)
 	{
 		//Do nothing, because the strategy is memoryless
 	}
 
 	@Override
-	public Distribution getNextMove(int state) throws InvalidStrategyStateException
+	public Distribution getNextMove(int state)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}
@@ -127,7 +126,7 @@ public abstract class MDStrategy implements Strategy
 	}
 
 	@Override
-	public @NonNull Model buildProduct(@Nullable Model model) throws PrismException
+	public @NonNull Model buildProduct(@Nullable Model model)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}
@@ -163,7 +162,7 @@ public abstract class MDStrategy implements Strategy
 	}
 
 	@Override
-	public void setMemory(Object memory) throws InvalidStrategyStateException
+	public void setMemory(Object memory)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}

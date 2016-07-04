@@ -60,7 +60,7 @@ import acceptance.AcceptanceType;
 public class LTL2DA extends PrismComponent
 {
 
-	public LTL2DA(PrismComponent parent) throws PrismException
+	public LTL2DA(PrismComponent parent)
 	{
 		super(parent);
 	}

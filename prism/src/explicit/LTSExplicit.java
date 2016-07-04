@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import strat.MDStrategy;
 
@@ -178,13 +177,13 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void buildFromPrismExplicit(String filename) throws PrismException
+	public void buildFromPrismExplicit(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -212,7 +211,7 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -233,7 +232,7 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}

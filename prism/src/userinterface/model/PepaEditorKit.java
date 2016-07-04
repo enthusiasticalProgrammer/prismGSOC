@@ -140,7 +140,7 @@ class PepaView extends PlainView
 	}
 
 	@Override
-	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = findStartOfLine(p0, getDocument());
 		int enLine = findEndOfLine(p1, getDocument());
@@ -181,7 +181,7 @@ class PepaView extends PlainView
 	}
 
 	@Override
-	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = findStartOfLine(p0, getDocument());
 		int enLine = findEndOfLine(p1, getDocument());

@@ -34,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import prism.PrismComponent;
-import prism.PrismException;
 
 /**
  * Tarjan's SCC algorithm operating on a Model object.
@@ -66,7 +65,7 @@ public class SCCComputerTarjan extends SCCComputer
 	/**
 	 * Build (B)SCC computer for a given model.
 	 */
-	public SCCComputerTarjan(PrismComponent parent, Model model) throws PrismException
+	public SCCComputerTarjan(PrismComponent parent, Model model)
 	{
 		super(parent);
 		this.model = model;

@@ -140,7 +140,7 @@ public class StateModelChecker extends PrismComponent
 	/**
 	 * Create a new StateModelChecker, inherit basic state from parent (unless null).
 	 */
-	public StateModelChecker(PrismComponent parent) throws PrismException
+	public StateModelChecker(PrismComponent parent)
 	{
 		super(parent);
 

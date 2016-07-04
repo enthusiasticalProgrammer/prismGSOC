@@ -80,7 +80,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 	}
 
 	@Override
-	public Object visit(FormulaList e) throws PrismLangException
+	public Object visit(FormulaList e)
 	{
 		// Override - don't need to do any semantic checks on formulas
 		// (they will have been expanded in place, where needed)

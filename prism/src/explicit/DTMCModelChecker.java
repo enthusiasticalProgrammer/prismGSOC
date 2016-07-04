@@ -52,7 +52,6 @@ import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 
 import parser.ast.ExpressionTemporal;
-import parser.ast.ExpressionUnaryOp;
 import parser.type.TypeDouble;
 
 /**
@@ -63,7 +62,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Create a new DTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public DTMCModelChecker(PrismComponent parent) throws PrismException
+	public DTMCModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 	}
@@ -312,6 +311,9 @@ public class DTMCModelChecker extends ProbModelChecker
 		return rewards;
 	}
 
+	/**
+	 * @throws PrismException is there, because it is needed in CTMCModelChecker
+	 */
 	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -360,6 +362,9 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
+	/**
+	 * @throws PrismException because CTMCModelChecker throws it while overriding the method 
+	 */
 	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -574,7 +579,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param dtmc The DTMC
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target) throws PrismException
+	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target)
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -1202,7 +1207,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet target, int k)
 	{
 		return computeBoundedReachProbs(dtmc, null, target, k, null, null);
 	}
@@ -1216,7 +1221,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedUntilProbs(DTMC dtmc, BitSet remain, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedUntilProbs(DTMC dtmc, BitSet remain, BitSet target, int k)
 	{
 		return computeBoundedReachProbs(dtmc, remain, target, k, null, null);
 	}
@@ -1232,7 +1237,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param init Initial solution vector - pass null for default
 	 * @param results Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet remain, BitSet target, int k, double init[], double results[]) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet remain, BitSet target, int k, double init[], double results[])
 	{
 		ModelCheckerResult res = null;
 		BitSet unknown;

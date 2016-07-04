@@ -42,7 +42,6 @@ import parser.visitor.ASTTraverseModify;
 import prism.ModelType;
 import prism.PrismComponent;
 import prism.PrismException;
-import prism.PrismLangException;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
 import explicit.IndexedSet;
@@ -79,7 +78,7 @@ public final class ModelBuilder extends PrismComponent
 	/**
 	 * Constructor
 	 */
-	public ModelBuilder(PrismComponent parent) throws PrismException
+	public ModelBuilder(PrismComponent parent)
 	{
 		super(parent);
 		// If present, initialise settings from PrismSettings
@@ -223,7 +222,7 @@ public final class ModelBuilder extends PrismComponent
 		modulesFile = (ModulesFile) modulesFile.accept(new ASTTraverseModify()
 		{
 			@Override
-			public Object visit(ExpressionConstant e) throws PrismLangException
+			public Object visit(ExpressionConstant e)
 			{
 				Expression expr = constExprs.get(e.getName());
 				return (expr != null) ? expr.deepCopy() : e;

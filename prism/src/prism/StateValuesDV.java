@@ -39,7 +39,7 @@ import parser.type.*;
  * Class for state-indexed vectors of (integer or double) values,
  * represented by a vector of doubles.
  */
-public class StateValuesDV implements StateValues
+public final class StateValuesDV implements StateValues
 {
 	/** Double vector storing values */
 	DoubleVector values;
@@ -366,19 +366,19 @@ public class StateValuesDV implements StateValues
 	// PRINTING STUFF
 
 	@Override
-	public void print(PrismLog log) throws PrismException
+	public void print(PrismLog log)
 	{
 		print(log, true, false, true, true);
 	}
 
 	@Override
-	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates) throws PrismException
+	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates)
 	{
 		print(log, printSparse, printMatlab, printStates, true);
 	}
 
 	@Override
-	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices) throws PrismException
+	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices)
 	{
 		int i;
 
@@ -471,13 +471,13 @@ public class StateValuesDV implements StateValues
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter)
 	{
 		printFiltered(log, filter, true, false, true, true);
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates)
 	{
 		printFiltered(log, filter, printSparse, printMatlab, printStates, true);
 	}
@@ -492,7 +492,6 @@ public class StateValuesDV implements StateValues
 	 * @param printIndizes Print indizes before states? 
 	 */
 	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices)
-			throws PrismException
 	{
 		int i;
 

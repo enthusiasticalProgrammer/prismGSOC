@@ -125,7 +125,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	// Methods for ModelGenerator interface
 
 	@Override
-	public boolean hasSingleInitialState() throws PrismException
+	public boolean hasSingleInitialState()
 	{
 		// Default to the case of a single initial state
 		return true;
@@ -144,7 +144,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	public abstract State getInitialState() throws PrismException;
 
 	@Override
-	public abstract void exploreState(State exploreState) throws PrismException;
+	public abstract void exploreState(State exploreState);
 
 	@Override
 	public abstract State getExploreState();
@@ -197,6 +197,9 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 		throw new PrismException("Label number \"" + i + "\" not defined");
 	}
 
+	/**
+	 * @throws PrismException is used in subclasses 
+	 */
 	@Override
 	public double getStateReward(int index, State state) throws PrismException
 	{

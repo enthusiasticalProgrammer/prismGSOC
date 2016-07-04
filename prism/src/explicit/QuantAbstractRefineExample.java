@@ -64,7 +64,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 	/**
 	 * Default constructor.
 	 */
-	public QuantAbstractRefineExample(PrismComponent parent) throws PrismException
+	public QuantAbstractRefineExample(PrismComponent parent)
 	{
 		super(parent);
 	}

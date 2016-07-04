@@ -467,7 +467,7 @@ public class ExplicitModel2MTBDD
 
 	// Build BDD for initial state(s)
 
-	private void buildInit() throws PrismException
+	private void buildInit()
 	{
 		start = JDD.Constant(0);
 		for (int r : modelExpl.getInitialStates()) {

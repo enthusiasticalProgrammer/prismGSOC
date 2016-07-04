@@ -64,7 +64,7 @@ public class LTLModelChecker extends PrismComponent
 	/**
 	 * Create a new DTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public LTLModelChecker(PrismComponent parent) throws PrismException
+	public LTLModelChecker(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -222,10 +222,10 @@ public class LTLModelChecker extends PrismComponent
 	}
 
 	/**
-	 * Construct the product of a DRA and a DTMC/CTMC.
-	 * @param dra The DRA
+	 * Construct the product of a DA and a DTMC/CTMC.
+	 * @param da The DA
 	 * @param model The  DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 */
 	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
 	{
@@ -1000,7 +1000,7 @@ public class LTLModelChecker extends PrismComponent
 
 		allAcceptingStates = JDD.Constant(0);
 
-		// for each acceptance pair (H_i, L_i) in the DRA, build H'_i = S x H_i
+		// for each acceptance pair (H_i, L_i) in the DA, build H'_i = S x H_i
 		// and compute the maximal ECs in H'_i
 		for (i = 0; i < dra.getAcceptance().size(); i++) {
 			// build the acceptance vectors H_i and L_i

@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 public class ToTreeString extends ASTTraverse
 {
@@ -43,7 +42,7 @@ public class ToTreeString extends ASTTraverse
 	}
 
 	@Override
-	public void defaultVisitPre(ASTElement node) throws PrismLangException
+	public void defaultVisitPre(ASTElement node)
 	{
 		// Don't print full toString() for multi-line objects
 		String s = node.toString();
@@ -54,7 +53,7 @@ public class ToTreeString extends ASTTraverse
 	}
 
 	@Override
-	public void defaultVisitPost(ASTElement node) throws PrismLangException
+	public void defaultVisitPost(ASTElement node)
 	{
 		depth--;
 	}

@@ -299,7 +299,7 @@ public class ExpressionFunc extends Expression
 		return (int) res;
 	}
 
-	public static double evaluatePowDouble(double base, double exp) throws PrismLangException
+	public static double evaluatePowDouble(double base, double exp)
 	{
 		return Math.pow(base, exp);
 	}
@@ -334,7 +334,7 @@ public class ExpressionFunc extends Expression
 		}
 	}
 
-	public static double evaluateLog(double x, double b) throws PrismLangException
+	public static double evaluateLog(double x, double b)
 	{
 		return PrismUtils.log(x, b);
 	}

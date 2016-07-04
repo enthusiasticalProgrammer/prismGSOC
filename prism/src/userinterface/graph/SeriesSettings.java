@@ -575,7 +575,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 		}
 	}
 
-	public void save(Element series) throws SettingException
+	public void save(Element series)
 	{
 		series.setAttribute("seriesHeading", getSeriesHeading());
 		series.setAttribute("lineWidth", "" + getLineWidth());

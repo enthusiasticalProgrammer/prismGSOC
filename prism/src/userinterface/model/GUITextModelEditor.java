@@ -866,6 +866,8 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 	@Override
 	public boolean canDoClipBoardAction(Action action)
 	{
+		//This is here, because of a cryptic exception in java.util and a workaround described in https://stackoverflow.com/questions/13575224/comparison-method-violates-its-general-contract-timsort-and-gridlayout
+		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		if (action == GUIPrism.getClipboardPlugin().getPasteAction()) {
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			return (clipboard.getContents(null) != null);

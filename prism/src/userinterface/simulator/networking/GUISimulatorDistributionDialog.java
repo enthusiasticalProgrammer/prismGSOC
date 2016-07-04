@@ -88,7 +88,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	}
 
 	public void show(GUIExperiment expr, Thread exprThread, ModulesFile modulesFile, PropertiesFile properties, UndefinedConstants undefinedConstants,
-			Expression propertyToCheck, SimulationInformation info) throws PrismException
+			Expression propertyToCheck, SimulationInformation info)
 	{
 		this.isExperiment = true;
 		this.modulesFile = modulesFile;
@@ -142,7 +142,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	}
 
 	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList props, SimulationInformation info)
-			throws PrismException
 	{
 		this.isExperiment = false;
 		this.modulesFile = modulesFile;
@@ -194,7 +193,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 	}
 
-	private void loadNetworkProfile(File file) throws PrismException
+	private void loadNetworkProfile(File file)
 	{
 		if (network != null)
 			network.deleteObserver(this);
@@ -573,16 +572,11 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 	private void editButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editButtonActionPerformed
 	{//GEN-HEADEREND:event_editButtonActionPerformed
-		try {
-			GUINetworkEditor edit = new GUINetworkEditor(null, network);
-			hostsTable.repaint();
-			netFile = edit.getFile(null, netFile);
-			loadNetworkProfile(netFile);
-			doHostTable();
-		} catch (PrismException e) {
-			System.out.println("The following exception occurred: " + e);
-			System.out.println("We proceed with fingers crossed");
-		}
+		GUINetworkEditor edit = new GUINetworkEditor(null, network);
+		hostsTable.repaint();
+		netFile = edit.getFile(null, netFile);
+		loadNetworkProfile(netFile);
+		doHostTable();
 	}//GEN-LAST:event_editButtonActionPerformed
 
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
@@ -669,11 +663,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 	private void stopButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_stopButtonActionPerformed
 	{//GEN-HEADEREND:event_stopButtonActionPerformed
-		try {
-			network.stopNetworking();
-		} catch (PrismException eeee) {
-			//TODO show a dialog
-		}
+		network.stopNetworking();
 	}//GEN-LAST:event_stopButtonActionPerformed
 
 	@Override
@@ -831,7 +821,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 
 		@Override
-		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1)
 		{
 			int stLine = findStartOfLine(p0, getDocument());
 			int enLine = findEndOfLine(Math.max(p0, p1 - 1), getDocument());
@@ -866,7 +856,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 
 		@Override
-		protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+		protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
 		{
 			int stLine = findStartOfLine(p0, getDocument());
 			int enLine = findEndOfLine(Math.max(p0, p1 - 1), getDocument());

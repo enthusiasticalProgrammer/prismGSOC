@@ -174,7 +174,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Create a new ProbModelChecker, inherit basic state from parent (unless null).
 	 */
-	public ProbModelChecker(PrismComponent parent) throws PrismException
+	public ProbModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 
@@ -1372,7 +1372,6 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 			// Build rewards
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
-			@NonNull
 			MDPReward mdpReward;
 			if (model instanceof DTMCProductMLRStrategyAndMDP) {
 				MDP mdp = ((DTMCProductMLRStrategyAndMDP) model).getMDP();

@@ -220,20 +220,20 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void checkForDeadlocks()
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -272,13 +272,13 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToDotFile(String filename) throws PrismException
+	public void exportToDotFile(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
+	public void exportToDotFile(String filename, BitSet mark)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -302,13 +302,13 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException
+	public void exportStates(int exportType, VarList varList, PrismLog log)
 	{
 		throw new UnsupportedOperationException();
 	}

@@ -161,7 +161,7 @@ public class HOAF2DA implements HOAConsumer
 	}
 
 	@Override
-	public void notifyHeaderStart(String version) throws HOAConsumerException
+	public void notifyHeaderStart(String version)
 	{
 		// NOP
 	}
@@ -187,7 +187,7 @@ public class HOAF2DA implements HOAConsumer
 	}
 
 	@Override
-	public void addAlias(String name, BooleanExpression<AtomLabel> labelExpr) throws HOAConsumerException
+	public void addAlias(String name, BooleanExpression<AtomLabel> labelExpr)
 	{
 		// NOP, aliases are already resolved
 	}
@@ -208,26 +208,26 @@ public class HOAF2DA implements HOAConsumer
 	}
 
 	@Override
-	public void setAcceptanceCondition(int numberOfSets, BooleanExpression<AtomAcceptance> accExpr) throws HOAConsumerException
+	public void setAcceptanceCondition(int numberOfSets, BooleanExpression<AtomAcceptance> accExpr)
 	{
 		this.accExpr = accExpr;
 	}
 
 	@Override
-	public void provideAcceptanceName(String name, List<Object> extraInfo) throws HOAConsumerException
+	public void provideAcceptanceName(String name, List<Object> extraInfo)
 	{
 		accName = name;
 		this.extraInfo = extraInfo;
 	}
 
 	@Override
-	public void setName(String name) throws HOAConsumerException
+	public void setName(String name)
 	{
 		// NOP
 	}
 
 	@Override
-	public void setTool(String name, String version) throws HOAConsumerException
+	public void setTool(String name, String version)
 	{
 		// NOP
 	}
@@ -636,7 +636,7 @@ public class HOAF2DA implements HOAConsumer
 	}
 
 	@Override
-	public void notifyEnd() throws HOAConsumerException
+	public void notifyEnd()
 	{
 		// flip acceptance sets that need negating
 		if (negateAcceptanceSetMembership != null) {

@@ -117,7 +117,7 @@ public class SymbolicEngine
 		}
 	}
 
-	public Expression getProbabilityInState(Updates ups, int i, State state) throws PrismLangException
+	public Expression getProbabilityInState(Updates ups, int i, State state)
 	{
 		Expression p = ups.getProbability(i);
 		return (p == null) ? Expression.Double(1.0) : p;

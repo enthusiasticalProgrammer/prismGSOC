@@ -83,7 +83,7 @@ public abstract class CIMethod extends SimulationMethod
 	}
 
 	@Override
-	public void computeMissingParameterBeforeSim() throws PrismException
+	public void computeMissingParameterBeforeSim()
 	{
 		// Nothing to do (always computed after simulation)
 	}
@@ -165,7 +165,7 @@ public abstract class CIMethod extends SimulationMethod
 	}
 
 	@Override
-	public String getResultExplanation(Sampler sampler) throws PrismException
+	public String getResultExplanation(Sampler sampler)
 	{
 		return "confidence interval is " + sampler.getMeanValue() + " +/- " + width + ", based on " + (100.0 * (1.0 - confidence)) + "% confidence level";
 	}

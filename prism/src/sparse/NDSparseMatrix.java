@@ -113,7 +113,7 @@ public class NDSparseMatrix
 	}
 
 	public static void AddActionsToNDSparseMatrix(JDDNode trans, JDDNode transActions, ODDNode odd, JDDVars rows, JDDVars cols, JDDVars nondet,
-			NDSparseMatrix ndsm) throws PrismException
+			NDSparseMatrix ndsm)
 	{
 		PS_AddActionsToNDSparseMatrix(trans.ptr(), transActions.ptr(), odd.ptr(), rows.array(), rows.n(), cols.array(), cols.n(), nondet.array(), nondet.n(),
 				ndsm.getPtr());

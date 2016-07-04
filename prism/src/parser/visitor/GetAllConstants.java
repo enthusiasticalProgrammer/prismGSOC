@@ -29,7 +29,6 @@ package parser.visitor;
 import java.util.Vector;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Get all constants (i.e. ExpressionConstant objects), store names in set.
@@ -44,7 +43,7 @@ public class GetAllConstants extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionConstant e) throws PrismLangException
+	public void visitPost(ExpressionConstant e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());

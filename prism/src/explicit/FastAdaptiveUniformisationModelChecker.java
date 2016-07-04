@@ -61,7 +61,7 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	/**
 	 * Constructor.
 	 */
-	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismException
+	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile)
 	{
 		super(parent);
 		this.modulesFile = modulesFile;

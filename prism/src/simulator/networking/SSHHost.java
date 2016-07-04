@@ -301,7 +301,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		stintThread.start();
 	}
 
-	public void stopStint() throws PrismException
+	public void stopStint()
 	{
 		Thread stopThread = new Thread(new Runnable()
 		{

@@ -579,7 +579,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 	}
 
 	@Override
-	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		InputSource inputSource = null;
 

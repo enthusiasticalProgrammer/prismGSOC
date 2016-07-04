@@ -17,7 +17,7 @@ public class PEPA2Prism extends PrismLanguageTranslator
 	}
 
 	@Override
-	public void load(File file) throws PrismException
+	public void load(File file)
 	{
 		modelFile = file;
 	}

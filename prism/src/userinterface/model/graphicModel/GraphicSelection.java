@@ -124,7 +124,7 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 	}
 
 	@Override
-	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, java.io.IOException
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException
 	{
 		if (!isDataFlavorSupported(flavor)) {
 			throw new UnsupportedFlavorException(flavor);

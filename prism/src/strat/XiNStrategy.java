@@ -8,7 +8,6 @@ import explicit.Distribution;
 import explicit.MDP;
 import explicit.Model;
 import explicit.MultiLongRun;
-import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismUtils;
 import solvers.SolverProxyInterface;
@@ -110,7 +109,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public @NonNull Model buildProduct(Model model) throws PrismException
+	public @NonNull Model buildProduct(Model model)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -134,7 +133,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void setMemory(Object memory) throws InvalidStrategyStateException
+	public void setMemory(Object memory)
 	{
 		throw new UnsupportedOperationException();
 	}

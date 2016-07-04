@@ -41,7 +41,6 @@ import parser.visitor.ASTTraverseModify;
 import prism.IntegerBound;
 import prism.Prism;
 import prism.PrismException;
-import prism.PrismLangException;
 import prism.PrismNotSupportedException;
 
 /**
@@ -51,7 +50,7 @@ import prism.PrismNotSupportedException;
  *  <li> direct translation into DRA for simple path formulas with temporal bounds</li>
  * </ol>
  */
-public class LTL2RabinLibrary
+public final class LTL2RabinLibrary
 {
 	private static ArrayList<String> labels;
 
@@ -135,7 +134,7 @@ public class LTL2RabinLibrary
 		ltl.accept(new ASTTraverse()
 		{
 			@Override
-			public Object visit(ExpressionLabel e) throws PrismLangException
+			public Object visit(ExpressionLabel e)
 			{
 				labels.add(e.getName());
 				return null;
@@ -148,7 +147,7 @@ public class LTL2RabinLibrary
 		ltl2.accept(new ASTTraverseModify()
 		{
 			@Override
-			public Object visit(ExpressionLabel e) throws PrismLangException
+			public Object visit(ExpressionLabel e)
 			{
 				int i = labels.indexOf(e.getName());
 				//char letter = (char) ('a' + i);
@@ -704,7 +703,7 @@ public class LTL2RabinLibrary
 	/**
 	 * Create a BitSet from a string, e.g. "0,3,4".
 	 */
-	private static BitSet createBitSetFromString(String s) throws PrismException
+	private static BitSet createBitSetFromString(String s)
 	{
 		int i, n;
 		BitSet bs = new BitSet();
@@ -720,7 +719,7 @@ public class LTL2RabinLibrary
 	}
 
 	// Example: manual creation of DRA for: !(F ("L0"&(X "L1")))
-	public static DA<BitSet, AcceptanceRabin> draForNotFaCb(String l0, String l1) throws PrismException
+	public static DA<BitSet, AcceptanceRabin> draForNotFaCb(String l0, String l1)
 	{
 		int numStates;
 		List<String> apList;

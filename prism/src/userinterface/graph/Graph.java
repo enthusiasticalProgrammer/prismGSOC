@@ -818,7 +818,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	 * TODO: Document this!
 	 */
 	@Override
-	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		InputSource inputSource = null;
 
@@ -1150,8 +1150,6 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			throw new PrismException("Problem saving graph: Error in creating XML: " + e);
 		} catch (TransformerException e) {
 			throw new PrismException("Problem saving graph: Transformer Exception: " + e);
-		} catch (SettingException e) {
-			throw new PrismException(e.getMessage());
 		}
 	}
 
@@ -1335,7 +1333,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		ChartUtilities.saveChartAsJPEG(file, 1.0f, this.chart, width, height);
 	}
 
-	public void exportToEPS(File file, int width, int height) throws GraphException, IOException
+	public void exportToEPS(File file, int width, int height) throws IOException
 	{
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 

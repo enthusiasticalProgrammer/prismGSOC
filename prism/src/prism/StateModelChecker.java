@@ -86,7 +86,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 
 	// Constructor
 
-	public StateModelChecker(Prism prism, Model m, PropertiesFile pf) throws PrismException
+	public StateModelChecker(Prism prism, Model m, PropertiesFile pf)
 	{
 		// Initialise PrismComponent
 		super(prism);
@@ -127,7 +127,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	 * {@code clearDummyModel()} later.
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
-	public StateModelChecker(Prism prism, VarList varList, JDDVars allDDRowVars, JDDVars[] varDDRowVars, Values constantValues) throws PrismException
+	public StateModelChecker(Prism prism, VarList varList, JDDVars allDDRowVars, JDDVars[] varDDRowVars, Values constantValues)
 	{
 		// Initialise PrismComponent
 		super(prism);

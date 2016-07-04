@@ -32,7 +32,7 @@ import prism.PrismLangException;
 /**
  * Rename (according to RenamedModule definition), return result.
  */
-public class Rename extends ASTTraverseModify
+public final class Rename extends ASTTraverseModify
 {
 	private RenamedModule rm;
 
@@ -71,14 +71,14 @@ public class Rename extends ASTTraverseModify
 	}
 
 	@Override
-	public void visitPost(Module e) throws PrismLangException
+	public void visitPost(Module e)
 	{
 		// New name for module is specied in RenamedModule
 		e.setName(rm.getName());
 	}
 
 	@Override
-	public void visitPost(Command e) throws PrismLangException
+	public void visitPost(Command e)
 	{
 		// Rename synchronising action of command
 		String s = rm.getNewName(e.getSynch());
@@ -87,7 +87,7 @@ public class Rename extends ASTTraverseModify
 	}
 
 	@Override
-	public void visitPost(Update e) throws PrismLangException
+	public void visitPost(Update e)
 	{
 		int i, n;
 		String s;
@@ -109,7 +109,7 @@ public class Rename extends ASTTraverseModify
 	}
 
 	@Override
-	public void visitPost(ExpressionFunc e) throws PrismLangException
+	public void visitPost(ExpressionFunc e)
 	{
 		// Rename function name (if necessary)
 		String s = rm.getNewName(e.getName());
@@ -118,7 +118,7 @@ public class Rename extends ASTTraverseModify
 	}
 
 	@Override
-	public void visitPost(ExpressionIdent e) throws PrismLangException
+	public void visitPost(ExpressionIdent e)
 	{
 		// Rename identifier (if necessary)
 		String s = rm.getNewName(e.getName());

@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Find all idents which are formulas, replace with ExpressionFormula, return result.
@@ -42,7 +41,7 @@ public class FindAllFormulas extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionIdent e) throws PrismLangException
+	public Object visit(ExpressionIdent e)
 	{
 		int i;
 		// See if identifier corresponds to a formula

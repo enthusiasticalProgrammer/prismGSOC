@@ -256,7 +256,7 @@ public class ChoiceListFlexi implements Choice
 	}
 
 	@Override
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		// Currently nothing to do here:
 		// Checks for bad probabilities/rates done earlier.
