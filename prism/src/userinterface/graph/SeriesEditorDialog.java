@@ -48,9 +48,6 @@ import org.jfree.data.general.*;
 public class SeriesEditorDialog extends JDialog
 {
 	//ATTRIBUTES    
-	private Action okAction;
-	private Action cancelAction;
-	private GUIPrism gui;
 	private java.util.List<SeriesEditor> editors;
 
 	private boolean cancelled;
@@ -412,7 +409,7 @@ public class SeriesEditorDialog extends JDialog
 					}
 					// Updating graph points...
 					else {
-						XYDataItem dataItem = SeriesEditor.this.xySeries.getDataItem(rowIndex);
+						SeriesEditor.this.xySeries.getDataItem(rowIndex);
 
 						// Null values are for in the buffer only. 
 						if (value == null)

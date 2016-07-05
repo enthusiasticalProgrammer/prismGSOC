@@ -239,14 +239,12 @@ public class DefinedConstant
 
 	public boolean incr()
 	{
-		int i;
-		int il, ih, is, iv;
+		int ih, is, iv;
 		double dl, dh, ds, dv;
 		boolean overflow = false;
 
 		// int
 		if (type instanceof TypeInt) {
-			il = ((Integer) low).intValue();
 			ih = ((Integer) high).intValue();
 			is = ((Integer) step).intValue();
 			iv = ((Integer) value).intValue();

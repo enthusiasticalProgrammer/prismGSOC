@@ -277,9 +277,6 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	protected StateValues checkExpressionSteadyState(ExpressionSS expr) throws PrismException
 	{
-		Expression pb; // probability bound (expression)
-		double p = 0; // probability bound (actual value)
-		String relOp; // relational operator
 
 		// BSCC stuff
 		List<JDDNode> bsccs = null;

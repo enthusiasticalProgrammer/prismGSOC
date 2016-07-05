@@ -196,9 +196,6 @@ public final class FoxGlynn
 
 	public static void test()
 	{
-		double[] weights;
-		double totalWeight = 0.0;
-		int left, right;
 
 		FoxGlynn w = null;
 		try {
@@ -208,10 +205,10 @@ public final class FoxGlynn
 		} catch (PrismException e) {
 			// ...
 		}
-		weights = w.getWeights();
-		left = w.getLeftTruncationPoint();
-		right = w.getRightTruncationPoint();
-		totalWeight = w.getTotalWeight();
+		w.getWeights();
+		w.getLeftTruncationPoint();
+		w.getRightTruncationPoint();
+		w.getTotalWeight();
 		w = null;
 	}
 

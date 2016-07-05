@@ -124,8 +124,7 @@ public class MDPModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability probabilities...");
 		mcProduct = new MDPModelChecker(this);
 		mcProduct.inheritSettings(this);
-		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs(product.getProductModel(), acc, false).soln,
-				product.getProductModel());
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs(product.getProductModel(), acc, false).soln, product.getProductModel());
 
 		// Subtract from 1 if we're model checking a negated formula for regular Pmin
 		if (minMax.isMin()) {

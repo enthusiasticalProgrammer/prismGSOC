@@ -1008,7 +1008,6 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			NodeList rootChildren = chartFormat.getChildNodes();
 
 			// Element layout is depricated for now. 
-			Element layout = (Element) rootChildren.item(0);
 			Element xAxis = (Element) rootChildren.item(1);
 			Element yAxis = (Element) rootChildren.item(2);
 

@@ -558,7 +558,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			}
 			if (currentGroup > owners.size() - 1)
 				currentGroup = 0;
-			
+
 			String[] stringArray = new String[groupNames.size()];
 			comboModel = new DefaultComboBoxModel<>(groupNames.toArray(stringArray));
 			fireTableDataChanged();

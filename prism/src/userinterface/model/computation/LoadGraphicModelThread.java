@@ -64,7 +64,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 		graphicEdit = new GUIGraphicModelEditor(handler, handler.getTree(), handler.getPropModel());
 		graphicEdit.newModel();
 		graphicEdit.setBusy(true);
-		
+
 		List<Constant> theConstants = new ArrayList<>();
 		List<Variable> theDeclarations = new ArrayList<>();
 		String theModelName = "", theModelType = "", sysInfo = "";

@@ -718,12 +718,6 @@ public class Transition implements PropertyOwner
 			double movingSubdivisions = from.getSubdivisions();
 			double movingOffset = from.getMovingOffset();
 
-			//Used for curves
-			double lastX = Double.NEGATIVE_INFINITY;
-			double lastY = Double.NEGATIVE_INFINITY;
-			double nextX = Double.POSITIVE_INFINITY;
-			double nextY = Double.POSITIVE_INFINITY;
-
 			//Storage of points before rendering
 			PointList tempPoints = new PointList();
 
@@ -836,7 +830,7 @@ public class Transition implements PropertyOwner
 			TempPoint last = null, from = null, toP = null, next = null;
 
 			double r = 8; //Curve radius
-			double dy, dx, angle, e, f, g, j, midx, midy, x0, y0, x1, y1, xp, yp, s;
+			double dy, dx, angle, e, f, g, j, x0, y0, x1, y1, xp, yp, s;
 
 			GeneralPath path = new GeneralPath();
 

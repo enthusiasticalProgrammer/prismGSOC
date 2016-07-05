@@ -51,7 +51,6 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
 	private GraphicModuleContainer thisgmc;
 
 	private boolean docked;
-	private boolean visible;
 
 	private int xSize = DEFAULT_X_SIZE;
 	private int ySize = DEFAULT_Y_SIZE;
@@ -501,8 +500,6 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
 
 		} else
 			externalFrame.setVisible(visible);
-
-		this.visible = visible;
 	}
 
 	public boolean isVisible()

@@ -1757,7 +1757,6 @@ public class ModuleModel extends SelectionModel implements Observer
 			double actualY = y / zoom;
 			actualX = snapIt(actualX);
 			actualY = snapIt(actualY);
-			Rectangle2D mouseBox = new Rectangle2D.Double(actualX, actualY, 1, 1);
 			if (!down)
 				zoom /= 1.1;
 			else
@@ -1781,7 +1780,6 @@ public class ModuleModel extends SelectionModel implements Observer
 	 */
 	public void processSingleClick(double x, double y)
 	{
-		boolean doSelection = mouseDownWasReallySingleClick;
 		mouseDownWasReallySingleClick = false;
 
 		double actualX = x / zoom;
@@ -1801,12 +1799,10 @@ public class ModuleModel extends SelectionModel implements Observer
 			//In PROBABILISTIC mode a single click adds a state to the branches array
 			if (drawingProbTrans) {
 				State st = null;
-				boolean foundAState = false;
 				for (int i = 0; i < numStates; i++) {
 					st = (State) theStates.get(i);
 
 					if (st.intersects((new Rectangle2D.Double(actualX, actualY, 1, 1))) && !(st instanceof Decision)) {
-						foundAState = true;
 						if (st == tempProbFrom) {
 							if (this.tempProbTo.size() > 0 || tempProbNailDown)
 								tempProbTo.add(st);
@@ -2459,8 +2455,6 @@ public class ModuleModel extends SelectionModel implements Observer
 	 */
 	public void processMouseUp(double x, double y)
 	{
-		double actualX = x / zoom;
-		double actualY = y / zoom;
 		//System.out.println("Process Mouse Up");
 		if (mode == ZOOM) {
 			if (isZoomSelecting) {
@@ -3147,12 +3141,6 @@ public class ModuleModel extends SelectionModel implements Observer
 				}
 				mutual = true;
 			}
-		}
-		int initial = 0;
-		for (int i = 0; i < getNumStates(); i++) {
-			State s = getState(i);
-			if (s.isInitial())
-				initial = i;
 		}
 		orderStates();
 

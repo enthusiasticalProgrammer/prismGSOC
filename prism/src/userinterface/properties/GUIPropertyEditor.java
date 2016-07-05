@@ -52,7 +52,6 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 	private GUIPrism parent;
 	private GUIMultiProperties props;
 	private ModulesFile parsedModel;
-	private boolean dispose = false;
 	private String id;
 	private int propertyInvalidStrategy = GUIMultiProperties.WARN_INVALID_PROPS;
 
@@ -216,7 +215,6 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 			} else {
 				int start = propertyText.getSelectionStart();
 				int end = propertyText.getSelectionEnd();
-				int length = propertyText.getSelectedText().length();
 				boolean shouldDo = false;
 				int open = 0;
 				int closed = 0;
@@ -260,7 +258,6 @@ public class GUIPropertyEditor extends javax.swing.JDialog implements ActionList
 			} else {
 				int start = propertyText.getSelectionStart();
 				int end = propertyText.getSelectionEnd();
-				int length = propertyText.getSelectedText().length();
 				boolean shouldDo = false;
 				int open = 0;
 				int closed = 0;

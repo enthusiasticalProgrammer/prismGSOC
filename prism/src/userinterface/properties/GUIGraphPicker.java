@@ -42,10 +42,8 @@ import parser.type.TypeInterval;
 
 public class GUIGraphPicker extends javax.swing.JDialog
 {
-	private GUIPrism gui;
 	private GUIPlugin plugin;
 
-	private GUIExperiment experiment;
 	private GUIGraphHandler graphHandler;
 	private ResultsCollection resultsCollection;
 
@@ -76,10 +74,8 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		super(parent, true);
 		setTitle("New Graph Series");
 
-		this.gui = parent;
 		this.plugin = plugin;
 
-		this.experiment = experiment;
 		this.graphHandler = graphHandler;
 		this.resultsCollection = experiment.getResults();
 

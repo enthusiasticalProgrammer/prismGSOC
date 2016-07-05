@@ -806,14 +806,9 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	class PepaView extends PlainView
 	{
 
-		private Matcher match;
-		private Pattern pattern;
-
 		public PepaView(Element elem)
 		{
 			super(elem);
-
-			pattern = Pattern.compile("%.*");
 		}
 
 		@Override
@@ -831,7 +826,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);

@@ -433,7 +433,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 					break;
 				}
 			}
-			tempValue =  fontList.getSelectedValue();
+			tempValue = fontList.getSelectedValue();
 			if (tempValue != null) {
 				fontBox.setText(tempValue);
 			} else
@@ -560,7 +560,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			String size = "" + f.getSize();
 
 			for (int i = 0; i < fontList.getModel().getSize(); i++) {
-				String listStr =  fontList.getModel().getElementAt(i).toLowerCase();
+				String listStr = fontList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.equals(str.toLowerCase())) {
 					Object value = fontList.getModel().getElementAt(i);
