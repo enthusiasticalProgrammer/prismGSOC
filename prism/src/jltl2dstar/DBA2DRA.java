@@ -37,7 +37,7 @@ import jltl2ba.APSet;
  * Provides conversion from deterministic Büchi to 
  * deterministic Rabin.
  */
-public class DBA2DRA
+class DBA2DRA
 {
 	/**
 	 * Convert a deterministic Büchi automaton

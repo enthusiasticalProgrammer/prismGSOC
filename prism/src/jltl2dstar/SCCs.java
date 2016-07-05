@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import jltl2ba.MyBitSet;
 
-public class SCCs
+class SCCs
 {
 
 	/**

@@ -34,7 +34,7 @@ import prism.PrismException;
 /**
  * Provides optimizations on complete DRAs, notably quotienting using bisimulation.
  */
-public class DRAOptimizations
+class DRAOptimizations
 {
 
 	/** type of a color */
@@ -43,7 +43,7 @@ public class DRAOptimizations
 	// typedef std::vector<unsigned int> state_vector;
 
 	/** Helper class, storing a coloring of the states */
-	public static class Coloring
+	static class Coloring
 	{
 
 		/** The number of colors */
@@ -210,7 +210,7 @@ public class DRAOptimizations
 	 * the states themself and the colors of the
 	 * to-states of the edges.
 	 */
-	public static class ColoredStateComparator implements Comparator<Integer>
+	static class ColoredStateComparator implements Comparator<Integer>
 	{
 
 		/** The coloring */
@@ -266,7 +266,7 @@ public class DRAOptimizations
 
 	/** Type of an acceptance signature */
 	// public typedef std::pair<BitSet*, BitSet*> acceptance_signature_t;
-	public static class AcceptanceSignature
+	static class AcceptanceSignature
 	{
 		public MyBitSet l;
 		public MyBitSet u;
@@ -280,7 +280,7 @@ public class DRAOptimizations
 	 * A container that stores (caches) the acceptance signatures of
 	 * all the states in a DRA.
 	 */
-	public static class AcceptanceSignatureContainer
+	static class AcceptanceSignatureContainer
 	{
 
 		/** Storage for the acceptance signatures */
@@ -315,7 +315,7 @@ public class DRAOptimizations
 	 * Functor that compares two DRA states based on their
 	 * acceptance signature.
 	 */
-	public static class AcceptanceSignatureComparator implements Comparator<Integer>
+	static class AcceptanceSignatureComparator implements Comparator<Integer>
 	{
 		/** The acceptance signature container */
 		private AcceptanceSignatureContainer _container;

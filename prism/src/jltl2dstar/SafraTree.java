@@ -28,7 +28,7 @@ import jltl2ba.MyBitSet;
 /** 
  * A Safra tree, an ordered tree of SafraTreeNodes.
  */
-public class SafraTree implements NBA2DAState
+class SafraTree implements NBA2DAState
 {
 
 	/** The maximum number of nodes */

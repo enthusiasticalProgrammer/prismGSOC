@@ -23,7 +23,7 @@ package jltl2dstar;
 /**
  * Options for the LTL2DRA scheduler.
  */
-public class Options_LTL2DRA implements Cloneable
+class Options_LTL2DRA implements Cloneable
 {
 
 	/** Constructor */

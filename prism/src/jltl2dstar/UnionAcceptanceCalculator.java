@@ -27,7 +27,7 @@ import prism.PrismException;
  * This approach merges the acceptance signatures of the two states in the union tuple, the union is provided by
  * the semantics of the Rabin acceptance condition (There <i>exists</i> an acceptance pair ....)
  */
-public class UnionAcceptanceCalculator
+class UnionAcceptanceCalculator
 {
 
 	/** The acceptance condition of the first automaton. */

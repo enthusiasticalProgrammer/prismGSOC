@@ -29,7 +29,7 @@ import java.util.*;
 import jltl2ba.APElementIterator;
 import jltl2ba.MyBitSet;
 
-public class NBAAnalysis
+class NBAAnalysis
 {
 
 	/** 
