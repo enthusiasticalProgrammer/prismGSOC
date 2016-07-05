@@ -41,7 +41,7 @@ public class FileSystem implements SettingOwner, TreeNode
 	private SingleLineStringSetting inputDir;
 	private SingleLineStringSetting outputDir;
 
-	private Vector hosts;
+	private Vector<SSHHost> hosts;
 
 	/** Creates a new instance of FileSystem */
 	public FileSystem(SimulatorNetworkHandler network, String name, String inputDir, String outputDir)
@@ -54,7 +54,7 @@ public class FileSystem implements SettingOwner, TreeNode
 		this.outputDir = new SingleLineStringSetting("simulator output directory", outputDir,
 				"The location on the network cluster's filesystem to which verification results will be written.", this, true);
 
-		hosts = new Vector();
+		hosts = new Vector<>();
 	}
 
 	//Access methods
@@ -215,7 +215,7 @@ public class FileSystem implements SettingOwner, TreeNode
 	//TreeNode methods
 
 	@Override
-	public Enumeration children()
+	public Enumeration<SSHHost> children()
 	{
 		return hosts.elements();
 	}

@@ -31,6 +31,7 @@ package userinterface.model.graphicModel;
 
 import java.awt.geom.*;
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import userinterface.util.*;
 import prism.*;
@@ -63,7 +64,7 @@ public class Transition implements PropertyOwner
 	 * to its subclasses.  It is not designed to be accessed externally, so please use
 	 * the getNails() method to access this.
 	 */
-	protected ArrayList nails;
+	protected List<Nail> nails;
 	/** This variable is the to State of this transition, it is protected <u>only</u>
 	 * to make it accessible to its subclasses.
 	 */
@@ -85,7 +86,7 @@ public class Transition implements PropertyOwner
 	protected Point2D middle;
 
 	//Debugging
-	private ArrayList intersects;
+	private List<Line2D.Double> intersects;
 
 	//Constructors
 
@@ -112,7 +113,7 @@ public class Transition implements PropertyOwner
 		probability.setOffsetX(-10);
 		probability.setOffsetY(-20);
 		probability.setColour(Color.black);
-		nails = new ArrayList();
+		nails = new ArrayList<>();
 		docked = true;
 		selected = false;
 
@@ -124,7 +125,7 @@ public class Transition implements PropertyOwner
 	/** Creates a new Transition with the given to and from states and an ArrayList of
 	 * nails.
 	 */
-	public Transition(State from, State to, ArrayList nails, Prism pr)
+	public Transition(State from, State to, List<Nail> nails, Prism pr)
 	{
 		this(from, to, pr);
 		this.nails = nails;
@@ -184,7 +185,7 @@ public class Transition implements PropertyOwner
 	}
 
 	/** Access method to return the ArrayList of nail objects for this transition. */
-	public ArrayList getNails()
+	public List<Nail> getNails()
 	{
 		return nails;
 	}
@@ -390,7 +391,7 @@ public class Transition implements PropertyOwner
 	 */
 	public boolean intersects(Rectangle2D rect)
 	{
-		intersects = new ArrayList();
+		intersects = new ArrayList<>();
 		//rect.setRect(rect.getX()-2, rect.getY()-2, rect.getWidth()+4, rect.getHeight()+4);
 		boolean doesIt = false;
 		double fromX = from.getX() + (from.getWidth() / 2);
@@ -496,7 +497,7 @@ public class Transition implements PropertyOwner
 
 	public void workOutMiddle()
 	{
-		ArrayList poly = new ArrayList();
+		ArrayList<java.awt.Point> poly = new ArrayList<>();
 		double fromX = from.getX() + 15;
 		double fromY = from.getY() + 15;
 		double gridWidth = from.getGridWidth();
@@ -1173,7 +1174,7 @@ public class Transition implements PropertyOwner
 		}
 	}
 
-	class PointList extends ArrayList
+	class PointList extends ArrayList<TempPoint>
 	{
 		public PointList()
 		{

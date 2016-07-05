@@ -35,7 +35,7 @@ import javax.swing.*;
  * The settings are propagated to the JFreeChart library.
  */
 @SuppressWarnings("serial")
-public class SeriesSettingsList extends AbstractListModel implements Observer
+public class SeriesSettingsList extends AbstractListModel<SeriesSettings> implements Observer
 {
 	private Graph graph;
 
@@ -48,7 +48,7 @@ public class SeriesSettingsList extends AbstractListModel implements Observer
 	}
 
 	@Override
-	public Object getElementAt(int index)
+	public SeriesSettings getElementAt(int index)
 	{
 		synchronized (graph.getSeriesLock()) {
 			return graph.getGraphSeries(seriesKeys.get(index));

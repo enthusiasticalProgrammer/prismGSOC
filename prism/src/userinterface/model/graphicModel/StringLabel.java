@@ -31,7 +31,9 @@ package userinterface.model.graphicModel;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
+import java.util.List;
 
 //Prism Packages
 
@@ -61,7 +63,7 @@ public class StringLabel extends SingleProperty
 
 	public static boolean lineLabels;
 	//debugging
-	private ArrayList intersects = null;
+	private List<Rectangle2D.Double> intersects = null;
 
 	//Constructors
 
@@ -146,7 +148,7 @@ public class StringLabel extends SingleProperty
 	 */
 	public boolean intersects(Rectangle2D rect)
 	{
-		intersects = new ArrayList();
+		intersects = new ArrayList<Rectangle2D.Double>();
 		if (!getString().equals("")) {
 			double parX;
 			double parY;

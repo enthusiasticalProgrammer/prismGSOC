@@ -28,6 +28,7 @@
 package userinterface.properties;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -156,13 +157,13 @@ public class GUIPropLabelList extends JTable
 
 	class PropLabelModel extends AbstractTableModel
 	{
-		ArrayList labels; // The list of labels
+		List<GUILabel> labels; // The list of labels
 		int labCount; // Counter used to generate new default names for labels
 		Exception error; // Any error that occurs when all labels are parsed together
 
 		public PropLabelModel()
 		{
-			labels = new ArrayList();
+			labels = new ArrayList<>();
 			labCount = 0;
 			error = null;
 		}
@@ -273,7 +274,7 @@ public class GUIPropLabelList extends JTable
 
 		public void newList()
 		{
-			labels = new ArrayList();
+			labels = new ArrayList<>();
 			fireTableStructureChanged();
 			parent.labelListChanged();
 		}

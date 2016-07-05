@@ -29,6 +29,7 @@ package simulator.networking;
 import java.io.*;
 import java.util.*;
 import prism.PrismException;
+import simulator.networking.SSHHandler.PingThread;
 
 public class SSHHandler
 {
@@ -210,14 +211,14 @@ public class SSHHandler
 		String userName;
 		String hostName;
 		Thread owner;
-		Vector threads;
+		Vector<PingThread> threads;
 
 		PingController(String userName, String hostName, Thread owner)
 		{
 			this.userName = userName;
 			this.hostName = hostName;
 			this.owner = owner;
-			threads = new Vector();
+			threads = new Vector<PingThread>();
 		}
 
 		@Override
@@ -234,7 +235,7 @@ public class SSHHandler
 				while (true) {
 					synchronized (threads) {
 						if (threads.size() > 0)
-							((Thread) threads.get(0)).interrupt();
+							threads.get(0).interrupt();
 						else
 							break;
 					}
@@ -249,9 +250,9 @@ public class SSHHandler
 		String userName;
 		String hostName;
 		Thread owner;
-		Vector threads;
+		Vector<PingThread> threads;
 
-		PingThread(String userName, String hostName, Thread owner, Vector threads)
+		PingThread(String userName, String hostName, Thread owner, Vector<PingThread> threads)
 		{
 			this.userName = userName;
 			this.hostName = hostName;

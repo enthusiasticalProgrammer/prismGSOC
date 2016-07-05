@@ -29,23 +29,21 @@ package userinterface.model.graphicModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.awt.event.*;
 import userinterface.*;
 import java.beans.*;
 
 public class ModulesPanel extends JPanel implements MouseListener, ComponentListener
 {
-	private ArrayList containers;
-	private ArrayList showChecks;
-	private ArrayList dockChecks;
-	private GUIPrism gui;
+	private List<Object> containers;
+	private List<JCheckBoxMenuItem> showChecks;
+	private List<JCheckBoxMenuItem> dockChecks;
 	private GUIGraphicModelEditor gme;
 
 	private JDesktopPane dp;
 	private JScrollPane scr;
-
-	private JTabbedPane tp;
 
 	private boolean autolayout;
 
@@ -57,12 +55,11 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 	private Action tile, cascade, addModule;
 
 	/** Creates a new instance of ModulesPanel */
-	public ModulesPanel(GUIPrism gui, GUIGraphicModelEditor gme)
+	public ModulesPanel(GUIGraphicModelEditor gme)
 	{
-		containers = new ArrayList();
-		showChecks = new ArrayList();
-		dockChecks = new ArrayList();
-		this.gui = gui;
+		containers = new ArrayList<Object>();
+		showChecks = new ArrayList<>();
+		dockChecks = new ArrayList<>();
 		this.gme = gme;
 
 		autolayout = true;
@@ -77,9 +74,9 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 	{
 		dp.removeAll();
 
-		containers = new ArrayList();
-		showChecks = new ArrayList();
-		dockChecks = new ArrayList();
+		containers = new ArrayList<Object>();
+		showChecks = new ArrayList<>();
+		dockChecks = new ArrayList<>();
 
 		autolayout = true;
 
@@ -715,7 +712,6 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		}
 
 		////System.out.println("doing minmi");
-		int maxWidth = dp.getWidth();
 		int border = 7;
 
 		int currX = 0;
@@ -757,13 +753,11 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		}
 
 		////System.out.println("doing minmi");
-		int maxWidth = dp.getWidth();
 		int border = 21;
 
 		int currX = 0;
 		int currY = 0;
 
-		int currBaseY = 0;
 		int maxHeightSoFar = 0;
 
 		int previousSelection = getSelectedIndex();

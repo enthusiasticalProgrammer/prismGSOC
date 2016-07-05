@@ -162,7 +162,7 @@ public abstract class Setting
 	/**
 	 *  Returns the class type of the value being stored
 	 */
-	public abstract Class getValueClass();
+	public abstract Class<?> getValueClass();
 
 	/**
 	 *  Sets the value, with some type checking.  A set is expected to be done

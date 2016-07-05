@@ -28,6 +28,7 @@
 package userinterface.model.graphicModel;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 
@@ -87,7 +88,7 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 		//drawingPane.setModel(null);
 		textEditor.newModel();
 
-		properties.setOwners(new ArrayList());
+		properties.setOwners(new ArrayList<PropertyOwner>());
 		//modules = new ArrayList();
 		modPanel.newModel();
 	}
@@ -170,7 +171,7 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 			//drawingScroller.setViewportView(drawingPane);
 			//drawingScroller.setColumnHeaderView(moduleLabel);
 			//drawingPane.doSize();
-			modPanel = new ModulesPanel(handler.getGUIPlugin().getGUI(), this);
+			modPanel = new ModulesPanel(this);
 
 			editorPanel.add(modPanel, BorderLayout.CENTER);
 			editorPanel.add(new GraphicToolBar(this), BorderLayout.NORTH);
@@ -241,7 +242,7 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 
 	//Updates
 
-	public void loadAllExceptModules(String name, String type, ArrayList globals, ArrayList constants, String systemInformation) throws PrismException
+	public void loadAllExceptModules(String name, String type, List globals, List constants, String systemInformation) throws PrismException
 	{
 		//System.out.println("loadAllExceptModules called "+type);
 
@@ -339,37 +340,37 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 		return tree.getModelType();
 	}
 
-	public ArrayList getEditableConstantNames()
+	public List<String> getEditableConstantNames()
 	{
 		return tree.getEditableConstantNames();
 	}
 
-	public ArrayList getEditableConstantValues()
+	public List<String> getEditableConstantValues()
 	{
 		return tree.getEditableConstantValues();
 	}
 
-	public ArrayList<Type> getEditableConstantTypes()
+	public List<Type> getEditableConstantTypes()
 	{
 		return tree.getEditableConstantTypes();
 	}
 
-	public ArrayList getEditableGlobalNames()
+	public List<String> getEditableGlobalNames()
 	{
 		return tree.getEditableGlobalNames();
 	}
 
-	public ArrayList getEditableGlobalMins()
+	public List<String> getEditableGlobalMins()
 	{
 		return tree.getEditableGlobalMins();
 	}
 
-	public ArrayList getEditableGlobalMaxs()
+	public List<String> getEditableGlobalMaxs()
 	{
 		return tree.getEditableGlobalMaxs();
 	}
 
-	public ArrayList getEditableGlobalInits()
+	public List<String> getEditableGlobalInits()
 	{
 		return tree.getEditableGlobalInits();
 	}
@@ -392,27 +393,27 @@ public class GUIGraphicModelEditor extends GUIModelEditor implements SelectionLi
 		return mms;
 	}
 
-	public ArrayList getVariableNames(ModuleModel m)
+	public List<String> getVariableNames(ModuleModel m)
 	{
 		return tree.getVariableNames(m.getCorrespondingModuleNode());
 	}
 
-	public ArrayList<Type> getVariableTypes(ModuleModel m)
+	public List<Type> getVariableTypes(ModuleModel m)
 	{
 		return tree.getVariableTypes(m.getCorrespondingModuleNode());
 	}
 
-	public ArrayList getVariableMins(ModuleModel m)
+	public List<String> getVariableMins(ModuleModel m)
 	{
 		return tree.getVariableMins(m.getCorrespondingModuleNode());
 	}
 
-	public ArrayList getVariableMaxs(ModuleModel m)
+	public List<String> getVariableMaxs(ModuleModel m)
 	{
 		return tree.getVariableMaxs(m.getCorrespondingModuleNode());
 	}
 
-	public ArrayList getVariableInits(ModuleModel m)
+	public List<String> getVariableInits(ModuleModel m)
 	{
 		return tree.getVariableInits(m.getCorrespondingModuleNode());
 	}

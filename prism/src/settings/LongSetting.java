@@ -60,7 +60,7 @@ public class LongSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<Long> getValueClass()
 	{
 		return Long.class;
 	}

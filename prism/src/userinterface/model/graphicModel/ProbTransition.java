@@ -31,7 +31,9 @@ package userinterface.model.graphicModel;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.*;
+import java.util.List;
+import java.util.Observer;
+
 import userinterface.util.*;
 import prism.*;
 
@@ -65,7 +67,7 @@ public class ProbTransition extends Transition
 	 * only render one nail, an ArrayList is passed in to make to compatible with the
 	 * superclass, however, this should only contain <u>one</u> nail or no nails.
 	 */
-	public ProbTransition(State from, State to, ArrayList nails, Prism pr)
+	public ProbTransition(State from, State to, List<Nail> nails, Prism pr)
 	{
 		super(from, to, nails, pr);
 		probability = new ExpressionLabel("", this, pr);

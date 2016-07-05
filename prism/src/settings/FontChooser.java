@@ -110,9 +110,9 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		String[] styles = { "Plain", "Bold", "Italic", "Bold Italic" };
 		String[] sizes = { "8", "9", "10", "11", "12", "14", "16", "18", "20" };
 
-		DefaultComboBoxModel fontModel = new DefaultComboBoxModel(allFonts);
-		DefaultComboBoxModel styleModel = new DefaultComboBoxModel(styles);
-		DefaultComboBoxModel sizeModel = new DefaultComboBoxModel(sizes);
+		DefaultComboBoxModel<String> fontModel = new DefaultComboBoxModel<>(allFonts);
+		DefaultComboBoxModel<String> styleModel = new DefaultComboBoxModel<>(styles);
+		DefaultComboBoxModel<String> sizeModel = new DefaultComboBoxModel<>(sizes);
 
 		fontList.setModel(fontModel);
 		styleList.setModel(styleModel);
@@ -159,7 +159,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		jPanel42 = new javax.swing.JPanel();
 		jPanel43 = new javax.swing.JPanel();
 		jScrollPane4 = new javax.swing.JScrollPane();
-		fontList = new javax.swing.JList();
+		fontList = new javax.swing.JList<>();
 		jPanel44 = new javax.swing.JPanel();
 		jPanel45 = new javax.swing.JPanel();
 		jPanel46 = new javax.swing.JPanel();
@@ -171,7 +171,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		jPanel50 = new javax.swing.JPanel();
 		jPanel51 = new javax.swing.JPanel();
 		jScrollPane5 = new javax.swing.JScrollPane();
-		styleList = new javax.swing.JList();
+		styleList = new javax.swing.JList<>();
 		jPanel52 = new javax.swing.JPanel();
 		jPanel53 = new javax.swing.JPanel();
 		jPanel54 = new javax.swing.JPanel();
@@ -182,7 +182,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		jPanel57 = new javax.swing.JPanel();
 		jPanel58 = new javax.swing.JPanel();
 		jScrollPane6 = new javax.swing.JScrollPane();
-		sizeList = new javax.swing.JList();
+		sizeList = new javax.swing.JList<>();
 		jPanel59 = new javax.swing.JPanel();
 		jPanel60 = new javax.swing.JPanel();
 		previewLabel = new javax.swing.JLabel();
@@ -200,7 +200,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
-				closeDialog(evt);
+				closeDialog();
 			}
 		});
 
@@ -404,7 +404,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 	}//GEN-END:initComponents
 
 	/** Closes the dialog */
-	private void closeDialog(java.awt.event.WindowEvent evt)//GEN-FIRST:event_closeDialog
+	private void closeDialog()//GEN-FIRST:event_closeDialog
 	{
 		setVisible(false);
 		dispose();

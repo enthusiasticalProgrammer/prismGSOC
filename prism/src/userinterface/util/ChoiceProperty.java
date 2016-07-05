@@ -41,7 +41,7 @@ public class ChoiceProperty extends SingleProperty
 	private boolean fixedSize;
 
 	//Editor
-	private DefaultComboBoxModel listModel;
+	private DefaultComboBoxModel<String> listModel;
 	private JComboBox editor;
 
 	/** Creates a new instance of DoubleProperty */
@@ -60,7 +60,7 @@ public class ChoiceProperty extends SingleProperty
 		this.currIndex = startIndex;
 		this.fixedSize = true;
 
-		listModel = new DefaultComboBoxModel(props);
+		listModel = new DefaultComboBoxModel<>(props);
 		editor = new JComboBox(listModel);
 		editor.setEditable(false);
 		Font f = editor.getFont();
@@ -133,7 +133,7 @@ public class ChoiceProperty extends SingleProperty
 		if (properties == null)
 			properties = new ArrayList<String>();
 		if (listModel == null)
-			listModel = new DefaultComboBoxModel();
+			listModel = new DefaultComboBoxModel<>();
 		if (property instanceof String) {
 			String comp = (String) property;
 			boolean found = false;

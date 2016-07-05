@@ -33,12 +33,12 @@ import prism.*;
 public class SimulatorResultsFile extends Observable
 {
 
-	private ArrayList results;
+	private List<SimulatorResult> results;
 
 	/** Creates a new instance of SimulatorResultsFile */
 	public SimulatorResultsFile()
 	{
-		results = new ArrayList();
+		results = new ArrayList<>();
 	}
 
 	public void tellObservers()
@@ -102,7 +102,7 @@ public class SimulatorResultsFile extends Observable
 
 	public void reset()
 	{
-		results = new ArrayList();
+		results = new ArrayList<>();
 		tellObservers();
 	}
 

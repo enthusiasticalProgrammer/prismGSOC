@@ -60,7 +60,7 @@ public class DoubleSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<Double> getValueClass()
 	{
 		return Double.class;
 	}

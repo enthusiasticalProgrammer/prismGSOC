@@ -301,9 +301,9 @@ public class PrismXYSeries extends XYSeries
 	}
 
 	@Override
-	public List getItems()
+	public List <XYDataItem>getItems()
 	{
-		List items = new LinkedList();
+		List<XYDataItem> items = new LinkedList<>();
 
 		for (int i = 0; i < getItemCount(); i++) {
 			XYDataItem item = super.getDataItem(i);

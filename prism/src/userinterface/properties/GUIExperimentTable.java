@@ -238,7 +238,7 @@ public class GUIExperimentTable extends JTable
 		}
 
 		@Override
-		public Class getColumnClass(int i)
+		public Class<?> getColumnClass(int i)
 		{
 			switch (i) {
 			case 0:

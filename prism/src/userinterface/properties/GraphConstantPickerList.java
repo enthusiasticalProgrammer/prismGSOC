@@ -29,12 +29,13 @@ package userinterface.properties;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 
 public class GraphConstantPickerList extends JPanel implements Scrollable
 {
 
-	private ArrayList rows;
+	private List<GraphConstantLine> rows;
 	private JPanel nextPanel;
 
 	/** Creates a new instance of ConstantPickerList */
@@ -44,7 +45,7 @@ public class GraphConstantPickerList extends JPanel implements Scrollable
 		nextPanel = new JPanel();
 		nextPanel.setLayout(new BorderLayout());
 		add(nextPanel, BorderLayout.CENTER);
-		rows = new ArrayList();
+		rows = new ArrayList<>();
 	}
 
 	public void addConstant(GraphConstantLine pl)

@@ -63,7 +63,7 @@ public class FontColorSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<FontColorPair> getValueClass()
 	{
 		return FontColorPair.class;
 	}

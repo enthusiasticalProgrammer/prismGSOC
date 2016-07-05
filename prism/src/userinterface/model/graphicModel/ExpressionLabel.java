@@ -31,6 +31,7 @@ package userinterface.model.graphicModel;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 import prism.*;
 
@@ -54,7 +55,7 @@ public class ExpressionLabel extends ExpressionProperty
 	private boolean selected;
 
 	//Debugging
-	private ArrayList intersects;
+	private ArrayList<Rectangle2D.Double> intersects;
 	//Constructors
 
 	public static boolean lineLabels;
@@ -220,7 +221,7 @@ public class ExpressionLabel extends ExpressionProperty
 	 */
 	public boolean intersects(Rectangle2D rect)
 	{
-		intersects = new ArrayList();
+		intersects = new ArrayList<Rectangle2D.Double>();
 		if (!getString().equals("")) {
 			double parX;
 			double parY;

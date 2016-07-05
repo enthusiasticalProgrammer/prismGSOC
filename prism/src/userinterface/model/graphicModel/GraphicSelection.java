@@ -31,6 +31,10 @@ import java.awt.datatransfer.*;
 import java.io.*;
 import java.util.*;
 
+import userinterface.model.graphicModel.GraphicSelection.SelectionPair;
+import userinterface.model.graphicModel.GraphicSelection.StateSelect;
+import userinterface.model.graphicModel.GraphicSelection.TransitionSelect;
+
 public class GraphicSelection implements ClipboardOwner, Transferable, Serializable
 {
 	SelectionPair selection;
@@ -41,8 +45,8 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 	 */
 	public GraphicSelection(ModuleModel theModel)
 	{
-		ArrayList states = new ArrayList();
-		ArrayList transitions = new ArrayList();
+		List<StateSelect> states = new ArrayList<>();
+		List<TransitionSelect> transitions = new ArrayList<>();
 		double topX = Double.POSITIVE_INFINITY, topY = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < theModel.getNumStates(); i++) {
 			State st = theModel.getState(i);
@@ -65,7 +69,7 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 					if (st == t.getFrom()) {
 						//System.out.println("frompart1"+j);
 						for (int k = 0; k < states.size(); k++) {
-							StateSelect curr = (StateSelect) states.get(k);
+							StateSelect curr = states.get(k);
 							//System.out.println("beforefrom");
 							if (curr.id == j) {
 								from = curr;
@@ -76,7 +80,7 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 					if (st == t.getTo()) {
 						//System.out.println("topart1"+j);
 						for (int k = 0; k < states.size(); k++) {
-							StateSelect curr = (StateSelect) states.get(k);
+							StateSelect curr = states.get(k);
 							//System.out.println("beforeto");
 							//System.out.println("j = "+j+" curr.id = "+curr.id);
 							if (curr.id == j) {
@@ -140,7 +144,7 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 	public DataFlavor[] getTransferDataFlavors()
 	{
 		DataFlavor[] flavors = new DataFlavor[2];
-		Class type = selection.getClass();
+		Class<? extends SelectionPair> type = selection.getClass();
 		String mimeType = "application/x-java-serialized-object;class=" + type.getName();
 		try {
 			flavors[0] = new DataFlavor(mimeType);
@@ -237,14 +241,14 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 		double topX, topY;
 		double offsetX = 0, offsetY = 0;
 
-		public SelectionPair(ArrayList states, ArrayList transitions)
+		public SelectionPair(List<StateSelect> states, List<TransitionSelect> transitions)
 		{
 			this.states = new StateSelect[states.size()];
 			for (int i = 0; i < states.size(); i++)
-				this.states[i] = (StateSelect) states.get(i);
+				this.states[i] = states.get(i);
 			this.transitions = new TransitionSelect[transitions.size()];
 			for (int i = 0; i < transitions.size(); i++)
-				this.transitions[i] = (TransitionSelect) transitions.get(i);
+				this.transitions[i] = transitions.get(i);
 			//System.out.println("Selection pair name: "+getClass().getName());
 		}
 

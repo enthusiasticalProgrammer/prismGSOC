@@ -29,6 +29,7 @@ package userinterface.graph;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -58,7 +59,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		this.theModel = theModel;
 
 		/* TODO: Use generic container. */
-		ArrayList own = new ArrayList();
+		List<Graph> own = new ArrayList<>();
 		own.add(theModel);
 
 		graphPropertiesTable = new SettingTable(parent);
@@ -75,17 +76,17 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 		axesList.addListSelectionListener(this);
 
-		own = new ArrayList();
-		own.add(xAxisSettings);
+		List<AxisSettings> own2 = new ArrayList<>();
+		own2.add(xAxisSettings);
 		axisPropertiesTable = new SettingTable(parent);
-		axisPropertiesTable.setOwners(own);
+		axisPropertiesTable.setOwners(own2);
 		xAxisSettings.setDisplay(axisPropertiesTable);
 		yAxisSettings.setDisplay(axisPropertiesTable);
 
-		own = new ArrayList();
-		own.add(displaySettings);
+		List<DisplaySettings> own3 = new ArrayList<>();
+		own3.add(displaySettings);
 		displayPropertiesTable = new SettingTable(parent);
-		displayPropertiesTable.setOwners(own);
+		displayPropertiesTable.setOwners(own3);
 		displaySettings.setDisplay(displayPropertiesTable);
 
 		seriesList = new JList(theModel.getGraphSeriesList());
@@ -303,7 +304,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				addSeriesActionPerformed(evt);
+				addSeriesActionPerformed();
 			}
 		});
 
@@ -517,7 +518,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		seriesList.clearSelection();
 	}
 
-	private void addSeriesActionPerformed(java.awt.event.ActionEvent evt)
+	private void addSeriesActionPerformed()
 	{
 		theModel.addSeries("New Series");
 	}
@@ -551,7 +552,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		if (e.getSource() == axesList) {
 			int[] sel = axesList.getSelectedIndices();
 
-			ArrayList own = new ArrayList();
+			List<AxisSettings> own = new ArrayList<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				if (sel[i] == 0)
@@ -564,7 +565,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			synchronized (theModel.getSeriesLock()) {
 				int[] sel = seriesList.getSelectedIndices();
 
-				ArrayList own = new ArrayList();
+				List<Object> own = new ArrayList<>();
 				//seriesPropertiesTable.setOwners(own);
 
 				for (int i = 0; i < sel.length; i++) {

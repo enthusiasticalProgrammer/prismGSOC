@@ -178,7 +178,7 @@ public class GUIPrism extends JFrame
 	private PrismLog theLog;
 
 	//gui components
-	private ArrayList plugs;
+	private List<GUIPlugin> plugs;
 	private JTabbedPane theTabs;
 	private GUIPlugin logPlug;
 	private GUIEventHandler eventHandle;

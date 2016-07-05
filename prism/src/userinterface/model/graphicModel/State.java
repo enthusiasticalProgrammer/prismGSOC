@@ -32,6 +32,7 @@ package userinterface.model.graphicModel;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
+import java.util.List;
 
 //Prism Package
 import userinterface.util.*;
@@ -67,7 +68,7 @@ public class State implements PropertyOwner
 	protected double movingSubdivisions;
 	protected double gridWidth;
 
-	private ArrayList associatedTransitions;
+	private List<Transition> associatedTransitions;
 
 	//Constructors
 
@@ -94,7 +95,7 @@ public class State implements PropertyOwner
 		invarient = new StringLabel("", this, "Invarient:");
 		invarient.setOffsetX(5);
 		invarient.setOffsetY(40);*/
-		associatedTransitions = new ArrayList();
+		associatedTransitions = new ArrayList<Transition>();
 
 		descriptor = "0";
 
@@ -268,7 +269,7 @@ public class State implements PropertyOwner
 
 		for (int i = 0; i < associatedTransitions.size(); i++) {
 			////System.out.println("checking for minX in transition "+i);
-			Transition t = (Transition) associatedTransitions.get(i);
+			Transition t = associatedTransitions.get(i);
 			if (t.getMinX() < min)
 				min = t.getMinX();
 		}
@@ -284,7 +285,7 @@ public class State implements PropertyOwner
 		//more here for labels
 		//more here for transitions
 		for (int i = 0; i < associatedTransitions.size(); i++) {
-			Transition t = (Transition) associatedTransitions.get(i);
+			Transition t = associatedTransitions.get(i);
 			if (t.getMinY() < min)
 				min = t.getMinY();
 		}
@@ -301,7 +302,7 @@ public class State implements PropertyOwner
 		//more here for labels
 		//more here for transitions
 		for (int i = 0; i < associatedTransitions.size(); i++) {
-			Transition t = (Transition) associatedTransitions.get(i);
+			Transition t = associatedTransitions.get(i);
 			if (t.getMaxX() > max)
 				max = t.getMaxX();
 		}
@@ -317,7 +318,7 @@ public class State implements PropertyOwner
 		//more here for labels
 		//more here for transitions
 		for (int i = 0; i < associatedTransitions.size(); i++) {
-			Transition t = (Transition) associatedTransitions.get(i);
+			Transition t = associatedTransitions.get(i);
 			if (t.getMaxY() > max)
 				max = t.getMaxY();
 		}

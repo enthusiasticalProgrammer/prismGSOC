@@ -297,7 +297,7 @@ public class ConstantLine extends javax.swing.JPanel
 		rangeCombo = new javax.swing.JRadioButton();
 
 		boolSingleValueCombo.setBackground(new java.awt.Color(255, 255, 255));
-		boolSingleValueCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "true", "false" }));
+		boolSingleValueCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
 		boolSingleValueCombo.setMinimumSize(new java.awt.Dimension(4, 19));
 		boolSingleValueCombo.setPreferredSize(new java.awt.Dimension(4, 19));
 

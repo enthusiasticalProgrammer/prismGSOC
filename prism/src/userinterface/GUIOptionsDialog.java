@@ -35,7 +35,7 @@ import settings.*;
 public class GUIOptionsDialog extends javax.swing.JDialog
 {
 
-	private ArrayList panels;
+	private List<SettingTable> panels;
 	private PrismSettings settings;
 
 	/** Creates new form GUIOptionsDialog */
@@ -43,7 +43,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 	{
 		super(parent, true);
 		settings = parent.getPrism().getSettings();
-		panels = new ArrayList();
+		panels = new ArrayList<>();
 		initComponents();
 		this.getRootPane().setDefaultButton(cancelButton);
 		setLocationRelativeTo(getParent()); // centre
@@ -52,7 +52,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		for (int i = 0; i < settings.optionOwners.length; i++) {
 			SettingTable table = new SettingTable(this);
 
-			ArrayList al = new ArrayList();
+			List<DefaultSettingOwner> al = new ArrayList<>();
 			settings.optionOwners[i].setDisplay(table);
 			al.add(settings.optionOwners[i]);
 			table.setOwners(al);

@@ -29,6 +29,8 @@ package userinterface.simulator.networking;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
@@ -53,14 +55,14 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private boolean isExperiment;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
-	private ArrayList props;
+	private List<GUIProperty> props;
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
 
 	private boolean cancelled = false;
 
-	private ArrayList propertyValues = null;
+	private List propertyValues = null;
 
 	//GUI for GUIProperties
 	private JTable propertyTable;
@@ -613,7 +615,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//do the work.
 		if (!isExperiment) {
 			try {
-				ArrayList propFormulae = new ArrayList();
+				ArrayList<Expression> propFormulae = new ArrayList<Expression>();
 				for (int i = 0; i < props.size(); i++) {
 					GUIProperty guiProp = (GUIProperty) props.get(i);
 					propFormulae.add(guiProp.getProperty());

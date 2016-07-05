@@ -121,7 +121,7 @@ public class FileSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<File> getValueClass()
 	{
 		return File.class;
 	}

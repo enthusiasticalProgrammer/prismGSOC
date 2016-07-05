@@ -63,7 +63,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 		setDefaultRenderer(Object.class, new PathChangeTableRenderer(true));
 		// Loop indicator
 		loopIndicatorModel = new LoopIndicatorListModel();
-		loopIndicator = new JList(loopIndicatorModel);
+		loopIndicator = new JList<>(loopIndicatorModel);
 		loopIndicator.setBackground(new JPanel().getBackground());
 		loopIndicator.setFixedCellWidth(25);
 		loopIndicator.setFixedCellHeight(getRowHeight());
@@ -220,12 +220,12 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 
 	// Model for list representing loop indicator
 
-	class LoopIndicatorListModel extends AbstractListModel
+	class LoopIndicatorListModel extends AbstractListModel<String>
 	{
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object getElementAt(int index)
+		public String getElementAt(int index)
 		{
 			return "";
 		}

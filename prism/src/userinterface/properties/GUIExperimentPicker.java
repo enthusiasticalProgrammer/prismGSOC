@@ -31,9 +31,11 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.util.*;
+import java.util.List;
 
 import prism.*;
 import userinterface.*;
+import userinterface.properties.GUIExperimentPicker.Rememberance;
 
 public class GUIExperimentPicker extends javax.swing.JDialog
 {
@@ -44,7 +46,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	public static final int VALUES_DONE_SHOW_GRAPH_AND_SIMULATE = 4;
 	public static final int VALUES_DONE_SIMULATE = 5;
 
-	static ArrayList remember;
+	static List<Rememberance> remember;
 
 	static boolean lastGraph = true;
 	static boolean lastSimulation = false;
@@ -61,7 +63,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	private GUIPrism gui;
 
 	static {
-		remember = new ArrayList();
+		remember = new ArrayList<Rememberance>();
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
@@ -289,7 +291,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 
 		// go through list of remembered values and see if we can use them
 		for (int i = 0; i < remember.size(); i++) {
-			Rememberance r = (Rememberance) remember.get(i);
+			Rememberance r = remember.get(i);
 			for (int j = 0; j < propTable.getNumConstants(); j++) {
 				ConstantLine cl = propTable.getConstantLine(j);
 				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
@@ -360,7 +362,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 
 			// see if we got this constant remembered already
 			for (j = 0; j < remember.size(); j++) {
-				r = (Rememberance) remember.get(j);
+				r = remember.get(j);
 				// if so, replace it
 				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					remember.set(j, rNew);
@@ -384,7 +386,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 			rNew.step = cl.getStepValue();
 			// see if we got this constant remembered already
 			for (j = 0; j < remember.size(); j++) {
-				r = (Rememberance) remember.get(j);
+				r = remember.get(j);
 				// if so, replace it
 				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					remember.set(j, rNew);

@@ -30,6 +30,7 @@ package userinterface;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
@@ -341,11 +342,11 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 
 	class DefineConstantTable extends AbstractTableModel
 	{
-		ArrayList constants;
+		List<Constant> constants;
 
 		public DefineConstantTable()
 		{
-			constants = new ArrayList();
+			constants = new ArrayList<>();
 		}
 
 		public void addConstant(Constant c)

@@ -31,7 +31,8 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
-import java.util.*;
+import java.util.List;
+
 import userinterface.*;
 
 public class GUIResultsTable extends javax.swing.JDialog
@@ -149,7 +150,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 	class ResultsTableModel extends AbstractTableModel
 	{
 		String headings[];
-		ArrayList cells;
+		List<String[]> cells;
 		int numRows, numCols;
 
 		public ResultsTableModel(GUIExperiment exp)

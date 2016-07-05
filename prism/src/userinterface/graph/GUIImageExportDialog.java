@@ -197,7 +197,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		imageTypeInputLabel.setText("Image format:");
 		innerTopPanel.add(imageTypeInputLabel);
 
-		imageTypeInputField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "JPEG", "PNG", "EPS" }));
+		imageTypeInputField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JPEG", "PNG", "EPS" }));
 		imageTypeInputField.addActionListener(new java.awt.event.ActionListener()
 		{
 			@Override

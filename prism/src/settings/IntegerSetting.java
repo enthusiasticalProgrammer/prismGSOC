@@ -60,7 +60,7 @@ public class IntegerSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<Integer> getValueClass()
 	{
 		return Integer.class;
 	}

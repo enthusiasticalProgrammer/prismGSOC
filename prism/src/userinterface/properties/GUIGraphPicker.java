@@ -117,12 +117,12 @@ public class GUIGraphPicker extends javax.swing.JDialog
 				// For each of the possible value in the range
 				for (int j = 0; j < multiSeries.get(i).getNumSteps(); j++) {
 					// Clone the list
-					ArrayList copy = (ArrayList<Values>) temp.clone();
+					ArrayList<Values> copy = (ArrayList<Values>) temp.clone();
 
 					// For each element in the list
 					for (int k = 0; k < copy.size(); k++) {
 						Values v = new Values();
-						Values cp = (Values) copy.get(k);
+						Values cp = copy.get(k);
 						v.addValues(cp);
 						v.addValue(multiSeries.get(i).getName(), multiSeries.get(i).getValue(j));
 						seriesValues.add(v);
@@ -355,7 +355,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		jPanel5 = new javax.swing.JPanel();
 		topComboLabel = new javax.swing.JLabel();
 		jPanel6 = new javax.swing.JPanel();
-		selectAxisConstantCombo = new javax.swing.JComboBox();
+		selectAxisConstantCombo = new javax.swing.JComboBox<String>();
 		jPanel7 = new javax.swing.JPanel();
 		middleLabel = new javax.swing.JLabel();
 		constantTablePanel = new javax.swing.JPanel();
@@ -365,7 +365,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		newGraphRadio = new javax.swing.JRadioButton();
 		existingGraphRadio = new javax.swing.JRadioButton();
 		jPanel11 = new javax.swing.JPanel();
-		existingGraphCombo = new javax.swing.JComboBox();
+		existingGraphCombo = new javax.swing.JComboBox<String>();
 		jPanel12 = new javax.swing.JPanel();
 		seriesNameLabel = new javax.swing.JLabel();
 		seriesNameField = new javax.swing.JTextField();
@@ -379,7 +379,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
-				closeDialog(evt);
+				closeDialog();
 			}
 		});
 
@@ -666,7 +666,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 	}
 
 	/** Closes the dialog */
-	private void closeDialog(java.awt.event.WindowEvent evt)
+	private void closeDialog()
 	{
 		setVisible(false);
 		dispose();
@@ -675,7 +675,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 	// Variables declaration - do not modify
 	private javax.swing.ButtonGroup buttonGroup1;
 	private javax.swing.JPanel constantTablePanel;
-	private javax.swing.JComboBox existingGraphCombo;
+	private javax.swing.JComboBox<String> existingGraphCombo;
 	private javax.swing.JRadioButton existingGraphRadio;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JPanel jPanel1;
@@ -694,7 +694,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 	private javax.swing.JButton lineOkayButton;
 	private javax.swing.JLabel middleLabel;
 	private javax.swing.JRadioButton newGraphRadio;
-	private javax.swing.JComboBox selectAxisConstantCombo;
+	private javax.swing.JComboBox<String> selectAxisConstantCombo;
 	private javax.swing.JTextField seriesNameField;
 	private javax.swing.JLabel seriesNameLabel;
 	private javax.swing.JLabel topComboLabel;

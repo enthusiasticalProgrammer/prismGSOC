@@ -243,7 +243,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 
 	}
 
-	class UpdateHeaderListModel extends AbstractListModel
+	class UpdateHeaderListModel extends AbstractListModel<Object>
 	{
 
 		@Override

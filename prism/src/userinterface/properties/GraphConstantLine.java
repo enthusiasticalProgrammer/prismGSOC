@@ -182,17 +182,17 @@ public class GraphConstantLine extends javax.swing.JPanel
 		java.awt.GridBagConstraints gridBagConstraints;
 
 		choiceButtonGroup = new javax.swing.ButtonGroup();
-		boolSingleValueCombo = new javax.swing.JComboBox();
+		boolSingleValueCombo = new javax.swing.JComboBox<>();
 		sizerPanel = new javax.swing.JPanel();
 		jPanel1 = new javax.swing.JPanel();
 		nameLabel = new javax.swing.JLabel();
 		jPanel2 = new javax.swing.JPanel();
 		typeLabel = new javax.swing.JLabel();
 		jPanel3 = new javax.swing.JPanel();
-		valuePicker = new javax.swing.JComboBox();
+		valuePicker = new javax.swing.JComboBox<Object>();
 
 		boolSingleValueCombo.setBackground(new java.awt.Color(255, 255, 255));
-		boolSingleValueCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "true", "false" }));
+		boolSingleValueCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));
 		boolSingleValueCombo.setMinimumSize(new java.awt.Dimension(4, 19));
 		boolSingleValueCombo.setPreferredSize(new java.awt.Dimension(4, 19));
 
@@ -270,7 +270,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 	private javax.swing.JLabel nameLabel;
 	private javax.swing.JPanel sizerPanel;
 	private javax.swing.JLabel typeLabel;
-	private javax.swing.JComboBox valuePicker;
+	private javax.swing.JComboBox<Object> valuePicker;
 	// End of variables declaration//GEN-END:variables
 
 	class BottomBorder implements javax.swing.border.Border

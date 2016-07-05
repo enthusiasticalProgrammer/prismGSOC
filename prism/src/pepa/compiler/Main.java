@@ -34,7 +34,7 @@ public class Main
 	public static String compile(String fileName) throws InternalError
 	{
 		try {
-			Class c = Class.forName("pepa");
+			Class<?> c = Class.forName("pepa");
 			Method[] m = c.getMethods();
 			// Terminate here if no methods found
 			if (m.length == 0)

@@ -49,7 +49,6 @@ public class SaveGraphicModelThread extends Thread
 	private GUIMultiModelHandler handler;
 	private File f;
 	private GUIPlugin plug;
-	private boolean error;
 
 	/** Creates a new instance of SaveGraphicModelThread */
 	public SaveGraphicModelThread(File f, GUIMultiModelHandler handler, GUIModelEditor theEditor)
@@ -57,7 +56,6 @@ public class SaveGraphicModelThread extends Thread
 		this.theEditor = theEditor;
 		this.handler = handler;
 		this.f = f;
-		error = false;
 		plug = handler.getGUIPlugin();
 	}
 
@@ -91,9 +89,9 @@ public class SaveGraphicModelThread extends Thread
 			//Constants
 			{
 				Element cons = doc.createElement("constants");
-				ArrayList consNames = editor.getEditableConstantNames();
-				ArrayList consValues = editor.getEditableConstantValues();
-				ArrayList<Type> consTypes = editor.getEditableConstantTypes();
+				List<String> consNames = editor.getEditableConstantNames();
+				List<String> consValues = editor.getEditableConstantValues();
+				List<Type> consTypes = editor.getEditableConstantTypes();
 
 				for (int i = 0; i < consTypes.size(); i++) {
 					Object value = consValues.get(i);
@@ -113,11 +111,11 @@ public class SaveGraphicModelThread extends Thread
 			//Globals
 			{
 				Element decl = doc.createElement("globals");
-				ArrayList declNames = editor.getEditableGlobalNames();
-				ArrayList declMins = editor.getEditableGlobalMins();
-				ArrayList declMaxs = editor.getEditableGlobalMaxs();
-				ArrayList declInits = editor.getEditableGlobalInits();
-				ArrayList<Type> declTypes = editor.getEditableGlobalTypes();
+				List<String> declNames = editor.getEditableGlobalNames();
+				List<String> declMins = editor.getEditableGlobalMins();
+				List<String> declMaxs = editor.getEditableGlobalMaxs();
+				List<String> declInits = editor.getEditableGlobalInits();
+				List<Type> declTypes = editor.getEditableGlobalTypes();
 
 				for (int i = 0; i < declTypes.size(); i++) {
 					Type type = declTypes.get(i);
@@ -157,9 +155,9 @@ public class SaveGraphicModelThread extends Thread
 			//Modules
 			{
 				for (int i = 0; i < theModules.length; i++) {
-					ArrayList decisions = new ArrayList();
-					ArrayList probTrans = new ArrayList();
-					ArrayList branchTrans = new ArrayList();
+					List decisions = new ArrayList();
+					List<Transition> probTrans = new ArrayList<>();
+					List<Transition> branchTrans = new ArrayList<>();
 					Element module = doc.createElement("module");
 					module.setAttribute("name", theModules[i].getCorrespondingModuleNode().getName());
 
@@ -326,11 +324,11 @@ public class SaveGraphicModelThread extends Thread
 						}
 					}
 					//Variables
-					ArrayList variableNames = editor.getVariableNames(theModules[i]);
-					ArrayList<Type> variableTypes = editor.getVariableTypes(theModules[i]);
-					ArrayList variableInits = editor.getVariableInits(theModules[i]);
-					ArrayList variableMins = editor.getVariableMins(theModules[i]);
-					ArrayList variableMaxs = editor.getVariableMaxs(theModules[i]);
+					List variableNames = editor.getVariableNames(theModules[i]);
+					List<Type> variableTypes = editor.getVariableTypes(theModules[i]);
+					List variableInits = editor.getVariableInits(theModules[i]);
+					List variableMins = editor.getVariableMins(theModules[i]);
+					List variableMaxs = editor.getVariableMaxs(theModules[i]);
 					for (int j = 0; j < variableTypes.size(); j++) {
 						Type type = variableTypes.get(j);
 
@@ -394,7 +392,7 @@ public class SaveGraphicModelThread extends Thread
 
 						//branches
 						//get all branches of this decision
-						ArrayList extract = new ArrayList();
+						ArrayList<ProbTransition> extract = new ArrayList<ProbTransition>();
 						for (int k = 0; k < branchTrans.size(); k++) {
 							ProbTransition prtr = (ProbTransition) branchTrans.get(k);
 							if (prtr.getFrom() == de)
@@ -402,7 +400,7 @@ public class SaveGraphicModelThread extends Thread
 						}
 
 						for (int k = 0; k < extract.size(); k++) {
-							ProbTransition prtr = (ProbTransition) extract.get(k);
+							ProbTransition prtr = extract.get(k);
 							Element aBranch = doc.createElement("branch");
 							int toState = 0;
 							for (int l = 0; l < theModules[i].getNumStates(); l++) {

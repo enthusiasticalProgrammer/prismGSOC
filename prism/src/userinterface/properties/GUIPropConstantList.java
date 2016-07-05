@@ -28,6 +28,7 @@
 package userinterface.properties;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -62,7 +63,7 @@ public class GUIPropConstantList extends JTable
 
 	protected void setEditorAndRenderer()
 	{
-		JComboBox typeChooser = new JComboBox();
+		JComboBox<String> typeChooser = new JComboBox<>();
 		typeChooser.addItem(new String("int"));
 		typeChooser.addItem(new String("double"));
 		typeChooser.addItem(new String("bool"));
@@ -167,13 +168,13 @@ public class GUIPropConstantList extends JTable
 
 	class PropConstantModel extends AbstractTableModel
 	{
-		ArrayList constants; // The list of constants
+		List<GUIConstant> constants; // The list of constants
 		int conCount; // Counter used to generate new default names for constants
 		Exception error; // Any error that occurs when all constants are parsed together
 
 		public PropConstantModel()
 		{
-			constants = new ArrayList();
+			constants = new ArrayList<>();
 			conCount = 0;
 			error = null;
 		}
@@ -288,7 +289,7 @@ public class GUIPropConstantList extends JTable
 
 		public void newList()
 		{
-			constants = new ArrayList();
+			constants = new ArrayList<>();
 			fireTableStructureChanged();
 			parent.constantListChanged();
 		}
