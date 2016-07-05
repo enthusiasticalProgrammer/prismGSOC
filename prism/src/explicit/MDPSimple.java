@@ -692,8 +692,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = 0.0;
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			// Check whether we have exceeded min/max so far
@@ -737,8 +737,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = 0.0;
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			// Store strategy info if value matches
@@ -762,8 +762,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		// Compute sum for this distribution
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 
@@ -787,8 +787,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = 0.0;
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				if (k != s) {
 					d += prob * vect[k];
 				} else {
@@ -833,8 +833,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		// Compute sum for this distribution
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			if (k != s) {
 				d += prob * vect[k];
 			} else {
@@ -864,8 +864,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = mdpRewards.getTransitionReward(s, j);
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			// Check whether we have exceeded min/max so far
@@ -904,8 +904,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		// d = mcRewards.getTransitionReward(s);
 		d = 0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 		d += mcRewards.getStateReward(s);
@@ -931,8 +931,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = mdpRewards.getTransitionReward(s, j);
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				if (k != s) {
 					d += prob * vect[k];
 				} else {
@@ -984,8 +984,8 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			// Compute sum for this distribution
 			d = mdpRewards.getTransitionReward(s, j);
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			d += mdpRewards.getStateReward(s);

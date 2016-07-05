@@ -370,7 +370,7 @@ public class ExpressionFunc extends Expression
 		e.setOldStyle(oldStyle);
 		n = getNumOperands();
 		for (i = 0; i < n; i++) {
-			e.addOperand((Expression) getOperand(i).deepCopy());
+			e.addOperand(getOperand(i).deepCopy());
 		}
 		e.setType(type);
 		e.setPosition(this);

@@ -474,7 +474,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setYConstraints() throws PrismException
 	{
-		Map<Integer, Double>[] map = (Map<Integer, Double>[]) new HashMap[model.getNumStates()];
+		Map<Integer, Double>[] map = new HashMap[model.getNumStates()];
 		for (int state = 0; state < model.getNumStates(); state++) {
 			map[state] = new HashMap<>();
 		}

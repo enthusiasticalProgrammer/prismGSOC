@@ -237,7 +237,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		// (1) a row in the picker list
 		// (2) an item in the "x axis" drop down menu
 		for (int i = 0; i < resultsCollection.getRangingConstants().size(); i++) {
-			DefinedConstant dc = (DefinedConstant) resultsCollection.getRangingConstants().get(i);
+			DefinedConstant dc = resultsCollection.getRangingConstants().get(i);
 			pickerList.addConstant(new GraphConstantLine(dc, this));
 			this.selectAxisConstantCombo.addItem(dc.getName());
 		}

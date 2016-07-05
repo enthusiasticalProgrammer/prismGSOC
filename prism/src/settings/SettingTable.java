@@ -393,7 +393,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 						row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
+				ArrayList<?> settings = (ArrayList<?>) value;
 				ArrayList<Object> values = new ArrayList<>();
 				boolean enabled = true;
 				Setting first = null;
@@ -451,7 +451,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				return currentEditor.getTableCellEditorComponent(table, setting, setting.getValue(), isSelected, row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
+				ArrayList<?> settings = (ArrayList<?>) value;
 				ArrayList<Object> values = new ArrayList<>();
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
@@ -514,7 +514,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			String ownerList = "";
 			while (it.hasNext()) {
 
-				SettingOwner po = (SettingOwner) it.next();
+				SettingOwner po = it.next();
 				//            for(int i = 0; i < po.getNumProperties(); i++)
 				//            {
 				//                po.getProperty(i).addObserver(this);
@@ -630,7 +630,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		{
 			if (groupNames.size() == 0)
 				return 0;
-			SettingOwner firstInGroup = (SettingOwner) owners.get(groupStarts.get(currentGroup).intValue());
+			SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 			return firstInGroup.getNumSettings();
 		}
 
@@ -653,7 +653,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		public Object getValueAt(int row, int column)
 		{
 			if (column == 0) {
-				SettingOwner firstInGroup = (SettingOwner) owners.get(groupStarts.get(currentGroup).intValue());
+				SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 				//System.out.println("firstInGroup = "+firstInGroup);
 				return firstInGroup.getSetting(row).getName();
 			} else {
@@ -755,7 +755,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		protected SettingOwner getOwner(int i)
 		{
-			return (SettingOwner) owners.get(i);
+			return owners.get(i);
 		}
 
 		public int getNumGroups()

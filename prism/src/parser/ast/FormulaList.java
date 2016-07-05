@@ -114,7 +114,7 @@ public class FormulaList extends ASTElement
 		for (int i = 0; i < n; i++) {
 			Vector<String> v = getFormula(i).getAllFormulas();
 			for (int j = 0; j < v.size(); j++) {
-				int k = getFormulaIndex((String) v.elementAt(j));
+				int k = getFormulaIndex(v.elementAt(j));
 				if (k != -1) {
 					matrix[i][k] = true;
 				}

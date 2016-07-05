@@ -50,7 +50,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 	private GUISimulator.UpdateTableModel utm;
 
 	private UpdateHeaderListModel headerModel;
-	private JList header;
+	private JList<String> header;
 	private UpdateHeaderRenderer updateHeaderRenderer;
 	private UpdateTableRenderer updateTableRenderer;
 
@@ -69,7 +69,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 		getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		headerModel = new UpdateHeaderListModel();
-		JList rowHeader = new JList(headerModel);
+		JList<String> rowHeader = new JList<>(headerModel);
 
 		rowHeader.setBackground(new JPanel().getBackground());
 
@@ -151,7 +151,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 		repaint();
 	}
 
-	public JList getUpdateRowHeader()
+	public JList<String> getUpdateRowHeader()
 	{
 		return header;
 	}
@@ -243,11 +243,11 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 
 	}
 
-	class UpdateHeaderListModel extends AbstractListModel<Object>
+	class UpdateHeaderListModel extends AbstractListModel<String>
 	{
 
 		@Override
-		public Object getElementAt(int index)
+		public String getElementAt(int index)
 		{
 			return "" + index;
 		}

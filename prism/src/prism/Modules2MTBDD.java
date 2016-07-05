@@ -1750,7 +1750,7 @@ public class Modules2MTBDD
 			// find sections of state space
 			// which have exactly i nondet. choices in this module
 			JDD.Ref(overlaps);
-			equalsi = JDD.Equals(overlaps, (double) i);
+			equalsi = JDD.Equals(overlaps, i);
 			// if there aren't any for this i, skip the iteration
 			if (equalsi.equals(JDD.ZERO)) {
 				JDD.Deref(equalsi);

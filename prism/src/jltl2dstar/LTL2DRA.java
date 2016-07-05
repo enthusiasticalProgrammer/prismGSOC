@@ -43,7 +43,7 @@ class LTL2DRA
 	 */
 	private DRA LTLtoDRA_rec(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException
 	{
-		SimpleLTL ltl_pnf = ((SimpleLTL) ltl.clone()).simplify();
+		SimpleLTL ltl_pnf = ltl.clone().simplify();
 
 		if (options.allow_union && ltl_pnf.kind == LTLType.OR) {
 			SimpleLTL ltl_left = ltl_pnf.left;

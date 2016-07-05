@@ -643,7 +643,7 @@ public class PropertiesFile extends ASTElement
 		ret.setConstantList((ConstantList) constantList.deepCopy());
 		n = getNumProperties();
 		for (i = 0; i < n; i++) {
-			ret.addProperty((Property) getPropertyObject(i).deepCopy());
+			ret.addProperty(getPropertyObject(i).deepCopy());
 		}
 		// Copy other (generated) info
 		ret.allIdentsUsed = (allIdentsUsed == null) ? null : (Vector<String>) allIdentsUsed.clone();

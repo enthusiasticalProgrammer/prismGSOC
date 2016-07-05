@@ -160,7 +160,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		// Some easy references
 		chart = super.getChart();
 		plot = chart.getXYPlot();
-		plot.setBackgroundPaint((Paint) Color.white);
+		plot.setBackgroundPaint(Color.white);
 		seriesCollection = (XYSeriesCollection) plot.getDataset();
 
 		xAxisSettings = new AxisSettings("X", true, this);
@@ -1066,7 +1066,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			chartFormat.setAttribute("titleFontSize", "" + titleFont.getSize());
 			chartFormat.setAttribute("titleFontStyle", "" + titleFont.getStyle());
 
-			Color titleFontColor = (Color) getTitleFont().c;
+			Color titleFontColor = getTitleFont().c;
 			chartFormat.setAttribute("titleFontColourR", "" + titleFontColor.getRed());
 			chartFormat.setAttribute("titleFontColourG", "" + titleFontColor.getGreen());
 			chartFormat.setAttribute("titleFontColourB", "" + titleFontColor.getBlue());

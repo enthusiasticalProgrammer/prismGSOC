@@ -660,7 +660,7 @@ public class MultiObjModelChecker extends PrismComponent
 				double timePre = System.currentTimeMillis();
 				value = weightedMultiReachProbs(modelMDP, yes, maybe, start, labels, transRewards, opsAndBounds);
 				double timePost = System.currentTimeMillis();
-				double time = ((double) (timePost - timePre)) / 1000.0;
+				double time = (timePost - timePre) / 1000.0;
 				mainLog.println("Multi-objective value iterations took " + time + " s.");
 			}
 			// Unknown method (shouldn't happen)

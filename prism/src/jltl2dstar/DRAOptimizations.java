@@ -411,7 +411,7 @@ class DRAOptimizations
 	 */
 	private <T extends Comparator<Integer>> Coloring generateColoring(Vector<Integer> states, Coloring coloring, T comp)
 	{
-		Integer[] statearray = (Integer[]) states.toArray(new Integer[0]);
+		Integer[] statearray = states.toArray(new Integer[0]);
 		Arrays.sort(statearray, comp);
 		Vector<Integer> sortedstates = new Vector<>(Arrays.asList(statearray));
 

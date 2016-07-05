@@ -254,8 +254,8 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		distr = ctmc.getTransitions(s);
 		sum = d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			// Non-diagonal entries
 			if (k != s) {
 				sum += prob;
@@ -280,8 +280,8 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		distr = ctmc.getTransitions(s);
 		sum = d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			// Non-diagonal entries only
 			if (k != s) {
 				sum += prob;
@@ -317,8 +317,8 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 			distr = ctmc.getTransitions(i);
 			sum = 0.0;
 			for (Map.Entry<Integer, Double> e : distr) {
-				j = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				j = e.getKey();
+				prob = e.getValue();
 				// Non-diagonal entries only
 				if (j != i) {
 					sum += prob;

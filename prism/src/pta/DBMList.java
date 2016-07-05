@@ -71,7 +71,7 @@ public class DBMList extends NCZone
 			this.pta = dbml.pta;
 			list = new ArrayList<>();
 			for (DBM dbm : dbml.list) {
-				list.add((DBM) dbm.deepCopy());
+				list.add(dbm.deepCopy());
 			}
 		}
 	}
@@ -182,7 +182,7 @@ public class DBMList extends NCZone
 	{
 		int i, j, n1, n2;
 		if (z instanceof DBM)
-			z = new DBMList((DBM) z);
+			z = new DBMList(z);
 		DBMList dbml = (DBMList) z;
 		DBMList listNew;
 		DBM dbmNew;
@@ -403,7 +403,7 @@ public class DBMList extends NCZone
 	public void intersectComplement(Zone z)
 	{
 		if (z instanceof DBM)
-			z = new DBMList((DBM) z);
+			z = new DBMList(z);
 		DBMList dbml = (DBMList) z;
 		for (DBM dbm : dbml.list) {
 			DBMList listTmp = dbm.createComplement();
@@ -481,7 +481,7 @@ public class DBMList extends NCZone
 	{
 		DBMList copy = new DBMList(pta);
 		for (DBM dbm : list) {
-			copy.list.add((DBM) dbm.deepCopy());
+			copy.list.add(dbm.deepCopy());
 		}
 		return copy;
 	}

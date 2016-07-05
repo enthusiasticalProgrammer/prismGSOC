@@ -214,7 +214,7 @@ public class XiNStrategy implements Strategy
 	 */
 	private double xprime(int state)
 	{
-		return ((double) mdp.getNumChoices(state)) / getM();
+		return (mdp.getNumChoices(state)) / getM();
 	}
 
 	private double sumOfPerturbedFrequencies(int state)

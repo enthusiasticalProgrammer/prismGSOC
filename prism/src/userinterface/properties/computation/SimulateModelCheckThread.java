@@ -126,7 +126,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 			}
 			//after collecting the results stop all of the clock icons
 			for (int i = 0; i < clkThreads.size(); i++) {
-				IconThread ict = (IconThread) clkThreads.get(i);
+				IconThread ict = clkThreads.get(i);
 				ict.interrupt();
 				while (!ict.canContinue) {
 					try {

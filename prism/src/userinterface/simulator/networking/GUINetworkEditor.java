@@ -351,7 +351,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 			}
 		}
 		for (int i = 0; i < fss.size(); i++) {
-			treeModel.nodeStructureChanged((FileSystem) fss.get(i));
+			treeModel.nodeStructureChanged(fss.get(i));
 		}
 
 		ArrayList<Integer> indices = new ArrayList<>();

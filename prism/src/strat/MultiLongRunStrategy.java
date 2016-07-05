@@ -232,7 +232,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			if (mem < -1 || mem >= recurrentChoices.length) {
 				throw new IllegalArgumentException("only values from -1 to " + recurrentChoices.length + " are allowed");
 			}
-			this.strategy = (int) mem;
+			this.strategy = mem;
 		} else {
 			throw new IllegalArgumentException("Integer is required as argument, current type: " + memory.getClass());
 		}

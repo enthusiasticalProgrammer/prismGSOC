@@ -443,8 +443,8 @@ public class STPGExplicit extends MDPSimple implements STPG
 			d = mdpRewards.getTransitionReward(s, j);
 
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k] * disc;
 			}
 

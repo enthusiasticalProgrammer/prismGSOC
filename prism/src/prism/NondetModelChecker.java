@@ -369,7 +369,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		// Boolean
 		if (exprSub.getType() instanceof TypeBool) {
 			// Copy expression because we will modify it
-			exprSub = (ExpressionStrategy) exprSub.deepCopy();
+			exprSub = exprSub.deepCopy();
 			// We will solve an existential query, so negate if universal
 			if (forAll) {
 				exprSub = Expression.Not(exprSub);

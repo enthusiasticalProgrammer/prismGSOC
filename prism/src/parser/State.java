@@ -64,8 +64,8 @@ public class State implements Comparable<State>
 	 */
 	public State(State s1, State s2)
 	{
-		Object[] arr1 = (Object[]) s1.varValues;
-		Object[] arr2 = (Object[]) s2.varValues;
+		Object[] arr1 = s1.varValues;
+		Object[] arr2 = s2.varValues;
 		varValues = new Object[arr1.length + arr2.length];
 		int i;
 		for (i = 0; i < arr1.length; i++)

@@ -103,7 +103,7 @@ public class SystemRename extends SystemDefn
 		if (i == -1) {
 			return s;
 		} else {
-			return (String) to.elementAt(i);
+			return to.elementAt(i);
 		}
 	}
 

@@ -232,10 +232,10 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	{
 		AcceptanceGenRabin result = new AcceptanceGenRabin();
 		for (GenRabinPair pair : this) {
-			result.add((GenRabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		for (GenRabinPair pair : other) {
-			result.add((GenRabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		return result;
 	}

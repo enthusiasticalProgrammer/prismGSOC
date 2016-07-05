@@ -380,11 +380,11 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 							if (aFrom != -1)
 								aNail.setFrom(nails.get(aFrom));
 							else
-								aNail.setFrom((userinterface.model.graphicModel.State) theModel.getState(from));
+								aNail.setFrom(theModel.getState(from));
 							if (aTo != -1)
 								aNail.setTo(nails.get(aTo));
 							else
-								aNail.setTo((userinterface.model.graphicModel.State) theModel.getState(to));
+								aNail.setTo(theModel.getState(to));
 						}
 						int tranInd = 0;
 						if (nails.size() > 0) {

@@ -36,7 +36,7 @@ public abstract class Setting
 	private Object value;
 	private boolean editableWhenMultiple;
 	private boolean enabled;
-	private ArrayList constraints;
+	private List<SettingConstraint> constraints;
 	private String version;
 
 	private SettingOwner owner;
@@ -52,7 +52,7 @@ public abstract class Setting
 		this.enabled = true;
 		this.version = null;
 
-		constraints = new ArrayList();
+		constraints = new ArrayList<>();
 		if (constraint != null)
 			addConstraint(constraint);
 	}
@@ -90,7 +90,7 @@ public abstract class Setting
 
 	public SettingConstraint getConstraint(int i)
 	{
-		return (SettingConstraint) constraints.get(i);
+		return constraints.get(i);
 	}
 
 	public void setVersion(String s)

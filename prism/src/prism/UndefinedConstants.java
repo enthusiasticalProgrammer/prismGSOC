@@ -203,12 +203,12 @@ public class UndefinedConstants
 		// create storage for info about constant definitions
 		mfConsts = new ArrayList<>(mfNumConsts);
 		for (i = 0; i < mfNumConsts; i++) {
-			s = (String) mfv.elementAt(i);
+			s = mfv.elementAt(i);
 			mfConsts.add(new DefinedConstant(s, modulesFile.getConstantList().getConstantType(modulesFile.getConstantList().getConstantIndex(s))));
 		}
 		pfConsts = new ArrayList<>(pfNumConsts);
 		for (i = 0; i < pfNumConsts; i++) {
-			s = (String) pfv.elementAt(i);
+			s = pfv.elementAt(i);
 			pfConsts.add(new DefinedConstant(s, propertiesFile.getConstantList().getConstantType(propertiesFile.getConstantList().getConstantIndex(s))));
 		}
 		// initialise storage just created

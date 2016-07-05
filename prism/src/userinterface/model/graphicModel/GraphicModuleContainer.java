@@ -580,12 +580,12 @@ public class GraphicModuleContainer implements FocusListener, AdjustmentListener
 
 	public int getViewOffsetX()
 	{
-		return (int) scroller.getHorizontalScrollBar().getModel().getValue();
+		return scroller.getHorizontalScrollBar().getModel().getValue();
 	}
 
 	public int getViewOffsetY()
 	{
-		return (int) scroller.getVerticalScrollBar().getModel().getValue();
+		return scroller.getVerticalScrollBar().getModel().getValue();
 	}
 
 	@Override

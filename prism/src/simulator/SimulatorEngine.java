@@ -1033,7 +1033,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public Path getPath()
 	{
-		return (Path) path;
+		return path;
 	}
 
 	/**

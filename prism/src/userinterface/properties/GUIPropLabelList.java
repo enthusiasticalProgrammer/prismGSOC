@@ -177,7 +177,7 @@ public class GUIPropLabelList extends JTable
 
 		public GUILabel getLabel(int i)
 		{
-			return (GUILabel) labels.get(i);
+			return labels.get(i);
 		}
 
 		public Exception getError()
@@ -317,7 +317,7 @@ public class GUIPropLabelList extends JTable
 			GUILabel gl = getLabel(rowIndex);
 			switch (columnIndex) {
 			case 0: {
-				if (!gl.name.equals((String) aValue)) {
+				if (!gl.name.equals(aValue)) {
 					gl.name = (String) aValue;
 					gl.parse();
 					validateLabels();
@@ -326,7 +326,7 @@ public class GUIPropLabelList extends JTable
 				break;
 			}
 			case 1: {
-				if (!gl.label.equals((String) aValue)) {
+				if (!gl.label.equals(aValue)) {
 					gl.label = (String) aValue;
 					gl.parse();
 					validateLabels();

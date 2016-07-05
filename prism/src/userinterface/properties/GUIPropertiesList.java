@@ -50,7 +50,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	private Prism prism;
 	private GUIMultiProperties parent;
 
-	private DefaultListModel listModel;
+	private DefaultListModel<GUIProperty> listModel;
 
 	private PictureCellRenderer rend;
 
@@ -62,7 +62,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 		this.prism = prism;
 		this.parent = parent;
 
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		setModel(listModel);
 
 		rend = new PictureCellRenderer();
@@ -96,7 +96,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	 */
 	public GUIProperty getProperty(int i)
 	{
-		return (GUIProperty) listModel.getElementAt(i);
+		return listModel.getElementAt(i);
 	}
 
 	/**

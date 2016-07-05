@@ -41,7 +41,8 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 {
 	private SettingTable graphPropertiesTable, axisPropertiesTable, displayPropertiesTable, seriesPropertiesTable;
 
-	private JList seriesList, axesList;
+	private JList<String> axesList;
+	private JList<SeriesSettings> seriesList;
 
 	private Graph theModel;
 	private AxisSettings xAxisSettings;
@@ -71,7 +72,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		displaySettings = theModel.getDisplaySettings();
 
 		String[] axes = { "x-Axis", "y-Axis" };
-		axesList = new JList(axes);
+		axesList = new JList<>(axes);
 		axesList.setSelectedIndex(0);
 
 		axesList.addListSelectionListener(this);
@@ -89,7 +90,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		displayPropertiesTable.setOwners(own3);
 		displaySettings.setDisplay(displayPropertiesTable);
 
-		seriesList = new JList(theModel.getGraphSeriesList());
+		seriesList = new JList<>(theModel.getGraphSeriesList());
 		seriesList.addListSelectionListener(this);
 		seriesList.setCellRenderer(new ListCellRenderer()
 		{
@@ -420,7 +421,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			java.util.List<Graph.SeriesKey> selected = new ArrayList<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				selected.add(((SeriesSettings) theModel.getGraphSeriesList().getElementAt(sel[i])).getSeriesKey());
+				selected.add(theModel.getGraphSeriesList().getElementAt(sel[i]).getSeriesKey());
 			}
 
 			SeriesEditorDialog.makeSeriesEditor(plugin, parent, theModel, selected);
@@ -452,7 +453,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toMove.add(series.getSeriesKey());
 			}
 
@@ -478,7 +479,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toMove.add(series.getSeriesKey());
 			}
 
@@ -504,7 +505,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toRemove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toRemove.add(series.getSeriesKey());
 			}
 

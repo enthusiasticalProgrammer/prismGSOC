@@ -200,7 +200,7 @@ public class ExpressionStrategy extends Expression
 		expr.setThereExists(isThereExists());
 		expr.coalition = new Coalition(coalition);
 		for (Expression operand : operands) {
-			expr.addOperand((Expression) operand.deepCopy());
+			expr.addOperand(operand.deepCopy());
 		}
 		expr.singleOperand = singleOperand;
 		expr.setType(type);

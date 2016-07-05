@@ -104,8 +104,8 @@ public class ProbTransition extends Transition
 		double fromY = from.getY() + 2.5;
 
 		for (int i = 0; i < nails.size(); i++) {
-			double toX = ((Nail) (nails.get(i))).getX();
-			double toY = ((Nail) (nails.get(i))).getY();
+			double toX = (nails.get(i)).getX();
+			double toY = (nails.get(i)).getY();
 
 			if ((new Line2D.Double(fromX, fromY, toX, toY)).intersects(rect)) {
 				doesIt = true;

@@ -682,8 +682,8 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 				// Compute sum for this distribution
 				d = 0.0;
 				for (Map.Entry<Integer, Double> e : distr) {
-					k = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					k = e.getKey();
+					prob = e.getValue();
 					d += prob * vect[k];
 				}
 				// Check whether we have exceeded min/max so far
@@ -722,8 +722,8 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 				// Compute sum for this distribution
 				d = 0.0;
 				for (Map.Entry<Integer, Double> e : distr) {
-					k = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					k = e.getKey();
+					prob = e.getValue();
 					d += prob * vect[k];
 				}
 				// Check whether we have exceeded min/max so far
@@ -774,8 +774,8 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 				// Compute sum for this distribution
 				d = 0.0;
 				for (Map.Entry<Integer, Double> e : distr) {
-					k = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					k = e.getKey();
+					prob = e.getValue();
 					if (k != s) {
 						d += prob * vect[k];
 					} else {
@@ -828,8 +828,8 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 				// Compute sum for this distribution
 				d = rewards.getNestedTransitionReward(s, dsIter, dIter);
 				for (Map.Entry<Integer, Double> e : distr) {
-					k = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					k = e.getKey();
+					prob = e.getValue();
 					d += prob * vect[k];
 				}
 				// Check whether we have exceeded min/max so far
@@ -871,8 +871,8 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 				// Compute sum for this distribution
 				d = rewards.getNestedTransitionReward(s, dsIter, dIter);
 				for (Map.Entry<Integer, Double> e : distr) {
-					k = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					k = e.getKey();
+					prob = e.getValue();
 					d += prob * vect[k];
 				}
 				// Check whether we have exceeded min/max so far

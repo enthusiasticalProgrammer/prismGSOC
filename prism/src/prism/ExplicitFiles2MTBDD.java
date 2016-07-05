@@ -275,7 +275,7 @@ public class ExplicitFiles2MTBDD
 		// TODO: disable if not required?
 		model.setSynchs(synchs);
 		if (modelType != ModelType.MDP) {
-			model.setTransPerAction((JDDNode[]) transPerAction.toArray(new JDDNode[0]));
+			model.setTransPerAction(transPerAction.toArray(new JDDNode[0]));
 		} else {
 			model.setTransActions(transActions);
 		}

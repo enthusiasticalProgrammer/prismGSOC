@@ -1051,7 +1051,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 					GUIClipboardProperties gcp = (GUIClipboardProperties) contents.getTransferData(getGUIClipboardPropertiesDataFlavor());
 					ArrayList<GUIProperty> listOfProperties = gcp.getProperties();
 					for (int i = 0; i < listOfProperties.size(); i++) {
-						GUIProperty property = (GUIProperty) listOfProperties.get(i);
+						GUIProperty property = listOfProperties.get(i);
 						propList.addProperty(property.getName(), property.getPropString(), property.getComment());
 						setModified(true);
 					}
@@ -1776,7 +1776,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		// disable certain actions if any of the selected properties are currently being edited
 		boolean showDeleters = true;
 		for (int i = 0; i < selectedProps.size(); i++) {
-			if (((GUIProperty) selectedProps.get(i)).isBeingEdited()) {
+			if (selectedProps.get(i).isBeingEdited()) {
 				showDeleters = false;
 				break;
 			}

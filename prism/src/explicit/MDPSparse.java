@@ -127,15 +127,15 @@ public class MDPSparse extends MDPExplicit
 					if (sort) {
 						sorted.put(e.getKey(), e.getValue());
 					} else {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 				}
 				if (sort) {
 					for (Map.Entry<Integer, Double> e : sorted.entrySet()) {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 					sorted.clear();
@@ -197,15 +197,15 @@ public class MDPSparse extends MDPExplicit
 					if (sort) {
 						sorted.put(permut[e.getKey()], e.getValue());
 					} else {
-						cols[k] = (Integer) permut[e.getKey()];
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = permut[e.getKey()];
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 				}
 				if (sort) {
 					for (Map.Entry<Integer, Double> e : sorted.entrySet()) {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 					sorted.clear();

@@ -95,7 +95,7 @@ public class SaveGraphicModelThread extends Thread
 
 				for (int i = 0; i < consTypes.size(); i++) {
 					Object value = consValues.get(i);
-					String name = (String) consNames.get(i);
+					String name = consNames.get(i);
 					Element newCons = null;
 
 					newCons = doc.createElement(consTypes.get(i).getTypeString() + "Constant");
@@ -119,23 +119,23 @@ public class SaveGraphicModelThread extends Thread
 
 				for (int i = 0; i < declTypes.size(); i++) {
 					Type type = declTypes.get(i);
-					String name = (String) declNames.get(i);
+					String name = declNames.get(i);
 					Element newDecl = null;
 					Object init;
 					if (type instanceof TypeInt) {
 						newDecl = doc.createElement("variable");
 						newDecl.setAttribute("name", name);
-						newDecl.setAttribute("min", (String) declMins.get(i));
-						newDecl.setAttribute("max", (String) declMaxs.get(i));
+						newDecl.setAttribute("min", declMins.get(i));
+						newDecl.setAttribute("max", declMaxs.get(i));
 						init = declInits.get(i);
 						if (init != null)
-							newDecl.setAttribute("init", (String) declInits.get(i));
+							newDecl.setAttribute("init", declInits.get(i));
 					} else if (type instanceof TypeBool) {
 						newDecl = doc.createElement("boolVariable");
 						newDecl.setAttribute("name", name);
 						init = declInits.get(i);
 						if (init != null)
-							newDecl.setAttribute("init", (String) declInits.get(i));
+							newDecl.setAttribute("init", declInits.get(i));
 					}
 					if (newDecl != null)
 						decl.appendChild(newDecl);
@@ -297,7 +297,7 @@ public class SaveGraphicModelThread extends Thread
 							}
 							//nails
 							for (int k = 0; k < tr.getNails().size(); k++) {
-								Nail na = (Nail) (tr.getNails().get(k));
+								Nail na = (tr.getNails().get(k));
 								Element nail = doc.createElement("nail");
 								if (na.getFrom() instanceof Nail) {
 									nail.setAttribute("from", "" + tr.getNails().indexOf(na.getFrom()));
@@ -412,8 +412,8 @@ public class SaveGraphicModelThread extends Thread
 							aBranch.setAttribute("to", "" + toState);
 							//nail position
 							if (prtr.getNails().size() > 0) {
-								double nailX = ((Nail) (prtr.getNails().get(0))).getX();
-								double nailY = ((Nail) (prtr.getNails().get(0))).getY();
+								double nailX = (prtr.getNails().get(0)).getX();
+								double nailY = (prtr.getNails().get(0)).getY();
 								{
 									Element position = doc.createElement("position");
 									position.setAttribute("x", "" + nailX);

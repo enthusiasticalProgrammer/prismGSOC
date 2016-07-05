@@ -47,7 +47,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 	// Table model
 	private GUISimulatorPathTableModel ptm;
 	// Component on left hand side to show path loops
-	private JList loopIndicator;
+	private JList<String> loopIndicator;
 	private LoopIndicatorListModel loopIndicatorModel;
 
 	/** Creates a new instance of GUISimulatorPathTable */
@@ -291,7 +291,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 					else
 						this.setToolTipText("Time spent in state " + (row) + " (not yet known)");
 				} else {
-					stringValue = (simulator.formatDouble((Double) timeValue.getValue()));
+					stringValue = (simulator.formatDouble(timeValue.getValue()));
 					if (timeValue.isCumulative())
 						this.setToolTipText("Cumulative time up until entering state " + (row));
 					else

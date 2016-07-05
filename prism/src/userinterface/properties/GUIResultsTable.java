@@ -183,7 +183,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 		@Override
 		public Object getValueAt(int i, int j)
 		{
-			String[] line = (String[]) cells.get(i);
+			String[] line = cells.get(i);
 			if (j < line.length)
 				return line[j];
 			return "?";

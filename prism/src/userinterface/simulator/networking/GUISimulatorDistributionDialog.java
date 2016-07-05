@@ -617,7 +617,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			try {
 				ArrayList<Expression> propFormulae = new ArrayList<>();
 				for (int i = 0; i < props.size(); i++) {
-					GUIProperty guiProp = (GUIProperty) props.get(i);
+					GUIProperty guiProp = props.get(i);
 					propFormulae.add(guiProp.getProperty());
 				}
 				System.out.println("doing 1");
@@ -972,7 +972,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			super();
 			data = new String[props.size()][4];
 			for (int i = 0; i < props.size(); i++) {
-				data[i][0] = ((GUIProperty) props.get(i)).getPropString();
+				data[i][0] = props.get(i).getPropString();
 				data[i][1] = "";
 				data[i][2] = "";
 				data[i][3] = "";

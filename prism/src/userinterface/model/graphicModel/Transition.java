@@ -209,7 +209,7 @@ public class Transition implements PropertyOwner
 
 	public Nail getNail(int i)
 	{
-		return (Nail) nails.get(i);
+		return nails.get(i);
 	}
 
 	/** Access method to return the StringLabel object holding data concerning this
@@ -398,8 +398,8 @@ public class Transition implements PropertyOwner
 		double fromY = from.getY() + (from.getWidth() / 2);
 
 		for (int i = 0; i < nails.size(); i++) {
-			double toX = ((Nail) (nails.get(i))).getX();
-			double toY = ((Nail) (nails.get(i))).getY();
+			double toX = (nails.get(i)).getX();
+			double toY = (nails.get(i)).getY();
 			intersects.add((new Line2D.Double(fromX, fromY, toX, toY)));
 			if ((new Line2D.Double(fromX, fromY, toX, toY)).intersects(rect)) {
 				doesIt = true;
@@ -536,7 +536,7 @@ public class Transition implements PropertyOwner
 
 		poly.add(new java.awt.Point((int) fromX, (int) fromY));
 		for (int i = 0; i < nails.size(); i++) {
-			Nail toN = (Nail) (nails.get(i));
+			Nail toN = (nails.get(i));
 			double toX = toN.getX();
 			double toY = toN.getY();
 			gridWidth = toN.getGridWidth();
@@ -602,7 +602,7 @@ public class Transition implements PropertyOwner
 			java.awt.Point last = null;
 			double length = 0.0;
 			for (int i = 0; i < poly.size(); i++) {
-				java.awt.Point p = (java.awt.Point) poly.get(i);
+				java.awt.Point p = poly.get(i);
 
 				if (last != null) {
 					length += Math.sqrt(Math.pow(p.x - last.x, 2) + Math.pow(p.y - last.y, 2));
@@ -617,13 +617,13 @@ public class Transition implements PropertyOwner
 			int i = 0;
 			double sofar = 0;
 			double lastAmount = 0;
-			last = (java.awt.Point) poly.get(0);
-			java.awt.Point p = (java.awt.Point) poly.get(0);
+			last = poly.get(0);
+			java.awt.Point p = poly.get(0);
 
 			while (sofar <= midpoint) {
 				last = p;
 				i++;
-				p = (java.awt.Point) poly.get(i);
+				p = poly.get(i);
 				lastAmount = Math.sqrt(Math.pow(p.x - last.x, 2) + Math.pow(p.y - last.y, 2));
 				sofar += lastAmount;
 
@@ -664,7 +664,7 @@ public class Transition implements PropertyOwner
 		boolean found = false;
 		int i = 0;
 		for (i = 0; i < nails.size(); i++) {
-			two = (Nail) nails.get(i);
+			two = nails.get(i);
 			if (liesBetween(nx, ny, one, two)) {
 				found = true;
 				break;
@@ -757,7 +757,7 @@ public class Transition implements PropertyOwner
 			tempPoints.add(new TempPoint(fromX, fromY));
 
 			for (int i = 0; i < nails.size(); i++) {
-				Nail toN = (Nail) (nails.get(i));
+				Nail toN = (nails.get(i));
 				double toX = toN.getX();
 				double toY = toN.getY();
 				movingSubdivisions = toN.getSubdivisions();
@@ -968,7 +968,7 @@ public class Transition implements PropertyOwner
 			//draw dots if selected
 
 			for (int i = 0; i < nails.size(); i++) {
-				Nail toN = (Nail) (nails.get(i));
+				Nail toN = (nails.get(i));
 				double toDX = toN.getX();
 				double toDY = toN.getY();
 				movingOffset = toN.getMovingOffset();
@@ -1183,7 +1183,7 @@ public class Transition implements PropertyOwner
 
 		public TempPoint getPoint(int i)
 		{
-			return (TempPoint) get(i);
+			return get(i);
 		}
 
 		public double getX(int i)

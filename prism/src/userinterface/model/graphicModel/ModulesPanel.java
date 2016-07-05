@@ -121,7 +121,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		JCheckBoxMenuItem dock = null;
 
 		for (int i = 0; i < dockChecks.size(); i++) {
-			JCheckBoxMenuItem curr = (JCheckBoxMenuItem) dockChecks.get(i);
+			JCheckBoxMenuItem curr = dockChecks.get(i);
 			if (curr.getText().equals(mm.getModuleName())) {
 				dock = curr;
 				break;
@@ -135,7 +135,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		JCheckBoxMenuItem show = null;
 
 		for (int i = 0; i < showChecks.size(); i++) {
-			JCheckBoxMenuItem curr = (JCheckBoxMenuItem) showChecks.get(i);
+			JCheckBoxMenuItem curr = showChecks.get(i);
 			if (curr.getText().equals(mm.getModuleName())) {
 				show = curr;
 				break;
@@ -607,7 +607,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		}
 
 		for (int i = 0; i < containers.size(); i++) {
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) showChecks.get(i);
+			JCheckBoxMenuItem jcmi = showChecks.get(i);
 			jcmi.setSelected(true);
 		}
 	}
@@ -623,7 +623,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		}
 
 		for (int i = 0; i < containers.size(); i++) {
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) showChecks.get(i);
+			JCheckBoxMenuItem jcmi = showChecks.get(i);
 			jcmi.setSelected(false);
 		}
 	}
@@ -639,7 +639,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		gmc.setVisible(false);
 
 		for (int i = 0; i < containers.size(); i++) {
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) showChecks.get(i);
+			JCheckBoxMenuItem jcmi = showChecks.get(i);
 
 			if (jcmi.getText().equals(gmc.getName())) {
 				jcmi.setSelected(false);
@@ -654,7 +654,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		gmc.setVisible(true);
 
 		for (int i = 0; i < containers.size(); i++) {
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) showChecks.get(i);
+			JCheckBoxMenuItem jcmi = showChecks.get(i);
 
 			if (jcmi.getText().equals(gmc.getName())) {
 				jcmi.setSelected(true);
@@ -677,7 +677,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		}
 
 		for (int i = 0; i < containers.size(); i++) {
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) dockChecks.get(i);
+			JCheckBoxMenuItem jcmi = dockChecks.get(i);
 			jcmi.setSelected(true);
 		}
 
@@ -694,7 +694,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 		////System.out.println("before for loop");
 		for (int i = 0; i < dockChecks.size(); i++) {
 			////System.out.println("unchecking "+i);
-			JCheckBoxMenuItem jcmi = (JCheckBoxMenuItem) dockChecks.get(i);
+			JCheckBoxMenuItem jcmi = dockChecks.get(i);
 			jcmi.setSelected(false);
 		}
 

@@ -80,7 +80,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		String ownerList = "";
 		while (it.hasNext()) {
 
-			PropertyOwner po = (PropertyOwner) it.next();
+			PropertyOwner po = it.next();
 			for (int i = 0; i < po.getNumProperties(); i++) {
 				po.getProperty(i).addObserver(this);
 				po.getProperty(i).setOwningModel(this);

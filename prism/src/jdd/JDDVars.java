@@ -156,7 +156,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public JDDNode getVar(int i)
 	{
-		return (JDDNode) vars.elementAt(i);
+		return vars.elementAt(i);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public long getVarPtr(int i)
 	{
-		return ((JDDNode) vars.elementAt(i)).ptr();
+		return vars.elementAt(i).ptr();
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public int getVarIndex(int i)
 	{
-		return DDV_GetIndex(((JDDNode) vars.elementAt(i)).ptr());
+		return DDV_GetIndex(vars.elementAt(i).ptr());
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class JDDVars implements Iterable<JDDNode>
 		int i;
 
 		for (i = 0; i < vars.size(); i++) {
-			JDD.Ref((JDDNode) vars.elementAt(i));
+			JDD.Ref(vars.elementAt(i));
 		}
 	}
 
@@ -233,7 +233,7 @@ public class JDDVars implements Iterable<JDDNode>
 		int i;
 
 		for (i = 0; i < vars.size(); i++) {
-			JDD.Deref((JDDNode) vars.elementAt(i));
+			JDD.Deref(vars.elementAt(i));
 		}
 	}
 

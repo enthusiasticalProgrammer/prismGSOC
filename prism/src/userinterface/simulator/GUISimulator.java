@@ -474,7 +474,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		} catch (PrismException e) {
 			this.error(e.getMessage());
 			if (e instanceof PrismLangException) {
-				guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+				guiMultiModel.getHandler().modelParseFailed(e, false);
 				guiMultiModel.tabToFront();
 			}
 		}
@@ -563,7 +563,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		} catch (PrismException e) {
 			this.error(e.getMessage());
-			guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+			guiMultiModel.getHandler().modelParseFailed(e, false);
 			guiMultiModel.tabToFront();
 		}
 	}
@@ -944,7 +944,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		} catch (PrismException e) {
 			this.error(e.getMessage());
 			if (e instanceof PrismLangException) {
-				guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+				guiMultiModel.getHandler().modelParseFailed(e, false);
 				guiMultiModel.tabToFront();
 			}
 		}
@@ -1165,11 +1165,11 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		tabbedPane = new javax.swing.JTabbedPane();
 		outerStateLabelPanel = new javax.swing.JPanel();
 		stateLabelScrollPane = new javax.swing.JScrollPane();
-		stateLabelList = new javax.swing.JList();
+		stateLabelList = new javax.swing.JList<>();
 		stateLabelList = new GUISimLabelList(this);
 		outerPathFormulaePanel = new javax.swing.JPanel();
 		pathFormulaeScrollPane = new javax.swing.JScrollPane();
-		pathFormulaeList = new javax.swing.JList();
+		pathFormulaeList = new javax.swing.JList<>();
 		pathFormulaeList = new GUISimPathFormulaeList(this);
 		informationPanel = new javax.swing.JPanel();
 		innerInformationPanel = new javax.swing.JPanel();

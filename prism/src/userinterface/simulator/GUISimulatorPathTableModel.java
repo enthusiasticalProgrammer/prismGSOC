@@ -449,11 +449,11 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 			}
 			// A variable column
 			else if (varStart <= columnIndex && columnIndex < rewardStart) {
-				return ((Variable) view.getVisibleVariables().get(columnIndex - varStart)).toString();
+				return view.getVisibleVariables().get(columnIndex - varStart).toString();
 			}
 
 			else if (rewardStart <= columnIndex) {
-				return ((RewardStructureColumn) view.getVisibleRewardColumns().get(columnIndex - rewardStart)).getColumnName();
+				return view.getVisibleRewardColumns().get(columnIndex - rewardStart).getColumnName();
 			}
 		}
 		return "Undefined Column";
@@ -482,11 +482,11 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 			}
 			// A variable column
 			else if (varStart <= columnIndex && columnIndex < rewardStart) {
-				return "Values of variable \"" + ((Variable) view.getVisibleVariables().get(columnIndex - varStart)).toString() + "\"";
+				return "Values of variable \"" + view.getVisibleVariables().get(columnIndex - varStart).toString() + "\"";
 			}
 
 			else if (rewardStart <= columnIndex) {
-				RewardStructureColumn column = ((RewardStructureColumn) view.getVisibleRewardColumns().get(columnIndex - rewardStart));
+				RewardStructureColumn column = (view.getVisibleRewardColumns().get(columnIndex - rewardStart));
 				String rewardName = column.getRewardStructure().getColumnName();
 
 				if (column.isStateReward())
@@ -544,7 +544,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 			}
 			// A reward column
 			else if (rewardStart <= columnIndex) {
-				RewardStructureColumn rewardColumn = (RewardStructureColumn) view.getVisibleRewardColumns().get(columnIndex - rewardStart);
+				RewardStructureColumn rewardColumn = view.getVisibleRewardColumns().get(columnIndex - rewardStart);
 				rewardStructureValue.setRewardStructureColumn(rewardColumn);
 				rewardStructureValue.setRewardValueUnknown(false);
 				// A state reward column

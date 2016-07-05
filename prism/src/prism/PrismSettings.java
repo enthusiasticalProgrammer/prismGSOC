@@ -1771,7 +1771,7 @@ public class PrismSettings implements Observer
 		pt.setOwners(owners);
 
 		for (int i = 0; i < owners.size(); i++) {
-			SettingOwner a = (SettingOwner) owners.get(i);
+			SettingOwner a = owners.get(i);
 			a.setDisplay(pt);
 		}
 

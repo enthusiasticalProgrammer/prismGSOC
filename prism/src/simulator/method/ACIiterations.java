@@ -162,7 +162,7 @@ public final class ACIiterations extends CIMethod
 		// 2 iterations needed to compute variance of the sampler
 		if (sampler.getVariance() <= 0.0 || iters < 2)
 			return 0;
-		return 10 * ((int) (100.0 * (double) (iters + 1) * width * width / (sampler.getVariance() * squaredQuantile)) / 10);
+		return 10 * ((int) (100.0 * (iters + 1) * width * width / (sampler.getVariance() * squaredQuantile)) / 10);
 	}
 
 	@Override

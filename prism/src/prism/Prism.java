@@ -3537,14 +3537,14 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 						initDist = mc.readDistributionFromFile(fileIn);
 						initTimeDouble = 0;
 					}
-					probs = ((StochModelChecker) mc).doTransient(timeDouble - initTimeDouble, initDist);
+					probs = mc.doTransient(timeDouble - initTimeDouble, initDist);
 				} else {
 					ProbModelChecker mc = new ProbModelChecker(this, currentModel, null);
 					if (i == 0) {
 						initDist = mc.readDistributionFromFile(fileIn);
 						initTimeInt = 0;
 					}
-					probs = ((ProbModelChecker) mc).doTransient(timeInt - initTimeInt, initDist);
+					probs = mc.doTransient(timeInt - initTimeInt, initDist);
 				}
 			}
 			// Explicit
