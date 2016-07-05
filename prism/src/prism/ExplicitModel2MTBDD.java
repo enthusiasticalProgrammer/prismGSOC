@@ -240,7 +240,7 @@ public class ExplicitModel2MTBDD
 		JDDNode v, vr, vc;
 		int i, j, n;
 		int ddVarsUsed = 0;
-		ddVarNames = new Vector<String>();
+		ddVarNames = new Vector<>();
 
 		// create arrays/etc. first
 
@@ -356,11 +356,11 @@ public class ExplicitModel2MTBDD
 		mainLog.print("Converting to MTBDD: ");
 
 		// Initialise action list
-		synchs = new Vector<String>();
+		synchs = new Vector<>();
 		// Initialise mtbdds
 		trans = JDD.Constant(0);
 		if (modelType != ModelType.MDP) {
-			transPerAction = new Vector<JDDNode>();
+			transPerAction = new Vector<>();
 			transPerAction.add(JDD.Constant(0));
 		} else {
 			transActions = JDD.Constant(0);

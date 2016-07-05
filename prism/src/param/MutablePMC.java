@@ -77,9 +77,9 @@ final class MutablePMC
 	{
 		this.numStates = numStates;
 		this.functionFactory = functionFactory;
-		transitionProbs = new ArrayList<LinkedList<Function>>(numStates);
-		transitionTargets = new ArrayList<LinkedList<Integer>>(numStates);
-		incoming = new ArrayList<LinkedList<Integer>>(numStates);
+		transitionProbs = new ArrayList<>(numStates);
+		transitionTargets = new ArrayList<>(numStates);
+		incoming = new ArrayList<>(numStates);
 		for (int state = 0; state < numStates; state++) {
 			transitionTargets.add(new LinkedList<Integer>());
 			transitionProbs.add(new LinkedList<Function>());
@@ -204,9 +204,9 @@ final class MutablePMC
 	 */
 	void makeAbsorbing(int state)
 	{
-		LinkedList<Integer> loop = new LinkedList<Integer>();
+		LinkedList<Integer> loop = new LinkedList<>();
 		loop.add(state);
-		LinkedList<Function> one = new LinkedList<Function>();
+		LinkedList<Function> one = new LinkedList<>();
 		one.add(functionFactory.getOne());
 		transitionTargets.set(state, loop);
 		transitionProbs.set(state, one);

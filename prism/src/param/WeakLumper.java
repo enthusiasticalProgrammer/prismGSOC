@@ -69,7 +69,7 @@ final class WeakLumper extends Lumper
 	 */
 	private HashMap<HashSet<Integer>, Function> stateSignature(int state, HashSet<Integer> ownClass)
 	{
-		HashMap<HashSet<Integer>, Function> signature = new HashMap<HashSet<Integer>, Function>();
+		HashMap<HashSet<Integer>, Function> signature = new HashMap<>();
 		ListIterator<Integer> toStateIter = origPmc.transitionTargets.get(state).listIterator();
 		ListIterator<Function> toProbIter = origPmc.transitionProbs.get(state).listIterator();
 
@@ -128,10 +128,10 @@ final class WeakLumper extends Lumper
 	@Override
 	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks)
 	{
-		ArrayList<Integer> nonSilent = new ArrayList<Integer>(oldBlock.size());
-		HashSet<Integer> silent = new HashSet<Integer>();
-		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>>();
-		HashMap<Integer, HashSet<Integer>> stateToBlock = new HashMap<Integer, HashSet<Integer>>();
+		ArrayList<Integer> nonSilent = new ArrayList<>(oldBlock.size());
+		HashSet<Integer> silent = new HashSet<>();
+		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<>();
+		HashMap<Integer, HashSet<Integer>> stateToBlock = new HashMap<>();
 		/* compute signatures of states of old block and divide into silent/
 		 * nonsilent states. Silent states are states which cannot leave the
 		 * block in one step. */
@@ -141,7 +141,7 @@ final class WeakLumper extends Lumper
 				nonSilent.add(state);
 				HashSet<Integer> newBlock = signatures.get(signature);
 				if (newBlock == null) {
-					newBlock = new HashSet<Integer>();
+					newBlock = new HashSet<>();
 					signatures.put(signature, newBlock);
 				}
 				newBlock.add(state);
@@ -152,9 +152,9 @@ final class WeakLumper extends Lumper
 		}
 
 		/* non-silent states reach only the new block they are contained in */
-		HashMap<Integer, HashSet<HashSet<Integer>>> reachWhichBlocks = new HashMap<Integer, HashSet<HashSet<Integer>>>();
+		HashMap<Integer, HashSet<HashSet<Integer>>> reachWhichBlocks = new HashMap<>();
 		for (int state : oldBlock) {
-			HashSet<HashSet<Integer>> predReachBlocks = new HashSet<HashSet<Integer>>();
+			HashSet<HashSet<Integer>> predReachBlocks = new HashSet<>();
 			if (!silent.contains(state)) {
 				predReachBlocks.add(stateToBlock.get(state));
 			}
@@ -169,7 +169,7 @@ final class WeakLumper extends Lumper
 		 * state from the same block. */
 		for (int state : nonSilent) {
 			HashSet<Integer> block = stateToBlock.get(state);
-			ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+			ArrayDeque<Integer> stack = new ArrayDeque<>();
 			stack.push(state);
 			while (!stack.isEmpty()) {
 				int stackState = stack.pop();
@@ -183,11 +183,11 @@ final class WeakLumper extends Lumper
 			}
 		}
 		/* compute new blocks, add the nonempty ones to list of new blocks */
-		HashMap<HashSet<HashSet<Integer>>, HashSet<Integer>> remap = new HashMap<HashSet<HashSet<Integer>>, HashSet<Integer>>();
+		HashMap<HashSet<HashSet<Integer>>, HashSet<Integer>> remap = new HashMap<>();
 		for (Entry<Integer, HashSet<HashSet<Integer>>> entry : reachWhichBlocks.entrySet()) {
 			HashSet<Integer> sigStates = remap.get(entry.getValue());
 			if (sigStates == null) {
-				sigStates = new HashSet<Integer>();
+				sigStates = new HashSet<>();
 				remap.put(entry.getValue(), sigStates);
 			}
 			sigStates.add(entry.getKey());
@@ -250,11 +250,11 @@ final class WeakLumper extends Lumper
 	protected void createInitialPartition()
 	{
 		super.createInitialPartition();
-		ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
+		ArrayList<HashSet<Integer>> newBlocks = new ArrayList<>();
 		while (partition.mayChange()) {
 			HashSet<Integer> oldBlock = partition.nextChangeableBlock();
-			HashSet<Integer> leaveSet = new HashSet<Integer>();
-			ArrayList<Integer> directLeaving = new ArrayList<Integer>();
+			HashSet<Integer> leaveSet = new HashSet<>();
+			ArrayList<Integer> directLeaving = new ArrayList<>();
 			for (int state : oldBlock) {
 				for (int toState : origPmc.transitionTargets.get(state)) {
 					if (!oldBlock.contains(toState)) {
@@ -265,7 +265,7 @@ final class WeakLumper extends Lumper
 				}
 			}
 			for (int state : directLeaving) {
-				ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
+				ArrayDeque<Integer> stack = new ArrayDeque<>();
 				stack.push(state);
 				while (!stack.isEmpty()) {
 					int leaving = stack.pop();
@@ -280,7 +280,7 @@ final class WeakLumper extends Lumper
 			if (!leaveSet.isEmpty()) {
 				newBlocks.add(leaveSet);
 			}
-			HashSet<Integer> staying = new HashSet<Integer>(oldBlock);
+			HashSet<Integer> staying = new HashSet<>(oldBlock);
 			staying.removeAll(leaveSet);
 			if (!staying.isEmpty()) {
 				newBlocks.add(staying);

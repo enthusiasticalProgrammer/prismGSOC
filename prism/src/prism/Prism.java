@@ -295,7 +295,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// add this Prism object as a results listener
 		settings.addSettingsListener(this);
 		// create list of model listeners
-		modelListeners = new ArrayList<PrismModelListener>();
+		modelListeners = new ArrayList<>();
 	}
 
 	/**
@@ -2736,7 +2736,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		mainLog.println(getDestinationStringForFile(file));
 
 		// Collect labels to export
-		List<String> labelNames = new ArrayList<String>();
+		List<String> labelNames = new ArrayList<>();
 		labelNames.add("init");
 		labelNames.add("deadlock");
 		for (int i = 0; i < numLabels; i++) {

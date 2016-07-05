@@ -618,7 +618,7 @@ public class PrismCL implements PrismModelListener
 	{
 		int i;
 
-		propertiesToCheck = new ArrayList<Property>();
+		propertiesToCheck = new ArrayList<>();
 
 		// no properties to check
 		if (propertiesFile == null) {

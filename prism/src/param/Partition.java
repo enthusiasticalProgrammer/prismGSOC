@@ -99,11 +99,11 @@ final class Partition
 	Partition(MutablePMC pmc)
 	{
 		this.pmc = pmc;
-		blocks = new HashSet<HashSet<Integer>>();
-		stateToBlock = new ArrayList<HashSet<Integer>>(pmc.getNumStates());
-		HashSet<Integer> initialBlock = new HashSet<Integer>(1);
-		mayChange = new PriorityQueue<HashSet<Integer>>(11, new HashSetSizeComparator());
-		mayChangeHash = new HashSet<HashSet<Integer>>();
+		blocks = new HashSet<>();
+		stateToBlock = new ArrayList<>(pmc.getNumStates());
+		HashSet<Integer> initialBlock = new HashSet<>(1);
+		mayChange = new PriorityQueue<>(11, new HashSetSizeComparator());
+		mayChangeHash = new HashSet<>();
 		for (int state = 0; state < pmc.getNumStates(); state++) {
 			initialBlock.add(state);
 			stateToBlock.add(initialBlock);
@@ -177,7 +177,7 @@ final class Partition
 	 */
 	ArrayList<HashSet<Integer>> getAllBlocks()
 	{
-		ArrayList<HashSet<Integer>> allBlocks = new ArrayList<HashSet<Integer>>(blocks.size());
+		ArrayList<HashSet<Integer>> allBlocks = new ArrayList<>(blocks.size());
 		for (HashSet<Integer> block : blocks) {
 			allBlocks.add(block);
 		}

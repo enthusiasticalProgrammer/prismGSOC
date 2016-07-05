@@ -292,7 +292,7 @@ public class LTLModelChecker extends PrismComponent
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		// Create the new dd variables
-		newDDVarNames = new Vector<String>();
+		newDDVarNames = new Vector<>();
 		newDDVarNames.addAll(ddVarNames);
 		j = before ? allDDRowVars.getMinVarIndex() - 2 * n : model.getAllDDColVars().getMaxVarIndex() + 1;
 		for (i = 0; i < n; i++) {
@@ -479,7 +479,7 @@ public class LTLModelChecker extends PrismComponent
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		// Create the new dd variables
-		newDDVarNames = new Vector<String>();
+		newDDVarNames = new Vector<>();
 		newDDVarNames.addAll(ddVarNames);
 		j = before ? allDDRowVars.getMinVarIndex() - 2 * n : model.getAllDDColVars().getMaxVarIndex() + 1;
 		for (i = 0; i < n; i++) {
@@ -563,7 +563,7 @@ public class LTLModelChecker extends PrismComponent
 			modelProd.setTransActions(model.getTransActions());
 		}
 		// Also need to copy set of action label strings
-		modelProd.setSynchs(new Vector<String>(model.getSynchs()));
+		modelProd.setSynchs(new Vector<>(model.getSynchs()));
 
 		// Do reachability/etc. for the new model
 		modelProd.doReachability();
@@ -790,8 +790,8 @@ public class LTLModelChecker extends PrismComponent
 		if (acceptance.size() > 1) {
 			acceptanceVector_L_not = JDD.Constant(0);
 			acceptanceVector_K = JDD.Constant(0);
-			ArrayList<JDDNode> statesLnot = new ArrayList<JDDNode>();
-			ArrayList<JDDNode> statesK = new ArrayList<JDDNode>();
+			ArrayList<JDDNode> statesLnot = new ArrayList<>();
+			ArrayList<JDDNode> statesK = new ArrayList<>();
 
 			for (i = 0; i < acceptance.size(); i++) {
 				JDDNode tmpLnot = JDD.Not(acceptance.get(i).getL());
@@ -853,7 +853,7 @@ public class LTLModelChecker extends PrismComponent
 					candidateStates = JDD.And(ec, acceptanceVector_L_not);
 					if (candidateStates.equals(ec)) {
 						//mainLog.println(" ------------- ec is not modified ------------- ");
-						ecs = new Vector<JDDNode>();
+						ecs = new Vector<>();
 						// store copy of ec in ecs
 						JDD.Ref(ec);
 						ecs.add(ec);
@@ -1014,7 +1014,7 @@ public class LTLModelChecker extends PrismComponent
 				candidateStates = JDD.And(ec, acceptanceVector_H);
 				if (candidateStates.equals(ec)) {
 					//mainLog.println(" ------------- ec is not modified ------------- ");
-					ecs = new Vector<JDDNode>();
+					ecs = new Vector<>();
 					ecs.add(ec.copy());
 					JDD.Deref(candidateStates);
 				} else if (candidateStates.equals(JDD.ZERO)) {
@@ -1057,11 +1057,11 @@ public class LTLModelChecker extends PrismComponent
 			List<JDDNode> targetDDs, List<List<JDDNode>> allstatesH, List<List<JDDNode>> allstatesL, List<JDDNode> combinations,
 			List<List<Integer>> combinationIDs) throws PrismException
 	{
-		List<queueElement> queue = new ArrayList<queueElement>();
+		List<queueElement> queue = new ArrayList<>();
 		int sp = 0;
 
 		for (int i = 0; i < dra.length; i++) {
-			List<Integer> ids = new ArrayList<Integer>();
+			List<Integer> ids = new ArrayList<>();
 			ids.add(i);
 			queueElement e = new queueElement(allstatesH.get(i), allstatesL.get(i), targetDDs.get(i), ids, i + 1);
 			queue.add(e);
@@ -1103,8 +1103,8 @@ public class LTLModelChecker extends PrismComponent
 		//mainLog.println("  ------------- Processing " + e.draIDs + ": -------------");
 
 		for (int i = e.next; i < dra.length; i++) {
-			List<JDDNode> newstatesH = new ArrayList<JDDNode>();
-			List<JDDNode> newstatesL = new ArrayList<JDDNode>();
+			List<JDDNode> newstatesH = new ArrayList<>();
+			List<JDDNode> newstatesL = new ArrayList<>();
 			//if(e.draIDs.size() >= 2 || sp > 0 /*|| queue.size() > 3*/)
 			//	break;
 			//mainLog.println("             combinations " + e.draIDs + ", " + i + ": ");
@@ -1171,7 +1171,7 @@ public class LTLModelChecker extends PrismComponent
 
 			if (!newstatesH.isEmpty() /*&& i+1 < dra.length*/) {
 				// generate a new element and put it into queue
-				List<Integer> ids = new ArrayList<Integer>(e.draIDs);
+				List<Integer> ids = new ArrayList<>(e.draIDs);
 				ids.add(i);
 				queueElement e1 = new queueElement(newstatesH, newstatesL, allAcceptingStates, ids, i + 1);
 				queue.add(e1);
@@ -1332,7 +1332,7 @@ public class LTLModelChecker extends PrismComponent
 	public List<JDDNode> findBottomEndComponents(NondetModel model, JDDNode states) throws PrismException
 	{
 		List<JDDNode> ecs = findMECStates(model, states);
-		List<JDDNode> becs = new Vector<JDDNode>();
+		List<JDDNode> becs = new Vector<>();
 		JDDNode out;
 
 		for (JDDNode scc : ecs) {
@@ -1414,7 +1414,7 @@ class queueElement
 	public void addChildren(queueElement child)
 	{
 		if (children == null)
-			children = new ArrayList<queueElement>();
+			children = new ArrayList<>();
 		children.add(child);
 	}
 }

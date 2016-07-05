@@ -103,13 +103,13 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			}
 		}
 		if (mdp.actions != null) {
-			actions = new ArrayList<List<Object>>(numStates);
+			actions = new ArrayList<>(numStates);
 			for (int s = 0; s < numStates; s++)
 				actions.add(null);
 			for (int s = 0; s < numStates; s++) {
 				if (mdp.actions.get(s) != null) {
 					int n = mdp.trans.get(s).size();
-					List<Object> list = new ArrayList<Object>(n);
+					List<Object> list = new ArrayList<>(n);
 					for (int i = 0; i < n; i++) {
 						list.add(mdp.actions.get(s).get(i));
 					}
@@ -157,13 +157,13 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			}
 		}
 		if (mdp.actions != null) {
-			actions = new ArrayList<List<Object>>(numStates);
+			actions = new ArrayList<>(numStates);
 			for (int s = 0; s < numStates; s++)
 				actions.add(null);
 			for (int s = 0; s < numStates; s++) {
 				if (mdp.actions.get(s) != null) {
 					int n = mdp.trans.get(s).size();
-					List<Object> list = new ArrayList<Object>(n);
+					List<Object> list = new ArrayList<>(n);
 					for (int i = 0; i < n; i++) {
 						list.add(mdp.actions.get(s).get(i));
 					}
@@ -200,12 +200,12 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		}
 
 		if (mdp.actions != null) {
-			actions = new ArrayList<List<Object>>(numStates);
+			actions = new ArrayList<>(numStates);
 			for (int s = 0; s < numStates; s++)
 				actions.add(null);
 			for (int s = 0; s < numStates; s++) {
 				int n = mdp.getNumChoices(s);
-				List<Object> list = new ArrayList<Object>(n);
+				List<Object> list = new ArrayList<>(n);
 				for (int i = 0; i < n; i++) {
 					list.add(mdp.getAction(s, i));
 				}
@@ -228,7 +228,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		super.initialise(numStates);
 		numDistrs = numTransitions = maxNumDistrs = 0;
 		maxNumDistrsOk = true;
-		trans = new ArrayList<List<Distribution>>(numStates);
+		trans = new ArrayList<>(numStates);
 		for (int i = 0; i < numStates; i++) {
 			trans.add(new ArrayList<Distribution>());
 		}
@@ -418,14 +418,14 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			return;
 		// If no actions array created yet, create it
 		if (actions == null) {
-			actions = new ArrayList<List<Object>>(numStates);
+			actions = new ArrayList<>(numStates);
 			for (int j = 0; j < numStates; j++)
 				actions.add(null);
 		}
 		// If no actions for state i yet, create list
 		if (actions.get(s) == null) {
 			int n = trans.get(s).size();
-			List<Object> list = new ArrayList<Object>(n);
+			List<Object> list = new ArrayList<>(n);
 			for (int j = 0; j < n; j++) {
 				list.add(null);
 			}
@@ -448,7 +448,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 	{
 		// Need to build set to avoid duplicates
 		// So not necessarily the fastest method to access successors
-		HashSet<Integer> succs = new HashSet<Integer>();
+		HashSet<Integer> succs = new HashSet<>();
 		for (Distribution distr : trans.get(s)) {
 			succs.addAll(distr.getSupport());
 		}
@@ -728,7 +728,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		List<Distribution> step;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation 
 		j = -1;
 		step = trans.get(s);
@@ -975,7 +975,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 		List<Distribution> step;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation 
 		j = -1;
 		step = trans.get(s);

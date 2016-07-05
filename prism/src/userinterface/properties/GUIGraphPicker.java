@@ -87,7 +87,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		// (this means if the user closes the dialog, this counts as a cancel)
 		this.graphCancelled = true;
 
-		this.multiSeries = new Vector<DefinedConstant>();
+		this.multiSeries = new Vector<>();
 
 		initComponents();
 		setResizable(false);
@@ -102,10 +102,10 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		/* If OK was pressed. */
 		if (!graphCancelled) {
 			/* Collect series keys. */
-			Vector<Graph.SeriesKey> seriesKeys = new Vector<Graph.SeriesKey>();
+			Vector<Graph.SeriesKey> seriesKeys = new Vector<>();
 
 			/* Collect series Values */
-			ArrayList<Values> seriesValues = new ArrayList<Values>();
+			ArrayList<Values> seriesValues = new ArrayList<>();
 
 			/* Add single constant values to each serie */
 			seriesValues.add(otherValues);
@@ -307,7 +307,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		ranger = selectAxisConstantCombo.getSelectedItem().toString();
 		// init arrays
 		otherValues = new Values();
-		multiSeries = new Vector<DefinedConstant>();
+		multiSeries = new Vector<>();
 		// go through constants in picker list
 		for (int j = 0; j < pickerList.getNumConstants(); j++) {
 			// get constant
@@ -355,7 +355,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		jPanel5 = new javax.swing.JPanel();
 		topComboLabel = new javax.swing.JLabel();
 		jPanel6 = new javax.swing.JPanel();
-		selectAxisConstantCombo = new javax.swing.JComboBox<String>();
+		selectAxisConstantCombo = new javax.swing.JComboBox<>();
 		jPanel7 = new javax.swing.JPanel();
 		middleLabel = new javax.swing.JLabel();
 		constantTablePanel = new javax.swing.JPanel();
@@ -365,7 +365,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		newGraphRadio = new javax.swing.JRadioButton();
 		existingGraphRadio = new javax.swing.JRadioButton();
 		jPanel11 = new javax.swing.JPanel();
-		existingGraphCombo = new javax.swing.JComboBox<String>();
+		existingGraphCombo = new javax.swing.JComboBox<>();
 		jPanel12 = new javax.swing.JPanel();
 		seriesNameLabel = new javax.swing.JLabel();
 		seriesNameField = new javax.swing.JTextField();
@@ -591,7 +591,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 
 		// init arrays
 		otherValues = new Values();
-		multiSeries = new Vector<DefinedConstant>();
+		multiSeries = new Vector<>();
 
 		// go through all constants in picker list
 		for (int j = 0; j < pickerList.getNumConstants(); j++) {

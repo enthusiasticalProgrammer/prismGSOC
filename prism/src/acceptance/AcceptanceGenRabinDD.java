@@ -154,7 +154,7 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 				newL = JDD.SetVectorElement(newL, ddRowVars, i, 1.0);
 			}
 
-			ArrayList<JDDNode> newK_list = new ArrayList<JDDNode>();
+			ArrayList<JDDNode> newK_list = new ArrayList<>();
 			int n = pair.getNumK();
 			for (int j = 0; j < n; j++) {
 				JDDNode newK_j = JDD.Constant(0);

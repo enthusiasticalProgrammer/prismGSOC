@@ -78,9 +78,9 @@ public class SCCComputerLockstep extends SCCComputer
 	@Override
 	public void computeSCCs()
 	{
-		sccs = new Vector<JDDNode>();
+		sccs = new Vector<>();
 		allSCCs = JDD.Constant(0);
-		tasks = new Stack<DecompTask>();
+		tasks = new Stack<>();
 		JDD.Ref(reach);
 		JDD.Ref(trans01);
 		tasks.push(new DecompTask(reach, trans01));
@@ -95,9 +95,9 @@ public class SCCComputerLockstep extends SCCComputer
 	public void computeSCCs(JDDNode filter)
 	{
 		//computeSCCs();
-		sccs = new Vector<JDDNode>();
+		sccs = new Vector<>();
 		allSCCs = JDD.Constant(0);
-		tasks = new Stack<DecompTask>();
+		tasks = new Stack<>();
 		JDD.Ref(reach);
 		JDD.Ref(trans01);
 		tasks.push(new DecompTask(reach, trans01));

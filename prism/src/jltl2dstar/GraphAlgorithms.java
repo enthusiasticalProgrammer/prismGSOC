@@ -78,8 +78,8 @@ class GraphAlgorithms
 		{
 			_graph = graph;
 			_result = result;
-			_stack = new Stack<Integer>();
-			_dfs_data = new Vector<SCC_DFS_Data>();
+			_stack = new Stack<>();
+			_dfs_data = new Vector<>();
 		}
 
 		/** Calculate the SCCs*/

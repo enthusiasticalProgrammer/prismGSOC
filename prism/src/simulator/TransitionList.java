@@ -33,11 +33,11 @@ import prism.*;
 
 public class TransitionList
 {
-	private ArrayList<Choice> choices = new ArrayList<Choice>();
+	private ArrayList<Choice> choices = new ArrayList<>();
 	/** The index of the choice containing each transition. */
-	private ArrayList<Integer> transitionIndices = new ArrayList<Integer>();
+	private ArrayList<Integer> transitionIndices = new ArrayList<>();
 	/** The offset with the choice containing each transition. */
-	private ArrayList<Integer> transitionOffsets = new ArrayList<Integer>();
+	private ArrayList<Integer> transitionOffsets = new ArrayList<>();
 	private int numChoices = 0;
 	private int numTransitions = 0;
 	private double probSum = 0.0;

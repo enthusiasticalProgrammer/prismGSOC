@@ -46,7 +46,7 @@ public class ExpressionStrategy extends Expression
 	protected Coalition coalition = new Coalition();
 
 	/** Child expression(s) */
-	protected List<Expression> operands = new ArrayList<Expression>();
+	protected List<Expression> operands = new ArrayList<>();
 
 	/** Is there just a single operand (P/R operator)? If not, the operand list will be parenthesised. **/
 	protected boolean singleOperand = false;

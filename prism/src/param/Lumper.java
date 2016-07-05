@@ -156,8 +156,8 @@ abstract class Lumper
 	{
 		HashSet<Integer> oldBlock = partition.nextChangeableBlock();
 		if (!origPmc.isUseRewards()) {
-			HashSet<Integer> safeStates = new HashSet<Integer>();
-			HashSet<Integer> unsafeStates = new HashSet<Integer>();
+			HashSet<Integer> safeStates = new HashSet<>();
+			HashSet<Integer> unsafeStates = new HashSet<>();
 			for (int state : oldBlock) {
 				if (origPmc.isTargetState(state)) {
 					unsafeStates.add(state);
@@ -165,7 +165,7 @@ abstract class Lumper
 					safeStates.add(state);
 				}
 			}
-			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
+			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<>();
 			if (safeStates.size() != 0) {
 				newBlocks.add(safeStates);
 			}
@@ -174,7 +174,7 @@ abstract class Lumper
 			}
 			partition.addBlocks(newBlocks);
 		} else {
-			HashMap<RewardEntry, HashSet<Integer>> rewardToStateMap = new HashMap<RewardEntry, HashSet<Integer>>();
+			HashMap<RewardEntry, HashSet<Integer>> rewardToStateMap = new HashMap<>();
 			for (int state : oldBlock) {
 				Function reward = origPmc.getReward(state);
 				Function time = null;
@@ -184,12 +184,12 @@ abstract class Lumper
 				RewardEntry entry = new RewardEntry(reward, time);
 				HashSet<Integer> block = rewardToStateMap.get(entry);
 				if (block == null) {
-					block = new HashSet<Integer>();
+					block = new HashSet<>();
 					rewardToStateMap.put(entry, block);
 				}
 				block.add(state);
 			}
-			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
+			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<>();
 			for (HashSet<Integer> block : rewardToStateMap.values()) {
 				if (block.size() != 0) {
 					newBlocks.add(block);
@@ -219,7 +219,7 @@ abstract class Lumper
 	protected void mapBlocksToNumber()
 	{
 		blocks = partition.getAllBlocks();
-		blockToNumber = new HashMap<HashSet<Integer>, Integer>();
+		blockToNumber = new HashMap<>();
 		originalToOptimised = new int[origPmc.getNumStates()];
 		int nextBlockNumber = 0;
 		for (HashSet<Integer> block : blocks) {
@@ -251,7 +251,7 @@ abstract class Lumper
 	 */
 	protected void lump()
 	{
-		ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
+		ArrayList<HashSet<Integer>> newBlocks = new ArrayList<>();
 		while (partition.mayChange()) {
 			newBlocks.clear();
 			HashSet<Integer> oldBlock = partition.nextChangeableBlock();

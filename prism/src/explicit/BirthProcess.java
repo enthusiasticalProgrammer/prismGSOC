@@ -157,7 +157,7 @@ public class BirthProcess
 			throw new IllegalArgumentException("unifRate must be set if withRateArray is false");
 		}
 		if (withRateArray && initialising) {
-			jumpRates = new ArrayList<Double>();
+			jumpRates = new ArrayList<>();
 		}
 		initialising = false;
 		if (!withRateArray && rate > unifRate) {

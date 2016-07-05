@@ -60,14 +60,14 @@ public class PTA
 	public PTA()
 	{
 		numClocks = 0;
-		clockNames = new ArrayList<String>();
+		clockNames = new ArrayList<>();
 		numLocations = 0;
-		locationNames = new ArrayList<Object>();
-		invariants = new ArrayList<LinkedHashSet<Constraint>>();
+		locationNames = new ArrayList<>();
+		invariants = new ArrayList<>();
 		locationNameVars = null;
 		numTransitions = 0;
-		transitions = new ArrayList<ArrayList<Transition>>();
-		alphabet = new LinkedHashSet<String>();
+		transitions = new ArrayList<>();
+		alphabet = new LinkedHashSet<>();
 		cMax = 0;
 	}
 

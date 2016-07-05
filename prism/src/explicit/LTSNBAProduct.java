@@ -163,9 +163,9 @@ public class LTSNBAProduct extends Product<Model>
 	public static LTSNBAProduct doProduct(Model model, NBA nba, BitSet statesOfInterest, Vector<BitSet> labelBS)
 	{
 		// map state index in product automaton -> ProductState
-		ArrayList<ProductState> productIdToProductState = new ArrayList<ProductState>();
+		ArrayList<ProductState> productIdToProductState = new ArrayList<>();
 		// map ProductState -> state index in product automaton
-		HashMap<ProductState, Integer> productStateToProductId = new HashMap<ProductState, Integer>();
+		HashMap<ProductState, Integer> productStateToProductId = new HashMap<>();
 
 		// storage for the product model
 		LTSExplicit productModel = new LTSExplicit();
@@ -173,7 +173,7 @@ public class LTSNBAProduct extends Product<Model>
 		BitSet acceptingStates = new BitSet();
 
 		// the stack of product ids that potentially have to be expanded
-		Stack<Integer> todo = new Stack<Integer>();
+		Stack<Integer> todo = new Stack<>();
 
 		// product state ids that have already been expanded
 		BitSet expanded = new BitSet();

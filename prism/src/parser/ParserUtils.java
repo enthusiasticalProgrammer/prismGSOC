@@ -40,7 +40,7 @@ public class ParserUtils
 	 */
 	public static List<Expression> splitConjunction(Expression expr)
 	{
-		ArrayList<Expression> list = new ArrayList<Expression>();
+		ArrayList<Expression> list = new ArrayList<>();
 		splitOnBinaryOp(expr, ExpressionBinaryOp.AND, list);
 		return list;
 	}
@@ -52,7 +52,7 @@ public class ParserUtils
 	 */
 	public static List<Expression> splitDisjunction(Expression expr)
 	{
-		ArrayList<Expression> list = new ArrayList<Expression>();
+		ArrayList<Expression> list = new ArrayList<>();
 		splitOnBinaryOp(expr, ExpressionBinaryOp.OR, list);
 		return list;
 	}
@@ -153,7 +153,7 @@ public class ParserUtils
 
 		// For constant expressions, this is easy
 		if (expr.isConstant()) {
-			res = new HashSet<Integer>();
+			res = new HashSet<>();
 			res.add(expr.evaluateInt(constantValues));
 			return res;
 		}
@@ -163,7 +163,7 @@ public class ParserUtils
 		allValues = varList.getAllValues(vars);
 
 		// Compute set of all values
-		res = new HashSet<Integer>();
+		res = new HashSet<>();
 		for (Values varValues : allValues) {
 			res.add(expr.evaluateInt(constantValues, varValues));
 		}

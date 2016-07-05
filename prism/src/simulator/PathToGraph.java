@@ -87,7 +87,7 @@ public class PathToGraph extends PathDisplayer
 		graphModel.getYAxisSettings().setHeading("Value");
 
 		// Create series
-		varSeriesKeys = new ArrayList<Graph.SeriesKey>();
+		varSeriesKeys = new ArrayList<>();
 		if (varsToShow == null) {
 			for (int j = 0; j < numVars; j++) {
 				varSeriesKeys.add(graphModel.addSeries(modulesFile.getVarName(j)));
@@ -101,7 +101,7 @@ public class PathToGraph extends PathDisplayer
 			}
 		}
 		if (showRewards) {
-			rewardSeriesKeys = new ArrayList<Graph.SeriesKey>();
+			rewardSeriesKeys = new ArrayList<>();
 			for (int j = 0; j < numRewardStructs; j++) {
 				rewardSeriesKeys.add(graphModel.addSeries(modulesFile.getRewardStruct(j).getName()));
 			}

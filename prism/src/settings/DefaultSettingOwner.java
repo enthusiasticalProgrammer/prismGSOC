@@ -44,7 +44,7 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 		this.name = name;
 		this.id = id;
 		display = null;
-		settings = new ArrayList<Setting>();
+		settings = new ArrayList<>();
 	}
 
 	@Override

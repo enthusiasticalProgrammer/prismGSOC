@@ -394,7 +394,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 			} else if (value instanceof ArrayList) {
 				ArrayList settings = (ArrayList) value;
-				ArrayList<Object> values = new ArrayList<Object>();
+				ArrayList<Object> values = new ArrayList<>();
 				boolean enabled = true;
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
@@ -452,7 +452,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 			} else if (value instanceof ArrayList) {
 				ArrayList settings = (ArrayList) value;
-				ArrayList<Object> values = new ArrayList<Object>();
+				ArrayList<Object> values = new ArrayList<>();
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
 					if (settings.get(i) instanceof Setting) {
@@ -506,9 +506,9 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
-			groupNames = new ArrayList<String>();
-			groupStarts = new ArrayList<Integer>();
-			groupSizes = new ArrayList<Integer>();
+			groupNames = new ArrayList<>();
+			groupStarts = new ArrayList<>();
+			groupSizes = new ArrayList<>();
 			int index = 0;
 
 			String ownerList = "";
@@ -569,7 +569,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			Iterator it = owners.iterator();
 			SettingOwner last = null;
 			String tempName = "";
-			groupNames = new ArrayList<String>();
+			groupNames = new ArrayList<>();
 
 			String ownerList = "";
 			while (it.hasNext()) {
@@ -663,7 +663,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					SettingOwner firstInGroup = getOwner(getCurrentGroupStart());
 					return firstInGroup.getSetting(row);
 				} else {
-					ArrayList<Setting> currProps = new ArrayList<Setting>();
+					ArrayList<Setting> currProps = new ArrayList<>();
 					for (int i = getCurrentGroupStart(); i < getCurrentGroupStart() + getCurrentGroupSize(); i++) {
 						SettingOwner prop = getOwner(i);
 						currProps.add(prop.getSetting(row));

@@ -63,7 +63,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 		TreeMap<Integer, Pair<Double, Object>> sorted;
 		// Output transitions to .tra file
 		out.print(numStates + " " + getNumTransitions() + "\n");
-		sorted = new TreeMap<Integer, Pair<Double, Object>>();
+		sorted = new TreeMap<>();
 		for (i = 0; i < numStates; i++) {
 			// Extract transitions and sort by destination state index (to match PRISM-exported files)
 			Iterator<Map.Entry<Integer, Pair<Double, Object>>> iter = getTransitionsAndActionsIterator(i);
@@ -149,7 +149,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 			out = new FileWriter(filename);
 			out.write(getModelType().keyword() + "\n");
 			out.write("module M\nx : [0.." + (numStates - 1) + "];\n");
-			sorted = new TreeMap<Integer, Double>();
+			sorted = new TreeMap<>();
 			for (i = 0; i < numStates; i++) {
 				// Extract transitions and sort by destination state index (to match PRISM-exported files)
 				Iterator<Map.Entry<Integer, Double>> iter = getTransitionsIterator(i);

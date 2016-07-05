@@ -116,7 +116,7 @@ class ConstraintChecker
 	ConstraintChecker(int numRandomPoints)
 	{
 		this.numRandomPoints = numRandomPoints;
-		decisions = new HashMap<DecisionEntryKey, ArrayList<DecisionEntryValue>>();
+		decisions = new HashMap<>();
 	}
 
 	/**
@@ -195,7 +195,7 @@ class ConstraintChecker
 
 		entries = decisions.get(key);
 		if (entries == null) {
-			entries = new ArrayList<DecisionEntryValue>();
+			entries = new ArrayList<>();
 			decisions.put(key, entries);
 		}
 		DecisionEntryValue entry = new DecisionEntryValue();

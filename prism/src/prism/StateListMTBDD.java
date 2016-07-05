@@ -170,7 +170,7 @@ public class StateListMTBDD implements StateList
 	@Override
 	public List<String> exportToStringList()
 	{
-		strList = new ArrayList<String>((int) size);
+		strList = new ArrayList<>((int) size);
 		outputFormat = OutputFormat.STRINGS;
 		limit = false;
 		doPrint();

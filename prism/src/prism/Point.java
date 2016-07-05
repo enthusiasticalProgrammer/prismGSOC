@@ -247,7 +247,7 @@ public class Point
 	 */
 	public Point project(BitSet b)
 	{
-		ArrayList<Double> al = new ArrayList<Double>();
+		ArrayList<Double> al = new ArrayList<>();
 		for (int i = 0; i < this.getDimension(); i++)
 			if (b.get(i))
 				al.add(this.getCoord(i));

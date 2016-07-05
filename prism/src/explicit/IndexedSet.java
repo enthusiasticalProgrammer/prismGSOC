@@ -45,13 +45,13 @@ public class IndexedSet<T> implements StateStorage<T>
 	public IndexedSet(boolean sorted)
 	{
 		indexOfLastAdd = -1;
-		set = sorted ? new TreeMap<T, Integer>() : new HashMap<T, Integer>();
+		set = sorted ? new TreeMap<>() : new HashMap<>();
 	}
 
 	public IndexedSet(Comparator<T> comparator)
 	{
 		indexOfLastAdd = -1;
-		set = new TreeMap<T, Integer>(comparator);
+		set = new TreeMap<>(comparator);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class IndexedSet<T> implements StateStorage<T>
 	@Override
 	public ArrayList<T> toArrayList()
 	{
-		ArrayList<T> list = new ArrayList<T>(set.size());
+		ArrayList<T> list = new ArrayList<>(set.size());
 		toArrayList(list);
 		return list;
 	}
@@ -146,7 +146,7 @@ public class IndexedSet<T> implements StateStorage<T>
 	@Override
 	public ArrayList<T> toPermutedArrayList(int permut[])
 	{
-		ArrayList<T> list = new ArrayList<T>(set.size());
+		ArrayList<T> list = new ArrayList<>(set.size());
 		toPermutedArrayList(permut, list);
 		return list;
 	}

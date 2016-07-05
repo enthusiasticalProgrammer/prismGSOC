@@ -183,7 +183,7 @@ public class NBA_State implements Iterable<Map.Entry<APElement, MyBitSet>>
 		{
 			_apset_size = apset.size();
 			_state = state;
-			_container = new HashMap<APElement, MyBitSet>();
+			_container = new HashMap<>();
 		}
 
 		/** Get the target states */

@@ -105,7 +105,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	 */
 	public List<GUIProperty> getAllNamedProperties()
 	{
-		ArrayList<GUIProperty> ret = new ArrayList<GUIProperty>();
+		ArrayList<GUIProperty> ret = new ArrayList<>();
 		for (int i = 0; i < getNumProperties(); i++) {
 			if (getProperty(i).getName() != null)
 				ret.add(getProperty(i));
@@ -155,7 +155,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	 */
 	public ArrayList<GUIProperty> getSelectedProperties()
 	{
-		ArrayList<GUIProperty> gps = new ArrayList<GUIProperty>();
+		ArrayList<GUIProperty> gps = new ArrayList<>();
 		int[] ind = getSelectedIndices();
 		for (int i = 0; i < ind.length; i++) {
 			gps.add(getProperty(ind[i]));
@@ -184,7 +184,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	 */
 	public ArrayList<GUIProperty> getValidSelectedProperties()
 	{
-		ArrayList<GUIProperty> gps = new ArrayList<GUIProperty>();
+		ArrayList<GUIProperty> gps = new ArrayList<>();
 		if (parent.getParsedModel() == null)
 			return gps;
 		int[] ind = getSelectedIndices();
@@ -208,7 +208,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 		ArrayList<GUIProperty> gps = getValidSelectedProperties();
 
 		//strings will contain all relevant named properties, first selected, then refernced
-		Vector<String> strings = new Vector<String>();
+		Vector<String> strings = new Vector<>();
 
 		for (GUIProperty p : gps) {
 			//add even null
@@ -221,7 +221,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 					strings.add(s);
 		}
 
-		Vector<GUIProperty> referencedProps = new Vector<GUIProperty>();
+		Vector<GUIProperty> referencedProps = new Vector<>();
 
 		//turn referenced strings to props.
 		int i = gps.size();
@@ -273,7 +273,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	 */
 	public ArrayList<GUIProperty> getValidSimulatableSelectedProperties()
 	{
-		ArrayList<GUIProperty> gps = new ArrayList<GUIProperty>();
+		ArrayList<GUIProperty> gps = new ArrayList<>();
 		if (parent.getParsedModel() == null)
 			return gps;
 		int[] ind = getSelectedIndices();
@@ -418,7 +418,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	public void validateProperties()
 	{
-		List<GUIProperty> list = new ArrayList<GUIProperty>();
+		List<GUIProperty> list = new ArrayList<>();
 		for (int i = 0; i < getNumProperties(); i++) {
 			GUIProperty p = getProperty(i);
 			p.makeInvalid();

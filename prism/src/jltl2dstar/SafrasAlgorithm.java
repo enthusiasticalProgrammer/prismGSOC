@@ -66,7 +66,7 @@ class SafrasAlgorithm
 
 		_NODES = 2 * nba.getStateCount();
 		stv_reorder = null;
-		_next = new Vector<MyBitSet>();
+		_next = new Vector<>();
 		_next.setSize(nba.getStateCount());
 	}
 

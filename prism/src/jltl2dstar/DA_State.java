@@ -50,7 +50,7 @@ class DA_State
 	public DA_State(DA graph)
 	{
 		_graph = graph;
-		_edges = new HashMap<APElement, DA_State>();
+		_edges = new HashMap<>();
 		_description = "";
 	}
 

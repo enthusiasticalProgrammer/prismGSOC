@@ -392,7 +392,7 @@ public class SaveGraphicModelThread extends Thread
 
 						//branches
 						//get all branches of this decision
-						ArrayList<ProbTransition> extract = new ArrayList<ProbTransition>();
+						ArrayList<ProbTransition> extract = new ArrayList<>();
 						for (int k = 0; k < branchTrans.size(); k++) {
 							ProbTransition prtr = (ProbTransition) branchTrans.get(k);
 							if (prtr.getFrom() == de)

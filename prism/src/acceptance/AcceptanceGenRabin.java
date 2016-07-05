@@ -130,7 +130,7 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 		@Override
 		public GenRabinPair clone()
 		{
-			ArrayList<BitSet> newK_list = new ArrayList<BitSet>();
+			ArrayList<BitSet> newK_list = new ArrayList<>();
 			for (BitSet K_j : K_list)
 				newK_list.add((BitSet) K_j.clone());
 			return new GenRabinPair((BitSet) L.clone(), newK_list);

@@ -72,9 +72,9 @@ public class SCCComputerSCCFind extends SCCComputer
 	@Override
 	public void computeSCCs()
 	{
-		sccs = new Vector<JDDNode>();
+		sccs = new Vector<>();
 		allSCCs = JDD.Constant(0);
-		tasks = new Stack<DecompTask>();
+		tasks = new Stack<>();
 		JDD.Ref(reach);
 		JDD.Ref(trans01);
 		JDDNode trimmedNodes = trim(reach, trans01);
@@ -91,9 +91,9 @@ public class SCCComputerSCCFind extends SCCComputer
 	public void computeSCCs(JDDNode filter)
 	{
 		//computeSCCs();
-		sccs = new Vector<JDDNode>();
+		sccs = new Vector<>();
 		allSCCs = JDD.Constant(0);
-		tasks = new Stack<DecompTask>();
+		tasks = new Stack<>();
 		JDD.Ref(reach);
 		JDD.Ref(trans01);
 		JDDNode trimmedNodes = trim(reach, trans01);
@@ -213,7 +213,7 @@ public class SCCComputerSCCFind extends SCCComputer
 	private SkelForwardResult skelForward(JDDNode nodes, JDDNode edges, JDDNode node)
 	{
 
-		Stack<JDDNode> stack = new Stack<JDDNode>();
+		Stack<JDDNode> stack = new Stack<>();
 
 		JDD.Ref(node);
 		JDDNode level = node;

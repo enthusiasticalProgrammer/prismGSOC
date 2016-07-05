@@ -64,7 +64,7 @@ public class JDDVars implements Iterable<JDDNode>
 	 */
 	public JDDVars()
 	{
-		vars = new Vector<JDDNode>();
+		vars = new Vector<>();
 		array = 0;
 		arrayBuilt = false;
 	}

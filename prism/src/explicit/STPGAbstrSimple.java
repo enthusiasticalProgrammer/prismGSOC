@@ -106,7 +106,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 		super.initialise(numStates);
 		numDistrSets = numDistrs = numTransitions = 0;
 		maxNumDistrSets = maxNumDistrs = 0;
-		trans = new ArrayList<ArrayList<DistributionSet>>(numStates);
+		trans = new ArrayList<>(numStates);
 		for (int i = 0; i < numStates; i++) {
 			trans.add(new ArrayList<DistributionSet>());
 		}
@@ -293,7 +293,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		// Need to build set to avoid duplicates
 		// So not necessarily the fastest method to access successors
-		HashSet<Integer> succs = new HashSet<Integer>();
+		HashSet<Integer> succs = new HashSet<>();
 		for (DistributionSet distrs : trans.get(s)) {
 			for (Distribution distr : distrs) {
 				succs.addAll(distr.getSupport());
@@ -373,7 +373,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 		TreeMap<Integer, Double> sorted;
 		// Output transitions to .tra file
 		out.print(numStates + " " + numDistrSets + " " + numDistrs + " " + numTransitions + "\n");
-		sorted = new TreeMap<Integer, Double>();
+		sorted = new TreeMap<>();
 		for (i = 0; i < numStates; i++) {
 			j = -1;
 			for (DistributionSet distrs : trans.get(i)) {
@@ -507,7 +507,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		// Need to build set to avoid duplicates
 		// So not necessarily the fastest method to access successors
-		HashSet<Integer> succs = new HashSet<Integer>();
+		HashSet<Integer> succs = new HashSet<>();
 		for (Distribution distr : trans.get(s).get(i)) {
 			succs.addAll(distr.getSupport());
 		}
@@ -710,7 +710,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 		ArrayList<DistributionSet> step;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation 
 		j = -1;
 		step = trans.get(s);
@@ -857,7 +857,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 		ArrayList<DistributionSet> step;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation 
 		dsIter = -1;
 		step = trans.get(s);

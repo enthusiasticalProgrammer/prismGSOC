@@ -617,9 +617,9 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				theModel.nodeStructureChanged(root);
 			}
 		}
-		editableModules = new ArrayList<ModuleNode>();
-		editableDeclarations = new ArrayList<DeclarationNode>();
-		editableConstants = new ArrayList<ConstantNode>();
+		editableModules = new ArrayList<>();
+		editableDeclarations = new ArrayList<>();
+		editableConstants = new ArrayList<>();
 
 		modCounter = 1;
 	}
@@ -663,8 +663,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			}
 
 			//Create 2 ArrayLists: one of Modules in the tree and one of modules not in the tree
-			ArrayList<Module> inTree = new ArrayList<Module>();
-			ArrayList<Module> notInTree = new ArrayList<Module>();
+			ArrayList<Module> inTree = new ArrayList<>();
+			ArrayList<Module> notInTree = new ArrayList<>();
 
 			for (int i = 0; i < parsedModel.getNumModules(); i++) {
 				Module aMod = parsedModel.getModule(i);
@@ -683,8 +683,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				/*  Check its variables getting variables which are already there
 				 *  and putting them in varInTree, and getting variables which
 				 *  are not there and putting them in varNotInTree*/
-				ArrayList<Declaration> varInTree = new ArrayList<Declaration>();
-				ArrayList<Declaration> varNotInTree = new ArrayList<Declaration>();
+				ArrayList<Declaration> varInTree = new ArrayList<>();
+				ArrayList<Declaration> varNotInTree = new ArrayList<>();
 
 				for (int j = 0; j < inTreeMod.getNumDeclarations(); j++) {
 					Declaration d = inTreeMod.getDeclaration(j);
@@ -749,7 +749,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 				/*  remove variables which are in the tree but not in varInTree or
 				 *  varNotInTree */
-				ArrayList<DeclarationNode> removeNodes = new ArrayList<DeclarationNode>();
+				ArrayList<DeclarationNode> removeNodes = new ArrayList<>();
 				for (int j = 0; j < inTreeNode.getChildCount(); j++) {
 					DeclarationNode vNode = (DeclarationNode) inTreeNode.getChildAt(j);
 					if (!variableExists(vNode, varInTree, varNotInTree)) {
@@ -805,7 +805,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				theModel.nodesWereInserted(modules, new int[] { index });
 			}
 			//remove modules from the tree which are not in either inTree or notInTree
-			ArrayList<DefaultMutableTreeNode> removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			ArrayList<DefaultMutableTreeNode> removeNodes = new ArrayList<>();
 			for (int i = 0; i < modules.getChildCount(); i++) {
 				ModuleNode mNode = (ModuleNode) modules.getChildAt(i);
 				if (!moduleExists(mNode, inTree, notInTree)) {
@@ -842,8 +842,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  Create 2 ArrayLists.  One of Declarations in the tree and one of declarations
 			 *  not in the tree. */
-			ArrayList<Declaration> decInTree = new ArrayList<Declaration>();
-			ArrayList<Declaration> decNotInTree = new ArrayList<Declaration>();
+			ArrayList<Declaration> decInTree = new ArrayList<>();
+			ArrayList<Declaration> decNotInTree = new ArrayList<>();
 
 			for (int i = 0; i < parsedModel.getNumGlobals(); i++) {
 				Declaration d = parsedModel.getGlobal(i);
@@ -901,7 +901,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  remove declarations which are in the tree but not in decInTree or
 			 *  decNotInTree */
-			removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			removeNodes = new ArrayList<>();
 			for (int i = 0; i < declarations.getChildCount(); i++) {
 				DeclarationNode vNode = (DeclarationNode) declarations.getChildAt(i);
 				if (!declarationExists(vNode, decInTree, decNotInTree)) {
@@ -939,8 +939,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  Create 2 ArrayLists.  One of Constants in the tree and one of constants
 			 *  not in the tree. */
-			ArrayList<ConstantNode> conInTree = new ArrayList<ConstantNode>();
-			ArrayList<ConstantNode> conNotInTree = new ArrayList<ConstantNode>();
+			ArrayList<ConstantNode> conInTree = new ArrayList<>();
+			ArrayList<ConstantNode> conNotInTree = new ArrayList<>();
 
 			for (int i = 0; i < csts.size(); i++) {
 				String name = csts.getConstantName(i);
@@ -998,7 +998,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  remove declarations which are in the tree but not in decInTree or
 			 *  decNotInTree */
-			removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			removeNodes = new ArrayList<>();
 			for (int i = 0; i < constants.getChildCount(); i++) {
 				ConstantNode cNode = (ConstantNode) constants.getChildAt(i);
 				if (!constantExists(cNode, conInTree, conNotInTree)) {
@@ -1242,8 +1242,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  Create 2 ArrayLists.  One of Modules in the tree and one of modules
 			 *  not in the tree. */
-			ArrayList<Module> inTree = new ArrayList<Module>();
-			ArrayList<Module> notInTree = new ArrayList<Module>();
+			ArrayList<Module> inTree = new ArrayList<>();
+			ArrayList<Module> notInTree = new ArrayList<>();
 
 			for (int i = 0; i < parsedModel.getNumModules(); i++) {
 				Module aMod = parsedModel.getModule(i);
@@ -1262,8 +1262,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				/*  Check its variables getting variables which are already there
 				 *  and putting them in varInTree, and getting variables which
 				 *  are not there and putting them in varNotInTree*/
-				ArrayList<Declaration> varInTree = new ArrayList<Declaration>();
-				ArrayList<Declaration> varNotInTree = new ArrayList<Declaration>();
+				ArrayList<Declaration> varInTree = new ArrayList<>();
+				ArrayList<Declaration> varNotInTree = new ArrayList<>();
 
 				for (int j = 0; j < inTreeMod.getNumDeclarations(); j++) {
 					Declaration d = inTreeMod.getDeclaration(j);
@@ -1322,7 +1322,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 				/*  remove variables which are in the tree but not in varInTree or
 				 *  varNotInTree */
-				ArrayList<DeclarationNode> removeNodes = new ArrayList<DeclarationNode>();
+				ArrayList<DeclarationNode> removeNodes = new ArrayList<>();
 				for (int j = 0; j < inTreeNode.getChildCount(); j++) {
 					DeclarationNode vNode = (DeclarationNode) inTreeNode.getChildAt(j);
 					if (!variableExists(vNode, varInTree, varNotInTree)) {
@@ -1373,7 +1373,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 				theModel.nodesWereInserted(modules, new int[] { index });
 			}
 			//remove modules from the tree which are not in either inTree or notInTree
-			ArrayList<DefaultMutableTreeNode> removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			ArrayList<DefaultMutableTreeNode> removeNodes = new ArrayList<>();
 			for (int i = 0; i < modules.getChildCount(); i++) {
 				ModuleNode mNode = (ModuleNode) modules.getChildAt(i);
 				if (!mNode.isEditable() && !moduleExists(mNode, inTree, notInTree)) {
@@ -1404,8 +1404,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  Create 2 ArrayLists.  One of Declarations in the tree and one of declarations
 			 *  not in the tree. */
-			ArrayList<Declaration> decInTree = new ArrayList<Declaration>();
-			ArrayList<Declaration> decNotInTree = new ArrayList<Declaration>();
+			ArrayList<Declaration> decInTree = new ArrayList<>();
+			ArrayList<Declaration> decNotInTree = new ArrayList<>();
 
 			for (int i = 0; i < parsedModel.getNumGlobals(); i++) {
 				Declaration d = parsedModel.getGlobal(i);
@@ -1464,7 +1464,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  remove declarations which are in the tree but not in decInTree or
 			 *  decNotInTree */
-			removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			removeNodes = new ArrayList<>();
 			for (int i = 0; i < declarations.getChildCount(); i++) {
 				DeclarationNode vNode = (DeclarationNode) declarations.getChildAt(i);
 				if (!vNode.isEditable() && !declarationExists(vNode, decInTree, decNotInTree)) {
@@ -1496,8 +1496,8 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  Create 2 ArrayLists.  One of Constants in the tree and one of constants
 			 *  not in the tree. */
-			ArrayList<ConstantNode> conInTree = new ArrayList<ConstantNode>();
-			ArrayList<ConstantNode> conNotInTree = new ArrayList<ConstantNode>();
+			ArrayList<ConstantNode> conInTree = new ArrayList<>();
+			ArrayList<ConstantNode> conNotInTree = new ArrayList<>();
 
 			for (int i = 0; i < csts.size(); i++) {
 				String name = csts.getConstantName(i);
@@ -1555,7 +1555,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 			/*  remove declarations which are in the tree but not in decInTree or
 			 *  decNotInTree */
-			removeNodes = new ArrayList<DefaultMutableTreeNode>();
+			removeNodes = new ArrayList<>();
 			for (int i = 0; i < constants.getChildCount(); i++) {
 				ConstantNode cNode = (ConstantNode) constants.getChildAt(i);
 				if (!cNode.isEditable() && !constantExists(cNode, conInTree, conNotInTree)) {
@@ -2140,7 +2140,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableConstantNames()
 	{
-		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<>();
 		for (int i = 0; i < editableConstants.size(); i++) {
 			DeclarationNode dn = editableConstants.get(i);
 			names.add(dn.getName());
@@ -2150,7 +2150,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableConstantValues()
 	{
-		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> values = new ArrayList<>();
 		for (int i = 0; i < editableConstants.size(); i++) {
 			ConstantNode cn = editableConstants.get(i);
 			if (cn.getValue() != null) {
@@ -2166,7 +2166,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<Type> getEditableConstantTypes()
 	{
-		ArrayList<Type> types = new ArrayList<Type>();
+		ArrayList<Type> types = new ArrayList<>();
 		for (int i = 0; i < editableConstants.size(); i++) {
 			Object node = editableConstants.get(i);
 			if (node instanceof BoolConstantNode) {
@@ -2183,7 +2183,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableGlobalNames()
 	{
-		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<>();
 		for (int i = 0; i < editableDeclarations.size(); i++) {
 			DeclarationNode dn = editableDeclarations.get(i);
 			names.add(dn.getName());
@@ -2193,7 +2193,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableGlobalMins()
 	{
-		ArrayList<String> mins = new ArrayList<String>();
+		ArrayList<String> mins = new ArrayList<>();
 		for (int i = 0; i < editableDeclarations.size(); i++) {
 			Object node = editableDeclarations.get(i);
 			if (node instanceof GlobalNode) {
@@ -2207,7 +2207,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableGlobalMaxs()
 	{
-		ArrayList<String> maxs = new ArrayList<String>();
+		ArrayList<String> maxs = new ArrayList<>();
 		for (int i = 0; i < editableDeclarations.size(); i++) {
 			Object node = editableDeclarations.get(i);
 			if (node instanceof GlobalNode) {
@@ -2222,7 +2222,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getEditableGlobalInits()
 	{
-		ArrayList<String> inits = new ArrayList<String>();
+		ArrayList<String> inits = new ArrayList<>();
 		for (int i = 0; i < editableDeclarations.size(); i++) {
 			Object node = editableDeclarations.get(i);
 			if (node instanceof GlobalNode) {
@@ -2238,7 +2238,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<Type> getEditableGlobalTypes()
 	{
-		ArrayList<Type> types = new ArrayList<Type>();
+		ArrayList<Type> types = new ArrayList<>();
 		for (int i = 0; i < editableDeclarations.size(); i++) {
 			Object node = editableDeclarations.get(i);
 			if (node instanceof GlobalBoolNode) {
@@ -2253,7 +2253,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getVariableNames(ModuleNode m)
 	{
-		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<>();
 		for (int i = 0; i < m.getChildCount(); i++) {
 			DeclarationNode vn = (DeclarationNode) m.getChildAt(i);
 			if (!(vn instanceof StateVarNode)) {
@@ -2265,7 +2265,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<Type> getVariableTypes(ModuleNode m)
 	{
-		ArrayList<Type> types = new ArrayList<Type>();
+		ArrayList<Type> types = new ArrayList<>();
 		for (int i = 0; i < m.getChildCount(); i++) {
 			DeclarationNode dn = (DeclarationNode) m.getChildAt(i);
 			if (!(dn instanceof StateVarNode)) {
@@ -2282,7 +2282,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getVariableMins(ModuleNode m)
 	{
-		ArrayList<String> mins = new ArrayList<String>();
+		ArrayList<String> mins = new ArrayList<>();
 		for (int i = 0; i < m.getChildCount(); i++) {
 			DeclarationNode dn = (DeclarationNode) m.getChildAt(i);
 			if (!(dn instanceof StateVarNode)) {
@@ -2301,7 +2301,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getVariableMaxs(ModuleNode m)
 	{
-		ArrayList<String> maxs = new ArrayList<String>();
+		ArrayList<String> maxs = new ArrayList<>();
 		for (int i = 0; i < m.getChildCount(); i++) {
 			DeclarationNode dn = (DeclarationNode) m.getChildAt(i);
 			if (!(dn instanceof StateVarNode)) {
@@ -2320,7 +2320,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	public ArrayList<String> getVariableInits(ModuleNode m)
 	{
-		ArrayList<String> inits = new ArrayList<String>();
+		ArrayList<String> inits = new ArrayList<>();
 		for (int i = 0; i < m.getChildCount(); i++) {
 			DeclarationNode dn = (DeclarationNode) m.getChildAt(i);
 			if (!(dn instanceof StateVarNode)) {
@@ -2501,7 +2501,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	class ModuleEditor extends JTextField implements TreeCellEditor
 	{
 		String name;
-		Vector<CellEditorListener> listeners = new Vector<CellEditorListener>();
+		Vector<CellEditorListener> listeners = new Vector<>();
 		private static final int minWidth = 64;
 
 		public ModuleEditor()
@@ -2691,7 +2691,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	class DeclarationEditor extends JTextField implements TreeCellEditor
 	{
 		String name;
-		Vector<CellEditorListener> listeners = new Vector<CellEditorListener>();
+		Vector<CellEditorListener> listeners = new Vector<>();
 		private static final int minWidth = 64;
 
 		public DeclarationEditor()
@@ -3230,7 +3230,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	class ExpressionEditor extends JTextField implements TreeCellEditor
 	{
 		Expression exp;
-		Vector<CellEditorListener> listeners = new Vector<CellEditorListener>();
+		Vector<CellEditorListener> listeners = new Vector<>();
 		private static final int minWidth = 64;
 
 		public ExpressionEditor()
@@ -3386,7 +3386,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	class ModelTypeEditor extends JComboBox implements TreeCellEditor
 	{
 		String value;
-		Vector<CellEditorListener> listeners = new Vector<CellEditorListener>();
+		Vector<CellEditorListener> listeners = new Vector<>();
 		Object[] list;
 
 		public ModelTypeEditor(Object[] list)

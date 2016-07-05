@@ -85,7 +85,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	 */
 	public void clear()
 	{
-		map = new HashMap<Integer, Double>();
+		map = new HashMap<>();
 	}
 
 	/**

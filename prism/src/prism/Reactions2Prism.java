@@ -151,21 +151,21 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 		HashSet<String> prismIdents;
 
 		// Check species ids are unique
-		ArrayList<String> speciesIDs = new ArrayList<String>();
+		ArrayList<String> speciesIDs = new ArrayList<>();
 		for (Species species : speciesList) {
 			if (speciesIDs.contains(species.id))
 				throw new PrismException("Duplicate species id \"" + species.id + "\"");
 			speciesIDs.add(species.id);
 		}
 		// Check parameter names are unique
-		ArrayList<String> paramNames = new ArrayList<String>();
+		ArrayList<String> paramNames = new ArrayList<>();
 		for (Parameter parameter : parameterList) {
 			if (paramNames.contains(parameter.name))
 				throw new PrismException("Duplicate parameter name \"" + parameter.name + "\"");
 			paramNames.add(parameter.name);
 		}
 		// Check reaction ids are unique
-		ArrayList<String> reactionIDs = new ArrayList<String>();
+		ArrayList<String> reactionIDs = new ArrayList<>();
 		for (Reaction reaction : reactionList) {
 			if (reactionIDs.contains(reaction.id))
 				throw new PrismException("Duplicate reaction id \"" + reaction.id + "\"");
@@ -180,8 +180,8 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 		}
 
 		// Generate unique and valid PRISM identifier (module and variable name) for each species
-		modulesNames = new HashSet<String>();
-		prismIdents = new HashSet<String>();
+		modulesNames = new HashSet<>();
+		prismIdents = new HashSet<>();
 		for (Species species : speciesList) {
 			s = species.id;
 			s2 = convertToValidPrismIdent(s);
@@ -245,8 +245,8 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 		Reaction reaction;
 		Parameter parameter;
 		String s2;
-		ArrayList<String> renameFrom = new ArrayList<String>();
-		ArrayList<String> renameTo = new ArrayList<String>();
+		ArrayList<String> renameFrom = new ArrayList<>();
+		ArrayList<String> renameTo = new ArrayList<>();
 		StringBuilder sb = new StringBuilder();
 
 		// Header
@@ -525,16 +525,16 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 		{
 			this.id = id;
 			this.name = name;
-			reactants = new ArrayList<String>();
-			reactantStoichs = new ArrayList<Integer>();
-			products = new ArrayList<String>();
-			productStoichs = new ArrayList<Integer>();
+			reactants = new ArrayList<>();
+			reactantStoichs = new ArrayList<>();
+			products = new ArrayList<>();
+			productStoichs = new ArrayList<>();
 			reversible = false;
 			kineticLaw = null;
 			kineticLawString = null;
 			kineticLawReverse = null;
 			kineticLawReverseString = null;
-			parameters = new ArrayList<Parameter>();
+			parameters = new ArrayList<>();
 		}
 
 		public void addReactant(String reactant)

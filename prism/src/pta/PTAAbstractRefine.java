@@ -157,7 +157,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 		// Compute validity of each outgoing transition from this state.
 		// In fact, since guards for multiple transitions are often identical,
 		// we only do this for distinct ones, and build a 'map' between them.
-		valids = new ArrayList<NCZone>(numTransitions);
+		valids = new ArrayList<>(numTransitions);
 		map = new int[numTransitions];
 		for (i = 0; i < numTransitions; i++) {
 			st = graph.trans.get(src).get(i);
@@ -301,7 +301,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 			mainLog.println("Splitting: #" + splitState + "=" + lzSplit);
 
 		// Compute zones that this state will be split into; store in 'partition'
-		partition = new ArrayList<DBMList>();
+		partition = new ArrayList<>();
 		choiceCount = 0;
 		for (List<Integer> choiceList : choiceLists) {
 			choiceCount += choiceList.size();
@@ -314,8 +314,8 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 					actionBitSet = (BitSet) action;
 					List<SymbolicTransition> sts = graph.trans.get(splitState);
 					n = sts.size();
-					Set<NCZone> valids = new LinkedHashSet<NCZone>();
-					Set<NCZone> validCmpls = new LinkedHashSet<NCZone>();
+					Set<NCZone> valids = new LinkedHashSet<>();
+					Set<NCZone> validCmpls = new LinkedHashSet<>();
 					for (i = 0; i < n; i++) {
 						SymbolicTransition st = sts.get(i);
 						// Store in appropriate set 
@@ -408,8 +408,8 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 		}
 
 		// Update symbolic transitions and abstraction
-		Set<SymbolicTransition> oldSTs = new LinkedHashSet<SymbolicTransition>();
-		Set<SymbolicTransition> newSTs = new LinkedHashSet<SymbolicTransition>();
+		Set<SymbolicTransition> oldSTs = new LinkedHashSet<>();
+		Set<SymbolicTransition> newSTs = new LinkedHashSet<>();
 		// Go through all abstract states
 		numStates = graph.states.size();
 		for (i = 0; i < numStates; i++) {

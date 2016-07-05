@@ -102,7 +102,7 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	public void initialise(int numStates)
 	{
 		super.initialise(numStates);
-		transitionList = new ArrayList<Distribution>(numStates);
+		transitionList = new ArrayList<>(numStates);
 		for (int state = 0; state < numStates; state++) {
 			transitionList.add(new Distribution());
 		}

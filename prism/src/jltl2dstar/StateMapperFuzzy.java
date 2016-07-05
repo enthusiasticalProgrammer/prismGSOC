@@ -47,7 +47,7 @@ class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher> imple
 	public StateMapperFuzzy()
 	{
 		_count = 0;
-		_map = new HashMap<AbstractedKeyType, Vector<ListValue>>();
+		_map = new HashMap<>();
 	}
 
 	/** Clear the mapping. */

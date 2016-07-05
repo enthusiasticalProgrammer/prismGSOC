@@ -387,7 +387,7 @@ public class Property extends ASTElement
 		} else if (type instanceof TypeVoid && result instanceof TileList) { //Pareto curve
 
 			//Create the list of points from the expected results
-			List<Point> liExpected = new ArrayList<Point>();
+			List<Point> liExpected = new ArrayList<>();
 			Pattern p = Pattern.compile("\\(([^,]*),([^)]*)\\)");
 			Matcher m = p.matcher(strExpected);
 			if (!m.find()) {

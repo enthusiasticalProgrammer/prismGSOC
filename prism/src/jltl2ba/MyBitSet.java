@@ -66,7 +66,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 	// ugly
 	public Vector<Integer> IntegerList()
 	{
-		Vector<Integer> tmp = new Vector<Integer>();
+		Vector<Integer> tmp = new Vector<>();
 		for (int i = 0; i < this.size(); i++)
 			if (this.get(i))
 				tmp.add(new Integer(i));

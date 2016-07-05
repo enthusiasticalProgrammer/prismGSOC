@@ -46,9 +46,9 @@ public class LabelList extends ASTElement
 
 	public LabelList()
 	{
-		names = new Vector<String>();
-		labels = new Vector<Expression>();
-		nameIdents = new Vector<ExpressionIdent>();
+		names = new Vector<>();
+		labels = new Vector<>();
+		nameIdents = new Vector<>();
 	}
 
 	// Set methods

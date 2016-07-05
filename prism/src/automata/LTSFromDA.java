@@ -60,7 +60,7 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(int s)
 	{
-		Set<Integer> succs = new HashSet<Integer>();
+		Set<Integer> succs = new HashSet<>();
 		int n = da.getNumEdges(s);
 		for (int i = 0; i < n; i++) {
 			succs.add(da.getEdgeDest(s, i));
@@ -215,7 +215,7 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(int s, int i)
 	{
-		Set<Integer> succs = new HashSet<Integer>();
+		Set<Integer> succs = new HashSet<>();
 		succs.add(da.getEdgeDest(s, i));
 		return succs.iterator();
 	}

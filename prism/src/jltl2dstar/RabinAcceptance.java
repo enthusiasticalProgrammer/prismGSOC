@@ -56,8 +56,8 @@ class RabinAcceptance implements Iterable<Integer>
 	public RabinAcceptance()
 	{
 		_is_compact = true;
-		_acceptance_L = new Vector<MyBitSet>();
-		_acceptance_U = new Vector<MyBitSet>();
+		_acceptance_L = new Vector<>();
+		_acceptance_U = new Vector<>();
 	}
 
 	/**

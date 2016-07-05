@@ -141,8 +141,8 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		attributes = new HashPrintRequestAttributeSet();
 
-		models = new ArrayList<Graph>();
-		options = new ArrayList<GraphOptions>();
+		models = new ArrayList<>();
+		options = new ArrayList<>();
 	}
 
 	private void initComponents()

@@ -67,8 +67,8 @@ final class JasFunctionFactory extends FunctionFactory
 		this.parameterNames = parameterNames;
 
 		BigInteger fac = new BigInteger();
-		jasPolyRing = new GenPolynomialRing<BigInteger>(fac, pNameReversed.length, pNameReversed);
-		jasQuotRing = new QuotientRing<BigInteger>(jasPolyRing);
+		jasPolyRing = new GenPolynomialRing<>(fac, pNameReversed.length, pNameReversed);
+		jasQuotRing = new QuotientRing<>(jasPolyRing);
 		one = new JasFunction(this, jasQuotRing.getONE(), JasFunction.NORMAL);
 		zero = new JasFunction(this, jasQuotRing.getZERO(), JasFunction.NORMAL);
 		nan = new JasFunction(this, jasQuotRing.getZERO(), JasFunction.NAN);

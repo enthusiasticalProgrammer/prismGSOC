@@ -59,7 +59,7 @@ public class PredecessorRelation
 	 */
 	public PredecessorRelation(Model model)
 	{
-		pre = new ArrayList<ArrayList<Integer>>(model.getNumStates());
+		pre = new ArrayList<>(model.getNumStates());
 		// construct the (empty) array list for all states
 		for (int s = 0; s < model.getNumStates(); s++) {
 			pre.add(s, new ArrayList<Integer>());
@@ -154,7 +154,7 @@ public class PredecessorRelation
 		result = (BitSet) target.clone();
 
 		// the stack of states whose predecessors have to be considered
-		Stack<Integer> todo = new Stack<Integer>();
+		Stack<Integer> todo = new Stack<>();
 
 		// initial todo: all the target states
 		for (Integer s : IterableBitSet.getSetBits(target)) {

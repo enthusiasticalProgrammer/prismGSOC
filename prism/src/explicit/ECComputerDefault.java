@@ -51,7 +51,7 @@ public class ECComputerDefault extends ECComputer
 	private NondetModel model;
 
 	/** Computed list of MECs **/
-	private @NonNull List<@NonNull BitSet> mecs = new ArrayList<@NonNull BitSet>();
+	private @NonNull List<@NonNull BitSet> mecs = new ArrayList<>();
 
 	/**
 	 * Build (M)EC computer for a given model.
@@ -109,7 +109,7 @@ public class ECComputerDefault extends ECComputer
 		}
 		// Initialise L with set of all states to look in (if non-empty)
 		@NonNull
-		List<@NonNull BitSet> L = new ArrayList<@NonNull BitSet>();
+		List<@NonNull BitSet> L = new ArrayList<>();
 		if (restrict.isEmpty())
 			return L;
 		L.add(restrict);
@@ -138,7 +138,7 @@ public class ECComputerDefault extends ECComputer
 		return L;
 	}
 
-	private Set<BitSet> processedSCCs = new HashSet<BitSet>();
+	private Set<BitSet> processedSCCs = new HashSet<>();
 
 	private boolean canLBeChanged(List<BitSet> L, BitSet E)
 	{
@@ -155,7 +155,7 @@ public class ECComputerDefault extends ECComputer
 	{
 		if (sccs.size() > 0) {
 			@NonNull
-			List<@NonNull BitSet> toAdd = new ArrayList<@NonNull BitSet>();
+			List<@NonNull BitSet> toAdd = new ArrayList<>();
 			for (int i = 0; i < sccs.size(); i++) {
 				if (!L.contains(sccs.get(i))) {
 					toAdd.add(sccs.get(i));
@@ -170,7 +170,7 @@ public class ECComputerDefault extends ECComputer
 
 	private SubNondetModel restrict(BitSet states)
 	{
-		Map<Integer, BitSet> actions = new HashMap<Integer, BitSet>();
+		Map<Integer, BitSet> actions = new HashMap<>();
 		BitSet initialStates = new BitSet();
 		initialStates.set(states.nextSetBit(0));
 
@@ -208,7 +208,7 @@ public class ECComputerDefault extends ECComputer
 	private @NonNull List<@NonNull BitSet> translateStates(SubNondetModel model, List<BitSet> sccs)
 	{
 		@NonNull
-		List<@NonNull BitSet> r = new ArrayList<@NonNull BitSet>();
+		List<@NonNull BitSet> r = new ArrayList<>();
 		for (int i = 0; i < sccs.size(); i++) {
 			BitSet set = sccs.get(i);
 			BitSet set2 = new BitSet();

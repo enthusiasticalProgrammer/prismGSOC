@@ -290,7 +290,7 @@ public class NonProbModelChecker extends StateModelChecker
 
 		// Create storage for counterexample, if required
 		if (doGenCex) {
-			cexDDs = new ArrayList<JDDNode>();
+			cexDDs = new ArrayList<>();
 			cexDone = false;
 			init = model.getStart();
 		}
@@ -384,7 +384,7 @@ public class NonProbModelChecker extends StateModelChecker
 				if (1 == 2) {
 					// For an MDP model, build a list of actions from counterexample
 					if (model.getModelType() == ModelType.MDP) {
-						cexActions = new Vector<String>();
+						cexActions = new Vector<>();
 						for (i = cexDDs.size() - 1; i >= 1; i--) {
 							JDD.Ref(trans01);
 							JDD.Ref(cexDDs.get(i));

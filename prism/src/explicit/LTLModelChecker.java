@@ -277,7 +277,7 @@ public class LTLModelChecker extends PrismComponent
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
@@ -305,7 +305,7 @@ public class LTLModelChecker extends PrismComponent
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
@@ -333,7 +333,7 @@ public class LTLModelChecker extends PrismComponent
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
@@ -361,7 +361,7 @@ public class LTLModelChecker extends PrismComponent
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
@@ -439,13 +439,13 @@ public class LTLModelChecker extends PrismComponent
 		// s(s') = s' / daSize
 		// q(s') = s' % daSize
 
-		LinkedList<Point> queue = new LinkedList<Point>();
+		LinkedList<Point> queue = new LinkedList<>();
 		int map[] = new int[prodNumStates];
 		Arrays.fill(map, -1);
 
 		if (model.getStatesList() != null) {
-			prodStatesList = new ArrayList<State>();
-			daStatesList = new ArrayList<State>(da.size());
+			prodStatesList = new ArrayList<>();
+			daStatesList = new ArrayList<>(da.size());
 			for (int i = 0; i < da.size(); i++) {
 				daStatesList.add(new State(1).setValue(0, i));
 			}
@@ -584,7 +584,7 @@ public class LTLModelChecker extends PrismComponent
 		}
 
 		@SuppressWarnings("unchecked")
-		LTLProduct<M> product = new LTLProduct<M>((M) prodModel, model, null, daSize, invMap);
+		LTLProduct<M> product = new LTLProduct<>((M) prodModel, model, null, daSize, invMap);
 
 		// generate acceptance for the product model by lifting
 		product.setAcceptance(liftAcceptance(product, da.getAcceptance()));
@@ -724,7 +724,7 @@ public class LTLModelChecker extends PrismComponent
 		BitSet allPairs = new BitSet();
 		allPairs.set(0, acceptance.size());
 
-		Stack<ECandPairs> todo = new Stack<ECandPairs>();
+		Stack<ECandPairs> todo = new Stack<>();
 		ECComputer ecComputer = ECComputer.createECComputer(this, model);
 		ecComputer.computeMECStates();
 		for (BitSet mecs : ecComputer.getMECStates()) {

@@ -69,12 +69,12 @@ public class DRA<Symbol>
 		apList = null;
 		this.size = size;
 		this.start = -1;
-		edges = new ArrayList<List<Edge>>(size);
+		edges = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			edges.add(new ArrayList<Edge>());
 		}
-		acceptanceL = new ArrayList<BitSet>();
-		acceptanceK = new ArrayList<BitSet>();
+		acceptanceL = new ArrayList<>();
+		acceptanceK = new ArrayList<>();
 	}
 
 	// TODO: finish/tidy this

@@ -39,7 +39,7 @@ public class GUIEventHandler
 	public GUIEventHandler(GUIPrism gui)
 	{
 		this.gui = gui;
-		listeners = new ArrayList<GUIEventListener>();
+		listeners = new ArrayList<>();
 	}
 
 	public void addListener(GUIEventListener listen)

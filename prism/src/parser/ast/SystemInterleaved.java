@@ -40,7 +40,7 @@ public class SystemInterleaved extends SystemDefn
 
 	public SystemInterleaved()
 	{
-		operands = new Vector<SystemDefn>();
+		operands = new Vector<>();
 	}
 
 	// Set methods

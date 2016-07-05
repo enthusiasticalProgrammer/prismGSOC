@@ -153,7 +153,7 @@ public class GUIPrism extends JFrame
 		log = new userinterface.log.GUILog(g);
 		nw = new userinterface.GUINetwork(g);
 		// Add to list
-		ArrayList<GUIPlugin> plugs = new ArrayList<GUIPlugin>();
+		ArrayList<GUIPlugin> plugs = new ArrayList<>();
 		plugs.add(fileMenu);
 		plugs.add(clipboardPlugin);
 		plugs.add(model);
@@ -407,7 +407,7 @@ public class GUIPrism extends JFrame
 	{
 		// just before we get started, pass any command-line args to all plugins
 		// we first remove the -javamaxmem argument, if present
-		List<String> argsCopy = new ArrayList<String>();
+		List<String> argsCopy = new ArrayList<>();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equals("-javamaxmem")) {
 				i++;

@@ -1283,16 +1283,16 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 			popup.add(viewPrismCode);
 		}
 
-		modelFilters = new HashMap<String, FileFilter>();
+		modelFilters = new HashMap<>();
 		modelFilters.put("prism", new FileNameExtensionFilter("PRISM models (*.prism, *.pm, *.nm, *.sm)", "prism", "pm", "nm", "sm"));
 		modelFilters.put("pepa", new FileNameExtensionFilter("PEPA models (*.pepa)", "pepa"));
-		staFilters = new HashMap<String, FileFilter>();
+		staFilters = new HashMap<>();
 		staFilters.put("sta", new FileNameExtensionFilter("State list files (*.sta)", "sta"));
 		staFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		traFilters = new HashMap<String, FileFilter>();
+		traFilters = new HashMap<>();
 		traFilters.put("tra", new FileNameExtensionFilter("Transition matrix files (*.tra)", "tra"));
 		traFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		labFilters = new HashMap<String, FileFilter>();
+		labFilters = new HashMap<>();
 		labFilters.put("lab", new FileNameExtensionFilter("Label files (*.lab)", "lab"));
 		labFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
 		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");

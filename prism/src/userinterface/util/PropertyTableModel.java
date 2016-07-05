@@ -51,10 +51,10 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 	{
 		super();
 		this.theTable = null;
-		groupNames = new ArrayList<String>();
-		groupStarts = new ArrayList<Integer>();
-		groupSizes = new ArrayList<Integer>();
-		owners = new ArrayList<PropertyOwner>();
+		groupNames = new ArrayList<>();
+		groupStarts = new ArrayList<>();
+		groupSizes = new ArrayList<>();
+		owners = new ArrayList<>();
 		comboModel = new DefaultComboBoxModel<>();
 	}
 
@@ -72,9 +72,9 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		PropertyOwner last = null;
 		int currGroupCount = 0;
 		String tempName = "";
-		groupNames = new ArrayList<String>();
-		groupStarts = new ArrayList<Integer>();
-		groupSizes = new ArrayList<Integer>();
+		groupNames = new ArrayList<>();
+		groupStarts = new ArrayList<>();
+		groupSizes = new ArrayList<>();
 		int index = 0;
 
 		String ownerList = "";
@@ -175,7 +175,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 				PropertyOwner firstInGroup = getOwner(getCurrentGroupStart());
 				return firstInGroup.getProperty(row);
 			} else {
-				ArrayList<SingleProperty> currProps = new ArrayList<SingleProperty>();
+				ArrayList<SingleProperty> currProps = new ArrayList<>();
 				for (int i = getCurrentGroupStart(); i < getCurrentGroupStart() + getCurrentGroupSize(); i++) {
 					PropertyOwner prop = getOwner(i);
 					currProps.add(prop.getProperty(row));

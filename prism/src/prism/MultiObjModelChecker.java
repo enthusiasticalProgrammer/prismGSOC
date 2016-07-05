@@ -73,7 +73,7 @@ public class MultiObjModelChecker extends PrismComponent
 		// TODO (JK): Adapt to support simple path formulas with bounds via DRA construction
 
 		// Model check maximal state formulas
-		Vector<JDDNode> labelDDs = new Vector<JDDNode>();
+		Vector<JDDNode> labelDDs = new Vector<>();
 		ltl = mcLtl.checkMaximalStateFormulas(modelChecker, model, pathFormula.deepCopy(), labelDDs);
 
 		// Convert LTL formula to deterministic Rabin automaton (DRA)
@@ -233,12 +233,12 @@ public class MultiObjModelChecker extends PrismComponent
 				rtarget = JDD.And(rtarget, JDD.Not(rmecs));
 				//rtarget = JDD.ThereExists(rtarget, modelProduct.getAllDDColVars());
 				// find target states for LTL formulae
-				Vector<JDDNode> tmptargetDDs = new Vector<JDDNode>();
-				List<JDDNode> tmpmultitargetDDs = new ArrayList<JDDNode>();
-				List<Integer> tmpmultitargetIDs = new ArrayList<Integer>();
-				ArrayList<DA<BitSet, AcceptanceRabin>> tmpdra = new ArrayList<DA<BitSet, AcceptanceRabin>>();
-				ArrayList<JDDVars> tmpdraDDRowVars = new ArrayList<JDDVars>();
-				ArrayList<JDDVars> tmpdraDDColVars = new ArrayList<JDDVars>();
+				Vector<JDDNode> tmptargetDDs = new Vector<>();
+				List<JDDNode> tmpmultitargetDDs = new ArrayList<>();
+				List<Integer> tmpmultitargetIDs = new ArrayList<>();
+				ArrayList<DA<BitSet, AcceptanceRabin>> tmpdra = new ArrayList<>();
+				ArrayList<JDDVars> tmpdraDDRowVars = new ArrayList<>();
+				ArrayList<JDDVars> tmpdraDDColVars = new ArrayList<>();
 				int count = 0;
 				for (int i = 0; i < numTargets; i++)
 					if (opsAndBounds.isProbabilityObjective(i) && opsAndBounds.getOperator(i) != Operator.P_MAX
@@ -270,7 +270,7 @@ public class MultiObjModelChecker extends PrismComponent
 					}
 					tmpOpsAndBounds.add(new OpRelOpBound("R", RelOp.MAX, -1.0), Operator.R_MAX, -1.0, -1, opsAndBounds.probSize());
 
-					ArrayList<JDDNode> tmprewards = new ArrayList<JDDNode>(1);
+					ArrayList<JDDNode> tmprewards = new ArrayList<>(1);
 					tmprewards.add(rtarget);
 					double prob = (Double) computeMultiReachProbs(modelProduct, mcLtl, tmprewards, modelProduct.getStart(), tmptargetDDs, tmpmultitargetDDs,
 							tmpmultitargetIDs, tmpOpsAndBounds, count > 1);
@@ -312,9 +312,9 @@ public class MultiObjModelChecker extends PrismComponent
 		DA<BitSet, AcceptanceRabin>[] tmpdra = new DA[conflictformulae];
 		JDDVars[] tmpdraDDRowVars = new JDDVars[conflictformulae];
 		JDDVars[] tmpdraDDColVars = new JDDVars[conflictformulae];
-		List<JDDNode> tmptargetDDs = new ArrayList<JDDNode>(conflictformulae);
-		List<List<JDDNode>> tmpallstatesH = new ArrayList<List<JDDNode>>(conflictformulae);
-		List<List<JDDNode>> tmpallstatesL = new ArrayList<List<JDDNode>>(conflictformulae);
+		List<JDDNode> tmptargetDDs = new ArrayList<>(conflictformulae);
+		List<List<JDDNode>> tmpallstatesH = new ArrayList<>(conflictformulae);
+		List<List<JDDNode>> tmpallstatesL = new ArrayList<>(conflictformulae);
 		int count = 0;
 		for (int i = 0; i < numTargets; i++)
 			if (opsAndBounds.isProbabilityObjective(i)) {
@@ -327,7 +327,7 @@ public class MultiObjModelChecker extends PrismComponent
 				tmpallstatesL.add(allstatesL.get(i));
 				count++;
 			}
-		List<List<Integer>> tmpmultitargetIDs = new ArrayList<List<Integer>>();
+		List<List<Integer>> tmpmultitargetIDs = new ArrayList<>();
 
 		mcLtl.findMultiConflictAcceptingStates(tmpdra, modelProduct, tmpdraDDRowVars, tmpdraDDColVars, tmptargetDDs, tmpallstatesH, tmpallstatesL,
 				multitargetDDs, tmpmultitargetIDs);
@@ -363,14 +363,14 @@ public class MultiObjModelChecker extends PrismComponent
 	{
 
 		// Compute all maximal end components
-		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<ArrayList<JDDNode>>(numTargets);
-		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<ArrayList<JDDNode>>(numTargets);
+		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<>(numTargets);
+		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<>(numTargets);
 		JDDNode acceptanceVector_H = JDD.Constant(0);
 		JDDNode acceptanceVector_L = JDD.Constant(0);
 		for (int i = 0; i < numTargets; i++) {
 			if (!reachExpr[i]) {
-				ArrayList<JDDNode> statesH = new ArrayList<JDDNode>();
-				ArrayList<JDDNode> statesL = new ArrayList<JDDNode>();
+				ArrayList<JDDNode> statesH = new ArrayList<>();
+				ArrayList<JDDNode> statesL = new ArrayList<>();
 				for (int k = 0; k < dra[i].getAcceptance().size(); k++) {
 					JDDNode tmpH = JDD.Constant(0);
 					JDDNode tmpL = JDD.Constant(0);
@@ -437,9 +437,9 @@ public class MultiObjModelChecker extends PrismComponent
 			DA<BitSet, AcceptanceRabin>[] tmpdra = new DA[conflictformulae];
 			JDDVars[] tmpdraDDRowVars = new JDDVars[conflictformulae];
 			JDDVars[] tmpdraDDColVars = new JDDVars[conflictformulae];
-			List<JDDNode> tmptargetDDs = new ArrayList<JDDNode>(conflictformulae);
-			List<List<JDDNode>> tmpallstatesH = new ArrayList<List<JDDNode>>(conflictformulae);
-			List<List<JDDNode>> tmpallstatesL = new ArrayList<List<JDDNode>>(conflictformulae);
+			List<JDDNode> tmptargetDDs = new ArrayList<>(conflictformulae);
+			List<List<JDDNode>> tmpallstatesH = new ArrayList<>(conflictformulae);
+			List<List<JDDNode>> tmpallstatesL = new ArrayList<>(conflictformulae);
 			int count = 0;
 			for (int i = 0; i < numTargets; i++)
 				if (!reachExpr[i]) {
@@ -453,7 +453,7 @@ public class MultiObjModelChecker extends PrismComponent
 					count++;
 				}
 			//multitargetDDs = new ArrayList<JDDNode>();
-			List<List<Integer>> tmpmultitargetIDs = new ArrayList<List<Integer>>();
+			List<List<Integer>> tmpmultitargetIDs = new ArrayList<>();
 
 			mcLtl.findMultiConflictAcceptingStates(tmpdra, modelProduct, tmpdraDDRowVars, tmpdraDDColVars, tmptargetDDs, tmpallstatesH, tmpallstatesL,
 					multitargetDDs, tmpmultitargetIDs);
@@ -738,9 +738,9 @@ public class MultiObjModelChecker extends PrismComponent
 		int dimProb = targets.length;
 		int dimReward = rewards.size();
 		Point targetPoint = new Point(dimProb + dimReward);
-		ArrayList<Point> computedPoints = new ArrayList<Point>();
-		ArrayList<Point> computedDirections = new ArrayList<Point>();
-		ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+		ArrayList<Point> computedPoints = new ArrayList<>();
+		ArrayList<Point> computedDirections = new ArrayList<>();
+		ArrayList<Point> pointsForInitialTile = new ArrayList<>();
 
 		//create vectors and sparse matrices for the objectives
 		final DoubleVector[] probDoubleVectors = new DoubleVector[dimProb];
@@ -999,8 +999,8 @@ public class MultiObjModelChecker extends PrismComponent
 		int dimProb = targets.length;
 		int dimReward = rewards.size();
 		Point targetPoint = new Point(dimProb + dimReward);
-		ArrayList<Point> computedPoints = new ArrayList<Point>();
-		ArrayList<Point> computedDirections = new ArrayList<Point>();
+		ArrayList<Point> computedPoints = new ArrayList<>();
+		ArrayList<Point> computedDirections = new ArrayList<>();
 
 		//create vectors and sparse matrices for the objectives
 		final DoubleVector[] probDoubleVectors = new DoubleVector[dimProb];

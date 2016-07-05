@@ -174,7 +174,7 @@ class NBA2DRA
 			return dra_result;
 		} else {
 			SafraNBA2DRA nba2da_fuzzy = new SafraNBA2DRA(_detailed_states);
-			nba2da_fuzzy.convert(safras_algo, dra_result, limit, new StateMapperFuzzy<SafraTreeCandidateMatcher>());
+			nba2da_fuzzy.convert(safras_algo, dra_result, limit, new StateMapperFuzzy<>());
 			return dra_result;
 		}
 	}

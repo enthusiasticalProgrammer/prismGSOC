@@ -174,7 +174,7 @@ public class AcceptanceGeneric implements AcceptanceOmega
 		switch (getKind()) {
 		case AND:
 		case OR: {
-			List<AcceptanceGeneric> result = new ArrayList<AcceptanceGeneric>();
+			List<AcceptanceGeneric> result = new ArrayList<>();
 			result.addAll(left.getLeafNodes());
 			result.addAll(right.getLeafNodes());
 			return result;

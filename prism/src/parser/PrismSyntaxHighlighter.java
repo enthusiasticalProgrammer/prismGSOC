@@ -59,18 +59,18 @@ public class PrismSyntaxHighlighter
 	private static int quoteAlternator = 1;
 
 	static {
-		puncReplaceFrom_ECHO = new ArrayList<String>();
-		puncReplaceTo_ECHO = new ArrayList<String>();
-		puncReplaceFrom_HTML = new ArrayList<String>();
-		puncReplaceTo_HTML = new ArrayList<String>();
+		puncReplaceFrom_ECHO = new ArrayList<>();
+		puncReplaceTo_ECHO = new ArrayList<>();
+		puncReplaceFrom_HTML = new ArrayList<>();
+		puncReplaceTo_HTML = new ArrayList<>();
 		puncReplaceFrom_HTML.add("&");
 		puncReplaceTo_HTML.add("&amp;");
 		puncReplaceFrom_HTML.add("<");
 		puncReplaceTo_HTML.add("&lt;");
 		puncReplaceFrom_HTML.add(">");
 		puncReplaceTo_HTML.add("&gt;");
-		puncReplaceFrom_LATEX = new ArrayList<String>();
-		puncReplaceTo_LATEX = new ArrayList<String>();
+		puncReplaceFrom_LATEX = new ArrayList<>();
+		puncReplaceTo_LATEX = new ArrayList<>();
 		puncReplaceFrom_LATEX.add("\\{");
 		puncReplaceTo_LATEX.add("\\\\{");
 		puncReplaceFrom_LATEX.add("\\}");
@@ -97,8 +97,8 @@ public class PrismSyntaxHighlighter
 		puncReplaceTo_LATEX.add("\\${<}\\$");
 		puncReplaceFrom_LATEX.add("#");
 		puncReplaceTo_LATEX.add("\\\\#");
-		puncReplaceFrom_LATEXMATHS = new ArrayList<String>();
-		puncReplaceTo_LATEXMATHS = new ArrayList<String>();
+		puncReplaceFrom_LATEXMATHS = new ArrayList<>();
+		puncReplaceTo_LATEXMATHS = new ArrayList<>();
 		puncReplaceFrom_LATEXMATHS.add("\\{");
 		puncReplaceTo_LATEXMATHS.add("\\\\{");
 		puncReplaceFrom_LATEXMATHS.add("\\}");
@@ -123,8 +123,8 @@ public class PrismSyntaxHighlighter
 		puncReplaceTo_LATEXMATHS.add("{>}");
 		puncReplaceFrom_LATEXMATHS.add("<");
 		puncReplaceTo_LATEXMATHS.add("{<}");
-		puncReplaceFrom_PRISMGUI = new ArrayList<String>();
-		puncReplaceTo_PRISMGUI = new ArrayList<String>();
+		puncReplaceFrom_PRISMGUI = new ArrayList<>();
+		puncReplaceTo_PRISMGUI = new ArrayList<>();
 	}
 
 	// resulting output
@@ -631,7 +631,7 @@ public class PrismSyntaxHighlighter
 		String cssLoc = "prism.css";
 
 		// Put arguments into a list, parsing any switches as we go
-		ArrayList<String> argsList = new ArrayList<String>();
+		ArrayList<String> argsList = new ArrayList<>();
 		int i = 0;
 		while (i < args.length) {
 			if (args[i].matches("-.*")) {

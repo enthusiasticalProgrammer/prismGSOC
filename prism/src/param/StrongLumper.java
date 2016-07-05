@@ -60,7 +60,7 @@ final class StrongLumper extends Lumper
 	 */
 	private HashMap<HashSet<Integer>, Function> stateSignature(int state)
 	{
-		HashMap<HashSet<Integer>, Function> signature = new HashMap<HashSet<Integer>, Function>();
+		HashMap<HashSet<Integer>, Function> signature = new HashMap<>();
 		ListIterator<Integer> toStateIter = origPmc.transitionTargets.get(state).listIterator();
 		ListIterator<Function> toProbIter = origPmc.transitionProbs.get(state).listIterator();
 		while (toStateIter.hasNext()) {
@@ -87,12 +87,12 @@ final class StrongLumper extends Lumper
 	@Override
 	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks)
 	{
-		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>>();
+		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<>();
 		for (int state : oldBlock) {
 			HashMap<HashSet<Integer>, Function> signature = stateSignature(state);
 			HashSet<Integer> newBlock = signatures.get(signature);
 			if (newBlock == null) {
-				newBlock = new HashSet<Integer>();
+				newBlock = new HashSet<>();
 				signatures.put(signature, newBlock);
 			}
 			newBlock.add(state);

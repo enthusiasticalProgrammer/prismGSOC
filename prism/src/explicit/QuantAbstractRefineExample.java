@@ -141,7 +141,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 		// Construct initial abstraction.
 		// Simultaneously, build abstractToConcrete,
 		// which records which concrete states correspond to each game choice.
-		abstractToConcrete = new ArrayList<List<Set<Integer>>>(nAbstract);
+		abstractToConcrete = new ArrayList<>(nAbstract);
 		for (a = 0; a < nAbstract; a++)
 			abstractToConcrete.add(new ArrayList<Set<Integer>>());
 		for (c = 0; c < nConcrete; c++) {
@@ -196,8 +196,8 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 		i = 0;
 		for (List<Integer> choiceList : choiceLists) {
 			// Build...
-			listNew = new ArrayList<Set<Integer>>(1);
-			concreteStatesNew = new HashSet<Integer>();
+			listNew = new ArrayList<>(1);
+			concreteStatesNew = new HashSet<>();
 			listNew.add(concreteStatesNew);
 			// Compute index 'a' of new abstract state
 			// (first one reuses splitState, rest go on the end)
@@ -275,7 +275,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 		int j, a;
 
 		list = abstractToConcrete.get(i);
-		listNew = new ArrayList<Set<Integer>>();
+		listNew = new ArrayList<>();
 		abstraction.clearState(i);
 		for (Set<Integer> concreteStates : list) {
 			for (int c : concreteStates) {

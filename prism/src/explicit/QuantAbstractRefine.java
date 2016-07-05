@@ -567,7 +567,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 				}
 				//
 				else {
-					HashSet<Integer> rebuildStates = new HashSet<Integer>();
+					Set<Integer> rebuildStates = new HashSet<>();
 					timer = System.currentTimeMillis();
 					numNewStates = refineState(i, null, rebuildStates);
 					timer = System.currentTimeMillis() - timer;
@@ -867,13 +867,13 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	 */
 	protected boolean chooseStatesToRefine() throws PrismException
 	{
-		ArrayList<Integer> refinableStates;
+		List<Integer> refinableStates;
 		double maxDiff, bound;
 		int i, numStates;
 
 		// Empty refinement states lists
-		refinableStates = new ArrayList<Integer>();
-		refineStates = new ArrayList<Integer>();
+		refinableStates = new ArrayList<>();
+		refineStates = new ArrayList<>();
 
 		// Check max diff in bounds over initial states
 		// (computed after numerical solution)
@@ -954,8 +954,8 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		timer = System.currentTimeMillis();
 
 		// Store lists of game states that have been or will need to be rebuilt
-		rebuiltStates = new LinkedHashSet<Integer>();
-		rebuildStates = new LinkedHashSet<Integer>();
+		rebuiltStates = new LinkedHashSet<>();
+		rebuildStates = new LinkedHashSet<>();
 
 		numSuccRefines = 0;
 		n = refineStates.size();
@@ -1024,7 +1024,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		}
 
 		// Decide how this state will be split up (in terms of player 1 choices)
-		choiceLists = new ArrayList<List<Integer>>();
+		choiceLists = new ArrayList<>();
 		switch (refineStratHow) {
 		case VAL:
 			lbStrat = ubStrat = null;
@@ -1102,10 +1102,10 @@ public abstract class QuantAbstractRefine extends PrismComponent
 					ubStrat.removeAll(lbStrat);
 				}
 				List<Integer> newChoiceList;
-				newChoiceList = new ArrayList<Integer>();
+				newChoiceList = new ArrayList<>();
 				newChoiceList.add(lbStrat.get(0));
 				choiceLists.add(newChoiceList);
-				newChoiceList = new ArrayList<Integer>();
+				newChoiceList = new ArrayList<>();
 				newChoiceList.add(ubStrat.get(0));
 				choiceLists.add(newChoiceList);
 				break;
@@ -1117,7 +1117,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 			n = abstraction.getNumChoices(refineState);
 			for (i = 0; i < n; i++) {
 				List<Integer> newChoiceList;
-				newChoiceList = new ArrayList<Integer>();
+				newChoiceList = new ArrayList<>();
 				newChoiceList.add(i);
 				choiceLists.add(newChoiceList);
 			}
@@ -1161,7 +1161,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 				included.set(j);
 			}
 		}
-		otherChoices = new ArrayList<Integer>();
+		otherChoices = new ArrayList<>();
 		i = included.nextClearBit(0);
 		while (i < nChoices) {
 			otherChoices.add(i);

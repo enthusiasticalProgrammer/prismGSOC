@@ -142,7 +142,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	public Iterator<Integer> getSuccessorsIterator(final int s)
 	{
 		if (exitRates[s] == 0) {
-			List<Integer> list = new ArrayList<Integer>(1);
+			List<Integer> list = new ArrayList<>(1);
 			list.add(s);
 			return list.iterator();
 		} else {
@@ -251,7 +251,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	{
 		if (exitRates[s] == 0) {
 			// return prob-1 self-loop
-			Map<Integer, Double> m = new TreeMap<Integer, Double>();
+			Map<Integer, Double> m = new TreeMap<>();
 			m.put(s, 1.0);
 			return m.entrySet().iterator();
 		} else {

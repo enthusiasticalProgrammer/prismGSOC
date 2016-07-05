@@ -75,7 +75,7 @@ class Scheduler
 			_apset = apset;
 			_options = options;
 			_sched = sched;
-			children = new Vector<Tree>();
+			children = new Vector<>();
 		}
 
 		/** Print the tree on output stream (default level: 0) */

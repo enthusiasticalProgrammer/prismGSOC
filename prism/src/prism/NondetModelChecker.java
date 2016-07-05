@@ -430,7 +430,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	protected StateValues checkExpressionMultiObjective(ExpressionFunc expr) throws PrismException
 	{
 		// Extract objective list from 'multi' function
-		List<Expression> exprs = new ArrayList<Expression>();
+		List<Expression> exprs = new ArrayList<>();
 		int n = expr.getNumOperands();
 		for (int i = 0; i < n; i++) {
 			exprs.add(expr.getOperand(i));
@@ -482,8 +482,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		// Check format and extract bounds/etc.
 		int numObjectives = exprs.size();
 		OpsAndBoundsList opsAndBounds = new OpsAndBoundsList();
-		List<JDDNode> transRewardsList = new ArrayList<JDDNode>();
-		List<Expression> pathFormulas = new ArrayList<Expression>(numObjectives);
+		List<JDDNode> transRewardsList = new ArrayList<>();
+		List<Expression> pathFormulas = new ArrayList<>(numObjectives);
 		for (int i = 0; i < numObjectives; i++) {
 			extractInfoFromMultiObjectiveOperand((ExpressionQuant) exprs.get(i), opsAndBounds, transRewardsList, pathFormulas, i);
 		}
@@ -539,7 +539,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		outputProductMulti(modelProduct);
 
 		// Construct rewards for product model
-		List<JDDNode> transRewardsListProduct = new ArrayList<JDDNode>();
+		List<JDDNode> transRewardsListProduct = new ArrayList<>();
 		for (JDDNode transRewards : transRewardsList) {
 			JDD.Ref(transRewards);
 			JDD.Ref(modelProduct.getTrans01());
@@ -557,14 +557,14 @@ public class NondetModelChecker extends NonProbModelChecker
 		boolean transchanged = mcMo.removeNonZeroRewardTrans(modelProduct, transRewardsList, opsAndBounds);
 
 		// Compute all maximal end components
-		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<ArrayList<JDDNode>>(numObjectives);
-		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<ArrayList<JDDNode>>(numObjectives);
+		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<>(numObjectives);
+		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<>(numObjectives);
 		JDDNode acceptanceVector_H = JDD.Constant(0);
 		JDDNode acceptanceVector_L = JDD.Constant(0);
 		for (int i = 0; i < numObjectives; i++) {
 			if (opsAndBounds.isProbabilityObjective(i)) {
-				ArrayList<JDDNode> statesH = new ArrayList<JDDNode>();
-				ArrayList<JDDNode> statesL = new ArrayList<JDDNode>();
+				ArrayList<JDDNode> statesH = new ArrayList<>();
+				ArrayList<JDDNode> statesL = new ArrayList<>();
 				for (int k = 0; k < dra[i].getAcceptance().size(); k++) {
 					JDDNode tmpH = JDD.Constant(0);
 					JDDNode tmpL = JDD.Constant(0);
@@ -596,7 +596,7 @@ public class NondetModelChecker extends NonProbModelChecker
 				draDDColVars, opsAndBounds, numObjectives);
 
 		// Create array to store BDDs for targets (i.e. accepting EC states); probability objectives only 
-		List<JDDNode> targetDDs = new ArrayList<JDDNode>(numObjectives);
+		List<JDDNode> targetDDs = new ArrayList<>(numObjectives);
 		for (int i = 0; i < numObjectives; i++) {
 			if (opsAndBounds.isProbabilityObjective(i)) {
 				mainLog.println("\nFinding accepting end components for " + pathFormulas.get(i).toString() + "...");
@@ -616,8 +616,8 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// check if there are conflicts in objectives
 		if (conflictformulae > 1) {
-			multitargetDDs = new ArrayList<JDDNode>();
-			multitargetIDs = new ArrayList<Integer>();
+			multitargetDDs = new ArrayList<>();
+			multitargetIDs = new ArrayList<>();
 			mcMo.checkConflictsInObjectives(modelProduct, mcLtl, conflictformulae, numObjectives, opsAndBounds, dra, draDDRowVars, draDDColVars, targetDDs,
 					allstatesH, allstatesL, multitargetDDs, multitargetIDs);
 		}
@@ -1141,7 +1141,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct = null, probs = null;
-		Vector<JDDNode> labelDDs = new Vector<JDDNode>();
+		Vector<JDDNode> labelDDs = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		NondetModel modelProduct;
 		NondetModelChecker mcProduct;
@@ -1401,7 +1401,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		mcLtl = new LTLModelChecker(prism);
 
 		// Model check maximal state formulas
-		labelDDs = new Vector<JDDNode>();
+		labelDDs = new Vector<>();
 		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelDDs);
 
 		// Convert LTL formula to deterministic automaton (DA)

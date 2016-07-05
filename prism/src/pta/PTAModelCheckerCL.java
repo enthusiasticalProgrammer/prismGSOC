@@ -201,7 +201,7 @@ public class PTAModelCheckerCL
 			System.exit(1);
 		}
 
-		ptaFiles = new ArrayList<String>();
+		ptaFiles = new ArrayList<>();
 		for (i = 0; i < args.length; i++) {
 			s = args[i];
 			// Process a switch
@@ -244,7 +244,7 @@ public class PTAModelCheckerCL
 		String s;
 		BufferedReader in = null;
 
-		ArrayList<String> ptaFilesNew = new ArrayList<String>();
+		ArrayList<String> ptaFilesNew = new ArrayList<>();
 		for (String ptaFile : ptaFiles) {
 			if (ptaFile.endsWith(".deslist")) {
 				try {

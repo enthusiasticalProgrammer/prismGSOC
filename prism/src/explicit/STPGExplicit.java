@@ -53,7 +53,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	public STPGExplicit()
 	{
 		super();
-		stateOwners = new ArrayList<Integer>(0);
+		stateOwners = new ArrayList<>(0);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	public STPGExplicit(int numStates)
 	{
 		super(numStates);
-		stateOwners = new ArrayList<Integer>(numStates);
+		stateOwners = new ArrayList<>(numStates);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	public STPGExplicit(STPGExplicit stpg, int permut[])
 	{
 		super(stpg, permut);
-		stateOwners = new ArrayList<Integer>(numStates);
+		stateOwners = new ArrayList<>(numStates);
 		// Create blank array of correct size
 		for (int i = 0; i < numStates; i++) {
 			stateOwners.add(0);
@@ -89,7 +89,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	public STPGExplicit(STPGExplicit stpg)
 	{
 		super(stpg);
-		stateOwners = new ArrayList<Integer>(stpg.stateOwners);
+		stateOwners = new ArrayList<>(stpg.stateOwners);
 	}
 
 	// Mutators (for ModelSimple)

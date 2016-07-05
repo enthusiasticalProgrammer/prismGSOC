@@ -780,7 +780,7 @@ public class GUITextModelEditor extends GUIModelEditor implements DocumentListen
 			editor.getHighlighter().removeHighlight(parseErrorHighlightKey);
 
 		/* Mapping for gutter */
-		Map<Integer, String> errorLines = new HashMap<Integer, String>();
+		Map<Integer, String> errorLines = new HashMap<>();
 
 		if (parseError != null && parseError.hasLineNumbers()) {
 			String error = parseError.getMessage();

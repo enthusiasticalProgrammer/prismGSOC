@@ -47,9 +47,9 @@ public class FormulaList extends ASTElement
 
 	public FormulaList()
 	{
-		names = new Vector<String>();
-		formulas = new Vector<Expression>();
-		nameIdents = new Vector<ExpressionIdent>();
+		names = new Vector<>();
+		formulas = new Vector<>();
+		nameIdents = new Vector<>();
 	}
 
 	// Set methods

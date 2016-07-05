@@ -472,7 +472,7 @@ public class NonProbModelChecker extends StateModelChecker
 		}
 
 		LTLModelChecker ltlMC = new LTLModelChecker(this);
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 		expr = ltlMC.checkMaximalStateFormulas(this, model, expr, labelBS);
 
 		// We are doing existential LTL checking:

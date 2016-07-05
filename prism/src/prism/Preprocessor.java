@@ -215,10 +215,10 @@ public class Preprocessor
 		output = "";
 		outputEnabled = true;
 		pc = 0;
-		stack = new Stack<Object>();
-		varNames = new Vector<String>();
-		varTypes = new Vector<Type>();
-		varScopes = new Vector<Integer>();
+		stack = new Stack<>();
+		varNames = new Vector<>();
+		varTypes = new Vector<>();
+		varScopes = new Vector<>();
 		values = new Values();
 		paramCounter = 0;
 

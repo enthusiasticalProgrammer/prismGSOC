@@ -66,7 +66,7 @@ public class ExpressionFunc extends Expression
 	public ExpressionFunc(String name)
 	{
 		setName(name);
-		operands = new ArrayList<Expression>();
+		operands = new ArrayList<>();
 	}
 
 	// Set methods

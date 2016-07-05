@@ -85,7 +85,7 @@ class UnionNBA2DRA
 		state_mapper.add(start, start_state);
 		da_result.setStartState(start_state);
 
-		Stack<unprocessed_value> unprocessed = new Stack<unprocessed_value>();
+		Stack<unprocessed_value> unprocessed = new Stack<>();
 		unprocessed.push(new unprocessed_value(start, start_state));
 
 		while (!unprocessed.empty()) {

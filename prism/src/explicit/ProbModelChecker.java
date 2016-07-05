@@ -1232,9 +1232,9 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			sv = mlr.solveDefault();
 			this.strategy = mlr.getStrategy();
 		} else {//Pareto
-			ArrayList<Point> computedPoints = new ArrayList<Point>();
-			ArrayList<Point> computedDirections = new ArrayList<Point>();
-			ArrayList<Point> pointsForInitialTile = new ArrayList<Point>();
+			ArrayList<Point> computedPoints = new ArrayList<>();
+			ArrayList<Point> computedDirections = new ArrayList<>();
+			ArrayList<Point> pointsForInitialTile = new ArrayList<>();
 
 			//TODO:weights might differ a bit when more objectives come into play
 			Point p1 = mlr.solveMulti(new Point(new double[] { 1.0, 0.0 }));

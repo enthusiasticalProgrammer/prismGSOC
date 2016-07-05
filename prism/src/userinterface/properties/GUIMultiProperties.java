@@ -284,7 +284,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			validGUIProperties = propList.getValidSelectedProperties();
 			// Query user for undefined constant values (if required)
 			int n = parsedProperties.getNumProperties();
-			ArrayList<Property> validProperties = new ArrayList<Property>(n);
+			ArrayList<Property> validProperties = new ArrayList<>(n);
 			for (int i = 0; i < n; i++)
 				validProperties.add(parsedProperties.getPropertyObject(i));
 			uCon = new UndefinedConstants(parsedModel, parsedProperties, validProperties);
@@ -334,9 +334,9 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		// See which of the (valid) selected properties are ok for simulation
 		// Also store a list of the expression themselves
-		simulatableGUIProperties = new ArrayList<GUIProperty>();
-		ArrayList<Property> simulatableProperties = new ArrayList<Property>();
-		simulatableExprs = new ArrayList<Expression>();
+		simulatableGUIProperties = new ArrayList<>();
+		ArrayList<Property> simulatableProperties = new ArrayList<>();
+		simulatableExprs = new ArrayList<>();
 		for (int i = 0; i < validGUIProperties.size(); i++) {
 			GUIProperty guiP = validGUIProperties.get(i);
 			if (getPrism().isPropertyOKForSimulation(guiP.getProperty())) {
@@ -433,7 +433,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		}
 
 		//get Property objects for sorting out undefined constants
-		ArrayList<Property> props = new ArrayList<Property>();
+		ArrayList<Property> props = new ArrayList<>();
 		for (int i = 0; i < parsedProperties.getNumProperties(); i++) {
 			props.add(parsedProperties.getPropertyObject(i));
 		}
@@ -1981,7 +1981,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		createPopups();
 		//file filters
 		propsFilter = new FileNameExtensionFilter("PRISM properties (*.props, *.pctl, *.csl)", "props", "pctl", "csl");
-		labFilters = new HashMap<String, FileFilter>();
+		labFilters = new HashMap<>();
 		labFilters.put("lab", new FileNameExtensionFilter("Label files (*.lab)", "lab"));
 		labFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
 		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");

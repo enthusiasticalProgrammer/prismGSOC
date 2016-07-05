@@ -54,7 +54,7 @@ public class Coalition
 	{
 		// Empty list of players
 		allPlayers = false;
-		players = new ArrayList<String>();
+		players = new ArrayList<>();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class Coalition
 		// Copy all info (though, strictly speaking, "players" is irrelevant if allPlayers==true
 		// (note that we access c.players directly since getPlayers() can return null)
 		allPlayers = c.isAllPlayers();
-		players = new ArrayList<String>(c.players);
+		players = new ArrayList<>(c.players);
 	}
 
 	// Set methods

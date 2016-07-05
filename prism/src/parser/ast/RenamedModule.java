@@ -50,10 +50,10 @@ public class RenamedModule extends ASTElement
 	{
 		name = n;
 		baseModule = b;
-		oldNames = new ArrayList<String>();
-		newNames = new ArrayList<String>();
-		oldNameASTElements = new ArrayList<ExpressionIdent>();
-		newNameASTElements = new ArrayList<ExpressionIdent>();
+		oldNames = new ArrayList<>();
+		newNames = new ArrayList<>();
+		oldNameASTElements = new ArrayList<>();
+		newNameASTElements = new ArrayList<>();
 	}
 
 	// Set methods

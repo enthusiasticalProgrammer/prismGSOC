@@ -99,7 +99,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 			}
 
 			ArrayList<Variable> vars = view.getVisibleVariables();
-			Set<String> varNames = new HashSet<String>();
+			Set<String> varNames = new HashSet<>();
 
 			for (Variable variable : vars) {
 				varNames.add(variable.getName());
@@ -167,7 +167,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 
 			if (view.getVisibleVariables().size() > 0) {
 				ArrayList<Variable> vars = view.getVisibleVariables();
-				Set<String> varNames = new HashSet<String>();
+				Set<String> varNames = new HashSet<>();
 
 				for (Variable variable : vars) {
 					varNames.add(variable.getName());
@@ -216,7 +216,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	public String getGroupToolTip(int groupIndex)
 	{
 		ArrayList<Variable> vars = view.getVisibleVariables();
-		Set<String> varNames = new HashSet<String>();
+		Set<String> varNames = new HashSet<>();
 
 		for (Variable variable : vars) {
 			varNames.add(variable.getName());
@@ -313,7 +313,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 			int visVarCount = 0;
 
 			ArrayList<Variable> vars = view.getVisibleVariables();
-			Set<String> varNames = new HashSet<String>();
+			Set<String> varNames = new HashSet<>();
 
 			for (Variable variable : vars) {
 				varNames.add(variable.getName());

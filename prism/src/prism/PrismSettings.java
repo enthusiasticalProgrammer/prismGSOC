@@ -518,7 +518,7 @@ public class PrismSettings implements Observer
 
 		//populate a hash table with the keys
 		populateHashTable(counter);
-		settingsListeners = new ArrayList<PrismSettingsListener>();
+		settingsListeners = new ArrayList<>();
 	}
 
 	/**
@@ -542,7 +542,7 @@ public class PrismSettings implements Observer
 
 	private void populateHashTable(int size)
 	{
-		data = new Hashtable<String, Setting>(size);
+		data = new Hashtable<>(size);
 
 		for (int i = 0; i < optionOwners.length; i++) {
 			for (int j = 0; j < optionOwners[i].getNumSettings(); j++) {
@@ -1469,7 +1469,7 @@ public class PrismSettings implements Observer
 			sw = sw.substring(1);
 		// Extract options, if present
 		int i = sw.indexOf(':');
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		if (i != -1) {
 			String optionsString = sw.substring(i + 1);
 			sw = sw.substring(0, i);
@@ -1483,7 +1483,7 @@ public class PrismSettings implements Observer
 				}
 			}
 		}
-		return new Pair<String, Map<String, String>>(sw, map);
+		return new Pair<>(sw, map);
 	}
 
 	/**
@@ -1762,7 +1762,7 @@ public class PrismSettings implements Observer
 		JFrame jf = new JFrame("Prism Settings");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		ArrayList<DefaultSettingOwner> owners = new ArrayList<DefaultSettingOwner>();
+		ArrayList<DefaultSettingOwner> owners = new ArrayList<>();
 		for (int i = 0; i < set.optionOwners.length; i++) {
 			owners.add(set.optionOwners[i]);
 		}

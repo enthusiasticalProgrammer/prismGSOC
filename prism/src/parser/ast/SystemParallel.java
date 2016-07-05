@@ -43,14 +43,14 @@ public class SystemParallel extends SystemDefn
 
 	public SystemParallel()
 	{
-		actions = new Vector<String>();
+		actions = new Vector<>();
 	}
 
 	public SystemParallel(SystemDefn s1, SystemDefn s2)
 	{
 		operand1 = s1;
 		operand2 = s2;
-		actions = new Vector<String>();
+		actions = new Vector<>();
 	}
 
 	// Set methods

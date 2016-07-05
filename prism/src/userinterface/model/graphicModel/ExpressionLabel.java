@@ -221,7 +221,7 @@ public class ExpressionLabel extends ExpressionProperty
 	 */
 	public boolean intersects(Rectangle2D rect)
 	{
-		intersects = new ArrayList<Rectangle2D.Double>();
+		intersects = new ArrayList<>();
 		if (!getString().equals("")) {
 			double parX;
 			double parY;

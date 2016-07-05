@@ -57,7 +57,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 	/** Creates a new instance of ModulesPanel */
 	public ModulesPanel(GUIGraphicModelEditor gme)
 	{
-		containers = new ArrayList<Object>();
+		containers = new ArrayList<>();
 		showChecks = new ArrayList<>();
 		dockChecks = new ArrayList<>();
 		this.gme = gme;
@@ -74,7 +74,7 @@ public class ModulesPanel extends JPanel implements MouseListener, ComponentList
 	{
 		dp.removeAll();
 
-		containers = new ArrayList<Object>();
+		containers = new ArrayList<>();
 		showChecks = new ArrayList<>();
 		dockChecks = new ArrayList<>();
 

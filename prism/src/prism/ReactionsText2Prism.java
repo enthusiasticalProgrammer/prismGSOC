@@ -87,9 +87,9 @@ public class ReactionsText2Prism extends Reactions2Prism
 		String reactionId = null, reactionName = null;
 
 		// Initialise storage
-		speciesList = new ArrayList<Species>();
-		parameterList = new ArrayList<Parameter>();
-		reactionList = new ArrayList<Reaction>();
+		speciesList = new ArrayList<>();
+		parameterList = new ArrayList<>();
+		reactionList = new ArrayList<>();
 
 		try {
 			// Open file for reading

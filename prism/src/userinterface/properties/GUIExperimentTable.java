@@ -122,7 +122,7 @@ public class GUIExperimentTable extends JTable
 
 		public ExperimentTableModel()
 		{
-			experiments = new ArrayList<GUIExperiment>();
+			experiments = new ArrayList<>();
 		}
 
 		@Override

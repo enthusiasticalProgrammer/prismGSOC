@@ -201,8 +201,8 @@ public class ConstructModel extends PrismComponent
 		}
 
 		// Initialise states storage
-		states = new IndexedSet<State>(true);
-		explore = new LinkedList<State>();
+		states = new IndexedSet<>(true);
+		explore = new LinkedList<>();
 		// Add initial state(s) to 'explore', 'states' and to the model
 		for (State initState : modelGen.getInitialStates()) {
 			explore.add(initState);

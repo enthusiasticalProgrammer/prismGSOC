@@ -54,7 +54,7 @@ public final class StateValues
 	 */
 	public StateValues(int numStates, int initState)
 	{
-		values = new ArrayList<StateValue>(numStates);
+		values = new ArrayList<>(numStates);
 		for (int state = 0; state < numStates; state++) {
 			values.add(state, null);
 		}

@@ -269,7 +269,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setZSumToOne() throws PrismException
 	{
 		//NOTE: there is an error in the LICS11 paper, we need to sum over MEC states only.
-		Map<Integer, Double> row = new HashMap<Integer, Double>();
+		Map<Integer, Double> row = new HashMap<>();
 
 		for (BitSet b : this.mecs) {
 			for (int i = 0; i < b.length(); i++) {
@@ -294,7 +294,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private Map<Integer, Double> getRowForReward(MDPItem constraint)
 	{
-		Map<Integer, Double> row = new HashMap<Integer, Double>();
+		Map<Integer, Double> row = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state)) {
 				for (int action = 0; action < model.getNumChoices(state); action++) {
@@ -349,7 +349,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setEqnForMECLink(BitSet maxEndComponent) throws PrismException
 	{
 		for (int n = 0; n < 1 << getN(); n++) {
-			Map<Integer, Double> row = new HashMap<Integer, Double>();
+			Map<Integer, Double> row = new HashMap<>();
 
 			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
 
@@ -411,7 +411,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setXConstraints() throws PrismException
 	{
-		Map<Integer, Map<Integer, Double>> map = new HashMap<Integer, Map<Integer, Double>>();
+		Map<Integer, Map<Integer, Double>> map = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state))
 				map.put(state, new HashMap<Integer, Double>());
@@ -476,7 +476,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	{
 		Map<Integer, Double>[] map = (Map<Integer, Double>[]) new HashMap[model.getNumStates()];
 		for (int state = 0; state < model.getNumStates(); state++) {
-			map[state] = new HashMap<Integer, Double>();
+			map[state] = new HashMap<>();
 		}
 
 		int initialState = model.getFirstInitialState();
@@ -563,7 +563,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 		for (int i = 0; i < getN(); i++) {
 			MDPConstraint constraint = this.getConstraintNonTrivialProbabilityConstraints().get(i);
-			Map<Integer, Double> map = new HashMap<Integer, Double>();
+			Map<Integer, Double> map = new HashMap<>();
 
 			for (int n = 0; n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
@@ -598,7 +598,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
-		Map<Integer, Double> map = new HashMap<Integer, Double>();
+		Map<Integer, Double> map = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (maxEndComponent.get(state)) {
 				for (int act = 0; act < model.getNumChoices(state); act++) {
@@ -668,7 +668,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		if (weights.getDimension() != 2) {
 			throw new UnsupportedOperationException("MultiLongRun can only create 2D pareto curve.");
 		}
-		Map<Integer, Double> weightedMap = new HashMap<Integer, Double>();
+		Map<Integer, Double> weightedMap = new HashMap<>();
 		//Reward bounds
 		int numCount = 0;
 		ArrayList<MDPObjective> numIndices = new ArrayList<>();

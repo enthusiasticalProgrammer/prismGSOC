@@ -50,7 +50,7 @@ public class DBMList extends NCZone
 	public DBMList(PTA pta)
 	{
 		this.pta = pta;
-		list = new ArrayList<DBM>();
+		list = new ArrayList<>();
 	}
 
 	/**
@@ -62,14 +62,14 @@ public class DBMList extends NCZone
 		if (z instanceof DBM) {
 			DBM dbm = (DBM) z;
 			this.pta = dbm.pta;
-			list = new ArrayList<DBM>();
+			list = new ArrayList<>();
 			addDBM(dbm);
 		}
 		// From DBM 
 		else {
 			DBMList dbml = (DBMList) z;
 			this.pta = dbml.pta;
-			list = new ArrayList<DBM>();
+			list = new ArrayList<>();
 			for (DBM dbm : dbml.list) {
 				list.add((DBM) dbm.deepCopy());
 			}

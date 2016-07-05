@@ -33,7 +33,7 @@ public class TypeInterval extends Type
 	private static Map<Type, TypeInterval> singletons;
 
 	static {
-		singletons = new HashMap<Type, TypeInterval>();
+		singletons = new HashMap<>();
 	}
 
 	private Type subType;

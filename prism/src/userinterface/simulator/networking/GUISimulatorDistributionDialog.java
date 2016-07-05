@@ -615,7 +615,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//do the work.
 		if (!isExperiment) {
 			try {
-				ArrayList<Expression> propFormulae = new ArrayList<Expression>();
+				ArrayList<Expression> propFormulae = new ArrayList<>();
 				for (int i = 0; i < props.size(); i++) {
 					GUIProperty guiProp = (GUIProperty) props.get(i);
 					propFormulae.add(guiProp.getProperty());

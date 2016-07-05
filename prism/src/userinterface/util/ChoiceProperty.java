@@ -53,7 +53,7 @@ public class ChoiceProperty extends SingleProperty
 	public ChoiceProperty(PropertyOwner owner, String name, String[] props, int startIndex, String comment)
 	{
 		super(owner, name, props[startIndex], "", false, comment);
-		properties = new ArrayList<String>();
+		properties = new ArrayList<>();
 		for (int i = 0; i < props.length; i++) {
 			properties.add(props[i]);
 		}
@@ -131,7 +131,7 @@ public class ChoiceProperty extends SingleProperty
 	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
 	{
 		if (properties == null)
-			properties = new ArrayList<String>();
+			properties = new ArrayList<>();
 		if (listModel == null)
 			listModel = new DefaultComboBoxModel<>();
 		if (property instanceof String) {

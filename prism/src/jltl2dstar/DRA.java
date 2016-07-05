@@ -154,7 +154,7 @@ class DRA extends DA
 			// Rabin
 			automata.DA<BitSet, AcceptanceRabin> draNew;
 
-			draNew = new automata.DA<BitSet, AcceptanceRabin>(numStates);
+			draNew = new automata.DA<>(numStates);
 			createPrismDA(draNew);
 			AcceptanceRabin accNew = createRabinAcceptance();
 			draNew.setAcceptance(accNew);
@@ -164,7 +164,7 @@ class DRA extends DA
 			// Streett
 			automata.DA<BitSet, AcceptanceStreett> dsaNew;
 
-			dsaNew = new automata.DA<BitSet, AcceptanceStreett>(numStates);
+			dsaNew = new automata.DA<>(numStates);
 			createPrismDA(dsaNew);
 			AcceptanceStreett accNew = createStreettAcceptance();
 			dsaNew.setAcceptance(accNew);
@@ -186,7 +186,7 @@ class DRA extends DA
 		numLabels = getAPSize();
 		numStates = size();
 		// Copy AP set
-		apList = new ArrayList<String>(numLabels);
+		apList = new ArrayList<>(numLabels);
 		for (i = 0; i < numLabels; i++) {
 			apList.add(getAPSet().getAP(i));
 		}
@@ -263,9 +263,9 @@ class DRA extends DA
 
 		numLabels = getAPSize();
 		numStates = size();
-		draNew = new prism.DRA<BitSet>(numStates);
+		draNew = new prism.DRA<>(numStates);
 		// Copy AP set
-		apList = new ArrayList<String>(numLabels);
+		apList = new ArrayList<>(numLabels);
 		for (i = 0; i < numLabels; i++) {
 			apList.add(getAPSet().getAP(i));
 		}

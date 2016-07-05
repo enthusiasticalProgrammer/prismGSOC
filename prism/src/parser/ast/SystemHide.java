@@ -42,13 +42,13 @@ public class SystemHide extends SystemDefn
 
 	public SystemHide()
 	{
-		actions = new Vector<String>();
+		actions = new Vector<>();
 	}
 
 	public SystemHide(SystemDefn s)
 	{
 		operand = s;
-		actions = new Vector<String>();
+		actions = new Vector<>();
 	}
 
 	// Set methods

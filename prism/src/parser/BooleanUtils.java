@@ -293,10 +293,10 @@ public class BooleanUtils
 			List<List<Expression>> aDnf = doConversionToDNF(a);
 			List<List<Expression>> bDnf = doConversionToDNF(b);
 			// a1|a2|... & b1|b2|...  ==  a1&b1 | a1&b2 | ...
-			List<List<Expression>> dnf = new ArrayList<List<Expression>>();
+			List<List<Expression>> dnf = new ArrayList<>();
 			for (List<Expression> ai : aDnf) {
 				for (List<Expression> bj : bDnf) {
-					List<Expression> aibj = new ArrayList<Expression>();
+					List<Expression> aibj = new ArrayList<>();
 					aibj.addAll(ai);
 					aibj.addAll(bj);
 					dnf.add(aibj);
@@ -315,8 +315,8 @@ public class BooleanUtils
 			return aDnf;
 		}
 		// Convert proposition to trivial DNF
-		List<List<Expression>> dnf = new ArrayList<List<Expression>>(1);
-		List<Expression> disjunct = new ArrayList<Expression>(1);
+		List<List<Expression>> dnf = new ArrayList<>(1);
+		List<Expression> disjunct = new ArrayList<>(1);
 		disjunct.add(expr);
 		dnf.add(disjunct);
 		return dnf;
@@ -353,10 +353,10 @@ public class BooleanUtils
 			List<List<Expression>> aCnf = doConversionToCNF(a);
 			List<List<Expression>> bCnf = doConversionToCNF(b);
 			// a1&a2&... | b1&b2&...  ==  a1|b1 & a1|b2 & ...
-			List<List<Expression>> cnf = new ArrayList<List<Expression>>();
+			List<List<Expression>> cnf = new ArrayList<>();
 			for (List<Expression> ai : aCnf) {
 				for (List<Expression> bj : bCnf) {
-					List<Expression> aibj = new ArrayList<Expression>();
+					List<Expression> aibj = new ArrayList<>();
 					aibj.addAll(ai);
 					aibj.addAll(bj);
 					cnf.add(aibj);
@@ -375,8 +375,8 @@ public class BooleanUtils
 			return aCnf;
 		}
 		// Convert proposition to trivial CNF
-		List<List<Expression>> cnf = new ArrayList<List<Expression>>(1);
-		List<Expression> conjunct = new ArrayList<Expression>(1);
+		List<List<Expression>> cnf = new ArrayList<>(1);
+		List<Expression> conjunct = new ArrayList<>(1);
 		conjunct.add(expr);
 		cnf.add(conjunct);
 		return cnf;

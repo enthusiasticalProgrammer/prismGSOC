@@ -130,7 +130,7 @@ public abstract class PathDisplayer
 	public void setVarsToShow(List<Integer> varsToShow)
 	{
 		// Take a copy of var index list
-		this.varsToShow = varsToShow == null ? null : new ArrayList<Integer>(varsToShow);
+		this.varsToShow = varsToShow == null ? null : new ArrayList<>(varsToShow);
 	}
 
 	/**

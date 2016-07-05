@@ -39,7 +39,7 @@ class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA
 	public StateMapper()
 	{
 		_count = 0;
-		_map = new HashMap<K, S>();
+		_map = new HashMap<>();
 	}
 
 	/** Clear the mapping */

@@ -111,7 +111,7 @@ public class SemanticCheck extends ASTTraverse
 		// Check system...endsystem construct (if present)
 		// Each module should appear exactly once
 		if (e.getSystemDefn() != null) {
-			e.getSystemDefn().getModules(v = new Vector<String>());
+			e.getSystemDefn().getModules(v = new Vector<>());
 			if (v.size() != e.getNumModules()) {
 				throw new PrismLangException("All modules must appear in the \"system\" construct exactly once", e.getSystemDefn());
 			}
@@ -302,7 +302,7 @@ public class SemanticCheck extends ASTTraverse
 		// Check all actions are valid and ensure no duplicates
 		// (only check "from": OK to introduce new actions and to map to same
 		// action)
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumRenames();
 		for (i = 0; i < n; i++) {
 			s = e.getFrom(i);
@@ -325,7 +325,7 @@ public class SemanticCheck extends ASTTraverse
 		Vector<String> v;
 
 		// Check all actions are valid and ensure no duplicates
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumActions();
 		for (i = 0; i < n; i++) {
 			s = e.getAction(i);
@@ -348,7 +348,7 @@ public class SemanticCheck extends ASTTraverse
 		Vector<String> v;
 
 		// Check all actions are valid and ensure no duplicates
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumActions();
 		for (i = 0; i < n; i++) {
 			s = e.getAction(i);

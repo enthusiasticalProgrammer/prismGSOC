@@ -52,8 +52,8 @@ public class Module extends ASTElement
 	public Module(String n)
 	{
 		name = n;
-		decls = new ArrayList<Declaration>();
-		commands = new ArrayList<Command>();
+		decls = new ArrayList<>();
+		commands = new ArrayList<>();
 		invariant = null;
 		parent = null;
 		baseModule = null;
@@ -200,7 +200,7 @@ public class Module extends ASTElement
 	{
 		int i, n;
 		String s;
-		Vector<String> allSynchs = new Vector<String>();
+		Vector<String> allSynchs = new Vector<>();
 		n = getNumCommands();
 		for (i = 0; i < n; i++) {
 			s = getCommand(i).getSynch();

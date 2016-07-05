@@ -57,7 +57,7 @@ public final class LTL2RabinLibrary
 	private static HashMap<String, String> dras;
 	static {
 		// Hard-coded DRA descriptions for various LTL formulas 
-		dras = new HashMap<String, String>();
+		dras = new HashMap<>();
 		dras.put("F \"L0\"", "2 states (start 0), 1 labels: 0-{}->0 0-{0}->1 1-{}->1 1-{0}->1; 1 acceptance pairs: ({},{1})");
 		dras.put("G \"L0\"", "2 states (start 0), 1 labels: 0-{}->1 0-{0}->0 1-{}->1 1-{0}->1; 1 acceptance pairs: ({1},{0})");
 		dras.put("G F \"L0\"", "2 states (start 0), 1 labels: 0-{0}->1 0-{}->0 1-{0}->1 1-{}->0; 1 acceptance pairs: ({},{1})");
@@ -130,7 +130,7 @@ public final class LTL2RabinLibrary
 	public static DA<BitSet, AcceptanceRabin> getDRAforLTL(Expression ltl, Values constants) throws PrismException
 	{
 		// Get list of labels appearing
-		labels = new ArrayList<String>();
+		labels = new ArrayList<>();
 		ltl.accept(new ASTTraverse()
 		{
 			@Override
@@ -392,7 +392,7 @@ public final class LTL2RabinLibrary
 	public static DA<BitSet, AcceptanceRabin> constructDRAForUntil(String labelA, boolean aNegated, String labelB, boolean bNegated, IntegerBound bounds)
 	{
 		DA<BitSet, AcceptanceRabin> dra;
-		List<String> apList = new ArrayList<String>();
+		List<String> apList = new ArrayList<>();
 
 		/** Edge label for edge where first and second operand are false */
 		BitSet edge_ab = null;
@@ -419,7 +419,7 @@ public final class LTL2RabinLibrary
 			apList.add(labelB);
 		}
 
-		dra = new DA<BitSet, AcceptanceRabin>(states);
+		dra = new DA<>(states);
 		dra.setAcceptance(new AcceptanceRabin());
 		dra.setAPList(apList);
 		dra.setStartState(0);
@@ -545,7 +545,7 @@ public final class LTL2RabinLibrary
 	public static DA<BitSet, AcceptanceRabin> constructDRAForFinally(String labelA, boolean negateA, IntegerBound bounds)
 	{
 		DA<BitSet, AcceptanceRabin> dra;
-		List<String> apList = new ArrayList<String>();
+		List<String> apList = new ArrayList<>();
 		BitSet edge_no, edge_yes;
 		BitSet accL, accK;
 
@@ -556,7 +556,7 @@ public final class LTL2RabinLibrary
 
 		apList.add(labelA);
 
-		dra = new DA<BitSet, AcceptanceRabin>(states);
+		dra = new DA<>(states);
 		dra.setAcceptance(new AcceptanceRabin());
 		dra.setAPList(apList);
 		dra.setStartState(0);
@@ -619,7 +619,7 @@ public final class LTL2RabinLibrary
 	public static DA<BitSet, AcceptanceRabin> constructDRAForTrue(String label) throws PrismException
 	{
 		if (label != null) {
-			List<String> labels = new ArrayList<String>();
+			List<String> labels = new ArrayList<>();
 			labels.add(label);
 			return createDRAFromString("1 states (start 0), 1 labels: 0-{}->0 0-{0}->0; 1 acceptance pairs: ({},{0})", labels);
 		} else {
@@ -634,7 +634,7 @@ public final class LTL2RabinLibrary
 	 */
 	public static DA<BitSet, AcceptanceRabin> constructDRAForInitialStateLabel(String label, boolean negatedLabel) throws PrismException
 	{
-		List<String> labels = new ArrayList<String>();
+		List<String> labels = new ArrayList<>();
 		labels.add(label);
 		if (negatedLabel) {
 			return createDRAFromString("3 states (start 0), 1 labels: 0-{ }->1 0-{0}->2 1-{0}->1 1-{ }->1 2-{}->2 2-{0}->2; 1 acceptance pairs: ({2},{1})",
@@ -660,7 +660,7 @@ public final class LTL2RabinLibrary
 			// Num states
 			j = s.indexOf("states", ptr);
 			n = Integer.parseInt(s.substring(0, j).trim());
-			draNew = new DA<BitSet, AcceptanceRabin>(n);
+			draNew = new DA<>(n);
 			draNew.setAcceptance(acceptance);
 			draNew.setAPList(labels);
 			// Start state
@@ -727,10 +727,10 @@ public final class LTL2RabinLibrary
 
 		// 4 states (start 3), 2 labels: 0-{1}->0 0-{0, 1}->1 0-{}->0 0-{0}->1 1-{1}->2 1-{0, 1}->2 1-{}->0 1-{0}->1 2-{1}->2 2-{0, 1}->2 2-{}->2 2-{0}->2 3-{1}->0 3-{0, 1}->1 3-{}->0 3-{0}->1; 1 acceptance pairs: ({2},{0, 1})
 		numStates = 4;
-		draNew = new DA<BitSet, AcceptanceRabin>(numStates);
+		draNew = new DA<>(numStates);
 		draNew.setAcceptance(new AcceptanceRabin());
 		// AP set
-		apList = new ArrayList<String>(2);
+		apList = new ArrayList<>(2);
 		apList.add(l0);
 		apList.add(l1);
 		draNew.setAPList(apList);

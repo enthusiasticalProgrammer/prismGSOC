@@ -152,7 +152,7 @@ public class Modules2MTBDD
 		public SystemDDs(int n)
 		{
 			synchs = new ComponentDDs[n];
-			allSynchs = new HashSet<String>();
+			allSynchs = new HashSet<>();
 		}
 	}
 
@@ -348,7 +348,7 @@ public class Modules2MTBDD
 		JDDNode v, vr, vc;
 		int i, j, m, n, last;
 		int ddVarsUsed = 0;
-		ddVarNames = new Vector<String>();
+		ddVarNames = new Vector<>();
 
 		switch (prism.getOrdering()) {
 

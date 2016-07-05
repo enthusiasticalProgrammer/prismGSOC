@@ -49,7 +49,7 @@ final class RegionsTODO
 
 	public RegionsTODO()
 	{
-		regions = new PriorityQueue<Region>(11, new RegionsByVolumeComparator());
+		regions = new PriorityQueue<>(11, new RegionsByVolumeComparator());
 	}
 
 	int size()

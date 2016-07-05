@@ -66,7 +66,7 @@ final class Polynomial
 		coefficients = new BigInteger[numTerms];
 		exponents = new int[numTerms * numVariables];
 		this.numVariables = numVariables;
-		this.pointsSeen = new HashMap<Point, BigRational>();
+		this.pointsSeen = new HashMap<>();
 		this.size = 0;
 	}
 

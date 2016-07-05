@@ -97,8 +97,8 @@ public class SimulateModelCheckThread extends GUIComputationThread
 		if (allAtOnce) {
 			Result results[] = null;
 			Exception resultError = null;
-			ArrayList<Expression> properties = new ArrayList<Expression>();
-			ArrayList<IconThread> clkThreads = new ArrayList<IconThread>();
+			ArrayList<Expression> properties = new ArrayList<>();
+			ArrayList<IconThread> clkThreads = new ArrayList<>();
 			for (int i = 0; i < guiProps.size(); i++) {
 				GUIProperty gp = guiProps.get(i);
 				properties.add(gp.getProperty());

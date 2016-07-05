@@ -78,7 +78,7 @@ public class ModuleModel extends SelectionModel implements Observer
 	private JMenuItem addNailPop, startTransition;
 	private JMenuItem addState;
 	private JMenuItem addChoice;
-	private JMenuItem cut, copy, paste, delete, selectAll;
+	private JMenuItem cut, copy, paste, delete;
 	private JMenuItem zoomIn, zoomOut, restoreZoom;
 
 	private State starterState; //for starting transitions from the menu
@@ -152,12 +152,12 @@ public class ModuleModel extends SelectionModel implements Observer
 		controlDown = false;
 		//Set up Module attributes
 		moduleName = corresponding.getName();
-		variables = new ArrayList<Object>();
-		theStates = new ArrayList<Object>();
+		variables = new ArrayList<>();
+		theStates = new ArrayList<>();
 		numStates = 0;
-		transitions = new ArrayList<Object>();
+		transitions = new ArrayList<>();
 		numTransitions = 0;
-		theNails = new ArrayList<Object>();
+		theNails = new ArrayList<>();
 		numNails = 0;
 
 		//Set up drawing environment attributes
@@ -196,7 +196,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		tranDrawY1 = 0;
 		tranDrawY2 = 0;
 		tempFromState = null;
-		tempNails = new ArrayList<Nail>();
+		tempNails = new ArrayList<>();
 
 		//Setup Branched Transition drawing attributes
 		drawingProbTrans = false;
@@ -206,8 +206,8 @@ public class ModuleModel extends SelectionModel implements Observer
 		tempProbFrom = null;
 		tempAddNailTrans = null;
 		tempProbNail = null;
-		tempProbTo = new ArrayList<State>();
-		tempProbNails = new ArrayList<Nail>();
+		tempProbTo = new ArrayList<>();
+		tempProbNails = new ArrayList<>();
 		lastProbNail = null;
 
 		//Setup Popups
@@ -344,10 +344,10 @@ public class ModuleModel extends SelectionModel implements Observer
 						isMoving = false;
 
 						tempProbFrom = starterState;
-						tempProbTo = new ArrayList<State>();
+						tempProbTo = new ArrayList<>();
 
 						drawingProbTrans = true;
-						tempNails = new ArrayList<Nail>();
+						tempNails = new ArrayList<>();
 
 						deSelectAll();
 						setChanged();
@@ -390,7 +390,7 @@ public class ModuleModel extends SelectionModel implements Observer
 					isMoving = false;
 
 					tempProbFrom = starterState;
-					tempProbTo = new ArrayList<State>();
+					tempProbTo = new ArrayList<>();
 
 					drawingExtraBranches = true;
 
@@ -840,7 +840,7 @@ public class ModuleModel extends SelectionModel implements Observer
 	{
 		modified = true;
 		if (aNail != null) {
-			ArrayList<Nail> keepNails = new ArrayList<Nail>();
+			ArrayList<Nail> keepNails = new ArrayList<>();
 			keepNails.add(aNail);
 			ProbTransition prtr = new ProbTransition(from, to, keepNails, handler.getGUIPlugin().getPrism());
 			prtr.registerObserver(this);
@@ -1227,7 +1227,7 @@ public class ModuleModel extends SelectionModel implements Observer
 							else
 								tIndex = addProbTransition(from, to, null);
 						} else {
-							ArrayList<Nail> nails = new ArrayList<Nail>();
+							ArrayList<Nail> nails = new ArrayList<>();
 
 							for (int j = 0; j < trsel.nails.length; j++) {
 								GraphicSelection.NailSelect ns = trsel.nails[j];
@@ -1289,8 +1289,8 @@ public class ModuleModel extends SelectionModel implements Observer
 	{
 		modified = true;
 		//First check to see whether any transitions
-		ArrayList<Transition> removeTr = new ArrayList<Transition>();
-		ArrayList<State> removeSt = new ArrayList<State>();
+		ArrayList<Transition> removeTr = new ArrayList<>();
+		ArrayList<State> removeSt = new ArrayList<>();
 		for (int i = 0; i < numTransitions; i++) {
 			Transition tra = (Transition) transitions.get(i);
 			if (tra.isSelected()) {
@@ -1345,7 +1345,7 @@ public class ModuleModel extends SelectionModel implements Observer
 			}
 		}
 
-		ArrayList<Nail> removeNa = new ArrayList<Nail>();
+		ArrayList<Nail> removeNa = new ArrayList<>();
 		for (int i = 0; i < numNails; i++) {
 			Nail na = (Nail) theNails.get(i);
 			if (na.isSelected())
@@ -1406,7 +1406,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		if (tempProbTo.size() == 0) {
 			drawingProbTrans = false;
 			tempProbFrom = null;
-			tempProbTo = new ArrayList<State>();
+			tempProbTo = new ArrayList<>();
 			tempProbNailDown = false;
 			tempProbNail = null;
 			tempProbNails.clear();
@@ -1422,7 +1422,7 @@ public class ModuleModel extends SelectionModel implements Observer
 				addTransition(tempProbFrom, (tempProbTo.get(0)), false);
 			drawingProbTrans = false;
 			tempProbFrom = null;
-			tempProbTo = new ArrayList<State>();
+			tempProbTo = new ArrayList<>();
 			tempProbNailDown = false;
 			tempProbNail = null;
 			tempProbNails.clear();
@@ -1472,7 +1472,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		boolean contin = tempProbTo.size() > 0;
 		while (contin) {
 			State toState = (tempProbTo.get(0));
-			ArrayList<State> sta = new ArrayList<State>();
+			ArrayList<State> sta = new ArrayList<>();
 			sta.add(toState);
 			int counter = 1;
 			for (int i = 1; i < tempProbTo.size(); i++) // count all of the same
@@ -1513,7 +1513,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		}
 		drawingProbTrans = false;
 		tempProbFrom = null;
-		tempProbTo = new ArrayList<State>();
+		tempProbTo = new ArrayList<>();
 		tempProbNailDown = false;
 		tempProbNail = null;
 		tempProbNails.clear();
@@ -1526,7 +1526,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		if (tempProbTo.size() == 0) {
 			drawingExtraBranches = false;
 			tempProbFrom = null;
-			tempProbTo = new ArrayList<State>();
+			tempProbTo = new ArrayList<>();
 			tempProbNailDown = false;
 			tempProbNail = null;
 			tempProbNails.clear();
@@ -1543,7 +1543,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		boolean contin = tempProbTo.size() > 0;
 		while (contin) {
 			State toState = (tempProbTo.get(0));
-			ArrayList<State> sta = new ArrayList<State>();
+			ArrayList<State> sta = new ArrayList<>();
 			sta.add(toState);
 			int counter = 1;
 			for (int i = 1; i < tempProbTo.size(); i++) // count all of the same
@@ -1584,7 +1584,7 @@ public class ModuleModel extends SelectionModel implements Observer
 		}
 		drawingExtraBranches = false;
 		tempProbFrom = null;
-		tempProbTo = new ArrayList<State>();
+		tempProbTo = new ArrayList<>();
 		tempProbNailDown = false;
 		tempProbNail = null;
 		tempProbNails.clear();
@@ -1647,10 +1647,10 @@ public class ModuleModel extends SelectionModel implements Observer
 						isMoving = false;
 
 						tempProbFrom = st;
-						tempProbTo = new ArrayList<State>();
+						tempProbTo = new ArrayList<>();
 
 						drawingProbTrans = true;
-						tempNails = new ArrayList<Nail>();
+						tempNails = new ArrayList<>();
 
 						deSelectAll();
 						setChanged();
@@ -1691,7 +1691,7 @@ public class ModuleModel extends SelectionModel implements Observer
 						isMoving = false;
 
 						tempProbFrom = st;
-						tempProbTo = new ArrayList<State>();
+						tempProbTo = new ArrayList<>();
 
 						drawingExtraBranches = true;
 
@@ -2084,13 +2084,13 @@ public class ModuleModel extends SelectionModel implements Observer
 				} else {
 					drawingProbTrans = false;
 					tempProbFrom = null;
-					tempProbTo = new ArrayList<State>();
+					tempProbTo = new ArrayList<>();
 					tempProbNailDown = false;
 					tempProbNail = null;
 					lastProbNail = null;
 					//System.out.println("in rmclick stuff ere");
-					tempNails = new ArrayList<Nail>();
-					tempProbNails = new ArrayList<Nail>();
+					tempNails = new ArrayList<>();
+					tempProbNails = new ArrayList<>();
 				}
 				setChanged();
 				notifyObservers(null);
@@ -2100,7 +2100,7 @@ public class ModuleModel extends SelectionModel implements Observer
 				} else {
 					drawingExtraBranches = false;
 					tempProbFrom = null;
-					tempProbTo = new ArrayList<State>();
+					tempProbTo = new ArrayList<>();
 					tempProbNailDown = false;
 					tempProbNail = null;
 				}
@@ -3080,8 +3080,8 @@ public class ModuleModel extends SelectionModel implements Observer
 	public void orderStates()
 	{
 		// This method has the job of sorting the state array so that normal states appear first and decisions last
-		ArrayList<Object> normal = new ArrayList<Object>();
-		ArrayList<Object> notNormal = new ArrayList<Object>();
+		ArrayList<Object> normal = new ArrayList<>();
+		ArrayList<Object> notNormal = new ArrayList<>();
 		for (int i = 0; i < theStates.size(); i++) {
 			Object st = theStates.get(i);
 			if (st instanceof Decision)
@@ -3089,7 +3089,7 @@ public class ModuleModel extends SelectionModel implements Observer
 			else
 				normal.add(st);
 		}
-		theStates = new ArrayList<Object>();
+		theStates = new ArrayList<>();
 		theStates.addAll(normal);
 
 		//notify each state of its new index
