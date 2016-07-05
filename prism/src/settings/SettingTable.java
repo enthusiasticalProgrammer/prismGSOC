@@ -783,13 +783,4 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		}
 
 	}
-
-	public static void printArray(ArrayList a)
-	{
-		System.out.print("(");
-		for (int i = 0; i < a.size(); i++)
-			System.out.print(a.get(i) + " ");
-		//System.out.println(")");
-	}
-
 }
