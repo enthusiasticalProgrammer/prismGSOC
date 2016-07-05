@@ -57,16 +57,16 @@ Code Style improvements:
 		to keep a special algorithm]
 
 	dropped memorylessness, aka mlessmulti
-
+-Dropped unused throws-clauses
+-parametrised raw types (not yet completely done)
 
 Features in Rabinizer:
--Rabinizer can now cope with Frequency-G formulae
+-Rabinizer supports the controller-synthesis construction
 
 
 
 --------------------------------------------------------------TIMEPLAN--------------------------------------------------------------------
 
--now until 1.7.: extend Rabinizer
 -4.7.-8.7.: put Rabinizer-standard-construction into PRISM
 -11.7.-22.7.: connect DTMGRA and conjunctive-SAT
 -25.7.-29.7.: Do the optional (but extremely strongly desired things):
