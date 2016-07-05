@@ -291,40 +291,8 @@ public class GUINetworkOptions extends OptionsPanel
 
 	}
 
-	public void defaultGUI()
-	{
-
-	}
-
 	@Override
 	public void synchronizeGUI()
-	{
-
-	}
-
-	public boolean valid()
-	{
-		return true;
-	}
-
-	public void loadXMLElement(Document doc, Element element)
-	{
-
-	}
-
-	public Element saveXMLElement(Document doc) throws DOMException
-	{
-
-		//Element e = doc.createElement("network")
-
-		return null;
-	}
-
-	public void loadProperties(Properties properties)
-	{
-	}
-
-	public void saveProperties(Properties properties)
 	{
 
 	}
