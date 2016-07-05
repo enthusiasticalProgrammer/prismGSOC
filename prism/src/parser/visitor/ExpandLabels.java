@@ -38,18 +38,19 @@ public class ExpandLabels extends ASTTraverseModify
 {
 	// The LabelList for label definitions
 	private LabelList labelList;
-	
+
 	public ExpandLabels(LabelList labelList)
 	{
 		this.labelList = labelList;
 	}
-	
+
+	@Override
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		int i;
 		Type t;
 		Expression expr;
-		
+
 		// See if identifier corresponds to a label
 		i = labelList.getLabelIndex(e.getName());
 		if (i != -1) {
@@ -69,9 +70,8 @@ public class ExpandLabels extends ASTTraverseModify
 			// Return replacement expression
 			return expr;
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
 }
-

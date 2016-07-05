@@ -64,7 +64,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 	/**
 	 * Default constructor.
 	 */
-	public QuantAbstractRefineExample(PrismComponent parent) throws PrismException
+	public QuantAbstractRefineExample(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -87,9 +87,9 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 
 		// Get initial (concrete) states
 		initialConcrete = new BitSet(nConcrete);
-		for (int in: modelConcrete.getInitialStates())
+		for (int in : modelConcrete.getInitialStates())
 			initialConcrete.set(in, 1);
-		
+
 		// Get target (concrete) states
 		statesList = modelConcrete.getStatesList();
 		i = modulesFile.getLabelList().getLabelIndex(targetLabel);
@@ -100,7 +100,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 		for (i = 0; i < nConcrete; i++) {
 			targetConcrete.set(i, targetExpr.evaluateBoolean(statesList.get(i)));
 		}
-		
+
 		// Build a mapping between concrete/abstract states
 		// Initial abstract states: 0: initial, 1: target, 2:rest
 		concreteToAbstract = new int[nConcrete];
@@ -176,8 +176,7 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 	// Implementation of splitState(...) for abstraction-refinement loop; see superclass for details 
 
 	@Override
-	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates,
-			Set<Integer> rebuildStates) throws PrismException
+	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates, Set<Integer> rebuildStates) throws PrismException
 	{
 		List<Set<Integer>> list, listNew;
 		Set<Integer> concreteStates, concreteStatesNew;
@@ -326,13 +325,13 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 			undefinedConstants.defineUsingConstSwitch("");
 			modulesFile.setUndefinedConstants(undefinedConstants.getMFConstantValues());
 			modulesFile = (ModulesFile) modulesFile.deepCopy().expandConstants(modulesFile.getConstantList());
-			
+
 			// Build the model (explicit-state reachability) 
 			ConstructModel constructModel = new ConstructModel(prism);
 			constructModel.setBuildSparse(false);
 			ModelSimple model = (ModelSimple) constructModel.constructModel(new ModulesFileModelGenerator(modulesFile, prism));
 			model.exportToPrismExplicitTra(args[1]);
-			
+
 			// Create/initialise abstraction-refinement engine
 			QuantAbstractRefineExample abstractRefine = new QuantAbstractRefineExample(prism);
 			abstractRefine.setModelType(ModelType.MDP);
@@ -341,12 +340,12 @@ public class QuantAbstractRefineExample extends QuantAbstractRefine
 			abstractRefine.modelConcrete = model;
 			abstractRefine.modulesFile = modulesFile;
 			abstractRefine.targetLabel = args[1];
-			
+
 			// Do abstraction-refinement
 			abstractRefine.printSettings();
 			boolean min = true;
 			abstractRefine.abstractRefine(min);
-			
+
 		} catch (FileNotFoundException e) {
 			System.out.println("Error: " + e.getMessage());
 			System.exit(1);

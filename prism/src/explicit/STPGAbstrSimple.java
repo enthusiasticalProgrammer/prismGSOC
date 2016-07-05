@@ -339,7 +339,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		for (int i = 0; i < numStates; i++) {
 			// Note that no distributions is a deadlock, not an empty distribution
@@ -425,7 +425,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		throw new RuntimeException("Not yet supported");
 	}
-	
+
 	@Override
 	public void exportToPrismLanguage(String filename) throws PrismException
 	{
@@ -501,7 +501,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		return trans.get(s).get(i).containsOneOf(set);
 	}
-	
+
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(final int s, final int i)
 	{
@@ -542,7 +542,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	{
 		throw new RuntimeException("Not implemented");
 	}
-	
+
 	@Override
 	public boolean isChoiceNested(int s, int i)
 	{
@@ -1043,6 +1043,7 @@ public class STPGAbstrSimple extends ModelExplicit implements STPG, NondetModelS
 	/**
 	 * Equality check.
 	 */
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o == null || !(o instanceof STPGAbstrSimple))

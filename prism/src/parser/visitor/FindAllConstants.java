@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Find all idents which are constants, replace with ExpressionConstant, return result.
@@ -35,20 +34,21 @@ import prism.PrismLangException;
 public class FindAllConstants extends ASTTraverseModify
 {
 	private ConstantList constantList;
-	
+
 	public FindAllConstants(ConstantList constantList)
 	{
 		this.constantList = constantList;
 	}
-	
-	public Object visit(ExpressionIdent e) throws PrismLangException
+
+	@Override
+	public Object visit(ExpressionIdent e)
 	{
 		int i;
 		// See if identifier corresponds to a constant
 		i = constantList.getConstantIndex(e.getName());
 		if (i != -1) {
 			// If so, replace it with an ExpressionConstant object
-			ExpressionConstant expr = new ExpressionConstant(e.getName(),  constantList.getConstantType(i));
+			ExpressionConstant expr = new ExpressionConstant(e.getName(), constantList.getConstantType(i));
 			expr.setPosition(e);
 			return expr;
 		}
@@ -56,4 +56,3 @@ public class FindAllConstants extends ASTTraverseModify
 		return e;
 	}
 }
-

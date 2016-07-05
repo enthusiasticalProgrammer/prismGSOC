@@ -32,17 +32,18 @@ import jltl2ba.MyBitSet;
  * As every APMonom represents a subset of 2^AP, this allows access
  * to all of the members of this subset.<br>
  */
-public class APMonom2APElements implements Iterator<APElement> {
-	
+public class APMonom2APElements implements Iterator<APElement>
+{
+
 	/** The underlying APSet. */
-	private APSet _ap_set;    
-	  
+	private APSet _ap_set;
+
 	/** The underlying APMonom. */
-	private APMonom _m;       
+	private APMonom _m;
 
 	/** The current APElement. */
 	private APElement _cur_e;
-	
+
 	/** Bits that are set */
 	private MyBitSet set_mask;
 
@@ -55,43 +56,46 @@ public class APMonom2APElements implements Iterator<APElement> {
 		_ap_set = s;
 		_cur_e = new APElement(m.getValueBits());
 		_end_marker = m.isFalse();
-		
+
 		if (m.isTrue()) {
 			set_mask = new MyBitSet(_ap_set.size());
-		}
-		else {
+		} else {
 			set_mask = _m.getSetBits();
 		}
 	}
-	
-	private void increment() {
-	    for (int i = set_mask.nextClearBit(0); i < _ap_set.size(); i = set_mask.nextClearBit(i+1)) {
-	    	if (_cur_e.get(i) == false) {
-	    		_cur_e.set(i, true);
-	    		return;
-	    	} else {
-	    		_cur_e.set(i, false);
-	    	}
-	    }
-	    // overflow -> end
-	    _end_marker = true;
+
+	private void increment()
+	{
+		for (int i = set_mask.nextClearBit(0); i < _ap_set.size(); i = set_mask.nextClearBit(i + 1)) {
+			if (_cur_e.get(i) == false) {
+				_cur_e.set(i, true);
+				return;
+			} else {
+				_cur_e.set(i, false);
+			}
+		}
+		// overflow -> end
+		_end_marker = true;
 	}
-	
+
+	@Override
 	public boolean hasNext()
 	{
 		return !_end_marker;
 	}
-	
+
+	@Override
 	public APElement next() throws NoSuchElementException
 	{
 		if (hasNext()) {
 			APElement rv = (APElement) _cur_e.clone();
 			increment();
 			return rv;
-		}
-		else throw new NoSuchElementException();
+		} else
+			throw new NoSuchElementException();
 	}
-	
+
+	@Override
 	public void remove() throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

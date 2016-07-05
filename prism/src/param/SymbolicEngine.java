@@ -59,7 +59,8 @@ public class SymbolicEngine
 	protected BitSet enabledModules[];
 	protected int synchModuleCounts[];
 
-	public SymbolicEngine(ModulesFile modulesFile) {
+	public SymbolicEngine(ModulesFile modulesFile)
+	{
 		this.modulesFile = modulesFile;
 		modelType = modulesFile.getModelType();
 		numModules = modulesFile.getNumModules();
@@ -96,7 +97,7 @@ public class SymbolicEngine
 			enabledModules[j] = new BitSet(numModules);
 		}
 	}
-	
+
 	private void calculateUpdatesForModule(int m, State state) throws PrismLangException
 	{
 		Module module;
@@ -115,30 +116,30 @@ public class SymbolicEngine
 			}
 		}
 	}
-	
-	public Expression getProbabilityInState(Updates ups, int i, State state) throws PrismLangException
+
+	public Expression getProbabilityInState(Updates ups, int i, State state)
 	{
 		Expression p = ups.getProbability(i);
 		return (p == null) ? Expression.Double(1.0) : p;
 	}
-	
+
 	static boolean hasMoreThanOneVariable(Expression exp)
 	{
 		int varNum = 0;
 		try {
 			varNum = exp.getAllVars().size();
 			//System.out.println("varNum = " + varNum);
-		} catch(PrismLangException e) {
-			
+		} catch (PrismLangException e) {
+
 		}
-		
-		if (varNum >1) {
+
+		if (varNum > 1) {
 			return true;
 		} else {
-			return false;	   
+			return false;
 		}
 	}
-	
+
 	/**
 	 * Create a new Choice object (currently ChoiceListFlexi) based on an Updates object
 	 * and a (global) state. Check for negative probabilities/rates.
@@ -172,7 +173,7 @@ public class SymbolicEngine
 
 		return ch;
 	}
-	
+
 	public TransitionList calculateTransitions(State state) throws PrismException
 	{
 		List<ChoiceListFlexi> chs;
@@ -259,18 +260,18 @@ public class SymbolicEngine
 				transitionList.add(ch);
 			}
 		}
-		
+
 		// Check validity of the computed transitions
 		// (not needed currently)
 		//transitionList.checkValid(modelType);
-		
+
 		// Check for errors (e.g. overflows) in the computed transitions
 		//transitionList.checkForErrors(state, varList);
-		
+
 		//System.out.println(transitionList);
 		return transitionList;
 	}
-	
+
 	/**
 	 * Create a new Choice object (currently ChoiceListFlexi) based on the product
 	 * of an existing ChoiceListFlexi and an Updates object, for some (global) state.

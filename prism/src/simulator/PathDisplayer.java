@@ -45,13 +45,13 @@ public abstract class PathDisplayer
 
 	/** Should we show changes in state only, or all steps? (not for snapshot mode) */
 	protected boolean showChangesOnly = true;
-	
+
 	/** Indices of variables to show (null = all) */
 	protected List<Integer> varsToShow = null;
 
 	/** Should we show transition probabilities/rates? */
 	protected boolean showProbs = false;
-	
+
 	/** Should we display rewards? */
 	protected boolean showRewards = false;
 
@@ -80,7 +80,7 @@ public abstract class PathDisplayer
 	{
 		return showChangesOnly;
 	}
-	
+
 	/**
 	 * Should we display transition probabilities/rates?
 	 */
@@ -88,7 +88,7 @@ public abstract class PathDisplayer
 	{
 		return showProbs;
 	}
-	
+
 	/**
 	 * Should we display rewards?
 	 */
@@ -96,7 +96,7 @@ public abstract class PathDisplayer
 	{
 		return showRewards;
 	}
-	
+
 	// Setters for config
 
 	/**
@@ -159,7 +159,8 @@ public abstract class PathDisplayer
 		}
 	}
 
-	public void step(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex, State newState, double[] newStateRewards)
+	public void step(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex, State newState,
+			double[] newStateRewards)
 	{
 		if (showSnapshots) {
 			if (timeCumul < nextTime) {
@@ -190,7 +191,8 @@ public abstract class PathDisplayer
 	/**
 	 * Displaying a step of a path.
 	 */
-	public abstract void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex, State newState, double[] newStateRewards);
+	public abstract void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex,
+			State newState, double[] newStateRewards);
 
 	/**
 	 * Displaying a snapshot of a path at a particular time instant.

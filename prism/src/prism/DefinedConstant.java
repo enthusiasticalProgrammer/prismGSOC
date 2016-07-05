@@ -239,13 +239,14 @@ public class DefinedConstant
 
 	public boolean incr()
 	{
-
-		int ih, is, iv;
+		int i;
+		int il, ih, is, iv;
 		double dl, dh, ds, dv;
 		boolean overflow = false;
 
 		// int
 		if (type instanceof TypeInt) {
+			il = ((Integer) low).intValue();
 			ih = ((Integer) high).intValue();
 			is = ((Integer) step).intValue();
 			iv = ((Integer) value).intValue();
@@ -406,6 +407,7 @@ public class DefinedConstant
 	/** Convert to string. */
 	/*  Note that the (temorary) value is not included here */
 
+	@Override
 	public String toString()
 	{
 		String s = "";

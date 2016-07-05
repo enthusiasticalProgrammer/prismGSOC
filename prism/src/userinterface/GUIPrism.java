@@ -178,7 +178,7 @@ public class GUIPrism extends JFrame
 	private PrismLog theLog;
 
 	//gui components
-	private ArrayList plugs;
+	private List<GUIPlugin> plugs;
 	private JTabbedPane theTabs;
 	private GUIPlugin logPlug;
 	private GUIEventHandler eventHandle;
@@ -263,7 +263,7 @@ public class GUIPrism extends JFrame
 	 *	  <LI>Status Bar at the bottom
 	 *  </UL>
 	 */
-	private void initComponents() throws GUIException
+	private void initComponents()
 	{
 		JMenuBar menuBar = new JMenuBar();
 		JPanel toolPanel = new JPanel();
@@ -274,6 +274,7 @@ public class GUIPrism extends JFrame
 		theTabs = new JTabbedPane();
 		theTabs.addChangeListener(new ChangeListener()
 		{
+			@Override
 			public void stateChanged(ChangeEvent e)
 			{
 				clipboardPlugin.pluginChanged(getFocussedPlugin());
@@ -312,6 +313,7 @@ public class GUIPrism extends JFrame
 
 		Action tabSwapper = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				nextTab();
@@ -321,6 +323,7 @@ public class GUIPrism extends JFrame
 
 		prismOptions = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				options.show();
@@ -336,6 +339,7 @@ public class GUIPrism extends JFrame
 
 		fontIncrease = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				adjustFont(1);
@@ -353,6 +357,7 @@ public class GUIPrism extends JFrame
 
 		fontDecrease = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				adjustFont(-1);
@@ -384,6 +389,7 @@ public class GUIPrism extends JFrame
 		setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				exit();
@@ -689,6 +695,7 @@ public class GUIPrism extends JFrame
 	 */
 	private static final class SplashScreenCloser implements Runnable
 	{
+		@Override
 		public void run()
 		{
 			splash.dispose();

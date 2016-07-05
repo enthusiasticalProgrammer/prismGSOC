@@ -90,6 +90,7 @@ public interface StateValues extends StateVector
 	public void maxMTBDD(JDDNode vec2);
 
 	/** Clear the stored information. */
+	@Override
 	void clear();
 
 	/** Get the number of non-zero values in this vector. */
@@ -126,7 +127,7 @@ public interface StateValues extends StateVector
 	/**
 	 * Get the sum of those elements that are in the (BDD) filter.
 	 * If the filter is empty for this vector, returns 0.
- 	 * <br>[ DEREFS: <i>none</i> ]
+	 * <br>[ DEREFS: <i>none</i> ]
 	 */
 	double sumOverBDD(JDDNode filter);
 
@@ -144,6 +145,7 @@ public interface StateValues extends StateVector
 	StateValues sumOverDDVars(JDDVars sumVars, Model newModel) throws PrismException;
 
 	/** Returns an Object with the value of the i-th entry in this vector. */
+	@Override
 	Object getValue(int i);
 
 	/**
@@ -234,5 +236,5 @@ public interface StateValues extends StateVector
 	/**
 	 * Make a (deep) copy of this vector
 	 */
-	StateValues deepCopy() throws PrismException; 
+	StateValues deepCopy() throws PrismException;
 }

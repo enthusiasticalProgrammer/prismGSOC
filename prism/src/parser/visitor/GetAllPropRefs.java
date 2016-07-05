@@ -29,7 +29,6 @@ package parser.visitor;
 import java.util.Vector;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Get all references to properties (by name) (i.e. ExpressionProp objects), store names in set.
@@ -37,17 +36,17 @@ import prism.PrismLangException;
 public class GetAllPropRefs extends ASTTraverse
 {
 	private Vector<String> v;
-	
+
 	public GetAllPropRefs(Vector<String> v)
 	{
 		this.v = v;
 	}
-	
-	public void visitPost(ExpressionProp e) throws PrismLangException
+
+	@Override
+	public void visitPost(ExpressionProp e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());
 		}
 	}
 }
-

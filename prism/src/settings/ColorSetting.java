@@ -33,73 +33,71 @@ public class ColorSetting extends Setting
 {
 	private static ColorRenderer renderer;
 	private static ColorEditor editor;
-	
-	static
-	{
+
+	static {
 		renderer = new ColorRenderer();
 		editor = new ColorEditor();
 	}
-	
+
 	/** Creates a new instance of ColorSetting */
 	public ColorSetting(String name, Color value, String comment, SettingOwner owner, boolean editableWhenMultiple)
 	{
 		super(name, value, comment, owner, editableWhenMultiple);
 	}
-	
+
 	public ColorSetting(String name, Color value, String comment, SettingOwner owner, boolean editableWhenMultiple, ColorConstraint constraint)
 	{
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
-	
-	
+
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
-	
+
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
-	
-	public Class getValueClass()
+
+	@Override
+	public Class<Color> getValueClass()
 	{
 		return Color.class;
 	}
-	
+
 	public Color getColorValue()
 	{
-		return (Color)getValue();
+		return (Color) getValue();
 	}
-	
+
 	/**
 	 *	Parses strings of the form: "r,g,b" e.g. "255,0,255"
 	 */
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
-		try
-		{
-			int r,g,b;
+		try {
+			int r, g, b;
 			StringTokenizer tokens = new StringTokenizer(string, ",");
 			r = Integer.parseInt(tokens.nextToken());
 			g = Integer.parseInt(tokens.nextToken());
 			b = Integer.parseInt(tokens.nextToken());
-			return new Color(r,g,b);
-		}
-		catch(NumberFormatException e)
-		{
-			throw new SettingException("Error when parsing: "+string+" as a Color value.");
-		}
-		catch(NoSuchElementException e)
-		{
-			throw new SettingException("Error when parsing: "+string+" as a Color value.");
+			return new Color(r, g, b);
+		} catch (NumberFormatException e) {
+			throw new SettingException("Error when parsing: " + string + " as a Color value.");
+		} catch (NoSuchElementException e) {
+			throw new SettingException("Error when parsing: " + string + " as a Color value.");
 		}
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		Color c = getColorValue();
-		return c.getRed()+","+c.getGreen()+","+c.getBlue();
+		return c.getRed() + "," + c.getGreen() + "," + c.getBlue();
 	}
-	
+
 }

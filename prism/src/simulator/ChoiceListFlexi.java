@@ -67,7 +67,7 @@ public class ChoiceListFlexi implements Choice
 		moduleOrActionIndex = ch.moduleOrActionIndex;
 		updates = new ArrayList<List<Update>>(ch.updates.size());
 		for (List<Update> list : ch.updates) {
-			List<Update> listNew = new ArrayList<Update>(list.size()); 
+			List<Update> listNew = new ArrayList<Update>(list.size());
 			updates.add(listNew);
 			for (Update up : list) {
 				listNew.add(up);
@@ -256,12 +256,12 @@ public class ChoiceListFlexi implements Choice
 	}
 
 	@Override
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		// Currently nothing to do here:
 		// Checks for bad probabilities/rates done earlier.
 	}
-	
+
 	@Override
 	public void checkForErrors(State currentState, VarList varList) throws PrismException
 	{
@@ -272,7 +272,7 @@ public class ChoiceListFlexi implements Choice
 				up.checkUpdate(currentState, varList);
 		}
 	}
-	
+
 	@Override
 	public String toString()
 	{

@@ -56,10 +56,10 @@ import parser.PrismSyntaxHighlighter;
  */
 class PrismEditorKit extends DefaultEditorKit
 {
-	
+
 	private PrismContext preferences;
 	private GUIMultiModelHandler handler;
-	
+
 	/** Creates a new instance of the Prism editor kit.
 	 * 
 	 * @param handler The GUI handler for this component.
@@ -71,8 +71,7 @@ class PrismEditorKit extends DefaultEditorKit
 
 	public PrismContext getStylePreferences()
 	{
-		if (preferences == null)
-		{
+		if (preferences == null) {
 			preferences = new PrismContext(handler);
 		}
 		return preferences;
@@ -83,16 +82,19 @@ class PrismEditorKit extends DefaultEditorKit
 		this.preferences = preferences;
 	}
 
+	@Override
 	public String getContentType()
 	{
 		return "text/prism";
 	}
 
+	@Override
 	public Document createDefaultDocument()
 	{
 		return new DefaultStyledDocument();
 	}
 
+	@Override
 	public final ViewFactory getViewFactory()
 	{
 		return getStylePreferences();
@@ -107,9 +109,9 @@ class PrismContext extends StyleContext implements ViewFactory
 	public static final String NUMERIC_D = "Numeric";
 	public static final String VARIABLE_D = "Variable";
 	public static final String COMMENT_D = "Single Line Comment";
-	
+
 	private GUIMultiModelHandler handler;
-	
+
 	/** Creates a new instance of PrismContext.
 	 * 
 	 * @param handler The GUI handler for this component. 
@@ -119,6 +121,7 @@ class PrismContext extends StyleContext implements ViewFactory
 		this.handler = handler;
 	}
 
+	@Override
 	public View create(Element element)
 	{
 		return new PrismView(element, handler);
@@ -128,9 +131,9 @@ class PrismContext extends StyleContext implements ViewFactory
 
 class PrismView extends PlainView
 {
-	
+
 	static final Style PLAIN_S = new Style(Color.black, Font.PLAIN);
-	
+
 	private GUIMultiModelHandler handler;
 
 	public PrismView(Element element, GUIMultiModelHandler handler)
@@ -139,97 +142,91 @@ class PrismView extends PlainView
 		this.handler = handler;
 	}
 
-	protected int drawUnselectedText(Graphics g, int x, int y,int p0, int p1) throws BadLocationException
+	@Override
+	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());
 		int enLine = p1;// findEndOfLine(p1-1, getDocument());
 
 		if (g instanceof Graphics2D) {
-			Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
-        
+
 		// x+= getLeftInset();
 		// System.out.println("p0 = "+p0+", p1 = "+p1+", st = "+stLine+",
 		// enLine = "+enLine+".");
-		try
-		{
+		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
 			// Segment segment = getLineBuffer();
 
 			// System.out.println(doc.getText(p0, p1-p0));
 			// String s = doc.getText(p0, p1-p0);
-			String s = doc.getText(stLine, enLine-stLine);
+			String s = doc.getText(stLine, enLine - stLine);
 			// System.out.println("------");
 			// System.out.println("highlighting unselected string = \n"+s);
 			// System.out.println("------");
 
-			Style[] styles = highlight(s, (p0-stLine), (p1-p0));
+			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			String fname = handler.getPrismEditorFontFast().getName();
 			int fsize = handler.getPrismEditorFontFast().getSize();
 
-			for(int curr = 0; curr < styles.length; curr++)
-			{
+			for (int curr = 0; curr < styles.length; curr++) {
 
 				Style c = styles[curr];
 
 				g.setColor(c.c);
 				g.setFont(new Font(fname, c.style, fsize));
 				Segment segm = new Segment();// getLineBuffer();
-				doc.getText(p0+curr, 1, segm);
-				x = Utilities.drawTabbedText(segm, x, y, g, this, p0+curr);
+				doc.getText(p0 + curr, 1, segm);
+				x = Utilities.drawTabbedText(segm, x, y, g, this, p0 + curr);
 
 			}
 			g.setColor(Color.black);
 			g.setFont(new Font(fname, Font.PLAIN, fsize));
-		}
-		catch(BadLocationException ex)
-		{
+		} catch (BadLocationException ex) {
 			ex.printStackTrace();
 		}
 		return x;
 	}
 
-	protected int drawSelectedText(Graphics g, int x, int y,int p0, int p1) throws BadLocationException
+	@Override
+	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());
 		int enLine = p1;// findEndOfLine(p1-1, getDocument());
 
 		if (g instanceof Graphics2D) {
-			Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
-        
+
 		// x+= getLeftInset();
 		// System.out.println("p0 = "+p0+", p1 = "+p1+", st = "+stLine+",
 		// enLine = "+enLine+".");
-		try
-		{
+		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
-			String s = doc.getText(stLine, enLine-stLine);
-			Style[] styles = highlight(s, (p0-stLine), (p1-p0));
+			String s = doc.getText(stLine, enLine - stLine);
+			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			String fname = handler.getPrismEditorFontFast().getName();
 			int fsize = handler.getPrismEditorFontFast().getSize();
 
-			for(int curr = 0; curr < styles.length; curr++)
-			{
+			for (int curr = 0; curr < styles.length; curr++) {
 
 				Style c = styles[curr];
 
 				g.setColor(c.c);
 				g.setFont(new Font(fname, c.style, fsize));
 				Segment segm = new Segment();// getLineBuffer();
-				doc.getText(p0+curr, 1, segm);
-				x = Utilities.drawTabbedText(segm, x, y, g, this, p0+curr);
+				doc.getText(p0 + curr, 1, segm);
+				x = Utilities.drawTabbedText(segm, x, y, g, this, p0 + curr);
 
 			}
 			g.setColor(Color.black);
 			g.setFont(new Font(fname, Font.PLAIN, fsize));
-		}
-		catch(BadLocationException ex)
-		{
+		} catch (BadLocationException ex) {
 			ex.printStackTrace();
 		}
 		return x;
@@ -239,16 +236,13 @@ class PrismView extends PlainView
 	{
 		int typeArray[];
 		int i, n;
-		if(!s.endsWith("\n"))
+		if (!s.endsWith("\n"))
 			s += "\n";
 		// s = s.substring(0, s.length()-1);
 
-		try
-		{
+		try {
 			typeArray = PrismSyntaxHighlighter.lineForPrismGUI(s);
-		}
-		catch (PrismLangException e)
-		{
+		} catch (PrismLangException e) {
 			n = s.length();
 			typeArray = new int[n];
 			for (i = 0; i < n; i++)
@@ -256,23 +250,34 @@ class PrismView extends PlainView
 		}
 
 		Style[] ret = new Style[length];
-		for (i = 0; i < length; i++)
-		{
+		for (i = 0; i < length; i++) {
 
-			if(i+offset < typeArray.length)
-			{
-				switch (typeArray[i+offset])
-				{
-				case PrismSyntaxHighlighter.PUNCTUATION: ret[i] = PLAIN_S; break;
-				case PrismSyntaxHighlighter.COMMENT: ret[i] = handler.getPrismEditorCommentFast(); break;
-				case PrismSyntaxHighlighter.WHITESPACE: ret[i] = PLAIN_S; break;
-				case PrismSyntaxHighlighter.KEYWORD: ret[i] = handler.getPrismEditorKeywordFast(); break;
-				case PrismSyntaxHighlighter.NUMERIC: ret[i] = handler.getPrismEditorNumericFast(); break;
-				case PrismSyntaxHighlighter.IDENTIFIER: ret[i] = handler.getPrismEditorVariableFast(); break;
-				default: ret[i] = PLAIN_S; break;
+			if (i + offset < typeArray.length) {
+				switch (typeArray[i + offset]) {
+				case PrismSyntaxHighlighter.PUNCTUATION:
+					ret[i] = PLAIN_S;
+					break;
+				case PrismSyntaxHighlighter.COMMENT:
+					ret[i] = handler.getPrismEditorCommentFast();
+					break;
+				case PrismSyntaxHighlighter.WHITESPACE:
+					ret[i] = PLAIN_S;
+					break;
+				case PrismSyntaxHighlighter.KEYWORD:
+					ret[i] = handler.getPrismEditorKeywordFast();
+					break;
+				case PrismSyntaxHighlighter.NUMERIC:
+					ret[i] = handler.getPrismEditorNumericFast();
+					break;
+				case PrismSyntaxHighlighter.IDENTIFIER:
+					ret[i] = handler.getPrismEditorVariableFast();
+					break;
+				default:
+					ret[i] = PLAIN_S;
+					break;
 				}
-			}
-			else ret[i] = PLAIN_S;
+			} else
+				ret[i] = PLAIN_S;
 
 		}
 
@@ -312,7 +317,7 @@ class PrismView extends PlainView
 		index+=2;
 		return index;
 	}
-
+	
 	private synchronized int findEndOfLine(int p1, Document d)
 	{
 		int index = p1;

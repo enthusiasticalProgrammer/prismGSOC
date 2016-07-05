@@ -61,7 +61,7 @@ public class APMCiterations extends APMCMethod
 			computeMissingParameterBeforeSim();
 		return numSamples;
 	}
-	
+
 	@Override
 	public String getParametersString()
 	{
@@ -70,7 +70,7 @@ public class APMCiterations extends APMCMethod
 		else
 			return "approximation=" + approximation + ", confidence=" + confidence + ", number of samples=" + numSamples;
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

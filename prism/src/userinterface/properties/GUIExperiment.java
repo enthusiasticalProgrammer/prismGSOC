@@ -200,6 +200,7 @@ public class GUIExperiment
 			this.propertiesFile = propertiesFile;
 		}
 
+		@Override
 		public void run()
 		{
 			int i, k;
@@ -215,6 +216,7 @@ public class GUIExperiment
 			try {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						guiProp.startProgress();
@@ -242,11 +244,11 @@ public class GUIExperiment
 					if (useSimulation && !reuseInfo) {
 						try {
 							info = null;
-							info = GUISimulationPicker.defineSimulationWithDialog(guiProp.getGUI(), propertyToCheck.getExpression(), prism.getPRISMModel(), "("
-									+ definedMFConstants + ")");
-						} catch (PrismException e) {
+							info = GUISimulationPicker.defineSimulationWithDialog(guiProp.getGUI(), propertyToCheck.getExpression(), prism.getPRISMModel(),
+									"(" + definedMFConstants + ")");
+						} catch (Exception e) {
 							// in case of error, report it (in log only), store as result, and go on to the next model
-							errorLog(e.getMessage());
+							errorLog(e);
 							setMultipleErrors(definedMFConstants, null, e);
 							undefinedConstants.iterateModel();
 							continue;
@@ -331,6 +333,7 @@ public class GUIExperiment
 							// store result of model checking
 							SwingUtilities.invokeAndWait(new Runnable()
 							{
+								@Override
 								public void run()
 								{
 									GUIExperiment.this.setResult(definedMFConstants, definedPFConstants, res);
@@ -351,6 +354,7 @@ public class GUIExperiment
 
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						guiProp.stopProgress();
@@ -367,6 +371,7 @@ public class GUIExperiment
 				try {
 					SwingUtilities.invokeAndWait(new Runnable()
 					{
+						@Override
 						public void run()
 						{
 

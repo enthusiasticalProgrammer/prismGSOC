@@ -74,6 +74,7 @@ public class FontColorEditor implements SettingEditor, ActionListener, FocusList
 		button.addFocusListener(this);
 	}
 
+	@Override
 	public Object getEditorValue()
 	{
 		if (modified) {
@@ -83,6 +84,7 @@ public class FontColorEditor implements SettingEditor, ActionListener, FocusList
 			return NOT_CHANGED_VALUE;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 		if (isSelected) {
@@ -166,10 +168,12 @@ public class FontColorEditor implements SettingEditor, ActionListener, FocusList
 		return panel;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		dialogFocus = true;
@@ -201,10 +205,12 @@ public class FontColorEditor implements SettingEditor, ActionListener, FocusList
 			lastTable.editingStopped(new ChangeEvent(this));
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		dialogFocus = false;

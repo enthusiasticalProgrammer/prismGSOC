@@ -27,21 +27,25 @@ import java.util.HashMap;
  */
 
 /** A mapper from KeyType to StateType, ResultType can be used as an alternative key type. */
-public class StateMapper <R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State> implements StateMapperInterface<R,K,S> {
+public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State> implements StateMapperInterface<R, K, S>
+{
 
 	/** The hash map from StateType to MappedStateType */
-	private HashMap<K,S> _map;
+	private HashMap<K, S> _map;
 	/** The number of mappings */
 	private int _count;
 
 	/** Constructor. */
-	public StateMapper() {
+	public StateMapper()
+	{
 		_count = 0;
-		_map = new HashMap<K,S>();
+		_map = new HashMap<K, S>();
 	}
-		
+
 	/** Clear the mapping */
-	public void clear() {
+	@Override
+	public void clear()
+	{
 		_map.clear();
 		_count = 0;
 	}
@@ -51,7 +55,9 @@ public class StateMapper <R extends NBA2DAResult<K>, K extends NBA2DAState, S ex
 	 * @param state the state
 	 */
 	// public StateType add(KeyType key, StateType state) {
-	public void add(K key, S state) {
+	@Override
+	public void add(K key, S state)
+	{
 		// System.out.println("Adding hash " + key.hashCode());
 		if (!_map.containsKey(key))
 			++_count;
@@ -60,12 +66,12 @@ public class StateMapper <R extends NBA2DAResult<K>, K extends NBA2DAState, S ex
 		// System.out.println("Item count: " + _count);
 	}
 
-
 	/** Find a mapping. 
 	 * @param key the key
 	 * @return the state (or the NULL pointer if not found)
 	 */
-	public S find(K key) {
+	public S find(K key)
+	{
 		// System.out.println("Looking for hash " + key.hashCode());
 		// if (_map.containsKey(key)) System.out.println("Match");
 		// else System.out.println("Miss");
@@ -76,14 +82,18 @@ public class StateMapper <R extends NBA2DAResult<K>, K extends NBA2DAState, S ex
 	 * @param result
 	 * @return the state (or the NULL pointer if not found)
 	 */
-	public S find(R result) {
+	@Override
+	public S find(R result)
+	{
 		return find(result.getState());
 	}
 
 	/** Get number of mappings.
 	 * @return the number of mappings
 	 */
-	public int size() {
+	@Override
+	public int size()
+	{
 		return _count;
 	}
 }

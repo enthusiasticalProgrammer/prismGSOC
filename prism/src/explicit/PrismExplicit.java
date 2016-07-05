@@ -29,6 +29,8 @@ package explicit;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.ast.Expression;
 import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
@@ -65,9 +67,10 @@ public class PrismExplicit extends PrismComponent
 	 * @param modulesFile Model to build
 	 * @param simEngine PRISM simulator engine (for model exploration)
 	 */
-	public Model buildModel(ModulesFile modulesFile, ModelGenerator simEngine) throws PrismException
+	public @NonNull Model buildModel(ModulesFile modulesFile, ModelGenerator simEngine) throws PrismException
 	{
 		long l; // timer
+		@NonNull
 		Model modelExpl;
 		ConstructModel constructModel;
 
@@ -104,7 +107,7 @@ public class PrismExplicit extends PrismComponent
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws PrismException
 	{
 		// can only do ordered version of export for explicit engine
 		if (!ordered) {
@@ -114,16 +117,31 @@ public class PrismExplicit extends PrismComponent
 		// print message
 		mainLog.print("\nExporting transition matrix ");
 		switch (exportType) {
-		case Prism.EXPORT_PLAIN: mainLog.print("in plain text format "); break;
-		case Prism.EXPORT_MATLAB: mainLog.print("in Matlab format "); break;
-		case Prism.EXPORT_DOT: mainLog.print("in Dot format "); break;
-		case Prism.EXPORT_MRMC: mainLog.print("in MRMC format "); break;
-		case Prism.EXPORT_ROWS: mainLog.print("in rows format "); break;
-		case Prism.EXPORT_DOT_STATES: mainLog.print("in Dot format (with states) "); break;
+		case Prism.EXPORT_PLAIN:
+			mainLog.print("in plain text format ");
+			break;
+		case Prism.EXPORT_MATLAB:
+			mainLog.print("in Matlab format ");
+			break;
+		case Prism.EXPORT_DOT:
+			mainLog.print("in Dot format ");
+			break;
+		case Prism.EXPORT_MRMC:
+			mainLog.print("in MRMC format ");
+			break;
+		case Prism.EXPORT_ROWS:
+			mainLog.print("in rows format ");
+			break;
+		case Prism.EXPORT_DOT_STATES:
+			mainLog.print("in Dot format (with states) ");
+			break;
 		}
-		if (file != null) mainLog.println("to file \"" + file + "\"..."); else mainLog.println("below:");
+		if (file != null)
+			mainLog.println("to file \"" + file + "\"...");
+		else
+			mainLog.println("below:");
 		PrismLog tmpLog = getPrismLogForFile(file);
-		
+
 		// do export
 		switch (exportType) {
 		case Prism.EXPORT_PLAIN:
@@ -142,20 +160,29 @@ public class PrismExplicit extends PrismComponent
 	{
 		int i;
 		PrismLog tmpLog;
-		
+
 		// no specific states format for MRMC
-		if (exportType == Prism.EXPORT_MRMC) exportType = Prism.EXPORT_PLAIN;
+		if (exportType == Prism.EXPORT_MRMC)
+			exportType = Prism.EXPORT_PLAIN;
 		// rows format does not apply to states output
-		if (exportType == Prism.EXPORT_ROWS) exportType = Prism.EXPORT_PLAIN;
-		
+		if (exportType == Prism.EXPORT_ROWS)
+			exportType = Prism.EXPORT_PLAIN;
+
 		// print message
 		mainLog.print("\nExporting list of reachable states ");
 		switch (exportType) {
-		case Prism.EXPORT_PLAIN: mainLog.print("in plain text format "); break;
-		case Prism.EXPORT_MATLAB: mainLog.print("in Matlab format "); break;
+		case Prism.EXPORT_PLAIN:
+			mainLog.print("in plain text format ");
+			break;
+		case Prism.EXPORT_MATLAB:
+			mainLog.print("in Matlab format ");
+			break;
 		}
-		if (file != null) mainLog.println("to file \"" + file + "\"..."); else mainLog.println("below:");
-		
+		if (file != null)
+			mainLog.println("to file \"" + file + "\"...");
+		else
+			mainLog.println("below:");
+
 		// create new file log or use main log
 		if (file != null) {
 			tmpLog = new PrismFileLog(file.getPath());
@@ -166,17 +193,20 @@ public class PrismExplicit extends PrismComponent
 		} else {
 			tmpLog = mainLog;
 		}
-		
+
 		// print header: list of model vars
-		if (exportType == Prism.EXPORT_MATLAB) tmpLog.print("% ");
+		if (exportType == Prism.EXPORT_MATLAB)
+			tmpLog.print("% ");
 		tmpLog.print("(");
 		for (i = 0; i < mf.getNumVars(); i++) {
 			tmpLog.print(mf.getVarName(i));
-			if (i < mf.getNumVars()-1) tmpLog.print(",");
+			if (i < mf.getNumVars() - 1)
+				tmpLog.print(",");
 		}
 		tmpLog.println(")");
-		if (exportType == Prism.EXPORT_MATLAB) tmpLog.println("states=[");
-		
+		if (exportType == Prism.EXPORT_MATLAB)
+			tmpLog.println("states=[");
+
 		// print states
 		StateValues statesList = null;
 		try {
@@ -188,14 +218,16 @@ public class PrismExplicit extends PrismComponent
 			statesList.print(tmpLog);
 		else
 			statesList.print(tmpLog, true, true, true, true);
-		
+
 		// print footer
-		if (exportType == Prism.EXPORT_MATLAB) tmpLog.println("];");
-		
+		if (exportType == Prism.EXPORT_MATLAB)
+			tmpLog.println("];");
+
 		// tidy up
-		if (file != null) tmpLog.close();
+		if (file != null)
+			tmpLog.close();
 	}
-	
+
 	/**
 	 * Perform model checking of a property on a model and return result.
 	 * @param model The model
@@ -247,7 +279,7 @@ public class PrismExplicit extends PrismComponent
 	{
 		doSteadyState(model, Prism.EXPORT_PLAIN, null);
 	}
-	
+
 	/**
 	 * Compute steady-state probabilities (for a DTMC or CTMC).
 	 * Output probability distribution to a file (or, if file is null, to log). 
@@ -258,28 +290,37 @@ public class PrismExplicit extends PrismComponent
 		long l = 0; // timer
 		StateValues probs = null;
 		PrismLog tmpLog;
-		
+
 		if (!(model.getModelType() == ModelType.CTMC || model.getModelType() == ModelType.DTMC))
 			throw new PrismNotSupportedException("Steady-state probabilities only computed for DTMCs/CTMCs");
-		
+
 		// no specific states format for MRMC
-		if (exportType == Prism.EXPORT_MRMC) exportType = Prism.EXPORT_PLAIN;
+		if (exportType == Prism.EXPORT_MRMC)
+			exportType = Prism.EXPORT_PLAIN;
 		// rows format does not apply to states output
-		if (exportType == Prism.EXPORT_ROWS) exportType = Prism.EXPORT_PLAIN;
-		
+		if (exportType == Prism.EXPORT_ROWS)
+			exportType = Prism.EXPORT_PLAIN;
+
 		mainLog.println("\nComputing steady-state probabilities...");
 		l = System.currentTimeMillis();
 		probs = computeSteadyStateProbabilities(model);
 		l = System.currentTimeMillis() - l;
-		
+
 		// print message
 		mainLog.print("\nPrinting steady-state probabilities ");
 		switch (exportType) {
-		case Prism.EXPORT_PLAIN: mainLog.print("in plain text format "); break;
-		case Prism.EXPORT_MATLAB: mainLog.print("in Matlab format "); break;
+		case Prism.EXPORT_PLAIN:
+			mainLog.print("in plain text format ");
+			break;
+		case Prism.EXPORT_MATLAB:
+			mainLog.print("in Matlab format ");
+			break;
 		}
-		if (fileOut != null) mainLog.println("to file \"" + fileOut + "\"..."); else mainLog.println("below:");
-		
+		if (fileOut != null)
+			mainLog.println("to file \"" + fileOut + "\"...");
+		else
+			mainLog.println("below:");
+
 		// create new file log or use main log
 		if (fileOut != null) {
 			tmpLog = new PrismFileLog(fileOut.getPath());
@@ -290,16 +331,17 @@ public class PrismExplicit extends PrismComponent
 		} else {
 			tmpLog = mainLog;
 		}
-		
+
 		// print out or export probabilities
 		probs.print(tmpLog, fileOut == null, exportType == Prism.EXPORT_MATLAB, fileOut == null, true);
-		
+
 		// print out computation time
-		mainLog.println("\nTime for steady-state probability computation: " + l/1000.0 + " seconds.");
-		
+		mainLog.println("\nTime for steady-state probability computation: " + l / 1000.0 + " seconds.");
+
 		// tidy up
 		probs.clear();
-		if (fileOut != null) tmpLog.close();
+		if (fileOut != null)
+			tmpLog.close();
 	}
 
 	/**
@@ -312,11 +354,9 @@ public class PrismExplicit extends PrismComponent
 		if (model.getModelType() == ModelType.DTMC) {
 			DTMCModelChecker mcDTMC = new DTMCModelChecker(this);
 			probs = mcDTMC.doSteadyState((DTMC) model);
-		}
-		else if (model.getModelType() == ModelType.CTMC) {
+		} else if (model.getModelType() == ModelType.CTMC) {
 			throw new PrismNotSupportedException("Not implemented yet"); // TODO
-		}
-		else {
+		} else {
 			throw new PrismNotSupportedException("Steady-state probabilities only computed for DTMCs/CTMCs");
 		}
 		return probs;
@@ -330,7 +370,7 @@ public class PrismExplicit extends PrismComponent
 	{
 		doTransient(model, time, Prism.EXPORT_PLAIN, null, null);
 	}
-	
+
 	/**
 	 * Compute transient probabilities (for a DTMC or CTMC).
 	 * Output probability distribution to a file (or, if file is null, to log). 
@@ -342,38 +382,46 @@ public class PrismExplicit extends PrismComponent
 		long l = 0; // timer
 		StateValues probs = null;
 		PrismLog tmpLog;
-		
-		if (time < 0) throw new PrismException("Cannot compute transient probabilities for negative time value");
-		
+
+		if (time < 0)
+			throw new PrismException("Cannot compute transient probabilities for negative time value");
+
 		// no specific states format for MRMC
-		if (exportType == Prism.EXPORT_MRMC) exportType = Prism.EXPORT_PLAIN;
+		if (exportType == Prism.EXPORT_MRMC)
+			exportType = Prism.EXPORT_PLAIN;
 		// rows format does not apply to states output
-		if (exportType == Prism.EXPORT_ROWS) exportType = Prism.EXPORT_PLAIN;
-		
+		if (exportType == Prism.EXPORT_ROWS)
+			exportType = Prism.EXPORT_PLAIN;
+
 		l = System.currentTimeMillis();
 
 		if (model.getModelType() == ModelType.DTMC) {
 			throw new PrismNotSupportedException("Not implemented yet"); // TODO
-		}
-		else if (model.getModelType() == ModelType.CTMC) {
+		} else if (model.getModelType() == ModelType.CTMC) {
 			mainLog.println("\nComputing transient probabilities (time = " + time + ")...");
 			CTMCModelChecker mcCTMC = new CTMCModelChecker(this);
 			probs = mcCTMC.doTransient((CTMC) model, time, fileIn);
-		}
-		else {
+		} else {
 			throw new PrismNotSupportedException("Transient probabilities only computed for DTMCs/CTMCs");
 		}
-		
+
 		l = System.currentTimeMillis() - l;
-		
+
 		// print message
 		mainLog.print("\nPrinting transient probabilities ");
 		switch (exportType) {
-		case Prism.EXPORT_PLAIN: mainLog.print("in plain text format "); break;
-		case Prism.EXPORT_MATLAB: mainLog.print("in Matlab format "); break;
+		case Prism.EXPORT_PLAIN:
+			mainLog.print("in plain text format ");
+			break;
+		case Prism.EXPORT_MATLAB:
+			mainLog.print("in Matlab format ");
+			break;
 		}
-		if (fileOut != null) mainLog.println("to file \"" + fileOut + "\"..."); else mainLog.println("below:");
-		
+		if (fileOut != null)
+			mainLog.println("to file \"" + fileOut + "\"...");
+		else
+			mainLog.println("below:");
+
 		// create new file log or use main log
 		if (fileOut != null) {
 			tmpLog = new PrismFileLog(fileOut.getPath());
@@ -384,18 +432,19 @@ public class PrismExplicit extends PrismComponent
 		} else {
 			tmpLog = mainLog;
 		}
-		
+
 		// print out or export probabilities
 		probs.print(tmpLog, fileOut == null, exportType == Prism.EXPORT_MATLAB, fileOut == null, fileOut == null);
-		
+
 		// print out computation time
-		mainLog.println("\nTime for transient probability computation: " + l/1000.0 + " seconds.");
+		mainLog.println("\nTime for transient probability computation: " + l / 1000.0 + " seconds.");
 
 		// tidy up
 		probs.clear();
-		if (fileOut != null) tmpLog.close();
+		if (fileOut != null)
+			tmpLog.close();
 	}
-	
+
 	/**
 	 * Either create a new PrismFileLog for {@code file} or,
 	 * if {@code file} is null, return {@code mainLog}.
@@ -415,7 +464,7 @@ public class PrismExplicit extends PrismComponent
 		}
 		return tmpLog;
 	}
-	
+
 	/**
 	 * Simple test program.
 	 */
@@ -442,6 +491,33 @@ public class PrismExplicit extends PrismComponent
 			PrismExplicit pe = new PrismExplicit(prism.getMainLog(), prism.getSettings());
 			Model modelExpl = pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
 			pe.modelCheck(modelExpl, modulesFile, propertiesFile, propertiesFile.getProperty(0));
+		} catch (PrismException e) {
+			System.out.println(e);
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+		}
+	}
+
+	/**
+	 * Simple test program.
+	 */
+	private static void modelCheckViaExplicitFiles(String args[])
+	{
+		Prism prism;
+		try {
+			PrismLog log = new PrismFileLog("stdout");
+			prism = new Prism(log);
+			prism.initialise();
+			prism.setDoProbChecks(false);
+			ModulesFile modulesFile = prism.parseModelFile(new File(args[0]));
+			PropertiesFile propertiesFile = prism.parsePropertiesFile(modulesFile, new File(args[1]));
+			prism.loadPRISMModel(modulesFile);
+			prism.exportTransToFile(true, Prism.EXPORT_PLAIN, new File("tmp.tra"));
+			prism.exportLabelsToFile(null, Prism.EXPORT_PLAIN, new File("tmp.lab"));
+			DTMCSimple modelExplicit = new DTMCSimple();
+			modelExplicit.buildFromPrismExplicit("tmp.tra");
+			PrismExplicit pe = new PrismExplicit(prism.getMainLog(), prism.getSettings());
+			pe.modelCheck(modelExplicit, null, propertiesFile, propertiesFile.getProperty(0));
 		} catch (PrismException e) {
 			System.out.println(e);
 		} catch (FileNotFoundException e) {

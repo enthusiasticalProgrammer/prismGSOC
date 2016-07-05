@@ -83,7 +83,7 @@ public abstract class CIMethod extends SimulationMethod
 	}
 
 	@Override
-	public void computeMissingParameterBeforeSim() throws PrismException
+	public void computeMissingParameterBeforeSim()
 	{
 		// Nothing to do (always computed after simulation)
 	}
@@ -119,14 +119,19 @@ public abstract class CIMethod extends SimulationMethod
 		}
 	}
 
+	@Override
 	public abstract void computeMissingParameterAfterSim();
 
+	@Override
 	public abstract Object getMissingParameter() throws PrismException;
 
+	@Override
 	public abstract String getParametersString();
 
+	@Override
 	public abstract boolean shouldStopNow(int iters, Sampler sampler);
 
+	@Override
 	public abstract int getProgress(int iters, Sampler sampler);
 
 	@Override
@@ -138,8 +143,8 @@ public abstract class CIMethod extends SimulationMethod
 		switch (prOp) {
 		case 0: // 0=quantitative
 			return new Double(mean);
-			//return new prism.Interval(mean - stddev, mean + stddev);
-			//return new Double(stddev / mean); // noise
+		//return new prism.Interval(mean - stddev, mean + stddev);
+		//return new Double(stddev / mean); // noise
 		case -1: // -1=lower bound
 			if (mean >= theta + width)
 				return new Boolean(true);
@@ -160,7 +165,7 @@ public abstract class CIMethod extends SimulationMethod
 	}
 
 	@Override
-	public String getResultExplanation(Sampler sampler) throws PrismException
+	public String getResultExplanation(Sampler sampler)
 	{
 		return "confidence interval is " + sampler.getMeanValue() + " +/- " + width + ", based on " + (100.0 * (1.0 - confidence)) + "% confidence level";
 	}

@@ -25,7 +25,6 @@
 //	
 //==============================================================================
 
-
 package automata;
 
 import java.io.FileInputStream;
@@ -77,13 +76,17 @@ import acceptance.AcceptanceStreett.StreettPair;
  * <li>At most 30 atomic propositions</li>
  * </ul>
  */
-public class HOAF2DA implements HOAConsumer {
-
+public class HOAF2DA implements HOAConsumer
+{
 
 	/** An exception that is thrown to indicate that the automaton had transition based acceptance. */
 	@SuppressWarnings("serial")
-	public class TransitionBasedAcceptanceException extends HOAConsumerException {
-		public TransitionBasedAcceptanceException(String e) {super(e);}
+	public class TransitionBasedAcceptanceException extends HOAConsumerException
+	{
+		public TransitionBasedAcceptanceException(String e)
+		{
+			super(e);
+		}
 	}
 
 	/** The resulting deterministic automaton */
@@ -125,7 +128,8 @@ public class HOAF2DA implements HOAConsumer {
 	private long expectedNumberOfEdgesPerState;
 
 	/** Clear the various state information */
-	public void clear() {
+	public void clear()
+	{
 		aps = new APSet();
 
 		implicitEdgeHelper = null;
@@ -146,22 +150,25 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	/** Constructor */
-	public HOAF2DA() {
+	public HOAF2DA()
+	{
 	}
 
 	@Override
-	public boolean parserResolvesAliases() {
+	public boolean parserResolvesAliases()
+	{
 		return true;
 	}
 
 	@Override
-	public void notifyHeaderStart(String version) throws HOAConsumerException {
+	public void notifyHeaderStart(String version)
+	{
 		// NOP
 	}
 
 	@Override
-	public void setNumberOfStates(int numberOfStates)
-			throws HOAConsumerException {
+	public void setNumberOfStates(int numberOfStates) throws HOAConsumerException
+	{
 		size = numberOfStates;
 		knowSize = true;
 		if (numberOfStates == 0) {
@@ -170,9 +177,9 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	@Override
-	public void addStartStates(List<Integer> stateConjunction)
-			throws HOAConsumerException {
-		if(stateConjunction.size() > 1 || knowStartState) {
+	public void addStartStates(List<Integer> stateConjunction) throws HOAConsumerException
+	{
+		if (stateConjunction.size() > 1 || knowStartState) {
 			throw new HOAConsumerException("Not a deterministic automaton: More then one Start state");
 		}
 		startState = stateConjunction.get(0).intValue();
@@ -181,14 +188,15 @@ public class HOAF2DA implements HOAConsumer {
 
 	@Override
 	public void addAlias(String name, BooleanExpression<AtomLabel> labelExpr)
-			throws HOAConsumerException {
+	{
 		// NOP, aliases are already resolved
 	}
 
 	@Override
-	public void setAPs(List<String> aps) throws HOAConsumerException {
+	public void setAPs(List<String> aps) throws HOAConsumerException
+	{
 		if (aps.size() > 30) {
-			throw new HOAConsumerException("Automaton has "+aps.size()+" atomic propositions, at most 30 are supported");
+			throw new HOAConsumerException("Automaton has " + aps.size() + " atomic propositions, at most 30 are supported");
 		}
 
 		apList = aps;
@@ -200,54 +208,56 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	@Override
-	public void setAcceptanceCondition(int numberOfSets,
-			BooleanExpression<AtomAcceptance> accExpr)
-			throws HOAConsumerException {
+	public void setAcceptanceCondition(int numberOfSets, BooleanExpression<AtomAcceptance> accExpr)
+	{
 		this.accExpr = accExpr;
 	}
 
 	@Override
 	public void provideAcceptanceName(String name, List<Object> extraInfo)
-			throws HOAConsumerException {
+	{
 		accName = name;
 		this.extraInfo = extraInfo;
 	}
 
 	@Override
-	public void setName(String name) throws HOAConsumerException {
+	public void setName(String name)
+	{
 		// NOP
 	}
 
 	@Override
-	public void setTool(String name, String version) throws HOAConsumerException {
+	public void setTool(String name, String version)
+	{
 		// NOP
 	}
 
 	@Override
-	public void addProperties(List<String> properties)
-			throws HOAConsumerException {
-		if(!properties.contains("deterministic")) {
+	public void addProperties(List<String> properties) throws HOAConsumerException
+	{
+		if (!properties.contains("deterministic")) {
 			// we don't know yet whether the automaton is actually deterministic...
 		}
-		if(properties.contains("univ-branch")) {
+		if (properties.contains("univ-branch")) {
 			throw new HOAConsumerException("A HOAF with universal branching is not deterministic");
 		}
-		
-		if(properties.contains("state-labels")) {
+
+		if (properties.contains("state-labels")) {
 			throw new HOAConsumerException("Can't handle state labelling");
 		}
 	}
 
 	@Override
-	public void addMiscHeader(String name, List<Object> content)
-			throws HOAConsumerException {
-		if (name.substring(0,1).toUpperCase().equals(name.substring(0,1))) {
-			throw new HOAConsumerException("Unknown header "+name+" potentially containing semantic information, can not handle");
+	public void addMiscHeader(String name, List<Object> content) throws HOAConsumerException
+	{
+		if (name.substring(0, 1).toUpperCase().equals(name.substring(0, 1))) {
+			throw new HOAConsumerException("Unknown header " + name + " potentially containing semantic information, can not handle");
 		}
 	}
 
 	@Override
-	public void notifyBodyStart() throws HOAConsumerException {
+	public void notifyBodyStart() throws HOAConsumerException
+	{
 		if (!knowSize) {
 			throw new HOAConsumerException("Can currently only parse automata where the number of states is specified in the header");
 		}
@@ -255,10 +265,10 @@ public class HOAF2DA implements HOAConsumer {
 			throw new HOAConsumerException("Not a deterministic automaton: No initial state specified (Start header)");
 		}
 		if (startState >= size) {
-			throw new HOAConsumerException("Initial state "+startState+" is out of range");
+			throw new HOAConsumerException("Initial state " + startState + " is out of range");
 		}
 
-		da = new DA<BitSet,AcceptanceGeneric>(size);
+		da = new DA<BitSet, AcceptanceGeneric>(size);
 		da.setStartState(startState);
 
 		if (apList == null) {
@@ -304,13 +314,10 @@ public class HOAF2DA implements HOAConsumer {
 		case EXP_FALSE:
 			return new AcceptanceGeneric(false);
 		case EXP_AND:
-			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.AND,
-                    prepareAcceptanceGeneric(expr.getLeft()),
-                    prepareAcceptanceGeneric(expr.getRight()));
+			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.AND, prepareAcceptanceGeneric(expr.getLeft()),
+					prepareAcceptanceGeneric(expr.getRight()));
 		case EXP_OR:
-			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.OR,
-                    prepareAcceptanceGeneric(expr.getLeft()),
-                    prepareAcceptanceGeneric(expr.getRight()));
+			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.OR, prepareAcceptanceGeneric(expr.getLeft()), prepareAcceptanceGeneric(expr.getRight()));
 		case EXP_NOT:
 			throw new HOAConsumerException("Boolean negation not allowed in acceptance expression");
 		case EXP_ATOM: {
@@ -341,7 +348,7 @@ public class HOAF2DA implements HOAConsumer {
 		}
 		}
 
-		throw new UnsupportedOperationException("Unknown operator in acceptance condition: "+expr);
+		throw new UnsupportedOperationException("Unknown operator in acceptance condition: " + expr);
 	}
 
 	/**
@@ -356,7 +363,7 @@ public class HOAF2DA implements HOAConsumer {
 		acceptanceSets = new ArrayList<BitSet>(1);
 		BitSet acceptingStates = new BitSet();
 		AcceptanceBuchi acceptanceBuchi = new AcceptanceBuchi(acceptingStates);
-		acceptanceSets.add(acceptingStates);  // Inf(0)
+		acceptanceSets.add(acceptingStates); // Inf(0)
 
 		return acceptanceBuchi;
 	}
@@ -366,22 +373,21 @@ public class HOAF2DA implements HOAConsumer {
 	 */
 	private AcceptanceRabin prepareAcceptanceRabin() throws HOAConsumerException
 	{
-		if (extraInfo.size() != 1 ||
-		    !(extraInfo.get(0) instanceof Integer)) {
+		if (extraInfo.size() != 1 || !(extraInfo.get(0) instanceof Integer)) {
 			throw new HOAConsumerException("Invalid acc-name: Rabin header");
 		}
 
-		int numberOfPairs = (Integer)extraInfo.get(0);
+		int numberOfPairs = (Integer) extraInfo.get(0);
 		AcceptanceRabin acceptanceRabin = new AcceptanceRabin();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs*2);
-		for (int i = 0; i< numberOfPairs; i++) {
+		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet L = new BitSet();
 			BitSet K = new BitSet();
 
-			acceptanceSets.add(L);   // 2*i   = Fin(L) = F G !L
-			acceptanceSets.add(K);   // 2*i+1 = Inf(K) = G F  K
+			acceptanceSets.add(L); // 2*i   = Fin(L) = F G !L
+			acceptanceSets.add(K); // 2*i+1 = Inf(K) = G F  K
 
-			acceptanceRabin.add(new RabinPair(L,K));
+			acceptanceRabin.add(new RabinPair(L, K));
 		}
 
 		return acceptanceRabin;
@@ -392,22 +398,21 @@ public class HOAF2DA implements HOAConsumer {
 	 */
 	private AcceptanceStreett prepareAcceptanceStreett() throws HOAConsumerException
 	{
-		if (extraInfo.size() != 1 ||
-		    !(extraInfo.get(0) instanceof Integer)) {
+		if (extraInfo.size() != 1 || !(extraInfo.get(0) instanceof Integer)) {
 			throw new HOAConsumerException("Invalid acc-name: Streett header");
 		}
 
-		int numberOfPairs = (Integer)extraInfo.get(0);
+		int numberOfPairs = (Integer) extraInfo.get(0);
 		AcceptanceStreett acceptanceStreett = new AcceptanceStreett();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs*2);
-		for (int i = 0; i< numberOfPairs; i++) {
+		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet R = new BitSet();
 			BitSet G = new BitSet();
 
-			acceptanceSets.add(R);   // 2*i
-			acceptanceSets.add(G);   // 2*i+1
+			acceptanceSets.add(R); // 2*i
+			acceptanceSets.add(G); // 2*i+1
 
-			acceptanceStreett.add(new StreettPair(R,G));
+			acceptanceStreett.add(new StreettPair(R, G));
 		}
 
 		return acceptanceStreett;
@@ -418,12 +423,11 @@ public class HOAF2DA implements HOAConsumer {
 	 */
 	private AcceptanceGenRabin prepareAcceptanceGenRabin() throws HOAConsumerException
 	{
-		if (extraInfo.size() < 1 ||
-		    !(extraInfo.get(0) instanceof Integer)) {
+		if (extraInfo.size() < 1 || !(extraInfo.get(0) instanceof Integer)) {
 			throw new HOAConsumerException("Invalid acc-name: generalized-Rabin header");
 		}
 
-		int numberOfPairs = (Integer)extraInfo.get(0);
+		int numberOfPairs = (Integer) extraInfo.get(0);
 		if (extraInfo.size() != numberOfPairs + 1) {
 			throw new HOAConsumerException("Invalid acc-name: generalized-Rabin header");
 		}
@@ -434,17 +438,17 @@ public class HOAF2DA implements HOAConsumer {
 			}
 			numberOfKs[i] = (Integer) extraInfo.get(i + 1);
 		}
-		
+
 		AcceptanceGenRabin acceptanceGenRabin = new AcceptanceGenRabin();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs*2);
-		for (int i = 0; i< numberOfPairs; i++) {
+		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet L = new BitSet();
-			acceptanceSets.add(L);   // Fin(L) = F G !L
+			acceptanceSets.add(L); // Fin(L) = F G !L
 			ArrayList<BitSet> K_list = new ArrayList<BitSet>();
 			for (int j = 0; j < numberOfKs[i]; j++) {
 				BitSet K_j = new BitSet();
 				K_list.add(K_j);
-				acceptanceSets.add(K_j);   // Inf(K_j) = G F  K_j
+				acceptanceSets.add(K_j); // Inf(K_j) = G F  K_j
 			}
 			acceptanceGenRabin.add(new GenRabinPair(L, K_list));
 		}
@@ -453,17 +457,16 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	@Override
-	public void addState(int id, String info,
-			BooleanExpression<AtomLabel> labelExpr, List<Integer> accSignature)
-			throws HOAConsumerException {
+	public void addState(int id, String info, BooleanExpression<AtomLabel> labelExpr, List<Integer> accSignature) throws HOAConsumerException
+	{
 		implicitEdgeHelper.startOfState(id);
 
-		if(labelExpr != null) {
-			throw new HOAConsumerException("State "+id+" has a state label, currently only supports labels on transitions");
+		if (labelExpr != null) {
+			throw new HOAConsumerException("State " + id + " has a state label, currently only supports labels on transitions");
 		}
-		
+
 		if (id >= size) {
-			throw new HOAConsumerException("Illegal state index "+id+", out of range");
+			throw new HOAConsumerException("Illegal state index " + id + ", out of range");
 		}
 
 		if (accSignature != null) {
@@ -483,14 +486,15 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	@Override
-	public void addEdgeImplicit(int stateId, List<Integer> conjSuccessors,
-			List<Integer> accSignature) throws HOAConsumerException {
+	public void addEdgeImplicit(int stateId, List<Integer> conjSuccessors, List<Integer> accSignature) throws HOAConsumerException
+	{
 		if (conjSuccessors.size() != 1) {
-			throw new HOAConsumerException("Not a DA, state "+stateId+" has transition with conjunctive target");
+			throw new HOAConsumerException("Not a DA, state " + stateId + " has transition with conjunctive target");
 		}
 
 		if (accSignature != null) {
-			throw new TransitionBasedAcceptanceException("DA has transition-based acceptance (state "+stateId+", currently only state-labeled acceptance is supported");
+			throw new TransitionBasedAcceptanceException(
+					"DA has transition-based acceptance (state " + stateId + ", currently only state-labeled acceptance is supported");
 		}
 
 		int to = conjSuccessors.get(0);
@@ -507,14 +511,15 @@ public class HOAF2DA implements HOAConsumer {
 		}
 		da.addEdge(stateId, edge, to);
 	}
-	
+
 	/**
 	 * Returns a list of APMonoms for the expression. The expression currently has to be in
 	 * disjunctive normal form. Returns one APMonom for each clause of the DNF.
 	 */
-	private List<APMonom> labelExpressionToAPMonom(BooleanExpression<AtomLabel> expr) throws HOAConsumerException {
+	private List<APMonom> labelExpressionToAPMonom(BooleanExpression<AtomLabel> expr) throws HOAConsumerException
+	{
 		List<APMonom> result = new ArrayList<APMonom>();
-		
+
 		switch (expr.getType()) {
 		case EXP_AND:
 		case EXP_ATOM:
@@ -534,21 +539,21 @@ public class HOAF2DA implements HOAConsumer {
 			result.addAll(labelExpressionToAPMonom(expr.getRight()));
 			return result;
 		}
-		throw new UnsupportedOperationException("Unsupported operator in label expression: "+expr);
+		throw new UnsupportedOperationException("Unsupported operator in label expression: " + expr);
 	}
 
-	
 	/**
 	 * Returns a single APMonom for a single clause of the overall DNF formula.
 	 * Modifies APMonom result such that in the end it is correct.
 	 */
-	private void labelExpressionToAPMonom(BooleanExpression<AtomLabel> expr, APMonom result) throws HOAConsumerException {
+	private void labelExpressionToAPMonom(BooleanExpression<AtomLabel> expr, APMonom result) throws HOAConsumerException
+	{
 		try {
 			switch (expr.getType()) {
 			case EXP_TRUE:
 			case EXP_FALSE:
 			case EXP_OR:
-				throw new HOAConsumerException("Complex transition labels are not yet supported, only disjunctive normal form: "+expr);
+				throw new HOAConsumerException("Complex transition labels are not yet supported, only disjunctive normal form: " + expr);
 
 			case EXP_AND:
 				labelExpressionToAPMonom(expr.getLeft(), result);
@@ -556,7 +561,7 @@ public class HOAF2DA implements HOAConsumer {
 				return;
 			case EXP_ATOM: {
 				int apIndex = expr.getAtom().getAPIndex();
-				if (result.isSet(apIndex) && result.getValue(apIndex)!=true) {
+				if (result.isSet(apIndex) && result.getValue(apIndex) != true) {
 					throw new HOAConsumerException("Complex transition labels are not yet supported, transition label evaluates to false");
 				}
 				result.setValue(apIndex, true);
@@ -567,7 +572,7 @@ public class HOAF2DA implements HOAConsumer {
 					throw new HOAConsumerException("Complex transition labels are not yet supported, only conjunction of (negated) labels");
 				}
 				int apIndex = expr.getLeft().getAtom().getAPIndex();
-				if (result.isSet(apIndex) && result.getValue(apIndex)!=false) {
+				if (result.isSet(apIndex) && result.getValue(apIndex) != false) {
 					throw new HOAConsumerException("Complex transition labels are not yet supported, transition label evaluates to false");
 				}
 				result.setValue(apIndex, false);
@@ -575,22 +580,22 @@ public class HOAF2DA implements HOAConsumer {
 			}
 			}
 		} catch (PrismException e) {
-			throw new HOAConsumerException("While parsing, APMonom exception: "+e.getMessage());
+			throw new HOAConsumerException("While parsing, APMonom exception: " + e.getMessage());
 		}
 	}
-	
+
 	@Override
-	public void addEdgeWithLabel(int stateId,
-			BooleanExpression<AtomLabel> labelExpr,
-			List<Integer> conjSuccessors, List<Integer> accSignature)
-			throws HOAConsumerException {
+	public void addEdgeWithLabel(int stateId, BooleanExpression<AtomLabel> labelExpr, List<Integer> conjSuccessors, List<Integer> accSignature)
+			throws HOAConsumerException
+	{
 
 		if (conjSuccessors.size() != 1) {
-			throw new HOAConsumerException("Not a DA, state "+stateId+" has transition with conjunctive target");
+			throw new HOAConsumerException("Not a DA, state " + stateId + " has transition with conjunctive target");
 		}
 
 		if (accSignature != null) {
-			throw new TransitionBasedAcceptanceException("DA has transition-based acceptance (state "+stateId+", currently only state-labeled acceptance is supported");
+			throw new TransitionBasedAcceptanceException(
+					"DA has transition-based acceptance (state " + stateId + ", currently only state-labeled acceptance is supported");
 		}
 
 		if (labelExpr == null) {
@@ -601,7 +606,7 @@ public class HOAF2DA implements HOAConsumer {
 
 		for (APMonom monom : labelExpressionToAPMonom(labelExpr)) {
 			APMonom2APElements it = new APMonom2APElements(aps, monom);
-			while(it.hasNext()) {
+			while (it.hasNext()) {
 				APElement el = it.next();
 				// check whether this edge already exist
 				int previousTo = da.getEdgeDestByLabel(stateId, el);
@@ -611,7 +616,8 @@ public class HOAF2DA implements HOAConsumer {
 					continue;
 				}
 				if (previousTo != -1) {
-					throw new HOAConsumerException("Not a deterministic automaton, non-determinism detected (state "+stateId+", label = "+el+", to="+to+", previously to "+previousTo+")");
+					throw new HOAConsumerException("Not a deterministic automaton, non-determinism detected (state " + stateId + ", label = " + el + ", to="
+							+ to + ", previously to " + previousTo + ")");
 				}
 				da.addEdge(stateId, el, to);
 			}
@@ -624,14 +630,14 @@ public class HOAF2DA implements HOAConsumer {
 		implicitEdgeHelper.endOfState();
 
 		if (da.getNumEdges(stateId) != expectedNumberOfEdgesPerState) {
-			throw new HOAConsumerException("State "+ stateId +" has " + da.getNumEdges(stateId)
-			                               + " transitions, should have " + expectedNumberOfEdgesPerState
-			                               + " (automaton is required to be complete and deterministic)");
+			throw new HOAConsumerException("State " + stateId + " has " + da.getNumEdges(stateId) + " transitions, should have " + expectedNumberOfEdgesPerState
+					+ " (automaton is required to be complete and deterministic)");
 		}
 	}
 
 	@Override
-	public void notifyEnd() throws HOAConsumerException {
+	public void notifyEnd()
+	{
 		// flip acceptance sets that need negating
 		if (negateAcceptanceSetMembership != null) {
 			for (int index : negateAcceptanceSetMembership) {
@@ -643,12 +649,14 @@ public class HOAF2DA implements HOAConsumer {
 	}
 
 	@Override
-	public void notifyAbort() {
+	public void notifyAbort()
+	{
 		clear();
-		
+
 	}
-	
-	public DA<BitSet,? extends AcceptanceOmega> getDA() {
+
+	public DA<BitSet, ? extends AcceptanceOmega> getDA()
+	{
 		return da;
 	}
 
@@ -714,7 +722,7 @@ public class HOAF2DA implements HOAConsumer {
 			System.err.println(e.toString());
 			rv = 1;
 		}
-		
+
 		if (rv != 0) {
 			System.exit(rv);
 		}

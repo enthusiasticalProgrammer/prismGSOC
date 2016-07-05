@@ -31,35 +31,35 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
-import java.util.*; 
+import java.util.List;
+
 import userinterface.*;
 
 public class GUIResultsTable extends javax.swing.JDialog
 {
 	private static int noOpen = 0;
-	
 
 	private GUIExperiment exp;
-	
+
 	private JPanel topPanel;
 	private JButton closeButton;
 
 	private JTable table;
 	private ResultsTableModel tableModel;
-	
+
 	/** Creates a new instance of GUIResultsTable */
 	public GUIResultsTable(GUIPrism parent, GUIExperiment exp)
 	{
 		super(parent, "Experiment Results", false);
 		this.exp = exp;
-		
+
 		//setup table
 		tableModel = new ResultsTableModel(exp);
 		table = new JTable();
 		table.setModel(tableModel);
 		table.setCellSelectionEnabled(true);
 		table.setRowHeight(getFontMetrics(table.getFont()).getHeight() + 4);
-		
+
 		//initialise
 		initComponents();
 		getRootPane().setDefaultButton(closeButton);
@@ -69,74 +69,78 @@ public class GUIResultsTable extends javax.swing.JDialog
 	}
 
 	/** This method is called from within the constructor to initialize the form. */
-	
+
 	private void initComponents()
 	{
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog();
 			}
 		});
-		
-		JLabel topLabel = new JLabel("Results of \'" + exp.getPropertyString() + "\' for \'" + exp.getDefinedConstantsString() + "\'"); 
-				
+
+		JLabel topLabel = new JLabel("Results of \'" + exp.getPropertyString() + "\' for \'" + exp.getDefinedConstantsString() + "\'");
+
 		JPanel tmpPanel = new JPanel();
 		tmpPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
+
 		tmpPanel.setLayout(new BorderLayout(10, 10));
 		tmpPanel.add(topLabel, BorderLayout.NORTH);
 		tmpPanel.add(topLabel, BorderLayout.NORTH);
-		
+
 		topPanel = new JPanel();
 		topPanel.setBorder(new TitledBorder("Results"));
 		topPanel.setLayout(new BorderLayout());
-		
+
 		JPanel borderPanel = new JPanel();
 		borderPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		borderPanel.setLayout(new BorderLayout());
-		
+
 		JScrollPane sp = new JScrollPane();
 		sp.setViewportView(table);
 		borderPanel.add(sp, BorderLayout.CENTER);
 		topPanel.add(borderPanel);
-		topPanel.setPreferredSize(new Dimension(500,200));
-		
+		topPanel.setPreferredSize(new Dimension(500, 200));
+
 		tmpPanel.add(topPanel, BorderLayout.CENTER);
-		
+
 		JPanel tmpPanel2 = new JPanel();
 		tmpPanel2.setLayout(new BorderLayout());
-			
+
 		closeButton = new JButton("Close");
 
 		closeButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				closeDialog();
 			}
 		});
-		
-		tmpPanel2.add(closeButton, BorderLayout.EAST);		
-		
+
+		tmpPanel2.add(closeButton, BorderLayout.EAST);
+
 		tmpPanel.add(tmpPanel2, BorderLayout.SOUTH);
 		this.getContentPane().add(tmpPanel);
 	}
 
+	@Override
 	public void show()
 	{
 		noOpen++;
-		setLocation(getX()+(noOpen*50), getY()+(noOpen*50));
+		setLocation(getX() + (noOpen * 50), getY() + (noOpen * 50));
 		super.show();
 	}
-	
+
+	@Override
 	public void dispose()
 	{
 		noOpen--;
 		super.dispose();
 	}
-	
+
 	private void closeDialog()
 	{
 		setVisible(false);
@@ -146,9 +150,9 @@ public class GUIResultsTable extends javax.swing.JDialog
 	class ResultsTableModel extends AbstractTableModel
 	{
 		String headings[];
-		ArrayList cells;
+		List<String[]> cells;
 		int numRows, numCols;
-		
+
 		public ResultsTableModel(GUIExperiment exp)
 		{
 			headings = exp.getResults().getHeadingsArray();
@@ -158,25 +162,30 @@ public class GUIResultsTable extends javax.swing.JDialog
 			//prop = new ArrayList();
 		}
 
+		@Override
 		public String getColumnName(int j)
 		{
 			return headings[j];
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return numCols;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return numRows;
 		}
 
+		@Override
 		public Object getValueAt(int i, int j)
 		{
-			String[] line = (String[])cells.get(i);
-			if (j<line.length) return line[j];
+			String[] line = (String[]) cells.get(i);
+			if (j < line.length)
+				return line[j];
 			return "?";
 		}
 	}

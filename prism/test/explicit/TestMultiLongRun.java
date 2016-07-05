@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,14 +22,12 @@ import prism.PrismLangException;
 import prism.PrismLog;
 import prism.PrismSettings;
 import prism.PrismUtils;
-import prism.Result;
 import simulator.ModulesFileModelGenerator;
 
 //TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	public MDP m1;
-	public MDP m2; //currently not used, TODO Christopher: use it or lose it
+	public @NonNull MDP m1;
 	public MDPModelChecker mdp11;
 	public MDPModelChecker mdp12;
 	public MDPModelChecker mdp13;
@@ -35,13 +35,18 @@ public class TestMultiLongRun
 	public ExpressionFunc e1;
 	public ExpressionFunc e2;
 	public ExpressionFunc e3;
-	
+
 	public ModulesFile modulesFile = null;
 	public PropertiesFile propertiesFile = null;
 	public PropertiesFile propertiesFile2 = null;
 	public PropertiesFile propertiesFile3 = null;
 
 	public StateValues infeasible;
+
+	public TestMultiLongRun() throws PrismLangException
+	{
+		setUp();
+	}
 
 	@Before
 	public void setUp() throws PrismLangException
@@ -99,10 +104,12 @@ public class TestMultiLongRun
 	}
 
 	@Test
-	public void modelIsNotNull() throws PrismException{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
-		assertNotNull(ml11.getModel());
+	public void modelIsNotNull() throws PrismException
+	{
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
+		assertNotNull(ml11.model);
 	}
+
 	/**
 	 * To check that no exception occurs 
 	 * @throws PrismException 
@@ -125,13 +132,24 @@ public class TestMultiLongRun
 		assertNotEquals(infeasible, sv);
 	}
 
+	@Test
+	public void isFeasibleWithNoConstraints() throws PrismException
+	{
+		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<@NonNull MDPConstraint>(), new HashSet<@NonNull MDPObjective>(),
+				new HashSet<@NonNull MDPExpectationConstraint>(), "Linear programming");
+		mlr.createMultiLongRunLP();
+		mlr.solveDefault();
+		assertNotNull(mlr.getStrategy());
+
+	}
+
 	/** 
 	 * @throws PrismException 
 	 */
 	@Test
 	public void testTwoObjectives() throws PrismException
 	{
-		MultiLongRun ml12 = mdp12.createMultiLongRun(m1, e2);
+		MultiLongRun<?> ml12 = mdp12.createMultiLongRun(m1, e2);
 		assertEquals(2, ml12.objectives.size());
 	}
 
@@ -141,7 +159,7 @@ public class TestMultiLongRun
 	@Test
 	public void testGetN() throws PrismException
 	{
-		MultiLongRun ml12 = mdp12.createMultiLongRun(m1, e2);
+		MultiLongRun<?> ml12 = mdp12.createMultiLongRun(m1, e2);
 		assertEquals(2, ml12.getN());
 	}
 
@@ -152,8 +170,7 @@ public class TestMultiLongRun
 	@Test
 	public void testGetVarXNegative() throws PrismException
 	{
-		MultiLongRun ml13 = mdp13.createMultiLongRun(m1, e3);
-		ml13.computeOffsets();
+		MultiLongRun<?> ml13 = mdp13.createMultiLongRun(m1, e3);
 		assertTrue(ml13.getVarX(0, 0, 1) == -1);
 	}
 
@@ -164,7 +181,7 @@ public class TestMultiLongRun
 	@Test
 	public void testValuesOfExample4() throws PrismException
 	{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 
@@ -190,7 +207,7 @@ public class TestMultiLongRun
 	@Test
 	public void testValuesOfExample5() throws PrismException
 	{
-		MultiLongRun ml11 = mdp11.createMultiLongRun(m1, e1);
+		MultiLongRun<?> ml11 = mdp11.createMultiLongRun(m1, e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 

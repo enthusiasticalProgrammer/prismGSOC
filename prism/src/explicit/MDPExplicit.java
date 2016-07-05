@@ -211,7 +211,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	}
 
 	// Accessors (for NondetModel)
-	
+
 	@Override
 	public boolean areAllChoiceActionsUnique()
 	{

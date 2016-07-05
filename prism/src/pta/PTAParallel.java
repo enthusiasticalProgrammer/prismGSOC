@@ -46,7 +46,7 @@ public class PTAParallel
 	private PTA pta2;
 	// Resulting PTA (parallel composition)
 	private PTA par;
-	
+
 	/**
 	 * Construct the parallel composition of two PTAs.
 	 */
@@ -180,7 +180,7 @@ public class PTAParallel
 				}
 			}
 		}
-		
+
 		return par;
 	}
 
@@ -209,7 +209,7 @@ public class PTAParallel
 		// Return index of state in state set 
 		return states.getIndexOfLastAdd();
 	}
-	
+
 	/**
 	 * Class to store a pair of indices.
 	 */
@@ -223,17 +223,20 @@ public class PTAParallel
 			this.i1 = i1;
 			this.i2 = i2;
 		}
-		
+
+		@Override
 		public int hashCode()
 		{
 			// Simple hash code
 			return i1;
 		}
-		
+
+		@Override
 		public boolean equals(Object o)
 		{
 			IndexPair ip;
-			if (o == null) return false;
+			if (o == null)
+				return false;
 			try {
 				ip = (IndexPair) o;
 			} catch (ClassCastException e) {
@@ -241,17 +244,18 @@ public class PTAParallel
 			}
 			return i1 == ip.i1 && i2 == ip.i2;
 		}
-		
+
+		@Override
 		public String toString()
 		{
-			return i1 +"," + i2; 
+			return i1 + "," + i2;
 		}
 	}
 
 	/**
 	 * Main method to test
 	 *  (read from multiple des files, output result to a des file)
-	 */ 
+	 */
 	public static void main(String args[])
 	{
 		PTA pta, pta2;

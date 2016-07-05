@@ -213,7 +213,7 @@ public class PrismUtils
 		// To match C's printf, we have to tweak the Java version (strip trailing .000)
 		return String.format(Locale.UK, "%." + prec + "g", d).replaceFirst("\\.?0+(e|$)", "$1");
 	}
-	
+
 	/**
 	 * Create a string for a list of objects, with a specified separator,
 	 * e.g. ["a","b","c"], "," -&gt; "a,b,c"
@@ -226,13 +226,13 @@ public class PrismUtils
 			if (first) {
 				first = false;
 			} else {
-				s += separator; 
+				s += separator;
 			}
 			s += obj.toString();
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Create a string for an array of objects, with a specified separator,
 	 * e.g. ["a","b","c"], "," -&gt; "a,b,c"
@@ -245,13 +245,13 @@ public class PrismUtils
 			if (first) {
 				first = false;
 			} else {
-				s += separator; 
+				s += separator;
 			}
 			s += obj.toString();
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Check for any cycles in an 2D boolean array representing a graph.
 	 * Useful for checking for cyclic dependencies in connected definitions.
@@ -340,15 +340,15 @@ public class PrismUtils
 		}
 		switch (m.group(2)) {
 		case "":
-		case "s":  // seconds
+		case "s": // seconds
 			return value;
-		case "m":  // minutes
+		case "m": // minutes
 			return value * 60;
-		case "h":  // hours
+		case "h": // hours
 			return value * (60 * 60);
-		case "d":  // days
+		case "d": // days
 			return value * (24 * 60 * 60);
-		case "w":  // weeks
+		case "w": // weeks
 			return value * (7 * 24 * 60 * 60);
 		default:
 			// Shouldn't happen
@@ -359,7 +359,7 @@ public class PrismUtils
 	/**
 	 * Convert a number of bytes to a string representing the amount of memory (e.g. 125k, 50m, 4g).
 	 */
-	public static String convertBytesToMemoryString(long bytes) throws PrismException
+	public static String convertBytesToMemoryString(long bytes)
 	{
 		String units[] = { "b", "k", "m", "g" };
 		for (int i = 3; i > 0; i--) {
@@ -369,12 +369,12 @@ public class PrismUtils
 			}
 		}
 		return bytes + units[0];
-		
+
 		/*for (String s : new String[] { "1g", "1500m", "2g", "1000m", "1024m", "1" }) {
 			System.out.println(s + " => " + PrismUtils.convertMemoryStringtoKB(s) * 1024 + " => " + PrismUtils.convertBytesToMemoryString(PrismUtils.convertMemoryStringtoKB(s) * 1024));
 		}*/
 	}
-	
+
 	/**
 	 * Utility method to create a new PrintStream for a file, but any errors are converted to PrismExceptions
 	 */

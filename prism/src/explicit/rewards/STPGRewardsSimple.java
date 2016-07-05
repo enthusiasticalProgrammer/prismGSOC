@@ -113,6 +113,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 	/**
 	 * Clear all rewards for state s.
 	 */
+	@Override
 	public void clearRewards(int s)
 	{
 		super.clearRewards(s);
@@ -138,7 +139,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 	}
 
 	// Converters
-	
+
 	@Override
 	public STPGRewards liftFromModel(Product<? extends Model> product)
 	{
@@ -147,7 +148,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 		STPGRewardsSimple rewardsProd = new STPGRewardsSimple(rewardsProdMDP);
 		// Lift nested transition rewards
 		Model modelProd = product.getProductModel();
-		int numStatesProd = modelProd.getNumStates();		
+		int numStatesProd = modelProd.getNumStates();
 		if (nestedTransRewards != null) {
 			for (int s = 0; s < numStatesProd; s++) {
 				List<List<Double>> list1 = nestedTransRewards.get(product.getModelState(s));
@@ -165,7 +166,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 		}
 		return rewardsProd;
 	}
-	
+
 	// Other
 
 	@Override

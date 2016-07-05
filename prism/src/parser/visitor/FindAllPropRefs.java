@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Find all references to properties (by name), replace the ExpressionLabels with ExpressionProp objects.
@@ -36,14 +35,15 @@ public class FindAllPropRefs extends ASTTraverseModify
 {
 	private ModulesFile mf;
 	private PropertiesFile pf;
-	
+
 	public FindAllPropRefs(ModulesFile mf, PropertiesFile pf)
 	{
 		this.mf = mf;
 		this.pf = pf;
 	}
-	
-	public Object visit(ExpressionLabel e) throws PrismLangException
+
+	@Override
+	public Object visit(ExpressionLabel e)
 	{
 		String name;
 		Property prop = null;
@@ -65,4 +65,3 @@ public class FindAllPropRefs extends ASTTraverseModify
 		return e;
 	}
 }
-

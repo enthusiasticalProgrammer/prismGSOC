@@ -49,12 +49,12 @@ public class IntegerBound
 	{
 		// normalize
 		if (lower_strict && lower != null) {
-			lowest = new Integer(lower+1);
+			lowest = new Integer(lower + 1);
 		} else {
 			lowest = lower;
 		}
 		if (upper_strict && upper != null) {
-			highest = new Integer(upper-1);
+			highest = new Integer(upper - 1);
 		} else {
 			highest = upper;
 		}
@@ -93,17 +93,16 @@ public class IntegerBound
 	 */
 	public static IntegerBound fromExpressionTemporal(ExpressionTemporal expression, Values constantValues, boolean check) throws PrismException
 	{
-		IntegerBound bounds =  new IntegerBound(expression.getLowerBound() == null ? null : expression.getLowerBound().evaluateInt(constantValues),
-		                                          expression.lowerBoundIsStrict(),
-		                                          expression.getUpperBound() == null ? null : expression.getUpperBound().evaluateInt(constantValues),
-		                                          expression.upperBoundIsStrict());
+		IntegerBound bounds = new IntegerBound(expression.getLowerBound() == null ? null : expression.getLowerBound().evaluateInt(constantValues),
+				expression.lowerBoundIsStrict(), expression.getUpperBound() == null ? null : expression.getUpperBound().evaluateInt(constantValues),
+				expression.upperBoundIsStrict());
 
 		if (check) {
 			if (bounds.hasNegativeBound()) {
-				throw new PrismException("Negative bound in "+expression.toString());
+				throw new PrismException("Negative bound in " + expression.toString());
 			}
 			if (bounds.isEmpty()) {
-				throw new PrismException("Empty bound in "+expression.toString());
+				throw new PrismException("Empty bound in " + expression.toString());
 			}
 		}
 
@@ -143,8 +142,7 @@ public class IntegerBound
 	/** Returns {@code true} if the lower or upper bound is negative. */
 	public boolean hasNegativeBound()
 	{
-		if (lowest != null && lowest < 0 ||
-		    highest != null && highest < 0) {
+		if (lowest != null && lowest < 0 || highest != null && highest < 0) {
 			return true;
 		}
 		return false;
@@ -153,14 +151,15 @@ public class IntegerBound
 	/** Returns {@code true} if the lower bound is higher than the upper bound. */
 	public boolean isEmpty()
 	{
-		if (hasLowerBound() && hasUpperBound()) return getLowestInteger()>getHighestInteger();
+		if (hasLowerBound() && hasUpperBound())
+			return getLowestInteger() > getHighestInteger();
 		return false;
 	}
 
 	/** Returns true if {@code value} is in the bounds. */
 	public boolean isInBounds(int value)
 	{
-		if (lowest!=null) {
+		if (lowest != null) {
 			if (value >= lowest) {
 				// continue
 			} else {
@@ -168,7 +167,7 @@ public class IntegerBound
 			}
 		}
 
-		if (highest!=null) {
+		if (highest != null) {
 			if (value <= highest) {
 				return true;
 			} else {
@@ -186,7 +185,8 @@ public class IntegerBound
 	{
 		int max = 0;
 
-		if (isEmpty()) return 0;
+		if (isEmpty())
+			return 0;
 
 		if (lowest != null) {
 			max = lowest;
@@ -200,26 +200,27 @@ public class IntegerBound
 	}
 
 	/** String representation */
+	@Override
 	public String toString()
 	{
 		if (hasLowerBound()) {
 			if (hasUpperBound()) {
 				if (getLowestInteger().equals(getHighestInteger())) {
-					return "="+getLowestInteger();
+					return "=" + getLowestInteger();
 				}
-				return "["+getLowestInteger()+","+getHighestInteger()+"]";
+				return "[" + getLowestInteger() + "," + getHighestInteger() + "]";
 			} else {
-				return ">="+getLowestInteger();
+				return ">=" + getLowestInteger();
 			}
 		} else {
 			if (hasUpperBound()) {
-				return "<="+getHighestInteger();
+				return "<=" + getHighestInteger();
 			} else {
 				return "";
 			}
 		}
 	}
-	
+
 	public static void main(String args[])
 	{
 		System.out.println(new IntegerBound(1, true, 3, false));

@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import prism.PrismComponent;
 import prism.PrismException;
 
@@ -49,12 +51,12 @@ public class ECComputerDefault extends ECComputer
 	private NondetModel model;
 
 	/** Computed list of MECs **/
-	private List<BitSet> mecs = new ArrayList<BitSet>();
+	private @NonNull List<@NonNull BitSet> mecs = new ArrayList<@NonNull BitSet>();
 
 	/**
 	 * Build (M)EC computer for a given model.
 	 */
-	public ECComputerDefault(PrismComponent parent, NondetModel model) throws PrismException
+	public ECComputerDefault(PrismComponent parent, NondetModel model)
 	{
 		super(parent);
 		this.model = model;
@@ -63,25 +65,25 @@ public class ECComputerDefault extends ECComputer
 	// Methods for ECComputer interface
 
 	@Override
-	public void computeMECStates() throws PrismException
+	public void computeMECStates()
 	{
 		mecs = findEndComponents(null, null);
 	}
 
 	@Override
-	public void computeMECStates(BitSet restrict) throws PrismException
+	public void computeMECStates(BitSet restrict)
 	{
 		mecs = findEndComponents(restrict, null);
 	}
 
 	@Override
-	public void computeMECStates(BitSet restrict, BitSet accept) throws PrismException
+	public void computeMECStates(BitSet restrict, BitSet accept)
 	{
 		mecs = findEndComponents(restrict, accept);
 	}
 
 	@Override
-	public List<BitSet> getMECStates()
+	public @NonNull List<@NonNull BitSet> getMECStates()
 	{
 		return mecs;
 	}
@@ -98,7 +100,7 @@ public class ECComputerDefault extends ECComputer
 	 * @param accept BitSet for the set of accepting states
 	 * @return a list of BitSets representing the MECs
 	 */
-	private List<BitSet> findEndComponents(BitSet restrict, BitSet accept) throws PrismException
+	private @NonNull List<@NonNull BitSet> findEndComponents(BitSet restrict, BitSet accept)
 	{
 		// If restrict is null, look within set of all reachable states
 		if (restrict == null) {
@@ -106,7 +108,8 @@ public class ECComputerDefault extends ECComputer
 			restrict.set(0, model.getNumStates());
 		}
 		// Initialise L with set of all states to look in (if non-empty)
-		List<BitSet> L = new ArrayList<BitSet>();
+		@NonNull
+		List<@NonNull BitSet> L = new ArrayList<@NonNull BitSet>();
 		if (restrict.isEmpty())
 			return L;
 		L.add(restrict);
@@ -116,7 +119,8 @@ public class ECComputerDefault extends ECComputer
 			changed = false;
 			BitSet E = L.remove(0);
 			SubNondetModel submodel = restrict(E);
-			List<BitSet> sccs = translateStates(submodel, computeSCCs(submodel));
+			@NonNull
+			List<@NonNull BitSet> sccs = translateStates(submodel, computeSCCs(submodel));
 			L = replaceEWithSCCs(L, E, sccs);
 			changed = canLBeChanged(L, E);
 		}
@@ -147,10 +151,11 @@ public class ECComputerDefault extends ECComputer
 		return false;
 	}
 
-	private List<BitSet> replaceEWithSCCs(List<BitSet> L, BitSet E, List<BitSet> sccs)
+	private @NonNull List<@NonNull BitSet> replaceEWithSCCs(@NonNull List<@NonNull BitSet> L, BitSet E, @NonNull List<@NonNull BitSet> sccs)
 	{
 		if (sccs.size() > 0) {
-			List<BitSet> toAdd = new ArrayList<BitSet>();
+			@NonNull
+			List<@NonNull BitSet> toAdd = new ArrayList<@NonNull BitSet>();
 			for (int i = 0; i < sccs.size(); i++) {
 				if (!L.contains(sccs.get(i))) {
 					toAdd.add(sccs.get(i));
@@ -193,16 +198,17 @@ public class ECComputerDefault extends ECComputer
 		return new SubNondetModel(model, states, actions, initialStates);
 	}
 
-	private List<BitSet> computeSCCs(NondetModel model) throws PrismException
+	private List<BitSet> computeSCCs(NondetModel model)
 	{
 		SCCComputer sccc = SCCComputer.createSCCComputer(this, model);
 		sccc.computeSCCs();
 		return sccc.getSCCs();
 	}
 
-	private List<BitSet> translateStates(SubNondetModel model, List<BitSet> sccs)
+	private @NonNull List<@NonNull BitSet> translateStates(SubNondetModel model, List<BitSet> sccs)
 	{
-		List<BitSet> r = new ArrayList<BitSet>();
+		@NonNull
+		List<@NonNull BitSet> r = new ArrayList<@NonNull BitSet>();
 		for (int i = 0; i < sccs.size(); i++) {
 			BitSet set = sccs.get(i);
 			BitSet set2 = new BitSet();

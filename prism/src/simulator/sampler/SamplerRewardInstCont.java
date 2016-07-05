@@ -55,12 +55,12 @@ public class SamplerRewardInstCont extends SamplerDouble
 	}
 
 	@Override
-	public boolean update(Path path, TransitionList transList) throws PrismLangException
+	public boolean update(Path path, TransitionList transList)
 	{
 		// If the answer is already known we should do nothing
 		if (valueKnown)
 			return true;
-		
+
 		// As soon as time bound exceeded, compute reward
 		if (path.getTotalTime() >= time) {
 			valueKnown = true;
@@ -80,10 +80,10 @@ public class SamplerRewardInstCont extends SamplerDouble
 			value = path.getCurrentStateReward(rewardStructIndex);
 		}
 		// Otherwise, don't know
-		
+
 		return valueKnown;
 	}
-	
+
 	@Override
 	public boolean needsBoundedNumSteps()
 	{

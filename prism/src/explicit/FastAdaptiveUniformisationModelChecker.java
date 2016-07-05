@@ -57,11 +57,11 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	private LabelList labelListModel;
 	// Labels from the property file
 	private LabelList labelListProp;
-	
+
 	/**
 	 * Constructor.
 	 */
-	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismException
+	public FastAdaptiveUniformisationModelChecker(PrismComponent parent, ModulesFile modulesFile, PropertiesFile propertiesFile)
 	{
 		super(parent);
 		this.modulesFile = modulesFile;

@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import parser.Values;
 import parser.ast.Expression;
@@ -138,7 +140,7 @@ public class StateModelChecker extends PrismComponent
 	/**
 	 * Create a new StateModelChecker, inherit basic state from parent (unless null).
 	 */
-	public StateModelChecker(PrismComponent parent) throws PrismException
+	public StateModelChecker(PrismComponent parent)
 	{
 		super(parent);
 
@@ -439,6 +441,9 @@ public class StateModelChecker extends PrismComponent
 	public Result check(Model model, Expression expr) throws PrismException
 	{
 
+		if (model == null) {
+			throw new NullPointerException();
+		}
 		ExpressionFilter exprFilter = null;
 		long timer = 0;
 		StateValues vals;
@@ -535,7 +540,7 @@ public class StateModelChecker extends PrismComponent
 	 * @param statesOfInterest a set of states for which results should be calculated (null = all states).
 	 *        The calculated values for states not of interest are arbitrary and should to be ignored.
 	 */
-	public StateValues checkExpression(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	public StateValues checkExpression(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res = null;
 
@@ -604,7 +609,7 @@ public class StateModelChecker extends PrismComponent
 	 * Model check a binary operator.
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionITE(Model model, ExpressionITE expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionITE(@NonNull Model model, ExpressionITE expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null, res2 = null, res3 = null;
 
@@ -633,7 +638,7 @@ public class StateModelChecker extends PrismComponent
 	 * Model check a binary operator.
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionBinaryOp(Model model, ExpressionBinaryOp expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionBinaryOp(@NonNull Model model, ExpressionBinaryOp expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null, res2 = null;
 		int op = expr.getOperator();
@@ -659,7 +664,7 @@ public class StateModelChecker extends PrismComponent
 	 * Model check a unary operator.
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionUnaryOp(Model model, ExpressionUnaryOp expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionUnaryOp(@NonNull Model model, ExpressionUnaryOp expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null;
 		int op = expr.getOperator();
@@ -681,7 +686,7 @@ public class StateModelChecker extends PrismComponent
 	 * Model check a function.
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionFunc(Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionFunc(@NonNull Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
 	{
 		switch (expr.getNameCode()) {
 		case ExpressionFunc.MIN:
@@ -701,7 +706,7 @@ public class StateModelChecker extends PrismComponent
 		}
 	}
 
-	protected StateValues checkExpressionFuncUnary(Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionFuncUnary(@NonNull Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null;
 		int op = expr.getNameCode();
@@ -723,7 +728,7 @@ public class StateModelChecker extends PrismComponent
 		return res1;
 	}
 
-	protected StateValues checkExpressionFuncBinary(Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionFuncBinary(@NonNull Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null, res2 = null;
 		int op = expr.getNameCode();
@@ -755,7 +760,7 @@ public class StateModelChecker extends PrismComponent
 		return res1;
 	}
 
-	protected StateValues checkExpressionFuncNary(Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionFuncNary(@NonNull Model model, ExpressionFunc expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res1 = null, res2 = null;
 		int i, n, op = expr.getNameCode();
@@ -890,7 +895,7 @@ public class StateModelChecker extends PrismComponent
 
 	// Check property ref
 
-	protected StateValues checkExpressionProp(Model model, ExpressionProp expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionProp(@NonNull Model model, ExpressionProp expr, BitSet statesOfInterest) throws PrismException
 	{
 		// Look up property and check recursively
 		Property prop = propertiesFile.lookUpPropertyObjectByName(expr.getName());
@@ -904,7 +909,7 @@ public class StateModelChecker extends PrismComponent
 
 	// Check filter
 
-	protected StateValues checkExpressionFilter(Model model, ExpressionFilter expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionFilter(@NonNull Model model, ExpressionFilter expr, BitSet statesOfInterest) throws PrismException
 	{
 		// Translate filter
 		Expression filter = expr.getFilter();
@@ -1206,7 +1211,7 @@ public class StateModelChecker extends PrismComponent
 	 * <br>
 	 * Returns the modified Expression.
 	 */
-	public Expression handleMaximalStateFormulas(ModelExplicit model, Expression expr) throws PrismException
+	public Expression handleMaximalStateFormulas(@NonNull ModelExplicit model, Expression expr) throws PrismException
 	{
 		Vector<BitSet> labelBS = new Vector<BitSet>();
 
@@ -1237,7 +1242,8 @@ public class StateModelChecker extends PrismComponent
 	 * are put into the list {@code propBSs}, which should be empty when this function is called.
 	 * The names of the labels (L0, L1, etc. by default) are put into {@code propNames}, which should also be empty. 
 	 */
-	public Expression checkMaximalPropositionalFormulas(Model model, Expression expr, List<String> propNames, List<BitSet> propBSs) throws PrismException
+	public Expression checkMaximalPropositionalFormulas(@NonNull Model model, Expression expr, List<String> propNames, List<BitSet> propBSs)
+			throws PrismException
 	{
 		Expression exprNew = (Expression) expr.accept(new CheckMaximalPropositionalFormulas(this, model, propNames, propBSs));
 		return exprNew;
@@ -1250,11 +1256,11 @@ public class StateModelChecker extends PrismComponent
 	class CheckMaximalPropositionalFormulas extends ASTTraverseModify
 	{
 		private StateModelChecker mc;
-		private Model model;
+		private @NonNull Model model;
 		private List<String> propNames;
 		private List<BitSet> propBSs;
 
-		public CheckMaximalPropositionalFormulas(StateModelChecker mc, Model model, List<String> propNames, List<BitSet> propBSs)
+		public CheckMaximalPropositionalFormulas(StateModelChecker mc, @NonNull Model model, List<String> propNames, List<BitSet> propBSs)
 		{
 			this.mc = mc;
 			this.model = model;
@@ -1262,56 +1268,67 @@ public class StateModelChecker extends PrismComponent
 			this.propBSs = propBSs;
 		}
 
+		@Override
 		public Object visit(ExpressionITE e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionBinaryOp e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionUnaryOp e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionFunc e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionIdent e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionLiteral e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionConstant e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionFormula e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionVar e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionLabel e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionProp e) throws PrismLangException
 		{
 			// Look up property and recurse
@@ -1323,6 +1340,7 @@ public class StateModelChecker extends PrismComponent
 			}
 		}
 
+		@Override
 		public Object visit(ExpressionFilter e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
@@ -1455,6 +1473,8 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public void exportLabels(Model model, List<String> labelNames, int exportType, PrismLog out) throws PrismException
 	{
+		if (model == null)
+			throw new NullPointerException();
 		List<BitSet> labels = new ArrayList<BitSet>();
 		for (String labelName : labelNames) {
 			StateValues sv = checkExpression(model, new ExpressionLabel(labelName), null);

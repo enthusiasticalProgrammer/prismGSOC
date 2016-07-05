@@ -36,13 +36,13 @@ public enum AcceptanceType {
 	/** Rabin acceptance */
 	RABIN("Rabin", "R"),
 	/** Streett acceptance */
- 	STREETT("Streett", "S"),
- 	/** Finite acceptance (goal states) */
- 	REACH("Finite", "F"),
- 	/** Generalized Rabin acceptance */
+	STREETT("Streett", "S"),
+	/** Finite acceptance (goal states) */
+	REACH("Finite", "F"),
+	/** Generalized Rabin acceptance */
 	GENERALIZED_RABIN("generalized-Rabin", "GR"),
 	/** Generic acceptance, i.e., a boolean formula over Inf and Fin as in HOA format */
- 	GENERIC("generic", "");   // abbreviation for generic is empty, results in DA
+	GENERIC("generic", ""); // abbreviation for generic is empty, results in DA
 
 	/** The long form name */
 	private final String typeName;
@@ -81,7 +81,7 @@ public enum AcceptanceType {
 	 */
 	public static boolean contains(AcceptanceType[] types, AcceptanceType type)
 	{
-		for (AcceptanceType t: types) {
+		for (AcceptanceType t : types) {
 			if (t.equals(type))
 				return true;
 		}

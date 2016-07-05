@@ -28,25 +28,26 @@ package settings;
 
 public class DoubleRangeConstraint implements SettingConstraint
 {
-    private double lower, upper;
-    private boolean inclusiveLower, inclusiveUpper;
-    
-    /** Creates a new instance of DoubleRangeConstraint */
-    public DoubleRangeConstraint(String parseThis)
-    {
-    }
-    
-    public DoubleRangeConstraint(double lower, double upper, boolean inclusiveLower, boolean inclusiveUpper)
-    {
-        this.lower = lower;
-        this.upper = upper;
-        this.inclusiveLower = inclusiveLower;
-        this.inclusiveUpper = inclusiveUpper;
-    }
-    
-    public void checkValue(Object value) throws SettingException
-    {
-        
-    }
-    
+	private double lower, upper;
+	private boolean inclusiveLower, inclusiveUpper;
+
+	/** Creates a new instance of DoubleRangeConstraint */
+	public DoubleRangeConstraint(String parseThis)
+	{
+	}
+
+	public DoubleRangeConstraint(double lower, double upper, boolean inclusiveLower, boolean inclusiveUpper)
+	{
+		this.lower = lower;
+		this.upper = upper;
+		this.inclusiveLower = inclusiveLower;
+		this.inclusiveUpper = inclusiveUpper;
+	}
+
+	@Override
+	public void checkValue(Object value)
+	{
+
+	}
+
 }

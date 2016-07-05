@@ -72,7 +72,7 @@ public class Transition
 			addEdge(new Edge(e));
 		}
 	}
-	
+
 	public void addGuardConstraint(Constraint c)
 	{
 		guard.add(c);
@@ -91,7 +91,7 @@ public class Transition
 		e.setParent(this);
 		edges.add(e);
 	}
-	
+
 	public void setParent(PTA parent)
 	{
 		this.parent = parent;
@@ -137,13 +137,13 @@ public class Transition
 		double prob = 0.0;
 		double err = 1e-10;
 		for (Edge e : edges) {
-			e.check();
 			prob += e.getProbability();
 		}
-		if (prob < 1.0-err || prob > 1.0+err)
-			throw new PrismException("Non-1 probability ("+prob+") for PTA transition \""+this+"\"");
+		if (prob < 1.0 - err || prob > 1.0 + err)
+			throw new PrismException("Non-1 probability (" + prob + ") for PTA transition \"" + this + "\"");
 	}
 
+	@Override
 	public String toString()
 	{
 		boolean first;
@@ -164,7 +164,7 @@ public class Transition
 		return s;
 	}
 
-	public void writeToDesFile(Writer out) throws PrismException, IOException
+	public void writeToDesFile(Writer out) throws IOException
 	{
 		out.write("\t[\n");
 		for (Edge e : edges) {

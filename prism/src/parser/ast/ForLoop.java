@@ -29,6 +29,7 @@ package parser.ast;
 import parser.visitor.*;
 import prism.PrismLangException;
 import parser.type.*;
+
 public class ForLoop extends ASTElement
 {
 	// For loop info
@@ -39,9 +40,9 @@ public class ForLoop extends ASTElement
 	// Optional storage...
 	private int pc;
 	private String between;
-	
+
 	// Constructor
-	
+
 	public ForLoop()
 	{
 		// for loop info
@@ -55,93 +56,97 @@ public class ForLoop extends ASTElement
 	}
 
 	// Set methods
-	
+
 	public void setLHS(String s)
 	{
 		lhs = s;
 	}
-	
+
 	public void setFrom(Expression e)
 	{
 		from = e;
 	}
-	
+
 	public void setTo(Expression e)
 	{
 		to = e;
 	}
-	
+
 	public void setStep(Expression e)
 	{
 		step = e;
 	}
-	
+
 	public void setPC(int i)
 	{
 		pc = i;
 	}
-	
+
 	public void setBetween(String s)
 	{
 		between = s;
 	}
 
 	// Get methods
-	
+
 	public String getLHS()
 	{
 		return lhs;
 	}
-	
+
 	public Expression getFrom()
 	{
 		return from;
 	}
-	
+
 	public Expression getTo()
 	{
 		return to;
 	}
-	
+
 	public Expression getStep()
 	{
 		return (step != null) ? step : new ExpressionLiteral(TypeInt.getInstance(), 1);
 	}
-	
+
 	public int getPC()
 	{
 		return pc;
 	}
-	
+
 	public String getBetween()
 	{
 		return between;
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = lhs + "=" + from;
-		if (step != null) s += ":" + step;
+		if (step != null)
+			s += ":" + step;
 		s += ":" + to;
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		ForLoop ret = new ForLoop();

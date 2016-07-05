@@ -57,7 +57,7 @@ public class SamplerNext extends SamplerBoolean
 		// If the answer is already known we should do nothing
 		if (valueKnown)
 			return true;
-		
+
 		// X "target" is true iff state 1 satisfies "target"
 		if (path.size() == 1) {
 			valueKnown = true;
@@ -65,10 +65,10 @@ public class SamplerNext extends SamplerBoolean
 		}
 		// Nothing else to do: if path size is 0, can't decide;
 		// if path size > 1 (should never happen), nothing changes
-		
+
 		return valueKnown;
 	}
-	
+
 	@Override
 	public boolean needsBoundedNumSteps()
 	{

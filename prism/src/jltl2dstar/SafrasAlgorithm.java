@@ -34,7 +34,8 @@ import prism.PrismException;
  * You have to provide at least the final states of the NBA, the other
  * values have to be set, if the corresponding option is set.
  */
-public class SafrasAlgorithm {
+public class SafrasAlgorithm
+{
 
 	private Options_Safra _options;
 	private NBAAnalysis _nba_analysis;
@@ -51,33 +52,34 @@ public class SafrasAlgorithm {
 	 * @param nba The NBA
 	 * @param options The options for Safra's algorithm
 	 */
-	public SafrasAlgorithm(NBA nba, Options_Safra options) throws PrismException {
-		_options = options; 
+	public SafrasAlgorithm(NBA nba, Options_Safra options) throws PrismException
+	{
+		_options = options;
 		_nba_analysis = new NBAAnalysis(nba);
 		_nba = nba;
-		
+
 		if (_nba.getFailIfDisjoint() && _nba_analysis.isNBADisjoint()) {
 			throw new PrismException("The NBA generated for the LTL formula was discovered to be disjoint,\n"
-			                       + "i.e., some states were not reachable from the initial state. This likely\n"
-			                       + "indicates a problem in the translation. Please report the formula to the\n"
-			                       + "PRISM developers");
+					+ "i.e., some states were not reachable from the initial state. This likely\n"
+					+ "indicates a problem in the translation. Please report the formula to the\n" + "PRISM developers");
 		}
-		
+
 		_NODES = 2 * nba.getStateCount();
-		stv_reorder = null; 
+		stv_reorder = null;
 		_next = new Vector<MyBitSet>();
 		_next.setSize(nba.getStateCount());
 	}
 
-	
 	// typedef SafraTreeTemplate_ptr result_t;
 	// typedef SafraTree_ptr state_t;
 
-	public SafraTreeTemplate delta(SafraTree tree, APElement elem) throws PrismException {
+	public SafraTreeTemplate delta(SafraTree tree, APElement elem)
+	{
 		return process(tree, elem);
 	}
 
-	public SafraTree getStartState() {
+	public SafraTree getStartState()
+	{
 		SafraTree start = new SafraTree(_NODES);
 		if (_nba.getStartState() != null) {
 			start.getRootNode().getLabeling().set(_nba.getStartState().getName());
@@ -86,11 +88,13 @@ public class SafrasAlgorithm {
 		return start;
 	}
 
-	public void prepareAcceptance(RabinAcceptance acceptance) {
+	public void prepareAcceptance(RabinAcceptance acceptance)
+	{
 		acceptance.newAcceptancePairs(_NODES);
 	}
 
-	public boolean checkEmpty() {
+	public boolean checkEmpty()
+	{
 		if (_nba.size() == 0 || _nba.getStartState() == null) {
 			return true;
 		}
@@ -105,7 +109,8 @@ public class SafrasAlgorithm {
 	 * @return a SafraTreeTemplate containing the new tree and 
 	 *         bookkeeping which states were created/deleted.
 	 */
-	public SafraTreeTemplate process(SafraTree tree, APElement elem) {
+	public SafraTreeTemplate process(SafraTree tree, APElement elem)
+	{
 		// Make copy of original tree
 		SafraTree cur = new SafraTree(tree);
 		SafraTreeTemplate tree_template = new SafraTreeTemplate(cur);
@@ -114,7 +119,7 @@ public class SafrasAlgorithm {
 		STVResetFinalFlag stv_reset_flag = new STVResetFinalFlag();
 		cur.walkTreePostOrder(stv_reset_flag);
 		// System.out.print("Reset: "); tree_template.getState().print(System.out); System.out.println();
-		
+
 		STVCheckFinalSet stv_final = new STVCheckFinalSet(_nba_analysis.getFinalStates(), tree_template);
 		cur.walkTreePostOrder(stv_final);
 		// System.out.print("Final: "); tree_template.getState().print(System.out); System.out.println();
@@ -122,7 +127,6 @@ public class SafrasAlgorithm {
 		STVPowerset stv_powerset = new STVPowerset(_nba, elem);
 		cur.walkTreePostOrder(stv_powerset);
 		// System.out.print("Powerset: "); tree_template.getState().print(System.out); System.out.println();
-
 
 		/*
 		 * Optimization: ACCEPTING_TRUE_LOOPS
@@ -151,7 +155,7 @@ public class SafrasAlgorithm {
 		STVCheckChildrenHorizontal stv_horizontal = new STVCheckChildrenHorizontal();
 		cur.walkTreePostOrder(stv_horizontal);
 		// System.out.print("Horizontal: "); tree_template.getState().print(System.out); System.out.println();
-		
+
 		STVRemoveEmpty stv_empty = new STVRemoveEmpty(tree_template);
 		cur.walkTreePostOrder(stv_empty);
 		// System.out.print("Empty: "); tree_template.getState().print(System.out); System.out.println();
@@ -185,24 +189,28 @@ public class SafrasAlgorithm {
 	}
 
 	/** Visitors */
-	public interface SafraTreeVisitor {
+	public interface SafraTreeVisitor
+	{
 		public void visit(SafraTree tree, SafraTreeNode node);
 	}
-	
+
 	/**
 	 * A Safra tree visitor that modifies the
 	 * children so that all children have
 	 * disjoint labels
 	 */
-	public class STVCheckChildrenHorizontal implements SafraTreeVisitor {
+	public class STVCheckChildrenHorizontal implements SafraTreeVisitor
+	{
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			if (node.getChildCount() <= 1) {
 				return;
 			}
 
-			MyBitSet already_seen = new MyBitSet();	// FIXME: although it's not used, hmph warnings
+			MyBitSet already_seen = new MyBitSet(); // FIXME: although it's not used, hmph warnings
 			boolean first = true;
 			for (SafraTreeNode cur_child : node) {
 				if (first) {
@@ -232,17 +240,23 @@ public class SafrasAlgorithm {
 	 * removed and the final flag is set on
 	 * the tree node.
 	 */
-	public class STVCheckChildrenVertical implements SafraTreeVisitor {
+	public class STVCheckChildrenVertical implements SafraTreeVisitor
+	{
 
 		private SafraTreeTemplate _tree_template;
 
-		public STVCheckChildrenVertical(SafraTreeTemplate tree_template) { 
+		public STVCheckChildrenVertical(SafraTreeTemplate tree_template)
+		{
 			_tree_template = tree_template;
 		}
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
-			if (node.getChildCount() == 0) {return;}
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
+			if (node.getChildCount() == 0) {
+				return;
+			}
 
 			MyBitSet labeling_union = new MyBitSet();
 			for (SafraTreeNode child : node) {
@@ -266,24 +280,27 @@ public class SafrasAlgorithm {
 	 * the label of the node and the set of final states in the
 	 * NBA intersect.
 	 */
-	public class STVCheckFinalSet implements SafraTreeVisitor {
+	public class STVCheckFinalSet implements SafraTreeVisitor
+	{
 
 		private MyBitSet _final_states;
 		private SafraTreeTemplate _tree_template;
-
 
 		/**
 		 * Constructor.
 		 * @param final_states the states that are accepting (final) in the NBA
 		 * @param tree_template the tree template to keep track of new nodes
 		 */
-		public STVCheckFinalSet(MyBitSet final_states, SafraTreeTemplate tree_template) {
+		public STVCheckFinalSet(MyBitSet final_states, SafraTreeTemplate tree_template)
+		{
 
 			_final_states = final_states;
 			_tree_template = tree_template;
 		}
 
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			if (_final_states.intersects(node.getLabeling())) {
 				MyBitSet q_and_f = (MyBitSet) _final_states.clone();
 				q_and_f.and(node.getLabeling());
@@ -304,11 +321,11 @@ public class SafrasAlgorithm {
 	 * are accepting. If this is the case, all
 	 * children are removed, and the final flag is set.
 	 */
-	public class STVCheckForFinalSucc implements SafraTreeVisitor {
+	public class STVCheckForFinalSucc implements SafraTreeVisitor
+	{
 		private boolean _success;
 		private MyBitSet _nba_states_with_all_succ_final;
 		private SafraTreeTemplate _tree_template;
-
 
 		/** 
 		 * Constructor 
@@ -317,21 +334,27 @@ public class SafrasAlgorithm {
 		 *                                       successors.
 		 * @param tree_template                  SafraTreeTemplate to keep track of removed nodes
 		 */
-		public STVCheckForFinalSucc(MyBitSet nba_states_with_all_succ_final, SafraTreeTemplate tree_template) {
-			_success = false; 
+		public STVCheckForFinalSucc(MyBitSet nba_states_with_all_succ_final, SafraTreeTemplate tree_template)
+		{
+			_success = false;
 			_nba_states_with_all_succ_final = nba_states_with_all_succ_final;
 			_tree_template = tree_template;
 		}
 
 		/** Returns true if the condition was triggered. */
-		public boolean wasSuccessful() {return _success;}
+		public boolean wasSuccessful()
+		{
+			return _success;
+		}
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 
 			boolean all_final = true;
-			for (int i = node.getLabeling().nextSetBit(0); i >= 0; i = node.getLabeling().nextSetBit(i+1)) {
-				if (! _nba_states_with_all_succ_final.get(i)) {
+			for (int i = node.getLabeling().nextSetBit(0); i >= 0; i = node.getLabeling().nextSetBit(i + 1)) {
+				if (!_nba_states_with_all_succ_final.get(i)) {
 					all_final = false;
 					break;
 				}
@@ -341,7 +364,7 @@ public class SafrasAlgorithm {
 				STVRemoveSubtree stv_remove = new STVRemoveSubtree(_tree_template);
 				tree.walkChildrenPostOrder(stv_remove, node);
 				node.setFinalFlag(true);
-				_success=true;
+				_success = true;
 			}
 		}
 	}
@@ -350,7 +373,8 @@ public class SafrasAlgorithm {
 	 * Safra tree visitor that performs the powerset construction
 	 * on the label of the Safra tree node.
 	 */
-	public class STVPowerset implements SafraTreeVisitor {
+	public class STVPowerset implements SafraTreeVisitor
+	{
 
 		private NBA _nba;
 		private APElement _elem;
@@ -358,16 +382,19 @@ public class SafrasAlgorithm {
 		/**
 		 * Constructor.
 		 */
-		public STVPowerset(NBA nba, APElement elem) {
+		public STVPowerset(NBA nba, APElement elem)
+		{
 			_nba = nba;
 			_elem = elem;
 		}
 
-		/** Node visitor */  
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		/** Node visitor */
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			MyBitSet old_labeling = node.getLabeling();
 			MyBitSet new_labeling = new MyBitSet(old_labeling.size());
-			for (int i = old_labeling.nextSetBit(0); i >= 0; i = old_labeling.nextSetBit(i+1)) {
+			for (int i = old_labeling.nextSetBit(0); i >= 0; i = old_labeling.nextSetBit(i + 1)) {
 				new_labeling.or(_nba.get(i).getEdge(_elem));
 			}
 			node.setLabeling(new_labeling);
@@ -378,16 +405,20 @@ public class SafrasAlgorithm {
 	 * A Safra tree visitor that removes tree nodes
 	 * with empty labels.
 	 */
-	public class STVRemoveEmpty implements SafraTreeVisitor {
+	public class STVRemoveEmpty implements SafraTreeVisitor
+	{
 
-		private	SafraTreeTemplate _tree_template;
+		private SafraTreeTemplate _tree_template;
 
-		public STVRemoveEmpty(SafraTreeTemplate tree_template) {
+		public STVRemoveEmpty(SafraTreeTemplate tree_template)
+		{
 			_tree_template = tree_template;
 		}
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			if (node.getLabeling().isEmpty()) {
 				int id = node.getID();
 				if (_tree_template.isRenameable(id)) {
@@ -407,16 +438,20 @@ public class SafrasAlgorithm {
 	 * A Safra tree visitor that removes all 
 	 * children of the node.
 	 */
-	public class STVRemoveSubtree implements SafraTreeVisitor {
+	public class STVRemoveSubtree implements SafraTreeVisitor
+	{
 
 		private SafraTreeTemplate _tree_template;
 
-		public STVRemoveSubtree(SafraTreeTemplate tree_template) {
-			_tree_template = tree_template;	
+		public STVRemoveSubtree(SafraTreeTemplate tree_template)
+		{
+			_tree_template = tree_template;
 		}
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			int id = node.getID();
 			if (_tree_template.isRenameable(id)) {
 				// this node was created recently, so we only delete it from
@@ -438,7 +473,8 @@ public class SafrasAlgorithm {
 	 * their is no state that is reachable by 
 	 * states in both labels.
 	 */
-	public class STVReorderChildren implements SafraTreeVisitor {
+	public class STVReorderChildren implements SafraTreeVisitor
+	{
 
 		private Vector<MyBitSet> _nba_reachability;
 		private MyBitSet[] _node_reachability;
@@ -450,7 +486,8 @@ public class SafrasAlgorithm {
 		 *                  in the NBA that are reachable from a state.
 		 * N                the maximum number of nodes in the Safra tree
 		 */
-		public STVReorderChildren(Vector<MyBitSet> nba_reachability, int N) {
+		public STVReorderChildren(Vector<MyBitSet> nba_reachability, int N)
+		{
 			_nba_reachability = nba_reachability;
 			_node_order = new int[N];
 			_node_reachability = new MyBitSet[N];
@@ -460,8 +497,12 @@ public class SafrasAlgorithm {
 		}
 
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
-			if (node.getChildCount() <= 1) {return;}
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
+			if (node.getChildCount() <= 1) {
+				return;
+			}
 
 			int i = 0;
 			for (SafraTreeNode child : node) {
@@ -470,7 +511,7 @@ public class SafrasAlgorithm {
 				_node_order[child.getID()] = i++;
 
 				MyBitSet label_this = child.getLabeling();
-				for (int setbit = label_this.nextSetBit(0); setbit >= 0; setbit = label_this.nextSetBit(setbit+1)) {
+				for (int setbit = label_this.nextSetBit(0); setbit >= 0; setbit = label_this.nextSetBit(setbit + 1)) {
 					reachable_this.or(_nba_reachability.get(setbit));
 				}
 				//      std::cerr << "reachability_this: "<<reachable_this << std::endl; 
@@ -482,11 +523,9 @@ public class SafrasAlgorithm {
 			// Bubble sort, ough!
 			boolean finished = false;
 			while (!finished) {
-				finished=true;
+				finished = true;
 
-				for (SafraTreeNode a = node.getOldestChild();
-				a != null && a.getYoungerBrother() != null;
-				a = a.getYoungerBrother()) {
+				for (SafraTreeNode a = node.getOldestChild(); a != null && a.getYoungerBrother() != null; a = a.getYoungerBrother()) {
 
 					SafraTreeNode b = a.getYoungerBrother();
 
@@ -496,14 +535,14 @@ public class SafrasAlgorithm {
 					if (reach_a.intersects(reach_b)) {
 						// a and b are not independant...
 						// --> keep relative order...
-						assert(_node_order[a.getID()] < _node_order[b.getID()]);
+						assert (_node_order[a.getID()] < _node_order[b.getID()]);
 					} else {
 						// a and b are independant...
 						if (a.getLabeling().compareTo(b.getLabeling()) >= 0) {
 							// swap
-							node.swapChildren(a,b);
-							a=b;
-							finished=false;	    
+							node.swapChildren(a, b);
+							a = b;
+							finished = false;
 						}
 					}
 				}
@@ -514,28 +553,35 @@ public class SafrasAlgorithm {
 	/**
 	 * Safra tree visitor that resets the final flag on the Safra tree node.
 	 */
-	public class STVResetFinalFlag implements SafraTreeVisitor {
-		
+	public class STVResetFinalFlag implements SafraTreeVisitor
+	{
+
 		/** Node visitor */
-		public void visit(SafraTree tree, SafraTreeNode node) {
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			node.setFinalFlag(false);
 		}
 	}
-	
+
 	/**
 	 * A Safra tree visitor that subtracts (minus operator) a BitSet from
 	 * the label of the tree node.
 	 */
-	public class STVSubstractLabeling implements SafraTreeVisitor {
+	public class STVSubstractLabeling implements SafraTreeVisitor
+	{
 
 		private MyBitSet _bitset;
 
-		public STVSubstractLabeling(MyBitSet bitset) {
+		public STVSubstractLabeling(MyBitSet bitset)
+		{
 			_bitset = bitset;
 		}
-		
-		public void visit(SafraTree tree, SafraTreeNode node) {
+
+		@Override
+		public void visit(SafraTree tree, SafraTreeNode node)
+		{
 			node.getLabeling().andNot(_bitset);
-		}  
+		}
 	}
 }

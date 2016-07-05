@@ -34,7 +34,7 @@ public class Interval
 	// Lower/upper value
 	public Object lower;
 	public Object upper;
-	
+
 	/**
 	 * Construct an Interval.
 	 * (lower and upper should be of the same type: Integer or Double)
@@ -44,7 +44,7 @@ public class Interval
 		this.lower = lower;
 		this.upper = upper;
 	}
-	
+
 	/**
 	 * Construct an integer Interval.
 	 */
@@ -53,7 +53,7 @@ public class Interval
 		this.lower = lower;
 		this.upper = upper;
 	}
-	
+
 	/**
 	 * Construct a double Interval.
 	 */
@@ -62,7 +62,7 @@ public class Interval
 		this.lower = lower;
 		this.upper = upper;
 	}
-	
+
 	@Override
 	public String toString()
 	{

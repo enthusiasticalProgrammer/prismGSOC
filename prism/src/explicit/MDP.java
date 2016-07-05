@@ -42,6 +42,7 @@ public interface MDP extends NondetModel
 	/**
 	 * Get the number of transitions from choice {@code i} of state {@code s}.
 	 */
+	@Override
 	public int getNumTransitions(int s, int i);
 
 	/**
@@ -107,7 +108,7 @@ public interface MDP extends NondetModel
 	 * @param v Set of states {@code v}
 	 */
 	public boolean prob1stepSingle(int s, int i, BitSet u, BitSet v);
-	
+
 	/**
 	 * Do a matrix-vector multiplication followed by min/max, i.e. one step of value iteration,
 	 * i.e. for all s: result[s] = min/max_k { sum_j P_k(s,j)*vect[j] }
@@ -276,5 +277,4 @@ public interface MDP extends NondetModel
 	 * @param dest Vector to write result to.
 	 */
 	public void mvMultRight(int[] states, int[] strat, double[] source, double[] dest);
-
 }

@@ -115,18 +115,17 @@ public class PredecessorRelation
 	public static PredecessorRelation forModel(PrismComponent parent, Model model)
 	{
 		long timer = System.currentTimeMillis();
-		
-		parent.getLog().print("Calculating predecessor relation for "+model.getModelType().fullName()+"...  ");
+
+		parent.getLog().print("Calculating predecessor relation for " + model.getModelType().fullName() + "...  ");
 		parent.getLog().flush();
 
 		PredecessorRelation pre = new PredecessorRelation(model);
-		
+
 		timer = System.currentTimeMillis() - timer;
 		parent.getLog().println("done (" + timer / 1000.0 + " seconds)");
 
 		return pre;
 	}
-
 
 	/**
 	 * Computes the set Pre*(target) via a DFS, i.e., all states that
@@ -139,7 +138,7 @@ public class PredecessorRelation
 	 * If the parameter {@code absorbing} is not {@code null},
 	 * then the states in {@code absorbing} are considered to be absorbing,
 	 * i.e., to have a single self-loop, disregarding other outgoing edges.
-
+	
 	 * @param remain restriction on the states that may occur
 	 *               on the path to target, {@code null} = all states
 	 * @param target The set of target states
@@ -152,7 +151,7 @@ public class PredecessorRelation
 		BitSet result;
 
 		// all target states are in Pre*
-		result = (BitSet)target.clone();
+		result = (BitSet) target.clone();
 
 		// the stack of states whose predecessors have to be considered
 		Stack<Integer> todo = new Stack<Integer>();
@@ -160,7 +159,7 @@ public class PredecessorRelation
 		// initial todo: all the target states
 		for (Integer s : IterableBitSet.getSetBits(target)) {
 			todo.add(s);
-		};
+		}
 
 		// the set of states that are finished
 		BitSet done = new BitSet();
@@ -168,7 +167,8 @@ public class PredecessorRelation
 		while (!todo.isEmpty()) {
 			int s = todo.pop();
 			// already considered?
-			if (done.get(s)) continue;
+			if (done.get(s))
+				continue;
 
 			done.set(s);
 

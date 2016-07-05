@@ -24,7 +24,6 @@
 //	
 //==============================================================================
 
-
 package explicit;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import strat.MDStrategy;
 
@@ -162,7 +160,8 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
 		for (int t : successors.get(s)) {
-			if (!set.get(t)) return false;
+			if (!set.get(t))
+				return false;
 		}
 		return true;
 	}
@@ -171,19 +170,20 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
 		for (int t : successors.get(s)) {
-			if (set.get(t)) return true;
+			if (set.get(t))
+				return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void buildFromPrismExplicit(String filename) throws PrismException
+	public void buildFromPrismExplicit(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -203,14 +203,15 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
-		for (Iterator<Integer> it = getSuccessorsIterator(s1); it.hasNext(); ) {
-			if (it.next() == s2) return true;
+		for (Iterator<Integer> it = getSuccessorsIterator(s1); it.hasNext();) {
+			if (it.next() == s2)
+				return true;
 		}
 		return false;
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -224,14 +225,14 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	@Override
 	protected void exportTransitionsToDotFile(int s, PrismLog out)
 	{
-		for (Iterator<Integer> it = getSuccessorsIterator(s); it.hasNext(); ) {
+		for (Iterator<Integer> it = getSuccessorsIterator(s); it.hasNext();) {
 			Integer successor = it.next();
 			out.println(s + " -> " + successor + ";");
 		}
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}

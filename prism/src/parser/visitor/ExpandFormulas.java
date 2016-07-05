@@ -37,23 +37,24 @@ public class ExpandFormulas extends ASTTraverseModify
 {
 	// The FormulaList for formula definitions
 	private FormulaList formulaList;
-	 // Whether to replace formulas outright with their definition
-	 // (true for use in models since they may be subjected to renaming afterwards;
-	 // false for properties since it is cleaner just to have the name there when displayed)
+	// Whether to replace formulas outright with their definition
+	// (true for use in models since they may be subjected to renaming afterwards;
+	// false for properties since it is cleaner just to have the name there when displayed)
 	private boolean replace;
-	
+
 	public ExpandFormulas(FormulaList formulaList, boolean replace)
 	{
 		this.formulaList = formulaList;
 		this.replace = replace;
 	}
-	
+
+	@Override
 	public Object visit(ExpressionFormula e) throws PrismLangException
 	{
 		int i;
 		Type t;
 		Expression expr;
-		
+
 		// See if identifier corresponds to a formula
 		i = formulaList.getFormulaIndex(e.getName());
 		if (i != -1) {
@@ -61,7 +62,7 @@ public class ExpandFormulas extends ASTTraverseModify
 			expr = formulaList.getFormula(i);
 			// But also recursively expand that
 			// (don't clone it to avoid duplication of work)
-			expr = (Expression)expr.expandFormulas(formulaList, replace);
+			expr = (Expression) expr.expandFormulas(formulaList, replace);
 			// Put in brackets so precedence is preserved
 			// (for display purposes only; in case of re-parse)
 			expr = Expression.Parenth(expr);
@@ -79,9 +80,8 @@ public class ExpandFormulas extends ASTTraverseModify
 				return e;
 			}
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
 }
-

@@ -215,7 +215,6 @@ public class Utils
 		for (i = 0; i < n; i++) {
 			if (array1[i] != array2[i])
 				return false;
-			;
 		}
 		return true;
 	}

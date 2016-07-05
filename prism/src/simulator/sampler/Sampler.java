@@ -117,7 +117,7 @@ public abstract class Sampler
 	{
 		this.simulationMethod = simulationMethod;
 	}
-	
+
 	/**
 	 * Get the attached SimulationMethod object.
 	 */
@@ -125,7 +125,7 @@ public abstract class Sampler
 	{
 		return simulationMethod;
 	}
-	
+
 	/**
 	 * Get an explanation of the result for the attached SimulationMethod object.
 	 * @throws PrismException if we can't get a result for some reason.
@@ -134,7 +134,7 @@ public abstract class Sampler
 	{
 		return simulationMethod.getResultExplanation(this);
 	}
-	
+
 	// Static methods for sampler creation
 
 	/**
@@ -254,7 +254,6 @@ public abstract class Sampler
 				return new SamplerRewardInstDisc(exprTemp, rsi);
 			}
 		case ExpressionTemporal.P_F:
-		case ExpressionTemporal.R_F:
 			// reachability reward
 			return new SamplerRewardReach(exprTemp, rsi);
 		}

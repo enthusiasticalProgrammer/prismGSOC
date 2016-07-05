@@ -92,68 +92,81 @@ public class ProbModel implements Model
 	// model info
 
 	// type
+	@Override
 	public ModelType getModelType()
 	{
 		return ModelType.DTMC;
 	}
 
 	// modules
+	@Override
 	public int getNumModules()
 	{
 		return numModules;
 	}
 
+	@Override
 	public String[] getModuleNames()
 	{
 		return moduleNames;
 	}
 
+	@Override
 	public String getModuleName(int i)
 	{
 		return moduleNames[i];
 	}
 
 	// vars
+	@Override
 	public int getNumVars()
 	{
 		return numVars;
 	}
 
+	@Override
 	public VarList getVarList()
 	{
 		return varList;
 	}
 
+	@Override
 	public String getVarName(int i)
 	{
 		return varList.getName(i);
 	}
 
+	@Override
 	public int getVarIndex(String n)
 	{
 		return varList.getIndex(n);
 	}
 
+	@Override
 	public int getVarModule(int i)
 	{
 		return varList.getModule(i);
 	}
 
+	@Override
 	public int getVarLow(int i)
 	{
 		return varList.getLow(i);
 	}
 
+	@Override
 	public int getVarHigh(int i)
 	{
 		return varList.getHigh(i);
 	}
 
+	@Override
 	public int getVarRange(int i)
 	{
 		return varList.getRange(i);
 	}
 
+	@Override
 	public Values getConstantValues()
 	{
 		return constantValues;
@@ -162,50 +175,59 @@ public class ProbModel implements Model
 	/**
 	 * Get list of action label names. 
 	 */
+	@Override
 	public List<String> getSynchs()
 	{
 		return synchs;
 	}
 
 	// rewards
+	@Override
 	public int getNumRewardStructs()
 	{
 		return numRewardStructs;
 	}
 
 	// stats
+	@Override
 	public long getNumStates()
 	{
 		return (numStates > Long.MAX_VALUE) ? -1 : Math.round(numStates);
 	}
 
+	@Override
 	public long getNumTransitions()
 	{
 		return (numTransitions > Long.MAX_VALUE) ? -1 : Math.round(numTransitions);
 	}
 
+	@Override
 	public long getNumStartStates()
 	{
 		return (numStartStates > Long.MAX_VALUE) ? -1 : Math.round(numStartStates);
 	}
 
 	// additional methods to get stats as strings
+	@Override
 	public String getNumStatesString()
 	{
 		return PrismUtils.bigIntToString(numStates);
 	}
 
+	@Override
 	public String getNumTransitionsString()
 	{
 		return PrismUtils.bigIntToString(numTransitions);
 	}
 
+	@Override
 	public String getNumStartStatesString()
 	{
 		return PrismUtils.bigIntToString(numStartStates);
 	}
 
 	// lists of states
+	@Override
 	public StateList getReachableStates()
 	{
 		return new StateListMTBDD(reach, this);
@@ -217,6 +239,7 @@ public class ProbModel implements Model
 		return new StateListMTBDD(deadlocks, this);
 	}
 
+	@Override
 	public StateList getStartStates()
 	{
 		return new StateListMTBDD(start, this);
@@ -224,21 +247,25 @@ public class ProbModel implements Model
 
 	// mtbdd stuff
 
+	@Override
 	public JDDNode getTrans()
 	{
 		return trans;
 	}
 
+	@Override
 	public JDDNode getTrans01()
 	{
 		return trans01;
 	}
 
+	@Override
 	public JDDNode getStart()
 	{
 		return start;
 	}
 
+	@Override
 	public JDDNode getReach()
 	{
 		return reach;
@@ -256,16 +283,19 @@ public class ProbModel implements Model
 		return deadlocks;
 	}
 
+	@Override
 	public JDDNode getStateRewards()
 	{
 		return getStateRewards(0);
 	}
 
+	@Override
 	public JDDNode getStateRewards(int i)
 	{
 		return (i >= 0 && i < numRewardStructs) ? stateRewards[i] : null;
 	}
 
+	@Override
 	public JDDNode getStateRewards(String s)
 	{
 		for (int i = 0; i < numRewardStructs; i++)
@@ -274,16 +304,19 @@ public class ProbModel implements Model
 		return null;
 	}
 
+	@Override
 	public JDDNode getTransRewards()
 	{
 		return getTransRewards(0);
 	}
 
+	@Override
 	public JDDNode getTransRewards(int i)
 	{
 		return (i >= 0 && i < numRewardStructs) ? transRewards[i] : null;
 	}
 
+	@Override
 	public JDDNode getTransRewards(String s)
 	{
 		for (int i = 0; i < numRewardStructs; i++)
@@ -292,88 +325,105 @@ public class ProbModel implements Model
 		return null;
 	}
 
+	@Override
 	public JDDNode getTransActions()
 	{
 		return transActions;
 	}
 
+	@Override
 	public JDDNode[] getTransPerAction()
 	{
 		return transPerAction;
 	}
 
 	// dd vars
+	@Override
 	public JDDVars[] getVarDDRowVars()
 	{
 		return varDDRowVars;
 	}
 
+	@Override
 	public JDDVars[] getVarDDColVars()
 	{
 		return varDDColVars;
 	}
 
+	@Override
 	public JDDVars getVarDDRowVars(int i)
 	{
 		return varDDRowVars[i];
 	}
 
+	@Override
 	public JDDVars getVarDDColVars(int i)
 	{
 		return varDDColVars[i];
 	}
 
+	@Override
 	public JDDVars[] getModuleDDRowVars()
 	{
 		return moduleDDRowVars;
 	}
 
+	@Override
 	public JDDVars[] getModuleDDColVars()
 	{
 		return moduleDDColVars;
 	}
 
+	@Override
 	public JDDVars getModuleDDRowVars(int i)
 	{
 		return moduleDDRowVars[i];
 	}
 
+	@Override
 	public JDDVars getModuleDDColVars(int i)
 	{
 		return moduleDDColVars[i];
 	}
 
+	@Override
 	public JDDVars getAllDDRowVars()
 	{
 		return allDDRowVars;
 	}
 
+	@Override
 	public JDDVars getAllDDColVars()
 	{
 		return allDDColVars;
 	}
 
 	// additional useful methods to do with dd vars
+	@Override
 	public int getNumDDRowVars()
 	{
 		return allDDRowVars.n();
 	}
 
+	@Override
 	public int getNumDDColVars()
 	{
 		return allDDColVars.n();
 	}
 
+	@Override
 	public int getNumDDVarsInTrans()
 	{
 		return allDDRowVars.n() * 2;
 	}
 
+	@Override
 	public Vector<String> getDDVarNames()
 	{
 		return ddVarNames;
 	}
 
+	@Override
 	public ODDNode getODD()
 	{
 		return odd;
@@ -440,6 +490,7 @@ public class ProbModel implements Model
 	/**
 	 * Set vector of action label names. 
 	 */
+	@Override
 	public void setSynchs(List<String> synchs)
 	{
 		this.synchs = synchs;
@@ -450,6 +501,7 @@ public class ProbModel implements Model
 	 * Reset transition matrix DD
 	 */
 
+	@Override
 	public void resetTrans(JDDNode trans)
 	{
 		if (this.trans != null)
@@ -461,6 +513,7 @@ public class ProbModel implements Model
 	 * Reset transition rewards DDs
 	 */
 
+	@Override
 	public void resetTransRewards(int i, JDDNode transRewards)
 	{
 		if (this.transRewards[i] != null) {
@@ -471,6 +524,7 @@ public class ProbModel implements Model
 
 	// do reachability
 
+	@Override
 	public void doReachability()
 	{
 		// compute reachable states
@@ -480,6 +534,7 @@ public class ProbModel implements Model
 	// this method allows you to skip the reachability phase
 	// it is only here for experimental purposes - not general use.
 
+	@Override
 	public void skipReachability()
 	{
 		// don't compute reachable states - assume all reachable
@@ -496,6 +551,7 @@ public class ProbModel implements Model
 	 * Set reachable states BDD (and compute number of states and ODD)
 	 */
 
+	@Override
 	public void setReach(JDDNode reach)
 	{
 		if (this.reach != null)
@@ -518,7 +574,7 @@ public class ProbModel implements Model
 		if (this.start != null)
 			JDD.Deref(this.start);
 		this.start = start;
-		
+
 		// work out number of initial states
 		numStartStates = JDD.GetNumMinterms(start, allDDRowVars.n());
 	}
@@ -526,6 +582,7 @@ public class ProbModel implements Model
 	/**
 	 * Set the DD used to store transition action label indices (MDPs).
 	 */
+	@Override
 	public void setTransActions(JDDNode transActions)
 	{
 		this.transActions = transActions;
@@ -534,6 +591,7 @@ public class ProbModel implements Model
 	/**
 	 * Set the DDs used to store transition action label indices (D/CTMCs).
 	 */
+	@Override
 	public void setTransPerAction(JDDNode[] transPerAction)
 	{
 		this.transPerAction = transPerAction;
@@ -542,6 +600,7 @@ public class ProbModel implements Model
 	// remove non-reachable states from various dds
 	// (and calculate num transitions)
 
+	@Override
 	public void filterReachableStates()
 	{
 		int i;
@@ -608,7 +667,7 @@ public class ProbModel implements Model
 		// find reachable states with no transitions
 		JDD.Ref(reach);
 		deadlocks = JDD.And(reach, JDD.Not(deadlocks));
-		
+
 		if (fix && !deadlocks.equals(JDD.ZERO)) {
 			// remove deadlocks by adding self-loops
 			// also update transPerAction info, if present
@@ -629,21 +688,25 @@ public class ProbModel implements Model
 		}
 	}
 
+	@Override
 	public void printTrans()
 	{
 		//		JDD.PrintMatrix(trans, allDDRowVars, allDDColVars);
 	}
 
+	@Override
 	public void printTrans01()
 	{
 		//		JDD.PrintMatrix(trans01, allDDRowVars, allDDColVars, JDD.ZERO_ONE);
 	}
 
+	@Override
 	public void printTransInfo(PrismLog log)
 	{
 		printTransInfo(log, false);
 	}
 
+	@Override
 	public void printTransInfo(PrismLog log, boolean extra)
 	{
 		int i, j, n;
@@ -705,6 +768,7 @@ public class ProbModel implements Model
 
 	// export transition matrix to a file
 
+	@Override
 	public void exportToFile(int exportType, boolean explicit, File file) throws FileNotFoundException, PrismException
 	{
 		if (!explicit) {
@@ -718,6 +782,7 @@ public class ProbModel implements Model
 
 	// returns string containing files used if there were more than 1, null otherwise
 
+	@Override
 	public String exportStateRewardsToFile(int exportType, File file) throws FileNotFoundException, PrismException
 	{
 		if (numRewardStructs == 0)
@@ -739,6 +804,7 @@ public class ProbModel implements Model
 
 	// returns string containing files used if there were more than 1, null otherwise
 
+	@Override
 	public String exportTransRewardsToFile(int exportType, boolean explicit, File file) throws FileNotFoundException, PrismException
 	{
 		if (numRewardStructs == 0)
@@ -790,6 +856,7 @@ public class ProbModel implements Model
 
 	// convert global state index to local indices
 
+	@Override
 	public String globalToLocal(long x)
 	{
 		int i;
@@ -807,6 +874,7 @@ public class ProbModel implements Model
 
 	// convert global state index to local index
 
+	@Override
 	public int globalToLocal(long x, int l)
 	{
 		int i;
@@ -825,6 +893,7 @@ public class ProbModel implements Model
 	/**
 	 * Convert a BDD (over model row variables) representing a single state to a State object. 
 	 */
+	@Override
 	public State convertBddToState(JDDNode dd)
 	{
 		JDDNode ptr;
@@ -851,6 +920,7 @@ public class ProbModel implements Model
 	 * Convert a BDD (over model row variables) representing a single state
 	 * to a (reachable) state index. 
 	 */
+	@Override
 	public int convertBddToIndex(JDDNode dd)
 	{
 		JDDNode ptr;
@@ -879,6 +949,7 @@ public class ProbModel implements Model
 	/**
 	 * Clear the model (deref all DDs and DD variables)
 	 */
+	@Override
 	public void clear()
 	{
 		if (varDDRowVars != null)

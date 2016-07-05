@@ -71,7 +71,6 @@ import userinterface.util.GUIUndoManager;
 import userinterface.util.PropertyTable;
 import userinterface.util.PropertyTableModel;
 
-
 @SuppressWarnings("serial")
 public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 {
@@ -103,11 +102,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	private ModulesFile parsedModel;
 	private Values lastMFConstants = null;
 	private PrismException lastBuildError = null;
-	
-	//tosettings: private boolean isAutoParse = true;
 	private boolean busy = false;
-	//tosettings: private boolean isSwitchOnLarge = true;   //now model.autoManual
-	//tosettings: private int autoParseWaitTime = DEFAULT_WAIT;
 
 	// Options (these are synchronised with those in PrismSettings, they are here for speed)
 	private boolean autoParseFast;
@@ -233,14 +228,12 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 
 		leftHandSide = new JPanel();
 		leftHandSide.setLayout(new BorderLayout());
-
 		leftHandSide.add(treeAndBuild, BorderLayout.CENTER);
 
 		graphicalPropModel = new PropertyTableModel();
 		graphicalProperties = new PropertyTable(graphicalPropModel); //not used initially
 
 		splitter.setLeftComponent(leftHandSide);
-
 		splitter.setRightComponent(editor);
 		splitter.setDividerLocation(0.5);
 		splitter.setOneTouchExpandable(true);
@@ -343,7 +336,6 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		theModel.notifyEventListeners(new GUIModelEvent(GUIModelEvent.NEW_LOAD_NOT_RELOAD_MODEL));
 	}
 
-
 	public void newGraphicModel()
 	{
 		activeFile = null;
@@ -380,7 +372,6 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	{
 		theModel.doEnables();
 	}
-
 
 	public void convertViewToGraphic()//dummy dummy dummy
 	{
@@ -849,12 +840,14 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		new BuildModelThread(this).start();
 	}
 
+	@Override
 	public synchronized void notifyModelBuildSuccessful()
 	{
 		// Deal with a model build success
 		// Put this in an invokeLater(...) so can be called from another thread
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				editor.modelParseSuccessful();
@@ -887,6 +880,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		}
 	}
 
+	@Override
 	public synchronized void notifyModelBuildFailed(PrismException e)
 	{
 		// Deal with a model build failure
@@ -894,6 +888,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		lastBuildError = e;
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if (lastBuildError != null && lastBuildError instanceof PrismLangException) {
@@ -1129,11 +1124,11 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 			return "<Untitled>";
 	}
 
-
+	/**
+	 * Is auto-parsing currently enabled?
+	 */
 	public synchronized boolean isAutoParse()
 	{
-		//tosettings: return isAutoParse;
-		//return theModel.getPrism().getSettings().getBoolean(PrismSettings.MODEL_AUTO_PARSE, true);
 		return autoParseFast;
 	}
 
@@ -1168,9 +1163,11 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 		theModel.doEnables();
 	}
 
+	/**
+	 * Should auto=parsing be disabled for large models?
+	 */
 	public synchronized boolean isSwitchOnLarge()
 	{
-		//tosettings: return isSwitchOnLarge;
 		return theModel.getPrism().getSettings().getBoolean(PrismSettings.MODEL_AUTO_MANUAL);
 	}
 
@@ -1469,6 +1466,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 			this.handler = handler;
 		}
 
+		@Override
 		public void run()
 		{
 			try {

@@ -130,6 +130,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -146,6 +147,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -157,6 +159,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -170,6 +173,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 		optionCheckBox.setText("Always prompt for initial state on path creation");
 		optionCheckBox.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				optionCheckBoxActionPerformed(evt);
@@ -199,7 +203,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 
 	private void optionCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_optionCheckBoxActionPerformed
-	// TODO add your handling code here:
+			// TODO add your handling code here:
 	}//GEN-LAST:event_optionCheckBoxActionPerformed
 
 	public static double log(double base, double x)
@@ -316,15 +320,18 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 		dispose();
 	}//GEN-LAST:event_closeDialog
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 
@@ -355,16 +362,19 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 			return values.get(i);
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 3;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return values.size();
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 
@@ -381,6 +391,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 			}
 		}
 
+		@Override
 		public String getColumnName(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -395,6 +406,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2)
@@ -403,6 +415,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 				return false;
 		}
 
+		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2) {
@@ -413,6 +426,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 			}
 		}
 
+		@Override
 		public String toString()
 		{
 			String str = "";
@@ -440,6 +454,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 			this.value = value;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name + "=" + value.toString();

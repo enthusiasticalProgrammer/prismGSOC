@@ -26,64 +26,64 @@
 
 package settings;
 
-public class LongSetting extends Setting 
+public class LongSetting extends Setting
 {
-    private static LongRenderer renderer;
-    private static LongEditor editor;
-    
-    static
-    {
-        renderer = new LongRenderer();
-        editor = new LongEditor();
-    }
-    
-    
-    /** Creates a new instance of LongSetting */
+	private static LongRenderer renderer;
+	private static LongEditor editor;
+
+	static {
+		renderer = new LongRenderer();
+		editor = new LongEditor();
+	}
+
+	/** Creates a new instance of LongSetting */
 	public LongSetting(String name, Long value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
-    public LongSetting(String name, Long value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return Long.class;
-    }
-    
-    public long getLongValue()
-    {
-        return ((Long)getValue()).longValue();
-    }
-    
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	public LongSetting(String name, Long value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	@Override
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	@Override
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	@Override
+	public Class<Long> getValueClass()
+	{
+		return Long.class;
+	}
+
+	public long getLongValue()
+	{
+		return ((Long) getValue()).longValue();
+	}
+
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
-		try
-		{
+		try {
 			return new Long(string);
-		}
-		catch(NumberFormatException e)
-		{
-			throw new SettingException("Error when parsing: "+string+" as a Long value.");
+		} catch (NumberFormatException e) {
+			throw new SettingException("Error when parsing: " + string + " as a Long value.");
 		}
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return ""+getLongValue();
+		return "" + getLongValue();
 	}
-	
+
 }

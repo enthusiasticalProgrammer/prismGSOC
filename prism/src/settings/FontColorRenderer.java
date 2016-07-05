@@ -43,6 +43,7 @@ public class FontColorRenderer implements SettingRenderer
 		panel.add(renderer, BorderLayout.CENTER);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
 			int column)
 	{

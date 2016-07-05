@@ -164,7 +164,7 @@ public final class ACIiterations extends CIMethod
 			return 0;
 		return 10 * ((int) (100.0 * (double) (iters + 1) * width * width / (sampler.getVariance() * squaredQuantile)) / 10);
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

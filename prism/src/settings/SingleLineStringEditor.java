@@ -34,156 +34,136 @@ import java.util.*;
 
 public class SingleLineStringEditor implements SettingEditor, CaretListener, FocusListener
 {
-    private JTextField field;
-    private Font font = new Font("monospaced", Font.PLAIN, 12);
-    
-    private JTable lastTable = null;
-    private int tableCol = -1;
-    private int tableRow = -1;
-    
-    private boolean valueGot = true;
-    
-    private boolean multiDifferent = false;
-    
-    
-    /** Creates a new instance of SingleLineStringEditor */
-    public SingleLineStringEditor()
-    {
-        field = new JTextField();
-        field.addCaretListener(this);
-        field.addFocusListener(this);
-    }
-    
-    public Object getEditorValue()
-    {
-        if(multiDifferent && field.getText().equals(""))
-        {
-            valueGot = true;
-            multiDifferent =false;
-            return NOT_CHANGED_VALUE;
-        }
-        else
-        {
-            valueGot = true;
-            return field.getText();
-        }
-    }
-    
-    public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
-    {
-        field.setMargin(new Insets(0, 2, 4, 2));
-        if (isSelected)
-        {
-            field.setForeground(table.getSelectionForeground());
-            field.setBackground(table.getSelectionBackground());
-        }
-        else
-        {
-            field.setForeground(table.getForeground());
-            field.setBackground(table.getBackground());
-        }
-        
-        
-        field.setBorder( UIManager.getBorder("Table.focusCellHighlightBorder") );
-        
-        multiDifferent = false;
-        
-        if(value instanceof String)
-        {
-            String str = (String)value;
-            
-            field.setText(str);
+	private JTextField field;
+	private Font font = new Font("monospaced", Font.PLAIN, 12);
 
-	    
-            field.setCaretColor(Color.black);
-            
-            field.setFont(font);
-        }
-        else if(value instanceof ArrayList)
-        {
-            ArrayList values = (ArrayList)value;
-            if(values.size() > 0)
-            {
-                //if we have multiple properties selected.
-                String last = null;
-                boolean allSame = true;
-                for(int i = 0; i < values.size(); i++)
-                {
-                    if(values.get(i) instanceof String)
-                    {
-                        String str = (String)values.get(i);
-                        if(last != null)
-                        {
-                            if(!str.equals(last))
-                            {
-                                allSame = false; break;
-                            }
-                            last = str;
-                        }
-                        else
-                        {
-                            last = str;
-                        }
-                    }
-                }
-                if(allSame)
-                {
-                    field.setText(last);
-                    
-                    field.setFont(font);
-                }
-                else
-                {
-                    field.setText("");
-                    field.setFont(font);
-                    multiDifferent = true;
-                }
-                
-            }
-        }
-        
-        lastTable = table;
-        tableRow = row;
-        tableCol = column;
-        valueGot = false;
-        
-        return field;
-    }
-    
-    public void stopEditing()
-    {
-    	
-    }
-    
-    public void caretUpdate(CaretEvent e)
-    {
-        field.getCaret().setVisible(true);
-    }
-    
-    public void focusGained(FocusEvent e)
-    {
-    }
-    
-    public void focusLost(FocusEvent e)
-    {
-        if(!valueGot && lastTable != null)
-        {
-            if(multiDifferent && field.getText().equals(""))
-            {
-                valueGot = true;
-                multiDifferent = false;
-            }
-            else
-            {
-                valueGot = true;
-                lastTable.setValueAt(field.getText(), tableRow, tableCol);
-            }
-            if(lastTable.getCellEditor() != null) lastTable.removeEditor();
-        }
-        else
-        {
-            multiDifferent = false;
-        }
-    }
-    
+	private JTable lastTable = null;
+	private int tableCol = -1;
+	private int tableRow = -1;
+
+	private boolean valueGot = true;
+
+	private boolean multiDifferent = false;
+
+	/** Creates a new instance of SingleLineStringEditor */
+	public SingleLineStringEditor()
+	{
+		field = new JTextField();
+		field.addCaretListener(this);
+		field.addFocusListener(this);
+	}
+
+	@Override
+	public Object getEditorValue()
+	{
+		if (multiDifferent && field.getText().equals("")) {
+			valueGot = true;
+			multiDifferent = false;
+			return NOT_CHANGED_VALUE;
+		} else {
+			valueGot = true;
+			return field.getText();
+		}
+	}
+
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
+	{
+		field.setMargin(new Insets(0, 2, 4, 2));
+		if (isSelected) {
+			field.setForeground(table.getSelectionForeground());
+			field.setBackground(table.getSelectionBackground());
+		} else {
+			field.setForeground(table.getForeground());
+			field.setBackground(table.getBackground());
+		}
+
+		field.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+
+		multiDifferent = false;
+
+		if (value instanceof String) {
+			String str = (String) value;
+
+			field.setText(str);
+
+			field.setCaretColor(Color.black);
+
+			field.setFont(font);
+		} else if (value instanceof ArrayList) {
+			ArrayList values = (ArrayList) value;
+			if (values.size() > 0) {
+				//if we have multiple properties selected.
+				String last = null;
+				boolean allSame = true;
+				for (int i = 0; i < values.size(); i++) {
+					if (values.get(i) instanceof String) {
+						String str = (String) values.get(i);
+						if (last != null) {
+							if (!str.equals(last)) {
+								allSame = false;
+								break;
+							}
+							last = str;
+						} else {
+							last = str;
+						}
+					}
+				}
+				if (allSame) {
+					field.setText(last);
+
+					field.setFont(font);
+				} else {
+					field.setText("");
+					field.setFont(font);
+					multiDifferent = true;
+				}
+
+			}
+		}
+
+		lastTable = table;
+		tableRow = row;
+		tableCol = column;
+		valueGot = false;
+
+		return field;
+	}
+
+	@Override
+	public void stopEditing()
+	{
+
+	}
+
+	@Override
+	public void caretUpdate(CaretEvent e)
+	{
+		field.getCaret().setVisible(true);
+	}
+
+	@Override
+	public void focusGained(FocusEvent e)
+	{
+	}
+
+	@Override
+	public void focusLost(FocusEvent e)
+	{
+		if (!valueGot && lastTable != null) {
+			if (multiDifferent && field.getText().equals("")) {
+				valueGot = true;
+				multiDifferent = false;
+			} else {
+				valueGot = true;
+				lastTable.setValueAt(field.getText(), tableRow, tableCol);
+			}
+			if (lastTable.getCellEditor() != null)
+				lastTable.removeEditor();
+		} else {
+			multiDifferent = false;
+		}
+	}
+
 }

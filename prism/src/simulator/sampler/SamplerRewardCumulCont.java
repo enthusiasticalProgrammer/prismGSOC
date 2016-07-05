@@ -47,7 +47,7 @@ public class SamplerRewardCumulCont extends SamplerDouble
 		// Then extract other required info
 		if (expr.getOperator() != ExpressionTemporal.R_C)
 			throw new PrismException("Error creating Sampler");
-		
+
 		timeBound = expr.getUpperBound().evaluateDouble();
 		this.rewardStructIndex = rewardStructIndex;
 		// Initialise sampler info
@@ -56,12 +56,12 @@ public class SamplerRewardCumulCont extends SamplerDouble
 	}
 
 	@Override
-	public boolean update(Path path, TransitionList transList) throws PrismLangException
+	public boolean update(Path path, TransitionList transList)
 	{
 		// If the answer is already known we should do nothing
 		if (valueKnown)
 			return true;
-		
+
 		// As soon as time bound exceeded, compute reward total
 		if (path.getTotalTime() >= timeBound) {
 			valueKnown = true;
@@ -87,10 +87,10 @@ public class SamplerRewardCumulCont extends SamplerDouble
 			double remainingTime = timeBound - path.getTotalTime();
 			value += path.getCurrentStateReward(rewardStructIndex) * remainingTime;
 		}
-		
+
 		return valueKnown;
 	}
-	
+
 	@Override
 	public boolean needsBoundedNumSteps()
 	{

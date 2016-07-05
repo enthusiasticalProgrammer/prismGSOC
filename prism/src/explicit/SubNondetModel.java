@@ -38,12 +38,10 @@ import java.util.Map;
 import java.util.Set;
 
 import common.IterableStateSet;
-
 import parser.State;
 import parser.Values;
 import parser.VarList;
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import strat.MDStrategy;
 
@@ -52,7 +50,7 @@ import strat.MDStrategy;
  * used to translate between state ids for model and sub-model. Created sub-model will have new 
  * state numbering from 0 to number of states in the sub model.
  */
-public class SubNondetModel implements NondetModel
+public final class SubNondetModel implements NondetModel
 {
 
 	private NondetModel model = null;
@@ -256,37 +254,37 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void checkForDeadlocks()
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicitTra(String filename) throws PrismException
+	public void exportToPrismExplicitTra(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicit(String baseFilename) throws PrismException
+	public void exportToPrismExplicit(String baseFilename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicitTra(File file) throws PrismException
+	public void exportToPrismExplicitTra(File file)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -297,6 +295,7 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void exportToPrismExplicitTra(PrismLog log)
 	{
 		throw new UnsupportedOperationException();
@@ -308,7 +307,8 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
-	public void exportToDotFile(String filename) throws PrismException
+	@Override
+	public void exportToDotFile(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -319,7 +319,8 @@ public class SubNondetModel implements NondetModel
 		throw new UnsupportedOperationException();
 	}
 
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
+	@Override
+	public void exportToDotFile(String filename, BitSet mark)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -331,13 +332,13 @@ public class SubNondetModel implements NondetModel
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException
+	public void exportStates(int exportType, VarList varList, PrismLog log)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -410,7 +411,7 @@ public class SubNondetModel implements NondetModel
 		return succ.iterator();
 	}
 
-
+	@Override
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{
 		s = translateState(s);
@@ -453,7 +454,7 @@ public class SubNondetModel implements NondetModel
 	private int getTransitions(int state)
 	{
 		int transitions = 0;
-		for (int i : new IterableStateSet(actions.get(state), model.getNumChoices(state))){
+		for (int i : new IterableStateSet(actions.get(state), model.getNumChoices(state))) {
 			transitions += model.getNumTransitions(state, i);
 		}
 		return transitions;

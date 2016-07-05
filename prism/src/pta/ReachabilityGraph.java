@@ -123,7 +123,7 @@ public class ReachabilityGraph
 			log.print("#" + (i++) + ":" + lz);
 		}
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -165,12 +165,12 @@ public class ReachabilityGraph
 
 		return z;
 	}
-	
+
 	/**
 	 * Build an MDP from this forwards reachability graph.
 	 * The set of initial states should also be specified.
 	 */
-	public MDP buildMDP(List<Integer> initialStates) throws PrismException
+	public MDP buildMDP(List<Integer> initialStates)
 	{
 		Distribution distr;
 		int numStates, src, count, dest;
@@ -183,7 +183,7 @@ public class ReachabilityGraph
 		mdp.addStates(states.size());
 
 		// For each symbolic state...
-		numStates = states.size(); 
+		numStates = states.size();
 		for (src = 0; src < numStates; src++) {
 			// And for each outgoing transition in PTA...
 			for (SymbolicTransition st : trans.get(src)) {

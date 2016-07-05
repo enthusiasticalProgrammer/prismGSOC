@@ -29,75 +29,80 @@ package userinterface.properties;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 
 public class GraphConstantPickerList extends JPanel implements Scrollable
 {
-    
-    private ArrayList rows;
-    private JPanel nextPanel;
-    
-    /** Creates a new instance of ConstantPickerList */
-    public GraphConstantPickerList()
-    {
-	setLayout(new BorderLayout());
-	nextPanel = new JPanel();
-	nextPanel.setLayout(new BorderLayout());
-	add(nextPanel, BorderLayout.CENTER);
-	rows = new ArrayList();
-    }
-    
-    public void addConstant(GraphConstantLine pl)
-    {
-	rows.add(pl);
-	nextPanel.add(pl, BorderLayout.NORTH);
-	JPanel np = new JPanel();
-	np.setLayout(new BorderLayout());
-	nextPanel.add(np, BorderLayout.CENTER);
-	nextPanel = np;
-    }
-    
-    public void disableLine(int index)
-    {
-        for(int i = 0; i < rows.size(); i++)
-        {
-            getConstantLine(i).setEnabled(true);
-        }
-        getConstantLine(index).setEnabled(false);
-    }
-    
-    public Dimension getPreferredScrollableViewportSize()
-    {
-	return getPreferredSize();
-    }
-    
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-    {
-	return 20;
-    }
-    
-    public boolean getScrollableTracksViewportHeight()
-    {
-	return false;
-    }
-    
-    public boolean getScrollableTracksViewportWidth()
-    {
-	return true;
-    }
-    
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
-    {
-	return 40;
-    }
-    
-    public int getNumConstants()
-    {
-	return rows.size();
-    }
-    
-    public GraphConstantLine getConstantLine(int i)
-    {
-	return (GraphConstantLine)rows.get(i);
-    }
+
+	private List<GraphConstantLine> rows;
+	private JPanel nextPanel;
+
+	/** Creates a new instance of ConstantPickerList */
+	public GraphConstantPickerList()
+	{
+		setLayout(new BorderLayout());
+		nextPanel = new JPanel();
+		nextPanel.setLayout(new BorderLayout());
+		add(nextPanel, BorderLayout.CENTER);
+		rows = new ArrayList<>();
+	}
+
+	public void addConstant(GraphConstantLine pl)
+	{
+		rows.add(pl);
+		nextPanel.add(pl, BorderLayout.NORTH);
+		JPanel np = new JPanel();
+		np.setLayout(new BorderLayout());
+		nextPanel.add(np, BorderLayout.CENTER);
+		nextPanel = np;
+	}
+
+	public void disableLine(int index)
+	{
+		for (int i = 0; i < rows.size(); i++) {
+			getConstantLine(i).setEnabled(true);
+		}
+		getConstantLine(index).setEnabled(false);
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize()
+	{
+		return getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+	{
+		return 20;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth()
+	{
+		return true;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+	{
+		return 40;
+	}
+
+	public int getNumConstants()
+	{
+		return rows.size();
+	}
+
+	public GraphConstantLine getConstantLine(int i)
+	{
+		return (GraphConstantLine) rows.get(i);
+	}
 }

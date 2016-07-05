@@ -24,7 +24,6 @@
 //	
 //==============================================================================
 
-
 package common;
 
 import java.util.BitSet;
@@ -36,7 +35,8 @@ import java.util.NoSuchElementException;
  * iterating over the set or cleared bits of a BitSet representing a set of states
  * as well as iterating over all states if the BitSet is {@code null}.
  */
-public class IterableStateSet implements Iterable<Integer> {
+public class IterableStateSet implements Iterable<Integer>
+{
 	private BitSet setOfStates;
 	private Integer numStates = null;
 	private boolean complement = false;
@@ -107,7 +107,7 @@ public class IterableStateSet implements Iterable<Integer> {
 		{
 			throw new UnsupportedOperationException();
 		}
-	};
+	}
 
 	/** Implementation of an Iterator that iterates over the empty state set */
 	private class NoStatesIterator implements Iterator<Integer>
@@ -129,7 +129,7 @@ public class IterableStateSet implements Iterable<Integer> {
 		{
 			throw new UnsupportedOperationException();
 		}
-	};
+	}
 
 	@Override
 	public Iterator<Integer> iterator()
@@ -143,7 +143,7 @@ public class IterableStateSet implements Iterable<Integer> {
 			}
 		} else {
 			// return appropriate IterableBitSet with maxIndex = numStates-1
-			return new IterableBitSet(setOfStates, numStates-1, complement).iterator();
+			return new IterableBitSet(setOfStates, numStates - 1, complement).iterator();
 		}
 	}
 

@@ -34,12 +34,13 @@ package param;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class ParamRewardStruct {
+final class ParamRewardStruct
+{
 	/** rewards for all choices */
 	Function[] rewards;
 	/** function factory the functions used for rewards belong to */
 	FunctionFactory factory;
-	
+
 	/**
 	 * Constructs a new reward structure for with given number of choices.
 	 * Initially, all rewards will be zero.
@@ -55,7 +56,7 @@ final class ParamRewardStruct {
 			rewards[choice] = factory.getZero();
 		}
 	}
-	
+
 	/**
 	 * Constructs a new reward structure which is the copy of another one.
 	 * 
@@ -69,7 +70,7 @@ final class ParamRewardStruct {
 		}
 		this.factory = other.factory;
 	}
-	
+
 	/**
 	 * Instantiate reward structure at a given point.
 	 * That is, a reward structure is computed in which the corresponding
@@ -86,10 +87,10 @@ final class ParamRewardStruct {
 			result.rewards[choice] = factory.fromBigRational(this.rewards[choice].evaluate(point));
 		}
 		result.factory = this.factory;
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Set reward for given choice.
 	 * 
@@ -100,7 +101,7 @@ final class ParamRewardStruct {
 	{
 		rewards[choice] = reward;
 	}
-	
+
 	/**
 	 * Add reward to given choice.
 	 * 
@@ -111,7 +112,7 @@ final class ParamRewardStruct {
 	{
 		rewards[choice] = rewards[choice].add(reward);
 	}
-	
+
 	/**
 	 * Get reward for given choice.
 	 * 
@@ -122,9 +123,10 @@ final class ParamRewardStruct {
 	{
 		return rewards[choice];
 	}
-	
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		StringBuffer result = new StringBuffer();
 		for (int state = 0; state < rewards.length; state++) {
 			result.append(state);
@@ -134,9 +136,10 @@ final class ParamRewardStruct {
 		}
 		return result.toString();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof ParamRewardStruct)) {
 			return false;
 		}
@@ -154,11 +157,12 @@ final class ParamRewardStruct {
 		}
 		return true;
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		int hash = 0;
-		
+
 		hash = factory.hashCode();
 		for (int choice = 0; choice < rewards.length; choice++) {
 			hash = rewards[choice].hashCode() + (hash << 6) + (hash << 16) - hash;

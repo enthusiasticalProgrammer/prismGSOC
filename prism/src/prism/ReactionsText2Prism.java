@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 /**
@@ -43,37 +42,11 @@ public class ReactionsText2Prism extends Reactions2Prism
 	/** Name of the original file */
 	protected String parsedFileName;
 
-	/**
-	 * Calling point for command-line script:
-	 * e.g. java -cp classes prism.ReactionsText2Prism myfile.txt 100
-	 * (100 denotes (integer) maximum for species population sizes, default is 100)
-	 */
-	public static void main(String args[])
-	{
-		PrismLog errLog = new PrismPrintStreamLog(System.err);
-		try {
-			if (args.length < 1) {
-				System.err.println("Usage: java -cp classes prism.ReactionsText2Prism <file> [max_amount]");
-				System.exit(1);
-			}
-			ReactionsText2Prism rt2prism = new ReactionsText2Prism(errLog);
-			try {
-				if (args.length > 1)
-					rt2prism.setMaxAmount(Integer.parseInt(args[1]));
-			} catch (NumberFormatException e) {
-				throw new PrismException("Invalid max amount \"" + args[1] + "\"");
-			}
-			rt2prism.translate(new File(args[0]));
-		} catch (PrismException e) {
-			errLog.println("Error: " + e.getMessage() + ".");
-		}
-	}
-
 	// Enums
 
 	private enum SectionType {
 		SPECIES, PARAMETERS, REACTIONS, RR, R
-	};
+	}
 
 	// Constructors
 
@@ -298,4 +271,30 @@ public class ReactionsText2Prism extends Reactions2Prism
 		parsedFileName = null;
 	}
 
+	/**
+	 * Calling point for command-line script:
+	 * e.g. java -cp classes prism.ReactionsText2Prism myfile.txt 100
+	 * (100 denotes (integer) maximum for species population sizes, default is 100)
+	 */
+	public static void main(String args[])
+	{
+		PrismLog errLog = new PrismPrintStreamLog(System.err);
+		try {
+			if (args.length < 1) {
+				System.err.println("Usage: java -cp classes prism.ReactionsText2Prism <file> [max_amount]");
+				System.exit(1);
+			}
+			ReactionsText2Prism rt2prism = new ReactionsText2Prism(errLog);
+			try {
+				if (args.length > 1)
+					rt2prism.setMaxAmount(Integer.parseInt(args[1]));
+			} catch (NumberFormatException e) {
+				throw new PrismException("Invalid max amount \"" + args[1] + "\"");
+			}
+			rt2prism.load(new File(args[0]));
+			rt2prism.translate(System.out);
+		} catch (PrismException e) {
+			errLog.println("Error: " + e.getMessage() + ".");
+		}
+	}
 }

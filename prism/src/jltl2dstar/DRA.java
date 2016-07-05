@@ -39,7 +39,8 @@ import prism.PrismException;
  * The DRA can be considered as a Streett automaton, if
  * a flag is set.
  */
-public class DRA extends DA {
+public class DRA extends DA
+{
 
 	/** Marker, is this DRA considered as a Streett automaton? */
 	private boolean _isStreett;
@@ -48,16 +49,19 @@ public class DRA extends DA {
 	 * Constructor.
 	 * @param ap_set the underlying APSet
 	 */
-	public DRA(APSet ap_set) {
+	public DRA(APSet ap_set)
+	{
 		super(ap_set);
 		_isStreett = false;
 	}
-	
-	public static DRA newInstance(APSet ap_set) {
+
+	public static DRA newInstance(APSet ap_set)
+	{
 		return new DRA(ap_set);
 	}
 
-	private String typeID() {
+	private String typeID()
+	{
 		if (isStreett()) {
 			return "DSA";
 		} else {
@@ -74,27 +78,28 @@ public class DRA extends DA {
 	/** Consider this DRA as a Streett automaton. */
 	public void considerAsStreett(boolean flag)
 	{
-		_isStreett=flag;
+		_isStreett = flag;
 	}
-
 
 	/**
 	 * Print the DRA/DSA in v2 format to the output stream.
 	 * This function can compact the automaton, which may invalidate iterators!
 	 */
-	public void print(PrintStream out) throws PrismException {
+	public void print(PrintStream out) throws PrismException
+	{
 		if (!this.isCompact()) {
 			this.makeCompact();
 		}
 
 		this.print(typeID(), out);
 	}
-	
+
 	/**
 	 * Print the DRA/DSA in dot format to the output stream.
 	 * This function can compact the automaton, which may invalidate iterators!
 	 */
-	public void printDot(PrintStream out) throws PrismException {
+	public void printDot(PrintStream out) throws PrismException
+	{
 		if (!this.isCompact()) {
 			this.makeCompact();
 		}
@@ -107,15 +112,16 @@ public class DRA extends DA {
 	 * This function can compact the automaton, which may invalidate iterators!
 	 */
 	// void print_dot(std::ostream& out)
-	
+
 	/**
 	 * Optimizes the acceptance condition.
 	 * This function may delete acceptance pairs,
 	 * which can invalidate iterators.
 	 */
-	public void optimizeAcceptanceCondition() throws PrismException {
-		
-		for (Iterator<Integer> it = this.acceptance().iterator(); it.hasNext(); ) {
+	public void optimizeAcceptanceCondition()
+	{
+
+		for (Iterator<Integer> it = this.acceptance().iterator(); it.hasNext();) {
 			Integer id = it.next();
 
 			if (this.acceptance().getAcceptance_L(id) == null)
@@ -134,8 +140,8 @@ public class DRA extends DA {
 		}
 	}
 
-
-	public DRA calculateUnion(DRA other, boolean trueloop_check, boolean detailed_states) throws PrismException {
+	public DRA calculateUnion(DRA other, boolean trueloop_check, boolean detailed_states) throws PrismException
+	{
 		if (this.isStreett() || other.isStreett()) {
 			throw new PrismException("Can not calculate union for Streett automata");
 		}
@@ -146,7 +152,7 @@ public class DRA extends DA {
 	/**
 	 * Convert this jltl2dstar deterministic automaton to PRISM data structures.
 	 */
-	public automata.DA<BitSet,? extends AcceptanceOmega> createPrismDA() throws PrismException
+	public automata.DA<BitSet, ? extends AcceptanceOmega> createPrismDA() throws PrismException
 	{
 		int numStates = size();
 		if (!isStreett()) {
@@ -176,12 +182,12 @@ public class DRA extends DA {
 	 * Convert the state and transition structure of this jltl2dstar deterministic automaton
 	 * to the PRISM data structures.
 	 */
-	private void createPrismDA(automata.DA<BitSet, ?> da) throws PrismException
+	private void createPrismDA(automata.DA<BitSet, ?> da)
 	{
 		int i, k, numLabels, numStates, src, dest;
 		List<String> apList;
 		BitSet bitset;
-		
+
 		numLabels = getAPSize();
 		numStates = size();
 		// Copy AP set
@@ -211,15 +217,16 @@ public class DRA extends DA {
 	 * Create an AcceptanceRabin acceptance condition from the acceptance condition
 	 * of this jltl2dstar deterministic automaton.
 	 */
-	private AcceptanceRabin createRabinAcceptance() throws PrismException {
+	private AcceptanceRabin createRabinAcceptance() throws PrismException
+	{
 		AcceptanceRabin accNew = new AcceptanceRabin();
 
 		// Copy acceptance pairs
 		RabinAcceptance acc = acceptance();
 		for (int i = 0; i < acc.size(); i++) {
 			// Note: Pairs (U_i,L_i) become (L_i,K_i) in PRISM's notation
-			BitSet newL = (BitSet)acc.getAcceptance_U(i).clone();
-			BitSet newK = (BitSet)acc.getAcceptance_L(i).clone();
+			BitSet newL = (BitSet) acc.getAcceptance_U(i).clone();
+			BitSet newK = (BitSet) acc.getAcceptance_L(i).clone();
 			AcceptanceRabin.RabinPair pair = new AcceptanceRabin.RabinPair(newL, newK);
 			accNew.add(pair);
 		}
@@ -230,16 +237,17 @@ public class DRA extends DA {
 	 * Create an AcceptanceStreett acceptance condition from the acceptance condition
 	 * of this jltl2dstar deterministic automaton.
 	 */
-	private AcceptanceStreett createStreettAcceptance() throws PrismException {
+	private AcceptanceStreett createStreettAcceptance() throws PrismException
+	{
 		AcceptanceStreett accNew = new AcceptanceStreett();
-		
+
 		// Copy acceptance pairs, interpreting the RabinAcceptance from this automaton
 		// as Streett acceptance
 		RabinAcceptance acc = acceptance();
 		for (int i = 0; i < acc.size(); i++) {
 			// Note: Pairs (U_i,L_i) become (G_i,R_i) in PRISM's notation
-			BitSet newR = (BitSet)acc.getAcceptance_L(i).clone();
-			BitSet newG = (BitSet)acc.getAcceptance_U(i).clone();
+			BitSet newR = (BitSet) acc.getAcceptance_L(i).clone();
+			BitSet newG = (BitSet) acc.getAcceptance_U(i).clone();
 			AcceptanceStreett.StreettPair pair = new AcceptanceStreett.StreettPair(newR, newG);
 
 			accNew.add(pair);
@@ -257,7 +265,7 @@ public class DRA extends DA {
 		BitSet bitset, bitset2;
 		RabinAcceptance acc;
 		prism.DRA<BitSet> draNew;
-		
+
 		numLabels = getAPSize();
 		numStates = size();
 		draNew = new prism.DRA<BitSet>(numStates);
@@ -283,7 +291,7 @@ public class DRA extends DA {
 			}
 		}
 		// Copy acceptance pairs
-		acc = acceptance(); 
+		acc = acceptance();
 		for (i = 0; i < acc.size(); i++) {
 			bitset = new BitSet();
 			bitset.or(acc.getAcceptance_U(i));
@@ -292,7 +300,7 @@ public class DRA extends DA {
 			// Note: Pairs (U_i,L_i) become (L_i,K_i) in PRISM's notation
 			draNew.addAcceptancePair(bitset, bitset2);
 		}
-		
+
 		return draNew;
 	}
 }

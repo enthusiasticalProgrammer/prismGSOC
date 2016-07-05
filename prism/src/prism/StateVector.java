@@ -40,7 +40,7 @@ public interface StateVector
 	 * Get the value of the ith element of the vector, as an Object.
 	 */
 	public Object getValue(int i);
-	
+
 	/**
 	 * Clear the vector, i.e. free any used memory.
 	 */

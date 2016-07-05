@@ -81,12 +81,14 @@ public class DistributionSet extends LinkedHashSet<Distribution>
 		}
 		return false;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return (action == null ? "" : "\"" + action + "\":") + super.toString();
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return super.equals(o) && action == ((DistributionSet) o).action;

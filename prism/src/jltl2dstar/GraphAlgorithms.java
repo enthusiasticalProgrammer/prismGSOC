@@ -31,20 +31,24 @@ import jltl2ba.MyBitSet;
  * of Strongly Connected Components (SCCs).
  */
 
-public class GraphAlgorithms {
-	
+public class GraphAlgorithms
+{
+
 	/** 
 	 * Calculate the SCCs for Graph graph and save in result.
 	 * disjoint default = false 
 	 */
-	public static void calculateSCCs(NBA graph, SCCs result, boolean disjoint) {
+	public static void calculateSCCs(NBA graph, SCCs result, boolean disjoint)
+	{
 		SCC_DFS scc_dfs = new SCC_DFS(graph, result);
 		scc_dfs.calculate(disjoint);
 	}
-	
-	public static class SCC_DFS {
-		
-		public static class SCC_DFS_Data {
+
+	public static class SCC_DFS
+	{
+
+		public static class SCC_DFS_Data
+		{
 			/** A class for saving DFS state information */
 			public int dfs_nr;
 			public int root_index;
@@ -70,7 +74,8 @@ public class GraphAlgorithms {
 		private int scc_nr;
 
 		/** Constructor */
-		public SCC_DFS(NBA graph, SCCs result) {
+		public SCC_DFS(NBA graph, SCCs result)
+		{
 			_graph = graph;
 			_result = result;
 			_stack = new Stack<Integer>();
@@ -78,7 +83,8 @@ public class GraphAlgorithms {
 		}
 
 		/** Calculate the SCCs*/
-		public void calculate(boolean disjoint) {
+		public void calculate(boolean disjoint)
+		{
 			current_dfs_nr = 0;
 			_dfs_data.clear();
 			// Ensure there are as many entries as there are graph-states
@@ -107,7 +113,8 @@ public class GraphAlgorithms {
 		}
 
 		/** Visit a state (perform DFS) */
-		private void visit(int v) {
+		private void visit(int v)
+		{
 			SCC_DFS_Data sdd = new SCC_DFS_Data();
 			sdd.dfs_nr = current_dfs_nr++;
 			sdd.root_index = v;
@@ -116,7 +123,7 @@ public class GraphAlgorithms {
 			_stack.push(v);
 			_dfs_data.set(v, sdd);
 
-			for (Iterator<Integer> it = _graph.get(v).successorIterator(); it.hasNext(); ) {
+			for (Iterator<Integer> it = _graph.get(v).successorIterator(); it.hasNext();) {
 				int w = it.next();
 
 				if (_dfs_data.get(w) == null) {
@@ -146,7 +153,7 @@ public class GraphAlgorithms {
 					_result.setState2SCC(w, scc_nr);
 
 					SCC_DFS_Data sdd_w = _dfs_data.get(w);
-					sdd_w.inComponent=true;
+					sdd_w.inComponent = true;
 				} while (w != v);
 
 				scc_nr = _result.addSCC(set) + 1;
@@ -154,7 +161,8 @@ public class GraphAlgorithms {
 		}
 
 		/** Calculate the Directed Acyclical Graph (DAG) */
-		private void calculateDAG() {
+		private void calculateDAG()
+		{
 			_result._dag.clear();
 			_result._dag.setSize(_result.countSCCs());
 			_result._reachability.setSize(_result.countSCCs());
@@ -165,11 +173,11 @@ public class GraphAlgorithms {
 				// Init
 				_result._dag.set(scc, new MyBitSet());
 				_result._reachability.set(scc, new MyBitSet());
-				
+
 				MyBitSet states_in_scc = _result.get(scc);
 
 				for (int from_state = states_in_scc.nextSetBit(0); from_state >= 0; from_state = states_in_scc.nextSetBit(from_state + 1)) {
-					for (Iterator<Integer> succ_it = _graph.get(from_state).successorIterator(); succ_it.hasNext(); ) {
+					for (Iterator<Integer> succ_it = _graph.get(from_state).successorIterator(); succ_it.hasNext();) {
 						int to_state = succ_it.next();
 						int to_scc = _result.state2scc(to_state);
 
@@ -195,7 +203,7 @@ public class GraphAlgorithms {
 
 			int[] sort = new int[_result.countSCCs()];
 			while (progress) {
-				progress=false;
+				progress = false;
 
 				for (int scc = 0; scc < _result.countSCCs(); ++scc) {
 					if (in_degree[scc] == 0) {
@@ -214,10 +222,9 @@ public class GraphAlgorithms {
 				_result._topological_order.set(sort[i], i);
 			}
 
-
 			// traverse SCCs in reverse topological order
 			for (int i = _result.countSCCs(); i > 0; --i) {
-				int cur_scc = _result._topological_order.get(i-1);
+				int cur_scc = _result._topological_order.get(i - 1);
 
 				MyBitSet reaches = _result._reachability.get(cur_scc);
 

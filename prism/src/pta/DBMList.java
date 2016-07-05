@@ -60,14 +60,14 @@ public class DBMList extends NCZone
 	{
 		// From DBM 
 		if (z instanceof DBM) {
-			DBM dbm = (DBM)z;
+			DBM dbm = (DBM) z;
 			this.pta = dbm.pta;
 			list = new ArrayList<DBM>();
 			addDBM(dbm);
 		}
 		// From DBM 
-		else { 
-			DBMList dbml = (DBMList)z;
+		else {
+			DBMList dbml = (DBMList) z;
 			this.pta = dbml.pta;
 			list = new ArrayList<DBM>();
 			for (DBM dbm : dbml.list) {
@@ -124,7 +124,7 @@ public class DBMList extends NCZone
 	/**
 	 * Get the {@code i}th DBM in the list.
 	 */
-	public DBM getDBM(int i) 
+	public DBM getDBM(int i)
 	{
 		return list.get(i);
 	}
@@ -134,16 +134,18 @@ public class DBMList extends NCZone
 	/**
 	 * Get parent PTA
 	 */
+	@Override
 	public PTA getPTA()
 	{
 		return pta;
 	}
-	
+
 	// Zone operations (modify the zone)
 
 	/**
 	 * Conjunction: add constraint x-y db
 	 */
+	@Override
 	public void addConstraint(int x, int y, int db)
 	{
 		for (DBM dbm : list) {
@@ -156,6 +158,7 @@ public class DBMList extends NCZone
 	/**
 	 * Conjunction: add constraint c
 	 */
+	@Override
 	public void addConstraint(Constraint c)
 	{
 		addConstraint(c.x, c.y, c.db);
@@ -164,6 +167,7 @@ public class DBMList extends NCZone
 	/**
 	 * Conjunction: add multiple constraints
 	 */
+	@Override
 	public void addConstraints(Iterable<Constraint> constraints)
 	{
 		for (Constraint c : constraints)
@@ -173,6 +177,7 @@ public class DBMList extends NCZone
 	/**
 	 * Conjunction: with another zone
 	 */
+	@Override
 	public void intersect(Zone z)
 	{
 		int i, j, n1, n2;
@@ -198,6 +203,7 @@ public class DBMList extends NCZone
 	/**
 	 * Up, i.e. let time elapse, subject to some constraints
 	 */
+	@Override
 	public void up(Iterable<Constraint> constraints)
 	{
 		for (DBM dbm : list) {
@@ -210,6 +216,7 @@ public class DBMList extends NCZone
 	/**
 	 * Down, i.e. zone which can reach this one, subject to some constraints
 	 */
+	@Override
 	public void down(Iterable<Constraint> constraints)
 	{
 		for (DBM dbm : list) {
@@ -222,6 +229,7 @@ public class DBMList extends NCZone
 	/**
 	 * Free, i.e. remove constraints on a clock
 	 */
+	@Override
 	public void free(int x)
 	{
 		// Existential quantification distributes over union 
@@ -235,6 +243,7 @@ public class DBMList extends NCZone
 	/**
 	 * Reset clock x
 	 */
+	@Override
 	public void reset(int x, int v)
 	{
 		// NOT IMPLEMENTED
@@ -244,6 +253,7 @@ public class DBMList extends NCZone
 	/**
 	 * Backward reset of clock x
 	 */
+	@Override
 	public void backReset(int x, int v)
 	{
 		// Implemented as conjunction, then "free"
@@ -263,6 +273,7 @@ public class DBMList extends NCZone
 	/**
 	 * c-Closure
 	 */
+	@Override
 	public void cClosure(int c)
 	{
 		// NOT IMPLEMENTED
@@ -270,12 +281,13 @@ public class DBMList extends NCZone
 	}
 
 	// Zone operations (create new zone)
-	
+
 	/**
 	 * Complement
 	 * Creates non-convex zone so creates new one,
 	 * and leaves this one unmodified
 	 */
+	@Override
 	public DBMList createComplement()
 	{
 		DBMList dbml = deepCopy();
@@ -284,10 +296,11 @@ public class DBMList extends NCZone
 	}
 
 	// Zone queries (do not modify the zone)
-	
+
 	/**
 	 * Is this zone empty (i.e. inconsistent)?
 	 */
+	@Override
 	public boolean isEmpty()
 	{
 		for (DBM dbm : list) {
@@ -300,6 +313,7 @@ public class DBMList extends NCZone
 	/**
 	 * Is constraint c satisfied by this zone (i.e does it overlap)?
 	 */
+	@Override
 	public boolean isSatisfied(Constraint c)
 	{
 		for (DBM dbm : list) {
@@ -312,6 +326,7 @@ public class DBMList extends NCZone
 	/**
 	 * Is a DBM (fully) included in this zone?
 	 */
+	@Override
 	public boolean includes(DBM dbm)
 	{
 		for (DBM dbm2 : list) {
@@ -324,6 +339,7 @@ public class DBMList extends NCZone
 	/**
 	 * Get the minimum value of a clock. 
 	 */
+	@Override
 	public int getClockMin(int x)
 	{
 		// Take min across all DBMs
@@ -333,10 +349,11 @@ public class DBMList extends NCZone
 		}
 		return min;
 	}
-	
+
 	/**
 	 * Get the maximum value of a clock. 
 	 */
+	@Override
 	public int getClockMax(int x)
 	{
 		// Take max across all DBMs
@@ -346,10 +363,11 @@ public class DBMList extends NCZone
 		}
 		return max;
 	}
-	
+
 	/**
 	 * Check if a clock is unbounded (can be infinite).
 	 */
+	@Override
 	public boolean clockIsUnbounded(int x)
 	{
 		// Clock is unbounded if is in any DBM
@@ -359,10 +377,11 @@ public class DBMList extends NCZone
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Check if all clocks are unbounded (can be infinite).
 	 */
+	@Override
 	public boolean allClocksAreUnbounded()
 	{
 		int i, n;
@@ -374,12 +393,13 @@ public class DBMList extends NCZone
 		}
 		return true;
 	}
-	
+
 	// Methods required for NCZone interface
-	
+
 	/**
 	 * Conjunction: with complement of another zone
 	 */
+	@Override
 	public void intersectComplement(Zone z)
 	{
 		if (z instanceof DBM)
@@ -394,6 +414,7 @@ public class DBMList extends NCZone
 	/**
 	 * Complement
 	 */
+	@Override
 	public void complement()
 	{
 		DBMList listNew, res;
@@ -421,27 +442,29 @@ public class DBMList extends NCZone
 	/**
 	 * Disjunction: with another zone
 	 */
+	@Override
 	public void union(Zone z)
 	{
 		if (z instanceof DBM) {
 			addDBM((DBM) z);
-		}
-		else {
+		} else {
 			addDBMs((DBMList) z);
 		}
 	}
-	
+
 	/**
 	 * Get some (any) convex zone contained within this zone.
 	 * Returns null if this zone is empty.
 	 */
+	@Override
 	public Zone getAZone()
 	{
 		if (list.size() > 0)
 			return list.get(0);
-		else return null;
+		else
+			return null;
 	}
-	
+
 	/**
 	 * Get the number of DBMs in this DBMList.
 	 */
@@ -453,6 +476,7 @@ public class DBMList extends NCZone
 	/**
 	 * Clone this zone
 	 */
+	@Override
 	public DBMList deepCopy()
 	{
 		DBMList copy = new DBMList(pta);
@@ -507,6 +531,7 @@ public class DBMList extends NCZone
 	/**
 	 * Get storage info string
 	 */
+	@Override
 	public String storageInfo()
 	{
 		return "List of " + list.size() + " DBMs with " + pta.numClocks + " clocks";
@@ -551,9 +576,9 @@ public class DBMList extends NCZone
 				list.remove(i);
 		}
 	}
-	
+
 	// Test program for complementing big DBM lists
-	
+
 	public static void main(String args[])
 	{
 		int numClocks = 7;

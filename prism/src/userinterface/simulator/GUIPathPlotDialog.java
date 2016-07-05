@@ -65,6 +65,7 @@ public class GUIPathPlotDialog extends JDialog
 
 	public enum SimulateChoice {
 		STEP, TIME;
+		@Override
 		public String toString()
 		{
 			switch (this) {
@@ -76,10 +77,11 @@ public class GUIPathPlotDialog extends JDialog
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	public enum ShowChoice {
 		ALL_STEPS, SNAPSHOTS;
+		@Override
 		public String toString()
 		{
 			switch (this) {
@@ -91,7 +93,7 @@ public class GUIPathPlotDialog extends JDialog
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	// Static instance
 	private static GUIPathPlotDialog instance = null;
@@ -203,6 +205,7 @@ public class GUIPathPlotDialog extends JDialog
 				okButton.setActionCommand("OK");
 				okButton.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						okButtonActionPerformed(e);
@@ -215,6 +218,7 @@ public class GUIPathPlotDialog extends JDialog
 				cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						cancelButtonActionPerformed(e);
@@ -257,7 +261,7 @@ public class GUIPathPlotDialog extends JDialog
 			}
 			{
 				comboBoxSimulate = new JComboBox();
-				comboBoxSimulate.setModel(new DefaultComboBoxModel(SimulateChoice.values()));
+				comboBoxSimulate.setModel(new DefaultComboBoxModel<>(SimulateChoice.values()));
 				GridBagConstraints gbc_comboBoxSimulate = new GridBagConstraints();
 				gbc_comboBoxSimulate.anchor = GridBagConstraints.WEST;
 				gbc_comboBoxSimulate.insets = new Insets(0, 0, 5, 5);
@@ -288,12 +292,13 @@ public class GUIPathPlotDialog extends JDialog
 				comboBoxShow = new JComboBox();
 				comboBoxShow.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						comboBoxShowActionPerformed(e);
 					}
 				});
-				comboBoxShow.setModel(new DefaultComboBoxModel(ShowChoice.values()));
+				comboBoxShow.setModel(new DefaultComboBoxModel<>(ShowChoice.values()));
 				GridBagConstraints gbc_comboBoxShow = new GridBagConstraints();
 				gbc_comboBoxShow.anchor = GridBagConstraints.WEST;
 				gbc_comboBoxShow.insets = new Insets(0, 0, 5, 5);
@@ -397,6 +402,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsAll);
 							rdbtnVarsAll.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -409,6 +415,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsNone);
 							rdbtnVarsNone.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -421,6 +428,7 @@ public class GUIPathPlotDialog extends JDialog
 							buttonGroupVars.add(rdbtnVarsSelected);
 							rdbtnVarsSelected.addActionListener(new ActionListener()
 							{
+								@Override
 								public void actionPerformed(ActionEvent e)
 								{
 									doEnables();
@@ -590,7 +598,7 @@ public class GUIPathPlotDialog extends JDialog
 			gui.errorDialog("Invalid maximum path length \"" + textFieldMaxLen.getText() + "\"");
 			return;
 		}
-		
+
 		cancelled = false;
 		dispose();
 	}
@@ -602,10 +610,12 @@ public class GUIPathPlotDialog extends JDialog
 	}
 
 	// Close when Escape pressed
+	@Override
 	protected JRootPane createRootPane()
 	{
 		ActionListener actionListener = new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
 				cancelled = true;

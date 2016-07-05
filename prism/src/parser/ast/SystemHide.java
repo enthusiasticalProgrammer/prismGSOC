@@ -37,74 +37,74 @@ public class SystemHide extends SystemDefn
 	private SystemDefn operand;
 	// Actions to be hidden
 	private Vector<String> actions;
-	
+
 	// Constructors
-	
+
 	public SystemHide()
 	{
 		actions = new Vector<String>();
 	}
-	
+
 	public SystemHide(SystemDefn s)
 	{
 		operand = s;
 		actions = new Vector<String>();
 	}
-	
+
 	// Set methods
-	
+
 	public void setOperand(SystemDefn s)
 	{
 		operand = s;
 	}
-	
+
 	public void addAction(String s)
 	{
 		actions.addElement(s);
 	}
-		
+
 	public void setAction(int i, String s)
 	{
 		actions.setElementAt(s, i);
 	}
-	
+
 	// Get methods
-	
+
 	public SystemDefn getOperand()
 	{
 		return operand;
 	}
-	
+
 	public int getNumActions()
 	{
 		return actions.size();
 	}
-	
+
 	public String getAction(int i)
 	{
 		return actions.elementAt(i);
 	}
-		
+
 	public boolean containsAction(String s)
 	{
 		return actions.contains(s);
 	}
-	
+
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void getModules(Vector<String> v)
 	{
 		operand.getModules(v);
 	}
-	
+
 	@Override
 	public void getModules(Vector<String> v, ModulesFile modulesFile)
 	{
 		operand.getModules(v, modulesFile);
 	}
-	
+
 	@Override
 	@SuppressWarnings("deprecation")
 	public void getSynchs(Vector<String> v)
@@ -112,47 +112,47 @@ public class SystemHide extends SystemDefn
 		// recurse
 		operand.getSynchs(v);
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v, ModulesFile modulesFile)
 	{
 		// recurse
 		operand.getSynchs(v, modulesFile);
 	}
-	
+
 	@Override
 	public void getReferences(Vector<String> v)
 	{
 		operand.getReferences(v);
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		int i, n;
 		String s = "";
-		
+
 		s = s + operand + "/{";
 		n = getNumActions();
-		for (i = 0; i < n-1; i++) {
+		for (i = 0; i < n - 1; i++) {
 			s = s + getAction(i) + ",";
 		}
 		if (n > 0) {
-			s = s + getAction(n-1);
+			s = s + getAction(n - 1);
 		}
 		s = s + "}";
-		
+
 		return s;
 	}
-	
+
 	@Override
 	public SystemDefn deepCopy()
 	{

@@ -42,7 +42,7 @@ public abstract class APMCMethod extends SimulationMethod
 {
 	// Has the missing parameter been computed yet?
 	protected boolean missingParameterComputed;
-	
+
 	// APMC parameters:
 	// Approximation (epsilon)
 	protected double approximation;
@@ -56,7 +56,7 @@ public abstract class APMCMethod extends SimulationMethod
 	protected int prOp;
 	// Probability/reward bound (if any)
 	protected double theta;
-	
+
 	/**
 	 * Constructor: initialise but don't set any parameters.
 	 */
@@ -86,14 +86,15 @@ public abstract class APMCMethod extends SimulationMethod
 		missingParameterComputed = false;
 	}
 
+	@Override
 	public abstract void computeMissingParameterBeforeSim() throws PrismException;
-	
+
 	@Override
 	public void setExpression(Expression expr) throws PrismException
 	{
 		Expression bound;
 		RelOp relOp;
-		
+
 		// For P properties...
 		if (expr instanceof ExpressionProb) {
 			bound = ((ExpressionProb) expr).getProb();
@@ -118,17 +119,19 @@ public abstract class APMCMethod extends SimulationMethod
 			theta = bound.evaluateDouble();
 		}
 	}
-	
+
 	@Override
 	public void computeMissingParameterAfterSim()
 	{
 		// Nothing to do (always computed before simulation)
 	}
 
+	@Override
 	public abstract Object getMissingParameter() throws PrismException;
-	
+
+	@Override
 	public abstract String getParametersString();
-	
+
 	@Override
 	public boolean shouldStopNow(int iters, Sampler sampler)
 	{
@@ -167,9 +170,10 @@ public abstract class APMCMethod extends SimulationMethod
 			throw new PrismException("Unknown property type");
 		}
 	}
-	
+
 	@Override
-	public String getResultExplanation(Sampler sampler){
+	public String getResultExplanation(Sampler sampler)
+	{
 		return "Pr(|ans - " + sampler.getMeanValue() + "| < " + approximation + ") > " + (1.0 - confidence);
 	}
 }

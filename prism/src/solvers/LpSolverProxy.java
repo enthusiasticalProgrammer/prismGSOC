@@ -28,6 +28,7 @@ public class LpSolverProxy implements SolverProxyInterface
 		}
 	}
 
+	@Override
 	public void addRowFromMap(Map<Integer, Double> row, double rhs, Comparator op, String name) throws PrismException
 	{
 		if (!isAddrowMode) {
@@ -80,28 +81,25 @@ public class LpSolverProxy implements SolverProxyInterface
 		try {
 			solver.setAddRowmode(false);
 			this.result = solver.solve();
-			//solver.printLp();
-			/*double[] val =getVariableValues();
-			for (int i = 0; i < val.length; i++) {
-				System.out.print(solver.getColName(i+1) + ": " + val[i] + ", ");
-			}*/
 			return this.result;
 		} catch (LpSolveException ex) {
 			throw new PrismException("Exception thrown when working with lpsolve solver: " + ex);
 		}
 	}
 
+	@Override
 	public boolean getBoolResult() throws PrismException
 	{
 		if (this.result == lpsolve.LpSolve.INFEASIBLE)
 			return false;
 		else if (this.result == lpsolve.LpSolve.OPTIMAL)
 			return true;
-		else
-			System.out.println("this.result: "+this.result);
+		else {
 			throw new PrismException("Unexpected result of LP solving, when boolean value is expected: " + this.result);
+		}
 	}
 
+	@Override
 	public double getDoubleResult() throws PrismException
 	{
 		if (this.result == lpsolve.LpSolve.INFEASIBLE) {//TODO other results

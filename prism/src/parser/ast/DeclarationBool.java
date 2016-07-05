@@ -40,10 +40,11 @@ public class DeclarationBool extends DeclarationType
 		// (But we re-use the existing "type" field for this purpose)
 		setType(TypeBool.getInstance());
 	}
-	
+
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
+	@Override
 	public Expression getDefaultStart()
 	{
 		return Expression.False();
@@ -53,15 +54,16 @@ public class DeclarationBool extends DeclarationType
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		return start != null ? start : Expression.False();
 	}*/
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -70,6 +72,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		return "bool";
@@ -78,6 +81,7 @@ public class DeclarationBool extends DeclarationType
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		DeclarationBool ret = new DeclarationBool();

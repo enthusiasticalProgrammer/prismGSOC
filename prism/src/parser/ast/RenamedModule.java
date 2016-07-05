@@ -43,9 +43,9 @@ public class RenamedModule extends ASTElement
 	private ExpressionIdent baseModuleASTElement;
 	private ArrayList<ExpressionIdent> oldNameASTElements;
 	private ArrayList<ExpressionIdent> newNameASTElements;
-	
+
 	// Constructor
-	
+
 	public RenamedModule(String n, String b)
 	{
 		name = n;
@@ -55,9 +55,9 @@ public class RenamedModule extends ASTElement
 		oldNameASTElements = new ArrayList<ExpressionIdent>();
 		newNameASTElements = new ArrayList<ExpressionIdent>();
 	}
-	
+
 	// Set methods
-	
+
 	public void setName(String n)
 	{
 		name = n;
@@ -67,22 +67,22 @@ public class RenamedModule extends ASTElement
 	{
 		baseModule = b;
 	}
-	
+
 	public void setNameASTElement(ExpressionIdent e)
 	{
 		nameASTElement = e;
 	}
-	
+
 	public void setBaseModuleASTElement(ExpressionIdent e)
 	{
 		baseModuleASTElement = e;
 	}
-	
+
 	public void addRename(String s1, String s2)
 	{
 		addRename(s1, s2, null, null);
 	}
-		
+
 	public void addRename(String s1, String s2, ExpressionIdent e1, ExpressionIdent e2)
 	{
 		oldNames.add(s1);
@@ -90,14 +90,14 @@ public class RenamedModule extends ASTElement
 		oldNameASTElements.add(e1);
 		newNameASTElements.add(e2);
 	}
-		
+
 	// Get methods
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public String getBaseModule()
 	{
 		return baseModule;
@@ -111,7 +111,7 @@ public class RenamedModule extends ASTElement
 		}
 		return newNames.get(i);
 	}
-		
+
 	public String getOldName(String s)
 	{
 		int i = newNames.indexOf(s);
@@ -120,79 +120,82 @@ public class RenamedModule extends ASTElement
 		}
 		return oldNames.get(i);
 	}
-	
+
 	public int getNumRenames()
 	{
 		return oldNames.size();
 	}
-	
+
 	public String getOldName(int i)
 	{
-		return oldNames.get(i); 
+		return oldNames.get(i);
 	}
-	
+
 	public String getNewName(int i)
 	{
-		return newNames.get(i); 
+		return newNames.get(i);
 	}
-	
+
 	public ExpressionIdent getNameASTElement()
 	{
 		return nameASTElement;
 	}
-	
+
 	public ExpressionIdent getBaseModuleASTElement()
 	{
 		return baseModuleASTElement;
 	}
-	
+
 	public ExpressionIdent getOldNameASTElement(int i)
 	{
 		return oldNameASTElements.get(i);
 	}
-	
+
 	public ExpressionIdent getNewNameASTElement(int i)
 	{
 		return newNameASTElements.get(i);
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
 		int i;
-		
+
 		s = s + "module " + name + " = " + baseModule + " [";
 		for (i = 0; i < oldNames.size() - 1; i++) {
 			s = s + oldNames.get(i) + " = " + newNames.get(i) + ", ";
 		}
 		i = oldNames.size() - 1;
 		s = s + oldNames.get(i) + " = " + newNames.get(i) + "] endmodule";
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		int i, n;
 		RenamedModule ret = new RenamedModule(name, baseModule);
-		ret.setNameASTElement((ExpressionIdent)nameASTElement.deepCopy());
-		ret.setBaseModuleASTElement((ExpressionIdent)baseModuleASTElement.deepCopy());
+		ret.setNameASTElement((ExpressionIdent) nameASTElement.deepCopy());
+		ret.setBaseModuleASTElement((ExpressionIdent) baseModuleASTElement.deepCopy());
 		n = oldNames.size();
 		for (i = 0; i < n; i++) {
 			ret.addRename(oldNames.get(i), newNames.get(i));

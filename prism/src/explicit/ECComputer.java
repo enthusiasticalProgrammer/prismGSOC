@@ -29,6 +29,8 @@ package explicit;
 import java.util.BitSet;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import prism.PrismComponent;
 import prism.PrismException;
 
@@ -41,7 +43,7 @@ public abstract class ECComputer extends PrismComponent
 	/**
 	 * Static method to create a new ECComputer object, depending on current settings.
 	 */
-	public static ECComputer createECComputer(PrismComponent parent, NondetModel model) throws PrismException
+	public static ECComputer createECComputer(PrismComponent parent, NondetModel model)
 	{
 		// Only one algorithm implemented currently
 		return new ECComputerDefault(parent, model);
@@ -50,7 +52,7 @@ public abstract class ECComputer extends PrismComponent
 	/**
 	 * Base constructor.
 	 */
-	public ECComputer(PrismComponent parent) throws PrismException
+	public ECComputer(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -81,9 +83,9 @@ public abstract class ECComputer extends PrismComponent
 	 * @param accept BitSet for the set of accepting states
 	 */
 	public abstract void computeMECStates(BitSet restrict, BitSet accept) throws PrismException;
-	
+
 	/**
 	 * Get the list of states for computed MECs.
 	 */
-	public abstract List<BitSet> getMECStates();
+	public abstract @NonNull List<@NonNull BitSet> getMECStates();
 }

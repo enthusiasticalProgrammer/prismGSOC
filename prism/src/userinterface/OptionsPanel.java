@@ -32,23 +32,23 @@ import prism.*;
 
 public abstract class OptionsPanel extends JPanel
 {
-    
-    private String tab;
-    
-    public OptionsPanel(String tab)
-    {
-        this.tab = tab;
-    }
-    
-    //Applies the state of the options panel to the data stored in PrismSettings
-    public abstract void apply() throws PrismException;
-    
-    //Sets up the gui to reflect the data stored in 
-    public abstract void synchronizeGUI();
-    
-    public String getTabText()
-    {
-        return tab;
-    }
-    
+
+	private String tab;
+
+	public OptionsPanel(String tab)
+	{
+		this.tab = tab;
+	}
+
+	//Applies the state of the options panel to the data stored in PrismSettings
+	public abstract void apply() throws PrismException;
+
+	//Sets up the gui to reflect the data stored in 
+	public abstract void synchronizeGUI();
+
+	public String getTabText()
+	{
+		return tab;
+	}
+
 }

@@ -40,7 +40,8 @@ import prism.PrismNotSupportedException;
 public class LTL2NBA extends PrismComponent
 {
 
-	public LTL2NBA(PrismComponent parent) throws PrismException {
+	public LTL2NBA(PrismComponent parent)
+	{
 		super(parent);
 	}
 

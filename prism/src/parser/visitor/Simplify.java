@@ -35,6 +35,7 @@ import prism.PrismLangException;
  */
 public class Simplify extends ASTTraverseModify
 {
+	@Override
 	public Object visit(ExpressionBinaryOp e) throws PrismLangException
 	{
 		// Apply recursively
@@ -151,6 +152,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionUnaryOp e) throws PrismLangException
 	{
 		// Apply recursively
@@ -166,6 +168,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionITE e) throws PrismLangException
 	{
 		// Apply recursively
@@ -186,6 +189,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionFunc e) throws PrismLangException
 	{
 		int i, n;
@@ -193,7 +197,8 @@ public class Simplify extends ASTTraverseModify
 		// Apply recursively
 		n = e.getNumOperands();
 		for (i = 0; i < n; i++) {
-			if (e.getOperand(i) != null) e.setOperand(i, (Expression)(e.getOperand(i).accept(this)));
+			if (e.getOperand(i) != null)
+				e.setOperand(i, (Expression) (e.getOperand(i).accept(this)));
 		}
 		// If all operands are literals, replace with literal
 		literal = true;
@@ -209,8 +214,9 @@ public class Simplify extends ASTTraverseModify
 		}
 		return e;
 	}
-	
-	public Object visit(ExpressionFormula e) throws PrismLangException
+
+	@Override
+	public Object visit(ExpressionFormula e)
 	{
 		// If formula has an attached definition, just replace it with that
 		return e.getDefinition() != null ? e.getDefinition() : e;

@@ -133,6 +133,7 @@ public class FormulaList extends ASTElement
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -141,6 +142,7 @@ public class FormulaList extends ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
@@ -158,13 +160,14 @@ public class FormulaList extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		int i, n;
 		FormulaList ret = new FormulaList();
 		n = size();
 		for (i = 0; i < n; i++) {
-			ret.addFormula((ExpressionIdent)getFormulaNameIdent(i).deepCopy(), getFormula(i).deepCopy());
+			ret.addFormula((ExpressionIdent) getFormulaNameIdent(i).deepCopy(), getFormula(i).deepCopy());
 		}
 		ret.setPosition(this);
 		return ret;

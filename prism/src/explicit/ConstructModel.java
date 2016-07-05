@@ -33,6 +33,8 @@ import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -66,14 +68,14 @@ public class ConstructModel extends PrismComponent
 	/** Should actions be attached to distributions (and used to distinguish them)? */
 	protected boolean distinguishActions = true;
 	/** Should labels be processed and attached to the model? */
-	protected boolean attachLabels = true; 
+	protected boolean attachLabels = true;
 
 	// Details of built model:
 
 	/** Reachable states */
 	protected List<State> statesList;
 
-	public ConstructModel(PrismComponent parent) throws PrismException
+	public ConstructModel(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -81,7 +83,6 @@ public class ConstructModel extends PrismComponent
 	/**
 	 * Get the list of states associated with the last model construction performed.  
 	 */
-
 	public List<State> getStatesList()
 	{
 		return statesList;
@@ -125,7 +126,7 @@ public class ConstructModel extends PrismComponent
 	 * Construct an explicit-state model and return it.
 	 * @param modelGen The ModelGenerator interface providing the model 
 	 */
-	public Model constructModel(ModelGenerator modelGen) throws PrismException
+	public @NonNull Model constructModel(ModelGenerator modelGen) throws PrismException
 	{
 		return constructModel(modelGen, false);
 	}
@@ -137,7 +138,7 @@ public class ConstructModel extends PrismComponent
 	 * @param modelGen The ModelGenerator interface providing the model 
 	 * @param justReach If true, just build the reachable state set, not the model
 	 */
-	public Model constructModel(ModelGenerator modelGen, boolean justReach) throws PrismException
+	public @NonNull Model constructModel(ModelGenerator modelGen, boolean justReach) throws PrismException
 	{
 		// Model info
 		ModelType modelType;
@@ -159,7 +160,7 @@ public class ConstructModel extends PrismComponent
 
 		// Get model info
 		modelType = modelGen.getModelType();
-		
+
 		// Display a warning if there are unbounded vars
 		VarList varList = modelGen.createVarList();
 		if (modelGen.containsUnboundedVariables())
@@ -335,6 +336,7 @@ public class ConstructModel extends PrismComponent
 			case STPG:
 			case SMG:
 			case PTA:
+			default:
 				throw new PrismNotSupportedException("Model construction not supported for " + modelType + "s");
 			}
 			model.setStatesList(statesList);
@@ -347,14 +349,14 @@ public class ConstructModel extends PrismComponent
 
 		if (attachLabels)
 			attachLabels(modelGen, model);
-		
+
 		return model;
 	}
 
 	private void attachLabels(ModelGenerator modelGen, ModelExplicit model) throws PrismException
 	{
 		// Get state info
-		List <State> statesList = model.getStatesList();
+		List<State> statesList = model.getStatesList();
 		int numStates = statesList.size();
 		// Create storage for labels
 		int numLabels = modelGen.getNumLabels();

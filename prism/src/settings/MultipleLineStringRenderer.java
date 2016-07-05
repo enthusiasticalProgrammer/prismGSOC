@@ -33,104 +33,88 @@ import javax.swing.border.*;
 
 public class MultipleLineStringRenderer implements SettingRenderer
 {
-    private JTextArea area = new JTextArea();
-    private Font font = new Font("monospaced", Font.PLAIN, 12);
-    private Font font2 = new Font("monospaced", Font.ITALIC, 12);
-    
-    
-    public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row, int column)
-    {
-        area.setMargin(new Insets(0, 2, 4, 2));
-        if (isSelected)
-        {
-            area.setForeground(table.getSelectionForeground());
-            area.setBackground(table.getSelectionBackground());
-        }
-        else
-        {
-            area.setForeground(table.getForeground());
-            area.setBackground(table.getBackground());
-        }
-        
-        if(hasFocus)
-        {
-            area.setBorder( UIManager.getBorder("Table.focusCellHighlightBorder") );
-        }
-        else
-        {
-            area.setBorder(new EmptyBorder(1, 2, 2, 1));
-        }
-        
-        if(value instanceof String)
-        {
-            String str = (String)value;
-            
-            area.setText(str);
+	private JTextArea area = new JTextArea();
+	private Font font = new Font("monospaced", Font.PLAIN, 12);
+	private Font font2 = new Font("monospaced", Font.ITALIC, 12);
 
-	    area.setEnabled(isEnabled);
-            area.setEditable(isEnabled);
-            area.setCaretColor(isEnabled?Color.black:Color.white);
-            
-            area.setFont(font);
-            
-        }
-        else if(value instanceof ArrayList)
-        {
-            ArrayList values = (ArrayList)value;
-            if(values.size() > 0)
-            {
-                //if we have multiple properties selected.
-                String last = null;
-                boolean allSame = true;
-                for(int i = 0; i < values.size(); i++)
-                {
-                    if(values.get(i) instanceof String)
-                    {
-                        String str = (String)values.get(i);
-                        if(last != null)
-                        {
-                            if(!str.equals(last))
-                            {
-                                allSame = false; break;
-                            }
-                            last = str;
-                        }
-                        else
-                        {
-                            last = str;
-                        }
-                    }
-                }
-                if(allSame)
-                {
-                    area.setText(last);
-                    
-                    area.setEnabled(isEnabled);
-                    area.setEditable(isEnabled);
-                    area.setCaretColor(isEnabled?Color.black:Color.white);
-            
-                    area.setFont(font);
-                }
-                else
-                {
-                    area.setText("(Different values)");
-                    
-                    area.setEnabled(isEnabled);
-                    area.setEditable(isEnabled);
-                    area.setCaretColor(isEnabled?Color.black:Color.white);
-                    area.setBackground(Color.lightGray);
-                    area.setFont(font2);
-                }
-                
-            }
-        }
-        //sort out the height
-        int heightWanted = (int)area.getPreferredSize().getHeight();
-        if(hasFocus) heightWanted++; //this is a hack (for some reason the UIManager provides a border that is 1 pixel too small for the cell highlight!!)
-        if(heightWanted != table.getRowHeight(row))
-            table.setRowHeight(row, heightWanted);
-        
-        return area;
-    }
-    
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
+			int column)
+	{
+		area.setMargin(new Insets(0, 2, 4, 2));
+		if (isSelected) {
+			area.setForeground(table.getSelectionForeground());
+			area.setBackground(table.getSelectionBackground());
+		} else {
+			area.setForeground(table.getForeground());
+			area.setBackground(table.getBackground());
+		}
+
+		if (hasFocus) {
+			area.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+		} else {
+			area.setBorder(new EmptyBorder(1, 2, 2, 1));
+		}
+
+		if (value instanceof String) {
+			String str = (String) value;
+
+			area.setText(str);
+
+			area.setEnabled(isEnabled);
+			area.setEditable(isEnabled);
+			area.setCaretColor(isEnabled ? Color.black : Color.white);
+
+			area.setFont(font);
+
+		} else if (value instanceof ArrayList) {
+			ArrayList values = (ArrayList) value;
+			if (values.size() > 0) {
+				//if we have multiple properties selected.
+				String last = null;
+				boolean allSame = true;
+				for (int i = 0; i < values.size(); i++) {
+					if (values.get(i) instanceof String) {
+						String str = (String) values.get(i);
+						if (last != null) {
+							if (!str.equals(last)) {
+								allSame = false;
+								break;
+							}
+							last = str;
+						} else {
+							last = str;
+						}
+					}
+				}
+				if (allSame) {
+					area.setText(last);
+
+					area.setEnabled(isEnabled);
+					area.setEditable(isEnabled);
+					area.setCaretColor(isEnabled ? Color.black : Color.white);
+
+					area.setFont(font);
+				} else {
+					area.setText("(Different values)");
+
+					area.setEnabled(isEnabled);
+					area.setEditable(isEnabled);
+					area.setCaretColor(isEnabled ? Color.black : Color.white);
+					area.setBackground(Color.lightGray);
+					area.setFont(font2);
+				}
+
+			}
+		}
+		//sort out the height
+		int heightWanted = (int) area.getPreferredSize().getHeight();
+		if (hasFocus)
+			heightWanted++; //this is a hack (for some reason the UIManager provides a border that is 1 pixel too small for the cell highlight!!)
+		if (heightWanted != table.getRowHeight(row))
+			table.setRowHeight(row, heightWanted);
+
+		return area;
+	}
+
 }

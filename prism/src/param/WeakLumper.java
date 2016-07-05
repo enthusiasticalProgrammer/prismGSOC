@@ -42,17 +42,19 @@ import java.util.Map.Entry;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class WeakLumper extends Lumper {
+final class WeakLumper extends Lumper
+{
 
 	/**
 	 * Construct a new weak bisimulation lumper.
 	 * 
 	 * @param origPmc Markov chain to construct lumper for
 	 */
-	WeakLumper(MutablePMC origPmc) {
+	WeakLumper(MutablePMC origPmc)
+	{
 		super(origPmc);
 	}
-	
+
 	/**
 	 * Construct the weak bisimulation signature of given block.
 	 * The signature is a mapping of blocks to the probability to move
@@ -105,7 +107,7 @@ final class WeakLumper extends Lumper {
 		}
 		return signature;
 	}
-	
+
 	/**
 	 * Refines a given block to a list of new blocks for weak bisimulation.
 	 * New blocks are as follows: some of the new blocks consist of the
@@ -124,8 +126,8 @@ final class WeakLumper extends Lumper {
 	 * @param newBlocks list of new blocks generated
 	 */
 	@Override
-	protected void refineBlock(HashSet<Integer> oldBlock,
-			ArrayList<HashSet<Integer>> newBlocks) {
+	protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks)
+	{
 		ArrayList<Integer> nonSilent = new ArrayList<Integer>(oldBlock.size());
 		HashSet<Integer> silent = new HashSet<Integer>();
 		HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>> signatures = new HashMap<HashMap<HashSet<Integer>, Function>, HashSet<Integer>>();
@@ -148,7 +150,7 @@ final class WeakLumper extends Lumper {
 				silent.add(state);
 			}
 		}
-		
+
 		/* non-silent states reach only the new block they are contained in */
 		HashMap<Integer, HashSet<HashSet<Integer>>> reachWhichBlocks = new HashMap<Integer, HashSet<HashSet<Integer>>>();
 		for (int state : oldBlock) {
@@ -158,7 +160,7 @@ final class WeakLumper extends Lumper {
 			}
 			reachWhichBlocks.put(state, predReachBlocks);
 		}
-		
+
 		/* collect all silent states which can reach a particular
 		 * non-silent state by performing a backwards depth-first search.
 		 * Mark silent states one comes across with the block of the
@@ -206,7 +208,8 @@ final class WeakLumper extends Lumper {
 	 * states) must lead to adding a self loop in their containing block.
 	 */
 	@Override
-	protected void buildQuotient() {
+	protected void buildQuotient()
+	{
 		optPmc = new MutablePMC(origPmc.getFunctionFactory(), blocks.size(), origPmc.isUseRewards(), false);
 		for (int newState = 0; newState < blocks.size(); newState++) {
 			HashMap<HashSet<Integer>, Function> signature = null;
@@ -221,7 +224,7 @@ final class WeakLumper extends Lumper {
 				}
 			}
 			if (signature == null) {
-				optPmc.addTransition(newState, newState, origPmc.getFunctionFactory().getOne());				
+				optPmc.addTransition(newState, newState, origPmc.getFunctionFactory().getOne());
 			} else {
 				for (Entry<HashSet<Integer>, Function> entry : signature.entrySet()) {
 					optPmc.addTransition(newState, blockToNumber.get(entry.getKey()), entry.getValue());
@@ -234,7 +237,7 @@ final class WeakLumper extends Lumper {
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates an initial partitioning.
 	 * This function is based on the of the {@code Lumper} class. However,
@@ -244,7 +247,8 @@ final class WeakLumper extends Lumper {
 	 * any number of steps.
 	 */
 	@Override
-	protected void createInitialPartition() {
+	protected void createInitialPartition()
+	{
 		super.createInitialPartition();
 		ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
 		while (partition.mayChange()) {

@@ -30,6 +30,8 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.ast.ExpressionTemporal;
 import prism.PrismComponent;
 import prism.PrismException;
@@ -50,11 +52,11 @@ public class CTMDPModelChecker extends MDPModelChecker
 	{
 		super(parent);
 	}
-	
+
 	// Model checking functions
 
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		double uTime;
 		BitSet b1, b2;
@@ -111,10 +113,11 @@ public class CTMDPModelChecker extends MDPModelChecker
 	 * @param init Initial solution vector - pass null for default
 	 * @param results Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(CTMDP ctmdp, BitSet remain, BitSet target, double t, boolean min, double init[], double results[]) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(CTMDP ctmdp, BitSet remain, BitSet target, double t, boolean min, double init[], double results[])
+			throws PrismException
 	{
 		// TODO: implement until
-		
+
 		MDP mdp;
 		MDPModelChecker mc;
 		ModelCheckerResult res;
@@ -148,10 +151,11 @@ public class CTMDPModelChecker extends MDPModelChecker
 	 * @param init: Initial solution vector - pass null for default
 	 * @param results: Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
-	public ModelCheckerResult computeBoundedReachProbsOld(CTMDP ctmdp, BitSet remain, BitSet target, double t, boolean min, double init[], double results[]) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbsOld(CTMDP ctmdp, BitSet remain, BitSet target, double t, boolean min, double init[], double results[])
+			throws PrismException
 	{
 		// TODO: implement until
-		
+
 		ModelCheckerResult res = null;
 		int i, n, iters;
 		double soln[], soln2[], tmpsoln[], sum[];

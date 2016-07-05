@@ -585,6 +585,7 @@ public class PropertiesFile extends ASTElement
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -593,6 +594,7 @@ public class PropertiesFile extends ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "", tmp;
@@ -626,6 +628,7 @@ public class PropertiesFile extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public ASTElement deepCopy()
 	{

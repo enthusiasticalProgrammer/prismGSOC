@@ -101,7 +101,7 @@ public final class SPRTMethod extends SimulationMethod
 	}
 
 	@Override
-	public void computeMissingParameterBeforeSim() throws PrismException
+	public void computeMissingParameterBeforeSim()
 	{
 		// Nothing to do (num iters computed on-the-fly)
 	}
@@ -223,17 +223,18 @@ public final class SPRTMethod extends SimulationMethod
 	}
 
 	@Override
-	public Object getResult(Sampler sampler) throws PrismException
+	public Object getResult(Sampler sampler)
 	{
 		// Is hypothesis H0 true?
 		return new Boolean(h0true);
 	}
 
 	@Override
-	public String getResultExplanation(Sampler sampler){
+	public String getResultExplanation(Sampler sampler)
+	{
 		return computedIterations + " samples needed to decide property " + h0true;
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

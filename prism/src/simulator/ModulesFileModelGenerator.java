@@ -21,7 +21,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 {
 	// Parent PrismComponent (logs, settings etc.)
 	protected PrismComponent parent;
-	
+
 	// PRISM model info
 	/** The original modules file (might have unresolved constants) */
 	private ModulesFile originalModulesFile;
@@ -31,9 +31,9 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	private Values mfConstants;
 	private VarList varList;
 	private LabelList labelList;
-	
+
 	// Model exploration info
-	
+
 	// State currently being explored
 	private State exploreState;
 	// Updater object for model
@@ -42,7 +42,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	protected TransitionList transitionList;
 	// Has the transition list been built? 
 	protected boolean transitionListBuilt;
-	
+
 	/**
 	 * Build a ModulesFileModelGenerator for a particular PRISM model, represented by a ModuleFile instance.
 	 * @param modulesFile The PRISM model
@@ -51,7 +51,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	{
 		this(modulesFile, null);
 	}
-	
+
 	/**
 	 * Build a ModulesFileModelGenerator for a particular PRISM model, represented by a ModuleFile instance.
 	 * @param modulesFile The PRISM model
@@ -59,7 +59,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	public ModulesFileModelGenerator(ModulesFile modulesFile, PrismComponent parent) throws PrismException
 	{
 		this.parent = parent;
-		
+
 		// No support for PTAs yet
 		if (modulesFile.getModelType() == ModelType.PTA) {
 			throw new PrismException("Sorry - the simulator does not currently support PTAs");
@@ -68,12 +68,12 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		if (modulesFile.getSystemDefn() != null) {
 			throw new PrismException("Sorry - the simulator does not currently handle the system...endsystem construct");
 		}
-		
+
 		// Store basic model info
 		this.modulesFile = modulesFile;
 		this.originalModulesFile = modulesFile;
 		modelType = modulesFile.getModelType();
-		
+
 		// If there are no constants to define, go ahead and initialise;
 		// Otherwise, setSomeUndefinedConstants needs to be called when the values are available  
 		mfConstants = modulesFile.getConstantValues();
@@ -81,7 +81,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 			initialise();
 		}
 	}
-	
+
 	/**
 	 * (Re-)Initialise the class ready for model exploration
 	 * (can only be done once any constants needed have been provided)
@@ -94,21 +94,21 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		// Get info
 		varList = modulesFile.createVarList();
 		labelList = modulesFile.getLabelList();
-		
+
 		// Create data structures for exploring model
 		updater = new Updater(modulesFile, varList, parent);
 		transitionList = new TransitionList();
 		transitionListBuilt = false;
 	}
-	
+
 	// Model info
-	
+
 	@Override
 	public ModelType getModelType()
 	{
 		return modelType;
 	}
-	
+
 	@Override
 	public void setSomeUndefinedConstants(Values someValues) throws PrismException
 	{
@@ -123,25 +123,25 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		mfConstants = modulesFile.getConstantValues();
 		initialise();
 	}
-	
+
 	@Override
 	public Values getConstantValues()
 	{
 		return mfConstants;
 	}
-	
+
 	@Override
 	public boolean containsUnboundedVariables()
 	{
 		return modulesFile.containsUnboundedVariables();
 	}
-	
+
 	@Override
 	public int getNumVars()
 	{
 		return modulesFile.getNumVars();
 	}
-	
+
 	@Override
 	public List<String> getVarNames()
 	{
@@ -157,39 +157,39 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	@Override
 	public int getNumLabels()
 	{
-		return labelList.size();	
+		return labelList.size();
 	}
-	
+
 	@Override
-	public String getLabelName(int i) throws PrismException
+	public String getLabelName(int i)
 	{
 		return labelList.getLabelName(i);
 	}
-	
+
 	@Override
 	public int getLabelIndex(String label)
 	{
 		return labelList.getLabelIndex(label);
 	}
-	
+
 	//@Override
 	public VarList getVarList()
 	{
 		return varList;
 	}
-	
+
 	@Override
 	public int getNumRewardStructs()
 	{
 		return modulesFile.getNumRewardStructs();
 	}
-	
+
 	@Override
 	public int getRewardStructIndex(String name)
 	{
 		return modulesFile.getRewardStructIndex(name);
 	}
-	
+
 	@Override
 	public RewardStruct getRewardStruct(int i)
 	{
@@ -197,11 +197,11 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public boolean hasSingleInitialState() throws PrismException
+	public boolean hasSingleInitialState()
 	{
 		return modulesFile.getInitialStates() == null;
 	}
-	
+
 	@Override
 	public State getInitialState() throws PrismException
 	{
@@ -212,7 +212,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 			return getInitialStates().get(0);
 		}
 	}
-	
+
 	@Override
 	public List<State> getInitialStates() throws PrismException
 	{
@@ -237,18 +237,18 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public void exploreState(State exploreState) throws PrismException
+	public void exploreState(State exploreState)
 	{
 		this.exploreState = exploreState;
 		transitionListBuilt = false;
 	}
-	
+
 	@Override
 	public State getExploreState()
 	{
 		return exploreState;
 	}
-	
+
 	@Override
 	public int getNumChoices() throws PrismException
 	{
@@ -276,6 +276,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	//@Override
+	@Override
 	public String getTransitionAction(int index) throws PrismException
 	{
 		int a = getTransitionList().getTransitionModuleOrActionIndex(index);
@@ -308,7 +309,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		Expression expr = labelList.getLabel(i);
 		return expr.evaluateBoolean(exploreState);
 	}
-	
+
 	@Override
 	public double getStateReward(int index, State state) throws PrismException
 	{
@@ -326,9 +327,9 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		}
 		return d;
 	}
-	
+
 	// Local utility methods
-	
+
 	/**
 	 * Returns the current list of available transitions, generating it first if this has not yet been done.
 	 */

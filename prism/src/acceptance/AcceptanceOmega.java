@@ -88,9 +88,10 @@ public interface AcceptanceOmega extends Cloneable
 	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException;
 
 	/** Abstract functor for use with the lift function. */
-	public static abstract class LiftBitSet {
+	public static abstract class LiftBitSet
+	{
 		public abstract BitSet lift(BitSet states);
-	};
+	}
 
 	/**
 	 * Lift the state sets in the acceptance condition.
@@ -105,7 +106,7 @@ public interface AcceptanceOmega extends Cloneable
 	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
-	
+
 	/**
 	 * Convert this acceptance condition to an AcceptanceGeneric condition.
 	 */

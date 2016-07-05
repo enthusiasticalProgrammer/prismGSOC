@@ -31,69 +31,70 @@ import parser.ast.ASTElement;
 public class PrismLangException extends PrismException
 {
 	public static final int MAX_ERR_STR = 20;
-	
+
 	protected ASTElement e = null;
-	
+
 	public PrismLangException(String s)
 	{
 		super(s);
 	}
-	
+
 	public PrismLangException(String s, ASTElement e)
 	{
 		super(s);
-		this.e =e ;
+		this.e = e;
 	}
-	
+
 	public void setASTElement(ASTElement e)
 	{
-		this.e =e ;
+		this.e = e;
 	}
-	
+
 	public boolean hasASTElement()
 	{
-		return e != null ;
+		return e != null;
 	}
-	
+
 	public ASTElement getASTElement()
 	{
-		return e ;
+		return e;
 	}
-	
+
+	@Override
 	public String getMessage()
 	{
 		String msg = super.getMessage();
-		if (e == null) return msg;
+		if (e == null)
+			return msg;
 		String s = e.toString();
 		if (s.length() < MAX_ERR_STR) {
-			if (e.hasPosition()) msg += " (\"" + s + "\", " + e.getBeginString() +")";
-			else msg += " (\"" + s + "\")";
-		}
-		else {
-			if (e.hasPosition()) msg += " (" + e.getBeginString() +")";
+			if (e.hasPosition())
+				msg += " (\"" + s + "\", " + e.getBeginString() + ")";
+			else
+				msg += " (\"" + s + "\")";
+		} else {
+			if (e.hasPosition())
+				msg += " (" + e.getBeginString() + ")";
 		}
 		return msg;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "Error: " + getMessage() + ".";
 	}
-	
+
 	public boolean hasLineNumbers()
 	{
-		if (hasASTElement())
-		{
-			if (e.getBeginColumn() != -1
-			 && e.getBeginLine() != -1
-			 && e.getEndLine() != -1
-			 && e.getEndColumn() != -1)
-			return true;
+		if (hasASTElement()) {
+			if (e.getBeginColumn() != -1 && e.getBeginLine() != -1 && e.getEndLine() != -1 && e.getEndColumn() != -1)
+				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public int getBeginColumn()
 	{
 		if (hasLineNumbers())
@@ -101,7 +102,7 @@ public class PrismLangException extends PrismException
 		else
 			return -1;
 	}
-	
+
 	public int getEndColumn()
 	{
 		if (hasLineNumbers())
@@ -109,7 +110,7 @@ public class PrismLangException extends PrismException
 		else
 			return -1;
 	}
-	
+
 	public int getBeginLine()
 	{
 		if (hasLineNumbers())
@@ -117,7 +118,7 @@ public class PrismLangException extends PrismException
 		else
 			return -1;
 	}
-	
+
 	public int getEndLine()
 	{
 		if (hasLineNumbers())

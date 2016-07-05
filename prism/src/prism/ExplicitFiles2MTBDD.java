@@ -143,7 +143,7 @@ public class ExplicitFiles2MTBDD
 		statesArray = new int[numStates][];
 		BufferedReader in = null;
 		try {
-
+			// open file for reading
 			in = new BufferedReader(new FileReader(statesFile));
 			// skip first line
 			in.readLine();

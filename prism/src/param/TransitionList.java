@@ -77,7 +77,7 @@ public class TransitionList
 		numTransitions += tr.size();
 		//probSum += tr.getProbabilitySum();
 	}
-	
+
 	// ACCESSORS
 
 	/**
@@ -103,9 +103,9 @@ public class TransitionList
 	{
 		return probSum;
 	}
-
+	
 	// Get access to Choice objects 
-
+	
 	/**
 	 * Get the ith choice.
 	 */
@@ -237,9 +237,9 @@ public class TransitionList
 	{
 		return getChoiceOfTransition(index).computeTarget(transitionOffsets.get(index), currentState);
 	}
-	
+
 	// Other checks and queries
-	
+
 	/**
 	 * Is there a deadlock (i.e. no available transitions)?
 	 */
@@ -255,10 +255,10 @@ public class TransitionList
 	 */
 	public boolean isDeterministic()
 	{
-		if(numTransitions == 1) {
+		if (numTransitions == 1) {
 			Expression e = getChoice(0).getProbability(0);
-			if(Expression.isDouble(e)) {
-				return (Double)((ExpressionLiteral)e).getValue() == 1.0;
+			if (Expression.isDouble(e)) {
+				return (Double) ((ExpressionLiteral) e).getValue() == 1.0;
 			}
 		}
 		return false;
@@ -296,13 +296,13 @@ public class TransitionList
 	 * Check the validity of the available transitions for a given model type.
 	 * Throw a PrismException if an error is found.
 	 */
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		for (ChoiceListFlexi ch : choices) {
 			ch.checkValid(modelType);
 		}
 	}
-	
+
 	/**
 	 * Check whether the available transitions (from a particular state)
 	 * would cause any errors, mainly variable overflows.
@@ -315,7 +315,7 @@ public class TransitionList
 			ch.checkForErrors(currentState, varList);
 		}
 	}
-	
+
 	@Override
 	public String toString()
 	{

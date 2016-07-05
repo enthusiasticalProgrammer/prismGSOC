@@ -44,7 +44,7 @@ public class LoadPEPAModelThread extends Thread
 	private GUIPepaModelEditor pepaEdit;
 	private boolean replace;
 	private Exception ex;
-	
+
 	/** Creates a new instance of LoadPEPAModelThread */
 	public LoadPEPAModelThread(GUIMultiModelHandler handler, GUIModelEditor edit, File f, boolean reload)
 	{
@@ -56,61 +56,71 @@ public class LoadPEPAModelThread extends Thread
 		replace = false;
 		ex = null;
 	}
-	
+
+	@Override
 	public void run()
 	{
-		if(edit instanceof GUIPepaModelEditor)
-		{
-			pepaEdit = (GUIPepaModelEditor)edit;
+		if (edit instanceof GUIPepaModelEditor) {
+			pepaEdit = (GUIPepaModelEditor) edit;
 			replace = false;
-		}
-		else
-		{
+		} else {
 			pepaEdit = new GUIPepaModelEditor(handler);
 			replace = true;
 		}
-		
-		try
-		{
+
+		try {
 			//notify interface of start of computation and start the read into pepaEdit
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				try
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
 				{
-					plug.startProgress();
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
-					plug.setTaskBarText("Loading model...");
-					pepaEdit.read(new FileReader(f), f);
+					try {
+						plug.startProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
+						plug.setTaskBarText("Loading model...");
+						pepaEdit.read(new FileReader(f), f);
+					} catch (IOException e) {
+						ex = e;
+					}
 				}
-				catch(IOException e)
-				{
-					ex = e;
-				}
-			}});
-			
+			});
+
 			//If there was a problem with the loading, notify the interface.
-			if(ex != null) {
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					plug.stopProgress(); 
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
-					plug.setTaskBarText("Loading model... error.");
-					plug.error("Could not open file \"" + f + "\"");
-				}});
+			if (ex != null) {
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						plug.stopProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
+						plug.setTaskBarText("Loading model... error.");
+						plug.error("Could not open file \"" + f + "\"");
+					}
+				});
 				return;
 			}
-			
+
 			//If we get here, the load has been successful, notify the interface and tell the handler.
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				plug.stopProgress(); 
-				plug.setTaskBarText("Loading model... done.");
-				plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
-				if(!reload)
-					handler.pepaModelLoaded(pepaEdit, f ,replace);
-				else
-					handler.pepaModelReLoaded(f);
-			}});
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					plug.stopProgress();
+					plug.setTaskBarText("Loading model... done.");
+					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
+					if (!reload)
+						handler.pepaModelLoaded(pepaEdit, f, replace);
+					else
+						handler.pepaModelReLoaded(f);
+				}
+			});
 		}
 		// catch and ignore any thread exceptions
-		catch (java.lang.InterruptedException e) {}
-		catch (java.lang.reflect.InvocationTargetException e) {}
+		catch (java.lang.InterruptedException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
 	}
 }

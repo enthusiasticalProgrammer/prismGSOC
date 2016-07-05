@@ -46,12 +46,12 @@ public class ExpressionFunc extends Expression
 	public static final int MOD = 5;
 	public static final int LOG = 6;
 	public static final int MULTI = 7;
-	
+
 	// Built-in function names
-	public static final String names[] = { "min", "max", "floor", "ceil", "pow", "mod", "log", "multi"};
+	public static final String names[] = { "min", "max", "floor", "ceil", "pow", "mod", "log", "multi" };
 	// Min/max function arities
-	public static final int minArities[] = { 2, 2, 1, 1, 2, 2, 2, 1,};
-	public static final int maxArities[] = { -1, -1, 1, 1, 2, 2, 2, -1};
+	public static final int minArities[] = { 2, 2, 1, 1, 2, 2, 2, 1, };
+	public static final int maxArities[] = { -1, -1, 1, 1, 2, 2, 2, -1 };
 
 	// Function name
 	private String name = "";
@@ -164,7 +164,7 @@ public class ExpressionFunc extends Expression
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -299,7 +299,7 @@ public class ExpressionFunc extends Expression
 		return (int) res;
 	}
 
-	public static double evaluatePowDouble(double base, double exp) throws PrismLangException
+	public static double evaluatePowDouble(double base, double exp)
 	{
 		return Math.pow(base, exp);
 	}
@@ -323,7 +323,7 @@ public class ExpressionFunc extends Expression
 		int rem = i % j;
 		return (rem < 0) ? rem + j : rem;
 	}
-	
+
 	public Object evaluateLog(EvaluateContext ec) throws PrismLangException
 	{
 		try {
@@ -334,7 +334,7 @@ public class ExpressionFunc extends Expression
 		}
 	}
 
-	public static double evaluateLog(double x, double b) throws PrismLangException
+	public static double evaluateLog(double x, double b)
 	{
 		return PrismUtils.log(x, b);
 	}
@@ -377,9 +377,9 @@ public class ExpressionFunc extends Expression
 
 		return e;
 	}
-	
+
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

@@ -31,9 +31,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.xml.bind.annotation.XmlElement;
-
 import java.util.Set;
 
 import prism.PrismUtils;
@@ -44,7 +41,6 @@ import prism.PrismUtils;
  */
 public class Distribution implements Iterable<Entry<Integer, Double>>
 {
-	@XmlElement
 	private HashMap<Integer, Double> map;
 
 	/**
@@ -177,6 +173,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	/**
 	 * Get an iterator over the entries of the map defining the distribution.
 	 */
+	@Override
 	public Iterator<Entry<Integer, Double>> iterator()
 	{
 		return map.entrySet().iterator();
@@ -242,22 +239,6 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		return distrNew;
 	}
 
-	/**
-	 * Puts the probabilities of other inside this distribution,
-	 * such that both add up. 
-	 */
-	public void merge(Distribution other)
-	{
-		for (Entry<Integer, Double> entry : other.map.entrySet()) {
-			if (map.get(entry.getKey()) == null) {
-				map.put(entry.getKey(), entry.getValue());
-			} else {
-				map.put(entry.getKey(), entry.getValue() + map.get(entry.getKey()));
-			}
-		}
-
-	}
-
 	@Override
 	public boolean equals(Object o)
 	{
@@ -274,24 +255,6 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 				return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * returns the int-value, which corresponds to the random double random value.
-	 * TODO Christopher: write it better.
-	 * @param random: a random number (between zero and exclusive the sum of probabilities)
-	 * @return int: the choice of this Distribution which is as random as the input number 
-	 */
-	public int evaluate(double random){
-		for(Entry<Integer,Double> entry : map.entrySet()){
-			if(entry.getValue()>=random){
-				return entry.getKey();
-			}else{
-				random=random-entry.getValue();
-			}
-		}
-		throw new UnsupportedOperationException("the random input number seems to be a bit too large or my probabilities do not sum up to 1"
-				+ "\nme: "+this+ "\n random: "+random);
 	}
 
 	@Override

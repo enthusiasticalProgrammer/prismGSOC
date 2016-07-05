@@ -81,7 +81,7 @@ public abstract class Zone
 	{
 		down(null);
 	}
-	
+
 	/**
 	 * Free, i.e. remove constraints on a clock
 	 */
@@ -103,7 +103,7 @@ public abstract class Zone
 	public abstract void cClosure(int c);
 
 	// Zone operations (create new zone)
-	
+
 	/**
 	 * Complement
 	 * Creates non-convex zone so creates new one,
@@ -112,7 +112,7 @@ public abstract class Zone
 	public abstract NCZone createComplement();
 
 	// Zone queries (do not modify the zone)
-	
+
 	/**
 	 * Is this zone empty (i.e. inconsistent)?
 	 */
@@ -127,42 +127,44 @@ public abstract class Zone
 	 * Is a DBM (fully) included in this zone?
 	 */
 	public abstract boolean includes(DBM dbm);
-	
+
 	/**
 	 * Get the minimum value of a clock. 
 	 */
 	public abstract int getClockMin(int x);
-	
+
 	/**
 	 * Get the maximum value of a clock. 
 	 */
 	public abstract int getClockMax(int x);
-	
+
 	/**
 	 * Check if a clock is unbounded (can be infinite).
 	 */
 	public abstract boolean clockIsUnbounded(int x);
-	
+
 	/**
 	 * Check if all clocks are unbounded (can be infinite).
 	 */
 	public abstract boolean allClocksAreUnbounded();
-	
+
 	// Misc
-	
+
 	/**
 	 * Clone this zone
 	 */
 	public abstract Zone deepCopy();
-	
+
 	/**
 	 * Get storage info string
 	 */
 	public abstract String storageInfo();
-	
+
 	// Standard Java methods
 
+	@Override
 	public abstract int hashCode();
 
+	@Override
 	public abstract boolean equals(Object o);
 }

@@ -50,7 +50,7 @@ public class GenerateSimulationPath
 	// Enums
 	private enum PathType {
 		SIM_PATH_NUM_STEPS, SIM_PATH_TIME, SIM_PATH_DEADLOCK
-	};
+	}
 
 	// Basic info needed for path
 	private ModulesFile modulesFile;
@@ -150,7 +150,6 @@ public class GenerateSimulationPath
 	 * @param details Information about the path to be generated
 	 */
 	public void generateAndPlotSimulationPathInThread(ModulesFile modulesFile, State initialState, String details, long maxPathLength, Graph graphModel)
-			throws PrismException
 	{
 		new GenerateAndPlotThread(modulesFile, initialState, details, maxPathLength, graphModel).start();
 	}
@@ -286,8 +285,7 @@ public class GenerateSimulationPath
 				} else if (bool.equals("false")) {
 					changesFalseOptionGiven = true;
 					simPathShowChangesOnly = false;
-				}
-				else
+				} else
 					throw new PrismException("Value for \"changes\" option must \"true\" or \"false\"");
 			} else {
 				// path of fixed number of steps
@@ -308,7 +306,7 @@ public class GenerateSimulationPath
 		if (varsOptionGiven && !changesFalseOptionGiven) {
 			simPathShowChangesOnly = true;
 		}
-		
+
 		// Display warning if attempt to use "repeat=" option and not "deadlock" option
 		if (simPathRepeat > 1 && simPathType != PathType.SIM_PATH_DEADLOCK) {
 			simPathRepeat = 1;
@@ -325,7 +323,7 @@ public class GenerateSimulationPath
 		mainLog.println(" * time=<x> - generate a path of at least <x> time units");
 		mainLog.println(" * deadlock - generate a path until a deadlock is reached");
 		mainLog.println(" * repeat=<n> - try <n> paths until a deadlock is found");
-		
+
 		mainLog.println(" * sep=<val> - use <val> as column separator (space, tab, comma)");
 		mainLog.println(" * vars=<x1,x2,...> - show values for variables x1,x2,.. only");
 		mainLog.println(" * loopcheck=<true|false> - whether to detect deterministic loops");
@@ -367,7 +365,7 @@ public class GenerateSimulationPath
 	/**
 	 * Create a PathDisplayer object for graph plotting
 	 */
-	private PathDisplayer generateDisplayerForPlotting(Graph graphModel) throws PrismException
+	private PathDisplayer generateDisplayerForPlotting(Graph graphModel)
 	{
 		PathToGraph displayer;
 
@@ -471,7 +469,7 @@ public class GenerateSimulationPath
 		boolean done;
 
 		// Print details
-		if(simPathType==PathType.SIM_PATH_DEADLOCK){
+		if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 			mainLog.println("\nGenerating random path(s) until deadlock state...");
 		}
 
@@ -488,7 +486,7 @@ public class GenerateSimulationPath
 				engine.automaticTransition();
 				i++;
 				// Check for termination (depending on type)
-				if(simPathType==PathType.SIM_PATH_DEADLOCK){
+				if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 					if (engine.queryIsDeadlock() || i >= maxPathLength)
 						done = true;
 					break;
@@ -551,6 +549,7 @@ public class GenerateSimulationPath
 			this.graphModel = graphModel;
 		}
 
+		@Override
 		public void run()
 		{
 			try {

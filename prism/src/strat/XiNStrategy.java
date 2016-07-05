@@ -2,21 +2,21 @@ package strat;
 
 import java.math.BigInteger;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.Model;
 import explicit.MultiLongRun;
-import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismUtils;
 import solvers.SolverProxyInterface;
 
-//TODO @Christopher: add Documentation
 /**
- * this is more or less an in-between state, because the fact that it outputs the correct
+ * this is more or less an in-between state of a strategy, because the fact that it outputs the correct
  * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
  * but we can output an approximation of it.
- * We also ommitted some the computation of kappa and n (from the paper TODO: which paper),
+ * We also ommitted some the computation of kappa and n (from the paper CKK15),
  * because it is irrelevant
  */
 public class XiNStrategy implements Strategy
@@ -26,15 +26,15 @@ public class XiNStrategy implements Strategy
 	private BigInteger phase;
 
 	/**Corresponds to N in paper (with trivial mapping [1..n] <--> 2^[1..n])*/
-	private int N; //TODO Christopher: convert to BigInteger, because it sometimes overflows
+	private int N;
 
 	private double[] solverVariables;
 
-	private MultiLongRun mlr;
+	private MultiLongRun<?> mlr;
 
 	private final MDP mdp;
 
-	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun mlr, int n)
+	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun<?> mlr, int n)
 	{
 		this.solverVariables = solver.getVariableValues();
 		this.mlr = mlr;
@@ -76,7 +76,7 @@ public class XiNStrategy implements Strategy
 	{
 		//Nothing to do.
 		//technically one needs to adjust the phase sometimes, but
-		//it is not neccessary, because due to readability we only return
+		//it is not necessary, because due to readability we only return
 		//an approximated version of the strategy
 	}
 
@@ -109,7 +109,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public Model buildProduct(Model model) throws PrismException
+	public @NonNull Model buildProduct(Model model)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -133,19 +133,13 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void setMemory(Object memory) throws InvalidStrategyStateException
+	public void setMemory(Object memory)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getStateDescription()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getInitialStateOfTheProduct(int s)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -170,18 +164,6 @@ public class XiNStrategy implements Strategy
 
 	@Override
 	public void exportDotFile(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Object getChoiceAction()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void clear()
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -223,7 +205,7 @@ public class XiNStrategy implements Strategy
 			}
 		}
 		//epsilonDouble is important in case sumX is zero
-		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon+PrismUtils.epsilonDouble;
+		return sumXPrime * (1.0 - epsilon) <= sumX * epsilon + PrismUtils.epsilonDouble;
 	}
 
 	/**

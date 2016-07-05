@@ -30,16 +30,17 @@ import parser.*;
 import parser.visitor.*;
 import prism.PrismLangException;
 import parser.type.*;
+
 public class ExpressionLiteral extends Expression
 {
 	final Object value; // Value
 	String string; // Optionally, keep original string to preserve user formatting
 
 	// Constructor
-	
+
 	public ExpressionLiteral(Type type, Object value)
 	{
-		this(type, value, ""+value);
+		this(type, value, "" + value);
 	}
 
 	public ExpressionLiteral(Type type, Object value, String string)
@@ -57,7 +58,7 @@ public class ExpressionLiteral extends Expression
 	}
 
 	// Get Methods
-	
+
 	public Object getValue()
 	{
 		return value;
@@ -67,9 +68,9 @@ public class ExpressionLiteral extends Expression
 	{
 		return string;
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -81,9 +82,9 @@ public class ExpressionLiteral extends Expression
 	{
 		return true;
 	}
-	
+
 	@Override
-	public Object evaluate(EvaluateContext ec) throws PrismLangException
+	public Object evaluate(EvaluateContext ec)
 	{
 		return value;
 	}
@@ -95,7 +96,7 @@ public class ExpressionLiteral extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
@@ -111,7 +112,7 @@ public class ExpressionLiteral extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

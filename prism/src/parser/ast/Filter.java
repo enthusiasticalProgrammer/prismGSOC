@@ -41,14 +41,14 @@ public class Filter extends ASTElement
 	private boolean maxReq = false;
 
 	// Constructor
-	
+
 	public Filter(Expression expr)
 	{
 		this.expr = expr;
 	}
 
 	// Set methods
-	
+
 	public void setExpression(Expression expr)
 	{
 		this.expr = expr;
@@ -63,9 +63,9 @@ public class Filter extends ASTElement
 	{
 		maxReq = b;
 	}
-	
+
 	// Get methods
-	
+
 	public Expression getExpression()
 	{
 		return expr;
@@ -93,32 +93,37 @@ public class Filter extends ASTElement
 			return maxReq ? "max" : "state";
 		}
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
 		s += "{" + expr + "}";
-		if (minReq) s += "{min}";
-		if (maxReq) s += "{max}";
+		if (minReq)
+			s += "{min}";
+		if (maxReq)
+			s += "{max}";
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		Filter ret = new Filter(expr.deepCopy());

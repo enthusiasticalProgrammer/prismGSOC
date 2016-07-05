@@ -23,28 +23,31 @@ package jltl2dstar;
 /**
  * Options for the LTL2DRA scheduler.
  */
-public class Options_LTL2DRA implements Cloneable {
+public class Options_LTL2DRA implements Cloneable
+{
 
 	/** Constructor */
-	public Options_LTL2DRA() {
+	public Options_LTL2DRA()
+	{
 		// Defaults...
-		allow_union=true;
-		recursive_union=true;
-		optimizeAcceptance=true;
-		bisim=false;
-		recursive_bisim=true;
+		allow_union = true;
+		recursive_union = true;
+		optimizeAcceptance = true;
+		bisim = false;
+		recursive_bisim = true;
 		// safety=false;
 
-		automata=AutomataType.RABIN;
-		only_union=false;
+		automata = AutomataType.RABIN;
+		only_union = false;
 		// only_safety=false;
 
-		detailed_states=false;
-		verbose_scheduler=false;
-		opt_safra=new Options_Safra();
+		detailed_states = false;
+		verbose_scheduler = false;
+		opt_safra = new Options_Safra();
 		// scheck_path="";
 	}
-	
+
+	@Override
 	public Options_LTL2DRA clone()
 	{
 		Options_LTL2DRA rv = new Options_LTL2DRA();
@@ -55,38 +58,35 @@ public class Options_LTL2DRA implements Cloneable {
 		rv.recursive_bisim = recursive_bisim;
 		// rv.safety = false;
 
-		rv.automata=automata;
+		rv.automata = automata;
 		rv.only_union = only_union;
 		// rv.only_safety = false;
 
 		rv.detailed_states = detailed_states;
 		rv.verbose_scheduler = verbose_scheduler;
-		rv.opt_safra = opt_safra.clone(); 
+		rv.opt_safra = opt_safra.clone();
 		// rv.scheck_path=scheck_path;
-		
+
 		return rv;
 	}
 
 	/** Disable all options */
-	public void allFalse() {
-		allow_union
-		=recursive_union
+	public void allFalse()
+	{
+		allow_union = recursive_union
 
 		// =safety
 
-		=optimizeAcceptance
-		=bisim
-		=recursive_bisim
+				= optimizeAcceptance = bisim = recursive_bisim
 
-		=only_union
-		// =only_safety
-		=detailed_states
-		=verbose_scheduler
-		=false;
+						= only_union
+						// =only_safety
+								= detailed_states = verbose_scheduler = false;
 	}
 
 	/** Change options for next level of recursion */
-	public void recursion() {
+	public void recursion()
+	{
 		allow_union = allow_union && recursive_union;
 		only_union = false;
 
@@ -118,7 +118,10 @@ public class Options_LTL2DRA implements Cloneable {
 	public boolean detailed_states;
 
 	/** Type of the automata that should be generated */
-	public static enum AutomataType {STREETT, RABIN, RABIN_AND_STREETT};
+	public static enum AutomataType {
+		STREETT, RABIN, RABIN_AND_STREETT
+	}
+
 	public AutomataType automata;
 
 	/** Use union construction exclusively */
@@ -132,4 +135,3 @@ public class Options_LTL2DRA implements Cloneable {
 	/** Path to scheck */
 	// String scheck_path;
 }
-

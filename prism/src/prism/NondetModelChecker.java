@@ -79,11 +79,11 @@ import explicit.MinMax;
 public class NondetModelChecker extends NonProbModelChecker
 {
 	// Model (MDP)
-	private NondetModel model;
+	protected NondetModel model;
 
 	// Extra (MDP) model info
-	private JDDNode nondetMask;
-	private JDDVars allDDNondetVars;
+	protected JDDNode nondetMask;
+	protected JDDVars allDDNondetVars;
 
 	// Options (in addition to those inherited from StateModelChecker):
 
@@ -91,11 +91,11 @@ public class NondetModelChecker extends NonProbModelChecker
 	// if 'precomp' is false, this disables all (non-essential) use of prob0/prob1
 	// if 'precomp' is true, the values of prob0/prob1 determine what is used
 	// (currently prob0/prob are not under user control)
-	private boolean precomp;
-	private boolean prob0;
-	private boolean prob1;
+	protected boolean precomp;
+	protected boolean prob0;
+	protected boolean prob1;
 	// Use fairness?
-	private boolean fairness;
+	protected boolean fairness;
 
 	// Constructor
 
@@ -906,6 +906,7 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		if (probs == null)
 			throw new PrismException("Unrecognised path operator in P operator");
+
 		if (negated) {
 			// Subtract from 1 for negation
 			probs.subtractFromOne();
@@ -913,8 +914,6 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		return probs;
 	}
-
-	// next
 
 	/**
 	 * Compute probabilities for a next operator.
@@ -2009,7 +2008,7 @@ public class NondetModelChecker extends NonProbModelChecker
 				mainLog.printWarning("Could not export target to file \"" + prism.getExportTargetFilename() + "\"");
 			}
 		}
-		
+
 		// compute states which can't reach goal with probability 1
 		if (b.equals(JDD.ZERO)) {
 			JDD.Ref(reach);

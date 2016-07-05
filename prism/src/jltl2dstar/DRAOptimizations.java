@@ -34,7 +34,8 @@ import prism.PrismException;
 /**
  * Provides optimizations on complete DRAs, notably quotienting using bisimulation.
  */
-public class DRAOptimizations {
+public class DRAOptimizations
+{
 
 	/** type of a color */
 	// typedef unsigned int color_t;
@@ -42,7 +43,8 @@ public class DRAOptimizations {
 	// typedef std::vector<unsigned int> state_vector;
 
 	/** Helper class, storing a coloring of the states */
-	public static class Coloring {
+	public static class Coloring
+	{
 
 		/** The number of colors */
 		private int _nr_of_colors;
@@ -69,9 +71,10 @@ public class DRAOptimizations {
 		 * @param dra the DRA
 		 * @param detailed Keep detailed information on the equivalence classes? (default: false)
 		 */
-		public Coloring(DRA dra, boolean detailed) {
+		public Coloring(DRA dra, boolean detailed)
+		{
 			_nr_of_colors = 0;
-			_detailed = detailed; 
+			_detailed = detailed;
 			_coloring = new Vector<Integer>(dra.size());
 			_coloring.setSize(dra.size());
 			_color2state = new Vector<Integer>();
@@ -87,7 +90,8 @@ public class DRAOptimizations {
 		 * @param size the initial size
 		 * @param detailed Keep detailed information on the equivalence classes? (default: false)
 		 */
-		public Coloring(int size, boolean detailed) {
+		public Coloring(int size, boolean detailed)
+		{
 			_nr_of_colors = 0;
 			_detailed = detailed;
 			_coloring = new Vector<Integer>(size);
@@ -102,19 +106,29 @@ public class DRAOptimizations {
 		}
 
 		/** Reset (clear) coloring. */
-		public void reset() {_nr_of_colors = 0;}
+		public void reset()
+		{
+			_nr_of_colors = 0;
+		}
 
 		/** Get the flag 'detailed' */
-		public boolean getFlagDetailed() {return _detailed;}
+		public boolean getFlagDetailed()
+		{
+			return _detailed;
+		}
 
 		/** Returns the size (number of states) of this coloring. */
-		public int size() {return _coloring.size();}
+		public int size()
+		{
+			return _coloring.size();
+		}
 
 		/** 
 		 * Create a new color
 		 * @return the newly created color
 		 */
-		public int newColor() {
+		public int newColor()
+		{
 			_nr_of_colors++;
 
 			_color2state.setSize(_nr_of_colors);
@@ -128,19 +142,22 @@ public class DRAOptimizations {
 		}
 
 		/** Return the current (last created) color */
-		public int currentColor() {
-			assert(_nr_of_colors > 0);
+		public int currentColor()
+		{
+			assert (_nr_of_colors > 0);
 			return _nr_of_colors - 1;
 		}
 
 		/** Return the number of colors */
-		public int countColors() {
+		public int countColors()
+		{
 			return _nr_of_colors;
 		}
 
 		/** Set the color of a state */
-		public void setColor(int state, int color) {
-			assert(color < _nr_of_colors);
+		public void setColor(int state, int color)
+		{
+			assert (color < _nr_of_colors);
 
 			_coloring.set(state, new Integer(color));
 			_color2state.set(color, new Integer(state));
@@ -151,7 +168,8 @@ public class DRAOptimizations {
 		}
 
 		/** Get the color for a state */
-		public int state2color(int state) {
+		public int state2color(int state)
+		{
 			return _coloring.get(state);
 		}
 
@@ -159,8 +177,9 @@ public class DRAOptimizations {
 		 *Get one representative state for the equivalence class with the 
 		 * specified color. 
 		 */
-		public int color2state(int color) {
-			assert(color < _nr_of_colors);
+		public int color2state(int color)
+		{
+			assert (color < _nr_of_colors);
 			return _color2state.get(color);
 		}
 
@@ -169,14 +188,16 @@ public class DRAOptimizations {
 		 * Can only be called, when the 'detailed' flag is activated in the
 		 * constructor.
 		 */
-		public MyBitSet color2states(int color) {
-			assert(color < _nr_of_colors);
-			assert(_detailed && _color2states != null);
+		public MyBitSet color2states(int color)
+		{
+			assert (color < _nr_of_colors);
+			assert (_detailed && _color2states != null);
 			return _color2states.get(color);
 		}
 
 		/** Print the coloring */
-		public void print(PrintStream out) {
+		public void print(PrintStream out)
+		{
 			for (int i = 0; i < this.size(); i++) {
 				out.println("color[" + i + "] = " + this.state2color(i));
 			}
@@ -189,7 +210,8 @@ public class DRAOptimizations {
 	 * the states themself and the colors of the
 	 * to-states of the edges.
 	 */
-	public static class ColoredStateComparator implements Comparator<Integer> {
+	public static class ColoredStateComparator implements Comparator<Integer>
+	{
 
 		/** The coloring */
 		private Coloring _coloring;
@@ -197,18 +219,21 @@ public class DRAOptimizations {
 		private DRA _dra;
 
 		/** Constructor */
-		public ColoredStateComparator(Coloring coloring, DRA dra) {
+		public ColoredStateComparator(Coloring coloring, DRA dra)
+		{
 			_coloring = coloring;
 			_dra = dra;
 		}
-		
+
 		/**
 		 * Compares two states 'less-than' using the
 		 * coloring, uses the bisimulation
 		 * equivalence relation to determine
 		 * equality.
 		 */
-		public int compare(Integer state_x, Integer state_y) {
+		@Override
+		public int compare(Integer state_x, Integer state_y)
+		{
 			int cx = _coloring.state2color(state_x);
 			int cy = _coloring.state2color(state_y);
 
@@ -218,10 +243,10 @@ public class DRAOptimizations {
 				return 1;
 			}
 
-			for (APElementIterator it = new APElementIterator(_dra.getAPSize()); it.hasNext(); ) {
+			for (APElementIterator it = new APElementIterator(_dra.getAPSize()); it.hasNext();) {
 				APElement label = it.next();
-				DA_State to_x =	_dra.get(state_x).edges().get(label);
-				DA_State to_y =	_dra.get(state_y).edges().get(label);
+				DA_State to_x = _dra.get(state_x).edges().get(label);
+				DA_State to_y = _dra.get(state_y).edges().get(label);
 
 				int ctx = _coloring.state2color(to_x.getName());
 				int cty = _coloring.state2color(to_y.getName());
@@ -241,19 +266,23 @@ public class DRAOptimizations {
 
 	/** Type of an acceptance signature */
 	// public typedef std::pair<BitSet*, BitSet*> acceptance_signature_t;
-	public static class AcceptanceSignature {
+	public static class AcceptanceSignature
+	{
 		public MyBitSet l;
 		public MyBitSet u;
-		
-		public AcceptanceSignature() {;}
+
+		public AcceptanceSignature()
+		{
+		}
 	}
-	
+
 	/** 
 	 * A container that stores (caches) the acceptance signatures of
 	 * all the states in a DRA.
 	 */
-	public static class AcceptanceSignatureContainer {
-		
+	public static class AcceptanceSignatureContainer
+	{
+
 		/** Storage for the acceptance signatures */
 		private Vector<AcceptanceSignature> _acceptancesig_vector;
 
@@ -261,10 +290,11 @@ public class DRAOptimizations {
 		 * Constructor, fills the container with the acceptance signatures of the states.
 		 * @param dra the DRA
 		 */
-		public AcceptanceSignatureContainer(DRA dra) {
+		public AcceptanceSignatureContainer(DRA dra)
+		{
 			_acceptancesig_vector = new Vector<AcceptanceSignature>(dra.size());
 
-			for (int i = 0; i < dra.size();	i++) {
+			for (int i = 0; i < dra.size(); i++) {
 				_acceptancesig_vector.add(new AcceptanceSignature());
 				_acceptancesig_vector.get(i).l = (MyBitSet) dra.acceptance().getAcceptance_L_forState(i).clone();
 				_acceptancesig_vector.get(i).u = (MyBitSet) dra.acceptance().getAcceptance_U_forState(i).clone();
@@ -275,7 +305,8 @@ public class DRAOptimizations {
 		 * Get the acceptance signature for state i.
 		 * @param i the state index
 		 */
-		public AcceptanceSignature get(int i) {
+		public AcceptanceSignature get(int i)
+		{
 			return _acceptancesig_vector.get(i);
 		}
 	}
@@ -284,12 +315,14 @@ public class DRAOptimizations {
 	 * Functor that compares two DRA states based on their
 	 * acceptance signature.
 	 */
-	public static class AcceptanceSignatureComparator implements Comparator<Integer> {
+	public static class AcceptanceSignatureComparator implements Comparator<Integer>
+	{
 		/** The acceptance signature container */
 		private AcceptanceSignatureContainer _container;
 
 		/** Constructor */
-		public AcceptanceSignatureComparator(AcceptanceSignatureContainer container) {
+		public AcceptanceSignatureComparator(AcceptanceSignatureContainer container)
+		{
 			_container = container;
 		}
 
@@ -297,18 +330,20 @@ public class DRAOptimizations {
 		 * Compares (less-than) two DRAState indizes based on their
 		 * acceptance signature.
 		 */
-		public int compare(Integer x, Integer y) {
+		@Override
+		public int compare(Integer x, Integer y)
+		{
 			AcceptanceSignature px = _container.get(x);
 			AcceptanceSignature py = _container.get(y);
 
 			return (px.l.compareTo(py.l) == 0 ? px.u.compareTo(py.u) : px.l.compareTo(py.l));
 		}
-		
-		public boolean equals(Integer x, Integer y) {
-			return compare(x,y) == 0;
+
+		public boolean equals(Integer x, Integer y)
+		{
+			return compare(x, y) == 0;
 		}
 	}
-
 
 	/** 
 	 * Perform quotienting using bisimulation
@@ -318,8 +353,9 @@ public class DRAOptimizations {
 	 * @param printStats print statistics on std::cerr? (default: false)
 	 * @return shared_ptr to the quotiented DRA
 	 */
-	public DRA optimizeBisimulation(DRA dra, boolean printColoring, boolean detailedStates, boolean printStats) throws PrismException {
-		if (!dra.isCompact()) 
+	public DRA optimizeBisimulation(DRA dra, boolean printColoring, boolean detailedStates, boolean printStats) throws PrismException
+	{
+		if (!dra.isCompact())
 			dra.makeCompact();
 
 		Vector<Integer> states = new Vector<Integer>(dra.size());
@@ -331,7 +367,6 @@ public class DRAOptimizations {
 
 		AcceptanceSignatureContainer accsig_container = new AcceptanceSignatureContainer(dra);
 		AcceptanceSignatureComparator accsig_comp = new AcceptanceSignatureComparator(accsig_container);
-
 
 		Coloring tmpcoloring = new Coloring(dra, detailedStates);
 		// generate initial coloring by running with the 
@@ -345,10 +380,10 @@ public class DRAOptimizations {
 		do {
 			oldColors = coloring.countColors();
 
-			ColoredStateComparator cnc = new ColoredStateComparator(coloring, dra);      
+			ColoredStateComparator cnc = new ColoredStateComparator(coloring, dra);
 
 			tmpcoloring = generateColoring(states, coloring, cnc);
-			coloring = tmpcoloring;      
+			coloring = tmpcoloring;
 		} while (oldColors != coloring.countColors());
 
 		if (printColoring) {
@@ -357,15 +392,13 @@ public class DRAOptimizations {
 
 		DRA dra_new = generateDRAfromColoring(dra, coloring, detailedStates);
 
-		int new_size=dra_new.size();
+		int new_size = dra_new.size();
 
 		if (printStats) {
 			System.err.println("Bisimulation: From (" + old_size + ") To (" + new_size + ") Initial: (" + initial_partition + ")");
 		}
 		return dra_new;
 	}
-
-
 
 	/**
 	 * Generate a new coloring based on the Comparator comp 
@@ -376,19 +409,22 @@ public class DRAOptimizations {
 	 * @return a pointer to a newly created Coloring, memory ownership
 	 *         passes to the caller
 	 */
-	private <T extends Comparator<Integer>>Coloring generateColoring(Vector<Integer> states, Coloring coloring, T comp) {
+	private <T extends Comparator<Integer>> Coloring generateColoring(Vector<Integer> states, Coloring coloring, T comp)
+	{
 		Integer[] statearray = (Integer[]) states.toArray(new Integer[0]);
 		Arrays.sort(statearray, comp);
-		Vector<Integer> sortedstates = new Vector<Integer>(Arrays.asList(statearray)); 
+		Vector<Integer> sortedstates = new Vector<Integer>(Arrays.asList(statearray));
 
 		Coloring result = new Coloring(coloring.size(), coloring.getFlagDetailed());
 
-		if (sortedstates.size() == 0) {return result;}
-		
+		if (sortedstates.size() == 0) {
+			return result;
+		}
+
 		// reverse iterators
 		ListIterator<Integer> current = sortedstates.listIterator(sortedstates.size());
 		ListIterator<Integer> last = sortedstates.listIterator(sortedstates.size());
-		
+
 		result.setColor(current.previous(), result.newColor());
 
 		// 0 .. n-3 n-2 n-1
@@ -400,7 +436,7 @@ public class DRAOptimizations {
 			// from the end, either:
 			//    *current  < *last with comp(current,last)==true
 			// or *current == *last with !comp(current,last)
-			
+
 			if (comp.compare(curr, last.previous()) < 0) {
 				// -> we have to start a new color
 				result.setColor(curr, result.newColor());
@@ -412,16 +448,16 @@ public class DRAOptimizations {
 		return result;
 	}
 
-
 	/**
 	 * Generate a new DRA from a coloring
 	 */
-	private DRA generateDRAfromColoring(DRA oldDRA, Coloring coloring, boolean detailedStates) throws PrismException {
+	private DRA generateDRAfromColoring(DRA oldDRA, Coloring coloring, boolean detailedStates) throws PrismException
+	{
 		DRA newDRA = new DRA(oldDRA.getAPSet());
 
 		newDRA.acceptance().newAcceptancePairs(oldDRA.acceptance().size());
 
-		for (int color = 0;	color < coloring.countColors();	++color) {
+		for (int color = 0; color < coloring.countColors(); ++color) {
 			newDRA.newState();
 		}
 
@@ -430,7 +466,7 @@ public class DRAOptimizations {
 
 		newDRA.setStartState(newDRA.get(start_state_color));
 
-		for (int color = 0; color < coloring.countColors();	++color) {
+		for (int color = 0; color < coloring.countColors(); ++color) {
 			DA_State new_state = newDRA.get(color);
 
 			int old_state_representative = coloring.color2state(color);
@@ -451,7 +487,7 @@ public class DRAOptimizations {
 					boolean first = true;
 					for (Integer state : old_states) {
 						if (first) {
-							first = false; 
+							first = false;
 						} else {
 							s += "<TD>,</TD>";
 						}
@@ -472,7 +508,7 @@ public class DRAOptimizations {
 
 			// Create appropriate acceptance conditions
 			int old_state_index = old_state.getName();
-			for (int i = 0; i < oldDRA.acceptance().size();	++i) {
+			for (int i = 0; i < oldDRA.acceptance().size(); ++i) {
 				if (oldDRA.acceptance().isStateInAcceptance_L(i, old_state_index)) {
 					new_state.acceptance().addTo_L(i);
 				}
@@ -482,7 +518,7 @@ public class DRAOptimizations {
 				}
 			}
 
-			for (Map.Entry<APElement,DA_State> edge : old_state.edges().entrySet()) {
+			for (Map.Entry<APElement, DA_State> edge : old_state.edges().entrySet()) {
 
 				int to_color = coloring.state2color(edge.getValue().getName());
 

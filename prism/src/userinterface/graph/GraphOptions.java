@@ -39,58 +39,62 @@ import userinterface.*;
 public class GraphOptions extends JDialog
 {
 	private GraphOptionsPanel gop;
+
 	/** Creates a new instance of MultiGraphOptions */
 	public GraphOptions(GUIPlugin plugin, Graph theModel, JFrame gui, String title)
 	{
 		super(gui, title);
-		
-		gop = new GraphOptionsPanel(plugin, gui, theModel); 
-		
-		gop.setPreferredSize(new Dimension(400,650));
-		
+
+		gop = new GraphOptionsPanel(plugin, gui, theModel);
+
+		gop.setPreferredSize(new Dimension(400, 650));
+
 		this.getContentPane().add(gop);
-		
+
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		this.getContentPane().add(p, BorderLayout.SOUTH);
-		
-		this.getContentPane().setSize(400,650);
-		
+
+		this.getContentPane().setSize(400, 650);
+
 		JButton jb = new JButton("Close");
-		
+
 		jb.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				gop.stopEditors();
 				setVisible(false);
 			}
-		}
-		);
-		
+		});
+
 		jb.addFocusListener(new FocusListener()
 		{
 			/**
 			 * Invoked when a component gains the keyboard focus.
 			 */
-			public void focusGained(FocusEvent e){}
-			
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+			}
+
 			/**
 			 * Invoked when a component loses the keyboard focus.
 			 */
+			@Override
 			public void focusLost(FocusEvent e)
-			{ 
+			{
 				//gop.stopEditors();
 			}
-			
+
 		});
-		
+
 		p.add(jb);
-		
-		
+
 		pack();
 		setLocationRelativeTo(getParent()); // centre
 		//show();
 		setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 	}
-	
+
 }

@@ -39,84 +39,97 @@ import userinterface.util.*;
 
 public class GUIFileMenu extends GUIPlugin
 {
-    private JMenu menu;
-    private Action exitAction;
-    
-    public GUIFileMenu(GUIPrism pr)
-    {
-        super(pr, false);
-        initComponents();
-    }
-    
+	private JMenu menu;
+	private Action exitAction;
+
+	public GUIFileMenu(GUIPrism pr)
+	{
+		super(pr, false);
+		initComponents();
+	}
+
+	@Override
 	public void takeCLArgs(String args[])
 	{
 	}
-    
-    public boolean displaysTab()
-    {
-        return false;
-    }
-    
-    public javax.swing.JMenu getMenu()
-    {
-        return menu;
-    }
-    
-    public OptionsPanel getOptions()
-    {
-        return null;
-    }
-    
-    public String getTabText()
-    {
-        return "";
-    }
-    
-    public javax.swing.JToolBar getToolBar()
-    {
-        return null;
-    }
-    
-    public String getXMLIDTag()
-    {
-        return "";
-    }
-    
-    public Object getXMLSaveTree()
-    {
-        return null;
-    }
-    
-    public void loadXML(Object c)
-    {
-    }
-    
-    public boolean processGUIEvent(GUIEvent e)
-    {
+
+	@Override
+	public boolean displaysTab()
+	{
 		return false;
-    }
-    
-    private void initComponents()
-    {
-        menu = new JMenu("File");
-        menu.setMnemonic('F');
-        exitAction = new AbstractAction()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                getGUI().exit();
-            }
-        };
-        exitAction.putValue(Action.LONG_DESCRIPTION, "Exits the application");
-        //exitAction.putValue(Action.SHORT_DESCRIPTION, "Exit");
-        exitAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_X));
-        exitAction.putValue(Action.NAME, "Exit");
-        exitAction.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExit.png"));
-        exitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        menu.add(exitAction);
-    }
-    
-    public void notifySettings(prism.PrismSettings settings)
-    {}
-    
+	}
+
+	@Override
+	public javax.swing.JMenu getMenu()
+	{
+		return menu;
+	}
+
+	@Override
+	public OptionsPanel getOptions()
+	{
+		return null;
+	}
+
+	@Override
+	public String getTabText()
+	{
+		return "";
+	}
+
+	@Override
+	public javax.swing.JToolBar getToolBar()
+	{
+		return null;
+	}
+
+	@Override
+	public String getXMLIDTag()
+	{
+		return "";
+	}
+
+	@Override
+	public Object getXMLSaveTree()
+	{
+		return null;
+	}
+
+	@Override
+	public void loadXML(Object c)
+	{
+	}
+
+	@Override
+	public boolean processGUIEvent(GUIEvent e)
+	{
+		return false;
+	}
+
+	private void initComponents()
+	{
+		menu = new JMenu("File");
+		menu.setMnemonic('F');
+		exitAction = new AbstractAction()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				getGUI().exit();
+			}
+		};
+		exitAction.putValue(Action.LONG_DESCRIPTION, "Exits the application");
+		//exitAction.putValue(Action.SHORT_DESCRIPTION, "Exit");
+		exitAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_X));
+		exitAction.putValue(Action.NAME, "Exit");
+		exitAction.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExit.png"));
+		exitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		menu.add(exitAction);
+	}
+
+	@Override
+	public void notifySettings(prism.PrismSettings settings)
+	{
+	}
+
 }

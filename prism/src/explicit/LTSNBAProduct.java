@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import prism.PrismLog;
 import common.IterableBitSet;
 import common.IterableStateSet;
@@ -51,7 +53,8 @@ import jltl2dstar.NBA_State;
 public class LTSNBAProduct extends Product<Model>
 {
 	/** A product state */
-	private static class ProductState {
+	private static class ProductState
+	{
 		/** The model state */
 		private int modelState;
 		/** The automaton state */
@@ -75,9 +78,11 @@ public class LTSNBAProduct extends Product<Model>
 		{
 			return automatonState;
 		}
-		
-		public String toString() {
-			return "(" + getModelState() + "," + getAutomatonState() +")";
+
+		@Override
+		public String toString()
+		{
+			return "(" + getModelState() + "," + getAutomatonState() + ")";
 		}
 
 		@Override
@@ -114,7 +119,7 @@ public class LTSNBAProduct extends Product<Model>
 	private BitSet acceptingStates;
 
 	/** Constructor for storing the product */
-	private LTSNBAProduct(LTS productModel, Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
+	private LTSNBAProduct(@NonNull LTS productModel, @NonNull Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
 	{
 		super(productModel, originalModel);
 		this.productStates = productStates;
@@ -136,8 +141,8 @@ public class LTSNBAProduct extends Product<Model>
 	/** Print the mapping between product state indizes and product states */
 	public void printStateMapping(PrismLog log)
 	{
-		for (int i =0; i < productStates.size(); i++) {
-			log.println(i + ": " + productStates.get(i) + (acceptingStates.get(i) ? " !":""));
+		for (int i = 0; i < productStates.size(); i++) {
+			log.println(i + ": " + productStates.get(i) + (acceptingStates.get(i) ? " !" : ""));
 		}
 	}
 
@@ -207,14 +212,14 @@ public class LTSNBAProduct extends Product<Model>
 			productIdToProductState.add(p);
 			int id = productModel.addState();
 			productModel.addInitialState(id);
-			assert ( id == productIdToProductState.size()-1 );
+			assert (id == productIdToProductState.size() - 1);
 			productStateToProductId.put(p, id);
 			todo.push(id);
 			if (nbaStart.isFinal()) {
 				acceptingStates.set(id);
 			}
 		}
-		
+
 		final APSet nbaAPSet = nba.getAPSet();
 
 		while (!todo.isEmpty()) {
@@ -235,7 +240,7 @@ public class LTSNBAProduct extends Product<Model>
 			// the successors in the NBA for the label corresponding to the model state
 			BitSet nbaSuccessors = fromNBA.getEdge(label);
 			// for each successor of the model state ...
-			for (Iterator<Integer> it = model.getSuccessorsIterator(from.getModelState()); it.hasNext(); ) {
+			for (Iterator<Integer> it = model.getSuccessorsIterator(from.getModelState()); it.hasNext();) {
 				Integer modelTo = it.next();
 				// ... and NBA successor ...
 				for (Integer nbaSuccessor : IterableBitSet.getSetBits(nbaSuccessors)) {
@@ -246,7 +251,7 @@ public class LTSNBAProduct extends Product<Model>
 						// newly discovered, add as state to the product model
 						productIdToProductState.add(successor);
 						successorID = productModel.addState();
-						assert ( successorID == productIdToProductState.size()-1 );
+						assert (successorID == productIdToProductState.size() - 1);
 						productStateToProductId.put(successor, successorID);
 						// mark as todo
 						todo.push(successorID);

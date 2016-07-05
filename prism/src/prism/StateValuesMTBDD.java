@@ -65,12 +65,12 @@ public class StateValuesMTBDD implements StateValues
 	int[] varValues;
 	int currentVar;
 	int currentVarLevel;
-	
+
 	/** log for output from print method */
 	PrismLog outputLog;
 
 	// CONSTRUCTOR
-	
+
 	/**
 	 * Constructor from a JDDNode (which is stored, not copied).
 	 * <br>[ STORES: values, derefed on later call to clear() ]
@@ -80,10 +80,10 @@ public class StateValuesMTBDD implements StateValues
 	public StateValuesMTBDD(JDDNode values, Model model)
 	{
 		int i;
-		
+
 		// store values vector mtbdd
 		this.values = values;
-		
+
 		// get info from model
 		this.model = model;
 		vars = model.getAllDDRowVars();
@@ -92,7 +92,7 @@ public class StateValuesMTBDD implements StateValues
 		numVars = vars.n();
 		odd = model.getODD();
 		varList = model.getVarList();
-		
+
 		// initialise arrays
 		varSizes = new int[varList.getNumVars()];
 		for (i = 0; i < varList.getNumVars(); i++) {
@@ -102,7 +102,7 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	// CONVERSION METHODS
-	
+
 	@Override
 	public StateValuesDV convertToStateValuesDV()
 	{
@@ -129,7 +129,7 @@ public class StateValuesMTBDD implements StateValues
 		ODDNode ptr;
 		JDDNode dd;
 		int j, k;
-		
+
 		// Use ODD to build BDD for state index i
 		dd = JDD.Constant(1);
 		ptr = odd;
@@ -145,7 +145,7 @@ public class StateValuesMTBDD implements StateValues
 				ptr = ptr.getElse();
 			}
 		}
-		
+
 		// Add element to vector MTBDD
 		values = JDD.ITE(dd, JDD.Constant(d), values);
 	}
@@ -159,12 +159,13 @@ public class StateValuesMTBDD implements StateValues
 		double d;
 		boolean hasIndices = false;
 		long size = model.getNumStates();
-		
+
 		try {
 			// open file for reading
 			in = new BufferedReader(new FileReader(file));
 			// read remaining lines
-			s = in.readLine(); lineNum++;
+			s = in.readLine();
+			lineNum++;
 			while (s != null) {
 				s = s.trim();
 				if (!("".equals(s))) {
@@ -184,18 +185,17 @@ public class StateValuesMTBDD implements StateValues
 					setElement(count, d);
 					count++;
 				}
-				s = in.readLine(); lineNum++;
+				s = in.readLine();
+				lineNum++;
 			}
 			// Close file
 			in.close();
 			// Check size
 			if (!hasIndices && count < size)
 				throw new PrismException("Too few values in file \"" + file + "\" (" + count + ", not " + size + ")");
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new PrismException("File I/O error reading from \"" + file + "\"");
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new PrismException("Error detected at line " + lineNum + " of file \"" + file + "\"");
 		}
 	}
@@ -207,14 +207,14 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	@Override
-	public void subtractFromOne() 
+	public void subtractFromOne()
 	{
 		JDD.Ref(reach);
 		values = JDD.Apply(JDD.MINUS, reach, values);
 	}
 
 	@Override
-	public void add(StateValues sp) 
+	public void add(StateValues sp)
 	{
 		StateValuesMTBDD spm = (StateValuesMTBDD) sp;
 		JDD.Ref(spm.values);
@@ -222,13 +222,13 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	@Override
-	public void timesConstant(double d) 
+	public void timesConstant(double d)
 	{
 		values = JDD.Apply(JDD.TIMES, values, JDD.Constant(d));
 	}
 
 	@Override
-	public double dotProduct(StateValues sp) 
+	public double dotProduct(StateValues sp)
 	{
 		StateValuesMTBDD spm = (StateValuesMTBDD) sp;
 		JDD.Ref(values);
@@ -261,7 +261,7 @@ public class StateValuesMTBDD implements StateValues
 		JDD.Ref(vec2);
 		values = JDD.Apply(JDD.MAX, values, vec2);
 	}
-	
+
 	@Override
 	public void clear()
 	{
@@ -269,7 +269,7 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	// METHODS TO ACCESS VECTOR DATA
-	
+
 	@Override
 	public int getSize()
 	{
@@ -312,7 +312,7 @@ public class StateValuesMTBDD implements StateValues
 	public int getNNZ()
 	{
 		double nnz = JDD.GetNumMinterms(values, numDDRowVars);
-		return (nnz > Integer.MAX_VALUE) ? -1 : (int)Math.round(nnz);
+		return (nnz > Integer.MAX_VALUE) ? -1 : (int) Math.round(nnz);
 	}
 
 	@Override
@@ -328,30 +328,31 @@ public class StateValuesMTBDD implements StateValues
 	{
 		JDDNode tmp;
 		double d;
-		
+
 		// filter filter
 		JDD.Ref(filter);
 		JDD.Ref(reach);
 		tmp = JDD.And(filter, reach);
-		
+
 		// This shouldn't really be called with an empty filter.
 		// But we check for this anyway and return NaN.
 		// This is unfortunately indistinguishable from the case
 		// where the vector does actually contain NaN. Ho hum.
-		if (tmp.equals(JDD.ZERO)) return Double.NaN;
-				
+		if (tmp.equals(JDD.ZERO))
+			return Double.NaN;
+
 		// remove all but first element of filter
 		tmp = JDD.RestrictToFirst(tmp, vars);
-		
+
 		// then apply filter to values
 		JDD.Ref(values);
 		tmp = JDD.Apply(JDD.TIMES, values, tmp);
-		
+
 		// extract single value (we use SumAbstract could use e.g. MaxAbstract, etc.)
 		tmp = JDD.SumAbstract(tmp, vars);
 		d = tmp.getValue();
 		JDD.Deref(tmp);
-		
+
 		return d;
 	}
 
@@ -360,22 +361,23 @@ public class StateValuesMTBDD implements StateValues
 	{
 		JDDNode tmp;
 		double d;
-		
+
 		// filter filter
 		JDD.Ref(filter);
 		JDD.Ref(reach);
 		tmp = JDD.And(filter, reach);
-		
+
 		// min of an empty set is +infinity
-		if (tmp.equals(JDD.ZERO)) return Double.POSITIVE_INFINITY;
-		
+		if (tmp.equals(JDD.ZERO))
+			return Double.POSITIVE_INFINITY;
+
 		// set non-reach states to infinity
 		JDD.Ref(values);
 		tmp = JDD.ITE(tmp, values, JDD.PlusInfinity());
-		
+
 		d = JDD.FindMin(tmp);
 		JDD.Deref(tmp);
-		
+
 		return d;
 	}
 
@@ -384,22 +386,23 @@ public class StateValuesMTBDD implements StateValues
 	{
 		JDDNode tmp;
 		double d;
-		
+
 		// filter filter
 		JDD.Ref(filter);
 		JDD.Ref(reach);
 		tmp = JDD.And(filter, reach);
-		
+
 		// max of an empty set is -infinity
-		if (tmp.equals(JDD.ZERO)) return Double.NEGATIVE_INFINITY;
-		
+		if (tmp.equals(JDD.ZERO))
+			return Double.NEGATIVE_INFINITY;
+
 		// set non-reach states to infinity
 		JDD.Ref(values);
 		tmp = JDD.ITE(tmp, values, JDD.MinusInfinity());
-		
+
 		d = JDD.FindMax(tmp);
 		JDD.Deref(tmp);
-		
+
 		return d;
 	}
 
@@ -408,14 +411,14 @@ public class StateValuesMTBDD implements StateValues
 	{
 		JDDNode tmp;
 		double d;
-		
+
 		JDD.Ref(values);
 		JDD.Ref(filter);
 		tmp = JDD.Apply(JDD.TIMES, values, filter);
 		tmp = JDD.SumAbstract(tmp, vars);
 		d = tmp.getValue();
 		JDD.Deref(tmp);
-		
+
 		return d;
 	}
 
@@ -424,14 +427,14 @@ public class StateValuesMTBDD implements StateValues
 	{
 		JDDNode tmp;
 		double d;
-		
+
 		JDD.Ref(values);
 		JDD.Ref(mult);
 		tmp = JDD.Apply(JDD.TIMES, values, mult);
 		tmp = JDD.SumAbstract(tmp, vars);
 		d = tmp.getValue();
 		JDD.Deref(tmp);
-		
+
 		return d;
 	}
 
@@ -439,10 +442,10 @@ public class StateValuesMTBDD implements StateValues
 	public StateValues sumOverDDVars(JDDVars sumVars, Model newModel)
 	{
 		JDDNode tmp;
-		
+
 		JDD.Ref(values);
 		tmp = JDD.SumAbstract(values, sumVars);
-		
+
 		return new StateValuesMTBDD(tmp, newModel);
 	}
 
@@ -450,7 +453,7 @@ public class StateValuesMTBDD implements StateValues
 	public JDDNode getBDDFromInterval(RelOp relOp, double bound)
 	{
 		JDDNode sol = null;
-		
+
 		JDD.Ref(values);
 		switch (relOp) {
 		case GEQ:
@@ -467,7 +470,7 @@ public class StateValuesMTBDD implements StateValues
 		default:
 			// Don't handle
 		}
-		
+
 		return sol;
 	}
 
@@ -475,10 +478,10 @@ public class StateValuesMTBDD implements StateValues
 	public JDDNode getBDDFromInterval(double lo, double hi)
 	{
 		JDDNode sol;
-		
+
 		JDD.Ref(values);
 		sol = JDD.Interval(values, lo, hi);
-		
+
 		return sol;
 	}
 
@@ -495,14 +498,14 @@ public class StateValuesMTBDD implements StateValues
 	public JDDNode getBDDFromCloseValueAbs(double value, double epsilon)
 	{
 		JDDNode sol;
-		
+
 		// TODO: infinite cases
 		// if (isinf(values[i])) return (isinf(value) && (values[i] > 0) == (value > 0)) ? 1 : 0
 		// else (fabs(values[i] - value) < epsilon);
-		
+
 		JDD.Ref(values);
 		sol = JDD.Interval(values, value - epsilon, value + epsilon);
-		
+
 		return sol;
 	}
 
@@ -510,7 +513,7 @@ public class StateValuesMTBDD implements StateValues
 	public JDDNode getBDDFromCloseValueRel(double value, double epsilon)
 	{
 		JDDNode sol;
-		
+
 		// TODO: infinite cases
 		// if (isinf(values[i])) return (isinf(value) && (values[i] > 0) == (value > 0)) ? 1 : 0
 		// else (fabs(values[i] - value) < epsilon);
@@ -519,7 +522,7 @@ public class StateValuesMTBDD implements StateValues
 		// (see doubles_are_close_rel in dv.cc for reference)
 		JDD.Ref(values);
 		sol = JDD.Interval(values, value - epsilon, value + epsilon);
-		
+
 		return sol;
 	}
 
@@ -529,13 +532,13 @@ public class StateValuesMTBDD implements StateValues
 	public void print(PrismLog log)
 	{
 		int i;
-		
+
 		// check if all zero
 		if (values.equals(JDD.ZERO)) {
 			log.println("(all zero)");
 			return;
 		}
-		
+
 		// set up and call recursive print
 		outputLog = log;
 		for (i = 0; i < varList.getNumVars(); i++) {
@@ -560,7 +563,8 @@ public class StateValuesMTBDD implements StateValues
 		StateValuesMTBDD sv = null;
 		try {
 			sv = new StateValuesMTBDD(values, model);
-			if (description != null) log.println(description);
+			if (description != null)
+				log.println(description);
 			sv.print(log);
 		} finally {
 			if (sv != null)
@@ -578,8 +582,10 @@ public class StateValuesMTBDD implements StateValues
 	public void print(PrismLog log, boolean printSparse, boolean printMatlab, boolean printStates, boolean printIndices) throws PrismException
 	{
 		// Because non-sparse output from MTBDD requires a bit more effort...
-		if (printSparse) print(log);
-		else throw new PrismException("Not supported");
+		if (printSparse)
+			print(log);
+		else
+			throw new PrismException("Not supported");
 		// Note we also ignore printMatlab/printStates/printIndices due to laziness
 	}
 
@@ -604,67 +610,84 @@ public class StateValuesMTBDD implements StateValues
 		JDDNode e, t;
 
 		// zero constant - bottom out of recursion
-		if (dd.equals(JDD.ZERO)) return;
+		if (dd.equals(JDD.ZERO))
+			return;
 
 		// base case - at bottom (nonzero terminal)
 		if (level == numVars) {
-		
+
 			outputLog.print(n + ":(");
 			j = varList.getNumVars();
 			for (i = 0; i < j; i++) {
 				// integer variable
 				if (varList.getType(i) instanceof TypeInt) {
-					outputLog.print(varValues[i]+varList.getLow(i));
+					outputLog.print(varValues[i] + varList.getLow(i));
 				}
 				// boolean variable
 				else {
 					outputLog.print(varValues[i] == 1);
 				}
-				if (i < j-1) outputLog.print(",");
+				if (i < j - 1)
+					outputLog.print(",");
 			}
 			outputLog.print(")=" + dd.getValue());
 			outputLog.println();
 			return;
 		}
-		
+
 		// select 'else' and 'then' branches
 		else if (dd.getIndex() > vars.getVarIndex(level)) {
 			e = t = dd;
-		}
-		else {
+		} else {
 			e = dd.getElse();
 			t = dd.getThen();
 		}
 
 		// then recurse...
-		currentVarLevel++; if (currentVarLevel == varSizes[currentVar]) { currentVar++; currentVarLevel=0; }
-		printRec(e, level+1, o.getElse(), n);
-		currentVarLevel--; if (currentVarLevel == -1) { currentVar--; currentVarLevel=varSizes[currentVar]-1; }
-		varValues[currentVar] += (1 << (varSizes[currentVar]-1-currentVarLevel));
-		currentVarLevel++; if (currentVarLevel == varSizes[currentVar]) { currentVar++; currentVarLevel=0; }
-		printRec(t, level+1, o.getThen(), n+o.getEOff());
-		currentVarLevel--; if (currentVarLevel == -1) { currentVar--; currentVarLevel=varSizes[currentVar]-1; }
-		varValues[currentVar] -= (1 << (varSizes[currentVar]-1-currentVarLevel));
+		currentVarLevel++;
+		if (currentVarLevel == varSizes[currentVar]) {
+			currentVar++;
+			currentVarLevel = 0;
+		}
+		printRec(e, level + 1, o.getElse(), n);
+		currentVarLevel--;
+		if (currentVarLevel == -1) {
+			currentVar--;
+			currentVarLevel = varSizes[currentVar] - 1;
+		}
+		varValues[currentVar] += (1 << (varSizes[currentVar] - 1 - currentVarLevel));
+		currentVarLevel++;
+		if (currentVarLevel == varSizes[currentVar]) {
+			currentVar++;
+			currentVarLevel = 0;
+		}
+		printRec(t, level + 1, o.getThen(), n + o.getEOff());
+		currentVarLevel--;
+		if (currentVarLevel == -1) {
+			currentVar--;
+			currentVarLevel = varSizes[currentVar] - 1;
+		}
+		varValues[currentVar] -= (1 << (varSizes[currentVar] - 1 - currentVarLevel));
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter)
 	{
 		int i;
 		JDDNode tmp;
-		
+
 		// filter out
 		JDD.Ref(values);
 		JDD.Ref(filter);
 		tmp = JDD.Apply(JDD.TIMES, values, filter);
-		
+
 		// check if all zero
 		if (tmp.equals(JDD.ZERO)) {
 			JDD.Deref(tmp);
 			log.println("(all zero)");
 			return;
 		}
-		
+
 		// set up and call recursive print
 		outputLog = log;
 		for (i = 0; i < varList.getNumVars(); i++) {
@@ -681,15 +704,18 @@ public class StateValuesMTBDD implements StateValues
 	public void printFiltered(PrismLog log, JDDNode filter, boolean printSparse, boolean printMatlab, boolean printStates) throws PrismException
 	{
 		// Because non-sparse output from MTBDD requires a bit more effort... 
-		if (printSparse) printFiltered(log, filter);
-		else throw new PrismException("Not supported");
+		if (printSparse)
+			printFiltered(log, filter);
+		else
+			throw new PrismException("Not supported");
 		// Note we also ignore printMatlab/printStates due to laziness
 	}
-	
+
 	/**
 	 * Make a (deep) copy of this vector
 	 */
-	public StateValuesMTBDD deepCopy() throws PrismException
+	@Override
+	public StateValuesMTBDD deepCopy()
 	{
 		JDD.Ref(values);
 		return new StateValuesMTBDD(values, model);

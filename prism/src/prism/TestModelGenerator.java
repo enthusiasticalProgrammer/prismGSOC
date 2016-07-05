@@ -37,7 +37,7 @@ import parser.ast.Expression;
 import parser.type.Type;
 import parser.type.TypeInt;
 
-public class TestModelGenerator extends DefaultModelGenerator
+public final class TestModelGenerator extends DefaultModelGenerator
 {
 	protected State exploreState;
 	protected int x;
@@ -61,7 +61,7 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return 1;
 	}
-	
+
 	@Override
 	public List<String> getVarNames()
 	{
@@ -79,7 +79,7 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return 1;
 	}
-	
+
 	@Override
 	public String getLabelName(int i) throws PrismException
 	{
@@ -95,17 +95,17 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return ("goal".equals(label)) ? 0 : -1;
 	}
-	
+
 	@Override
-	public State getInitialState() throws PrismException
+	public State getInitialState()
 	{
 		State s = new State(1);
-		s.varValues[0] = n/2;
+		s.varValues[0] = n / 2;
 		return s;
 	}
 
 	@Override
-	public void exploreState(State exploreState) throws PrismException
+	public void exploreState(State exploreState)
 	{
 		this.exploreState = exploreState;
 		x = ((Integer) exploreState.varValues[0]).intValue();
@@ -118,47 +118,47 @@ public class TestModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public int getNumChoices() throws PrismException
+	public int getNumChoices()
 	{
 		return 1;
 	}
 
 	@Override
-	public int getNumTransitions(int i) throws PrismException
+	public int getNumTransitions(int i)
 	{
 		return x > 0 && x < n ? 2 : 1;
 	}
 
 	@Override
-	public Object getTransitionAction(int i) throws PrismException
+	public Object getTransitionAction(int i)
 	{
 		return null;
 	}
 
 	@Override
-	public Object getTransitionAction(int i, int offset) throws PrismException
+	public Object getTransitionAction(int i, int offset)
 	{
 		return null;
 	}
 
 	@Override
-	public double getTransitionProbability(int i, int offset) throws PrismException
+	public double getTransitionProbability(int i, int offset)
 	{
 		return x > 0 && x < n ? 0.5 : 1.0;
 	}
 
 	@Override
-	public State computeTransitionTarget(int i, int offset) throws PrismException
+	public State computeTransitionTarget(int i, int offset)
 	{
 		State s = new State(1);
 		if (x == 0 || x == n) {
 			s.varValues[i] = x;
 		} else {
-			s.varValues[i] = (offset == 0) ? x -1 : x + 1;
+			s.varValues[i] = (offset == 0) ? x - 1 : x + 1;
 		}
 		return s;
 	}
-	
+
 	@Override
 	public boolean isLabelTrue(int i) throws PrismException
 	{

@@ -27,7 +27,6 @@
 
 package prism;
 
-import java.io.PrintStream;
 import java.util.*;
 
 /**
@@ -83,12 +82,12 @@ public class DRA<Symbol>
 	{
 		this.apList = apList;
 	}
-	
+
 	public List<String> getAPList()
 	{
 		return apList;
 	}
-	
+
 	// Mutators
 
 	/**
@@ -196,41 +195,6 @@ public class DRA<Symbol>
 		return acceptanceK.get(i);
 	}
 
-	/**
-	 * Print DRA in DOT format to an output stream.
-	 */
-	public void printDot(PrintStream out) throws PrismException
-	{
-		int i, j, n;
-		out.println("digraph model {");
-		for (i = 0; i < size; i++) {
-			if (i == start)
-				out.println("	" + i + " [label=\"" + i + "\", shape=ellipse]");
-			else {
-				boolean isAcceptance = false;
-				n = getNumAcceptancePairs();
-				for (j = 0; j < n; j++) {
-					if (acceptanceK.get(j).get(i)) {
-						out.println("	" + i + " [label=\"" + i + "\", shape=doublecircle]");
-						isAcceptance = true;
-						break;
-					} else if (acceptanceL.get(j).get(i)) {
-						out.println("	" + i + " [label=\"" + i + "\", shape=box]");
-						isAcceptance = true;
-						break;
-					}
-				}
-				if (!isAcceptance)
-					out.println("	" + i + " [label=\"" + i + "\", shape=circle]");
-			}
-		}
-		for (i = 0; i < size; i++) {
-			for (Edge e : edges.get(i)) {
-				out.println("	" + i + " -> " + e.dest + " [label=\"" + e.label + "\"]");
-			}
-		}
-	}
-
 	// Standard methods
 
 	@Override
@@ -241,7 +205,7 @@ public class DRA<Symbol>
 		s += size + " states (start " + start + ")";
 		if (apList != null)
 			s += ", " + apList.size() + " labels";
- 		s += ":";
+		s += ":";
 		for (i = 0; i < size; i++) {
 			for (Edge e : edges.get(i)) {
 				s += " " + i + "-" + e.label + "->" + e.dest;

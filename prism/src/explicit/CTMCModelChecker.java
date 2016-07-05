@@ -29,12 +29,15 @@ package explicit;
 import java.io.File;
 import java.util.*;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.StateRewardsArray;
 import parser.ast.*;
 import parser.type.*;
 import prism.*;
+
 /**
  * Explicit-state model checker for continuous-time Markov chains (CTMCs).
  * This uses various bits of functionality of DTMCModelChecker, so we inherit from that.
@@ -45,11 +48,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 	/**
 	 * Create a new CTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public CTMCModelChecker(PrismComponent parent) throws PrismException
+	public CTMCModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 	}
-	
+
 	// Model checking functions
 
 	@Override
@@ -70,7 +73,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// Now, we construct embedded DTMC and do the plain LTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().checkProbPathFormulaLTL(dtmcEmb, expr, qual, minMax, statesOfInterest);
 	}
 
@@ -93,11 +96,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 		// Construct embedded DTMC (and convert rewards for it) and do remaining computation
 		// on that with the "pure" cosafety LTL formula
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		int n = model.getNumStates();
 		StateRewardsArray rewEmb = new StateRewardsArray(n);
 		for (int i = 0; i < n; i++) {
-			rewEmb.setStateReward(i, ((MCRewards) modelRewards).getStateReward(i) / ((CTMC)model).getExitRate(i));
+			rewEmb.setStateReward(i, ((MCRewards) modelRewards).getStateReward(i) / ((CTMC) model).getExitRate(i));
 		}
 		return createDTMCModelChecker().checkRewardCoSafeLTL(dtmcEmb, rewEmb, expr, minMax, statesOfInterest);
 	}
@@ -120,14 +123,15 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// Now, we construct embedded DTMC and do the plain E[ LTL ] computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().checkExistsLTL(dtmcEmb, expr, statesOfInterest);
 	}
 
 	/**
 	 * Model check a time-bounded until operator; return vector of probabilities for all states.
 	 */
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
+	@Override
+	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;
@@ -323,12 +327,13 @@ public class CTMCModelChecker extends DTMCModelChecker
 		DTMC dtmcEmb = ctmc.getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeUntilProbs(dtmcEmb, remain, target);
 	}
-	
+
 	/**
 	 * @param dtmc The DTMC
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target) throws PrismException
+	@Override
+	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target)
 	{
 		mainLog.println("Building embedded DTMC...");
 		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
@@ -346,6 +351,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.  
 	 */
+	@Override
 	public ModelCheckerResult computeReachProbs(DTMC dtmc, BitSet remain, BitSet target, double init[], BitSet known) throws PrismException
 	{
 		mainLog.println("Building embedded DTMC...");
@@ -546,7 +552,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 		qt = q * t;
 		mainLog.println("\nUniformisation: q.t = " + q + " x " + t + " = " + qt);
 		acc = termCritParam / 8.0;
-		fg = new FoxGlynn(qt,1e-300, 1e+300, acc);
+		fg = new FoxGlynn(qt, 1e-300, 1e+300, acc);
 		left = fg.getLeftTruncationPoint();
 		right = fg.getRightTruncationPoint();
 		if (right < 0) {
@@ -560,7 +566,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 
 		// modify the poisson probabilities to what we need for this computation
 		// first make the kth value equal to the sum of the values for 0...k
-		for (i = left+1; i <= right; i++) {
+		for (i = left + 1; i <= right; i++) {
 			weights[i - left] += weights[i - 1 - left];
 		}
 		// then subtract from 1 and divide by uniformisation constant (q) to give mixed poisson probabilities
@@ -759,6 +765,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * @param mcRewards The rewards
 	 * @param target Target states
 	 */
+	@Override
 	public ModelCheckerResult computeReachRewards(DTMC dtmc, MCRewards mcRewards, BitSet target) throws PrismException
 	{
 		int i, n;
@@ -875,11 +882,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 	}
 
 	// Utility methods
-	
+
 	/**
 	 * Create a new DTMC model checker with the same settings as this one. 
 	 */
-	private DTMCModelChecker createDTMCModelChecker() throws PrismException
+	private DTMCModelChecker createDTMCModelChecker() throws PrismNotSupportedException
 	{
 		DTMCModelChecker mcDTMC = new DTMCModelChecker(this);
 		mcDTMC.inheritSettings(this);
@@ -896,11 +903,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 	// compute... methods to use a DTMCModelChecker for the computations instead
 
 	@Override
-	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsNext(dtmcEmb, target, statesOfInterest);
 	}
 
@@ -909,32 +916,34 @@ public class CTMCModelChecker extends DTMCModelChecker
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeForAllNext(dtmcEmb, target, statesOfInterest);
 	}
 
 	@Override
-	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsUntil(dtmcEmb, A, B);
 	}
 
+	@Override
 	public BitSet computeExistsGlobally(Model model, BitSet A) throws PrismException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsGlobally(dtmcEmb, A);
 	}
 
-	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismException
+	@Override
+	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC)model).getImplicitEmbeddedDTMC();
+		DTMC dtmcEmb = ((CTMC) model).getImplicitEmbeddedDTMC();
 		return createDTMCModelChecker().computeExistsRelease(dtmcEmb, A, B);
 	}
 

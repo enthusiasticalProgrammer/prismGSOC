@@ -30,98 +30,86 @@ import java.io.*;
 
 public class RemoteHandler
 {
-	
+
 	static String sshCommand = "ssh2";
 	static String scpCommand = "scp2";
 	static Runtime runtime;
-	
-	static
-	{
+
+	static {
 		runtime = Runtime.getRuntime();
 	}
-	
+
 	public static void configure(String shellCommand, String copyCommand)
 	{
-		
+
 		sshCommand = shellCommand;
 		scpCommand = copyCommand;
 	}
-	
-	public static int ssh(String [] arguments) throws InterruptedException
+
+	public static int ssh(String[] arguments) throws InterruptedException
 	{
-		String[]args = new String[arguments.length+2];
+		String[] args = new String[arguments.length + 2];
 		args[0] = sshCommand;
 		args[1] = "-x";
-		for(int i = 0 ; i < arguments.length; i++)
-		{
-			args[i+2] = arguments[i];
+		for (int i = 0; i < arguments.length; i++) {
+			args[i + 2] = arguments[i];
 		}
-		
-		for(int i = 0; i < args.length; i++)
-		{
-			System.out.print(args[i]+" ");
+
+		for (int i = 0; i < args.length; i++) {
+			System.out.print(args[i] + " ");
 		}
 		System.out.println();
-		try
-		{
+		try {
 			Process proc = runtime.exec(args);
 			System.out.println("started");
-			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "ERR"+args[1], proc);
-			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), "OUT"+args[1]);
-			
+			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "ERR" + args[1], proc);
+			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), "OUT" + args[1]);
+
 			errorGobbler.start();
 
 			int exitVal = proc.waitFor();
-			System.out.println("ssh returns "+exitVal);
+			System.out.println("ssh returns " + exitVal);
 			errorGobbler.interrupt();
 			outputGobbler.interrupt();
 			return exitVal;
-			
-		}
-		catch(IOException t)
-		{
+
+		} catch (IOException t) {
 			//t.printStackTrace();
 			return -1;
 		}
 	}
-	
-	public static int scp(String []arguments) throws InterruptedException
+
+	public static int scp(String[] arguments) throws InterruptedException
 	{
-		
-		String[]args = new String[arguments.length+1];
+
+		String[] args = new String[arguments.length + 1];
 		args[0] = scpCommand;
-		for(int i = 0 ; i < arguments.length; i++)
-		{
-			args[i+1] = arguments[i];
+		for (int i = 0; i < arguments.length; i++) {
+			args[i + 1] = arguments[i];
 		}
-		
-		for(int i = 0; i < args.length; i++)
-		{
-			System.out.print(args[i]+" ");
+
+		for (int i = 0; i < args.length; i++) {
+			System.out.print(args[i] + " ");
 		}
 		System.out.println();
-		
-		
-		try
-		{
+
+		try {
 			Process proc = runtime.exec(args);
 			//System.out.println(proc.toString());
-			
-			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "<ERROR: "+args[1], proc);
-			
+
+			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "<ERROR: " + args[1], proc);
+
 			errorGobbler.start();
 			int exitVal = proc.waitFor();
 			errorGobbler.interrupt();
 			return exitVal;
-			
-		}
-		catch(IOException t)
-		{
+
+		} catch (IOException t) {
 			t.printStackTrace();
 			return -1;
 		}
 	}
-	
+
 	static class StreamGobbler extends Thread
 	{
 		InputStream is;
@@ -140,19 +128,18 @@ public class RemoteHandler
 			this.os = redirect;
 		}
 
+		@Override
 		public void run()
 		{
-			try
-			{
+			try {
 				PrintWriter pw = null;
 				if (os != null)
 					pw = new PrintWriter(os);
 
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);
-				String line=null;
-				while ( (line = br.readLine()) != null && !interrupted())
-				{
+				String line = null;
+				while ((line = br.readLine()) != null && !interrupted()) {
 					if (pw != null)
 						pw.println(line);
 					if (pw != null)
@@ -161,9 +148,7 @@ public class RemoteHandler
 				}
 				if (pw != null)
 					pw.flush();
-			}
-			catch (IOException ioe)
-			{
+			} catch (IOException ioe) {
 				//ioe.printStackTrace();
 			}
 		}
@@ -189,28 +174,26 @@ public class RemoteHandler
 			this.proc = proc;
 		}
 
+		@Override
 		public void run()
 		{
-			try
-			{
+			try {
 				PrintWriter pw = null;
 				if (os != null)
 					pw = new PrintWriter(os);
 
 				InputStreamReader isr = new InputStreamReader(is);
 
-
 				BufferedReader br = new BufferedReader(isr);
-				String line=null;
+				String line = null;
 				//System.out.println("1");
 				//while (!br.ready() && !interrupted())// (line = br.readLine()) != null && !interrupted())
-				while((line = br.readLine()) != null && !interrupted())
-				{
+				while ((line = br.readLine()) != null && !interrupted()) {
 					if (pw != null)
-					pw.println(line);
-				//System.out.println("3");
-				if (pw != null)
-					pw.flush();
+						pw.println(line);
+					//System.out.println("3");
+					if (pw != null)
+						pw.flush();
 					proc.destroy();
 				}
 				/*//System.out.println("2");
@@ -224,14 +207,11 @@ public class RemoteHandler
 				//System.out.println("5");
 				proc.destroy();*/
 
-
 				//}
 				System.out.println("6");
 				//if (pw != null)
 				//    pw.flush();
-			}
-			catch (IOException ioe)
-			{
+			} catch (IOException ioe) {
 				//ioe.printStackTrace();
 			}
 		}

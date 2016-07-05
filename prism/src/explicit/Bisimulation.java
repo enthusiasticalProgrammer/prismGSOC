@@ -32,6 +32,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import prism.PrismComponent;
 import prism.PrismException;
@@ -51,7 +53,7 @@ public class Bisimulation extends PrismComponent
 	/**
 	 * Construct a new Bisimulation object.
 	 */
-	public Bisimulation(PrismComponent parent) throws PrismException
+	public Bisimulation(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -62,7 +64,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	public Model minimise(Model model, List<String> propNames, List<BitSet> propBSs) throws PrismException
+	public @NonNull Model minimise(Model model, List<String> propNames, List<BitSet> propBSs) throws PrismException
 	{
 		switch (model.getModelType()) {
 		case DTMC:
@@ -80,7 +82,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	private DTMC minimiseDTMC(DTMC dtmc, List<String> propNames, List<BitSet> propBSs)
+	private @NonNull DTMC minimiseDTMC(DTMC dtmc, List<String> propNames, List<BitSet> propBSs)
 	{
 		// Create initial partition based on propositions
 		initialisePartitionInfo(dtmc, propBSs);
@@ -111,7 +113,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	private CTMC minimiseCTMC(CTMC ctmc, List<String> propNames, List<BitSet> propBSs)
+	private @NonNull CTMC minimiseCTMC(CTMC ctmc, List<String> propNames, List<BitSet> propBSs)
 	{
 		// Create initial partition based on propositions
 		initialisePartitionInfo(ctmc, propBSs);
@@ -160,7 +162,7 @@ public class Bisimulation extends PrismComponent
 			for (int j = 0; j < m; j++) {
 				bs1 = all.get(j);
 				bs0 = (BitSet) bs1.clone();
- 				bs0.andNot(bs);
+				bs0.andNot(bs);
 				bs1.and(bs);
 				if (bs1.isEmpty()) {
 					all.set(j, bs0);

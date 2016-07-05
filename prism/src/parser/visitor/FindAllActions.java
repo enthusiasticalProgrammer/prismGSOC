@@ -38,14 +38,15 @@ import prism.PrismLangException;
 public class FindAllActions extends ASTTraverseModify
 {
 	private List<String> synchs;
-	
+
 	public FindAllActions(List<String> synchs)
 	{
 		this.synchs = synchs;
 	}
-	
+
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new object so don't need to return it.
+	@Override
 	public void visitPost(Command e) throws PrismLangException
 	{
 		int i;
@@ -65,9 +66,10 @@ public class FindAllActions extends ASTTraverseModify
 		// In theory, this can never occur since the set of action names is defined by existence in commands
 		throw new PrismLangException("Unknown action name " + e.getSynch() + " in command", e);
 	}
-	
+
 	// Note that this is done with VisitPost, i.e. after recursively visiting children.
 	// This is ok because we can modify rather than create a new Command so don't need to return it.
+	@Override
 	public void visitPost(RewardStructItem e) throws PrismLangException
 	{
 		int i;
@@ -91,4 +93,3 @@ public class FindAllActions extends ASTTraverseModify
 		throw new PrismLangException("Unknown action name " + e.getSynch() + " in reward structure item", e);
 	}
 }
-

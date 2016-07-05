@@ -181,6 +181,7 @@ public abstract class ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public abstract String toString();
 
 	/**
@@ -433,7 +434,7 @@ public abstract class ASTElement
 		TypeCheck visitor = new TypeCheck();
 		accept(visitor);
 	}
-	
+
 	public void semanticCheck() throws PrismLangException
 	{
 		semanticCheck(null, null);

@@ -27,11 +27,11 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.io.PrintStream;
 
+public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Integer>
+{
 
-public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Integer> {
+	private int _size; // workaround for default bitset size, resizing breaks stuff later!
 
-	private int _size;	// workaround for default bitset size, resizing breaks stuff later!
-	
 	public MyBitSet()
 	{
 		super();
@@ -43,17 +43,22 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 		super(size);
 		if (size > 0)
 			_size = size;
-		else _size = 0;
-	}
-	
-	public int size() {
-		if (_size > 0)
-			return _size;
-		else return super.size();
+		else
+			_size = 0;
 	}
 
-	public boolean containsAll(BitSet b) {
-		BitSet tmp = (BitSet)this.clone();
+	@Override
+	public int size()
+	{
+		if (_size > 0)
+			return _size;
+		else
+			return super.size();
+	}
+
+	public boolean containsAll(BitSet b)
+	{
+		BitSet tmp = (BitSet) this.clone();
 		tmp.or(b);
 		return tmp.equals(this);
 	}
@@ -69,7 +74,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 	}
 
 	public void print(PrintStream out)
-	{				/* prints the content of a set */
+	{ /* prints the content of a set */
 		int i;
 		boolean start = true;
 
@@ -87,7 +92,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 	}
 
 	public void print(PrintStream out, APSet symtable, boolean pos)
-	{				/* prints the content of an ap set */
+	{ /* prints the content of an ap set */
 		int i;
 		boolean start = true;
 		for (i = 0; i < size(); i++) {
@@ -102,6 +107,7 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 		}
 	}
 
+	@Override
 	public int compareTo(BitSet o)
 	{
 		BitSet tmp1 = (BitSet) this.clone();
@@ -110,39 +116,50 @@ public class MyBitSet extends BitSet implements Comparable<BitSet>, Iterable<Int
 		tmp2.andNot(this);
 		return (tmp1.length() - tmp2.length());
 	}
-	
-	public void increment() {
+
+	public void increment()
+	{
 		int i = this.nextClearBit(0);
-		this.clear(0,i);
+		this.clear(0, i);
 		this.set(i);
 	}
 
 	/* An iterator over the set bits of a bitset */
-	public Iterator<Integer> iterator() {
+	@Override
+	public Iterator<Integer> iterator()
+	{
 		return new MyBitSetIterator(this);
 	}
 
-	public static class MyBitSetIterator implements Iterator<Integer> {
+	public static class MyBitSetIterator implements Iterator<Integer>
+	{
 
 		private MyBitSet _bitset;
 		private int index;
-		
-		public MyBitSetIterator(MyBitSet bitset) {
+
+		public MyBitSetIterator(MyBitSet bitset)
+		{
 			_bitset = bitset;
 			index = _bitset.nextSetBit(0);
 		}
-		
-		public boolean hasNext() {
+
+		@Override
+		public boolean hasNext()
+		{
 			return (index >= 0);
 		}
-		
-		public Integer next() {
+
+		@Override
+		public Integer next()
+		{
 			Integer rv = new Integer(index);
 			index = _bitset.nextSetBit(index + 1);
 			return rv;
 		}
-		
-		public void remove() {
+
+		@Override
+		public void remove()
+		{
 			throw new UnsupportedOperationException();
 		}
 	}

@@ -28,24 +28,22 @@ package settings;
 
 public abstract class BooleanConstraint implements SettingConstraint
 {
-	
+
 	/** Creates a new instance of BooleanConstraint */
 	public BooleanConstraint()
 	{
 	}
-	
+
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
-		if(value instanceof Boolean)
-		{
-			checkValueBoolean(((Boolean)value).booleanValue());
-		}
-		else
-		{
+		if (value instanceof Boolean) {
+			checkValueBoolean(((Boolean) value).booleanValue());
+		} else {
 			throw new SettingException("Invalid type for property, should be a Boolean.");
 		}
 	}
-	
+
 	public abstract void checkValueBoolean(boolean value) throws SettingException;
-	
+
 }

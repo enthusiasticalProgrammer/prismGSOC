@@ -75,6 +75,7 @@ public class ExpressionProperty extends SingleProperty
 		return (String) getProperty();
 	}
 
+	@Override
 	public void setProperty(Object property) throws PropertyException
 	{
 		String expression = property.toString();
@@ -91,6 +92,7 @@ public class ExpressionProperty extends SingleProperty
 		super.setProperty(property);
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
@@ -101,6 +103,7 @@ public class ExpressionProperty extends SingleProperty
 
 	JTextArea area;
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		////System.out.println("rendering "+value.toString());

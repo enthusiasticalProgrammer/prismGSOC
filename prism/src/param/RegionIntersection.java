@@ -35,7 +35,8 @@ package param;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see RegionValuesIntersections
  */
-final class RegionIntersection {
+final class RegionIntersection
+{
 	private Region region;
 	private StateValues values1;
 	private StateValues values2;
@@ -46,7 +47,7 @@ final class RegionIntersection {
 		this.values1 = values1;
 		this.values2 = values2;
 	}
-	
+
 	public Region getRegion()
 	{
 		return region;
@@ -56,7 +57,7 @@ final class RegionIntersection {
 	{
 		return values1;
 	}
-	
+
 	public StateValues getStateValues2()
 	{
 		return values2;

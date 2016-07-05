@@ -33,7 +33,6 @@ import parser.ast.ExpressionLabel;
 import parser.ast.ExpressionProp;
 import parser.ast.PropertiesFile;
 import parser.ast.Property;
-import prism.PrismLangException;
 
 /**
  * Get all references to properties (by name) (i.e. ExpressionProp objects) recursively, store names in set.
@@ -49,14 +48,16 @@ public class GetAllPropRefsRecursively extends ASTTraverse
 		this.pf = pf;
 	}
 
-	public void visitPost(ExpressionProp e) throws PrismLangException
+	@Override
+	public void visitPost(ExpressionProp e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());
 		}
 	}
 
-	public void visitPost(ExpressionLabel e) throws PrismLangException
+	@Override
+	public void visitPost(ExpressionLabel e)
 	{
 		String name;
 		Property prop = null;

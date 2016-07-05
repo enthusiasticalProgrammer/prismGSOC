@@ -3,7 +3,6 @@ package automata;
 import java.util.BitSet;
 
 import prism.PrismComponent;
-import prism.PrismException;
 import explicit.SCCComputer;
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceRabin;
@@ -22,8 +21,8 @@ public class DASimplifyAcceptance
 	 * @param allowedAcceptance the allowed acceptance types
 	 */
 	@SuppressWarnings("unchecked")
-	public static DA<BitSet, ? extends AcceptanceOmega> simplifyAcceptance(PrismComponent parent, DA<BitSet, ? extends AcceptanceOmega> da, AcceptanceType... allowedAcceptance)
-			throws PrismException
+	public static DA<BitSet, ? extends AcceptanceOmega> simplifyAcceptance(PrismComponent parent, DA<BitSet, ? extends AcceptanceOmega> da,
+			AcceptanceType... allowedAcceptance)
 	{
 		// Simplifications for DRAs
 		if (da.getAcceptance() instanceof AcceptanceRabin) {

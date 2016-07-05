@@ -29,8 +29,11 @@ package explicit;
 import java.io.File;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import parser.VarList;
 import parser.ast.Declaration;
@@ -49,7 +52,6 @@ import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 
 import parser.ast.ExpressionTemporal;
-import parser.ast.ExpressionUnaryOp;
 import parser.type.TypeDouble;
 
 /**
@@ -60,7 +62,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Create a new DTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public DTMCModelChecker(PrismComponent parent) throws PrismException
+	public DTMCModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 	}
@@ -68,65 +70,15 @@ public class DTMCModelChecker extends ProbModelChecker
 	// Model checking functions
 
 	/**
-	 * Compute probabilities for a simple, non-LTL path operator.
-	 */
-	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr) throws PrismException
-	{
-		StateValues probs = null;
-
-		// Negation/parentheses
-		if (expr instanceof ExpressionUnaryOp) {
-			ExpressionUnaryOp exprUnary = (ExpressionUnaryOp) expr;
-			// Parentheses
-			if (exprUnary.getOperator() == ExpressionUnaryOp.PARENTH) {
-				// Recurse
-				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand());
-			}
-			// Negation
-			else if (exprUnary.getOperator() == ExpressionUnaryOp.NOT) {
-				// Compute, then subtract from 1 
-				probs = checkProbPathFormulaSimple(model, exprUnary.getOperand());
-				probs.timesConstant(-1.0);
-				probs.plusConstant(1.0);
-			}
-		}
-		// Temporal operators
-		else if (expr instanceof ExpressionTemporal) {
-			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
-			// Next
-			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
-				probs = checkProbNext(model, exprTemp);
-			}
-			// Until
-			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
-				if (exprTemp.hasBounds()) {
-					probs = checkProbBoundedUntil(model, exprTemp);
-				} else {
-					probs = checkProbUntil(model, exprTemp);
-				}
-			}
-			// Anything else - convert to until and recurse
-			else {
-				probs = checkProbPathFormulaSimple(model, exprTemp.convertToUntilForm());
-			}
-		}
-
-		if (probs == null)
-			throw new PrismException("Unrecognised path operator in P operator");
-
-		return probs;
-	}
-
-	/**
 	 * Compute probabilities for a next operator.
 	 */
-	protected StateValues checkProbNext(Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbNext(@NonNull Model model, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet target = null;
 		ModelCheckerResult res = null;
 
 		// Model check the operand
-		target = checkExpression(model, expr.getOperand2(),null).getBitSet();
+		target = checkExpression(model, expr.getOperand2(), null).getBitSet();
 
 		res = computeNextProbs((DTMC) model, target);
 		return StateValues.createFromDoubleArray(res.soln, model);
@@ -135,7 +87,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute probabilities for a bounded until operator.
 	 */
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
 	{
 		int time;
 		BitSet b1, b2;
@@ -172,7 +124,9 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
-	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	@Override
+	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+			throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MCRewards productRewards;
@@ -241,7 +195,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute probabilities for an (unbounded) until operator.
 	 */
-	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet b1, b2;
 		StateValues probs = null;
@@ -266,7 +220,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for the contents of an R operator.
 	 */
-	protected StateValues checkRewardFormula(Model model, MCRewards modelRewards, Expression expr) throws PrismException
+	protected StateValues checkRewardFormula(@NonNull Model model, MCRewards modelRewards, Expression expr) throws PrismException
 	{
 		StateValues rewards = null;
 
@@ -296,7 +250,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for a reachability reward operator.
 	 */
-	protected StateValues checkRewardReach(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkRewardReach(@NonNull Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet b;
 		StateValues rewards = null;
@@ -357,6 +311,9 @@ public class DTMCModelChecker extends ProbModelChecker
 		return rewards;
 	}
 
+	/**
+	 * @throws PrismException is there, because it is needed in CTMCModelChecker
+	 */
 	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -405,6 +362,9 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
+	/**
+	 * @throws PrismException because CTMCModelChecker throws it while overriding the method 
+	 */
 	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -574,6 +534,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * Generate a probability distribution, stored as a StateValues object, from a file.
 	 * If {@code distFile} is null, so is the return value.
 	 */
+	@Override
 	public StateValues readDistributionFromFile(File distFile, Model model) throws PrismException
 	{
 		StateValues dist = null;
@@ -594,6 +555,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * from the initial states info of the current model: either probability 1 for
 	 * the (single) initial state or equiprobable over multiple initial states.
 	 */
+	@Override
 	public StateValues buildInitialDistribution(Model model) throws PrismException
 	{
 		StateValues dist = null;
@@ -617,7 +579,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param dtmc The DTMC
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target) throws PrismException
+	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target)
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -812,7 +774,6 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	
 	/**
 	 * Prob0 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 0,
@@ -1246,7 +1207,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet target, int k)
 	{
 		return computeBoundedReachProbs(dtmc, null, target, k, null, null);
 	}
@@ -1260,7 +1221,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedUntilProbs(DTMC dtmc, BitSet remain, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedUntilProbs(DTMC dtmc, BitSet remain, BitSet target, int k)
 	{
 		return computeBoundedReachProbs(dtmc, remain, target, k, null, null);
 	}
@@ -1276,7 +1237,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param init Initial solution vector - pass null for default
 	 * @param results Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet remain, BitSet target, int k, double init[], double results[]) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(DTMC dtmc, BitSet remain, BitSet target, int k, double init[], double results[])
 	{
 		ModelCheckerResult res = null;
 		BitSet unknown;
@@ -1801,14 +1762,17 @@ public class DTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
-	 * The model is meant to be a DTMC (to be precise it has to be a DTMCFromMLRStrategyAndMDP)
+	 * The model is meant to be a DTMC (to be precise it has to be a DTMCFromMLRStrategyAndMDP),
+	 * but we have to write it as model, because it has to override the super-method.
 	 * The expr is some multi-objective expression.
 	 * Note that this method is mainly here, because it can verify the product of an MDP and
 	 * a multiLongRunStrategy.
 	 * 
 	 */
-	protected MultiLongRun getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	@Override
+	protected MultiLongRun<ArtificialNondetModelFromModel> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
+			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
+			@NonNull String method) throws PrismException
 	{
 		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);
 	}

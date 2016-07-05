@@ -29,6 +29,8 @@ package pta;
 public interface ZoneFactory
 {
 	public Zone createZero(PTA pta);
+
 	public Zone createTrue(PTA pta);
+
 	public Zone createFromConstraints(PTA pta, Iterable<Constraint> constrs);
 }

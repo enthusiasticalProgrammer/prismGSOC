@@ -30,15 +30,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 
-
 public class Point
-{	
+{
 	/**
 	 * A number used as a basis when neglecting roundoff errors in tests
 	 * for equality.
 	 */
 	protected static final double SMALL_NUMBER = 10e-6;
-	
+
 	/**
 	 * Internal storage for the coordinates
 	 */
@@ -118,13 +117,12 @@ public class Point
 			return true;
 		}
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return (int) (this.coords[0] * 100);
 	}
-	
 
 	/**
 	 * Determines if this point is very close to the point {@code p}, where
@@ -149,9 +147,9 @@ public class Point
 	}
 
 	/**
- 	 * Determines if this point is pointwise smaller than {@code p+SMALL_NUMBER}.
- 	 * 
- 	 */
+	 * Determines if this point is pointwise smaller than {@code p+SMALL_NUMBER}.
+	 * 
+	 */
 	public boolean isCoveredBy(Point p)
 	{
 		if (p.getDimension() != this.getDimension())
@@ -165,8 +163,6 @@ public class Point
 		return true;
 	}
 
-	
-
 	/**
 	 * Returns the point in which the coordinates are reweighted so that the
 	 * norm of the point is equal to 1.
@@ -179,7 +175,7 @@ public class Point
 		double sum = 0;
 		for (Double d : this.coords)
 			sum += Math.abs(d);
-		
+
 		//TODO throw exception when sum is 0?
 		for (int i = 0; i < ret.length; i++) {
 			ret[i] = Math.abs(this.coords[i]) / sum;
@@ -207,7 +203,7 @@ public class Point
 		}
 		return Math.sqrt(result);
 	}
-	
+
 	/**
 	 * Returns the euclidean norm of this point.
 	 */
@@ -215,20 +211,22 @@ public class Point
 	{
 		return this.distanceTo(new Point(this.getDimension()));
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return Arrays.toString(coords).replace('[', '(').replace(']', ')');
 	}
-	
+
 	/**
 	 * Returns a point with the same coordinates as this point.
 	 */
-	public Point clone() {
+	@Override
+	public Point clone()
+	{
 		return new Point(this.coords.clone());
 	}
-	
+
 	/**
 	 * Returns the vector representing the coordinates of this point. It is
 	 * a copy of the vector stored internally, so it can be modified without
@@ -253,11 +251,11 @@ public class Point
 		for (int i = 0; i < this.getDimension(); i++)
 			if (b.get(i))
 				al.add(this.getCoord(i));
-		
+
 		double[] ar = new double[al.size()];
 		for (int i = 0; i < ar.length; i++)
 			ar[i] = al.get(i);
-		
+
 		return new Point(ar);
 	}
 
@@ -271,7 +269,7 @@ public class Point
 	 */
 	public Point toRealProperties(OpsAndBoundsList obl)
 	{
-		if(obl==null)
+		if (obl == null)
 			return this;
 		double[] oldCoords = coords.clone();
 		double[] newCoords = new double[oldCoords.length];
@@ -279,7 +277,7 @@ public class Point
 		for (int i = 0; i < obl.probSize(); i++) {
 			int newIndex = obl.getOrigPositionProb(i);
 			if (obl.isProbNegated(i))
-				newCoords[newIndex] = 1-oldCoords[i];
+				newCoords[newIndex] = 1 - oldCoords[i];
 			else
 				newCoords[newIndex] = oldCoords[i];
 
@@ -287,22 +285,22 @@ public class Point
 
 		for (int i = 0; i < obl.rewardSize(); i++) {
 			int newIndex = obl.getOrigPositionReward(i);
-			if (obl.getRewardOperator(i) == Operator.R_MIN
-					|| obl.getRewardOperator(i) == Operator.R_LE)
-				newCoords[newIndex] = -oldCoords[i + obl.probSize()];			
+			if (obl.getRewardOperator(i) == Operator.R_MIN || obl.getRewardOperator(i) == Operator.R_LE)
+				newCoords[newIndex] = -oldCoords[i + obl.probSize()];
 			else
-				newCoords[newIndex] = oldCoords[i + obl.probSize()];			
+				newCoords[newIndex] = oldCoords[i + obl.probSize()];
 
 		}
-		
+
 		return new Point(newCoords);
 	}
-	
+
 	/**
 	 * True if all coordinates are exactly 0.
 	 * @return
 	 */
-	public boolean isZero() {
+	public boolean isZero()
+	{
 		for (int i = 0; i < this.getDimension(); i++)
 			if (this.getCoord(i) != 0)
 				return false;

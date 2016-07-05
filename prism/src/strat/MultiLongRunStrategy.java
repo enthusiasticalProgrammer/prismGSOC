@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import prism.PrismException;
+import org.eclipse.jdt.annotation.NonNull;
+
 import prism.PrismLog;
 import explicit.DTMC;
 import explicit.DTMCProductMLRStrategyAndMDP;
@@ -66,7 +67,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 */
 	public static MultiLongRunStrategy loadFromFile(String filename)
 	{
-		//TODO Christopher: adjust it
 		try {
 			File file = new File(filename);
 			//InputStream inputStream = new FileInputStream(file);
@@ -127,20 +127,17 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		strategy = -1;
 		setRecurrency(state);
-		System.out.println("init to " + isTransient());
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
 		setRecurrency(state);
-		System.out.println("in updateMemory,strategy: " + strategy + " state: " + state);
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
-		System.out.println("in getNextMove, strategy: " + strategy);
 		return (isTransient()) ? this.transientChoices[state] : this.recurrentChoices[strategy].getNextMove(state);
 	}
 
@@ -169,23 +166,17 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public Model buildProduct(Model model)
+	public @NonNull Model buildProduct(Model model)
 	{
-		System.out.println("in buildProduct");
-		try {
-			return buildProductFromMDPExplicit((MDPSparse) model);
-		} catch (PrismException e) {
-			// TODO Auto-generated catch block
-			System.out.println("something bad happened in buildProduct");
-			e.printStackTrace();
+		if (model == null) {
+			throw new NullPointerException();
 		}
-		return null;
+		return buildProductFromMDPExplicit((MDPSparse) model);
 	}
 
-	//TODO verify under strategy is not working (but however output with strategy does)
-	public DTMC buildProductFromMDPExplicit(MDPSparse model) throws PrismException
+	public @NonNull DTMC buildProductFromMDPExplicit(@NonNull MDPSparse model)
 	{
-		return new DTMCProductMLRStrategyAndMDP(model,this);
+		return new DTMCProductMLRStrategyAndMDP(model, this);
 	}
 
 	@Override
@@ -209,7 +200,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public String getType()
 	{
-		//TODO overwrite
 		return "Stochastic update strategy.";
 	}
 
@@ -235,7 +225,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 * Note that this could maybe be optimised a bit.
 	 */
 	@Override
-	public void setMemory(Object memory) throws InvalidStrategyStateException
+	public void setMemory(Object memory)
 	{
 		if (memory instanceof Integer) {
 			int mem = (Integer) memory;
@@ -267,31 +257,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public int getInitialStateOfTheProduct(int s)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	public void export(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void exportActions(PrismLog out)
-	{
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public Object getChoiceAction()
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void clear()
 	{
 		throw new UnsupportedOperationException();
 
@@ -314,11 +280,12 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public void exportDotFile(PrismLog out)
 	{
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("You can use exportToFileInstead");
 
 	}
 
-	public String toString()
+	@Override
+	public @NonNull String toString()
 	{
 		String result = "";
 		result += "transientChoices\n";
@@ -336,32 +303,33 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		for (int i = 0; i < recurrentChoices.length; i++) {
 			result += i + "  " + recurrentChoices[i] + "\n";
 		}
-		if (strategy > -2) {
-			throw new IllegalArgumentException();
-		}
 		return result;
 	}
-	
+
 	/**
 	 * This method is important for building the product
 	 */
-	public int getNumberOfDifferentStrategies(){
-		return recurrentChoices.length+1;
+	public int getNumberOfDifferentStrategies()
+	{
+		return recurrentChoices.length + 1;
 	}
+
 	/**
 	 * This method returns the Distribution of a strategy in a state.
 	 * strategy number 0 is transient, strategy at 1..N+1 is recurrentStrategy[x-1] 
 	 * @throws InvalidStrategyStateException if strategy is not defined in this state
 	 * @throws IllegalArgumentException, if strategy-number is not valid
+	 * @return the transition-Distribution, and not the action-Distribution
 	 */
-	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException{
-		if(strategy<0 || strategy>recurrentChoices.length){
+	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException
+	{
+		if (strategy < 0 || strategy > recurrentChoices.length) {
 			throw new IllegalArgumentException("wrong strategy-number");
 		}
-		if(strategy==0){
-			return transientChoices[state]; 
-		}
-		return recurrentChoices[strategy-1].getNextMove(state);
+
+		if (strategy == 0)
+			return transientChoices[state];
+		return recurrentChoices[strategy - 1].getNextMove(state);
 	}
 
 	public Distribution getSwitchProbability(int i)

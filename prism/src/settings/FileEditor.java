@@ -68,6 +68,7 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 		button.addFocusListener(this);
 	}
 
+	@Override
 	public Object getEditorValue()
 	{
 		if (modified) {
@@ -77,6 +78,7 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 			return NOT_CHANGED_VALUE;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting setting, Object value, boolean isSelected, int row, int column)
 	{
 		if (isSelected) {
@@ -129,7 +131,6 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 				}
 				if (allSame) {
 					renderer.setText(last.toString());
-					;
 				} else {
 					renderer.setText("(Different values)");
 					renderer.setFont(new Font("monospaced", Font.ITALIC, 12));
@@ -152,10 +153,12 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 		return panel;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		dialogFocus = true;
@@ -184,10 +187,12 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 			lastTable.editingStopped(new ChangeEvent(this));
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		dialogFocus = false;

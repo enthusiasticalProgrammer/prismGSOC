@@ -54,6 +54,7 @@ public class SimPathPlotThread extends GUIComputationThread
 		this.graphModel = graphModel;
 	}
 
+	@Override
 	public void run()
 	{
 		try {
@@ -64,7 +65,7 @@ public class SimPathPlotThread extends GUIComputationThread
 					plug.warning(msg);
 				}
 			}
-		} catch (Exception e) {
+		} catch (PrismException e) {
 			error(e.getMessage());
 		}
 	}

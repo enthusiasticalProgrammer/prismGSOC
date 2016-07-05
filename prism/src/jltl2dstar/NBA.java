@@ -31,7 +31,6 @@ import jltl2ba.APElement;
 import jltl2ba.APSet;
 import jltl2ba.MyBitSet;
 
-
 /** @file
  * Provides class NBA to store a nondeterministic Büchi automaton.
  */
@@ -41,35 +40,36 @@ import jltl2ba.MyBitSet;
  * See class DA for description of template parameters.
  */
 
-public class NBA implements Iterable<NBA_State> {
+public class NBA implements Iterable<NBA_State>
+{
 
 	/** Number of states */
-	  private int _state_count;
-	  
-	  /** Storage for the states */
-	  private Vector<NBA_State> _index;
+	private int _state_count;
 
-	  /** The underlying APSet */
-	  private APSet _apset;
-	  
-	  /** The start states */
-	  private NBA_State _start_state;
+	/** Storage for the states */
+	private Vector<NBA_State> _index;
 
-	  /** The states that are accepting (final) */
-	  private MyBitSet _final_states;
+	/** The underlying APSet */
+	private APSet _apset;
 
-	  /**
-	   * Flag, telling whether to fail later on if the NBA is discovered
-	   * to be disjoint, as this is indicative of a malfunctioning
-	   * NBA generator.
-	   */
-	  private boolean _fail_if_disjoint = false;
-	
+	/** The start states */
+	private NBA_State _start_state;
+
+	/** The states that are accepting (final) */
+	private MyBitSet _final_states;
+
+	/**
+	 * Flag, telling whether to fail later on if the NBA is discovered
+	 * to be disjoint, as this is indicative of a malfunctioning
+	 * NBA generator.
+	 */
+	private boolean _fail_if_disjoint = false;
+
 	/**
 	 * Constructor.
 	 * @param apset The underlying APSet
 	 */
-	public NBA (APSet apset)
+	public NBA(APSet apset)
 	{
 		_state_count = 0;
 		_start_state = null;
@@ -77,7 +77,7 @@ public class NBA implements Iterable<NBA_State> {
 		_index = new Vector<NBA_State>();
 		_final_states = new MyBitSet();
 	}
-	
+
 	/**
 	 * Add a new state.
 	 * @return a pointer to the newly generated state
@@ -86,7 +86,7 @@ public class NBA implements Iterable<NBA_State> {
 	{
 		_state_count++;
 		NBA_State state = new NBA_State(this);
-	  
+
 		_index.add(state);
 		return state;
 	}
@@ -98,7 +98,7 @@ public class NBA implements Iterable<NBA_State> {
 	}
 
 	//FIXME: ref_iterator
-  
+
 	/** Array index operator, get the state with index i. */
 	public NBA_State get(int i)
 	{
@@ -159,7 +159,8 @@ public class NBA implements Iterable<NBA_State> {
 	 * Remove states from the set of accepting (final) states when this is redundant.
 	 * @param sccs the SCCs of the NBA
 	 */
-	public void removeRedundantFinalStates(SCCs sccs) {
+	public void removeRedundantFinalStates(SCCs sccs)
+	{
 		for (int scc = 0; scc < sccs.countSCCs(); ++scc) {
 			if (sccs.get(scc).cardinality() == 1) {
 				int state_id = sccs.get(scc).nextSetBit(0);
@@ -175,11 +176,12 @@ public class NBA implements Iterable<NBA_State> {
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks if the NBA is deterministic (every edge has at most one target state).
 	 */
-	public boolean isDeterministic() {
+	public boolean isDeterministic()
+	{
 		for (NBA_State state : _index) {
 			for (Map.Entry<APElement, MyBitSet> edge : state) {
 				if (edge.getValue().cardinality() > 1) {
@@ -189,13 +191,14 @@ public class NBA implements Iterable<NBA_State> {
 		}
 		return true;
 	}
-	
-	public NBA product_automaton(NBA nba_2) {
-		
+
+	public NBA product_automaton(NBA nba_2)
+	{
+
 		NBA nba_1 = this;
-		
+
 		NBA product_nba = new NBA(nba_1.getAPSet());
-	  
+
 		APSet apset = nba_1.getAPSet();
 
 		for (int s_1 = 0; s_1 < nba_1.size(); s_1++) {
@@ -203,17 +206,17 @@ public class NBA implements Iterable<NBA_State> {
 				for (int copy = 0; copy < 2; copy++) {
 					int s_r = product_nba.nba_i_newState();
 					int to_copy = copy;
-		
+
 					if (copy == 0 && nba_1.get(s_1).isFinal()) {
-						to_copy=1;
+						to_copy = 1;
 					}
 					if (copy == 1 && nba_2.get(s_2).isFinal()) {
 						product_nba.get(s_r).setFinal(true);
 						to_copy = 0;
 					}
-		
+
 					APElement label = new APElement(apset.size());
-					for (int i = 0; i < (1<<apset.size()); i++) {
+					for (int i = 0; i < (1 << apset.size()); i++) {
 						MyBitSet to_s1 = nba_1.get(s_1).getEdge(label);
 						MyBitSet to_s2 = nba_2.get(s_2).getEdge(label);
 						MyBitSet to_set = new MyBitSet();
@@ -232,7 +235,7 @@ public class NBA implements Iterable<NBA_State> {
 		int start_1 = nba_1.getStartState().getName();
 		int start_2 = nba_2.getStartState().getName();
 		product_nba.setStartState(product_nba.get(start_1 * nba_2.size() + start_2));
-	  
+
 		return product_nba;
 	}
 
@@ -254,15 +257,16 @@ public class NBA implements Iterable<NBA_State> {
 			print_hoa(out);
 			break;
 		default:
-			throw new PrismNotSupportedException("Can not print NBA in '"+type+"' format");
+			throw new PrismNotSupportedException("Can not print NBA in '" + type + "' format");
 		}
 	}
 
 	/**
 	 * Print the NBA on the output stream.
 	 */
-	public void print(PrintStream out) {
-		for (NBA_State state : _index){
+	public void print(PrintStream out)
+	{
+		for (NBA_State state : _index) {
 			out.print("State " + state.getName());
 			if (getStartState() == state) {
 				out.print(" *");
@@ -275,21 +279,22 @@ public class NBA implements Iterable<NBA_State> {
 			for (Map.Entry<APElement, MyBitSet> edge : state) {
 				APElement label = edge.getKey();
 				MyBitSet to_states = edge.getValue();
-				out.println(" " + label.toString(getAPSet(),true) + " -> " + to_states.toString());
+				out.println(" " + label.toString(getAPSet(), true) + " -> " + to_states.toString());
 			}
 		}
 	}
 
 	/** Print the NBA as an LBTT automaton to out */
-	public void print_lbtt(PrintStream out) {
-		out.println(getStateCount()+" 1s");
+	public void print_lbtt(PrintStream out)
+	{
+		out.println(getStateCount() + " 1s");
 		for (NBA_State state : _index) {
-			out.print(state.getName());  // id
+			out.print(state.getName()); // id
 			out.print(" ");
 			out.print((getStartState() == state ? "1" : "0"));
 			out.print(" ");
 			out.println((state.isFinal() ? "0 -1" : "-1"));
-			
+
 			for (Map.Entry<APElement, MyBitSet> edge : state) {
 				APElement label = edge.getKey();
 				MyBitSet to_states = edge.getValue();
@@ -305,22 +310,23 @@ public class NBA implements Iterable<NBA_State> {
 	}
 
 	/** Print the NBA as a HOA automaton to out */
-	public void print_hoa(PrintStream out) {
+	public void print_hoa(PrintStream out)
+	{
 		out.println("HOA: v1");
-		out.println("States: "+size());
+		out.println("States: " + size());
 		_apset.print_hoa(out);
-		out.println("Start: "+getStartState().getName());
+		out.println("Start: " + getStartState().getName());
 		out.println("Acceptance: 1 Inf(0)");
 		out.println("acc-name: Buchi");
 		out.println("properties: trans-labels explicit-labels state-acc no-univ-branch");
 		out.println("--BODY--");
 		for (NBA_State state : _index) {
-			out.print("State: "+state.getName());  // id
+			out.print("State: " + state.getName()); // id
 			out.println((state.isFinal() ? " {0}" : ""));
 
 			for (Map.Entry<APElement, MyBitSet> edge : state) {
 				APElement label = edge.getKey();
-				String labelString = "["+label.toStringHOA(_apset.size())+"]";
+				String labelString = "[" + label.toStringHOA(_apset.size()) + "]";
 				MyBitSet to_states = edge.getValue();
 				for (Integer to : to_states) {
 					out.print(labelString);
@@ -333,13 +339,14 @@ public class NBA implements Iterable<NBA_State> {
 	}
 
 	/** Print the NBA as a Graphviz (DOT) graph to out */
-	public void print_dot(PrintStream out) {
+	public void print_dot(PrintStream out)
+	{
 		out.println("digraph nba {");
 		out.println(" node [fontname=Helvetica]");
 		out.println(" edge [constraints=false, fontname=Helvetica]");
 
 		for (NBA_State state : _index) {
-			out.print(" " + state.getName());  // id
+			out.print(" " + state.getName()); // id
 			out.print(" [shape=");
 			out.print((state.isFinal() ? "box" : "circle"));
 			if (state == getStartState()) {
@@ -350,7 +357,7 @@ public class NBA implements Iterable<NBA_State> {
 			for (Map.Entry<APElement, MyBitSet> edge : state) {
 				APElement label = edge.getKey();
 				//String labelString = "["+label.toStringHOA(_apset.size())+"]";
-				String labelString = label.toString(getAPSet(),true);
+				String labelString = label.toString(getAPSet(), true);
 				MyBitSet to_states = edge.getValue();
 				for (Integer to : to_states) {
 					out.print("  " + state.getName() + " -> " + to);
@@ -366,25 +373,25 @@ public class NBA implements Iterable<NBA_State> {
 	{
 		return _state_count;
 	}
-	
+
 	/** Set fail_if_disjoint flag */
 	public void setFailIfDisjoint(boolean value)
 	{
 		_fail_if_disjoint = value;
 	}
-	
+
 	/** Get fail_if_disjoint flag */
 	public boolean getFailIfDisjoint()
 	{
 		return _fail_if_disjoint;
 	}
-	
+
 	/** 
 	 * Create a new state.
 	 * @return the index of the new state
 	 */
 	public int nba_i_newState()
-	{ 
+	{
 		return newState().getName();
 	}
 
@@ -427,7 +434,8 @@ public class NBA implements Iterable<NBA_State> {
 	{
 		setStartState(this.get(state));
 	}
-	
+
+	@Override
 	public Iterator<NBA_State> iterator()
 	{
 		return _index.iterator();

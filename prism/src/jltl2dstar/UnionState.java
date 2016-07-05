@@ -21,18 +21,25 @@
 package jltl2dstar;
 
 /** A state representing a union state from two DA. */
-public class UnionState implements Comparable<UnionState>,NBA2DAState {
-	
-	public static class Result implements NBA2DAResult<UnionState> {
+public class UnionState implements Comparable<UnionState>, NBA2DAState
+{
+
+	public static class Result implements NBA2DAResult<UnionState>
+	{
 		private UnionState state;
-		public Result(UnionState state_) {
+
+		public Result(UnionState state_)
+		{
 			state = state_;
 		}
-		public UnionState getState() {
+
+		@Override
+		public UnionState getState()
+		{
 			return state;
 		}
 	}
-	
+
 	/** Index of the state from the first automaton */
 	protected int da_state_1;
 	/** Index of the state from the second automaton */
@@ -47,31 +54,40 @@ public class UnionState implements Comparable<UnionState>,NBA2DAState {
 	 * @param da_state_2_ index of the state in the second automaton
 	 * @param acceptance_calculator UnionAcceptanceCalculator
 	 */
-	public UnionState(int da_state_1_, int da_state_2_,	UnionAcceptanceCalculator acceptance_calculator) {
+	public UnionState(int da_state_1_, int da_state_2_, UnionAcceptanceCalculator acceptance_calculator)
+	{
 		da_state_1 = da_state_1_;
 		da_state_2 = da_state_2_;
 		signature = acceptance_calculator.calculateAcceptance(da_state_1, da_state_2);
 		description = "";
 	}
 
-	public int compareTo(UnionState other) {
+	@Override
+	public int compareTo(UnionState other)
+	{
 		if (da_state_1 != other.da_state_1)
 			return da_state_1 - other.da_state_1;
-		else return da_state_2 - other.da_state_2;
+		else
+			return da_state_2 - other.da_state_2;
 	}
-	
-	public boolean equals(UnionState other) {
+
+	public boolean equals(UnionState other)
+	{
 		return ((da_state_1 == other.da_state_1) && (da_state_2 == other.da_state_2));
 	}
-	
-	public boolean equals(Object o) {
+
+	@Override
+	public boolean equals(Object o)
+	{
 		return (o instanceof UnionState && this.equals((UnionState) o));
 	}
-	
+
 	/** Copy acceptance signature for this state
 	 * @param acceptance (<b>out</b>) AcceptanceForState for the state in the result automaton 
 	 */
-	public void generateAcceptance(AcceptanceForState acceptance) {
+	@Override
+	public void generateAcceptance(AcceptanceForState acceptance)
+	{
 		acceptance.setSignature(signature);
 	}
 
@@ -79,13 +95,14 @@ public class UnionState implements Comparable<UnionState>,NBA2DAState {
 	 * @param acceptance (<b>out</b>) acceptance signature for the state in the result automaton 
 	 */
 	// void generateAcceptance(da_signature_t& acceptance) const {
-//		acceptance=*signature;
-//	}
+	//		acceptance=*signature;
+	//	}
 
 	/** Return the acceptance acceptance signature for this state
 	 * @return the acceptance signature for this state
 	 */
-	public RabinSignature generateAcceptance() {
+	public RabinSignature generateAcceptance()
+	{
 		return signature;
 	}
 
@@ -93,23 +110,28 @@ public class UnionState implements Comparable<UnionState>,NBA2DAState {
 	 * Set the detailed description for this state
 	 * @param description_ the description
 	 */
-	public void setDescription(String description_) {
+	public void setDescription(String description_)
+	{
 		description = description_;
 	}
 
 	/** Generate a simple representation of this state 
 	 * @return a string with the representation
 	 */
-	public String toString() {
+	@Override
+	public String toString()
+	{
 		return "(" + da_state_1 + "," + da_state_1 + ")";
 	}
-	
-    /** Return the detailed description 
-     * @return the detailed description
-     */
-    public String toHTML() {
-        return description;
-    }
+
+	/** Return the detailed description 
+	 * @return the detailed description
+	 */
+	@Override
+	public String toHTML()
+	{
+		return description;
+	}
 
 	/** Calculates the hash for the union state. 
 	 * @param hash the HashFunction functor used for the calculation
@@ -118,11 +140,13 @@ public class UnionState implements Comparable<UnionState>,NBA2DAState {
 	// void hashCode(HashFunction& hash) {
 	// 		hash.hash(da_state_1);
 	// 		hash.hash(da_state_2);
-		// we don't have to consider the signature as there is a 
-		// 1-on-1 mapping between <da_state_1, da_state_2> -> signature
+	// we don't have to consider the signature as there is a 
+	// 1-on-1 mapping between <da_state_1, da_state_2> -> signature
 	// }
-    public int hashCode() {
-    	return da_state_1 + da_state_2 * 31;
-    }
+	@Override
+	public int hashCode()
+	{
+		return da_state_1 + da_state_2 * 31;
+	}
 
 }

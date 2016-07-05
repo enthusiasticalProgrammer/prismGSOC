@@ -35,7 +35,8 @@ import jltl2ba.MyBitSet;
  * Additionally, the APMonom can have the special values
  * TRUE or FALSE.<br>
  */
-public class APMonom {
+public class APMonom
+{
 
 	private MyBitSet bits_set;
 	private MyBitSet bits_value;
@@ -48,7 +49,8 @@ public class APMonom {
 		booleanValue = true;
 	}
 
-	public APMonom(boolean b) {
+	public APMonom(boolean b)
+	{
 		bits_set = new MyBitSet();
 		bits_value = new MyBitSet();
 		booleanValue = b;
@@ -65,7 +67,8 @@ public class APMonom {
 	 * @param index index of AP
 	 * @return <b>true</b> if AP is set
 	 */
-	public boolean isSet(int index) throws PrismException {
+	public boolean isSet(int index)
+	{
 		if (!isNormal()) {
 			// TRUE / FALSE -> the bit is not set
 			return false;
@@ -78,7 +81,8 @@ public class APMonom {
 	 * @param index index of AP
 	 * @return <b>true</b> if AP is true
 	 */
-	public boolean getValue(int index) throws PrismException {
+	public boolean getValue(int index) throws PrismException
+	{
 		if (!isNormal()) {
 			throw new PrismException("Can't get AP, is either TRUE/FALSE!");
 		}
@@ -95,19 +99,22 @@ public class APMonom {
 	 * @param index index of AP
 	 * @param value value of AP
 	 */
-	public void setValue(int index, boolean value) {
+	public void setValue(int index, boolean value)
+	{
 		bits_set.set(index, true);
 		bits_value.set(index, value);
 	}
-
 
 	/**
 	 * Perform a logical AND operation of this APMonom with a single AP.
 	 * @param index index index of AP
 	 * @param value value of AP
 	 */
-	public void andAP(int index, boolean value) {
-		if (isFalse()) {return;}
+	public void andAP(int index, boolean value)
+	{
+		if (isFalse()) {
+			return;
+		}
 
 		if (!isTrue()) {
 			if (bits_set.get(index) && bits_value.get(index) != value) {
@@ -121,22 +128,22 @@ public class APMonom {
 		setValue(index, value);
 	}
 
-
 	/**
 	 * Unsets this AP.
 	 * @param index index of AP
 	 */
-	public void unset(int index) {
-		bits_value.set(index,false);
+	public void unset(int index)
+	{
+		bits_value.set(index, false);
 		bits_set.set(index, false);
 	}
-
 
 	/**
 	 * Checks if this APMonom is equivalent to TRUE.
 	 * @return <b>true</b> if this APMonom is TRUE
 	 */
-	public boolean isTrue() {
+	public boolean isTrue()
+	{
 		return (!isNormal() && booleanValue);
 	}
 
@@ -144,7 +151,8 @@ public class APMonom {
 	 * Checks if this APMonom is equivalent to FALSE.
 	 * @return <b>true</b> if this APMonom is FALSE
 	 */
-	public boolean isFalse() {
+	public boolean isFalse()
+	{
 		return (!isNormal() && !booleanValue);
 	}
 
@@ -152,7 +160,8 @@ public class APMonom {
 	 * Checks if this APMonom is a normal APMonon (not equivalent to TRUE or FALSE).
 	 * @return <b>true</b> if this APMonom is normal (not TRUE/FALSE).
 	 */
-	public boolean isNormal() {
+	public boolean isNormal()
+	{
 		return !bits_set.isEmpty();
 	}
 
@@ -161,7 +170,8 @@ public class APMonom {
 	 * value (AP occurs in positive or negative form).
 	 * @return the SimpleBitSet of the values
 	 */
-	public MyBitSet getValueBits() {
+	public MyBitSet getValueBits()
+	{
 		return bits_value;
 	}
 
@@ -170,12 +180,14 @@ public class APMonom {
 	 * bits that are set (AP occurs).
 	 * @return the SimpleBitSet of the occuring APs
 	 */
-	public MyBitSet getSetBits() {
+	public MyBitSet getSetBits()
+	{
 		return bits_set;
 	}
 
 	/** Checks to see if the MyBitSet representation is normalized. */
-	public boolean isNormalized() {
+	public boolean isNormalized()
+	{
 		if (isTrue() || isFalse()) {
 			return true;
 		}
@@ -187,6 +199,7 @@ public class APMonom {
 	/**
 	 * Output APMonom
 	 */
+	@Override
 	public String toString()
 	{
 		String rv = "";
@@ -216,7 +229,8 @@ public class APMonom {
 	 * 
 	 * FIXME: I'm not sure if this does what it says it does, but ltl2dstar does it this way.
 	 */
-	public boolean isIntersectionEmpty(APMonom m2) {
+	public boolean isIntersectionEmpty(APMonom m2)
+	{
 		// check if there are contradicting values 
 		MyBitSet set_in_both = getSetBits();
 		set_in_both.and(m2.getSetBits());
@@ -227,20 +241,25 @@ public class APMonom {
 		MyBitSet maskedm2 = m2.getValueBits();
 		maskedm2.and(set_in_both);
 
-		return ! maskedm1.equals(maskedm2);
+		return !maskedm1.equals(maskedm2);
 	}
 
 	/**
 	 * Perform logical conjunction with other APMonom.
 	 * @param other the other APMonom
 	 */
-	public APMonom and(APMonom other) {
+	public APMonom and(APMonom other)
+	{
 		if (this.isFalse() || other.isFalse()) {
 			return new APMonom(false);
 		}
 
-		if (this.isTrue()) {return other;}
-		if (other.isTrue()) {return this;}
+		if (this.isTrue()) {
+			return other;
+		}
+		if (other.isTrue()) {
+			return this;
+		}
 
 		// both are not TRUE/FALSE:
 
@@ -263,7 +282,8 @@ public class APMonom {
 	 * Perform 'minus' operation (equal to *this & !other).
 	 * @param other the other APMonom
 	 */
-	APMonom andNot(APMonom other) {
+	APMonom andNot(APMonom other)
+	{
 		if (this.isFalse()) {
 			// false & anything == false
 			return new APMonom(false);
@@ -281,7 +301,7 @@ public class APMonom {
 
 		// the result will be false, if there are two set bits
 		// with equal value
-		MyBitSet set_in_both= getSetBits();
+		MyBitSet set_in_both = getSetBits();
 		set_in_both.and(other.getSetBits());
 
 		MyBitSet maskedm1 = getValueBits();
@@ -289,7 +309,7 @@ public class APMonom {
 
 		MyBitSet maskedm2 = other.getValueBits();
 		maskedm2.and(set_in_both);
-		maskedm2.flip(0,maskedm2.size());
+		maskedm2.flip(0, maskedm2.size());
 
 		if (!maskedm1.equals(maskedm2)) {
 			// return false;
@@ -304,27 +324,26 @@ public class APMonom {
 		return new APMonom(result_set, result_value);
 	}
 
-
 	/**
 	 * Checks for equality.
 	 * @param other the other APMonom
 	 * @return <b>true</b> if this and the other APMonom are equal
 	 */
-	public boolean equals(APMonom other) {
-		return (isNormal() && other.isNormal() &&
-				getValueBits().equals(other.getValueBits()) && 
-				getSetBits().equals(other.getSetBits()) ||
-				isTrue() && other.isTrue() ||
-				isFalse() && other.isFalse());
+	public boolean equals(APMonom other)
+	{
+		return (isNormal() && other.isNormal() && getValueBits().equals(other.getValueBits()) && getSetBits().equals(other.getSetBits())
+				|| isTrue() && other.isTrue() || isFalse() && other.isFalse());
 	}
 
-	public boolean equals(Object other) {
+	@Override
+	public boolean equals(Object other)
+	{
 		return ((other instanceof APMonom) && this.equals((APMonom) other));
 	}
 
 	public Iterator<APElement> APElementIterator(APSet s)
 	{
-		return (Iterator<APElement>) new APMonom2APElements(s, this);  
+		return (Iterator<APElement>) new APMonom2APElements(s, this);
 	}
 
 	public void setFromPosNeg(MyBitSet pos, MyBitSet neg) throws PrismException
@@ -334,27 +353,23 @@ public class APMonom {
 		if (pos.intersects(neg)) {
 			throw new PrismException("MyBitSet contradiction");
 		}
-		if ((pos.cardinality() == sz)
-				|| (pos.cardinality() == 0 && neg.cardinality() == 0)) {
+		if ((pos.cardinality() == sz) || (pos.cardinality() == 0 && neg.cardinality() == 0)) {
 			bits_set = new MyBitSet(sz);
 			bits_value = new MyBitSet(sz);
 			booleanValue = true;
-		}
-		else if (neg.cardinality() == sz) {
+		} else if (neg.cardinality() == sz) {
 			bits_set = new MyBitSet(sz);
 			bits_value = new MyBitSet(sz);
 			booleanValue = false;
-		}
-		else {
+		} else {
 			if (pos.size() == sz) {
 				bits_set = (MyBitSet) pos.clone();
-				bits_set.or(neg);  
+				bits_set.or(neg);
 				bits_value = (MyBitSet) pos.clone();
-			}
-			else {
+			} else {
 				bits_set = (MyBitSet) neg.clone();
-				bits_set.or(pos);  
-				bits_value = new MyBitSet(sz); 
+				bits_set.or(pos);
+				bits_value = new MyBitSet(sz);
 				bits_value.or(pos);
 			}
 		}

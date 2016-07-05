@@ -36,20 +36,23 @@ import jltl2dstar.NBA;
 /**
  * Command-line interface to the jltl2ba LTL->NBA translator.
  */
-public class Jltl2baCmdLine {
+public class Jltl2baCmdLine
+{
 
-	public int run(String formula, PrintStream output) throws Exception {
+	public int run(String formula, PrintStream output) throws Exception
+	{
 		formula = formula.trim();
 		SimpleLTL ltl = SimpleLTL.parseFormulaLBT(formula);
 		ltl = ltl.simplify();
-		
+
 		NBA nba = ltl.toNBA();
 		// nba.print_lbtt(output);
 		nba.print_hoa(output);
 		return 0;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		int rv = 0;
 		int outfile_pos = 1;
 		BufferedReader r = null;
@@ -92,7 +95,7 @@ public class Jltl2baCmdLine {
 			System.err.println(e.toString());
 			rv = 1;
 		}
-		
+
 		if (rv != 0) {
 			System.exit(rv);
 		}

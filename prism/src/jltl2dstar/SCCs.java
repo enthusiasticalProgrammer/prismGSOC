@@ -25,8 +25,8 @@ import java.io.PrintStream;
 
 import jltl2ba.MyBitSet;
 
-
-public class SCCs {
+public class SCCs
+{
 
 	/**
 	 * A class for storing information about the Strongly Connected Components (SCCs)
@@ -39,9 +39,9 @@ public class SCCs {
 	public Vector<MyBitSet> _reachability;
 	public boolean _graph_is_disjoint;
 
-
 	/** Constructor */
-	public SCCs() {
+	public SCCs()
+	{
 		_sccs = new Vector<MyBitSet>();
 		_state_to_scc = new Vector<Integer>();
 		_dag = new Vector<MyBitSet>();
@@ -49,42 +49,52 @@ public class SCCs {
 		_reachability = new Vector<MyBitSet>();
 		_graph_is_disjoint = false;
 	}
-	
+
 	/** Get the states that are in SCC scc_index */
-	public MyBitSet get(int scc_index) {
+	public MyBitSet get(int scc_index)
+	{
 		return _sccs.get(scc_index);
 	}
 
 	/** Get the number of SCCs */
-	public int countSCCs() {return _sccs.size();}
+	public int countSCCs()
+	{
+		return _sccs.size();
+	}
 
 	/** Get the SCC index for state */
-	public int state2scc(int state) {
+	public int state2scc(int state)
+	{
 		return _state_to_scc.get(state);
 	}
 
 	/** Get a vector with a topological order of the states*/
-	Vector<Integer> topologicalOrder() {
+	Vector<Integer> topologicalOrder()
+	{
 		return _topological_order;
 	}
 
 	/** Get a set of SCCs that are successors of the SCC scc_index */
-	MyBitSet successors(int scc_index) {
+	MyBitSet successors(int scc_index)
+	{
 		return _dag.get(scc_index);
 	}
 
 	/** Return true, if state_to is reachable from state_from */
-	public boolean stateIsReachable(int state_from, int state_to) {
+	public boolean stateIsReachable(int state_from, int state_to)
+	{
 		return isReachable(state2scc(state_from), state2scc(state_to));
 	}
 
 	/** Return true, if SCC scc_to is reachable from SCC_fromom */
-	public boolean isReachable(int scc_from, int scc_to) {
+	public boolean isReachable(int scc_from, int scc_to)
+	{
 		return _reachability.get(scc_from).get(scc_to);
 	}
 
 	/** Print the SCCs on the output stream */
-	public void print(PrintStream out) {
+	public void print(PrintStream out)
+	{
 		out.println("SCC:");
 
 		for (int i = 0; i < this.countSCCs(); i++) {
@@ -97,7 +107,8 @@ public class SCCs {
 	/** Get a vector of BitSets with reachability information 
 	 * (state -> reachable_states)
 	 */
-	public Vector<MyBitSet> getReachabilityForAllStates() {
+	public Vector<MyBitSet> getReachabilityForAllStates()
+	{
 		Vector<MyBitSet> v = new Vector<MyBitSet>();
 		v.setSize(_state_to_scc.size());
 
@@ -109,7 +120,7 @@ public class SCCs {
 			for (Integer it : reachable_sccs) {
 				// union with all states from the reachable scc
 				reachable_states.or(_sccs.get(it));
-			}      
+			}
 
 			v.set(i, reachable_states);
 
@@ -121,13 +132,15 @@ public class SCCs {
 	//  friend class GraphAlgorithms::SCC_DFS;
 
 	/** Add a new SCC */
-	public int addSCC(MyBitSet scc) {
+	public int addSCC(MyBitSet scc)
+	{
 		_sccs.add(scc);
 		return _sccs.size() - 1;
 	}
 
 	/** Set the SCC for a state */
-	public void setState2SCC(int state, int scc) {
+	public void setState2SCC(int state, int scc)
+	{
 		if (_state_to_scc.size() <= state) {
 			_state_to_scc.setSize(state + 1);
 		}
@@ -135,12 +148,14 @@ public class SCCs {
 	}
 
 	/** Set flag that the graph was discovered to be disjoint */
-	public void setGraphIsDisjoint() {
+	public void setGraphIsDisjoint()
+	{
 		_graph_is_disjoint = true;
 	}
-	
+
 	/** Get flag wether the graph was discovered to be disjoint */
-	public boolean getGraphIsDisjoint() {
+	public boolean getGraphIsDisjoint()
+	{
 		return _graph_is_disjoint;
 	}
 }

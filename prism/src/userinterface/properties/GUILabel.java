@@ -36,7 +36,7 @@ public class GUILabel
 	public String name;
 	public String label;
 	public Exception parseError;
-	
+
 	public GUILabel(GUIMultiProperties parent, String name, String label)
 	{
 		this.parent = parent;
@@ -44,7 +44,7 @@ public class GUILabel
 		this.label = label;
 		this.parseError = null;
 	}
-	
+
 	public void parse()
 	{
 		Expression expr = null;
@@ -52,30 +52,41 @@ public class GUILabel
 		// See if label definition is parseable
 		try {
 			// Check name is a valid identifier
-			try { expr = parent.getPrism().parseSingleExpressionString(name); }
-			catch (PrismLangException e) { throw new PrismException("Invalid label name \""+name+"\""); }
-			if (expr == null || !(expr instanceof ExpressionIdent)) throw new PrismException("Invalid label name \""+name+"\"");
+			try {
+				expr = parent.getPrism().parseSingleExpressionString(name);
+			} catch (PrismLangException e) {
+				throw new PrismException("Invalid label name \"" + name + "\"");
+			}
+			if (expr == null || !(expr instanceof ExpressionIdent))
+				throw new PrismException("Invalid label name \"" + name + "\"");
 			// Check (non-empty) label definition is valid (single) expression
-			try { if (!("".equals(label))) parent.getPrism().parseSingleExpressionString(label); }
-			catch (PrismLangException e) { throw new PrismException("Invalid expression \""+label+"\""); }
-		}
-		catch (PrismException e) {
+			try {
+				if (!("".equals(label)))
+					parent.getPrism().parseSingleExpressionString(label);
+			} catch (PrismLangException e) {
+				throw new PrismException("Invalid expression \"" + label + "\"");
+			}
+		} catch (PrismException e) {
 			this.parseError = e;
 		}
 	}
-	
-	public boolean isParseable() { return parseError==null; }
-	
+
+	public boolean isParseable()
+	{
+		return parseError == null;
+	}
+
+	@Override
 	public String toString()
 	{
-		return "label \""+getNameString()+"\" = "+getValueString()+";";
+		return "label \"" + getNameString() + "\" = " + getValueString() + ";";
 	}
-	
+
 	public String getNameString()
 	{
 		return name;
 	}
-	
+
 	public String getValueString()
 	{
 		return label;

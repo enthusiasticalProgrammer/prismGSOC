@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import explicit.rewards.MCRewards;
 import parser.State;
 import parser.Values;
@@ -25,20 +27,21 @@ import strat.MultiLongRunStrategy;
 /**
  * This class simulates a product between an MDP and a MultiLongRunStrategy,
  * which satisfies a multi-objective property. The product is computed implicitely.
+ * It can be outputted in a .tra-file.
  * 
  */
 public class DTMCProductMLRStrategyAndMDP implements DTMC
 {
-	private final MDP mdp;
-	private final MultiLongRunStrategy mlrs;
+	private final @NonNull MDP mdp;
+	private final @NonNull MultiLongRunStrategy mlrs;
 
-	public DTMCProductMLRStrategyAndMDP(MDP mdp, MultiLongRunStrategy mlrs)
+	public DTMCProductMLRStrategyAndMDP(@NonNull MDP mdp, @NonNull MultiLongRunStrategy mlrs)
 	{
 		this.mdp = mdp;
 		this.mlrs = mlrs;
 	}
 
-	public MDP getMDP()
+	public @NonNull MDP getMDP()
 	{
 		return mdp;
 	}
@@ -161,15 +164,12 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 		return false;
 	}
 
-	/**
-	 * Some transititons are traversed with probability 0.0
-	 */
 	@Override
 	public int getNumTransitions()
 	{
-		int result=0;
-		for(int state=0;state<getNumStates();state++){
-			result+=getNumTransitions(state);
+		int result = 0;
+		for (int state = 0; state < getNumStates(); state++) {
+			result += getNumTransitions(state);
 		}
 		return result;
 	}
@@ -220,26 +220,26 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void checkForDeadlocks()
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicit(@NotNull String baseFilename) throws PrismException
+	public void exportToPrismExplicit(String baseFilename) throws PrismException
 	{
 		exportToPrismExplicitTra(baseFilename + ".tra");
 	}
@@ -272,13 +272,13 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToDotFile(String filename) throws PrismException
+	public void exportToDotFile(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
+	public void exportToDotFile(String filename, BitSet mark)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -302,13 +302,13 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException
+	public void exportStates(int exportType, VarList varList, PrismLog log)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -372,8 +372,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 
 		Distribution oneTransitionMove = new Distribution();
 		for (Integer key : oneActionMove.getSupport()) {
-			System.out.println("state: "+state+", key: "+key);
-			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state/this.getNumStrategies(), key);
+			Iterator<Entry<Integer, Double>> iterator = mdp.getTransitionsIterator(state / this.getNumStrategies(), key);
 			while (iterator.hasNext()) {
 				Entry<Integer, Double> entry = iterator.next();
 				oneTransitionMove.add(entry.getKey(), entry.getValue() * oneActionMove.get(key));
@@ -406,6 +405,9 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	{
 		return null; //no actions, I guess
 	}
+
+	//From here on, the methods are not needed (I hope). The class is only designed to output
+	// somehow the Product of an MDP and a strategy.
 
 	@Override
 	public void prob0step(BitSet subset, BitSet u, BitSet result)

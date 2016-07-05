@@ -63,7 +63,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-
 import parser.State;
 import parser.Values;
 import parser.ast.LabelList;
@@ -166,6 +165,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		pathTable.addComponentListener(new ComponentAdapter()
 		{
+			@Override
 			public void componentResized(ComponentEvent e)
 			{
 				sortOutColumnSizes();
@@ -184,6 +184,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		currentUpdatesTable.setModel(updateTableModel);
 		currentUpdatesTable.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() == 2 && currentUpdatesTable.isEnabled()) {
@@ -198,6 +199,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		currentUpdatesTable.addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER && currentUpdatesTable.isEnabled()) {
@@ -224,6 +226,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		stateLabelList.addListSelectionListener(new ListSelectionListener()
 		{
+			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
 				pathTable.repaint();
@@ -283,7 +286,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		pathLengthLabel.setText(pathActive ? "" + engine.getPathSize() : "0");
 		totalTimeLabel.setText(pathActive ? formatDouble(engine.getTotalTimeForPath()) : "0");
 
-		if (strategy!=null)
+		if (strategy != null)
 			updateStrategyInfoPanel();
 	}
 
@@ -427,7 +430,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			displayPathLoops = true;
 
 			// check if we need to initialise a strategy
-			if ( getPrism().getStrategy()!=null ) {
+			if (getPrism().getStrategy() != null) {
 				// get reference to the strategy
 				strategy = getPrism().getStrategy();
 
@@ -522,7 +525,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		try {
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -533,10 +537,10 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 			if (isOldUpdate()) {
 
-				if (strategy != null && updateTableModel.stratState!=null) {
+				if (strategy != null && updateTableModel.stratState != null) {
 					try {
 						strategy.setMemory(updateTableModel.stratState);
-						updateTableModel.stratState=null;
+						updateTableModel.stratState = null;
 					} catch (InvalidStrategyStateException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -570,7 +574,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		System.out.println("autoStep, time");
 		try {
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -579,10 +584,10 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 			setComputing(true);
 			if (isOldUpdate()) {
-				if (strategy != null && updateTableModel.stratState!=null) {
+				if (strategy != null && updateTableModel.stratState != null) {
 					try {
 						strategy.setMemory(updateTableModel.stratState);
-						updateTableModel.stratState=null;
+						updateTableModel.stratState = null;
 					} catch (InvalidStrategyStateException e) {
 						e.printStackTrace();
 						throw new RuntimeException();
@@ -593,7 +598,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			engine.automaticTransitions(time, displayPathLoops);
 
 			// update strategy
-			if (strategy!=null) {
+			if (strategy != null) {
 				try {
 					strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathSize()));
 				} catch (InvalidStrategyStateException e) {
@@ -619,7 +624,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	}
 
 	/** Backtrack to a certain time. */
-	public void a_backTrack(double time) throws PrismException
+	public void a_backTrack(double time)
 	{
 		try {
 			setComputing(true);
@@ -651,17 +656,17 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	public void a_backTrack(int step)
 	{
 		try {
-			
-			if (strategy != null && updateTableModel.stratState!=null) {
+
+			if (strategy != null && updateTableModel.stratState != null) {
 				try {
 					strategy.setMemory(updateTableModel.stratState);
-					updateTableModel.stratState=null;
+					updateTableModel.stratState = null;
 				} catch (InvalidStrategyStateException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
 			}
-			
+
 			setComputing(true);
 			engine.backtrackTo(step);
 
@@ -745,7 +750,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (currentUpdatesTable.getSelectedRow() == -1)
 				throw new PrismException("No current update is selected");
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -863,16 +869,12 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	public void a_plotPath()
 	{
-		try {
-			setComputing(true);
-			guiProp.tabToFront();
-			Graph graphModel = new Graph();
-			guiProp.getGraphHandler().addGraph(graphModel);
-			engine.plotPath(graphModel);
-			setComputing(false);
-		} catch (PrismException e) {
-			error(e.getMessage());
-		}
+		setComputing(true);
+		guiProp.tabToFront();
+		Graph graphModel = new Graph();
+		guiProp.getGraphHandler().addGraph(graphModel);
+		engine.plotPath(graphModel);
+		setComputing(false);
 	}
 
 	public void a_newPathPlot(boolean chooseInitialState)
@@ -923,7 +925,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			String simPathDetails = pathPlotDialog.getSimPathString();
 			if (simPathDetails == null)
 				return;
-			
+
 			long maxPathLength = pathPlotDialog.getMaxPathLength();
 
 			// Create a new path in the simulator and plot it 
@@ -990,41 +992,49 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	//METHODS TO IMPLEMENT THE GUIPLUGIN INTERFACE
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return simulatorMenu;
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "Simulator";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
@@ -1034,6 +1044,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		ignoreNextParse = true;
 	}
 
+	@Override
 	public boolean processGUIEvent(userinterface.util.GUIEvent e)
 	{
 		if (e instanceof GUIModelEvent) {
@@ -1076,6 +1087,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		return false;
 	}
 
+	@Override
 	public void takeCLArgs(String[] args)
 	{
 	}
@@ -1106,8 +1118,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		currentUpdatesTable.setToolTipText(currentUpdatesTable.isEnabled() ? "Double click on an update to manually execute it" : null);
 		autoTimeCheck.setEnabled(pathActive && parsedModel != null && parsedModel.getModelType().continuousTime());
 
-		strategy=getPrism().getStrategy();
-		showStrategyCheck.setEnabled(pathActive && parsedModel != null && strategy!= null);
+		strategy = getPrism().getStrategy();
+		showStrategyCheck.setEnabled(pathActive && parsedModel != null && strategy != null);
 
 		modelType.setEnabled(parsedModel != null);
 		modelTypeLabel.setEnabled(parsedModel != null);
@@ -1132,7 +1144,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private void initComponents()
 	{
 		java.awt.GridBagConstraints gridBagConstraints;
-
 
 		buttonGroup1 = new javax.swing.ButtonGroup();
 		innerButtonPanel = new javax.swing.JPanel();
@@ -1183,13 +1194,13 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		innerAutomaticExplorationPanel = new javax.swing.JPanel();
 		randomExplorationButton = new javax.swing.JButton();
 		noStepsExplorePanel = new javax.swing.JPanel();
-		typeExploreCombo = new javax.swing.JComboBox();
+		typeExploreCombo = new javax.swing.JComboBox<String>();
 		inputExploreField = new javax.swing.JTextField();
 		backtrackPanel = new javax.swing.JPanel();
 		innerBacktrackPanel = new javax.swing.JPanel();
 		backtrackButton = new javax.swing.JButton();
 		noStepsBacktrackPanel = new javax.swing.JPanel();
-		typeBacktrackCombo = new javax.swing.JComboBox();
+		typeBacktrackCombo = new javax.swing.JComboBox<String>();
 		inputBacktrackField = new javax.swing.JTextField();
 		manualUpdatesPanel = new javax.swing.JPanel();
 		innerManualUpdatesPanel = new javax.swing.JPanel();
@@ -1205,7 +1216,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		tableScroll = new javax.swing.JScrollPane();
 		pathTablePlaceHolder = new javax.swing.JPanel();
 
-
 		strategyInfoPanel = new javax.swing.JPanel();
 		innerStrategyInfoPanel = new javax.swing.JPanel();
 		stratMemElem = new JEditorPane();
@@ -1219,6 +1229,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		newPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		newPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				newPathButtonActionPerformed(evt);
@@ -1234,6 +1245,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		resetPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		resetPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				resetPathButtonActionPerformed(evt);
@@ -1249,6 +1261,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		exportPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		exportPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				exportPathButtonActionPerformed(evt);
@@ -1265,6 +1278,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		configureViewButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		configureViewButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				configureViewButtonActionPerformed(evt);
@@ -1273,8 +1287,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		innerButtonPanel.add(configureViewButton);
 
-		pathTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		pathTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		jSplitPane1.setLeftComponent(jPanel3);
 
 		jSplitPane1.setRightComponent(jPanel4);
@@ -1438,6 +1453,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		randomExplorationButton.setPreferredSize(new java.awt.Dimension(160, 23));
 		randomExplorationButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				randomExplorationButtonActionPerformed(evt);
@@ -1449,7 +1465,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		noStepsExplorePanel.setLayout(new java.awt.GridBagLayout());
 
 		noStepsExplorePanel.setMinimumSize(new java.awt.Dimension(107, 0));
-		typeExploreCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Num. steps", "Upto state", "Max. time" }));
+		typeExploreCombo.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Num. steps", "Upto state", "Max. time" }));
 		typeExploreCombo.setToolTipText("");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1462,6 +1478,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		inputExploreField.setPreferredSize(new java.awt.Dimension(60, 19));
 		inputExploreField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				inputExploreFieldActionPerformed(evt);
@@ -1496,6 +1513,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		backtrackButton.setPreferredSize(new java.awt.Dimension(160, 23));
 		backtrackButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				backtrackButtonActionPerformed(evt);
@@ -1507,7 +1525,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		noStepsBacktrackPanel.setLayout(new java.awt.GridBagLayout());
 
 		noStepsBacktrackPanel.setMinimumSize(new java.awt.Dimension(107, 0));
-		typeBacktrackCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Num. steps", "To state" }));
+		typeBacktrackCombo.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Num. steps", "To state" }));
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		gridBagConstraints.weightx = 2.0;
@@ -1519,6 +1537,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		inputBacktrackField.setPreferredSize(new java.awt.Dimension(60, 19));
 		inputBacktrackField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				inputBacktrackFieldActionPerformed(evt);
@@ -1548,8 +1567,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		innerManualUpdatesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		manualUpdateTableScrollPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		currentUpdatesTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		currentUpdatesTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		manualUpdateTableScrollPanel.setViewportView(currentUpdatesTable);
 
 		innerManualUpdatesPanel.add(manualUpdateTableScrollPanel, java.awt.BorderLayout.CENTER);
@@ -1571,6 +1591,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		showStrategyCheck.setMargin(new java.awt.Insets(0, 0, 0, 0));
 		showStrategyCheck.addItemListener(new ItemListener()
 		{
+			@Override
 			public void itemStateChanged(ItemEvent itemEvent)
 			{
 				int state = itemEvent.getStateChange();
@@ -1636,6 +1657,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	}// </editor-fold>//GEN-END:initComponents
 
 	/** Override set font to set pass on to path table and header (which may not be visible yet) */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -1645,7 +1667,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	private void inputBacktrackFieldActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_inputBacktrackFieldActionPerformed
-		// TODO add your handling code here:
+			// TODO add your handling code here:
 	}//GEN-LAST:event_inputBacktrackFieldActionPerformed
 
 	private void backtrackButtonActionPerformed(java.awt.event.ActionEvent evt)
@@ -1735,6 +1757,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		newPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUISimulator.this.tabToFront();
@@ -1750,6 +1773,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathFromState = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUISimulator.this.tabToFront();
@@ -1764,6 +1788,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathPlot = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newPathPlot(false);
@@ -1777,6 +1802,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathPlotFromState = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newPathPlot(true);
@@ -1789,6 +1815,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		resetPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_restartPath();
@@ -1803,6 +1830,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		exportPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportPath();
@@ -1816,6 +1844,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		plotPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_plotPath();
@@ -1828,6 +1857,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		randomExploration = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				randomExplorationButtonActionPerformed(e);
@@ -1841,6 +1871,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		backtrack = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				backtrackButtonActionPerformed(e);
@@ -1854,6 +1885,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		backtrackToHere = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_backTrack(pathTable.getSelectedRow());
@@ -1866,6 +1898,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		removeToHere = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 
@@ -1883,6 +1916,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		configureView = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_configureView();
@@ -2044,7 +2078,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	 */
 	public void setStrategyGenerated(boolean strategyGenerated)
 	{
-		getPrism().getSimulator().setStrategy(strategy!= null ? getPrism().getStrategy() : null);
+		getPrism().getSimulator().setStrategy(strategy != null ? getPrism().getStrategy() : null);
 	}
 
 	/**
@@ -2094,23 +2128,28 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		doEnables();
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		doPopupDetection(e);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		doPopupDetection(e);
@@ -2122,9 +2161,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (e.getClickCount() == 2 && (e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll)) {
 				if (newPath.isEnabled())
 					a_newPath(false);
-			}
-			else if (e.isPopupTrigger()
-					&& (e.getSource() == pathTablePlaceHolder || e.getSource() == pathTable || e.getSource() == pathTable.getTableHeader() || e.getSource() == tableScroll)) {
+			} else if (e.isPopupTrigger() && (e.getSource() == pathTablePlaceHolder || e.getSource() == pathTable || e.getSource() == pathTable.getTableHeader()
+					|| e.getSource() == tableScroll)) {
 				randomExploration
 						.setEnabled(!(e.getSource() == pathTable.getTableHeader() || e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll));
 				backtrack.setEnabled(!(e.getSource() == pathTable.getTableHeader() || e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll));
@@ -2214,7 +2252,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	 * Setter for property displayStyle.
 	 * @param b New value of property displayStyle.
 	 */
-	public void setDisplayPathLoops(boolean b) throws PrismException
+	public void setDisplayPathLoops(boolean b)
 	{
 		displayPathLoops = b;
 		//getPrism().getSettings().set(PrismSettings.SIMULATOR_????, new Boolean(b));
@@ -2311,8 +2349,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private javax.swing.JPanel topValues;
 	private javax.swing.JLabel totalTime;
 	private javax.swing.JLabel totalTimeLabel;
-	private javax.swing.JComboBox typeBacktrackCombo;
-	private javax.swing.JComboBox typeExploreCombo;
+	private javax.swing.JComboBox<String> typeBacktrackCombo;
+	private javax.swing.JComboBox<String> typeExploreCombo;
 
 	// End of variables declaration//GEN-END:variables
 
@@ -2322,8 +2360,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	public void sortOutColumnSizes()
 	{
-		int prevWidth = pathTable.getWidth();
-
 		TableColumnModel cm = pathTable.getColumnModel();
 
 		for (int i = 0; i < cm.getColumnCount(); i++) {
@@ -2381,11 +2417,12 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			stratState = null;
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			if (pathActive) {
 				int cols = 3;
-				if (showStrategyCheck.isSelected() && strategy!=null)
+				if (showStrategyCheck.isSelected() && strategy != null)
 					cols++;
 				if (parsedModel.getModelType().multiplePlayers())
 					cols++;
@@ -2395,6 +2432,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			}
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			try {
@@ -2404,15 +2442,15 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			}
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			if (pathActive) {
 				try {
 					int converted = convertColumnIndex(columnIndex);
-					
-					
+
 					switch (converted) {
-					
+
 					// Strategy choice
 					case 0:
 						//try {
@@ -2420,14 +2458,14 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 						Distribution dist = strategy.getNextMove(stateIds.get(state));
 						System.out.println("dist for state " + state + ": " + dist);
 						int choice = engine.getChoiceIndexOfTransition(rowIndex);
-						if(dist.contains(choice))
+						if (dist.contains(choice))
 							return dist.get(choice);
 						return 0.0;
-						//} finally {
-						// resetting the memory
-						//if (oldUpdate)
-						//	strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathFull().size() - 1));
-						//}
+					//} finally {
+					// resetting the memory
+					//if (oldUpdate)
+					//	strategy.setMemory(engine.getPathFull().getStrategyState(engine.getPathFull().size() - 1));
+					//}
 					// Player
 					case 1:
 						return "dummy player"; //TODO merge with Prism-games
@@ -2452,7 +2490,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			}
 			return "";
 		}
-		
+
 		/**
 		 * Some columns might not be in use, because certain elements (strategy, player)
 		 * do not apply for simulation. This method takes the column index as viewed by the user,
@@ -2473,7 +2511,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			// Player
 			if (!(parsedModel.getModelType().multiplePlayers()))
 				offset++;
-			
+
 			if (offset != 1 || column > 0) {
 				return column + offset;
 			} else { //we have to check which is the 0th column
@@ -2487,7 +2525,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (pathActive) {
 				// First 2 columns are optional, so adjust index
 				int converted = convertColumnIndex(column);
-				
+
 				switch (converted) {
 				case 0:
 					return "Strategy";
@@ -2536,17 +2574,17 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		{
 			if (oldStep == pathTable.getRowCount() - 1) // if current state selected
 			{
-				if (strategy != null && stratState!=null) {
+				if (strategy != null && stratState != null) {
 					try {
 						strategy.setMemory(stratState);
-						stratState=null;
+						stratState = null;
 					} catch (InvalidStrategyStateException e) {
 						e.printStackTrace();
 						throw new RuntimeException();
 					}
 				}
 				updateUpdatesTable();
-				
+
 			} else {
 				this.oldStep = oldStep;
 				oldUpdate = true;
@@ -2607,6 +2645,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		}
 	}
 
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		displayStyleFast = settings.getInteger(PrismSettings.SIMULATOR_RENDER_ALL_VALUES) == 0;

@@ -41,16 +41,16 @@ public class ExpressionStrategy extends Expression
 {
 	/** "There exists a strategy" (true) or "for all strategies" (false) */
 	protected boolean thereExists = false;
-	
+
 	/** Coalition info (for game models) */
-	protected Coalition coalition = new Coalition(); 
-	
+	protected Coalition coalition = new Coalition();
+
 	/** Child expression(s) */
 	protected List<Expression> operands = new ArrayList<Expression>();
-	
+
 	/** Is there just a single operand (P/R operator)? If not, the operand list will be parenthesised. **/
 	protected boolean singleOperand = false;
-	
+
 	// Constructors
 
 	public ExpressionStrategy()
@@ -75,7 +75,7 @@ public class ExpressionStrategy extends Expression
 	{
 		this.thereExists = thereExists;
 	}
-	
+
 	public void setCoalitionAllPlayers()
 	{
 		this.coalition.setAllPlayers();
@@ -122,22 +122,22 @@ public class ExpressionStrategy extends Expression
 	{
 		return coalition;
 	}
-	
+
 	public boolean coalitionIsAllPlayers()
 	{
 		return coalition.isAllPlayers();
 	}
-	
+
 	public List<String> getCoalitionPlayers()
 	{
 		return coalition.getPlayers();
 	}
-	
+
 	public boolean hasSingleOperand()
 	{
 		return singleOperand;
 	}
-	
+
 	public int getNumOperands()
 	{
 		return operands.size();

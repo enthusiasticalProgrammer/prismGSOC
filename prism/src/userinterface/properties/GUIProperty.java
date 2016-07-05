@@ -37,7 +37,6 @@ import userinterface.GUIPrism;
 import param.BigRational;
 import parser.*;
 import parser.ast.*;
-import parser.type.TypeVoid;
 import prism.*;
 
 /**
@@ -63,7 +62,7 @@ public class GUIProperty
 	public static final ImageIcon IMAGE_NUMBER = GUIPrism.getIconFromImage("smallCompute.png");
 	/** A property state constant image */
 	public static final ImageIcon IMAGE_PARETO = GUIPrism.getIconFromImage("smallPareto.png");
-	
+
 	/** Property status */
 	public static final int STATUS_NOT_DONE = 0;
 	/** Property status */
@@ -102,7 +101,7 @@ public class GUIProperty
 	private String constantsString; // Constant values used
 	private String name;
 	private Vector<String> referencedNames;
-	
+
 	private GUIPropertiesList propList; // to be able to get named properties
 
 	/** Creates a new instance of GUIProperty */
@@ -110,7 +109,7 @@ public class GUIProperty
 	{
 		this.prism = prism;
 		this.propList = propList;
-		
+
 		this.id = id;
 		status = STATUS_NOT_DONE;
 		doingImage = IMAGE_DOING;
@@ -172,7 +171,7 @@ public class GUIProperty
 	{
 		return propString;
 	}
-	
+
 	/**
 	 * Returns the name of this property, or {@code null} if the property
 	 * has no name.
@@ -181,7 +180,7 @@ public class GUIProperty
 	{
 		return this.name;
 	}
-	
+
 	/**
 	 * If the property is valid (see {@link #isValid()}), returns a
 	 * (potentialy empty) vector containing names of properties
@@ -217,11 +216,12 @@ public class GUIProperty
 	 * be returning {@code false} until property is parsed OK again.
 	 * @return
 	 */
-	public void makeInvalid() {
+	public void makeInvalid()
+	{
 		this.expr = null;
 		this.referencedNames = null;
 	}
-	
+
 	/**
 	 * Is this property both valid (i.e. parsed OK last time it was checked)
 	 * and suitable approximate verification through simulation?
@@ -235,12 +235,11 @@ public class GUIProperty
 	{
 		return result;
 	}
-	
+
 	public int getNumberOfWarnings()
 	{
 		return this.numberOfWarnings;
 	}
-
 
 	public String getResultString()
 	{
@@ -271,6 +270,7 @@ public class GUIProperty
 		return method;
 	}
 
+	@Override
 	public String toString()
 	{
 		return ((this.name != null) ? ("\"" + this.name + "\" : ") : "") + propString;
@@ -332,7 +332,7 @@ public class GUIProperty
 			result = null;
 		}
 	}
-	
+
 	public void setNumberOfWarnings(int n)
 	{
 		this.numberOfWarnings = n;
@@ -373,23 +373,22 @@ public class GUIProperty
 			} catch (PrismException e) {
 				couldBeNoConstantsOrLabels = true;
 			}
-			
+
 			String namedString = "";
 			int namedCount = 0;
 			//Add named properties
 			for (GUIProperty namedProp : this.propList.getAllNamedProperties()) {
-				
-				if (namedProp.isValid() &&
-						(this.name == null || !this.name.equals(namedProp.getName()))) {
+
+				if (namedProp.isValid() && (this.name == null || !this.name.equals(namedProp.getName()))) {
 					namedCount++;
 					namedString += "\"" + namedProp.getName() + "\" : " + namedProp.getPropString() + "\n";
 				}
 			}
-			
+
 			//Parse all together
 			String withConsLabs = constantsString + "\n" + labelString + "\n" + namedString + propString;
 			PropertiesFile ff = prism.parsePropertiesString(m, withConsLabs);
-			
+
 			//Validation of number of properties
 			if (ff.getNumProperties() <= namedCount)
 				throw new PrismException("Empty Property");
@@ -415,10 +414,10 @@ public class GUIProperty
 			// otherwise, don't set status - reparse doesn't mean existing results should be lost
 			if (getStatus() == STATUS_PARSE_ERROR)
 				setStatus(STATUS_NOT_DONE);
-			
+
 			// get the referenced names
-			this.referencedNames = ff.getPropertyObject(namedCount).getAllPropRefsRecursively(ff); 
-			
+			this.referencedNames = ff.getPropertyObject(namedCount).getAllPropRefsRecursively(ff);
+
 		} catch (PrismException ex) {
 			this.expr = null;
 			this.referencedNames = null;
@@ -426,19 +425,19 @@ public class GUIProperty
 			parseError = ex.getMessage();
 		}
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return (this.propString != null) ? this.propString.length() : 0;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
 		if (!(obj instanceof GUIProperty))
 			return false;
-		
+
 		return this.id.equals(((GUIProperty) obj).id);
 	}
 }

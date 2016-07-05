@@ -30,145 +30,127 @@ import java.util.*;
 
 public class RangeConstraint extends NumericConstraint
 {
-    private double lower, upper;
-    private boolean inclusiveLower, inclusiveUpper;
-    
-    /** Creates a new instance of DoubleRangeConstraint */
-    public RangeConstraint(String parseThis)
-    {
+	private double lower, upper;
+	private boolean inclusiveLower, inclusiveUpper;
+
+	/** Creates a new instance of DoubleRangeConstraint */
+	public RangeConstraint(String parseThis)
+	{
 		StringTokenizer tokens = new StringTokenizer(parseThis, ",");
-        int count = tokens.countTokens();
-        
-        if(!parseThis.startsWith(","))
-        {
-            //lower and upper
-            if(count == 2)
-            {
-                try
-                {
-                    lower = Double.parseDouble(tokens.nextToken());
-                    upper = Double.parseDouble(tokens.nextToken());
-                }
-                catch(NumberFormatException e)
-                {
-                    lower = Double.NEGATIVE_INFINITY;
+		int count = tokens.countTokens();
+
+		if (!parseThis.startsWith(",")) {
+			//lower and upper
+			if (count == 2) {
+				try {
+					lower = Double.parseDouble(tokens.nextToken());
+					upper = Double.parseDouble(tokens.nextToken());
+				} catch (NumberFormatException e) {
+					lower = Double.NEGATIVE_INFINITY;
 					upper = Double.POSITIVE_INFINITY;
-                }
-            }
-            //lower only
-            else if(count == 1)
-            {
-                try
-                {
-                    lower = Double.parseDouble(tokens.nextToken());
+				}
+			}
+			//lower only
+			else if (count == 1) {
+				try {
+					lower = Double.parseDouble(tokens.nextToken());
 					upper = Double.POSITIVE_INFINITY;
-                }
-                catch(NumberFormatException e)
-                {
-                    lower = Double.NEGATIVE_INFINITY;
+				} catch (NumberFormatException e) {
+					lower = Double.NEGATIVE_INFINITY;
 					upper = Double.POSITIVE_INFINITY;
-                }
-            }
-            else
-            {
-                lower = Double.NEGATIVE_INFINITY;
-				upper = Double.POSITIVE_INFINITY;
-            }
-        }
-        else // should start with , and then a number
-        {
-            try
-            {
-                upper = Double.parseDouble(tokens.nextToken());
+				}
+			} else {
 				lower = Double.NEGATIVE_INFINITY;
-            }
-            catch(NumberFormatException e)
-            {
-                lower = Double.NEGATIVE_INFINITY;
 				upper = Double.POSITIVE_INFINITY;
-            }
-        }
-		
+			}
+		} else // should start with , and then a number
+		{
+			try {
+				upper = Double.parseDouble(tokens.nextToken());
+				lower = Double.NEGATIVE_INFINITY;
+			} catch (NumberFormatException e) {
+				lower = Double.NEGATIVE_INFINITY;
+				upper = Double.POSITIVE_INFINITY;
+			}
+		}
+
 		inclusiveLower = true;
 		inclusiveUpper = true;
-    }
-    
-    public RangeConstraint(double lower, double upper, boolean inclusiveLower, boolean inclusiveUpper)
-    {
-        this.lower = lower;
-        this.upper = upper;
-        this.inclusiveLower = inclusiveLower;
-        this.inclusiveUpper = inclusiveUpper;
-    }
-	
+	}
+
+	public RangeConstraint(double lower, double upper, boolean inclusiveLower, boolean inclusiveUpper)
+	{
+		this.lower = lower;
+		this.upper = upper;
+		this.inclusiveLower = inclusiveLower;
+		this.inclusiveUpper = inclusiveUpper;
+	}
+
 	public RangeConstraint(int lower, int upper, boolean inclusiveLower, boolean inclusiveUpper)
 	{
 		this.lower = lower;
-        this.upper = upper;
-        this.inclusiveLower = inclusiveLower;
-        this.inclusiveUpper = inclusiveUpper;
+		this.upper = upper;
+		this.inclusiveLower = inclusiveLower;
+		this.inclusiveUpper = inclusiveUpper;
 	}
-    
+
+	@Override
 	public void checkValueDouble(double value) throws SettingException
 	{
-		if(inclusiveLower)
-		{
-			if(value < lower) throw new SettingException("The value: "+value+" should be >="+lower);
+		if (inclusiveLower) {
+			if (value < lower)
+				throw new SettingException("The value: " + value + " should be >=" + lower);
+		} else {
+			if (value <= lower)
+				throw new SettingException("The value: " + value + " should be >" + lower);
 		}
-		else
-		{
-			if(value <= lower) throw new SettingException("The value: "+value+" should be >"+lower);
-		}
-		
-		if(inclusiveUpper)
-		{
-			if(value > upper) throw new SettingException("The value: "+value+"should be <="+upper);
-		}
-		else
-		{
-			if(value >= upper) throw new SettingException("The value: "+value+"should be <"+upper);
+
+		if (inclusiveUpper) {
+			if (value > upper)
+				throw new SettingException("The value: " + value + "should be <=" + upper);
+		} else {
+			if (value >= upper)
+				throw new SettingException("The value: " + value + "should be <" + upper);
 		}
 	}
-	
+
+	@Override
 	public void checkValueInteger(int value) throws SettingException
 	{
-		if(inclusiveLower)
-		{
-			if(value < lower) throw new SettingException("The value: "+value+" should be >="+(int)lower);
+		if (inclusiveLower) {
+			if (value < lower)
+				throw new SettingException("The value: " + value + " should be >=" + (int) lower);
+		} else {
+			if (value <= lower)
+				throw new SettingException("The value: " + value + " should be >" + (int) lower);
 		}
-		else
-		{
-			if(value <= lower) throw new SettingException("The value: "+value+" should be >"+(int)lower);
-		}
-		
-		if(inclusiveUpper)
-		{
-			if(value > upper) throw new SettingException("The value: "+value+"should be <="+(int)upper);
-		}
-		else
-		{
-			if(value >= upper) throw new SettingException("The value: "+value+"should be <"+(int)upper);
+
+		if (inclusiveUpper) {
+			if (value > upper)
+				throw new SettingException("The value: " + value + "should be <=" + (int) upper);
+		} else {
+			if (value >= upper)
+				throw new SettingException("The value: " + value + "should be <" + (int) upper);
 		}
 	}
-	
+
+	@Override
 	public void checkValueLong(long value) throws SettingException
 	{
-		if(inclusiveLower)
-		{
-			if(value < lower) throw new SettingException("The value: "+value+" should be >="+(long)lower);
+		if (inclusiveLower) {
+			if (value < lower)
+				throw new SettingException("The value: " + value + " should be >=" + (long) lower);
+		} else {
+			if (value <= lower)
+				throw new SettingException("The value: " + value + " should be >" + (long) lower);
 		}
-		else
-		{
-			if(value <= lower) throw new SettingException("The value: "+value+" should be >"+(long)lower);
-		}
-		
-		if(inclusiveUpper)
-		{
-			if(value > upper) throw new SettingException("The value: "+value+"should be <="+(long)upper);
-		}
-		else
-		{
-			if(value >= upper) throw new SettingException("The value: "+value+"should be <"+(long)upper);
+
+		if (inclusiveUpper) {
+			if (value > upper)
+				throw new SettingException("The value: " + value + "should be <=" + (long) upper);
+		} else {
+			if (value >= upper)
+				throw new SettingException("The value: " + value + "should be <" + (long) upper);
 		}
 	}
 }

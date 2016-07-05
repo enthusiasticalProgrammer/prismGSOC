@@ -29,7 +29,6 @@ package parser.visitor;
 import java.util.Vector;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Get all formulas (i.e. ExpressionFormula objects), store names in set.
@@ -37,17 +36,17 @@ import prism.PrismLangException;
 public class GetAllFormulas extends ASTTraverse
 {
 	private Vector<String> v;
-	
+
 	public GetAllFormulas(Vector<String> v)
 	{
 		this.v = v;
 	}
-	
-	public void visitPost(ExpressionFormula e) throws PrismLangException
+
+	@Override
+	public void visitPost(ExpressionFormula e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());
 		}
 	}
 }
-

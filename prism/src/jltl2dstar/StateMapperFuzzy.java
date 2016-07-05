@@ -31,9 +31,10 @@ import java.util.Vector;
  * A mapping from KeyType to StateType, with ResultType as an alternative key type, which can be fuzzily matched
  * using CandidateMatcher.
  */
-public class StateMapperFuzzy <CandidateMatcher extends SafraTreeCandidateMatcher> implements StateMapperInterface<SafraTreeTemplate, SafraTree, DA_State>
+public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher> implements StateMapperInterface<SafraTreeTemplate, SafraTree, DA_State>
 {
-	private class ListValue {
+	private class ListValue
+	{
 		SafraTree _key;
 		DA_State _state;
 	}
@@ -43,13 +44,16 @@ public class StateMapperFuzzy <CandidateMatcher extends SafraTreeCandidateMatche
 	private int _count;
 
 	/** Constructor. */
-	public StateMapperFuzzy() {
+	public StateMapperFuzzy()
+	{
 		_count = 0;
 		_map = new HashMap<AbstractedKeyType, Vector<ListValue>>();
 	}
 
 	/** Clear the mapping. */
-	public void clear() {
+	@Override
+	public void clear()
+	{
 		_map.clear();
 		_count = 0;
 	}
@@ -59,7 +63,9 @@ public class StateMapperFuzzy <CandidateMatcher extends SafraTreeCandidateMatche
 	 * @param result the query
 	 * @return the corresponding state or NULL otherwise
 	 */
-	public DA_State find(SafraTreeTemplate result) {
+	@Override
+	public DA_State find(SafraTreeTemplate result)
+	{
 
 		AbstractedKeyType search_key = new AbstractedKeyType(result.getState());
 
@@ -75,14 +81,15 @@ public class StateMapperFuzzy <CandidateMatcher extends SafraTreeCandidateMatche
 		return null;
 	}
 
-
 	/** 
 	 * Add a mapping
 	 * @param key the key
 	 * @param state the state
 	 */
-	public void add(SafraTree key, DA_State state) {
-		
+	@Override
+	public void add(SafraTree key, DA_State state)
+	{
+
 		AbstractedKeyType akey = new AbstractedKeyType(key);
 
 		ListValue item = new ListValue();
@@ -99,28 +106,39 @@ public class StateMapperFuzzy <CandidateMatcher extends SafraTreeCandidateMatche
 	}
 
 	/** Get the number of trees */
-	public int size() {return _count;}
-
-
+	@Override
+	public int size()
+	{
+		return _count;
+	}
 
 	/** 
 	 * A structure that abstracts the Keytype to its abstracted properties
 	 */
-	private class AbstractedKeyType {
+	private class AbstractedKeyType
+	{
 
 		private SafraTree _key;
 
-		public AbstractedKeyType(SafraTree key) {_key = key;}
-		
-		public int hashCode() {
+		public AbstractedKeyType(SafraTree key)
+		{
+			_key = key;
+		}
+
+		@Override
+		public int hashCode()
+		{
 			return CandidateMatcher.hash(_key);
 		}
 
-		public boolean equals(AbstractedKeyType other) {
+		public boolean equals(AbstractedKeyType other)
+		{
 			return CandidateMatcher.abstract_equal_to(_key, other._key);
 		}
-		
-		public boolean equals(Object o) {
+
+		@Override
+		public boolean equals(Object o)
+		{
 			return (o.getClass() == this.getClass()) && this.equals((AbstractedKeyType) o);
 		}
 	}

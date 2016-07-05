@@ -44,9 +44,9 @@ public class RewardStructItem extends ASTElement
 	private Expression states;
 	// Reward expression
 	private Expression reward;
-	
+
 	// constructor
-	
+
 	public RewardStructItem(String a, Expression s, Expression r)
 	{
 		synch = a;
@@ -56,29 +56,29 @@ public class RewardStructItem extends ASTElement
 	}
 
 	// Set methods
-	
+
 	public void setSynch(String s)
 	{
 		synch = s;
 	}
-	
+
 	public void setSynchIndex(int i)
 	{
 		synchIndex = i;
 	}
-	
+
 	public void setStates(Expression e)
 	{
 		states = e;
 	}
-	
+
 	public void setReward(Expression e)
 	{
 		reward = e;
 	}
-	
+
 	// Get methods
-	
+
 	/**
 	 * Get the action label for this command. For independent ("tau"-labelled) commands,
 	 * this is the empty string "" (it should never be null).
@@ -87,7 +87,7 @@ public class RewardStructItem extends ASTElement
 	{
 		return synch;
 	}
-	
+
 	/**
 	 * Get the index of the action label for this command (in the model's list of actions).
 	 * This is 1-indexed, with 0 denoting an independent ("tau"-labelled) command.
@@ -97,51 +97,55 @@ public class RewardStructItem extends ASTElement
 	{
 		return synchIndex;
 	}
-	
+
 	public Expression getStates()
 	{
 		return states;
 	}
-	
+
 	public Expression getReward()
 	{
 		return reward;
 	}
-	
+
 	/**
 	 *	Returns whether this reward is a state (false) or transition (true) reward
 	 */
 	public boolean isTransitionReward()
 	{
-		return (synch!=null);
+		return (synch != null);
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
-		
-		if (synch != null) s += "[" + synch + "] ";
+
+		if (synch != null)
+			s += "[" + synch + "] ";
 		s += states + " : " + reward + ";";
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		RewardStructItem ret = new RewardStructItem(synch, states.deepCopy(), reward.deepCopy());

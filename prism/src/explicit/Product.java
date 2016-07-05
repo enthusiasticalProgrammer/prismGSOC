@@ -24,10 +24,11 @@
 //	
 //==============================================================================
 
-
 package explicit;
 
 import java.util.BitSet;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
@@ -47,8 +48,8 @@ import prism.PrismNotSupportedException;
  */
 public abstract class Product<M extends Model> implements ModelTransformation<M, M>
 {
-	protected M originalModel = null;
-	protected M productModel = null;
+	protected final @NonNull M originalModel;
+	protected final @NonNull M productModel;
 
 	/**
 	 * For the given productState index, return the corresponding
@@ -64,19 +65,10 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 
 	/**
 	 * Constructor.
- 	 * @param originalModel the original model
+	 * @param productModel the product model
+	 * @param originalModel the original model
 	 */
-	public Product(M originalModel)
-	{
-		this.originalModel = originalModel;
-	}
-
-	/**
-	 * Constructor.
- 	 * @param productModel the product model
- 	 * @param originalModel the original model
-	 */
-	public Product(M productModel, M originalModel)
+	public Product(@NonNull M productModel, @NonNull M originalModel)
 	{
 		this.originalModel = originalModel;
 		this.productModel = productModel;
@@ -169,7 +161,7 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 			} else if (sv.type instanceof TypeDouble) {
 				result.setDoubleValue(modelState, (Double) sv.getValue(productState));
 			} else {
-				throw new PrismNotSupportedException("Handling for type "+sv.type+" not implemented.");
+				throw new PrismNotSupportedException("Handling for type " + sv.type + " not implemented.");
 			}
 		}
 

@@ -48,7 +48,7 @@ public class Module extends ASTElement
 	private String baseModule;
 
 	// Constructor
-	
+
 	public Module(String n)
 	{
 		name = n;
@@ -60,49 +60,49 @@ public class Module extends ASTElement
 	}
 
 	// Set methods
-	
+
 	public void setName(String n)
 	{
 		name = n;
 	}
-	
+
 	public void setNameASTElement(ExpressionIdent e)
 	{
 		nameASTElement = e;
 	}
-	
+
 	public void addDeclaration(Declaration d)
 	{
 		decls.add(d);
 	}
-	
+
 	public void setDeclaration(int i, Declaration d)
 	{
 		decls.set(i, d);
 	}
-	
+
 	public void addCommand(Command c)
 	{
 		commands.add(c);
 		c.setParent(this);
 	}
-	
+
 	public void removeCommand(Command c)
 	{
 		commands.remove(c);
 	}
-	
+
 	public void setCommand(int i, Command c)
 	{
 		commands.set(i, c);
 		c.setParent(this);
 	}
-	
+
 	public void setInvariant(Expression e)
 	{
 		invariant = e;
 	}
-	
+
 	public void setParent(ModulesFile mf)
 	{
 		parent = mf;
@@ -112,19 +112,19 @@ public class Module extends ASTElement
 	{
 		baseModule = b;
 	}
-	
+
 	// Get methods
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public ExpressionIdent getNameASTElement()
 	{
 		return nameASTElement;
 	}
-	
+
 	/**
 	 * Get the number of local variable declarations. 
 	 */
@@ -132,7 +132,7 @@ public class Module extends ASTElement
 	{
 		return decls.size();
 	}
-	
+
 	/**
 	 * Get the ith local variable declaration. 
 	 */
@@ -140,7 +140,7 @@ public class Module extends ASTElement
 	{
 		return decls.get(i);
 	}
-	
+
 	/**
 	 * Get the list of all local variable declarations. 
 	 */
@@ -148,44 +148,44 @@ public class Module extends ASTElement
 	{
 		return decls;
 	}
-	
+
 	/**
 	 * Check for the existence of a local variable (declaration).
 	 */
 	public boolean isVariableName(String var)
 	{
-		for (Declaration decl: decls) {
+		for (Declaration decl : decls) {
 			if (decl.getName().equals(var))
 				return true;
 		}
 		return false;
 	}
-	
+
 	public int getNumCommands()
 	{
 		return commands.size();
 	}
-	
+
 	public Command getCommand(int i)
 	{
 		return commands.get(i);
 	}
-	
+
 	public List<Command> getCommands()
 	{
 		return commands;
 	}
-	
+
 	public Expression getInvariant()
 	{
 		return invariant;
 	}
-	
+
 	public ModulesFile getParent()
 	{
 		return parent;
 	}
-	
+
 	public String getBaseModule()
 	{
 		return baseModule;
@@ -204,11 +204,12 @@ public class Module extends ASTElement
 		n = getNumCommands();
 		for (i = 0; i < n; i++) {
 			s = getCommand(i).getSynch();
-			if (!s.equals("") && !allSynchs.contains(s)) allSynchs.add(s);
+			if (!s.equals("") && !allSynchs.contains(s))
+				allSynchs.add(s);
 		}
 		return allSynchs;
 	}
-	
+
 	/**
 	 * Check if action label 's' is in the alphabet of this module.
 	 */
@@ -216,42 +217,46 @@ public class Module extends ASTElement
 	{
 		return getAllSynchs().contains(s);
 	}
-	
+
 	public boolean isLocalVariable(String s)
 	{
 		int i, n;
-		
+
 		n = getNumDeclarations();
 		for (i = 0; i < n; i++) {
-			if (getDeclaration(i).getName().equals(s)) return true;
+			if (getDeclaration(i).getName().equals(s))
+				return true;
 		}
 		return false;
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
 		int i, n;
-		
+
 		s = s + "module " + name + "\n\n";
 		n = getNumDeclarations();
 		for (i = 0; i < n; i++) {
 			s = s + "\t" + getDeclaration(i) + ";\n";
 		}
-		if (n > 0) s = s + "\n";
+		if (n > 0)
+			s = s + "\n";
 		if (invariant != null) {
 			s += "\tinvariant " + invariant + " endinvariant\n\n";
 		}
@@ -260,26 +265,27 @@ public class Module extends ASTElement
 			s = s + "\t" + getCommand(i) + ";\n";
 		}
 		s = s + "\nendmodule";
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		int i, n;
 		Module ret = new Module(name);
 		if (nameASTElement != null)
-			ret.setNameASTElement((ExpressionIdent)nameASTElement.deepCopy());
+			ret.setNameASTElement((ExpressionIdent) nameASTElement.deepCopy());
 		n = getNumDeclarations();
 		for (i = 0; i < n; i++) {
-			ret.addDeclaration((Declaration)getDeclaration(i).deepCopy());
+			ret.addDeclaration((Declaration) getDeclaration(i).deepCopy());
 		}
 		n = getNumCommands();
 		for (i = 0; i < n; i++) {
-			ret.addCommand((Command)getCommand(i).deepCopy());
+			ret.addCommand((Command) getCommand(i).deepCopy());
 		}
 		if (invariant != null)
 			ret.setInvariant(invariant.deepCopy());

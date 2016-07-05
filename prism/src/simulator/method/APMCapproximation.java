@@ -44,14 +44,14 @@ public class APMCapproximation extends APMCMethod
 	}
 
 	@Override
-	public void computeMissingParameterBeforeSim() throws PrismException
+	public void computeMissingParameterBeforeSim()
 	{
 		approximation = Math.sqrt((0.5 * Math.log(2.0 / confidence)) / numSamples);
 		missingParameterComputed = true;
 	}
 
 	@Override
-	public Object getMissingParameter() throws PrismException
+	public Object getMissingParameter()
 	{
 		if (!missingParameterComputed)
 			computeMissingParameterBeforeSim();
@@ -76,7 +76,7 @@ public class APMCapproximation extends APMCMethod
 			computeMissingParameterBeforeSim();
 		return super.getResult(sampler);
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

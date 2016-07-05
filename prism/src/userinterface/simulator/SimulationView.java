@@ -290,8 +290,8 @@ public class SimulationView extends Observable
 						rewardName = null;
 					}
 
-					RewardStructure rewardStructure = new RewardStructure(r, rewardName, parsedModel.getRewardStruct(r).getNumStateItems() == 0, parsedModel
-							.getRewardStruct(r).getNumTransItems() == 0);
+					RewardStructure rewardStructure = new RewardStructure(r, rewardName, parsedModel.getRewardStruct(r).getNumStateItems() == 0,
+							parsedModel.getRewardStruct(r).getNumTransItems() == 0);
 
 					if (!rewardStructure.isStateEmpty() || !rewardStructure.isTransitionEmpty())
 						rewards.add(rewardStructure);
@@ -341,11 +341,13 @@ public class SimulationView extends Observable
 			return type;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name;
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			return (o instanceof Variable && ((Variable) o).getIndex() == index);
@@ -523,6 +525,7 @@ public class SimulationView extends Observable
 			return false;
 		}
 
+		@Override
 		public String toString()
 		{
 			if (name != null) {
@@ -532,6 +535,7 @@ public class SimulationView extends Observable
 			}
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			return (o instanceof RewardStructure && ((RewardStructure) o).getIndex() == index && ((RewardStructure) o).isCumulative() == isCumulative());
@@ -576,6 +580,7 @@ public class SimulationView extends Observable
 			this.rewardStructure = rewardStructure;
 		}
 
+		@Override
 		public String toString()
 		{
 			return getColumnName();

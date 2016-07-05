@@ -162,7 +162,7 @@ public abstract class ExpressionQuant extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public int hashCode()
 	{

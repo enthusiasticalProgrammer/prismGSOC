@@ -89,13 +89,13 @@ public interface Model
 	 * (Such states may have been fixed at build-time by adding self-loops)
 	 */
 	public Iterable<Integer> getDeadlockStates();
-	
+
 	/**
 	 * Get list of states that are/were deadlocks.
 	 * (Such states may have been fixed at build-time by adding self-loops)
 	 */
 	public StateValues getDeadlockStatesList();
-	
+
 	/**
 	 * Get the index of the first state that is/was a deadlock.
 	 * (i.e. the one with the lowest index).
@@ -108,7 +108,7 @@ public interface Model
 	 * (Such states may have been fixed at build-time by adding self-loops)
 	 */
 	public boolean isDeadlockState(int i);
-	
+
 	/**
 	 * Get access to a list of states (optionally stored).
 	 */
@@ -121,13 +121,13 @@ public interface Model
 	 * Get access to a list of constant values (optionally stored).
 	 */
 	public Values getConstantValues();
-	
+
 	/**
 	 * Get the states that satisfy a label in this model (optionally stored).
 	 * Returns null if there is no label of this name.
 	 */
 	public BitSet getLabelStates(String name);
-	
+
 	/**
 	 * Get the labels that are (optionally) stored.
 	 * Returns an empty set if there are no labels.
@@ -146,7 +146,7 @@ public interface Model
 	 * Get an iterator over the successors of state s.
 	 */
 	public Iterator<Integer> getSuccessorsIterator(int s);
-	
+
 	/**
 	 * Returns true if state s2 is a successor of state s1.
 	 */
@@ -200,12 +200,12 @@ public interface Model
 	 * Export transition matrix to explicit format readable by PRISM (i.e. a .tra file).
 	 */
 	public void exportToPrismExplicitTra(File file) throws PrismException;
-	
+
 	/**
 	 * Export transition matrix to explicit format readable by PRISM (i.e. a .tra file).
 	 */
 	public void exportToPrismExplicitTra(PrismLog log);
-	
+
 	/**
 	 * Export to a dot file.
 	 * @param filename Name of file to export to
@@ -244,12 +244,12 @@ public interface Model
 	 * Export to a equivalent PRISM language model description.
 	 */
 	public void exportToPrismLanguage(String filename) throws PrismException;
-	
+
 	/**
 	 * Export states list.
 	 */
 	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException;
-	
+
 	/**
 	 * Report info/stats about the model as a string.
 	 */

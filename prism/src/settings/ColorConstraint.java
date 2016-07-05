@@ -30,24 +30,22 @@ import java.awt.Color;
 
 public abstract class ColorConstraint implements SettingConstraint
 {
-	
+
 	/** Creates a new instance of ColorConstraint */
 	public ColorConstraint()
 	{
 	}
-	
+
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
-		if(value instanceof Color)
-		{
-			checkValueColor((Color)value);
-		}
-		else
-		{
+		if (value instanceof Color) {
+			checkValueColor((Color) value);
+		} else {
 			throw new SettingException("Invalid type for property, should be a Colour.");
 		}
 	}
-	
+
 	public abstract void checkValueColor(Color col) throws SettingException;
-	
+
 }

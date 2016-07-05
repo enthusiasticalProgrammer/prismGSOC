@@ -29,13 +29,13 @@ package userinterface.util;
 
 public final class PropertyConstants
 {
-    public static final int STATE = 0;
-    public static final int TRANSITION = 1;
-    public static final int NAIL = 2;
-    public static final int DECISION = 3;
-    public static final int PROBTRANSITION = 4;
-    public static final int BRANCHTRANSITION = 5;
-    public static final int GRAPH = 6;
-    public static final int AXIS = 7;
-    public static final int SERIES = 8;
+	public static final int STATE = 0;
+	public static final int TRANSITION = 1;
+	public static final int NAIL = 2;
+	public static final int DECISION = 3;
+	public static final int PROBTRANSITION = 4;
+	public static final int BRANCHTRANSITION = 5;
+	public static final int GRAPH = 6;
+	public static final int AXIS = 7;
+	public static final int SERIES = 8;
 }

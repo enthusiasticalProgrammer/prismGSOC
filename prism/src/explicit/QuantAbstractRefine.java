@@ -85,25 +85,25 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	// Property type
 	public enum PropertyType {
 		PROB_REACH, EXP_REACH, PROB_REACH_BOUNDED;
-	};
+	}
 
 	// Refinement termination criteria
 	public enum RefineTermCrit {
 		ABSOLUTE, RELATIVE
-	};
+	}
 
 	public enum RefineStratWhere {
 		ALL, ALL_MAX, FIRST, FIRST_MAX, LAST, LAST_MAX
-	};
+	}
 
 	public enum RefineStratHow {
 		ALL, VAL
-	};
+	}
 
 	// Concrete model info
 	/** Type of (concrete) model; default is MDP. */
 	protected ModelType modelType = ModelType.MDP;
-	
+
 	// Property info
 	/** Property type; default is PROB_REACH */
 	protected PropertyType propertyType = PropertyType.PROB_REACH;
@@ -111,13 +111,13 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	protected boolean min;
 	/** Bound for when property is bounded reachability */
 	protected int reachBound = 0;
-	
+
 	// Abstract model info (updated by subclasses)
 	/** Abstract model */
 	protected NondetModelSimple abstraction;
 	/** BitSet of (abstract) target states for property to drive refinement */
 	protected BitSet target;
-	
+
 	// Stuff for refinement loop
 	protected ModelType abstractionType;
 	protected double[] lbSoln;
@@ -145,12 +145,12 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	/**
 	 * Default constructor.
 	 */
-	public QuantAbstractRefine(PrismComponent parent) throws PrismException
+	public QuantAbstractRefine(PrismComponent parent)
 	{
 		super(parent);
 		// Create dummy model checker to store options
 		try {
-			mcOptions = new ProbModelChecker(null);
+			mcOptions = new MDPModelChecker(null);
 		} catch (PrismException e) {
 			// Won't happen
 		}
@@ -386,7 +386,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		mainLog.println(" * above - start numerical soluton from above");
 		mainLog.println(" * below - start numerical soluton from below");
 	}
-	
+
 	// Abstract methods that must be implemented for abstraction-refinement loop
 
 	/**
@@ -422,8 +422,8 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	 * @param rebuildStates States that need rebuilding as a result should be added here.
 	 * @return Number of states into which split (i.e. 1 denotes split failed).
 	 */
-	protected abstract int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates,
-			Set<Integer> rebuildStates) throws PrismException;
+	protected abstract int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates, Set<Integer> rebuildStates)
+			throws PrismException;
 
 	/**
 	 * Rebuild the abstraction after a refinement.
@@ -583,12 +583,10 @@ public abstract class QuantAbstractRefine extends PrismComponent
 							int a = (j == 0) ? i : abstraction.getNumStates() - numNewStates + j;
 							lb = ((STPG) abstraction).mvMultMinMaxSingle(a, lbSoln, true, min);
 							ub = ((STPG) abstraction).mvMultMinMaxSingle(a, lbSoln, false, min);
-							mainLog.println("XXX " + a + ": old=[" + lbSoln[a] + "," + ubSoln[a] + "], new=[" + lb
-									+ "," + ub + "]");
+							mainLog.println("XXX " + a + ": old=[" + lbSoln[a] + "," + ubSoln[a] + "], new=[" + lb + "," + ub + "]");
 							lbSoln[a] = lbLastSoln[a] = lb;
 							ubSoln[a] = ubLastSoln[a] = ub;
-							if (PrismUtils.doublesAreClose(ub, lb, refineTermCritParam,
-									refineTermCrit == RefineTermCrit.ABSOLUTE)) {
+							if (PrismUtils.doublesAreClose(ub, lb, refineTermCritParam, refineTermCrit == RefineTermCrit.ABSOLUTE)) {
 								lbSoln[a] = ubSoln[a] = lb;
 								known.set(a);
 								count++;
@@ -633,8 +631,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		// See if each state has "converged", i.e. bounds are close enough to assume exact
 		n = abstraction.getNumStates();
 		for (i = 0; i < n; i++) {
-			known.set(i, PrismUtils.doublesAreClose(ubSoln[i], lbSoln[i], refineTermCritParam,
-					refineTermCrit == RefineTermCrit.ABSOLUTE));
+			known.set(i, PrismUtils.doublesAreClose(ubSoln[i], lbSoln[i], refineTermCritParam, refineTermCrit == RefineTermCrit.ABSOLUTE));
 		}
 
 		// Compute bounds for initial states
@@ -767,12 +764,10 @@ public abstract class QuantAbstractRefine extends PrismComponent
 			res = ((MDPModelChecker) mc).computeBoundedReachProbs((MDP) abstraction, null, target, reachBound, true, null, results);
 			break;
 		case CTMDP:
-			res = ((CTMDPModelChecker) mc).computeBoundedReachProbs((CTMDP) abstraction, null, target, (double) reachBound, true,
-					null, results);
+			res = ((CTMDPModelChecker) mc).computeBoundedReachProbs((CTMDP) abstraction, null, target, (double) reachBound, true, null, results);
 			break;
 		case STPG:
-			res = ((STPGModelChecker) mc).computeBoundedReachProbs((STPG) abstraction, null, target, reachBound, true, min, null,
-					results);
+			res = ((STPGModelChecker) mc).computeBoundedReachProbs((STPG) abstraction, null, target, reachBound, true, min, null, results);
 			break;
 		default:
 			throw new PrismNotSupportedException("Cannot model check " + abstractionType);
@@ -795,12 +790,10 @@ public abstract class QuantAbstractRefine extends PrismComponent
 			res = ((MDPModelChecker) mc).computeBoundedReachProbs((MDP) abstraction, null, target, reachBound, false, null, results);
 			break;
 		case CTMDP:
-			res = ((CTMDPModelChecker) mc).computeBoundedReachProbs((CTMDP) abstraction, null, target, (double) reachBound, false,
-					null, results);
+			res = ((CTMDPModelChecker) mc).computeBoundedReachProbs((CTMDP) abstraction, null, target, (double) reachBound, false, null, results);
 			break;
 		case STPG:
-			res = ((STPGModelChecker) mc).computeBoundedReachProbs((STPG) abstraction, null, target, reachBound, false, min, null,
-					results);
+			res = ((STPGModelChecker) mc).computeBoundedReachProbs((STPG) abstraction, null, target, reachBound, false, min, null, results);
 			break;
 		default:
 			throw new PrismNotSupportedException("Cannot model check " + abstractionType);
@@ -1004,8 +997,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	 * @param rebuildStates States that need rebuilding as a result will be added here.
 	 * @return Number of states into which split (i.e. 1 denotes refinement failed).
 	 */
-	protected int refineState(int refineState, Set<Integer> rebuiltStates, Set<Integer> rebuildStates)
-			throws PrismException
+	protected int refineState(int refineState, Set<Integer> rebuiltStates, Set<Integer> rebuildStates) throws PrismException
 	{
 		List<List<Integer>> choiceLists;
 		List<Integer> lbStrat = null, ubStrat = null;
@@ -1027,8 +1019,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		// Don't refine a state that we have already modified through refinement
 		if (rebuiltStates.contains(refineState)) {
 			if (verbosity >= 1)
-				mainLog.printWarning("Skipping refinement of #" + refineState
-						+ " which has already been modified by refinement.");
+				mainLog.printWarning("Skipping refinement of #" + refineState + " which has already been modified by refinement.");
 			return 1;
 		}
 
@@ -1041,36 +1032,26 @@ public abstract class QuantAbstractRefine extends PrismComponent
 			case MDP:
 				switch (propertyType) {
 				case PROB_REACH:
-					lbStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, true,
-							lbLastSoln);
-					ubStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, false,
-							ubLastSoln);
+					lbStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, true, lbLastSoln);
+					ubStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, false, ubLastSoln);
 					break;
 				case PROB_REACH_BOUNDED:
-					lbStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, true,
-							lbLastSoln);
-					ubStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, false,
-							ubLastSoln);
+					lbStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, true, lbLastSoln);
+					ubStrat = ((MDPModelChecker) mc).probReachStrategy((MDP) abstraction, refineState, target, false, ubLastSoln);
 					break;
 				case EXP_REACH:
-					lbStrat = ((MDPModelChecker) mc).expReachStrategy((MDP) abstraction, null, refineState, target, true,
-							lbLastSoln);
-					ubStrat = ((MDPModelChecker) mc).expReachStrategy((MDP) abstraction, null, refineState, target, false,
-							ubLastSoln);
+					lbStrat = ((MDPModelChecker) mc).expReachStrategy((MDP) abstraction, null, refineState, target, true, lbLastSoln);
+					ubStrat = ((MDPModelChecker) mc).expReachStrategy((MDP) abstraction, null, refineState, target, false, ubLastSoln);
 					break;
 				}
 				break;
 			case CTMDP:
-				lbStrat = ((CTMDPModelChecker) mc).probReachStrategy((CTMDP) abstraction, refineState, target, true,
-						lbLastSoln);
-				ubStrat = ((CTMDPModelChecker) mc).probReachStrategy((CTMDP) abstraction, refineState, target, false,
-						ubLastSoln);
+				lbStrat = ((CTMDPModelChecker) mc).probReachStrategy((CTMDP) abstraction, refineState, target, true, lbLastSoln);
+				ubStrat = ((CTMDPModelChecker) mc).probReachStrategy((CTMDP) abstraction, refineState, target, false, ubLastSoln);
 				break;
 			case STPG:
-				lbStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, true, min,
-						lbLastSoln);
-				ubStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, false,
-						min, ubLastSoln);
+				lbStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, true, min, lbLastSoln);
+				ubStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, false, min, ubLastSoln);
 				break;
 			default:
 				throw new AssertionError();
@@ -1086,8 +1067,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 			// Check if lb/ub are identical (just use equals() since lists are sorted)
 			if (lbStrat.equals(ubStrat) && lbStrat.size() == abstraction.getNumChoices(refineState)) {
 				if (verbosity >= 1)
-					mainLog.printWarning("Skipping refinement of #" + refineState
-							+ " for which lb/ub strategy sets are equal and covering.");
+					mainLog.printWarning("Skipping refinement of #" + refineState + " for which lb/ub strategy sets are equal and covering.");
 				return 1;
 			}
 			if (verbosity >= 1)
@@ -1154,11 +1134,9 @@ public abstract class QuantAbstractRefine extends PrismComponent
 
 		// Update existing solution vectors (if any)
 		lbSoln = Utils.extendDoubleArray(lbSoln, numStates, numStates + numNewStates - 1, lbSoln[refineState]);
-		lbLastSoln = Utils.extendDoubleArray(lbLastSoln, numStates, numStates + numNewStates - 1,
-				lbLastSoln[refineState]);
+		lbLastSoln = Utils.extendDoubleArray(lbLastSoln, numStates, numStates + numNewStates - 1, lbLastSoln[refineState]);
 		ubSoln = Utils.extendDoubleArray(ubSoln, numStates, numStates + numNewStates - 1, ubSoln[refineState]);
-		ubLastSoln = Utils.extendDoubleArray(ubLastSoln, numStates, numStates + numNewStates - 1,
-				ubLastSoln[refineState]);
+		ubLastSoln = Utils.extendDoubleArray(ubLastSoln, numStates, numStates + numNewStates - 1, ubLastSoln[refineState]);
 
 		// Note: we don't have to update 'known' since implicit new elements of a BitSet are assumed false
 
@@ -1250,13 +1228,12 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	/**
 	 * Export abstract model to a dot file with additional annotated info 
 	 */
-	private static void exportToDotFile(String filename, Model abstraction, BitSet known, double lbSoln[],
-			double ubSoln[]) throws PrismException
+	private static void exportToDotFile(String filename, Model abstraction, BitSet known, double lbSoln[], double ubSoln[]) throws PrismException
 	{
 		STPGAbstrSimple stpg;
 		int i, j, k;
 		String nij, nijk;
-		
+
 		if (abstraction instanceof STPG) {
 			stpg = (STPGAbstrSimple) abstraction;
 		} else if (abstraction instanceof MDPSimple) {

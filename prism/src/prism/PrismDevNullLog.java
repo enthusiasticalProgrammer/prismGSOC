@@ -32,58 +32,71 @@ public class PrismDevNullLog extends PrismLog
 	{
 	}
 
+	@Override
 	public boolean ready()
 	{
 		return true;
 	}
 
+	@Override
 	public long getFilePointer()
 	{
 		return 0;
 	}
 
+	@Override
 	public void flush()
 	{
 	}
 
+	@Override
 	public void close()
 	{
 	}
-	
+
 	// Basic print methods
-	
+
+	@Override
 	public void print(boolean b)
 	{
 	}
 
+	@Override
 	public void print(char c)
 	{
 	}
 
+	@Override
 	public void print(double d)
 	{
 	}
 
+	@Override
 	public void print(float f)
 	{
 	}
 
+	@Override
 	public void print(int i)
 	{
 	}
 
+	@Override
 	public void print(long l)
 	{
 	}
 
+	@Override
 	public void print(Object obj)
 	{
 	}
 
+	@Override
 	public void print(String s)
 	{
 	}
 
+	@Override
 	public void println()
 	{
 	}

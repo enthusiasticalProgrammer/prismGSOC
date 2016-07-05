@@ -54,7 +54,7 @@ public class PathOnTheFly extends Path
 	protected double previousStateRewards[];
 	protected double previousTransitionRewards[];
 	protected double currentStateRewards[];
-	
+
 	// Loop detector for path
 	protected LoopDetector loopDet;
 
@@ -115,13 +115,15 @@ public class PathOnTheFly extends Path
 	}
 
 	@Override
-	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transRewards, State newState, double[] newStateRewards, TransitionList transitionList)
+	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transRewards, State newState, double[] newStateRewards,
+			TransitionList transitionList)
 	{
 		addStep(1.0, choice, moduleOrActionIndex, probability, transRewards, newState, newStateRewards, transitionList);
 	}
 
 	@Override
-	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transRewards, State newState, double[] newStateRewards, TransitionList transitionList)
+	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transRewards, State newState, double[] newStateRewards,
+			TransitionList transitionList)
 	{
 		size++;
 		previousState.copy(currentState);
@@ -151,7 +153,7 @@ public class PathOnTheFly extends Path
 	{
 		return continuousTime;
 	}
-	
+
 	@Override
 	public long size()
 	{
@@ -211,55 +213,55 @@ public class PathOnTheFly extends Path
 	{
 		return totalRewards[rsi];
 	}
-	
+
 	@Override
 	public double getPreviousStateReward(int rsi)
 	{
 		return previousStateRewards[rsi];
 	}
-	
+
 	@Override
 	public double[] getPreviousStateRewards()
 	{
 		return previousStateRewards;
 	}
-	
+
 	@Override
 	public double getPreviousTransitionReward(int rsi)
 	{
 		return previousTransitionRewards[rsi];
 	}
-	
+
 	@Override
 	public double[] getPreviousTransitionRewards()
 	{
 		return previousTransitionRewards;
 	}
-	
+
 	@Override
 	public double getCurrentStateReward(int rsi)
 	{
 		return currentStateRewards[rsi];
 	}
-	
+
 	@Override
 	public double[] getCurrentStateRewards()
 	{
 		return currentStateRewards;
 	}
-	
+
 	@Override
 	public boolean isLooping()
 	{
 		return loopDet.isLooping();
 	}
-	
+
 	@Override
 	public long loopStart()
 	{
 		return loopDet.loopStart();
 	}
-	
+
 	@Override
 	public long loopEnd()
 	{

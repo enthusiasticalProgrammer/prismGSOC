@@ -57,3 +57,27 @@ Code Style improvements:
 		to keep a special algorithm]
 
 	dropped memorylessness, aka mlessmulti
+
+
+Features in Rabinizer:
+-Rabinizer can now cope with Frequency-G formulae
+
+
+
+--------------------------------------------------------------TIMEPLAN--------------------------------------------------------------------
+
+-now until 1.7.: extend Rabinizer
+-4.7.-8.7.: put Rabinizer-standard-construction into PRISM
+-11.7.-22.7.: connect DTMGRA and conjunctive-SAT
+-25.7.-29.7.: Do the optional (but extremely strongly desired things):
+    simulation of strategies, joint-SAT
+-1.8.-13.8.: Do more optional things, if they come up regarding the DTMGRA-related implementation.
+    -when the optional things are done: test and document: Also write junit-test-script
+    -Also I will have to adjust the user-manual a bit
+-15.8-end: Reserve: note that I have to submit the code according to the website from 15.8.-23.8. 
+
+
+
+
+
+

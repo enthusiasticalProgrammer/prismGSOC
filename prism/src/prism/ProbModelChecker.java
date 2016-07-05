@@ -125,6 +125,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	// Check expression (recursive)
 
+	@Override
 	public StateValues checkExpression(Expression expr) throws PrismException
 	{
 		StateValues res;
@@ -167,17 +168,17 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Check for trivial (i.e. stupid) cases
 		if (opInfo.isTriviallyTrue()) {
-			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
+			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
 			JDD.Ref(reach);
 			return new StateValuesMTBDD(reach, model);
 		} else if (opInfo.isTriviallyFalse()) {
-			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
+			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
 			return new StateValuesMTBDD(JDD.Constant(0), model);
 		}
 
 		// Print a warning if Pmin/Pmax used
 		if (opInfo.getRelOp() == RelOp.MIN || opInfo.getRelOp() == RelOp.MAX) {
-			prism.mainLog.printWarning("\"Pmin=?\" and \"Pmax=?\" operators are identical to \"P=?\" for DTMCs/CTMCs");
+			mainLog.printWarning("\"Pmin=?\" and \"Pmax=?\" operators are identical to \"P=?\" for DTMCs/CTMCs");
 		}
 
 		// Compute probabilities
@@ -186,8 +187,8 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Print out probabilities
 		if (prism.getVerbose()) {
-			prism.mainLog.print("\nProbabilities (non-zero only) for all states:\n");
-			probs.print(prism.mainLog);
+			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
+			probs.print(mainLog);
 		}
 
 		// For =? properties, just return values
@@ -212,7 +213,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		// Get info from R operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
-		
+
 		// Get rewards
 		Object rs = expr.getRewardStructIndex();
 		JDDNode stateRewards = getStateRewardsByIndexObject(rs, model, constantValues);
@@ -220,7 +221,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Print a warning if Rmin/Rmax used
 		if (opInfo.getRelOp() == RelOp.MIN || opInfo.getRelOp() == RelOp.MAX) {
-			prism.mainLog.printWarning("\"Rmin=?\" and \"Rmax=?\" operators are identical to \"R=?\" for DTMCs/CTMCs");
+			mainLog.printWarning("\"Rmin=?\" and \"Rmax=?\" operators are identical to \"R=?\" for DTMCs/CTMCs");
 		}
 
 		// Compute rewards
@@ -246,15 +247,14 @@ public class ProbModelChecker extends NonProbModelChecker
 		} else if (expr2.getType() instanceof TypePathBool || expr2.getType() instanceof TypeBool) {
 			rewards = checkRewardPathFormula(expr2, stateRewards, transRewards);
 		}
-		
+
 		if (rewards == null)
 			throw new PrismException("Unrecognised operator in R operator");
 
 		// Print out rewards
-
 		if (prism.getVerbose()) {
-			prism.mainLog.print("\nRewards (non-zero only) for all states:\n");
-			rewards.print(prism.mainLog);
+			mainLog.print("\nRewards (non-zero only) for all states:\n");
+			rewards.print(mainLog);
 		}
 
 		// For =? properties, just return values
@@ -296,11 +296,11 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Check for trivial (i.e. stupid) cases
 		if (opInfo.isTriviallyTrue()) {
-			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
+			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
 			JDD.Ref(reach);
 			return new StateValuesMTBDD(reach, model);
 		} else if (opInfo.isTriviallyFalse()) {
-			prism.mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
+			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies no states");
 			return new StateValuesMTBDD(JDD.Constant(0), model);
 		}
 
@@ -318,7 +318,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			}
 			// Unless we've been told to skip it
 			else {
-				prism.mainLog.println("\nSkipping BSCC computation...");
+				mainLog.println("\nSkipping BSCC computation...");
 				bsccs = new Vector<JDDNode>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
@@ -329,25 +329,25 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Compute steady-state probability for each BSCC...
 			probBSCCs = new double[numBSCCs];
 			for (i = 0; i < numBSCCs; i++) {
-				prism.mainLog.println("\nComputing steady state probabilities for BSCC " + (i + 1));
+				mainLog.println("\nComputing steady state probabilities for BSCC " + (i + 1));
 				bscc = bsccs.get(i);
 				// Compute steady state probabilities
 				probs = computeSteadyStateProbsForBSCC(trans, bscc);
 				if (verbose) {
-					prism.mainLog.print("\nBSCC " + (i + 1) + " steady-state probabilities: \n");
-					probs.print(prism.mainLog);
+					mainLog.print("\nBSCC " + (i + 1) + " steady-state probabilities: \n");
+					probs.print(mainLog);
 				}
 				// Sum probabilities over BDD b
 				d = probs.sumOverBDD(b);
 				probBSCCs[i] = d;
-				prism.mainLog.print("\nBSCC " + (i + 1) + " probability: " + d + "\n");
+				mainLog.print("\nBSCC " + (i + 1) + " probability: " + d + "\n");
 				// Free vector
 				probs.clear();
 			}
 
 			// If every state is in a BSCC, it's much easier...
 			if (notInBSCCs.equals(JDD.ZERO)) {
-				prism.mainLog.println("\nAll states are in BSCCs (so no reachability probabilities computed)");
+				mainLog.println("\nAll states are in BSCCs (so no reachability probabilities computed)");
 				// There are more efficient ways to do this if we just create the solution BDD directly
 				// But we actually build the prob vector so it can be printed out if necessary
 				tmp = JDD.Constant(0);
@@ -379,13 +379,13 @@ public class ProbModelChecker extends NonProbModelChecker
 					// Skip BSCCs with zero probability
 					if (probBSCCs[i] == 0.0)
 						continue;
-					prism.mainLog.println("\nComputing probabilities of reaching BSCC " + (i + 1));
+					mainLog.println("\nComputing probabilities of reaching BSCC " + (i + 1));
 					bscc = bsccs.get(i);
 					// Compute probabilities
 					probs = computeUntilProbs(trans, trans01, notInBSCCs, bscc);
 					if (verbose) {
-						prism.mainLog.print("\nBSCC " + (i + 1) + " reachability probabilities: \n");
-						probs.print(prism.mainLog);
+						mainLog.print("\nBSCC " + (i + 1) + " reachability probabilities: \n");
+						probs.print(mainLog);
 					}
 					// Multiply by BSCC prob, add to total
 					probs.timesConstant(probBSCCs[i]);
@@ -397,8 +397,8 @@ public class ProbModelChecker extends NonProbModelChecker
 
 			// print out probabilities
 			if (verbose) {
-				prism.mainLog.print("\nS operator probabilities: \n");
-				totalProbs.print(prism.mainLog);
+				mainLog.print("\nS operator probabilities: \n");
+				totalProbs.print(mainLog);
 			}
 		} catch (PrismException e) {
 			// Tidy up and pass on the exception
@@ -449,9 +449,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		// and whether we want to use the corresponding algorithms
 		boolean useSimplePathAlgo = expr.isSimplePathFormula();
 
-		if (useSimplePathAlgo &&
-		    prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA) &&
-		    LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
+		if (useSimplePathAlgo && prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA)
+				&& LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
 			// If PRISM_PATH_VIA_AUTOMATA is true, we want to use the LTL engine
 			// whenever possible
 			useSimplePathAlgo = false;
@@ -472,10 +471,9 @@ public class ProbModelChecker extends NonProbModelChecker
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
 
 		// Negation
-		if (expr instanceof ExpressionUnaryOp &&
-		    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
+		if (expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.NOT) {
 			negated = true;
-			expr = ((ExpressionUnaryOp)expr).getOperand();
+			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
 
 		if (expr instanceof ExpressionTemporal) {
@@ -523,29 +521,25 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDDVars daDDRowVars, daDDColVars;
 		int i;
 
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH,
-				AcceptanceType.GENERIC
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERIC };
 		mcLtl = new LTLModelChecker(prism);
 		da = mcLtl.constructDAForLTLFormula(this, model, expr, labelDDs, allowedAcceptance);
 
 		// Build product of Markov chain and automaton
 		// (note: might be a CTMC - StochModelChecker extends this class)
-		prism.mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MC-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		modelProduct = mcLtl.constructProductMC(da, model, labelDDs, daDDRowVars, daDDColVars);
-		prism.mainLog.println();
-		modelProduct.printTransInfo(prism.mainLog, prism.getExtraDDInfo());
+		mainLog.println();
+		modelProduct.printTransInfo(mainLog, prism.getExtraDDInfo());
 		// Output product, if required
 		if (prism.getExportProductTrans()) {
 			try {
-				prism.mainLog.println("\nExporting product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"...");
+				mainLog.println("\nExporting product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"...");
 				modelProduct.exportToFile(Prism.EXPORT_PLAIN, true, new File(prism.getExportProductTransFilename()));
 			} catch (FileNotFoundException e) {
-				prism.mainLog.printWarning("Could not export product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"");
+				mainLog.printWarning("Could not export product transition matrix to file \"" + prism.getExportProductTransFilename() + "\"");
 			}
 		}
 		if (prism.getExportProductStates()) {
@@ -653,7 +647,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			lowerBound = 0;
 		}
 
-		Integer windowSize = null;  // unbounded
+		Integer windowSize = null; // unbounded
 		if (bounds.hasUpperBound()) {
 			windowSize = bounds.getHighestInteger() - lowerBound;
 		}
@@ -828,13 +822,12 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		if (Expression.isReach(expr)) {
 			return checkRewardReach((ExpressionTemporal) expr, stateRewards, transRewards);
-		}
-		else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
+		} else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
 			return checkRewardCoSafeLTL(expr, stateRewards, transRewards);
 		}
 		throw new PrismException("R operator contains a path formula that is not syntactically co-safe: " + expr);
 	}
-	
+
 	// reach reward
 
 	protected StateValues checkRewardReach(ExpressionTemporal expr, JDDNode stateRewards, JDDNode transRewards) throws PrismException
@@ -846,7 +839,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		if (expr.hasBounds()) {
 			throw new PrismNotSupportedException("R operator cannot contain a bounded F operator: " + expr);
 		}
-		
+
 		// model check operand first
 		b = checkExpressionDD(expr.getOperand2());
 
@@ -886,7 +879,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			if (model.getModelType().continuousTime()) {
-				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType()+".");
+				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType() + ".");
 			}
 
 			if (!expr.isSimplePathFormula()) {
@@ -910,12 +903,9 @@ public class ProbModelChecker extends NonProbModelChecker
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
 		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
-		mainLog.println(da.getAutomataType()+" has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics()+".");
+		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for deterministic automaton translation: " + l / 1000.0 + " seconds.");
 		// If required, export DA 
@@ -929,7 +919,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		// Build product of Markov chain and automaton
 		// (note: might be a CTMC - StochModelChecker extends this class)
-		mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MC-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		l = System.currentTimeMillis();
@@ -961,7 +951,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDD.Ref(transRewards);
 		JDD.Ref(modelProduct.getTrans01());
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
-		
+
 		// Find accepting states + compute reachability rewards
 		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
 		JDDNode acc = null;

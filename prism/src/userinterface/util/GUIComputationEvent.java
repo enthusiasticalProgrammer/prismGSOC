@@ -31,22 +31,22 @@ import userinterface.*;
 
 public class GUIComputationEvent extends GUIEvent
 {
-    //CONSTANTS
-    public static final int COMPUTATION_START = 0;
-    public static final int COMPUTATION_DONE = 1;
-    public static final int COMPUTATION_ERROR = 2;
-    
-    private GUIPlugin source;
-    
-    /** Creates a new instance of GUIComputationEvent */
-    public GUIComputationEvent(int id, GUIPlugin source)
-    {
-        super(id);
-        this.source = source;
-    }
-    
-    public GUIPlugin getSource()
-    {
-        return source;
-    }
+	//CONSTANTS
+	public static final int COMPUTATION_START = 0;
+	public static final int COMPUTATION_DONE = 1;
+	public static final int COMPUTATION_ERROR = 2;
+
+	private GUIPlugin source;
+
+	/** Creates a new instance of GUIComputationEvent */
+	public GUIComputationEvent(int id, GUIPlugin source)
+	{
+		super(id);
+		this.source = source;
+	}
+
+	public GUIPlugin getSource()
+	{
+		return source;
+	}
 }

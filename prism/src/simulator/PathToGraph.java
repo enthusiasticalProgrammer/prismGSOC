@@ -115,7 +115,8 @@ public class PathToGraph extends PathDisplayer
 	}
 
 	@Override
-	public void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex, State newState, double[] newStateRewards)
+	public void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex,
+			State newState, double[] newStateRewards)
 	{
 		displayState(timeCumul, newState, newStateRewards, !showChangesOnly);
 	}
@@ -187,7 +188,7 @@ public class PathToGraph extends PathDisplayer
 			}
 		}
 	}
-	
+
 	@Override
 	public void endDisplay()
 	{

@@ -31,7 +31,6 @@ import java.util.Vector;
 import java.io.PrintStream;
 
 import jltl2ba.SimpleLTL;
-import prism.PrismException;
 
 public class Alternating
 {
@@ -65,6 +64,7 @@ public class Alternating
 			nxt = null;
 		}
 
+		@Override
 		public ATrans clone()
 		{
 			ATrans rv = new ATrans(to, pos, neg);
@@ -100,11 +100,11 @@ public class Alternating
 
 		public AProd()
 		{
-			;
+
 		}
 	}
 
-	public Alternating(SimpleLTL formula, APSet apset) throws PrismException
+	public Alternating(SimpleLTL formula, APSet apset)
 	{
 		astate_count = 0;
 		atrans_count = 0;

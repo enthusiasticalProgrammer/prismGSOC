@@ -5,38 +5,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import prism.PrismException;
 import strat.MultiLongRunStrategy;
 import strat.XiNStrategy;
 
-public class MultiLongRunMDP extends MultiLongRun
+/**
+ * This class verifies multi-long-run properties for MDPs. 
+ */
+class MultiLongRunMDP extends MultiLongRun<MDP>
 {
-	private final MDP mdp;
 
-	public MultiLongRunMDP(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+	public MultiLongRunMDP(@NonNull MDP mdp, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
+			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method);
-		this.mdp = mdp;
-		this.mecs = computeMECs();
-	}
-
-	@Override
-	protected int getNumChoicesOfModel(int state)
-	{
-		return mdp.getNumChoices(state);
-	}
-
-	@Override
-	protected Model getModel()
-	{
-		return mdp;
-	}
-
-	@Override
-	protected Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action)
-	{
-		return mdp.getTransitionsIterator(state, action);
+		super(constraints, objectives, expConstraints, method, mdp);
 	}
 
 	@Override
@@ -44,26 +29,26 @@ public class MultiLongRunMDP extends MultiLongRun
 	{
 		return state;
 	}
-	
+
 	@Override
-	public MultiLongRunStrategy getStrategy()
+	public @Nullable MultiLongRunStrategy getStrategy()
 	{
 		double[] lpResult;
 		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there
 
-		int numStates = getNumStatesOfModel();
+		int numStates = model.getNumStates();
 		Distribution[] transientDistribution = new Distribution[numStates];
 		Distribution[] switchProbability = new Distribution[numStates];
 
 		for (int state = 0; state < numStates; state++) {
 			double transientSum = 0.0;
-			for (int j = 0; j < getNumChoicesOfModel(state); j++) {
+			for (int j = 0; j < model.getNumChoices(state); j++) {
 				transientSum += lpResult[getVarY(state, j)];
 			}
 			transientDistribution[state] = getTransientDistributionAt(state, transientSum, lpResult);
 		}
 
-		for (BitSet mec : mecs) {
+		for (BitSet mec : this.mecs) {
 			Distribution mecDistribution = this.getSwitchProbabilityAt(mec);
 			for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
 				switchProbability[state] = mecDistribution;
@@ -86,17 +71,18 @@ public class MultiLongRunMDP extends MultiLongRun
 	{
 		double[] inBetweenResult = new double[1 << getN()];
 		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
-			for (int choice = 0; choice < getNumChoicesOfModel(state); choice++) {
+			for (int choice = 0; choice < model.getNumChoices(state); choice++) {
 				for (int N = 0; N < 1 << getN(); N++) {
 					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
 				}
 			}
 		}
-		double sumForNormalisation=0.0;
-		for(int i=0;i<inBetweenResult.length;sumForNormalisation+=inBetweenResult[i++]);
+		double sumForNormalisation = 0.0;
+		for (int i = 0; i < inBetweenResult.length; sumForNormalisation += inBetweenResult[i++])
+			;
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i]/sumForNormalisation);
+			result.add(i, inBetweenResult[i] / sumForNormalisation);
 		}
 		return result;
 	}
@@ -105,7 +91,7 @@ public class MultiLongRunMDP extends MultiLongRun
 	{
 		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
 		for (int i = 0; i < 1 << getN(); i++) {
-			strategies[i] = new XiNStrategy(solver, mdp, this, i);
+			strategies[i] = new XiNStrategy(solver, model, this, i);
 		}
 
 		return strategies;
@@ -116,11 +102,17 @@ public class MultiLongRunMDP extends MultiLongRun
 		if (transientSum > 0.0) {
 			Distribution result = new Distribution();
 
-			for (int j = 0; j < getNumChoicesOfModel(state); j++) {
+			for (int j = 0; j < model.getNumChoices(state); j++) {
 				result.add(j, resSt[getVarY(state, j)] / transientSum);
 			}
 			return result;
 		}
 		return null;
+	}
+
+	@Override
+	protected Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action)
+	{
+		return model.getTransitionsIterator(state, action);
 	}
 }

@@ -50,7 +50,8 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 		this.choices = choices;
 	}
 
-	public Object getEditorValue() throws SettingException
+	@Override
+	public Object getEditorValue()
 	{
 		if (modified) {
 			modified = false;
@@ -62,6 +63,7 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 			return NOT_CHANGED_VALUE;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 
@@ -128,10 +130,12 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 		return combo;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		modified = true;
@@ -139,10 +143,12 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 			lastTable.editingStopped(new ChangeEvent(this));
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		if (lastTable.getCellEditor() != null)

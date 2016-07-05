@@ -42,24 +42,25 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 	private PropertiesFile propertiesFile;
 	// The LabelList for label definitions
 	private LabelList labelList;
-	
+
 	public ExpandPropRefsAndLabels(PropertiesFile propertiesFile, LabelList labelList)
 	{
 		this.propertiesFile = propertiesFile;
 		this.labelList = labelList;
 	}
-	
+
+	@Override
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		int i;
 		Type t;
 		Expression expr;
-		
+
 		// Skip this if label list is missing
 		if (labelList == null) {
 			return e;
 		}
-		
+
 		// See if identifier corresponds to a label
 		i = labelList.getLabelIndex(e.getName());
 		if (i != -1) {
@@ -67,7 +68,7 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 			expr = labelList.getLabel(i).deepCopy();
 			// But also recursively expand that
 			// (nested labels not currently supported but may be one day)
-			//(don't clone it to avoid duplication of work)
+			// (don't clone it to avoid duplication of work)
 			expr = (Expression) expr.accept(this);
 			// Put in brackets so precedence is preserved
 			// (for display purposes only; in case of re-parse)
@@ -79,22 +80,23 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 			// Return replacement expression
 			return expr;
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionProp e) throws PrismLangException
 	{
 		Property prop;
 		Type t;
 		Expression expr;
-		
+
 		// Skip this if label list is missing
 		if (propertiesFile == null) {
 			return e;
 		}
-		
+
 		// See if name corresponds to a property
 		prop = propertiesFile.lookUpPropertyObjectByName(e.getName());
 		if (prop != null) {
@@ -113,9 +115,8 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 			// Return replacement expression
 			return expr;
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
 }
-

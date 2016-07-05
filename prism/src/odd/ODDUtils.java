@@ -34,12 +34,10 @@ public class ODDUtils
 	// load jni stuff from shared library
 	//------------------------------------------------------------------------------
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("odd");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -50,30 +48,31 @@ public class ODDUtils
 	//------------------------------------------------------------------------------
 
 	// cudd manager
-	
+
 	// jni method to set cudd manager for native code
 	private static native void ODD_SetCUDDManager(long ddm);
+
 	public static void setCUDDManager()
 	{
 		ODD_SetCUDDManager(JDD.GetCUDDManager());
 	}
-	
+
 	//------------------------------------------------------------------------------
 	// JNI wrappers
 	//------------------------------------------------------------------------------
-	
+
 	private static native long ODD_BuildODD(long dd, long vars, int num_vars);
+
 	/**
 	 *  Build an ODD.
 	 */
 	public static ODDNode BuildODD(JDDNode dd, JDDVars vars)
 	{
-		return new ODDNode(
-			ODD_BuildODD(dd.ptr(), vars.array(), vars.n())
-		);
+		return new ODDNode(ODD_BuildODD(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	private static native int ODD_GetNumODDNodes();
+
 	/**
 	 *  Get the number of nodes in the ODD just built.
 	 */
@@ -81,8 +80,9 @@ public class ODDUtils
 	{
 		return ODD_GetNumODDNodes();
 	}
-	
+
 	public static native int ODD_GetIndexOfFirstFromDD(long dd, long odd, long vars, int num_vars);
+
 	/**
 	 *  Get the index of the first non-zero element of a 0-1 MTBDD, according to an ODD.
 	 */
@@ -90,8 +90,9 @@ public class ODDUtils
 	{
 		return ODD_GetIndexOfFirstFromDD(dd.ptr(), odd.ptr(), vars.array(), vars.n());
 	}
-	
+
 	public static native long ODD_SingleIndexToDD(int i, long odd, long vars, int num_vars);
+
 	/**
 	 *  Convert a state index to a 0-1 MTBDD representing it, according to an ODD.
 	 */
@@ -99,14 +100,17 @@ public class ODDUtils
 	{
 		return JDD.ptrToNode(ODD_SingleIndexToDD(i, odd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	//------------------------------------------------------------------------------
 	// ODDNode methods
 	//------------------------------------------------------------------------------
 
 	public static native long ODD_GetTOff(long odd);
+
 	public static native long ODD_GetEOff(long odd);
+
 	public static native long ODD_GetThen(long odd);
+
 	public static native long ODD_GetElse(long odd);
 
 }

@@ -43,6 +43,7 @@ public class LocZoneSetOld extends ArrayList<LocZone>
 	}
 
 	// Override add to store index
+	@Override
 	public boolean add(LocZone lz)
 	{
 		int i = indexOf(lz);
@@ -55,7 +56,7 @@ public class LocZoneSetOld extends ArrayList<LocZone>
 			return false;
 		}
 	}
-	
+
 	public ArrayList<LocZone> toArrayList()
 	{
 		return this;

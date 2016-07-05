@@ -29,28 +29,30 @@ package prism;
 /**
  * Class to store {@code int} elements in an array.
  */
-public class NativeIntArray 
+public class NativeIntArray
 {
 	private static native long NIA_CreateArray(int size);
+
 	private static native void NIA_DeleteArray(long ptr);
+
 	private static native int NIA_Get(long ptr, int index);
+
 	private static native void NIA_Set(long ptr, int index, int value);
+
 	private static native void NIA_SetAll(long ptr, int indexFrom, int count, int value);
-	
-	static
-	{
+
+	static {
 		try {
 			System.loadLibrary("prism");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
 	}
-	
+
 	private long ptr;
 	private int size;
-	
+
 	/**
 	 * Creates a new native array of size s, and keeps it wrapped in this object.
 	 * Note that the elements of the array may not be initialised to 0. Use
@@ -62,7 +64,7 @@ public class NativeIntArray
 		this.size = size;
 		this.ptr = NIA_CreateArray(size);
 	}
-	
+
 	/**
 	 * Returns the pointer to the wrapped native array.
 	 * @return Pointer
@@ -71,7 +73,7 @@ public class NativeIntArray
 	{
 		return ptr;
 	}
-	
+
 	/**
 	 * Deletes the native array and frees the memory.
 	 */
@@ -79,7 +81,7 @@ public class NativeIntArray
 	{
 		NIA_DeleteArray(ptr);
 	}
-	
+
 	/**
 	 * Returns the {@code index}-th element of the aray
 	 * @param index
@@ -91,7 +93,7 @@ public class NativeIntArray
 			throw new IndexOutOfBoundsException();
 		return NIA_Get(ptr, index);
 	}
-	
+
 	/**
 	 * Sets the {@code index}-th element of the array to {@code val}.
 	 * @param index
@@ -109,10 +111,11 @@ public class NativeIntArray
 	 * Sets all elements of the array to {@code value}.
 	 * @param value Value to be set
 	 */
-	public void setAllTo(int value) {
+	public void setAllTo(int value)
+	{
 		NIA_SetAll(ptr, 0, size, value);
 	}
-	
+
 	/**
 	 * Returns the size of the wrapped array.
 	 */

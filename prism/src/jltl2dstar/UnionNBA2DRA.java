@@ -38,8 +38,9 @@ import prism.PrismException;
 //typename StateMapper_t=StateMapper<typename Algorithm_t::result_t,
 //typename Algorithm_t::state_t,
 //typename DA_t::state_type> >
-public class UnionNBA2DRA {
-	
+public class UnionNBA2DRA
+{
+
 	/** Save detailed information on the Safra trees in the states? */
 	private boolean _detailed_states;
 
@@ -47,7 +48,8 @@ public class UnionNBA2DRA {
 	 * Constructor
 	 * detailedStates default = false 
 	 */
-	public UnionNBA2DRA(boolean detailedStates) {
+	public UnionNBA2DRA(boolean detailedStates)
+	{
 		_detailed_states = detailedStates;
 	}
 
@@ -60,7 +62,9 @@ public class UnionNBA2DRA {
 	 *        (has to have same APSet as the nba)
 	 * @param limit a limit for the number of states (0 disables the limit - default).
 	 */
-	public void convert(DAUnionAlgorithm algo, DRA da_result, int limit, StateMapper<UnionState.Result,UnionState,DA_State> state_mapper) throws PrismException {
+	public void convert(DAUnionAlgorithm algo, DRA da_result, int limit, StateMapper<UnionState.Result, UnionState, DA_State> state_mapper)
+			throws PrismException
+	{
 
 		APSet ap_set = da_result.getAPSet();
 
@@ -89,8 +93,8 @@ public class UnionNBA2DRA {
 
 			UnionState cur = top.algo_state;
 			DA_State from = top.da_state;
-			
-			for (APElementIterator it_elem = new APElementIterator(ap_set.size()); it_elem.hasNext(); ) {
+
+			for (APElementIterator it_elem = new APElementIterator(ap_set.size()); it_elem.hasNext();) {
 
 				APElement elem = it_elem.next();
 
@@ -120,16 +124,15 @@ public class UnionNBA2DRA {
 
 	}
 
-	private class unprocessed_value {
+	private class unprocessed_value
+	{
 		public UnionState algo_state;
 		public DA_State da_state;
-		
-		public unprocessed_value(UnionState _algo_state, DA_State _da_state) {
+
+		public unprocessed_value(UnionState _algo_state, DA_State _da_state)
+		{
 			algo_state = _algo_state;
 			da_state = _da_state;
 		}
 	}
 }
-
-
-

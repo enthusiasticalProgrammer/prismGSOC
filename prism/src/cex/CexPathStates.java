@@ -29,7 +29,7 @@ package cex;
 import java.util.ArrayList;
 
 import parser.State;
-import simulator.PathFullInfo;;
+import simulator.PathFullInfo;
 
 /**
  * Class to store a counterexample/witness comprising a single path,
@@ -66,19 +66,19 @@ public class CexPathStates implements PathFullInfo
 	}
 
 	// ACCESSORS (for PathFullInfo)
-	
+
 	@Override
 	public long size()
 	{
 		return states.size() - 1;
 	}
-	
+
 	@Override
 	public State getState(int step)
 	{
 		return states.get(step);
 	}
-	
+
 	@Override
 	public double getStateReward(int step, int rsi)
 	{
@@ -126,57 +126,57 @@ public class CexPathStates implements PathFullInfo
 	{
 		return 0.0;
 	}
-	
+
 	@Override
 	public boolean isLooping()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public long loopStart()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	public long loopEnd()
 	{
 		return 0;
 	}
-	
+
 	@Override
 	public boolean hasRewardInfo()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean hasChoiceInfo()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean hasActionInfo()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean hasTimeInfo()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public boolean hasLoopInfo()
 	{
 		return false;
 	}
-	
+
 	// Standard method
-	
+
 	@Override
 	public String toString()
 	{
@@ -184,7 +184,7 @@ public class CexPathStates implements PathFullInfo
 		int i, n;
 		String s = "";
 		n = states.size();
-		for (i = 0; i < n; i++) { 
+		for (i = 0; i < n; i++) {
 			state = states.get(i);
 			s += state.toString();
 			if (i < n - 1)

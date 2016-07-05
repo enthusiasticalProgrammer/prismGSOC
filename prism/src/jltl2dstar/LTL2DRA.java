@@ -25,11 +25,13 @@ import jltl2ba.SimpleLTL;
 import jltl2ba.SimpleLTL.LTLType;
 import prism.PrismException;
 
-public class LTL2DRA {
+public class LTL2DRA
+{
 
 	private Options_Safra _safra_opt;
 
-	public LTL2DRA(Options_Safra safra_opt) {
+	public LTL2DRA(Options_Safra safra_opt)
+	{
 		_safra_opt = safra_opt;
 	}
 
@@ -41,8 +43,8 @@ public class LTL2DRA {
 	 */
 	private DRA LTLtoDRA_rec(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException
 	{
-		SimpleLTL ltl_pnf = ((SimpleLTL)ltl.clone()).simplify();
-		
+		SimpleLTL ltl_pnf = ((SimpleLTL) ltl.clone()).simplify();
+
 		if (options.allow_union && ltl_pnf.kind == LTLType.OR) {
 			SimpleLTL ltl_left = ltl_pnf.left;
 			SimpleLTL ltl_right = ltl_pnf.right;
@@ -57,16 +59,16 @@ public class LTL2DRA {
 		}
 
 		/*  if (options.safety) {
-	    LTLSafetyAutomata lsa;
-
-	    DRA_ptr safety_dra(lsa.ltl2dra<DRA_t>(ltl,
+		LTLSafetyAutomata lsa;
+		
+		DRA_ptr safety_dra(lsa.ltl2dra<DRA_t>(ltl,
 						  options.scheck_path));
-
-	    if (safety_dra.get()!=0) {
-	      return safety_dra;
-	    }
-	  	}
-		 */  
+		
+		if (safety_dra.get()!=0) {
+		  return safety_dra;
+		}
+		}
+		 */
 		NBA nba = ltl_pnf.toNBA(apset);
 
 		if (nba == null) {
@@ -93,12 +95,11 @@ public class LTL2DRA {
 	/* public DRA LTLtoDRA(SimpleLTL ltl, Options_LTL2DRA options) throws PrismException {
 		return LTLtoDRA_rec(ltl, ltl.getAPs(), options);
 	} */
-	
-	public DRA LTLtoDRA(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException {
+
+	public DRA LTLtoDRA(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException
+	{
 		return LTLtoDRA_rec(ltl, apset, options);
 	}
-
-
 
 	/**
 	 * Convert an NBA to a DRA using Safra's algorithm.
@@ -113,7 +114,8 @@ public class LTL2DRA {
 	 * @return a shared_ptr to the created DRA
 	 */
 	// DRA nba2dra(NBA nba, int limit, boolean detailedStates, StutterSensitivenessInformation::ptr stutter_information) {
-	DRA nba2dra(NBA nba, int limit, boolean detailedStates) throws PrismException {
+	DRA nba2dra(NBA nba, int limit, boolean detailedStates) throws PrismException
+	{
 
 		DRA dra = null;
 		NBA2DRA nba2dra = new NBA2DRA(_safra_opt, detailedStates);
@@ -125,12 +127,12 @@ public class LTL2DRA {
 			// rethrow to notify caller
 			throw e;
 		}
-		return dra;  
+		return dra;
 	}
 
-
 	/** Get the options for Safra's algorithm */
-	public Options_Safra getOptions() {
+	public Options_Safra getOptions()
+	{
 		return _safra_opt;
 	}
 

@@ -31,22 +31,29 @@ import java.math.BigInteger;
 /**
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-abstract class DagOperator {
+abstract class DagOperator
+{
 	private BigInteger cValue;
-	DagOperator(BigInteger cValue) {
+
+	DagOperator(BigInteger cValue)
+	{
 		this.cValue = cValue;
 	}
-	BigInteger getCValue() {
+
+	BigInteger getCValue()
+	{
 		return cValue;
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		return cValue.hashCode();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof DagOperator)) {
 			return false;
 		}

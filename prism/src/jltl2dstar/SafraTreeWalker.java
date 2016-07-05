@@ -28,7 +28,8 @@ package jltl2dstar;
  * <code>void visit(SafraTree& tree, SafraTreeNode *node)</code>
  * of the SafraTreeVisitor on each node of the tree.
  */
-public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor> {
+public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor>
+{
 
 	/** The Visitor */
 	private Visitor _visitor;
@@ -36,7 +37,8 @@ public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor> {
 	/** Constructor.
 	 *  @param visitor the visitor functor
 	 */
-	public SafraTreeWalker(Visitor visitor) {
+	public SafraTreeWalker(Visitor visitor)
+	{
 		_visitor = visitor;
 	}
 
@@ -44,8 +46,11 @@ public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor> {
 	 * Walk the tree post-order and call visit() on each node.
 	 * @param tree the SafraTree
 	 */
-	public void walkTreePostOrder(SafraTree tree) {
-		if (tree.getRootNode() == null) {return;}
+	public void walkTreePostOrder(SafraTree tree)
+	{
+		if (tree.getRootNode() == null) {
+			return;
+		}
 		walkSubTreePostOrder(tree, tree.getRootNode(), true);
 	}
 
@@ -55,9 +60,8 @@ public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor> {
 	 * @param top the current subroot 
 	 * @param visit_top if true, *top is visited too (former default: true)
 	 */
-	public void walkSubTreePostOrder(SafraTree tree, 
-			SafraTreeNode top,
-			boolean visit_top) {
+	public void walkSubTreePostOrder(SafraTree tree, SafraTreeNode top, boolean visit_top)
+	{
 		if (top.getChildCount() > 0) {
 			for (SafraTreeNode cur_child : top)
 				walkSubTreePostOrder(tree, cur_child, true);

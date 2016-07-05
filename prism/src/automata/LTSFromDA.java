@@ -1,3 +1,4 @@
+
 //==============================================================================
 //	
 //	Copyright (c) 2002-
@@ -29,7 +30,6 @@ package automata;
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import prism.ModelType;
@@ -93,13 +93,13 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
-	public void buildFromPrismExplicit(String filename) throws PrismException
+	public void buildFromPrismExplicit(String filename)
 	{
 		throw new RuntimeException("Not implemented yet");
 	}
@@ -134,7 +134,7 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new RuntimeException("Not implemented yet");
 	}
@@ -152,7 +152,7 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	}
 
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new RuntimeException("Not implemented yet");
 	}

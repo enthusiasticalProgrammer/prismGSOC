@@ -47,6 +47,7 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 		settings = new ArrayList<Setting>();
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {
@@ -61,42 +62,50 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 			return 0;
 	}
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return settings.size();
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		return settings.get(index);
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "";
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return id;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		return name;
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		setChanged();
 		notifyObservers(setting);
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;

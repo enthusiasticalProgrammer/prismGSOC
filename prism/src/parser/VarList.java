@@ -182,8 +182,7 @@ public class VarList
 			low = 0;
 			high = 1;
 			start = decl.getStartOrDefault().evaluateInt(constantValues);
-		}
-		else {
+		} else {
 			throw new PrismLangException("Unknown variable type \"" + declType + "\" in declaration", decl);
 		}
 
@@ -490,6 +489,7 @@ public class VarList
 	/**
 	 * Clone this list.
 	 */
+	@Override
 	public Object clone()
 	{
 		int i, n;

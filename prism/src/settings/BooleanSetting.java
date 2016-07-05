@@ -26,60 +26,68 @@
 
 package settings;
 
-public class BooleanSetting extends Setting 
+public class BooleanSetting extends Setting
 {
-    private static BooleanRenderer renderer;
-    private static BooleanEditor editor;
-    
-    static
-    {
-        renderer = new BooleanRenderer();
-        editor = new BooleanEditor();
-    }
-    
-    
-    /** Creates a new instance of BooleanSetting */
-    public BooleanSetting(String name, Boolean value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
+	private static BooleanRenderer renderer;
+	private static BooleanEditor editor;
+
+	static {
+		renderer = new BooleanRenderer();
+		editor = new BooleanEditor();
+	}
+
+	/** Creates a new instance of BooleanSetting */
+	public BooleanSetting(String name, Boolean value, String comment, SettingOwner owner, boolean editableWhenMultiple)
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
 	public BooleanSetting(String name, Boolean value, String comment, SettingOwner owner, boolean editableWhenMultiple, BooleanConstraint constraint)
 	{
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
-	
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return Boolean.class;
-    }
-    
-    public boolean getBooleanValue()
-    {
-        return ((Boolean)getValue()).booleanValue();
-    }
-    
+
+	@Override
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	@Override
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	@Override
+	public Class<Boolean> getValueClass()
+	{
+		return Boolean.class;
+	}
+
+	public boolean getBooleanValue()
+	{
+		return ((Boolean) getValue()).booleanValue();
+	}
+
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
-		if(string.equals("true")) return new Boolean(true);
-		else if(string.equals("false")) return new Boolean(false);
-		else throw new SettingException("Error when parsing: "+string+" as a Boolean value.");
+		if (string.equals("true"))
+			return new Boolean(true);
+		else if (string.equals("false"))
+			return new Boolean(false);
+		else
+			throw new SettingException("Error when parsing: " + string + " as a Boolean value.");
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		if(getBooleanValue()) return "true";
-		else return "false";
+		if (getBooleanValue())
+			return "true";
+		else
+			return "false";
 	}
-	
+
 }

@@ -51,6 +51,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		this.modulesFile = modulesFile;
 	}
 
+	@Override
 	public void visitPost(ModulesFile e) throws PrismLangException
 	{
 		int i, j, n, n2;
@@ -92,6 +93,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public Object visit(SystemReference e) throws PrismLangException
 	{
 		// Make sure referenced system exists
@@ -99,15 +101,17 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 			throw new PrismLangException("Reference to system " + e.getName() + " which does not exist", e);
 		return null;
 	}
-	
-	public Object visit(FormulaList e) throws PrismLangException
+
+	@Override
+	public Object visit(FormulaList e)
 	{
 		// Override - don't need to do any semantic checks on formulas
 		// (they will have been expanded in place, where needed)
 		// (and we shouldn't check them - e.g. clock vars appearing in errors would show as an error)
 		return null;
 	}
-	
+
+	@Override
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -122,6 +126,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ConstantList e) throws PrismLangException
 	{
 		int i, n;
@@ -133,6 +138,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(Declaration e) throws PrismLangException
 	{
 		if (e.getStart() != null && !e.getStart().isConstant()) {
@@ -146,6 +152,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationInt e) throws PrismLangException
 	{
 		if (e.getLow() != null && !e.getLow().isConstant()) {
@@ -156,6 +163,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationArray e) throws PrismLangException
 	{
 		if (e.getLow() != null && !e.getLow().isConstant()) {
@@ -166,6 +174,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(DeclarationClock e) throws PrismLangException
 	{
 		// Clocks are only allowed in PTA models
@@ -174,12 +183,14 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
-	public void visitPre(Module e) throws PrismLangException
+	@Override
+	public void visitPre(Module e)
 	{
 		// Register the fact we are entering a module
 		//inModule = e;
 	}
 
+	@Override
 	public Object visit(Module e) throws PrismLangException
 	{
 		// Override this so we can keep track of when we are in an invariant
@@ -187,7 +198,8 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		int i, n;
 		n = e.getNumDeclarations();
 		for (i = 0; i < n; i++) {
-			if (e.getDeclaration(i) != null) e.getDeclaration(i).accept(this);
+			if (e.getDeclaration(i) != null)
+				e.getDeclaration(i).accept(this);
 		}
 		inInvariant = e.getInvariant();
 		if (e.getInvariant() != null)
@@ -195,18 +207,21 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		inInvariant = null;
 		n = e.getNumCommands();
 		for (i = 0; i < n; i++) {
-			if (e.getCommand(i) != null) e.getCommand(i).accept(this);
+			if (e.getCommand(i) != null)
+				e.getCommand(i).accept(this);
 		}
 		visitPost(e);
 		return null;
 	}
 
-	public void visitPost(Module e) throws PrismLangException
+	@Override
+	public void visitPost(Module e)
 	{
 		// Register the fact we are leaving a module
 		//inModule = null;
 	}
 
+	@Override
 	public Object visit(Command e) throws PrismLangException
 	{
 		// Override this so we can keep track of when we are in a command
@@ -218,13 +233,15 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		visitPost(e);
 		return null;
 	}
-	
-	public void visitPre(Update e) throws PrismLangException
+
+	@Override
+	public void visitPre(Update e)
 	{
 		// Register the fact we are entering an update
 		//inUpdate = e;
 	}
 
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;
@@ -257,6 +274,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(SystemRename e) throws PrismLangException
 	{
 		int i, n;
@@ -281,6 +299,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(SystemHide e) throws PrismLangException
 	{
 		int i, n;
@@ -303,6 +322,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(SystemParallel e) throws PrismLangException
 	{
 		int i, n;
@@ -325,6 +345,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionVar e) throws PrismLangException
 	{
 		// For PTAs, references to variables in modules have to be local
@@ -343,6 +364,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		LabelList labelList;

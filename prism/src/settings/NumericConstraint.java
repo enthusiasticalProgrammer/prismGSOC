@@ -28,35 +28,29 @@ package settings;
 
 public abstract class NumericConstraint implements SettingConstraint
 {
-	
+
 	/** Creates a new instance of NumericConstraint */
 	public NumericConstraint()
 	{
 	}
-	
+
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
-		if(value instanceof Double)
-		{
-			checkValueDouble(((Double)value).doubleValue());
-		}
-		else if(value instanceof Integer)
-		{
-			checkValueInteger(((Integer)value).intValue());
-		}
-		else if(value instanceof Long)
-		{
-			checkValueLong(((Long)value).longValue());
-		}
-		else
-		{
+		if (value instanceof Double) {
+			checkValueDouble(((Double) value).doubleValue());
+		} else if (value instanceof Integer) {
+			checkValueInteger(((Integer) value).intValue());
+		} else if (value instanceof Long) {
+			checkValueLong(((Long) value).longValue());
+		} else {
 			throw new SettingException("Invalid type for property, should be numeric.");
 		}
 	}
-	
+
 	public abstract void checkValueDouble(double value) throws SettingException;
-	
+
 	public abstract void checkValueInteger(int value) throws SettingException;
-	
+
 	public abstract void checkValueLong(long value) throws SettingException;
 }

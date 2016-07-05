@@ -36,90 +36,168 @@ public class JDD
 {
 	// dd library functions
 	public static native long GetCUDDManager();
+
 	// dd
 	private static native void DD_SetOutputStream(long fp);
+
 	private static native long DD_GetOutputStream();
+
 	// dd_cudd
 	private static native void DD_InitialiseCUDD();
+
 	private static native void DD_InitialiseCUDD(long max_mem, double epsilon);
+
 	private static native void DD_SetCUDDMaxMem(long max_mem);
+
 	private static native void DD_SetCUDDEpsilon(double epsilon);
+
 	private static native void DD_CloseDownCUDD(boolean check);
+
 	private static native void DD_Ref(long dd);
+
 	private static native void DD_Deref(long dd);
+
 	private static native void DD_PrintCacheInfo();
+
 	private static native boolean DD_GetErrorFlag();
+
 	// dd_basics
 	private static native long DD_Create();
+
 	private static native long DD_Constant(double value);
+
 	private static native long DD_PlusInfinity();
+
 	private static native long DD_MinusInfinity();
+
 	private static native long DD_Var(int i);
+
 	private static native long DD_Not(long dd);
+
 	private static native long DD_Or(long dd1, long dd2);
+
 	private static native long DD_And(long dd1, long dd2);
+
 	private static native long DD_Xor(long dd1, long dd2);
+
 	private static native long DD_Implies(long dd1, long dd2);
+
 	private static native long DD_Apply(int op, long dd1, long dd2);
+
 	private static native long DD_MonadicApply(int op, long dd);
+
 	private static native long DD_Restrict(long dd, long cube);
+
 	private static native long DD_ITE(long dd1, long dd2, long dd3);
+
 	// dd_vars
 	private static native long DD_PermuteVariables(long dd, long old_vars, long new_vars, int num_vars);
+
 	private static native long DD_SwapVariables(long dd, long old_vars, long new_vars, int num_vars);
+
 	private static native long DD_VariablesGreaterThan(long x_vars, long y_vars, int num_vars);
+
 	private static native long DD_VariablesGreaterThanEquals(long x_vars, long y_vars, int num_vars);
+
 	private static native long DD_VariablesLessThan(long x_vars, long y_vars, int num_vars);
+
 	private static native long DD_VariablesLessThanEquals(long x_vars, long y_vars, int num_vars);
+
 	private static native long DD_VariablesEquals(long x_vars, long y_vars, int num_vars);
+
 	// dd_abstr
 	private static native long DD_ThereExists(long dd, long vars, int num_vars);
+
 	private static native long DD_ForAll(long dd, long vars, int num_vars);
+
 	private static native long DD_SumAbstract(long dd, long vars, int num_vars);
+
 	private static native long DD_ProductAbstract(long dd, long vars, int num_vars);
+
 	private static native long DD_MinAbstract(long dd, long vars, int num_vars);
+
 	private static native long DD_MaxAbstract(long dd, long vars, int num_vars);
+
 	// dd_term
 	private static native long DD_GreaterThan(long dd, double threshold);
+
 	private static native long DD_GreaterThanEquals(long dd, double threshold);
+
 	private static native long DD_LessThan(long dd, double threshold);
+
 	private static native long DD_LessThanEquals(long dd, double threshold);
+
 	private static native long DD_Equals(long dd, double value);
+
 	private static native long DD_Interval(long dd, double lower, double upper);
+
 	private static native long DD_RoundOff(long dd, int places);
+
 	private static native boolean DD_EqualSupNorm(long dd1, long dd2, double epsilon);
+
 	private static native double DD_FindMin(long dd);
+
 	private static native double DD_FindMax(long dd);
+
 	private static native long DD_RestrictToFirst(long dd, long vars, int num_vars);
+
 	// dd_info
 	private static native int DD_GetNumNodes(long dd);
+
 	private static native int DD_GetNumTerminals(long dd);
+
 	private static native double DD_GetNumMinterms(long dd, int num_vars);
+
 	private static native double DD_GetNumPaths(long dd);
+
 	private static native void DD_PrintInfo(long dd, int num_vars);
+
 	private static native void DD_PrintInfoBrief(long dd, int num_vars);
+
 	private static native void DD_PrintSupport(long dd);
+
 	private static native void DD_PrintSupportNames(long dd, List<String> var_names);
+
 	private static native long DD_GetSupport(long dd);
+
 	private static native void DD_PrintTerminals(long dd);
+
 	private static native void DD_PrintTerminalsAndNumbers(long dd, int num_vars);
+
 	// dd_matrix
 	private static native long DD_SetVectorElement(long dd, long vars, int num_vars, long index, double value);
+
 	private static native long DD_SetMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long rindex, long cindex, double value);
-	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex, long cindex, long lindex, double value);
+
+	private static native long DD_Set3DMatrixElement(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long lvars, int num_lvars, long rindex,
+			long cindex, long lindex, double value);
+
 	private static native double DD_GetVectorElement(long dd, long vars, int num_vars, long index);
+
 	private static native long DD_Identity(long rvars, long cvars, int num_vars);
+
 	private static native long DD_Transpose(long dd, long rvars, long cvars, int num_vars);
+
 	private static native long DD_MatrixMultiply(long dd1, long dd2, long vars, int num_vars, int method);
+
 	private static native void DD_PrintVector(long dd, long vars, int num_vars, int accuracy);
+
 	private static native void DD_PrintMatrix(long dd, long rvars, int num_rvars, long cvars, int num_cvars, int accuracy);
+
 	private static native void DD_PrintVectorFiltered(long dd, long filter, long vars, int num_vars, int accuracy);
+
 	// dd_export
 	private static native void DD_ExportDDToDotFile(long dd, String filename);
+
 	private static native void DD_ExportDDToDotFileLabelled(long dd, String filename, List<String> var_names);
+
 	private static native void DD_ExportMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String filename);
-	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars, String filename);
+
+	private static native void DD_Export3dMatrixToPPFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, long nvars, int num_nvars,
+			String filename);
+
 	private static native void DD_ExportMatrixToMatlabFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, String name, String filename);
+
 	private static native void DD_ExportMatrixToSpyFile(long dd, long rvars, int num_rvars, long cvars, int num_cvars, int depth, String filename);
 
 	/**
@@ -130,21 +208,21 @@ public class JDD
 	 * DD methods. It is generally not safe to use the CUDD library after this error occurred,
 	 * so the program should quit as soon as feasible.
 	 */
-	public static class CuddOutOfMemoryException extends RuntimeException {
+	public static class CuddOutOfMemoryException extends RuntimeException
+	{
 		private static final long serialVersionUID = -3094099053041270477L;
 
 		/** Constructor */
-		CuddOutOfMemoryException() {
+		CuddOutOfMemoryException()
+		{
 			super("Out of memory (or other internal error) in the CUDD library");
 		}
 	}
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("jdd");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -175,29 +253,29 @@ public class JDD
 	public static final int NORMAL = 3;
 	public static final int HIGH = 4;
 	public static final int LIST = 5;
-	
+
 	// matrix multiply methods
 	public static final int CMU = 1;
 	public static final int BOULDER = 2;
-	
+
 	// constant dds
 	public static JDDNode ZERO;
 	public static JDDNode ONE;
 	public static JDDNode PLUS_INFINITY;
 	public static JDDNode MINUS_INFINITY;
-		
+
 	// wrapper methods for dd
-	
+
 	public static void SetOutputStream(long fp)
 	{
 		DD_SetOutputStream(fp);
 	}
-	
+
 	public static long GetOutputStream()
 	{
 		return DD_GetOutputStream();
 	}
-	
+
 	// wrapper methods for dd_cudd
 
 	/**
@@ -212,7 +290,7 @@ public class JDD
 		PLUS_INFINITY = JDD.PlusInfinity();
 		MINUS_INFINITY = JDD.MinusInfinity();
 	}
-		
+
 	/**
 	 * initialise cudd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -225,7 +303,7 @@ public class JDD
 		PLUS_INFINITY = JDD.PlusInfinity();
 		MINUS_INFINITY = JDD.MinusInfinity();
 	}
-		
+
 	/**
 	 * set cudd max memory
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -234,7 +312,7 @@ public class JDD
 	{
 		DD_SetCUDDMaxMem(max_mem);
 	}
-		
+
 	/**
 	 * set cudd epsilon
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -243,12 +321,16 @@ public class JDD
 	{
 		DD_SetCUDDEpsilon(epsilon);
 	}
-		
+
 	/**
 	 * close down cudd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
-	public static void CloseDownCUDD() { CloseDownCUDD(true); }
+	public static void CloseDownCUDD()
+	{
+		CloseDownCUDD(true);
+	}
+
 	public static void CloseDownCUDD(boolean check)
 	{
 		Deref(ZERO);
@@ -259,7 +341,7 @@ public class JDD
 			DebugJDD.endLifeCycle();
 		DD_CloseDownCUDD(check);
 	}
-	
+
 	/**
 	 * reference dd
 	 * <br>[ REFS: dd, DEREFS: <i>none</i> ]
@@ -278,7 +360,7 @@ public class JDD
 			DebugJDD.increment(dd);
 		DD_Ref(ptr);
 	}
-	
+
 	/**
 	 * dereference dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
@@ -318,7 +400,7 @@ public class JDD
 	{
 		DD_PrintCacheInfo();
 	}
-	
+
 	// wrapper methods for dd_basics
 
 	/**
@@ -329,7 +411,7 @@ public class JDD
 	{
 		return ptrToNode(DD_Create());
 	}
-	
+
 	/**
 	 * create new constant dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -341,7 +423,7 @@ public class JDD
 		else
 			return ptrToNode(DD_Constant(value));
 	}
-		
+
 	/**
 	 * create new constant (plus infinity)
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -350,7 +432,7 @@ public class JDD
 	{
 		return ptrToNode(DD_PlusInfinity());
 	}
-	
+
 	/**
 	 * create new constant (minus infinity)
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -359,7 +441,7 @@ public class JDD
 	{
 		return ptrToNode(DD_MinusInfinity());
 	}
-	
+
 	/**
 	 * create new variable dd (1 if var i is true, 0 if not)
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -368,7 +450,7 @@ public class JDD
 	{
 		return ptrToNode(DD_Var(i));
 	}
-	
+
 	/**
 	 * not of dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -379,7 +461,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Not(dd.ptr()));
 	}
-	
+
 	/**
 	 * or of dd1, dd2
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -416,7 +498,7 @@ public class JDD
 
 		return result;
 	}
-	
+
 	/**
 	 * and of dd1, dd2
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -427,7 +509,7 @@ public class JDD
 			DebugJDD.decrement(dd1);
 			DebugJDD.decrement(dd2);
 		}
-			
+
 		return ptrToNode(DD_And(dd1.ptr(), dd2.ptr()));
 	}
 
@@ -467,7 +549,7 @@ public class JDD
 		}
 		return ptrToNode(DD_Xor(dd1.ptr(), dd2.ptr()));
 	}
-	
+
 	/**
 	 * implies of dd1, dd2
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -480,7 +562,7 @@ public class JDD
 		}
 		return ptrToNode(DD_Implies(dd1.ptr(), dd2.ptr()));
 	}
-	
+
 	/**
 	 * equivalence of dd1, dd2 (have to be 0/1-MTBDDs)
 	 * [ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -489,7 +571,7 @@ public class JDD
 	{
 		return Not(Xor(dd1, dd2));
 	}
-	
+
 	/**
 	 * generic apply operation
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -508,7 +590,8 @@ public class JDD
 	 * Operands are processed from left-to-right.
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>all arguments</i> ]
 	 */
-	public static JDDNode Times(JDDNode node, JDDNode... nodes) {
+	public static JDDNode Times(JDDNode node, JDDNode... nodes)
+	{
 		JDDNode result = node;
 		for (JDDNode n : nodes) {
 			result = Apply(JDD.TIMES, result, n);
@@ -522,7 +605,8 @@ public class JDD
 	 * Operands are processed from left-to-right.
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>all arguments</i> ]
 	 */
-	public static JDDNode Plus(JDDNode node, JDDNode... nodes) {
+	public static JDDNode Plus(JDDNode node, JDDNode... nodes)
+	{
 		JDDNode result = node;
 		for (JDDNode n : nodes) {
 			result = Apply(JDD.PLUS, result, n);
@@ -536,7 +620,8 @@ public class JDD
 	 * Operands are processed from left-to-right.
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>all arguments</i> ]
 	 */
-	public static JDDNode Max(JDDNode node, JDDNode... nodes) {
+	public static JDDNode Max(JDDNode node, JDDNode... nodes)
+	{
 		JDDNode result = node;
 		for (JDDNode n : nodes) {
 			result = Apply(JDD.MAX, result, n);
@@ -550,7 +635,8 @@ public class JDD
 	 * Operands are processed from left-to-right.
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>all arguments</i> ]
 	 */
-	public static JDDNode Min(JDDNode node, JDDNode... nodes) {
+	public static JDDNode Min(JDDNode node, JDDNode... nodes)
+	{
 		JDDNode result = node;
 		for (JDDNode n : nodes) {
 			result = Apply(JDD.MIN, result, n);
@@ -569,7 +655,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MonadicApply(op, dd.ptr()));
 	}
-	
+
 	/**
 	 * restrict dd based on cube
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd, cube ]
@@ -582,7 +668,7 @@ public class JDD
 		}
 		return ptrToNode(DD_Restrict(dd.ptr(), cube.ptr()));
 	}
-	
+
 	/**
 	 * ITE (if-then-else) operation
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2, dd3 ]
@@ -596,7 +682,7 @@ public class JDD
 		}
 		return ptrToNode(DD_ITE(dd1.ptr(), dd2.ptr(), dd3.ptr()));
 	}
-		
+
 	/**
 	 * Returns true if the two BDDs intersect (i.e. conjunction is non-empty).
 	 * [ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -612,7 +698,7 @@ public class JDD
 		JDD.Deref(tmp);
 		return res;
 	}
-	
+
 	/**
 	 * Returns true if {@code dd1} is contained in {@code dd2}.
 	 * [ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -630,9 +716,9 @@ public class JDD
 		JDD.Deref(tmp);
 		return res;
 	}
-	
+
 	// wrapper methods for dd_vars
-	
+
 	/**
 	 * permute (-&gt;) variables in dd (cf. swap)
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -712,7 +798,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ThereExists(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	/**
 	 * universal abstraction of vars from dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -723,7 +809,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ForAll(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	/**
 	 * sum abstraction of vars from dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -734,7 +820,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SumAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	/**
 	 * product abstraction of vars from dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -745,7 +831,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_ProductAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	/**
 	 * min abstraction of vars from dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -756,7 +842,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MinAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	/**
 	 * max abstraction of vars from dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -767,7 +853,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_MaxAbstract(dd.ptr(), vars.array(), vars.n()));
 	}
-	
+
 	// wrapper methods for dd_term
 
 	/**
@@ -780,7 +866,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_GreaterThan(dd.ptr(), threshold));
 	}
-	
+
 	/**
 	 * converts dd to a 0-1 dd, based on the interval [threshold, +inf)
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -791,7 +877,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_GreaterThanEquals(dd.ptr(), threshold));
 	}
-	
+
 	/**
 	 * converts dd to a 0-1 dd, based on the interval (-inf, threshold)
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -802,7 +888,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_LessThan(dd.ptr(), threshold));
 	}
-	
+
 	/**
 	 * converts dd to a 0-1 dd, based on the interval (-inf, threshold]
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -813,7 +899,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_LessThanEquals(dd.ptr(), threshold));
 	}
-	
+
 	/**
 	 * converts dd to a 0-1 dd, based on the interval [threshold, threshold]
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -824,7 +910,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Equals(dd.ptr(), value));
 	}
-	
+
 	/**
 	 * converts dd to a 0-1 dd, based on the interval [lower, upper]
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -835,7 +921,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Interval(dd.ptr(), lower, upper));
 	}
-	
+
 	/**
 	 * rounds terminals in dd to a certain number of decimal places
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -846,7 +932,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_RoundOff(dd.ptr(), places));
 	}
-	
+
 	/**
 	 * returns true if sup norm of dd1 and dd2 is less than epsilon, returns false otherwise
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -857,7 +943,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * returns minimum terminal in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -868,7 +954,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * returns maximum terminal in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -879,7 +965,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * returns dd restricted to first non-zero path (cube)
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -903,7 +989,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * returns number of terminals in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -914,7 +1000,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * returns number of minterms in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -925,7 +1011,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * get number of minterms as a string (have to store as a double
 	 * because can be very big but want to print out as a decimal)
@@ -934,12 +1020,11 @@ public class JDD
 	public static String GetNumMintermsString(JDDNode dd, int num_vars)
 	{
 		double minterms;
-		
+
 		minterms = GetNumMinterms(dd, num_vars);
 		if (minterms <= Long.MAX_VALUE) {
-			return "" + (long)minterms;
-		}
-		else {
+			return "" + (long) minterms;
+		} else {
 			return "" + minterms;
 		}
 	}
@@ -954,7 +1039,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * get number of paths as a string (have to store as a double
 	 * because can be very big but want to print out as a decimal)
@@ -963,12 +1048,11 @@ public class JDD
 	public static String GetNumPathsString(JDDNode dd)
 	{
 		double paths;
-		
+
 		paths = GetNumPaths(dd);
 		if (paths <= Long.MAX_VALUE) {
-			return "" + (long)paths;
-		}
-		else {
+			return "" + (long) paths;
+		} else {
 			return "" + paths;
 		}
 	}
@@ -984,7 +1068,7 @@ public class JDD
 	 */
 	public static boolean isSingleton(JDDNode dd, JDDVars vars)
 	{
-		int i=0;
+		int i = 0;
 		while (!dd.isConstant()) {
 			int index = dd.getIndex();
 			if (vars.getVar(i).getIndex() != index)
@@ -1011,10 +1095,10 @@ public class JDD
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
 	public static void PrintInfo(JDDNode dd, int num_vars)
-	{		
+	{
 		DD_PrintInfo(dd.ptr(), num_vars);
 	}
-	
+
 	/**
 	 * prints out compact info for dd (nodes, terminals, minterms)
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1023,25 +1107,25 @@ public class JDD
 	{
 		DD_PrintInfoBrief(dd.ptr(), num_vars);
 	}
-	
+
 	/**
 	 * gets info for dd as string (nodes, terminals, minterms)
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
 	public static String GetInfoString(JDDNode dd, int num_vars)
 	{
-		return GetNumNodes(dd)+" nodes ("+GetNumTerminals(dd)+" terminal), "+GetNumMintermsString(dd, num_vars)+" minterms";
+		return GetNumNodes(dd) + " nodes (" + GetNumTerminals(dd) + " terminal), " + GetNumMintermsString(dd, num_vars) + " minterms";
 	}
-	
+
 	/**
 	 * gets compact info for dd as string (nodes, terminals, minterms)
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
 	public static String GetInfoBriefString(JDDNode dd, int num_vars)
 	{
-		return "["+GetNumNodes(dd)+","+GetNumTerminals(dd)+","+GetNumMintermsString(dd, num_vars)+"]";
+		return "[" + GetNumNodes(dd) + "," + GetNumTerminals(dd) + "," + GetNumMintermsString(dd, num_vars) + "]";
 	}
-	
+
 	/**
 	 * Prints out the support of a DD (i.e. all DD variables that are actually present).
 	 * [ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1050,7 +1134,7 @@ public class JDD
 	{
 		DD_PrintSupport(dd.ptr());
 	}
-	
+
 	/**
 	 * Prints out the support of a DD (i.e. all DD variables that are actually present),
 	 * using the passed in list of DD variable names.
@@ -1060,7 +1144,7 @@ public class JDD
 	{
 		DD_PrintSupportNames(dd.ptr(), varNames);
 	}
-	
+
 	/**
 	 * returns support for dd (all dd variables present) as a cube of the dd vars
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -1069,7 +1153,7 @@ public class JDD
 	{
 		return ptrToNode(DD_GetSupport(dd.ptr()));
 	}
-	
+
 	/**
 	 * print out all values of all terminals in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1078,7 +1162,7 @@ public class JDD
 	{
 		DD_PrintTerminals(dd.ptr());
 	}
-	
+
 	/**
 	 * get list of values of all terminals in dd as string (native method sends to stdout)
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1087,7 +1171,7 @@ public class JDD
 	{
 		return GetTerminalsString(dd, 0, false);
 	}
-	
+
 	/**
 	 * print out all values of all terminals (and number of each) in dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1096,7 +1180,7 @@ public class JDD
 	{
 		DD_PrintTerminalsAndNumbers(dd.ptr(), num_vars);
 	}
-	
+
 	/**
 	 * get list of values of all terminals (and number of each) in dd (native method sends to stdout)
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1105,9 +1189,9 @@ public class JDD
 	{
 		return GetTerminalsString(dd, num_vars, true);
 	}
-	
+
 	// Generic code for two GetTerminals...String methods above
-	
+
 	public static String GetTerminalsString(JDDNode dd, int num_vars, boolean and_numbers)
 	{
 		JDDNode tmp, tmp2;
@@ -1130,18 +1214,20 @@ public class JDD
 			if (and_numbers) {
 				num = JDD.GetNumMinterms(tmp2, num_vars);
 				count += num;
-				s += "(" + (long)num + ") ";
+				s += "(" + (long) num + ") ";
 			}
 			tmp = JDD.ITE(tmp2, JDD.MinusInfinity(), tmp);
 		}
 		JDD.Deref(tmp);
 		// Finally, print if there are (and possibly how many) minus infinities
 		if (and_numbers) {
-			if (count < (1<<num_vars)) s += "-inf (" + ((1<<num_vars)-count) + ")";
+			if (count < (1 << num_vars))
+				s += "-inf (" + ((1 << num_vars) - count) + ")";
 		} else {
-			if (min == -Double.POSITIVE_INFINITY) s += "-inf";
+			if (min == -Double.POSITIVE_INFINITY)
+				s += "-inf";
 		}
-		
+
 		return s;
 	}
 
@@ -1157,7 +1243,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SetVectorElement(dd.ptr(), vars.array(), vars.n(), index, value));
 	}
-	
+
 	/**
 	 * sets element in matrix dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -1168,7 +1254,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_SetMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), rindex, cindex, value));
 	}
-	
+
 	/**
 	 * sets element in 3d matrix dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -1177,9 +1263,10 @@ public class JDD
 	{
 		if (DebugJDD.debugEnabled)
 			DebugJDD.decrement(dd);
-		return ptrToNode(DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
+		return ptrToNode(
+				DD_Set3DMatrixElement(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), lvars.array(), lvars.n(), rindex, cindex, lindex, value));
 	}
-	
+
 	/**
 	 * get element in vector dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1190,7 +1277,7 @@ public class JDD
 		checkForCuddError();
 		return rv;
 	}
-	
+
 	/**
 	 * creates dd for identity matrix
 	 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
@@ -1199,7 +1286,7 @@ public class JDD
 	{
 		return ptrToNode(DD_Identity(rvars.array(), cvars.array(), rvars.n()));
 	}
-	
+
 	/**
 	 * returns transpose of matrix dd
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd ]
@@ -1210,7 +1297,7 @@ public class JDD
 			DebugJDD.decrement(dd);
 		return ptrToNode(DD_Transpose(dd.ptr(), rvars.array(), cvars.array(), rvars.n()));
 	}
-	
+
 	/**
 	 * returns matrix multiplication of matrices dd1 and dd2
 	 * <br>[ REFS: <i>result</i>, DEREFS: dd1, dd2 ]
@@ -1228,8 +1315,8 @@ public class JDD
 	 * Print the minterms for a JDDNode (using the support of dd as variables).
 	 * <br>
 	 * Positive variables are marked with 1, negatives with 0 and don't cares are marked with -
- 	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
- 	 *
+	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
+	 *
 	 * @param log the output log
 	 * @param dd the MTBDD
 	 */
@@ -1243,7 +1330,7 @@ public class JDD
 	 * <br>
 	 * Positive variables are marked with 1, negatives with 0 and don't cares are marked with -
 	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
- 	 *
+	 *
 	 * @param log the output log
 	 * @param dd the MTBDD
 	 * @param name an optional description to be printed ({@code null} for none)
@@ -1263,8 +1350,8 @@ public class JDD
 	 * <br>
 	 * {@code vars} has to be ordered with increasing variable indizes and
 	 * has to contain all variables in the support of {@code dd}.
- 	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
- 	 *
+	 * <br>[ REFS: <i>none</i>, DEREFS: dd ]
+	 *
 	 * @param log the output log
 	 * @param dd the MTBDD
 	 * @param vars JDDVars of the relevant variables
@@ -1275,17 +1362,18 @@ public class JDD
 	{
 		try {
 			if (description != null)
-				log.println(description+":");
+				log.println(description + ":");
 			log.print(" Variables: (");
 			boolean first = true;
 			for (JDDNode var : vars) {
-				if (!first) log.print(",");
+				if (!first)
+					log.print(",");
 				first = false;
 				log.print(var.getIndex());
 			}
 			log.println(")");
 			char[] minterm = new char[vars.n()];
-			for (int i = 0; i< minterm.length; i++) {
+			for (int i = 0; i < minterm.length; i++) {
 				minterm[i] = '-';
 			}
 			PrintMintermsRec(log, dd, vars, 0, minterm);
@@ -1301,8 +1389,8 @@ public class JDD
 	 * <br>
 	 * {@code vars} has to be ordered with increasing variable indizes and
 	 * has to contain all variables in the support of {@code dd}.
- 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
- 	 *
+	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
+	 *
 	 * @param log the output log
 	 * @param dd the MTBDD
 	 * @param vars JDDVars of the relevant variables
@@ -1323,7 +1411,7 @@ public class JDD
 				log.print(c);
 			}
 			// ... and the constant value
-			log.println("| = " +dd.getValue());
+			log.println("| = " + dd.getValue());
 		} else {
 			// Get the current variable index
 			int index = dd.getIndex();
@@ -1333,18 +1421,18 @@ public class JDD
 				// We are at the level of the next var in vars
 				if (var_index == index) {
 					// Recurse for else
-					minterm[cur_index]='0';
-					PrintMintermsRec(log, dd.getElse(), vars, cur_index+1, minterm);
+					minterm[cur_index] = '0';
+					PrintMintermsRec(log, dd.getElse(), vars, cur_index + 1, minterm);
 					// Recurse for then
-					minterm[cur_index]='1';
-					PrintMintermsRec(log, dd.getThen(), vars, cur_index+1, minterm);
+					minterm[cur_index] = '1';
+					PrintMintermsRec(log, dd.getThen(), vars, cur_index + 1, minterm);
 					// ... and we are done
-					minterm[cur_index]='-';
+					minterm[cur_index] = '-';
 					return;
 				} else if (var_index < index) {
 					// The next variable in vars is less then the current dd index
 					//  -> don't care
-					minterm[cur_index]='-';
+					minterm[cur_index] = '-';
 					// Go to next variable in vars
 					++cur_index;
 					// ... and continue
@@ -1358,15 +1446,16 @@ public class JDD
 						if (var.getIndex() == index) {
 							// There is a var with the current index in vars, but
 							// not at the correct position
-							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = "+index+", var index = "+var_index+")");
+							throw new IllegalArgumentException("PrintMinterms: vars array does not appear to be sorted correctly (DD index = " + index
+									+ ", var index = " + var_index + ")");
 						}
 					}
 					// otherwise, the dd depends on a variable not in vars
-					throw new IllegalArgumentException("PrintMinterms: MTBDD depends on variable "+index+", not included in vars");
+					throw new IllegalArgumentException("PrintMinterms: MTBDD depends on variable " + index + ", not included in vars");
 				}
 			}
 			if (vars.n() == 0) {
-				throw new IllegalArgumentException("PrintMinterms: MTBDD depends on variable "+index+", not included in vars");
+				throw new IllegalArgumentException("PrintMinterms: MTBDD depends on variable " + index + ", not included in vars");
 			}
 			throw new UnsupportedOperationException("PrintMinterms: Implementation error");
 		}
@@ -1380,7 +1469,7 @@ public class JDD
 	{
 		DD_PrintVector(dd.ptr(), vars.array(), vars.n(), NORMAL);
 	}
-	
+
 	/**
 	 * prints out vector dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1389,7 +1478,7 @@ public class JDD
 	{
 		DD_PrintVector(dd.ptr(), vars.array(), vars.n(), accuracy);
 	}
-	
+
 	/**
 	 * prints out matrix dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1398,7 +1487,7 @@ public class JDD
 	{
 		DD_PrintMatrix(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), NORMAL);
 	}
-	
+
 	/**
 	 * prints out matrix dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1407,7 +1496,7 @@ public class JDD
 	{
 		DD_PrintMatrix(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), accuracy);
 	}
-	
+
 	/**
 	 * prints out vector dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1416,7 +1505,7 @@ public class JDD
 	{
 		DD_PrintVectorFiltered(dd.ptr(), filter.ptr(), vars.array(), vars.n(), NORMAL);
 	}
-	
+
 	/**
 	 * prints out vector dd
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1425,7 +1514,7 @@ public class JDD
 	{
 		DD_PrintVectorFiltered(dd.ptr(), filter.ptr(), vars.array(), vars.n(), accuracy);
 	}
-	
+
 	/**
 	 * traverse vector dd and call setElement method of VectorConsumer for each non zero element
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1434,21 +1523,20 @@ public class JDD
 	{
 		TraverseVectorRec(dd, vars, 0, 0, vc, code);
 	}
-	
+
 	// recursive part of TraverseVector
-	
+
 	private static void TraverseVectorRec(JDDNode dd, JDDVars vars, int varStart, long count, JDDVectorConsumer vc, int code)
 	{
 		JDDNode n, s;
-		
+
 		if (dd.equals(JDD.ZERO)) {
 			return;
 		}
-				
+
 		if (varStart == vars.getNumVars()) {
 			vc.setElement(count, dd.getValue(), code);
-		}
-		else {
+		} else {
 			// split into 2 cases
 			JDD.Ref(dd);
 			JDD.Ref(vars.getVar(varStart));
@@ -1456,10 +1544,10 @@ public class JDD
 			JDD.Ref(dd);
 			JDD.Ref(vars.getVar(varStart));
 			s = JDD.Restrict(dd, vars.getVar(varStart));
-			
-			TraverseVectorRec(n, vars, varStart+1, count, vc, code);
-			TraverseVectorRec(s, vars, varStart+1, count+(1l << (vars.getNumVars()-varStart-1)), vc, code);
-			
+
+			TraverseVectorRec(n, vars, varStart + 1, count, vc, code);
+			TraverseVectorRec(s, vars, varStart + 1, count + (1l << (vars.getNumVars() - varStart - 1)), vc, code);
+
 			JDD.Deref(n);
 			JDD.Deref(s);
 		}
@@ -1475,7 +1563,7 @@ public class JDD
 	{
 		DD_ExportDDToDotFile(dd.ptr(), filename);
 	}
-	
+
 	/**
 	 * export dd to a dot file
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1484,7 +1572,7 @@ public class JDD
 	{
 		DD_ExportDDToDotFileLabelled(dd.ptr(), filename, varNames);
 	}
-	
+
 	/**
 	 * export matrix dd to a pp file
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
@@ -1493,11 +1581,11 @@ public class JDD
 	{
 		DD_ExportMatrixToPPFile(dd.ptr(), rvars.array(), rvars.n(), cvars.array(), cvars.n(), filename);
 	}
-	
+
 	/**
 	 * Given a BDD that represents transition matrices of an MDP, this method
-     * outputs one matrix for every action. Note that the output is in fact
-     * not a PP file, but several PP files concatenated into one file.
+	 * outputs one matrix for every action. Note that the output is in fact
+	 * not a PP file, but several PP files concatenated into one file.
 	 *
 	 * For example, for a model with the variable
 	 * 	x : [0..2];
@@ -1507,7 +1595,7 @@ public class JDD
 	 *  [a] (x=2) -&gt; (x'=1);
 	 *  [a] (x=1) -&gt; (x'=0);
 	 * the output would be (e.g.)
- 	 *  4
+	 *  4
 	 *	4
 	 *	0 2 1.000000
 	 *	4

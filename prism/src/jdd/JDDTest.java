@@ -31,48 +31,48 @@ public class JDDTest
 	public static void main(String[] args)
 	{
 		JDDNode a, b, c;
-		JDDVars vars;		
-		
+		JDDVars vars;
+
 		System.out.println("\nTest program for JDD\n====================");
-		
+
 		// initialise cudd
 		JDD.InitialiseCUDD();
-		
+
 		// set up some variables
 		vars = new JDDVars();
 		vars.addVar(JDD.Var(0));
 		vars.addVar(JDD.Var(2));
-		
+
 		// blank dd
 		a = JDD.Create();
 		System.out.println("\nCreate()");
 		JDD.PrintVector(a, vars);
 		JDD.Deref(a);
-		
+
 		// constant
 		a = JDD.Constant(1.5);
 		System.out.println("\nConstant(1.5)");
 		JDD.PrintVector(a, vars);
 		JDD.Deref(a);
-		
+
 		// plus infinity
 		a = JDD.PlusInfinity();
 		System.out.println("\nPlusInfinity()");
 		JDD.PrintVector(a, vars);
 		JDD.Deref(a);
-		
+
 		// minus infinity
 		a = JDD.MinusInfinity();
 		System.out.println("\nMinusInfinity()");
 		JDD.PrintVector(a, vars);
 		JDD.Deref(a);
-		
+
 		// var
 		a = JDD.Var(0);
 		System.out.println("\nVar(0)");
 		JDD.PrintVector(a, vars);
 		JDD.Deref(a);
-				
+
 		a = JDD.Var(0);
 		b = JDD.Var(2);
 		System.out.print("\na: ");
@@ -86,7 +86,7 @@ public class JDDTest
 		System.out.println("\nNot(a)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
+
 		// or
 		JDD.Ref(a);
 		JDD.Ref(b);
@@ -94,7 +94,7 @@ public class JDDTest
 		System.out.println("\nOr(a, b)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
+
 		// and
 		JDD.Ref(a);
 		JDD.Ref(b);
@@ -102,7 +102,7 @@ public class JDDTest
 		System.out.println("\nAnd(a, b)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
+
 		// xor
 		JDD.Ref(a);
 		JDD.Ref(b);
@@ -110,7 +110,7 @@ public class JDDTest
 		System.out.println("\nXor(a, b)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
+
 		// implies
 		JDD.Ref(a);
 		JDD.Ref(b);
@@ -118,10 +118,10 @@ public class JDDTest
 		System.out.println("\nImplies(a, b)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
+
 		JDD.Deref(a);
 		JDD.Deref(b);
-		
+
 		a = JDD.Create();
 		a = JDD.SetVectorElement(a, vars, 0, 1);
 		a = JDD.SetVectorElement(a, vars, 1, 2);
@@ -136,7 +136,7 @@ public class JDDTest
 		JDD.PrintVector(a, vars);
 		System.out.print("b: ");
 		JDD.PrintVector(b, vars);
-		
+
 		// apply
 		JDD.Ref(a);
 		JDD.Ref(b);
@@ -162,14 +162,13 @@ public class JDDTest
 		System.out.println("\nApply(/, a, b)");
 		JDD.PrintVector(c, vars);
 		JDD.Deref(c);
-		
-		
+
 		JDD.Deref(a);
 		JDD.Deref(b);
 
 		// dereference variables
 		vars.derefAll();
-		
+
 		// close down cudd
 		JDD.CloseDownCUDD();
 		System.out.println();

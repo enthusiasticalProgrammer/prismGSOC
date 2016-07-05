@@ -122,6 +122,7 @@ public class DigitalClocks
 		for (RewardStruct rs : modulesFile.getRewardStructs()) {
 			rs.accept(new ASTTraverseModify()
 			{
+				@Override
 				public Object visit(ExpressionVar e) throws PrismLangException
 				{
 					if (e.getType() instanceof TypeClock) {
@@ -159,6 +160,7 @@ public class DigitalClocks
 		// Change all clock variable declarations to bounded integers
 		mf = (ModulesFile) mf.accept(new ASTTraverseModify()
 		{
+			@Override
 			public Object visit(Declaration e) throws PrismLangException
 			{
 				if (e.getDeclType() instanceof DeclarationClock) {
@@ -179,6 +181,7 @@ public class DigitalClocks
 		allInVariants = null;
 		mf = (ModulesFile) mf.accept(new ASTTraverseModify()
 		{
+			@Override
 			public Object visit(Module e) throws PrismLangException
 			{
 				Command timeCommand;
@@ -197,7 +200,8 @@ public class DigitalClocks
 				// Replace all clocks x with x+1 in invariant
 				invar = (Expression) invar.accept(new ASTTraverseModify()
 				{
-					public Object visit(ExpressionVar e) throws PrismLangException
+					@Override
+					public Object visit(ExpressionVar e)
 					{
 						if (e.getType() instanceof TypeClock) {
 							return Expression.Plus(e, Expression.Int(1));
@@ -242,6 +246,7 @@ public class DigitalClocks
 		asttm = new ASTTraverseModify()
 		{
 			// Resets
+			@Override
 			public Object visit(Update e) throws PrismLangException
 			{
 				int i, n;
@@ -264,7 +269,8 @@ public class DigitalClocks
 			}
 
 			// Variable accesses
-			public Object visit(ExpressionVar e) throws PrismLangException
+			@Override
+			public Object visit(ExpressionVar e)
 			{
 				if (e.getType() instanceof TypeClock) {
 					e.setType(TypeInt.getInstance());
@@ -317,6 +323,7 @@ public class DigitalClocks
 		try {
 			propertyToCheck.accept(new ASTTraverse()
 			{
+				@Override
 				public void visitPost(ExpressionProb e) throws PrismLangException
 				{
 					if (!e.getExpression().isSimplePathFormula()) {
@@ -328,11 +335,12 @@ public class DigitalClocks
 			e.setASTElement(propertyToCheck);
 			throw e;
 		}
-		
+
 		// Bounded properties not yet handled.
 		try {
 			propertyToCheck.accept(new ASTTraverse()
 			{
+				@Override
 				public void visitPost(ExpressionTemporal e) throws PrismLangException
 				{
 					if (e.getLowerBound() != null || e.getUpperBound() != null)
@@ -365,12 +373,13 @@ public class DigitalClocks
 	/**
 	 * Look for a strict clock constraint. If found return the offending element. Else, return null.
 	 */
-	public ASTElement findAStrictClockConstraint(ASTElement ast) throws PrismLangException
+	public ASTElement findAStrictClockConstraint(ASTElement ast)
 	{
 		try {
 			ASTTraverse astt = new ASTTraverse()
 			{
 				// Clock constraints
+				@Override
 				public void visitPost(ExpressionBinaryOp e) throws PrismLangException
 				{
 					if (e.getOperand1().getType() instanceof TypeClock) {
@@ -392,12 +401,13 @@ public class DigitalClocks
 	/**
 	 * Look for a diagonal clock constraint. If found return the offending element. Else, return null.
 	 */
-	public ASTElement findADiagonalClockConstraint(ASTElement ast) throws PrismLangException
+	public ASTElement findADiagonalClockConstraint(ASTElement ast)
 	{
 		try {
 			ASTTraverse astt = new ASTTraverse()
 			{
 				// Clock constraints
+				@Override
 				public void visitPost(ExpressionBinaryOp e) throws PrismLangException
 				{
 					if (e.getOperand1().getType() instanceof TypeClock) {
@@ -494,20 +504,23 @@ public class DigitalClocks
 			return (y == 0) ? x : computeGCD(y, x % y);
 		}
 
-		public void visitPost(ModulesFile e) throws PrismLangException
+		@Override
+		public void visitPost(ModulesFile e)
 		{
 			// When have traversed the model, compute GCDs and scale factor
 			scaleFactor = computeGCD(allClockVals);
 		}
 
-		public void visitPre(Module e) throws PrismLangException
+		@Override
+		public void visitPre(Module e)
 		{
 			// Create new array to store clocks for this module
 			currentClockList = new ArrayList<String>();
 			clockLists.put(e.getName(), currentClockList);
 		}
 
-		public void visitPost(Declaration e) throws PrismLangException
+		@Override
+		public void visitPost(Declaration e)
 		{
 			// Detect clock variable and store info
 			if (e.getDeclType() instanceof DeclarationClock) {
@@ -516,6 +529,7 @@ public class DigitalClocks
 		}
 
 		// Resets
+		@Override
 		public Object visit(Update e) throws PrismLangException
 		{
 			int i, n;
@@ -536,6 +550,7 @@ public class DigitalClocks
 		}
 
 		// Clock constraints
+		@Override
 		public void visitPost(ExpressionBinaryOp e) throws PrismLangException
 		{
 			// If this is a clock constraint, get and store max value

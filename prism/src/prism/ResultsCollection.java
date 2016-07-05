@@ -45,7 +45,7 @@ public class ResultsCollection
 
 	// Info about other constants (over which these results do *not* range)
 	private Values nonRangingConstantValues;
-	
+
 	// Storage of the actual results
 	private TreeNode root;
 	private int currentIteration = 0;
@@ -71,7 +71,7 @@ public class ResultsCollection
 		for (int i = 0; i < tmpRangingConstants.size(); i++) {
 			rangingConstants.add(tmpRangingConstants.get(i));
 		}
-		numMFRangingConstants = uCons.getNumModelRangingConstants(); 
+		numMFRangingConstants = uCons.getNumModelRangingConstants();
 		numPFRangingConstants = uCons.getNumPropertyRangingConstants();
 		nonRangingConstantValues = uCons.getNonRangingConstantValues();
 
@@ -240,6 +240,7 @@ public class ResultsCollection
 	/**
 	 * Create string representation of the data
 	 */
+	@Override
 	public String toString()
 	{
 		return toString(false, ",", ",", true);
@@ -296,7 +297,7 @@ public class ResultsCollection
 		exporter.end();
 		return exporter;
 	}
-	
+
 	/**
 	 * Create string representation of the data for a partial evaluation
 	 * @param partial Values for a subset of the constants
@@ -466,6 +467,7 @@ public class ResultsCollection
 		/**
 		 * Create string representation of the data
 		 */
+		@Override
 		public String toString()
 		{
 			return toString(false, ",", ",");
@@ -522,7 +524,7 @@ public class ResultsCollection
 				kids[i].exportRec(values, export);
 			}
 		}
-		
+
 		/**
 		 * Create string representation of the data for a partial evaluation
 		 * @param partial Values for a subset of the constants
@@ -584,14 +586,14 @@ public class ResultsCollection
 
 			res = "";
 			n = constant.getNumSteps();
-			
+
 			// Print constants/indices for matrix
 			// NB: need to enclose in quotes for CSV
 			if (rangingConstants.size() == 1 || rangingConstants.size() - level == 2) {
 				if (sep.equals(", "))
 					res += "\"";
 				if (rangingConstants.size() > 2)
-					res += head+", ";
+					res += head + ", ";
 				if (rangingConstants.size() == 1)
 					res += constant.getName();
 				else
@@ -646,6 +648,7 @@ public class ResultsCollection
 	{
 		private Object val = null;
 
+		@Override
 		public int setResult(Values setThese, Object result)
 		{
 			int ret = (val == null) ? 1 : 0;
@@ -653,31 +656,37 @@ public class ResultsCollection
 			return ret;
 		}
 
-		public Object getResult(Values getThese) throws PrismException
+		@Override
+		public Object getResult(Values getThese)
 		{
 			return val;
 		}
 
+		@Override
 		public String toStringMatrixRec(String sep, String head)
 		{
 			return val.toString();
 		}
 
+		@Override
 		public String toStringRec(boolean pv, String sep, String eq, String head)
 		{
 			return head + eq + val + "\n";
 		}
 
+		@Override
 		public void exportRec(Values values, ResultsExporter export)
 		{
 			export.exportResult(values, val);
 		}
-		
+
+		@Override
 		public String toStringPartialRec(Values partial, boolean first, boolean pv, String sep, String eq, String head)
 		{
 			return head + eq + val + "\n";
 		}
 
+		@Override
 		public void toArrayListRec(ArrayList<String[]> a, String line[])
 		{
 			line[rangingConstants.size()] = "" + val;

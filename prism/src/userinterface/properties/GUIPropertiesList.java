@@ -75,6 +75,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	}
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -97,33 +98,35 @@ public class GUIPropertiesList extends JList implements KeyListener
 	{
 		return (GUIProperty) listModel.getElementAt(i);
 	}
-	
+
 	/**
 	 * Returns all properties in this list that have
 	 * non-null name.
 	 */
-	public List<GUIProperty> getAllNamedProperties() {
+	public List<GUIProperty> getAllNamedProperties()
+	{
 		ArrayList<GUIProperty> ret = new ArrayList<GUIProperty>();
 		for (int i = 0; i < getNumProperties(); i++) {
 			if (getProperty(i).getName() != null)
 				ret.add(getProperty(i));
 		}
-		
+
 		return ret;
 	}
-	
+
 	/**
 	 * Looks up a property with the specified name and returns it. If
 	 * such a property does not exist, returns null;
 	 */
-	public GUIProperty getPropertyByName(String s) {
+	public GUIProperty getPropertyByName(String s)
+	{
 		for (int i = 0; i < getNumProperties(); i++) {
 			GUIProperty p = getProperty(i);
 			if (p.getName() != null && p.getName().equals(s)) {
 				return p;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -203,21 +206,21 @@ public class GUIPropertiesList extends JList implements KeyListener
 	{
 		String str = "";
 		ArrayList<GUIProperty> gps = getValidSelectedProperties();
-		
+
 		//strings will contain all relevant named properties, first selected, then refernced
-		Vector<String> strings = new Vector<String>(); 
-		
-		for (GUIProperty p : gps) { 
+		Vector<String> strings = new Vector<String>();
+
+		for (GUIProperty p : gps) {
 			//add even null
 			strings.add(p.getName());
 		}
-		
-		for (GUIProperty p : gps) { 
+
+		for (GUIProperty p : gps) {
 			for (String s : p.getReferencedNames())
 				if (!strings.contains(s))
 					strings.add(s);
 		}
-		
+
 		Vector<GUIProperty> referencedProps = new Vector<GUIProperty>();
 
 		//turn referenced strings to props.
@@ -232,14 +235,14 @@ public class GUIPropertiesList extends JList implements KeyListener
 			} //we don't need to care about null case, parser will find an error later.
 			i++;
 		}
-		
+
 		//add all named properties
 		String namedString = "";
 		//Add named properties
 		for (GUIProperty p : referencedProps) {
-				namedString += "\"" + p.getName() + "\" : " + p.getPropString() + "\n";
+			namedString += "\"" + p.getName() + "\" : " + p.getPropString() + "\n";
 		}
-		
+
 		for (GUIProperty gp : gps) {
 			if (gp.getName() != null) {
 				str += "\"" + gp.getName() + "\" : ";
@@ -317,10 +320,10 @@ public class GUIPropertiesList extends JList implements KeyListener
 			//the string contains property name
 			int start = propString.indexOf('"') + 1;
 			int end = propString.indexOf('"', start);
-			String name = propString.substring(start,end);
+			String name = propString.substring(start, end);
 			int colon = propString.indexOf(':') + 1;
 			String actualPropString = propString.substring(colon).trim();
-			
+
 			addProperty(name, actualPropString, comment);
 		} else {
 			addProperty(null, propString, comment);
@@ -421,7 +424,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 			p.makeInvalid();
 			list.add(p);
 		}
-		
+
 		boolean changed;
 		do {
 			changed = false;
@@ -469,6 +472,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	//REQUIRED TO IMPLEMENT KEYLISTENER
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 		if (e.getModifiers() == KeyEvent.CTRL_MASK) {
@@ -489,10 +493,12 @@ public class GUIPropertiesList extends JList implements KeyListener
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}
@@ -509,11 +515,13 @@ public class GUIPropertiesList extends JList implements KeyListener
 			setOpaque(true);
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return toolTip;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
@@ -552,16 +560,19 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

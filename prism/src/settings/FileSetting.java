@@ -30,31 +30,33 @@ import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 
-public class FileSetting extends Setting 
+public class FileSetting extends Setting
 {
-    private static FileRenderer renderer;
-    private static FileEditor editor;
-    
-    static
-    {
-        renderer = new FileRenderer();
-        editor = new FileEditor();
-    }
-	
+	private static FileRenderer renderer;
+	private static FileEditor editor;
+
+	static {
+		renderer = new FileRenderer();
+		editor = new FileEditor();
+	}
+
 	private static FileSelector defaultSelector()
 	{
 		try {
 			return new FileSelector()
 			{
 				JFileChooser choose = new JFileChooser();
-				
+
+				@Override
 				public File getFile(Frame parent, File defaultFile)
 				{
 					choose.setSelectedFile(defaultFile);
 					int choice = choose.showOpenDialog(parent);
-					if(choice == JFileChooser.CANCEL_OPTION) return null;
-					else return choose.getSelectedFile();
-					
+					if (choice == JFileChooser.CANCEL_OPTION)
+						return null;
+					else
+						return choose.getSelectedFile();
+
 				}
 			};
 		}
@@ -63,97 +65,105 @@ public class FileSetting extends Setting
 		// (in this case, you don't need this object anyway)
 		catch (HeadlessException e) {
 			return null;
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			return null;
 		}
 	}
-    
+
 	private boolean validFile;
 	private FileSelector selector;
-    
-    /** Creates a new instance of FileSetting */
+
+	/** Creates a new instance of FileSetting */
 	public FileSetting(String name, File value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-		if(value != null) validFile = value.isFile();
-		else validFile = false;
-		
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+		if (value != null)
+			validFile = value.isFile();
+		else
+			validFile = false;
+
 		selector = defaultSelector();
-    }
-	
-    public FileSetting(String name, File value, String comment, SettingOwner owner, boolean editableWhenMultiple, FontColorConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-		if(value != null) validFile = value.isFile();
-		else validFile = false;
-		
+	}
+
+	public FileSetting(String name, File value, String comment, SettingOwner owner, boolean editableWhenMultiple, FontColorConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+		if (value != null)
+			validFile = value.isFile();
+		else
+			validFile = false;
+
 		selector = defaultSelector();
-    }
-	
+	}
+
+	@Override
 	public void checkObjectWithConstraints(Object obj) throws SettingException
 	{
 		super.checkObjectWithConstraints(obj);
-		if(obj instanceof File)
-		{
-			File f = (File)obj;
+		if (obj instanceof File) {
+			File f = (File) obj;
 			validFile = f.isFile();
 
-		}
-		else 
+		} else
 			validFile = false;
 	}
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return File.class;
-    }
-	
-    public File getFileValue()
-    {
-		if(getValue() != null)
-			return (File)getValue();
-		else return null;
-		
-    }
-	
+
+	@Override
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	@Override
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	@Override
+	public Class<File> getValueClass()
+	{
+		return File.class;
+	}
+
+	public File getFileValue()
+	{
+		if (getValue() != null)
+			return (File) getValue();
+		else
+			return null;
+
+	}
+
 	public boolean isValidFile()
 	{
 		return validFile;
 	}
-    
-	public Object parseStringValue(String string) throws SettingException
+
+	@Override
+	public Object parseStringValue(String string)
 	{
 		return new File(string);
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		if(getFileValue() == null) return "";
-		else
-		{
+		if (getFileValue() == null)
+			return "";
+		else {
 			return getFileValue().getPath();
 		}
 	}
-	
+
 	public void setFileSelector(FileSelector selector)
 	{
 		this.selector = selector;
 	}
-	
+
 	public FileSelector getFileSelector()
 	{
 		return selector;
 	}
-	
+
 }

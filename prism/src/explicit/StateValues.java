@@ -52,7 +52,6 @@ import prism.StateVector;
 /**
  * Class for explicit-state storage of a state-indexed vector of values (int, double, boolean).
  */
-
 public class StateValues implements StateVector
 {
 	// Type (int, double or boolean)
@@ -504,7 +503,7 @@ public class StateValues implements StateVector
 	/**
 	 * Modify the vector by applying 'equals' with operand {@code sv}.
 	 */
-	public void applyEquals(StateValues sv) throws PrismException
+	public void applyEquals(StateValues sv)
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -542,22 +541,23 @@ public class StateValues implements StateVector
 	/**
 	 * used for testings only 
 	 */
+	@Override
 	public boolean equals(Object o)
 	{
-		if(! (o instanceof StateValues))
+		if (!(o instanceof StateValues))
 			return false;
-		StateValues sv=(StateValues) o;
+		StateValues sv = (StateValues) o;
 		if (type instanceof TypeInt) {
 			if (sv.type instanceof TypeInt) {
 				for (int i = 0; i < size; i++) {
-					if(valuesI[i] != sv.valuesI[i]){
+					if (valuesI[i] != sv.valuesI[i]) {
 						return false;
 					}
 				}
 				return true;
 			} else if (sv.type instanceof TypeDouble) {
 				for (int i = 0; i < size; i++) {
-					if(valuesI[i] != sv.valuesD[i]){
+					if (valuesI[i] != sv.valuesD[i]) {
 						return false;
 					}
 				}
@@ -567,14 +567,14 @@ public class StateValues implements StateVector
 			valuesB = new BitSet();
 			if (sv.type instanceof TypeInt) {
 				for (int i = 0; i < size; i++) {
-					if(valuesD[i] != sv.valuesI[i]){
+					if (valuesD[i] != sv.valuesI[i]) {
 						return false;
 					}
 				}
 				return true;
 			} else if (sv.type instanceof TypeDouble) {
 				for (int i = 0; i < size; i++) {
-					if(valuesD[i] != sv.valuesD[i]){
+					if (valuesD[i] != sv.valuesD[i]) {
 						return false;
 					}
 				}
@@ -583,7 +583,7 @@ public class StateValues implements StateVector
 		} else if (type instanceof TypeBool) {
 			if (sv.type instanceof TypeBool) {
 				for (int i = 0; i < size; i++) {
-					if(valuesB.get(i) != sv.valuesB.get(i)){
+					if (valuesB.get(i) != sv.valuesB.get(i)) {
 						return false;
 					}
 				}
@@ -596,7 +596,7 @@ public class StateValues implements StateVector
 	/**
 	 * Modify the vector by applying 'not-equals' with operand {@code sv}.
 	 */
-	public void notEquals(StateValues sv) throws PrismException
+	public void notEquals(StateValues sv)
 	{
 		if (type instanceof TypeInt) {
 			valuesB = new BitSet();
@@ -1740,7 +1740,7 @@ public class StateValues implements StateVector
 	/**
 	 * Make a (deep) copy of this vector
 	 */
-	public StateValues deepCopy() throws PrismException
+	public StateValues deepCopy()
 	{
 		StateValues sv = new StateValues();
 		sv.type = type;

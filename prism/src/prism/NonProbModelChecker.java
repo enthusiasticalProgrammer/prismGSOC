@@ -51,7 +51,7 @@ public class NonProbModelChecker extends StateModelChecker
 
 	// Constructor
 
-	public NonProbModelChecker(Prism prism, Model m, PropertiesFile pf) throws PrismException
+	public NonProbModelChecker(Prism prism, Model m, PropertiesFile pf)
 	{
 		// Initialise
 		super(prism, m, pf);
@@ -63,6 +63,7 @@ public class NonProbModelChecker extends StateModelChecker
 
 	// Check expression (recursive)
 
+	@Override
 	public StateValues checkExpression(Expression expr) throws PrismException
 	{
 		StateValues res;

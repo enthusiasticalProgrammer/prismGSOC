@@ -57,7 +57,7 @@ public abstract class SCCComputer extends PrismComponent
 	/**
 	 * Static method to create a new SCCComputer object, depending on current settings.
 	 */
-	public static SCCComputer createSCCComputer(PrismComponent parent, Model model) throws PrismException
+	public static SCCComputer createSCCComputer(PrismComponent parent, Model model)
 	{
 		return createSCCComputer(parent, model.getReach(), model.getTransReln(), model.getAllDDRowVars(), model.getAllDDColVars());
 	}
@@ -66,7 +66,6 @@ public abstract class SCCComputer extends PrismComponent
 	 * Static method to create a new SCCComputer object, depending on current settings.
 	 */
 	public static SCCComputer createSCCComputer(PrismComponent parent, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars)
-			throws PrismException
 	{
 		return createSCCComputer(parent, parent.getSettings().getChoice(PrismSettings.PRISM_SCC_METHOD), reach, trans01, allDDRowVars, allDDColVars);
 	}
@@ -74,8 +73,8 @@ public abstract class SCCComputer extends PrismComponent
 	/**
 	 * Static method to create a new SCCComputer object, depending on requested method.
 	 */
-	public static SCCComputer createSCCComputer(PrismComponent parent, int sccMethod, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars)
-			throws PrismException
+	public static SCCComputer createSCCComputer(PrismComponent parent, int sccMethod, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars,
+			JDDVars allDDColVars)
 	{
 		SCCComputer sccComputer;
 		switch (sccMethod) {
@@ -97,7 +96,7 @@ public abstract class SCCComputer extends PrismComponent
 	/**
 	 * Base constructor.
 	 */
-	public SCCComputer(PrismComponent parent, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars) throws PrismException
+	public SCCComputer(PrismComponent parent, JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars)
 	{
 		super(parent);
 		this.trans01 = trans01;

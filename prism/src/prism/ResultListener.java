@@ -35,7 +35,7 @@ import parser.*;
  * 
  * See {@link  prism.ResultsCollection  ResultCollection}. 
  */
-public interface ResultListener 
+public interface ResultListener
 {
 	/**
 	 * This method is called whenever a ResultCollection discovers a new result. 

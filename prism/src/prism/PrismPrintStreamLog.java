@@ -34,7 +34,7 @@ import java.io.*;
 public class PrismPrintStreamLog extends PrismLog
 {
 	PrintStream out = null;
-	
+
 	public PrismPrintStreamLog(PrintStream out)
 	{
 		setPrintStream(out);
@@ -49,70 +49,83 @@ public class PrismPrintStreamLog extends PrismLog
 	{
 		this.out = out;
 	}
-	
+
+	@Override
 	public boolean ready()
 	{
 		return out != null;
 	}
 
+	@Override
 	public long getFilePointer()
 	{
 		// This implementation is Java only so does not return a file pointer.
 		return -1;
 	}
-	
+
+	@Override
 	public void flush()
 	{
 		out.flush();
 	}
 
+	@Override
 	public void close()
 	{
 		out.close();
 	}
-	
+
 	// Basic print methods
-	
+
+	@Override
 	public void print(boolean b)
 	{
 		out.print(b);
 	}
 
+	@Override
 	public void print(char c)
 	{
 		out.print(c);
 	}
 
+	@Override
 	public void print(double d)
 	{
 		out.print(d);
 	}
 
+	@Override
 	public void print(float f)
 	{
 		out.print(f);
 	}
 
+	@Override
 	public void print(int i)
 	{
 		out.print(i);
 	}
 
+	@Override
 	public void print(long l)
 	{
 		out.print(l);
 	}
 
+	@Override
 	public void print(Object obj)
 	{
 		out.print(obj);
 	}
 
+	@Override
 	public void print(String s)
 	{
 		out.print(s);
 	}
 
+	@Override
 	public void println()
 	{
 		out.println();

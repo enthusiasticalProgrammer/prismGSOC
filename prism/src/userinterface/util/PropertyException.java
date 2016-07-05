@@ -30,9 +30,9 @@ package userinterface.util;
 @SuppressWarnings("serial")
 public class PropertyException extends Exception
 {
-    /** Creates a new instance of PropertyException */
-    public PropertyException(String desc)
-    {
-        super(desc);
-    }
+	/** Creates a new instance of PropertyException */
+	public PropertyException(String desc)
+	{
+		super(desc);
+	}
 }

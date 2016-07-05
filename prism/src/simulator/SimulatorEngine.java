@@ -28,11 +28,11 @@ package simulator;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import explicit.Distribution;
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -99,8 +99,7 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
-//TODO Christopher: if impossible to make the strategic simulation completely:
-//	the GUISimulator should have the most important features
+//TODO Christopher: if possible simulate strategies here
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -143,7 +142,7 @@ public class SimulatorEngine extends PrismComponent
 	protected Updater updater;
 
 	// strategy information
-	private Map<State, Integer> stateIds;
+	private @NonNull Map<State, Integer> stateIds;
 
 	// TODO: remove this (not in trunk any more)
 	private Prism prism;
@@ -246,14 +245,11 @@ public class SimulatorEngine extends PrismComponent
 			}
 		}
 		updater.calculateStateRewards(currentState, tmpStateRewards);
-
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
 		strategy = prism.getStrategy();
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
-			if (stateIds == null || stateIds.isEmpty())
-				this.setStrategy(strategy);
 			strategy.init(stateIds.get(currentState));
 			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
 		}
@@ -310,7 +306,7 @@ public class SimulatorEngine extends PrismComponent
 		case DTMC:
 		case MDP:
 			// Pick a random choice
-			i = (int) (Math.random()*numChoices);
+			i = (int) (Math.random() * numChoices);
 			choice = transitions.getChoice(i);
 			// Pick a random transition from this choice
 			d = Math.random();
@@ -322,7 +318,7 @@ public class SimulatorEngine extends PrismComponent
 			// Get sum of all rates
 			r = transitions.getProbabilitySum();
 			// Pick a random number to determine choice/transition
-			d = Math.random()*r;
+			d = Math.random() * r;
 			TransitionList.Ref ref = transitions.new Ref();
 			transitions.getChoiceIndexByProbabilitySum(d, ref);
 			// Execute
@@ -489,7 +485,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForCurrentState() throws PrismException
 	{
-		this.transitionList=updater.calculateTransitions(path.getCurrentState(), transitionList);
+		this.transitionList = updater.calculateTransitions(path.getCurrentState(), transitionList);
 		transitionListBuilt = true;
 		transitionListState = null;
 	}
@@ -737,7 +733,6 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	private void executeTransition(int i, int offset, int index) throws PrismException
 	{
-		//TODO Christopher: here the strategy-Problem can be solved
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
 		Choice choice = transitions.getChoice(i);
@@ -769,7 +764,6 @@ public class SimulatorEngine extends PrismComponent
 					strategy.getCurrentMemoryElement());
 		} else
 			path.addStep(index, choice.getModuleOrActionIndex(), p, tmpTransitionRewards, currentState, tmpStateRewards, transitions);
-
 		// Reset transition list 
 		transitionListBuilt = false;
 		transitionListState = null;
@@ -828,7 +822,7 @@ public class SimulatorEngine extends PrismComponent
 	/**
 	 * Reset samplers for any loaded properties.
 	 */
-	private void resetSamplers() throws PrismLangException
+	private void resetSamplers()
 	{
 		for (Sampler sampler : propertySamplers) {
 			sampler.reset();
@@ -913,7 +907,7 @@ public class SimulatorEngine extends PrismComponent
 	 * Returns the index of a variable name, as stored by the simulator for the current model.
 	 * Returns -1 if the action name does not exist. 
 	 */
-	public int getIndexOfVar(String name) throws PrismException
+	public int getIndexOfVar(String name)
 	{
 		return varList.getIndex(name);
 	}
@@ -1071,7 +1065,7 @@ public class SimulatorEngine extends PrismComponent
 	* Get the state at a given step of the path.
 	* (Not applicable for on-the-fly paths)
 	* @param step Step index (0 = initial state/step of path)
-	*/
+	 */
 	public State getStateOfPathStep(int step)
 	{
 		return ((PathFull) path).getState(step);
@@ -1153,7 +1147,7 @@ public class SimulatorEngine extends PrismComponent
 	 * Plot the current path on a Graph.
 	 * @param graphModel Graph on which to plot path
 	 */
-	public void plotPath(Graph graphModel) throws PrismException
+	public void plotPath(Graph graphModel)
 	{
 		((PathFull) path).plotOnGraph(graphModel);
 	}
@@ -1627,15 +1621,5 @@ public class SimulatorEngine extends PrismComponent
 	public void setStrategy(Strategy strategy)
 	{
 		this.strategy = strategy;
-		if (strategy != null && prism.getBuiltModelExplicit() != null) {
-			stateIds = new HashMap<State, Integer>();
-			java.util.List<State> stateslist = prism.getBuiltModelExplicit().getStatesList();
-			int i = 0;
-			for (State s : stateslist)
-				stateIds.put(s, i++);
-
-		} else if (strategy != null) {
-			throw new UnsupportedOperationException("wrong type of model");
-		}
 	}
 }

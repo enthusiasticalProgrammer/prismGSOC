@@ -35,20 +35,19 @@ import prism.PrismException;
 import userinterface.properties.*;
 import simulator.*;
 
-
 public class GUISimPathFormulaeList extends JList
 {
 
 	private GUISimulator guiSim;
 	private SimulatorEngine engine;
-	private DefaultListModel listModel;
+	private DefaultListModel<SimPathFormula> listModel;
 
 	/** Creates a new instance of GUISimPathFormulaeList */
 	public GUISimPathFormulaeList(GUISimulator guiSim)
 	{
 		this.guiSim = guiSim;
 		this.engine = guiSim.getPrism().getSimulator();
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		setModel(listModel);
 
 		setCellRenderer(new SimPathFormulaRenderer());
@@ -91,8 +90,7 @@ public class GUISimPathFormulaeList extends JList
 			int index = engine.addProperty(prop, propertiesFile);
 			SimPathFormula form = new SimPathFormula(str, index);
 			listModel.addElement(form);
-		}
-		catch (PrismException e) {
+		} catch (PrismException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}
@@ -108,6 +106,7 @@ public class GUISimPathFormulaeList extends JList
 			this.pathFormulaIndex = pathFormulaIndex;
 		}
 
+		@Override
 		public String toString()
 		{
 			return pathFormula;
@@ -131,13 +130,14 @@ public class GUISimPathFormulaeList extends JList
 			lastText = "Unknown";
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return lastText;
 		}
 
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus)
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
 			SimPathFormula l = (SimPathFormula) value;
@@ -167,16 +167,19 @@ public class GUISimPathFormulaeList extends JList
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

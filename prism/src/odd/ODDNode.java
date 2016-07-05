@@ -29,29 +29,29 @@ package odd;
 public class ODDNode
 {
 	private long ptr;
-	
+
 	public ODDNode(long p)
 	{
 		ptr = p;
 	}
-	
+
 	public ODDNode(ODDNode odd)
 	{
 		ptr = odd.ptr;
 	}
-	
+
 	public long ptr()
 	{
 		return ptr;
 	}
 
 	public long getTOff()
-	{	
+	{
 		return ODDUtils.ODD_GetTOff(ptr);
 	}
 
 	public long getEOff()
-	{	
+	{
 		return ODDUtils.ODD_GetEOff(ptr);
 	}
 
@@ -59,7 +59,7 @@ public class ODDNode
 	{
 		return new ODDNode(ODDUtils.ODD_GetThen(ptr));
 	}
-	
+
 	public ODDNode getElse()
 	{
 		return new ODDNode(ODDUtils.ODD_GetElse(ptr));
@@ -69,7 +69,8 @@ public class ODDNode
 	{
 		return ptr == odd.ptr;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "" + ptr;

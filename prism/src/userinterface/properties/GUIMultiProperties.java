@@ -145,7 +145,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	// State
 	private boolean modified;
 	private boolean computing;
-	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification, exportLabelsAfterReceiveParseNotification;
+	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification,
+			exportLabelsAfterReceiveParseNotification;
 	private PropertiesFile parsedProperties;
 	private ArrayList<GUIProperty> propertiesToBeVerified;
 	private File activeFile;
@@ -156,7 +157,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 	// GUI
 	private FileFilter propsFilter;
-	private Map<String,FileFilter> labFilters;
+	private Map<String, FileFilter> labFilters;
 	private FileFilter textFilter;
 	private FileFilter csvFilter;
 	private FileFilter matlabFilter;
@@ -168,11 +169,11 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	private JTextField fileTextField;
 	private Action newProps, openProps, saveProps, savePropsAs, insertProps, verifySelected, newProperty, editProperty, newConstant, removeConstant, newLabel,
 			removeLabel, newExperiment, deleteExperiment, stopExperiment, parametric, viewResults, plotResults, exportResultsListText, exportResultsListCSV,
-			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab,exportStratProduct, exportStratPlain, strategyInfo, generateStrategy,
-			implementStrategy, importStrategy, strategyExperiment;
+			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab, exportStratProduct, exportStratPlain,
+			strategyInfo, generateStrategy, implementStrategy, importStrategy, strategyExperiment;
 
 	private JMenu strategiesMenu;
-	
+
 	// Current properties
 	private GUIPropertiesList propList;
 	private GUIPropConstantList consTable;
@@ -200,6 +201,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		//options = new GUIPropertiesOptions(this);
 	}
 
+	@Override
 	public void takeCLArgs(String args[])
 	{
 		if (args.length > 1) {
@@ -967,10 +969,9 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			}
-		
-		// For a single property with a displayable counterexample, offer to do
-		// show it
+		}
+
+		// For a single property with a displayable counterexample, offer to do show it
 		if (selected.length == 1) {
 			GUIProperty gp = propList.getProperty(selected[0]);
 			Object cex = gp.getResult().getCounterexample();
@@ -997,13 +998,14 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 					List<prism.Point> l = tl.getPoints();
 					Comparator<prism.Point> c = new Comparator<prism.Point>()
 					{
+						@Override
 						public int compare(prism.Point o1, prism.Point o2)
 						{
 							if (o1.getCoord(0) == o2.getCoord(0))
 								return Double.compare(o1.getCoord(1), o2.getCoord(1));
 							else
 								return Double.compare(o1.getCoord(0), o2.getCoord(0));
-						};
+						}
 					};
 
 					Collections.sort(l, c);
@@ -1164,7 +1166,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		exportLabelsAfterReceiveParseNotification = true;
 		notifyEventListeners(new GUIPropertiesEvent(GUIPropertiesEvent.REQUEST_MODEL_PARSE));
 	}
-	
+
 	public void exportLabelsAfterParse()
 	{
 		// Switch off flag
@@ -1197,7 +1199,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			return;
 		}
 	}
-	
+
 	public void a_newExperiment()
 	{
 		// Reset warnings counter 
@@ -1325,7 +1327,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		}
 
 		// creating filters
-		GUIPrismFileFilter filter =new GUIPrismFileFilter("Explicit representation *.adv file");
+		GUIPrismFileFilter filter = new GUIPrismFileFilter("Explicit representation *.adv file");
 		filter.addExtension("adv");
 
 		// choosing file and exporting
@@ -1349,7 +1351,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			JOptionPane.showMessageDialog(this, "No model in memory, please build the model first.", "Cannot import", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		// creating filters
 		GUIPrismFileFilter[] filters = new GUIPrismFileFilter[1];
 		filters[0] = new GUIPrismFileFilter("Explicit representation *.adv file");
@@ -1360,14 +1362,14 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			final File file = getChooserFile();
 			//	 set strategies everywhere
 			try {
-				 getPrism().setStrategy(Strategies.loadStrategyFromFile(file.getAbsolutePath()));
+				getPrism().setStrategy(Strategies.loadStrategyFromFile(file.getAbsolutePath()));
 			} catch (IllegalArgumentException error) {
 				JOptionPane.showMessageDialog(this, "Problem reading the file", "Cannot import", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			simulator.setStrategyGenerated(true);
 			simulator.setStrategy(getPrism().getStrategy());
-			
+
 		}
 	}
 
@@ -1392,50 +1394,59 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		experimentAfterReceiveParseNotification = true;
 		notifyEventListeners(new GUIPropertiesEvent(GUIPropertiesEvent.REQUEST_MODEL_PARSE));
 	}
-	
+
 	//METHODS TO IMPLEMENT GUIPlugin INTERFACE
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
 	}
 
+	@Override
 	public JMenu getMenu()
 	{
 		return propMenu;
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "Properties";
 	}
 
+	@Override
 	public JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
 
 	// if return value is true, event should not be passed on to any more listeners
 
+	@Override
 	public boolean processGUIEvent(GUIEvent e)
 	{
 		if (e instanceof GUIModelEvent) {
@@ -1531,6 +1542,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 	//METHODS TO IMPLEMENT MouseListner INTERFACE
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		removeConstant.setEnabled(consTable.getSelectedRowCount() > 0);
@@ -1563,18 +1575,21 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 		removeConstant.setEnabled(consTable.getSelectedRowCount() > 0);
 		removeLabel.setEnabled(labTable.getSelectedRowCount() > 0);
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		removeConstant.setEnabled(consTable.getSelectedRowCount() > 0);
 		removeLabel.setEnabled(labTable.getSelectedRowCount() > 0);
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		removeConstant.setEnabled(consTable.getSelectedRowCount() > 0);
@@ -1673,6 +1688,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		return false;
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		removeConstant.setEnabled(consTable.getSelectedRowCount() > 0);
@@ -1737,12 +1753,14 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		}
 	}
 
+	@Override
 	public void componentAdded(ContainerEvent e)
 	{
 		// notify GUIClipboard
 		selectionChangeHandler.notifyListeners(new GUIEvent(1));
 	}
 
+	@Override
 	public void componentRemoved(ContainerEvent e)
 	{
 		// notify GUIClipboard
@@ -1750,6 +1768,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	}
 
 	//METHODS TO IMPLEMENT ListSelectionListener INTERFACE
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		ArrayList<GUIProperty> selectedProps = propList.getSelectedProperties();
@@ -1962,11 +1981,11 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		createPopups();
 		//file filters
 		propsFilter = new FileNameExtensionFilter("PRISM properties (*.props, *.pctl, *.csl)", "props", "pctl", "csl");
-		labFilters = new HashMap<String,FileFilter>();
+		labFilters = new HashMap<String, FileFilter>();
 		labFilters.put("lab", new FileNameExtensionFilter("Label files (*.lab)", "lab"));
 		labFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		textFilter =  new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
-		csvFilter =  new FileNameExtensionFilter("Comma-separated values (*.csv)", "csv");
+		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
+		csvFilter = new FileNameExtensionFilter("Comma-separated values (*.csv)", "csv");
 		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
 	}
 
@@ -2000,12 +2019,12 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		// adding import menu
 		strategiesMenu.add(new JSeparator());
 		strategiesMenu.add(importStrategy);
-		
+
 		// adding export menu
 		strategiesMenu.add(new JSeparator());
 		strategiesMenu.add(exportStratPlain);
 		strategiesMenu.add(exportStratProduct);
-		
+
 		//		JMenu stratExportMenu = new JMenu("Export strategy");
 		//		stratExportMenu.setIcon(GUIPrism.getIconFromImage("smallExport.png"));
 		//		stratExportMenu.add(exportStratPlain);
@@ -2060,6 +2079,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		newProps = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newList();
@@ -2075,6 +2095,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		openProps = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_open();
@@ -2090,6 +2111,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		saveProps = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_save();
@@ -2106,6 +2128,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		savePropsAs = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_saveAs();
@@ -2119,6 +2142,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		insertProps = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_insert();
@@ -2133,6 +2157,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		simulate = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_simulateSelected();
@@ -2146,6 +2171,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		details = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_detailSelected();
@@ -2158,15 +2184,14 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		verifySelected = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_verifySelected();
 			}
 		};
-		verifySelected
-				.putValue(
-						Action.LONG_DESCRIPTION,
-						"Model checks the selected properties against the model that is built.  If there is no built model, the parsed model is automatically built.  If the parsed model has changed since the last build, the user is prompted as to whether they wish to re-build the model.  If the model text has been modified since the last build, the user is asked whether they want to re-parse and re-build.");
+		verifySelected.putValue(Action.LONG_DESCRIPTION,
+				"Model checks the selected properties against the model that is built.  If there is no built model, the parsed model is automatically built.  If the parsed model has changed since the last build, the user is prompted as to whether they wish to re-build the model.  If the model text has been modified since the last build, the user is asked whether they want to re-parse and re-build.");
 		//verifySelected.putValue(Action.SHORT_DESCRIPTION, "Verify Selected Properties");
 		verifySelected.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_V));
 		verifySelected.putValue(Action.NAME, "Verify");
@@ -2175,6 +2200,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		newProperty = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newProperty();
@@ -2187,6 +2213,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		editProperty = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_editProperty();
@@ -2199,6 +2226,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		newConstant = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addConstant();
@@ -2211,6 +2239,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		removeConstant = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_removeSelectedConstants();
@@ -2223,6 +2252,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		newLabel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addLabel();
@@ -2235,6 +2265,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		removeLabel = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_removeSelectedLabels();
@@ -2247,6 +2278,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		newExperiment = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newExperiment();
@@ -2260,6 +2292,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		deleteExperiment = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_deleteExperiment();
@@ -2272,6 +2305,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		viewResults = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_viewResults();
@@ -2284,6 +2318,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		plotResults = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_plotResults();
@@ -2296,6 +2331,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		parametric = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newExperiment();
@@ -2308,6 +2344,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportResultsListText = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportResults(false, "\t");
@@ -2320,6 +2357,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportResultsListCSV = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportResults(false, ", ");
@@ -2332,6 +2370,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportResultsMatrixText = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportResults(true, "\t");
@@ -2344,6 +2383,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportResultsMatrixCSV = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportResults(true, ", ");
@@ -2356,6 +2396,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportLabelsPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportLabels(Prism.EXPORT_PLAIN);
@@ -2368,6 +2409,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportLabelsMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportLabels(Prism.EXPORT_MATLAB);
@@ -2377,9 +2419,10 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		exportLabelsMatlab.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_M));
 		exportLabelsMatlab.putValue(Action.NAME, "Matlab file");
 		exportLabelsMatlab.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallFileMatlab.png"));
-		
+
 		stopExperiment = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_stopExperiment();
@@ -2391,6 +2434,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		strategyInfo = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_showStrategyInfo();
@@ -2401,6 +2445,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		generateStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				try {
@@ -2418,6 +2463,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		implementStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (getPrism().getStrategy() == null) {
@@ -2439,9 +2485,10 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		strategyExperiment = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
+
 				a_strategyExperimentSelected();
 			}
 		};
@@ -2449,9 +2496,9 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		strategyExperiment.putValue(Action.NAME, "Perform experiment under strategy");
 		strategyExperiment.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExperiment.png"));
 
-		
 		exportStratProduct = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportStratProduct();
@@ -2463,6 +2510,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		exportStratPlain = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportStratPlain();
@@ -2474,6 +2522,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		importStrategy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_importStrategy();
@@ -2512,6 +2561,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		return labTable;
 	}
 
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		displayFontFast = settings.getFontColorPair(PrismSettings.PROPERTIES_FONT).f;
@@ -2551,6 +2601,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			stringRepresentation = new StringSelection(tmpString);
 		}
 
+		@Override
 		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
 		{
 			if (flavor.getRepresentationClass() == this.getClass()) {
@@ -2560,6 +2611,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			}
 		}
 
+		@Override
 		public DataFlavor[] getTransferDataFlavors()
 		{
 			DataFlavor[] stringFlavors = stringRepresentation.getTransferDataFlavors();
@@ -2574,6 +2626,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			return allFlavors;
 		}
 
+		@Override
 		public boolean isDataFlavorSupported(DataFlavor flavor)
 		{
 			return (stringRepresentation.isDataFlavorSupported(flavor) || flavor.equals(GUIMultiProperties.getGUIClipboardPropertiesDataFlavor()));

@@ -190,7 +190,7 @@ public class PrismCL implements PrismModelListener
 
 	// strategy export info
 	private Prism.StrategyExportType exportStratType = StrategyExportType.ACTIONS;
-	
+
 	// parametric analysis info
 	private String[] paramLowerBounds = null;
 	private String[] paramUpperBounds = null;
@@ -199,7 +199,8 @@ public class PrismCL implements PrismModelListener
 	/**
 	 * Entry point: call run method, catch CuddOutOfMemoryException
 	 */
-	public void go(String[] args) {
+	public void go(String[] args)
+	{
 		try {
 			run(args);
 		} catch (jdd.JDD.CuddOutOfMemoryException e) {
@@ -397,12 +398,11 @@ public class PrismCL implements PrismModelListener
 						// if a strategy was generated, and we need to export it, do so
 						if (exportstrat && res.getStrategy() != null) {
 							try {
-								prism.exportStrategy(res.getStrategy(), exportStratType, exportStratFilename.equals("stdout") ? null : new File(exportStratFilename));
+								prism.exportStrategy(res.getStrategy(), exportStratType,
+										exportStratFilename.equals("stdout") ? null : new File(exportStratFilename));
 							}
 							// in case of error, report it and proceed
-							catch (FileNotFoundException e) {
-								error("Couldn't open file \"" + exportStratFilename + "\" for output");
-							} catch (PrismException e) {
+							catch (PrismException e) {
 								error(e.getMessage());
 							}
 						}
@@ -473,7 +473,7 @@ public class PrismCL implements PrismModelListener
 						exporter.setProperty(propertiesToCheck.get(i));
 					} else {
 						if (exportResultsFormat.equalsIgnoreCase("csv")) {
-							tmpLog.print( "\"" + propertiesToCheck.get(i).toString().replaceAll("\"", "\"\"") + "\"\n");
+							tmpLog.print("\"" + propertiesToCheck.get(i).toString().replaceAll("\"", "\"\"") + "\"\n");
 						} else {
 							tmpLog.print(propertiesToCheck.get(i) + ":\n");
 						}
@@ -707,9 +707,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportStatesToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportStatesFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -720,9 +718,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportToSpyFile(new File(exportSpyFilename));
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportSpyFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -733,9 +729,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportToDotFile(new File(exportDotFilename));
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportDotFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -774,8 +768,8 @@ public class PrismCL implements PrismModelListener
 				File dotFile = File.createTempFile("prism-dot-", ".dot", null);
 				File dotPdfFile = File.createTempFile("prism-dot-", ".dot.pdf", null);
 				prism.exportTransToFile(exportordered, Prism.EXPORT_DOT_STATES, dotFile);
-				(new ProcessBuilder(new String[]{ "dot", "-Tpdf", "-o", dotPdfFile.getPath(), dotFile.getPath()})).start().waitFor();
-				(new ProcessBuilder(new String[]{ "open",dotPdfFile.getPath()})).start();
+				(new ProcessBuilder(new String[] { "dot", "-Tpdf", "-o", dotPdfFile.getPath(), dotFile.getPath() })).start().waitFor();
+				(new ProcessBuilder(new String[] { "open", dotPdfFile.getPath() })).start();
 			}
 			// in case of error, report it and proceed
 			catch (IOException | InterruptedException e) {
@@ -810,9 +804,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportSCCsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportSCCsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -824,9 +816,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportBSCCsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportBSCCsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -838,9 +828,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportMECsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportMECsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -936,7 +924,8 @@ public class PrismCL implements PrismModelListener
 	/** Set a timeout, exit program if timeout is reached */
 	private void setTimeout(final int timeout)
 	{
-		common.Timeout.setTimeout(timeout, new Runnable() {
+		common.Timeout.setTimeout(timeout, new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -1124,11 +1113,9 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("testall")) {
 					test = true;
 					testExitsOnFail = false;
-				}
-				else if (sw.equals("dddebug")) {
+				} else if (sw.equals("dddebug")) {
 					jdd.DebugJDD.enable();
-				}
-				else if (sw.equals("ddtrace")) {
+				} else if (sw.equals("ddtrace")) {
 					if (i < args.length - 1) {
 						String idString = args[++i];
 						try {
@@ -1666,7 +1653,7 @@ public class PrismCL implements PrismModelListener
 						errorAndExit("No file specified for -" + sw + " switch");
 					}
 				}
-				
+
 				// mtbdd construction method (hidden option)
 				else if (sw.equals("c1")) {
 					prism.setConstruction(1);
@@ -1732,7 +1719,7 @@ public class PrismCL implements PrismModelListener
 	private void processImportModelSwitch(String filesOptionsString) throws PrismException
 	{
 		// Split into files/options (on :)
-		String filesString=splitFilesAndOptions(filesOptionsString)[0];
+		String filesString = splitFilesAndOptions(filesOptionsString)[0];
 		// Split files into basename/extensions
 		int i = filesString.lastIndexOf('.');
 		if (i == -1)
@@ -1856,7 +1843,7 @@ public class PrismCL implements PrismModelListener
 			} else if (opt.equals("rows")) {
 				exportType = Prism.EXPORT_ROWS;
 			}
-			
+
 			// Unordered/ordered
 			else if (opt.equals("unordered")) {
 				exportordered = false;
@@ -1888,8 +1875,7 @@ public class PrismCL implements PrismModelListener
 		for (String opt : options) {
 			// Ignore ""
 			if (opt.equals("")) {
-			}
-			else if (opt.startsWith("type")) {
+			} else if (opt.startsWith("type")) {
 				if (!opt.startsWith("type="))
 					throw new PrismException("No value provided for \"type\" option of -exportstrat");
 				String optVal = opt.substring(5);
@@ -1970,11 +1956,7 @@ public class PrismCL implements PrismModelListener
 
 		// default to alternative ordering for MTBDD engine
 		if (prism.getEngine() == Prism.MTBDD && !orderingOverride) {
-			try {
-				prism.setOrdering(2);
-			} catch (PrismException e) {
-				// Can't go wrong
-			}
+			prism.setOrdering(2);
 		}
 
 		// check not trying to do gauss-seidel with mtbdd engine

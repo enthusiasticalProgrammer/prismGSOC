@@ -22,7 +22,7 @@ public class TestDTMCProductMLRStrategyAndMDP
 	{
 		TestMultiLongRun tmlr = new TestMultiLongRun();
 		tmlr.setUp();
-		MultiLongRun ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
+		MultiLongRun<?> ml11 = tmlr.mdp11.createMultiLongRun(tmlr.m1, tmlr.e1);
 		ml11.createMultiLongRunLP();
 		ml11.solveDefault();
 		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();

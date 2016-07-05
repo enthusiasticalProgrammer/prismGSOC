@@ -27,36 +27,42 @@ import java.util.BitSet;
 /**
  * Class representing an element of 2^AP. 
  */
-public class APElement extends MyBitSet {
-	
-	public APElement() {
+public class APElement extends MyBitSet
+{
+
+	public APElement()
+	{
 		super();
 	}
-	
-	public APElement(int size) {
+
+	public APElement(int size)
+	{
 		super(size);
 	}
-	
-	public APElement(MyBitSet m) {
+
+	public APElement(MyBitSet m)
+	{
 		super(m.size());
 		for (Integer i : m) {
 			this.set(i);
 		}
 	}
-	
-	public String toString(APSet ap_set, boolean spaces) 
+
+	public String toString(APSet ap_set, boolean spaces)
 	{
-		if (ap_set.size()==0) {return "true";}
+		if (ap_set.size() == 0) {
+			return "true";
+		}
 		String r = "";
 		for (int i = 0; i < ap_set.size(); i++) {
-			if (i>=1) {
+			if (i >= 1) {
 				r += "&";
 			}
 			if (!this.get(i)) {
 				r += "!";
 			} else {
 				if (spaces) {
-					r +=" ";
+					r += " ";
 				}
 			}
 			r += ap_set.getAP(i);
@@ -70,7 +76,9 @@ public class APElement extends MyBitSet {
 	 */
 	public String toStringLBTT(APSet ap_set)
 	{
-		if (ap_set.size()==0) {return "t";}
+		if (ap_set.size() == 0) {
+			return "t";
+		}
 		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i < ap_set.size(); i++) {
 			sb.append("& ");
@@ -107,15 +115,15 @@ public class APElement extends MyBitSet {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		for (int i=0; i < apSetSize; i++) {
-			if (i > 0) sb.append("&");
+		for (int i = 0; i < apSetSize; i++) {
+			if (i > 0)
+				sb.append("&");
 			if (label.get(i)) {
-				sb.append(" "+i);
+				sb.append(" " + i);
 			} else {
-				sb.append("!"+i);
+				sb.append("!" + i);
 			}
 		}
 		return sb.toString();
 	}
 }
-

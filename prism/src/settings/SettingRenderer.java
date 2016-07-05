@@ -31,7 +31,8 @@ import javax.swing.*;
 
 public interface SettingRenderer
 {
-    
-    public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row, int column);
-    
+
+	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
+			int column);
+
 }

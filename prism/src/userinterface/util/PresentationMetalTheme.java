@@ -37,28 +37,31 @@ import java.awt.*;
  */
 public class PresentationMetalTheme extends DefaultMetalTheme
 {
-    
-    private FontUIResource f;
-    public PresentationMetalTheme(int sizeChange)
-    {
-        FontUIResource fr = super.getControlTextFont();
-        String st = fr.getFontName();
-        ////System.out.println("st = "+st);
-        st = "Dialog.PLAIN";
-        
-        f = new FontUIResource(st, Font.PLAIN, 11+sizeChange);
-    }
-    
-    /** Overrides the superclass's getMenuTextFont method by returning a larger font. */    
-    public FontUIResource getMenuTextFont() 
-    { 
-        return f;
-    }
-    
-    /** Overrides the superclass's getControlTextFont() method to return a larger font. */    
-    public FontUIResource getControlTextFont() 
-    {
-        return f;
-    }
-    
+
+	private FontUIResource f;
+
+	public PresentationMetalTheme(int sizeChange)
+	{
+		FontUIResource fr = super.getControlTextFont();
+		String st = fr.getFontName();
+		////System.out.println("st = "+st);
+		st = "Dialog.PLAIN";
+
+		f = new FontUIResource(st, Font.PLAIN, 11 + sizeChange);
+	}
+
+	/** Overrides the superclass's getMenuTextFont method by returning a larger font. */
+	@Override
+	public FontUIResource getMenuTextFont()
+	{
+		return f;
+	}
+
+	/** Overrides the superclass's getControlTextFont() method to return a larger font. */
+	@Override
+	public FontUIResource getControlTextFont()
+	{
+		return f;
+	}
+
 }

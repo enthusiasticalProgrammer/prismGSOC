@@ -63,6 +63,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		setModelInfo(modelInfo);
 	}
 
+	@Override
 	public void setPropertiesFile(PropertiesFile propertiesFile)
 	{
 		this.propertiesFile = propertiesFile;
@@ -78,14 +79,16 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
-	public Object visit(FormulaList e) throws PrismLangException
+	@Override
+	public Object visit(FormulaList e)
 	{
 		// Override - don't need to do any semantic checks on formulas
 		// (they will have been expanded in place, where needed)
 		// (and we shouldn't check them - e.g. clock vars appearing in errors would show as an error)
 		return null;
 	}
-	
+
+	@Override
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -100,6 +103,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ConstantList e) throws PrismLangException
 	{
 		int i, n;
@@ -111,6 +115,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		int op = e.getOperator();
@@ -140,6 +145,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionProb e) throws PrismLangException
 	{
 		if (e.getModifier() != null) {
@@ -150,6 +156,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		if (e.getModifier() != null) {
@@ -186,6 +193,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		if (e.getModifier() != null) {
@@ -196,6 +204,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		String name = e.getName();
@@ -203,7 +212,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		if ("deadlock".equals(name) || "init".equals(name))
 			return;
 		// Otherwise check if it exists
-		if (modelInfo != null && modelInfo.getLabelIndex(name) != -1) { 
+		if (modelInfo != null && modelInfo.getLabelIndex(name) != -1) {
 			return;
 		} else if (propertiesFile != null) {
 			LabelList labelList = propertiesFile.getCombinedLabelList();
@@ -214,6 +223,7 @@ public class PropertiesSemanticCheck extends SemanticCheck
 		throw new PrismLangException("Undeclared label", e);
 	}
 
+	@Override
 	public void visitPost(ExpressionFilter e) throws PrismLangException
 	{
 		// Check filter type is valid

@@ -45,7 +45,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 
 	private boolean pathActive;
 	private ModulesFile parsedModel;
-	private PathFullInfo path; 
+	private PathFullInfo path;
 
 	private RewardStructureValue rewardStructureValue;
 	private VariableValue variableValue;
@@ -82,6 +82,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return parsedModel.getModelType().continuousTime();
 	}
 
+	@Override
 	public int getGroupCount()
 	{
 		if (!pathActive) {
@@ -140,6 +141,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public String getGroupName(int groupIndex)
 	{
 		if (!pathActive) {
@@ -210,6 +212,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public String getGroupToolTip(int groupIndex)
 	{
 		ArrayList<Variable> vars = view.getVisibleVariables();
@@ -274,6 +277,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return null;
 	}
 
+	@Override
 	public int getLastColumnOfGroup(int groupIndex)
 	{
 		int stepStart = 0;
@@ -376,6 +380,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	 * Returns the number of columns.
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
+	@Override
 	public int getColumnCount()
 	{
 		if (!pathActive) {
@@ -397,6 +402,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	 * Returns the number of rows.
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
+	@Override
 	public int getRowCount()
 	{
 		// Return current path size if there is an active path.
@@ -420,6 +426,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return false;
 	}
 
+	@Override
 	public String getColumnName(int columnIndex)
 	{
 		if (pathActive) {
@@ -452,6 +459,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return "Undefined Column";
 	}
 
+	@Override
 	public String getColumnToolTip(int columnIndex)
 	{
 		if (pathActive) {
@@ -492,6 +500,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return "Undefined Column";
 	}
 
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		if (pathActive) {
@@ -541,24 +550,23 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 				// A state reward column
 				if (rewardColumn.isStateReward()) {
 					double value = path.getStateReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != path.getStateReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
+					rewardStructureValue.setChanged(rowIndex == 0 || value != path.getStateReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex > path.size()); // Never unknown
 				}
 				// A transition reward column
 				else if (rewardColumn.isTransitionReward()) {
 					double value = path.getTransitionReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != path.getTransitionReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
+					rewardStructureValue
+							.setChanged(rowIndex == 0 || value != path.getTransitionReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex()));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex >= path.size());
 				}
 				// A cumulative reward column
 				else {
 					double value = path.getCumulativeReward(rowIndex, rewardColumn.getRewardStructure().getIndex());
-					rewardStructureValue.setChanged(rowIndex == 0
-							|| value != (path.getCumulativeReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex())));
+					rewardStructureValue
+							.setChanged(rowIndex == 0 || value != (path.getCumulativeReward(rowIndex - 1, rewardColumn.getRewardStructure().getIndex())));
 					rewardStructureValue.setRewardValue(new Double(value));
 					rewardStructureValue.setRewardValueUnknown(rowIndex > path.size()); // Never unknown
 				}

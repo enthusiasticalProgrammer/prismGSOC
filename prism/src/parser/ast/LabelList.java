@@ -41,36 +41,36 @@ public class LabelList extends ASTElement
 	// We also store an ExpressionIdent to match each name.
 	// This is to just to provide positional info.
 	private Vector<ExpressionIdent> nameIdents;
-	
+
 	// Constructor
-	
+
 	public LabelList()
 	{
 		names = new Vector<String>();
 		labels = new Vector<Expression>();
 		nameIdents = new Vector<ExpressionIdent>();
 	}
-	
+
 	// Set methods
-	
+
 	public void addLabel(ExpressionIdent n, Expression l)
 	{
 		names.addElement(n.getName());
 		labels.addElement(l);
 		nameIdents.add(n);
 	}
-	
-	public void setLabelName(int i , ExpressionIdent n)
+
+	public void setLabelName(int i, ExpressionIdent n)
 	{
 		names.set(i, n.getName());
 		nameIdents.set(i, n);
 	}
-	
-	public void setLabel(int i , Expression l)
+
+	public void setLabel(int i, Expression l)
 	{
 		labels.set(i, l);
 	}
-	
+
 	// Get methods
 
 	public int size()
@@ -82,12 +82,12 @@ public class LabelList extends ASTElement
 	{
 		return names.elementAt(i);
 	}
-	
+
 	public Expression getLabel(int i)
 	{
 		return labels.elementAt(i);
 	}
-	
+
 	public ExpressionIdent getLabelNameIdent(int i)
 	{
 		return nameIdents.elementAt(i);
@@ -102,42 +102,45 @@ public class LabelList extends ASTElement
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
 		int i, n;
-		
+
 		n = size();
 		for (i = 0; i < n; i++) {
 			s += "label \"" + getLabelName(i);
 			s += "\" = " + getLabel(i) + ";\n";
 		}
-		
+
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		int i, n;
 		LabelList ret = new LabelList();
 		n = size();
 		for (i = 0; i < n; i++) {
-			ret.addLabel((ExpressionIdent)getLabelNameIdent(i).deepCopy(), getLabel(i).deepCopy());
+			ret.addLabel((ExpressionIdent) getLabelNameIdent(i).deepCopy(), getLabel(i).deepCopy());
 		}
 		ret.setPosition(this);
 		return ret;

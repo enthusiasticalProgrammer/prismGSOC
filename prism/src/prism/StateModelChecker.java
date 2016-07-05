@@ -80,13 +80,13 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	// Verbose mode?
 	protected boolean verbose;
 	// Store the final results vector after model checking?
-	protected boolean storeVector = false; 
+	protected boolean storeVector = false;
 	// Generate/store a strategy during model checking?
 	protected boolean genStrat = false;
 
 	// Constructor
 
-	public StateModelChecker(Prism prism, Model m, PropertiesFile pf) throws PrismException
+	public StateModelChecker(Prism prism, Model m, PropertiesFile pf)
 	{
 		// Initialise PrismComponent
 		super(prism);
@@ -127,7 +127,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	 * {@code clearDummyModel()} later.
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
-	public StateModelChecker(Prism prism, VarList varList, JDDVars allDDRowVars, JDDVars[] varDDRowVars, Values constantValues) throws PrismException
+	public StateModelChecker(Prism prism, VarList varList, JDDVars allDDRowVars, JDDVars[] varDDRowVars, Values constantValues)
 	{
 		// Initialise PrismComponent
 		super(prism);
@@ -139,24 +139,24 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 		this.constantValues = constantValues;
 		// Create dummy model
 		reach = null;
-		model = new ProbModel(JDD.Constant(0),  // trans
-		                      JDD.Constant(0),  // start
-		                      new JDDNode[] {}, // state-rew
-		                      new JDDNode[] {}, // trans-rew
-		                      null,             // rewardStructNames
-		                      allDDRowVars.copy(), // allDDRowVars
-		                      new JDDVars(),    // allDDColVars
-		                      null,             // ddVarNames
-		                      0,                // numModules
-		                      null,             // moduleNames
-		                      null,             // moduleRowVars
-		                      null,             // moduleColVars
-		                      varDDRowVars.length, // numVars
-		                      varList,          // varList
-		                      JDDVars.copyArray(varDDRowVars), // varDDRowVars
-		                      null,             // varDDColVars
-		                      constantValues    // constantValues
-		                     );
+		model = new ProbModel(JDD.Constant(0), // trans
+				JDD.Constant(0), // start
+				new JDDNode[] {}, // state-rew
+				new JDDNode[] {}, // trans-rew
+				null, // rewardStructNames
+				allDDRowVars.copy(), // allDDRowVars
+				new JDDVars(), // allDDColVars
+				null, // ddVarNames
+				0, // numModules
+				null, // moduleNames
+				null, // moduleRowVars
+				null, // moduleColVars
+				varDDRowVars.length, // numVars
+				varList, // varList
+				JDDVars.copyArray(varDDRowVars), // varDDRowVars
+				null, // varDDColVars
+				constantValues // constantValues
+		);
 	}
 
 	/**
@@ -192,6 +192,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	/**
 	 * Model check an expression, process and return the result.
 	 */
+	@Override
 	public Result check(Expression expr) throws PrismException
 	{
 		long timer = 0;
@@ -212,7 +213,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 			exprFilter.setStoreVector(true);
 		}
 		expr = exprFilter;
-		
+
 		// Do model checking and store result vector
 		timer = System.currentTimeMillis();
 		vals = checkExpression(expr);
@@ -236,6 +237,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	/**
 	 * Model check an expression and return a vector result values over all states.
 	 */
+	@Override
 	public StateValues checkExpression(Expression expr) throws PrismException
 	{
 		StateValues res;
@@ -309,6 +311,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 
 	// Check expression, convert to symbolic form (if not already), return BDD
 
+	@Override
 	public JDDNode checkExpressionDD(Expression expr) throws PrismException
 	{
 		return checkExpression(expr).convertToStateValuesMTBDD().getJDDNode();
@@ -1367,7 +1370,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	}
 
 	// Utility functions for symbolic model checkers 
-	
+
 	/**
 	 * Get the state rewards (from a model) corresponding to the index of this R operator.
 	 * Throws an exception (with explanatory message) if it cannot be found.
@@ -1388,9 +1391,9 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 		}
 		if (stateRewards == null)
 			throw new PrismException("Invalid reward structure index \"" + rs + "\"");
-		return stateRewards; 
+		return stateRewards;
 	}
-	
+
 	/**
 	 * Get the transition rewards (from a model) corresponding to the index of this R operator.
 	 * Throws an exception (with explanatory message) if it cannot be found.
@@ -1411,7 +1414,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 		}
 		if (transRewards == null)
 			throw new PrismException("Invalid reward structure index \"" + rs + "\"");
-		return transRewards; 
+		return transRewards;
 	}
 
 	/** Get the constant values (both from the modules file and the properties file) */
@@ -1420,7 +1423,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	{
 		return constantValues;
 	}
-	
+
 	/**
 	 * Export a set of labels and the states that satisfy them.
 	 * @param labelNames The name of each label
@@ -1440,7 +1443,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 		String matlabVarName = "l";
 		String labelNamesArr[] = labelNames.toArray(new String[labelNames.size()]);
 		PrismMTBDD.ExportLabels(labels, labelNamesArr, matlabVarName, allDDRowVars, odd, exportType, (file != null) ? file.getPath() : null);
-		
+
 		// Derefs
 		for (int i = 0; i < numLabels; i++) {
 			JDD.Deref(labels[i]);

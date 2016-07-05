@@ -78,7 +78,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			//int lines = 1;
 
 			//if (theModel.getValueAt(i, 1) instanceof SingleProperty)
-				//lines = getNumLines(value);
+			//lines = getNumLines(value);
 			//theTable.setRowHeight(i, (lineWidth*lines)+2);
 			//int heightWanted = (int)area.getPreferredSize().getHeight();
 			//      if(heightWanted != theTable.getRowHeight(row));
@@ -212,8 +212,9 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 		jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 		jScrollPane1.setBorder(new javax.swing.border.LineBorder(java.awt.SystemColor.textInactiveText));
 		jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		theTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		theTable.setDoubleBuffered(true);
 		theTable.setGridColor(new java.awt.Color(198, 197, 197));
 		jScrollPane1.setViewportView(theTable);
@@ -253,6 +254,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 
 	}//GEN-END:initComponents
 
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		SingleProperty selected = theModel.getSelectedProperty(theTable.getSelectedRow());
@@ -279,6 +281,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 		}
 	}
 
+	@Override
 	public void tableChanged(TableModelEvent e)
 	{
 		CellEditor ce = theTable.getCellEditor();
@@ -323,6 +326,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 		return count;
 	}
 
+	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
 		theModel.setCurrentGroup(theCombo.getSelectedIndex());
@@ -372,6 +376,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			super.stopCellEditing();
 		}
 
+		@Override
 		public boolean shouldSelectCell(EventObject anEvent)
 		{
 			area.selectAll();
@@ -379,6 +384,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			return true;
 		}
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			if (boolProp != null) {
@@ -406,6 +412,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 				return field.getText();
 		}
 
+		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 		{
 			//System.out.println("Calling getTableCellEditorComponent()");
@@ -541,6 +548,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 				return new JLabel("ERROR");
 		}
 
+		@Override
 		public void caretUpdate(CaretEvent e)
 		{
 
@@ -559,6 +567,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			}
 		}
 
+		@Override
 		public void keyPressed(KeyEvent e)
 		{
 			if (e.getSource() == area) {
@@ -600,14 +609,17 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			}
 		}
 
+		@Override
 		public void keyReleased(KeyEvent e)
 		{
 		}
 
+		@Override
 		public void keyTyped(KeyEvent e)
 		{
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			stopCellEditing();
@@ -631,6 +643,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			//area.setWrapStyleWord(f);
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			////System.out.println("rendering "+value.toString());

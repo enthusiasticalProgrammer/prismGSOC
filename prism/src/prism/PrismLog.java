@@ -92,6 +92,7 @@ public abstract class PrismLog implements Closeable, AutoCloseable
 
 	public abstract void flush();
 
+	@Override
 	public abstract void close();
 
 	public abstract void print(boolean b);
@@ -372,7 +373,7 @@ public abstract class PrismLog implements Closeable, AutoCloseable
 	{
 		println("\n---------------------------------------------------------------------");
 	}
-	
+
 	/**
 	 * Prints a warning message {@code s}, preceded by "\nWarning: " and followed by a newline character.
 	 * <br>

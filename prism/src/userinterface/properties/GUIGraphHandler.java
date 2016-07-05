@@ -62,7 +62,6 @@ import userinterface.util.GUIPrismFileFilter;
 
 public class GUIGraphHandler extends JPanel implements MouseListener
 {
-
 	private boolean canDelete;
 
 	private JTabbedPane theTabs;
@@ -101,7 +100,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		initComponents();
 
 		pngFilter = new FileNameExtensionFilter("PNG files (*.png)", "png");
-		jpgFilter = new FileNameExtensionFilter("JPEG files (*.jpg, *.jpeg)", "jpg", "jpeg"); 
+		jpgFilter = new FileNameExtensionFilter("JPEG files (*.jpg, *.jpeg)", "jpg", "jpeg");
 		epsFilter = new FileNameExtensionFilter("Encapsulated PostScript files (*.eps)", "eps");
 		graFilter = new FileNameExtensionFilter("PRISM graph files (*.gra, *.xml)", "gra", "xml");
 		imagesFilter = new GUIPrismFileFilter[3];
@@ -153,8 +152,10 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		setLayout(new BorderLayout());
 		add(theTabs, BorderLayout.CENTER);
+
 		graphOptions = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GraphOptions graphOptions = options.get(theTabs.getSelectedIndex());
@@ -169,6 +170,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomIn = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -183,6 +185,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomOut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -197,6 +200,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomDefault = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -211,6 +215,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		importXML = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (plug.showOpenFileDialog(graFilter) != JFileChooser.APPROVE_OPTION)
@@ -230,6 +235,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportXML = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (plug.showSaveFileDialog(graFilter) != JFileChooser.APPROVE_OPTION)
@@ -249,6 +255,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImageJPG = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.JPEG);
@@ -263,6 +270,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImagePNG = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.PNG);
@@ -277,6 +285,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImageEPS = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.EPS);
@@ -291,17 +300,19 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (plug.showSaveFileDialog(matlabFilter[0]) != JFileChooser.APPROVE_OPTION)
-					return;
-				Graph mgm = models.get(theTabs.getSelectedIndex());
-
+				/*	if (plug.showSaveFileDialog(OpenDocumentChartFilter, OpenDocumentChartFilter[0]) != JFileChooser.APPROVE_OPTION)
+				return;
+				GraphView mgv = (GraphView)views.get(
+				theTabs.getSelectedIndex()
+				);
 				try {
-					mgm.exportToMatlab(plug.getChooserFile());
-				} catch (IOException ex) {
-					plug.error("Could not export Matlab file:\n" + ex.getMessage());
-				}
+				mgv.doExportToOpenDocumentChart(plug.getChooserFile());
+				} catch(ChartException ex) {
+				plug.error("Could not export OpenDocument Chart file:\n" + ex.getMessage());
+				}*/
 			}
 		};
 		exportMatlab.putValue(Action.NAME, "Matlab file (*.m)");
@@ -311,6 +322,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportOpenDocumentChart = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				/*	if (plug.showSaveFileDialog(OpenDocumentChartFilter, OpenDocumentChartFilter[0]) != JFileChooser.APPROVE_OPTION)
@@ -332,6 +344,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportOpenDocumentSpreadsheet = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				/*if (plug.showSaveFileDialog(OpenDocumentSpreadsheetFilter, OpenDocumentSpreadsheetFilter[0]) != JFileChooser.APPROVE_OPTION)
@@ -353,6 +366,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportCSV = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				/*if (plug.showSaveFileDialog(CSVFilter, CSVFilter[0]) != JFileChooser.APPROVE_OPTION)
@@ -374,6 +388,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportGNUPlot = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 
@@ -391,6 +406,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		printGraph = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph graph = models.get(theTabs.getSelectedIndex());
@@ -412,6 +428,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		deleteGraph = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph graph = models.get(theTabs.getSelectedIndex());
@@ -500,8 +517,6 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 					return;
 				try {
 					graph.exportToEPS(plug.getChooserFile(), imageDialog.getExportWidth(), imageDialog.getExportHeight());
-				} catch (GraphException ex) {
-					plug.error("Could not export EPS file:\n" + ex.getMessage());
 				} catch (IOException ex) {
 					plug.error("Could not export EPS file:\n" + ex.getMessage());
 				}
@@ -633,6 +648,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 	}
 
 	// User right clicked on a tab
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -640,6 +656,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		// Zoom out on double click
@@ -650,6 +667,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -708,6 +726,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -716,10 +735,12 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 	// don't implement these for tabs
 	//public void mouseClicked(MouseEvent e) { }
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}

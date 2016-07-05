@@ -57,7 +57,7 @@ public class PrismComponent
 	protected PrismSettings settings = null;
 
 	// Constructors
-	
+
 	/**
 	 * Default constructor.
 	 */
@@ -77,9 +77,9 @@ public class PrismComponent
 		setLog(parent.getLog());
 		setSettings(parent.getSettings());
 	}
-	
+
 	// Setters (declared as final since they are called from the constructor)
-	
+
 	/**
 	 * Set log ("mainLog") for output.
 	 */
@@ -95,9 +95,9 @@ public class PrismComponent
 	{
 		this.settings = settings;
 	}
-	
+
 	// Getters
-	
+
 	/**
 	 * Get log ("mainLog") for output.
 	 */
@@ -105,7 +105,7 @@ public class PrismComponent
 	{
 		return mainLog;
 	}
-	
+
 	/**
 	 * Get the locally stored PRISMSettings object.
 	 */

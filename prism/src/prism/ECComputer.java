@@ -76,7 +76,6 @@ public abstract class ECComputer extends PrismComponent
 	 * Base constructor.
 	 */
 	public ECComputer(PrismComponent parent, JDDNode reach, JDDNode trans, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars, JDDVars allDDNondetVars)
-			throws PrismException
 	{
 		super(parent);
 		this.reach = reach;

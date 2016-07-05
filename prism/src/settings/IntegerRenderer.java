@@ -33,95 +33,77 @@ import javax.swing.border.*;
 
 public class IntegerRenderer implements SettingRenderer
 {
-    private JTextField renderer = new JTextField();
-    private Font font = new Font("monospaced", Font.PLAIN, 12);
-    private Font font2 = new Font("monospaced", Font.ITALIC, 12);
-    
-    
-    public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row, int column)
-    {
-        renderer.setMargin(new Insets(0, 2, 4, 2));
-        if (isSelected)
-        {
-            renderer.setForeground(table.getSelectionForeground());
-            renderer.setBackground(table.getSelectionBackground());
-        }
-        else
-        {
-            renderer.setForeground(table.getForeground());
-            renderer.setBackground(table.getBackground());
-        }
-        
-        if(hasFocus)
-        {
-            renderer.setBorder( UIManager.getBorder("Table.focusCellHighlightBorder") );
-        }
-        else
-        {
-            renderer.setBorder(new EmptyBorder(1, 2, 2, 1));
-        }
-        
-        if(value instanceof Integer)
-        {
-            Integer dob = (Integer)value;
-            
-            renderer.setText(""+dob.intValue());
+	private JTextField renderer = new JTextField();
+	private Font font = new Font("monospaced", Font.PLAIN, 12);
+	private Font font2 = new Font("monospaced", Font.ITALIC, 12);
 
-	    renderer.setEnabled(isEnabled);
-            
-            renderer.setFont(font);
-        }
-        else if(value instanceof ArrayList)
-        {
-            ArrayList values = (ArrayList)value;
-            if(values.size() > 0)
-            {
-                //if we have multiple properties selected.
-                Integer last = null;
-                boolean allSame = true;
-                for(int i = 0; i < values.size(); i++)
-                {
-                    if(values.get(i) instanceof Integer)
-                    {
-                        Integer str = (Integer)values.get(i);
-                        if(last != null)
-                        {
-                            if(!str.equals(last))
-                            {
-                                allSame = false; break;
-                            }
-                            last = str;
-                        }
-                        else
-                        {
-                            last = str;
-                        }
-                    }
-                }
-                if(allSame)
-                {
-                    renderer.setText(""+last.intValue());
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
+			int column)
+	{
+		renderer.setMargin(new Insets(0, 2, 4, 2));
+		if (isSelected) {
+			renderer.setForeground(table.getSelectionForeground());
+			renderer.setBackground(table.getSelectionBackground());
+		} else {
+			renderer.setForeground(table.getForeground());
+			renderer.setBackground(table.getBackground());
+		}
 
-                    renderer.setEnabled(isEnabled);
-            
-                    renderer.setFont(font);
-                }
-                else
-                {
-                    renderer.setText("(Different values)");
-                    
-                    renderer.setEnabled(isEnabled);
-            
-                    renderer.setFont(font2);
-                    
-                    renderer.setBackground(Color.lightGray);
-                }
-                
-            }
-        }
-        
-        
-        return renderer;
-    }
-    
+		if (hasFocus) {
+			renderer.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+		} else {
+			renderer.setBorder(new EmptyBorder(1, 2, 2, 1));
+		}
+
+		if (value instanceof Integer) {
+			Integer dob = (Integer) value;
+
+			renderer.setText("" + dob.intValue());
+
+			renderer.setEnabled(isEnabled);
+
+			renderer.setFont(font);
+		} else if (value instanceof ArrayList) {
+			ArrayList<?> values = (ArrayList<?>) value;
+			if (values.size() > 0) {
+				//if we have multiple properties selected.
+				Integer last = null;
+				boolean allSame = true;
+				for (int i = 0; i < values.size(); i++) {
+					if (values.get(i) instanceof Integer) {
+						Integer str = (Integer) values.get(i);
+						if (last != null) {
+							if (!str.equals(last)) {
+								allSame = false;
+								break;
+							}
+							last = str;
+						} else {
+							last = str;
+						}
+					}
+				}
+				if (allSame) {
+					renderer.setText("" + last.intValue());
+
+					renderer.setEnabled(isEnabled);
+
+					renderer.setFont(font);
+				} else {
+					renderer.setText("(Different values)");
+
+					renderer.setEnabled(isEnabled);
+
+					renderer.setFont(font2);
+
+					renderer.setBackground(Color.lightGray);
+				}
+
+			}
+		}
+
+		return renderer;
+	}
+
 }

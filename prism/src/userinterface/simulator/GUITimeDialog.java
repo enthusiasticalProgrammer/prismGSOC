@@ -36,7 +36,7 @@ import userinterface.*;
 public class GUITimeDialog extends JDialog
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	//ATTRIBUTES    
 	private double time;
 	private boolean cancelled;
@@ -77,6 +77,7 @@ public class GUITimeDialog extends JDialog
 
 		this.timeInputField.getDocument().addDocumentListener(new DocumentListener()
 		{
+			@Override
 			public void changedUpdate(DocumentEvent e)
 			{
 				try {
@@ -89,11 +90,13 @@ public class GUITimeDialog extends JDialog
 				}
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e)
 			{
 				changedUpdate(e);
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e)
 			{
 				changedUpdate(e);
@@ -128,6 +131,7 @@ public class GUITimeDialog extends JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -148,6 +152,7 @@ public class GUITimeDialog extends JDialog
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -159,6 +164,7 @@ public class GUITimeDialog extends JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);

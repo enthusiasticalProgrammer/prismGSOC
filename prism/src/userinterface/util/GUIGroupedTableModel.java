@@ -38,7 +38,7 @@ public interface GUIGroupedTableModel extends TableModel
 	 * @return The number of groups in this model.
 	 */
 	public int getGroupCount();
-	
+
 	/**
 	 * Retrieves the name of a group.
 	 * @param groupIndex The index of a group.
@@ -46,14 +46,14 @@ public interface GUIGroupedTableModel extends TableModel
 	 * @see #getColumnName(int columnIndex). 
 	 */
 	public String getGroupName(int groupIndex);
-		
+
 	/**
 	 * Retrieves the index of the last `normal' column in a group.
 	 * @param groupIndex The index of a group.
 	 * @return The index of the last column in this group.
 	 */
-	public int getLastColumnOfGroup(int groupIndex);	
-	
+	public int getLastColumnOfGroup(int groupIndex);
+
 	/**
 	 * Retrieves the tooltip to be set for a group.
 	 * @param groupIndex The index of a group.
@@ -66,5 +66,5 @@ public interface GUIGroupedTableModel extends TableModel
 	 * @param columnIndex The index of a column.
 	 * @return The tooltip text for a column, or null.
 	 */
-	public String getColumnToolTip(int columnIndex)	;
+	public String getColumnToolTip(int columnIndex);
 }

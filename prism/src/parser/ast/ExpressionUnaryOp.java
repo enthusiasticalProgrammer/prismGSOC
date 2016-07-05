@@ -99,7 +99,7 @@ public class ExpressionUnaryOp extends Expression
 	{
 		return operand.isProposition();
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{

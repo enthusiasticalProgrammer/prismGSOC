@@ -67,6 +67,7 @@ public class NondetModel extends ProbModel
 	}
 
 	// type
+	@Override
 	public ModelType getModelType()
 	{
 		return ModelType.MDP;
@@ -123,16 +124,19 @@ public class NondetModel extends ProbModel
 		return allDDNondetVars.n();
 	}
 
+	@Override
 	public int getNumDDVarsInTrans()
 	{
 		return allDDRowVars.n() * 2 + allDDNondetVars.n();
 	}
 
+	@Override
 	public String getTransName()
 	{
 		return "Transition matrix";
 	}
 
+	@Override
 	public String getTransSymbol()
 	{
 		return "S";
@@ -159,14 +163,14 @@ public class NondetModel extends ProbModel
 		JDD.Ref(nondetMask);
 		JDDNode tmp = JDD.And(reach, JDD.And(JDD.LessThanEquals(transActions, 0), JDD.Not(nondetMask)));
 		tmp = JDD.SumAbstract(tmp, allDDNondetVars);
-		double max = JDD.FindMax(tmp); 
+		double max = JDD.FindMax(tmp);
 		JDD.Deref(tmp);
 		if (max > 1)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	// set methods for things not set up in constructor
 
 	public void setTransInd(JDDNode transInd)
@@ -198,6 +202,7 @@ public class NondetModel extends ProbModel
 
 	// do reachability
 
+	@Override
 	public void doReachability()
 	{
 		JDDNode tmp;
@@ -221,6 +226,7 @@ public class NondetModel extends ProbModel
 	// (and calculate num transitions, etc.)
 	// (and build mask)
 
+	@Override
 	public void filterReachableStates()
 	{
 		super.filterReachableStates();
@@ -234,13 +240,12 @@ public class NondetModel extends ProbModel
 				transSynch[i] = JDD.Apply(JDD.TIMES, reach, transSynch[i]);
 			}
 		}
-
 		// also filter transReln DD (if necessary)
 		if (transReln != null) {
 			JDD.Ref(reach);
 			transReln = JDD.Apply(JDD.TIMES, reach, transReln);
 		}
-		
+
 		// build mask for nondeterminstic choices
 		// (and work out number of choices)
 		JDD.Ref(trans01);
@@ -265,7 +270,7 @@ public class NondetModel extends ProbModel
 		// find reachable states with no transitions
 		JDD.Ref(reach);
 		deadlocks = JDD.And(reach, JDD.Not(deadlocks));
-		
+
 		if (fix && !deadlocks.equals(JDD.ZERO)) {
 			// remove deadlocks by adding self-loops to trans
 			// (also update transInd (if necessary) at same time)
@@ -308,6 +313,7 @@ public class NondetModel extends ProbModel
 		}
 	}
 
+	@Override
 	public void printTransInfo(PrismLog log, boolean extra)
 	{
 		int i, j, n;
@@ -378,6 +384,7 @@ public class NondetModel extends ProbModel
 
 	// export transition matrix to a file
 
+	@Override
 	public void exportToFile(int exportType, boolean explicit, File file) throws FileNotFoundException, PrismException
 	{
 		if (!explicit) {
@@ -392,6 +399,7 @@ public class NondetModel extends ProbModel
 
 	// returns string containing files used if there were more than 1, null otherwise
 
+	@Override
 	public String exportStateRewardsToFile(int exportType, File file) throws FileNotFoundException, PrismException
 	{
 		if (numRewardStructs == 0)
@@ -413,6 +421,7 @@ public class NondetModel extends ProbModel
 
 	// returns string containing files used if there were more than 1, null otherwise
 
+	@Override
 	public String exportTransRewardsToFile(int exportType, boolean explicit, File file) throws FileNotFoundException, PrismException
 	{
 		if (numRewardStructs == 0)
@@ -436,6 +445,7 @@ public class NondetModel extends ProbModel
 
 	// clear up (deref all dds, dd vars)
 
+	@Override
 	public void clear()
 	{
 		super.clear();

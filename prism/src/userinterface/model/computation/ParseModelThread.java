@@ -60,11 +60,13 @@ public class ParseModelThread extends GUIComputationThread
 		counter++;
 	}
 
+	@Override
 	public void run()
 	{
 		// Notify user interface of the start of computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if (!background)
@@ -96,6 +98,7 @@ public class ParseModelThread extends GUIComputationThread
 			errMsg = err.getMessage();
 			SwingUtilities.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					if (!background)
@@ -114,6 +117,7 @@ public class ParseModelThread extends GUIComputationThread
 		// If we get here, the parse has been successful, notify the interface and tell the handler.
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				if (!background)

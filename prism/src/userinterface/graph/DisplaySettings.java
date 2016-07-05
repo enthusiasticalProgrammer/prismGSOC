@@ -29,7 +29,6 @@ package userinterface.graph;
 import java.util.Observable;
 
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
 
 import settings.BooleanSetting;
 import settings.ColorSetting;
@@ -48,89 +47,106 @@ public class DisplaySettings extends Observable implements SettingOwner
 {
 	/* Display for settings. */
 	private SettingDisplay display;
-	
+
 	/** Our graph object. */
 	private Graph graph;
-	
+
 	/** JFreeChart representation of graphs. */
 	private JFreeChart chart;
-	
-	private BooleanSetting antiAlias;	
-	private ColorSetting backgroundColor;	
-	
+
+	private BooleanSetting antiAlias;
+	private ColorSetting backgroundColor;
+
 	public DisplaySettings(Graph graph)
 	{
 		this.graph = graph;
 		this.chart = graph.getChart();
-		
+
 		antiAlias = new BooleanSetting("anti-aliasing", new Boolean(true), "Should the graph be rendered using anti-aliasing?", this, false);
-		Color defaultColor = Color.white; 
-		
+		Color defaultColor = Color.white;
+
 		backgroundColor = new ColorSetting("background colour", defaultColor, "The background colour of the graph panel", this, false);
-		
+
 		updateDisplay();
 		setChanged();
 		notifyObservers();
-	}	
-	
-	public SettingDisplay getDisplay() 
+	}
+
+	@Override
+	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
-	public int getNumSettings() 
+	@Override
+	public int getNumSettings()
 	{
 		return 2;
 	}
 
-	public Setting getSetting(int index) 
+	@Override
+	public Setting getSetting(int index)
 	{
-		switch(index)
-		{
-			case 0: return antiAlias;
-			case 1: return backgroundColor;
-			default: return null;			
+		switch (index) {
+		case 0:
+			return antiAlias;
+		case 1:
+			return backgroundColor;
+		default:
+			return null;
 		}
 	}
 
-	public String getSettingOwnerClassName() {
-		return "Display";		
+	@Override
+	public String getSettingOwnerClassName()
+	{
+		return "Display";
 	}
 
-	public int getSettingOwnerID() {
+	@Override
+	public int getSettingOwnerID()
+	{
 		return prism.PropertyConstants.GRAPH_DISPLAY;
 	}
 
-	public String getSettingOwnerName() 
+	@Override
+	public String getSettingOwnerName()
 	{
 		if (graph != null && graph.getName() != null)
 			return graph.getName();
-			
+
 		return "";
 	}
 
-	public void notifySettingChanged(Setting setting) {
+	@Override
+	public void notifySettingChanged(Setting setting)
+	{
 		updateDisplay();
-		setChanged();		
-		notifyObservers(this);	
+		setChanged();
+		notifyObservers(this);
 	}
 
-	public void setDisplay(SettingDisplay display) {
+	@Override
+	public void setDisplay(SettingDisplay display)
+	{
 		this.display = display;
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
-		if(o instanceof SettingOwner)
-		{
+		if (o instanceof SettingOwner) {
 			SettingOwner po = (SettingOwner) o;
-			if(getSettingOwnerID() < po.getSettingOwnerID() )return -1;
-			else if(getSettingOwnerID() > po.getSettingOwnerID()) return 1;
-			else return 0;
-		}
-		else return 0;
-	}	
-	
+			if (getSettingOwnerID() < po.getSettingOwnerID())
+				return -1;
+			else if (getSettingOwnerID() > po.getSettingOwnerID())
+				return 1;
+			else
+				return 0;
+		} else
+			return 0;
+	}
+
 	/**
 	 * Getter for property antiAlias.
 	 * @return Value of property antiAlias.
@@ -139,26 +155,23 @@ public class DisplaySettings extends Observable implements SettingOwner
 	{
 		return antiAlias.getBooleanValue();
 	}
-	
+
 	/**
 	 * Setter for property antiAlias.
 	 * @param value Value of property antiAlias.
 	 */
 	public void setAntiAliased(boolean value)
 	{
-		try
-		{
+		try {
 			antiAlias.setValue(new Boolean(value));
 			updateDisplay();
 			setChanged();
 			notifyObservers(this);
-		}
-		catch (SettingException e)
-		{
+		} catch (SettingException e) {
 			// Shouldn't happen.
 		}
 	}
-	
+
 	/**
 	 * Getter for property backgroundColor.
 	 * @return Value of property backgroundColor.
@@ -167,37 +180,32 @@ public class DisplaySettings extends Observable implements SettingOwner
 	{
 		return backgroundColor.getColorValue();
 	}
-	
+
 	/**
 	 * Setter for property backgroundColor.
 	 * @param background Value of property backgroundColor.
 	 */
 	public void setBackgroundColor(Color background)
 	{
-		try
-		{
+		try {
 			backgroundColor.setValue(background);
 			updateDisplay();
 			setChanged();
 			notifyObservers(this);
-		}
-		catch (SettingException e)
-		{
+		} catch (SettingException e) {
 			// Shouldn't happen.
 		}
 	}
-	
+
 	private void updateDisplay()
 	{
 		/* Draw anti-aliased?. */
-		if (isAntiAliased() != this.chart.getAntiAlias())
-		{		
+		if (isAntiAliased() != this.chart.getAntiAlias()) {
 			this.chart.setAntiAlias(isAntiAliased());
 		}
-		
+
 		/* Background changed? */
-		if (!(this.chart.getBackgroundPaint() instanceof Color) || !backgroundColor.getColorValue().equals(this.chart.getBackgroundPaint()))
-		{
+		if (!(this.chart.getBackgroundPaint() instanceof Color) || !backgroundColor.getColorValue().equals(this.chart.getBackgroundPaint())) {
 			this.chart.setBackgroundPaint(backgroundColor.getColorValue());
 		}
 	}

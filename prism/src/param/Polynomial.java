@@ -41,8 +41,9 @@ import java.util.HashMap;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class Polynomial {
-	/** number of variables in this polynomial */ 
+final class Polynomial
+{
+	/** number of variables in this polynomial */
 	private int numVariables;
 	/** coefficients of this polynomial. */
 	private BigInteger[] coefficients;
@@ -50,10 +51,10 @@ final class Polynomial {
 	 * entries in exponents in this array, followed by the entries for
 	 * the next term (if any). */
 	private int[] exponents;
-	private HashMap<Point,BigRational> pointsSeen;
+	private HashMap<Point, BigRational> pointsSeen;
 	/** current size of the polynomial. used during its construction. */
 	private int size;
-	
+
 	/**
 	 * Constructs a new polynomial.
 	 * 
@@ -65,10 +66,10 @@ final class Polynomial {
 		coefficients = new BigInteger[numTerms];
 		exponents = new int[numTerms * numVariables];
 		this.numVariables = numVariables;
-		this.pointsSeen = new HashMap<Point,BigRational>();
+		this.pointsSeen = new HashMap<Point, BigRational>();
 		this.size = 0;
 	}
-	
+
 	/**
 	 * Adds a term to a polynomial.
 	 * To be used during its construction.
@@ -84,7 +85,7 @@ final class Polynomial {
 		}
 		size++;
 	}
-	
+
 	/**
 	 * Checks whether this polynomial is equal to the given object.
 	 * For this to hold, {@code obj} must be a polynomial, and it
@@ -94,11 +95,12 @@ final class Polynomial {
 	 * @return true iff {@code obj} is a polynomial which equals this polynomial
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof Polynomial)) {
 			return false;
 		}
-		
+
 		Polynomial other = (Polynomial) obj;
 		if (this.numVariables != other.numVariables) {
 			return false;
@@ -116,23 +118,24 @@ final class Polynomial {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Returns a hashcode for this polynomial.
 	 * 
 	 * @return hash code for this polynomial
 	 */
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		int hash = numVariables;
-		
+
 		for (int i = 0; i < exponents.length; i++) {
 			hash = exponents[i] + (hash << 6) + (hash << 16) - hash;
 		}
-		
+
 		for (int i = 0; i < coefficients.length; i++) {
 			hash = coefficients[i].hashCode() + (hash << 6) + (hash << 16) - hash;
 		}
@@ -146,11 +149,12 @@ final class Polynomial {
 	 * @return string representation of the polynomial
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		StringBuilder builder = new StringBuilder();
 		for (int term = 0; term < coefficients.length; term++) {
 			BigInteger coeff = coefficients[term];
-			
+
 			if (coeff.signum() > -1) {
 				if (term != 0) {
 					builder.append(" + ");
@@ -204,21 +208,21 @@ final class Polynomial {
 			}
 		}
 		result = BigRational.ZERO;
-		
+
 		for (int coeffNr = 0; coeffNr < coefficients.length; coeffNr++) {
 			BigRational coeffVal = new BigRational(coefficients[coeffNr]);
 			for (int var = 0; var < numVariables; var++) {
 				BigRational exp = point.getDimension(var).pow(exponents[coeffNr * numVariables + var]);
-				coeffVal = coeffVal.multiply(exp, cancel);				
+				coeffVal = coeffVal.multiply(exp, cancel);
 			}
-			
+
 			result = result.add(coeffVal, cancel);
 		}
 		pointsSeen.put(point, result);
 		time = System.currentTimeMillis() - time;
 		return result;
 	}
-	
+
 	/**
 	 * Evaluates a polynomial at a given point.
 	 * {@code point} must have the same dimension as the number of variables

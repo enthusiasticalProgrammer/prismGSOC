@@ -32,11 +32,12 @@ public abstract class StringConstraint implements SettingConstraint
 	public StringConstraint()
 	{
 	}
-	
+
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
 		checkValueString(value.toString());
 	}
-	
+
 	public abstract void checkValueString(String str) throws SettingException;
 }

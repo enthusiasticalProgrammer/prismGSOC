@@ -40,6 +40,7 @@ public class EvaluateContextValues implements EvaluateContext
 		this.varValues = varValues;
 	}
 
+	@Override
 	public Object getConstantValue(String name)
 	{
 		if (constantValues == null)
@@ -50,6 +51,7 @@ public class EvaluateContextValues implements EvaluateContext
 		return constantValues.getValue(i);
 	}
 
+	@Override
 	public Object getVarValue(String name, int index)
 	{
 		if (varValues == null)

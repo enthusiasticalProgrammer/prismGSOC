@@ -26,8 +26,7 @@
 
 package prism;
 
-public enum ModelType
-{
+public enum ModelType {
 	// List of model types (ordered alphabetically)
 	CTMC("continuous-time Markov chain") {
 		@Override
@@ -94,7 +93,7 @@ public enum ModelType
 		}
 	},
 	MDP("Markov decision process") {
-		
+
 	},
 	PTA("probabilistic timed automaton") {
 		@Override
@@ -124,7 +123,8 @@ public enum ModelType
 
 	private final String fullName;
 
-	ModelType(final String fullName) {
+	ModelType(final String fullName)
+	{
 		this.fullName = fullName;
 	}
 

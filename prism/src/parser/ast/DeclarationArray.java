@@ -85,28 +85,30 @@ public class DeclarationArray extends DeclarationType
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
+	@Override
 	public Expression getDefaultStart()
 	{
 		// TODO: what should be the default?
 		return null;
 	}
-	
+
 	/* TODO
 	@Override
 	public Expression getStart(ModulesFile parent)
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		// TODO: what should be the default?
 		return start != null ? start : null;
 	}*/
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);

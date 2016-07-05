@@ -36,9 +36,9 @@ import java.util.*;
 public interface StateStorage<T>
 {
 	public int get(T t);
-	
+
 	public boolean add(T state);
-	
+
 	public void clear();
 
 	public boolean contains(T state);
@@ -56,7 +56,7 @@ public interface StateStorage<T>
 	 * Get access to the underlying set of map entries. 
 	 */
 	public Set<Map.Entry<T, Integer>> getEntrySet();
-	
+
 	/**
 	 * Create an ArrayList of the states, ordered by index.
 	 */
@@ -67,7 +67,7 @@ public interface StateStorage<T>
 	 * @param list An empty ArrayList in which to store the result.
 	 */
 	public void toArrayList(ArrayList<T> list);
-	
+
 	/**
 	 * Create an ArrayList of the states, ordered by permuted index.
 	 * Index in new list is permut[old_index].
@@ -82,7 +82,7 @@ public interface StateStorage<T>
 	 * @param list An empty ArrayList in which to store the result.
 	 */
 	public void toPermutedArrayList(int permut[], ArrayList<T> list);
-	
+
 	/**
 	 * Build sort permutation. Assuming this was built as a sorted set,
 	 * this returns a permutation (integer array) mapping current indices

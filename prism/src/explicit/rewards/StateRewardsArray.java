@@ -36,7 +36,7 @@ public class StateRewardsArray extends StateRewards
 {
 	/** Array of state rewards **/
 	protected double stateRewards[] = null;
-	
+
 	/**
 	 * Constructor: all zero rewards.
 	 * @param numStates Number of states
@@ -48,14 +48,14 @@ public class StateRewardsArray extends StateRewards
 			stateRewards[i] = 0.0;
 		}
 	}
-	
+
 	/**
 	 * Copy constructor
 	 * @param rews Rewards to copy
 	 */
 	public StateRewardsArray(StateRewardsArray rews)
 	{
-		int numStates= rews.stateRewards.length;
+		int numStates = rews.stateRewards.length;
 		stateRewards = new double[numStates];
 		for (int i = 0; i < numStates; i++) {
 			stateRewards[i] = rews.stateRewards[i];
@@ -63,7 +63,7 @@ public class StateRewardsArray extends StateRewards
 	}
 
 	// Mutators
-	
+
 	/**
 	 * Set the reward for state {@code s} to {@code r}.
 	 */
@@ -71,7 +71,7 @@ public class StateRewardsArray extends StateRewards
 	{
 		stateRewards[s] = r;
 	}
-	
+
 	/**
 	 * Add {@code r} to the state reward for state {@code s} .
 	 */
@@ -79,17 +79,17 @@ public class StateRewardsArray extends StateRewards
 	{
 		stateRewards[s] += r;
 	}
-	
+
 	// Accessors
-	
+
 	@Override
 	public double getStateReward(int s)
 	{
 		return stateRewards[s];
 	}
-	
+
 	// Converters
-	
+
 	@Override
 	public StateRewards liftFromModel(Product<? extends Model> product)
 	{
@@ -101,7 +101,7 @@ public class StateRewardsArray extends StateRewards
 		}
 		return rewardsProd;
 	}
-	
+
 	// Other
 
 	@Override

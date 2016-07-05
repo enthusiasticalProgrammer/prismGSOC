@@ -30,7 +30,6 @@ package prism;
  * An exception indicating that a given feature is (currently) not supported,
  * e.g., a given combination of model type, engine and property.
  */
-@SuppressWarnings("serial")
 public class PrismNotSupportedException extends PrismException
 {
 	public PrismNotSupportedException(String s)

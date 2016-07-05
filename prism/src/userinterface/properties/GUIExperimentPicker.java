@@ -31,11 +31,12 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.util.*;
+import java.util.List;
 
 import prism.*;
 import userinterface.*;
+import userinterface.properties.GUIExperimentPicker.Rememberance;
 
-import parser.type.*;
 public class GUIExperimentPicker extends javax.swing.JDialog
 {
 	public static final int NO_VALUES = 0;
@@ -44,80 +45,72 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	public static final int VALUES_DONE_SHOW_GRAPH = 3;
 	public static final int VALUES_DONE_SHOW_GRAPH_AND_SIMULATE = 4;
 	public static final int VALUES_DONE_SIMULATE = 5;
-	
-	static ArrayList remember;
-	
+
+	static List<Rememberance> remember;
+
 	static boolean lastGraph = true;
 	static boolean lastSimulation = false;
-	    
+
 	private boolean cancelled = true;
-	
+
 	private ConstantPickerList propTable;
 	private ConstantPickerList modelTable;
-	
+
 	private javax.swing.JButton okayButton;
-	
+
 	private UndefinedConstants undef;
-	
+
 	private GUIPrism gui;
-	
-	static
-	{
-		remember = new ArrayList();
+
+	static {
+		remember = new ArrayList<Rememberance>();
 	}
-	
+
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	javax.swing.JCheckBox createGraphCheck;
 	javax.swing.JPanel topPanel;
 	javax.swing.JCheckBox useSimulationCheck;
 	// End of variables declaration//GEN-END:variables
-	
+
 	/** Creates new form GUIConstantsPicker */
 	public GUIExperimentPicker(GUIPrism parent, UndefinedConstants undef, boolean areModel, boolean areProp, boolean offerGraph, boolean offerSimulation)
 	{
 		super(parent, "Define Constants", true);
 		this.undef = undef;
 		this.gui = parent;
-		
+
 		//setup tables
 		propTable = new ConstantPickerList();
 		modelTable = new ConstantPickerList();
-		
+
 		//initialise
 		initComponents();
 		this.getRootPane().setDefaultButton(okayButton);
-		if (offerGraph)
-		{
+		if (offerGraph) {
 			createGraphCheck.setEnabled(true);
 			createGraphCheck.setSelected(lastGraph);
-		} else
-		{
+		} else {
 			createGraphCheck.setEnabled(false);
 			createGraphCheck.setSelected(false);
 		}
 
-		if(offerSimulation)
-		{
+		if (offerSimulation) {
 			useSimulationCheck.setEnabled(true);
 			useSimulationCheck.setSelected(lastSimulation);
-		}
-		else
-		{
+		} else {
 			useSimulationCheck.setEnabled(false);
 			useSimulationCheck.setSelected(false);
 		}
 
-
-		
 		initTables(areModel, areProp);
 		initValues(undef);
-		
+
 		//setResizable(false);
-		
+
 		pack();
 		setLocationRelativeTo(getParent()); // centre
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -134,7 +127,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		javax.swing.JPanel jPanel4;
 		javax.swing.JPanel jPanel5;
 		javax.swing.JPanel jPanel6;
-		
+
 		jPanel1 = new javax.swing.JPanel();
 		jPanel2 = new javax.swing.JPanel();
 		jPanel3 = new javax.swing.JPanel();
@@ -150,6 +143,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -210,13 +204,13 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		jPanel1.add(useSimulationCheck, gridBagConstraints);
 
 		getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-		
-		
+
 		jPanel6.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -228,6 +222,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -240,11 +235,10 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 
 		pack();
 	}//GEN-END:initComponents
-	
+
 	private void initTables(boolean areModel, boolean areProp)
 	{
-		if(areModel && areProp)
-		{
+		if (areModel && areProp) {
 			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
 			JPanel topTopPanel = new JPanel();
 			topTopPanel.setBorder(new TitledBorder("Model Constants"));
@@ -253,63 +247,54 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 			sp.setViewportView(modelTable);
 			topTopPanel.add(sp);
 			topTopPanel.add(new ConstantHeader(), BorderLayout.NORTH);
-			
+
 			JPanel bottomTopPanel = new JPanel();
 			bottomTopPanel.setBorder(new TitledBorder("Property Constants"));
 			bottomTopPanel.setLayout(new BorderLayout());
 			JScrollPane sp2 = new JScrollPane();
-			
+
 			sp2.setViewportView(propTable);
 			bottomTopPanel.add(sp2);
 			bottomTopPanel.add(new ConstantHeader(), BorderLayout.NORTH);
 			topPanel.add(topTopPanel);
 			topPanel.add(bottomTopPanel);
-		}
-		else if(areModel)
-		{
+		} else if (areModel) {
 			topPanel.setBorder(new TitledBorder("Model Constants"));
 			topPanel.setLayout(new BorderLayout());
 			JScrollPane sp = new JScrollPane();
 			sp.setViewportView(modelTable);
 			topPanel.add(sp);
 			topPanel.add(new ConstantHeader(), BorderLayout.NORTH);
-		}
-		else if(areProp)
-		{
+		} else if (areProp) {
 			topPanel.setBorder(new TitledBorder("Property Constants"));
 			topPanel.setLayout(new BorderLayout());
 			JScrollPane sp = new JScrollPane();
-			
+
 			sp.setViewportView(propTable);
 			topPanel.add(sp);
 			topPanel.add(new ConstantHeader(), BorderLayout.NORTH);
 		}
-		
-		topPanel.setPreferredSize(new Dimension(500,300));
+
+		topPanel.setPreferredSize(new Dimension(500, 300));
 	}
-	
+
 	private void initValues(UndefinedConstants undef)
 	{
-		for(int i = 0; i < undef.getMFNumUndefined(); i++)
-		{
+		for (int i = 0; i < undef.getMFNumUndefined(); i++) {
 			ConstantLine line = new ConstantLine(undef.getMFUndefinedName(i), undef.getMFUndefinedType(i));
 			modelTable.addConstant(line);
 		}
-		for(int i = 0; i < undef.getPFNumUndefined(); i++)
-		{
+		for (int i = 0; i < undef.getPFNumUndefined(); i++) {
 			ConstantLine line = new ConstantLine(undef.getPFUndefinedName(i), undef.getPFUndefinedType(i));
 			propTable.addConstant(line);
 		}
-		
+
 		// go through list of remembered values and see if we can use them
-		for(int i = 0; i < remember.size(); i++)
-		{
-			Rememberance r = (Rememberance)remember.get(i);
-			for(int j = 0; j < propTable.getNumConstants(); j++)
-			{
+		for (int i = 0; i < remember.size(); i++) {
+			Rememberance r = remember.get(i);
+			for (int j = 0; j < propTable.getNumConstants(); j++) {
 				ConstantLine cl = propTable.getConstantLine(j);
-				if(cl.getName().equals(r.varName) && (cl.getType() == r.type))
-				{
+				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					cl.setSingleValue(r.singleValue);
 					cl.setStartValue(r.start);
 					cl.setEndValue(r.end);
@@ -317,11 +302,9 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 					cl.setIsRange(r.isRange);
 				}
 			}
-			for(int j = 0; j < modelTable.getNumConstants(); j++)
-			{
+			for (int j = 0; j < modelTable.getNumConstants(); j++) {
 				ConstantLine cl = modelTable.getConstantLine(j);
-				if(cl.getName().equals(r.varName) && (cl.getType() == r.type))
-				{
+				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					cl.setSingleValue(r.singleValue);
 					cl.setStartValue(r.start);
 					cl.setEndValue(r.end);
@@ -331,45 +314,41 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 			}
 		}
 	}
-	
+
 	/** Call this static method to construct a new GUIConstantsPicker to define undef. */
 	public static int defineConstantsWithDialog(GUIPrism parent, UndefinedConstants undef, boolean offerGraph, boolean offerSimulation)
 	{
 		boolean areModel = undef.getMFNumUndefined() > 0;
-		boolean areProp  = undef.getPFNumUndefined() > 0;
-		if(areModel || areProp)
-		{
+		boolean areProp = undef.getPFNumUndefined() > 0;
+		if (areModel || areProp) {
 			return new GUIExperimentPicker(parent, undef, areModel, areProp, offerGraph, offerSimulation).defineValues();
-		}
-		else return NO_VALUES;
+		} else
+			return NO_VALUES;
 	}
-	
+
 	public int defineValues()
 	{
 		show();
-		if(cancelled)
+		if (cancelled)
 			return CANCELLED;
-		else
-			if(createGraphCheck.isSelected())
-				if(useSimulationCheck.isSelected())
-					return VALUES_DONE_SHOW_GRAPH_AND_SIMULATE;
-				else
-					return VALUES_DONE_SHOW_GRAPH;
+		else if (createGraphCheck.isSelected())
+			if (useSimulationCheck.isSelected())
+				return VALUES_DONE_SHOW_GRAPH_AND_SIMULATE;
 			else
-				if(useSimulationCheck.isSelected())
-					return VALUES_DONE_SIMULATE;
-				else 
-					return VALUES_DONE;
+				return VALUES_DONE_SHOW_GRAPH;
+		else if (useSimulationCheck.isSelected())
+			return VALUES_DONE_SIMULATE;
+		else
+			return VALUES_DONE;
 	}
-	
+
 	public void rememberValues()
 	{
 		int i, j;
 		ConstantLine cl;
 		Rememberance r, rNew;
-		
-		for(i = 0; i < propTable.getNumConstants(); i++)
-		{
+
+		for (i = 0; i < propTable.getNumConstants(); i++) {
 			cl = propTable.getConstantLine(i);
 			// store info about this constant
 			rNew = new GUIExperimentPicker.Rememberance();
@@ -380,23 +359,21 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 			rNew.end = cl.getEndValue();
 			rNew.start = cl.getStartValue();
 			rNew.step = cl.getStepValue();
-			
+
 			// see if we got this constant remembered already
-			for (j = 0; j < remember.size(); j++)
-			{
-				r = (Rememberance)remember.get(j);
+			for (j = 0; j < remember.size(); j++) {
+				r = remember.get(j);
 				// if so, replace it
-				if (cl.getName().equals(r.varName) && (cl.getType() == r.type))
-				{
+				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					remember.set(j, rNew);
 					break;
 				}
 			}
 			// if not, add it
-			if (j == remember.size()) remember.add(rNew);
+			if (j == remember.size())
+				remember.add(rNew);
 		}
-		for(i = 0; i < modelTable.getNumConstants(); i++)
-		{
+		for (i = 0; i < modelTable.getNumConstants(); i++) {
 			cl = modelTable.getConstantLine(i);
 			// store info about this constant
 			rNew = new GUIExperimentPicker.Rememberance();
@@ -408,96 +385,88 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 			rNew.start = cl.getStartValue();
 			rNew.step = cl.getStepValue();
 			// see if we got this constant remembered already
-			for (j = 0; j < remember.size(); j++)
-			{
-				r = (Rememberance)remember.get(j);
+			for (j = 0; j < remember.size(); j++) {
+				r = remember.get(j);
 				// if so, replace it
-				if (cl.getName().equals(r.varName) && (cl.getType() == r.type))
-				{
+				if (cl.getName().equals(r.varName) && (cl.getType() == r.type)) {
 					remember.set(j, rNew);
 					break;
 				}
 			}
 			// if not, add it
-			if (j == remember.size()) remember.add(rNew);
+			if (j == remember.size())
+				remember.add(rNew);
 		}
 	}
-	
+
 	private void okayButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_okayButtonActionPerformed
 	{//GEN-HEADEREND:event_okayButtonActionPerformed
-			int i, n;
-			ConstantLine c;
-			
-			try
-			{
-				// passing info to UndefinedConstants object
-				n = modelTable.getNumConstants();
-				for (i = 0; i < n; i++)
-				{
-					c = modelTable.getConstantLine(i);
-					c.checkValid();
-					if(c.isRange())
-					{
-						undef.defineConstant(c.getName(), c.getStartValue(), c.getEndValue(), c.getStepValue());
-					}
-					else
-					{
-						undef.defineConstant(c.getName(), c.getSingleValue());
-					}
+		int i, n;
+		ConstantLine c;
+
+		try {
+			// passing info to UndefinedConstants object
+			n = modelTable.getNumConstants();
+			for (i = 0; i < n; i++) {
+				c = modelTable.getConstantLine(i);
+				c.checkValid();
+				if (c.isRange()) {
+					undef.defineConstant(c.getName(), c.getStartValue(), c.getEndValue(), c.getStepValue());
+				} else {
+					undef.defineConstant(c.getName(), c.getSingleValue());
 				}
-				n = propTable.getNumConstants();
-				for (i = 0; i < n; i++)
-				{
-					c = propTable.getConstantLine(i);
-					c.checkValid();
-					if(c.isRange())
-					{
-						undef.defineConstant(c.getName(), c.getStartValue(), c.getEndValue(), c.getStepValue());
-					}
-					else
-					{
-						undef.defineConstant(c.getName(), c.getSingleValue());
-					}
+			}
+			n = propTable.getNumConstants();
+			for (i = 0; i < n; i++) {
+				c = propTable.getConstantLine(i);
+				c.checkValid();
+				if (c.isRange()) {
+					undef.defineConstant(c.getName(), c.getStartValue(), c.getEndValue(), c.getStepValue());
+				} else {
+					undef.defineConstant(c.getName(), c.getSingleValue());
 				}
-				undef.checkAllDefined();
-				undef.initialiseIterators();
-				
-				cancelled = false;
-				rememberValues();
-				lastGraph = this.createGraphCheck.isSelected();
-				lastSimulation = this.useSimulationCheck.isSelected();
-				dispose();
 			}
-			catch(PrismException e)
-			{
-				gui.errorDialog(e.getMessage());
-			}
+			undef.checkAllDefined();
+			undef.initialiseIterators();
+
+			cancelled = false;
+			rememberValues();
+			lastGraph = this.createGraphCheck.isSelected();
+			lastSimulation = this.useSimulationCheck.isSelected();
+			dispose();
+		} catch (PrismException e) {
+			gui.errorDialog(e.getMessage());
+		}
 	}//GEN-LAST:event_okayButtonActionPerformed
-		
+
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{//GEN-HEADEREND:event_cancelButtonActionPerformed
-			dispose();
+		dispose();
 	}//GEN-LAST:event_cancelButtonActionPerformed
-		
-		/** Closes the dialog */
+
+	/** Closes the dialog */
 	private void closeDialog(java.awt.event.WindowEvent evt)//GEN-FIRST:event_closeDialog
-		{
-			setVisible(false);
-			dispose();
+	{
+		setVisible(false);
+		dispose();
 	}//GEN-LAST:event_closeDialog
-		
-		// remembered values for a single constant
-		
-		static class Rememberance
+
+	// remembered values for a single constant
+
+	static class Rememberance
+	{
+		String varName;
+		parser.type.Type type;
+		boolean isRange;
+		String singleValue;
+		String start;
+		String end;
+		String step;
+
+		@Override
+		public String toString()
 		{
-			String varName;
-			parser.type.Type type;
-			boolean isRange;
-			String singleValue;
-			String start;
-			String end;
-			String step;
-			public String toString()
-			{ return varName+"("+type.getTypeString()+") : "+isRange+","+singleValue; }
+			return varName + "(" + type.getTypeString() + ") : " + isRange + "," + singleValue;
 		}
+	}
 }

@@ -148,18 +148,21 @@ public class AxisSettings extends Observable implements SettingOwner
 		/* Add constraints. */
 		minValue.addConstraint(new NumericConstraint()
 		{
+			@Override
 			public void checkValueDouble(double d) throws SettingException
 			{
 				if (activated && d >= maxValue.getDoubleValue())
 					throw new SettingException("Minimum value should be < Maximum value");
 			}
 
+			@Override
 			public void checkValueInteger(int i) throws SettingException
 			{
 				if (activated && i >= maxValue.getDoubleValue())
 					throw new SettingException("Minimum value should be < Maximum value");
 			}
 
+			@Override
 			public void checkValueLong(long i) throws SettingException
 			{
 				if (activated && i >= maxValue.getDoubleValue())
@@ -168,18 +171,21 @@ public class AxisSettings extends Observable implements SettingOwner
 		});
 		maxValue.addConstraint(new NumericConstraint()
 		{
+			@Override
 			public void checkValueDouble(double d) throws SettingException
 			{
 				if (activated && d <= minValue.getDoubleValue())
 					throw new SettingException("Maximum value should be > Minimum value");
 			}
 
+			@Override
 			public void checkValueInteger(int i) throws SettingException
 			{
 				if (activated && i <= minValue.getDoubleValue())
 					throw new SettingException("Maximum value should be > Minimum value");
 			}
 
+			@Override
 			public void checkValueLong(long i) throws SettingException
 			{
 				if (activated && i <= maxValue.getDoubleValue())
@@ -188,18 +194,21 @@ public class AxisSettings extends Observable implements SettingOwner
 		});
 		minimumPower.addConstraint(new NumericConstraint()
 		{
+			@Override
 			public void checkValueDouble(double d) throws SettingException
 			{
 				if (activated && d >= maximumPower.getDoubleValue())
 					throw new SettingException("Minimum power should be < Maximum power");
 			}
 
+			@Override
 			public void checkValueInteger(int i) throws SettingException
 			{
 				if (activated && i >= maximumPower.getDoubleValue())
 					throw new SettingException("Minimum power should be < Maximum power");
 			}
 
+			@Override
 			public void checkValueLong(long i) throws SettingException
 			{
 				if (activated && i >= maximumPower.getDoubleValue())
@@ -208,18 +217,21 @@ public class AxisSettings extends Observable implements SettingOwner
 		});
 		maximumPower.addConstraint(new NumericConstraint()
 		{
+			@Override
 			public void checkValueDouble(double d) throws SettingException
 			{
 				if (activated && d <= minimumPower.getDoubleValue())
 					throw new SettingException("Maximum power should be > Minimum power");
 			}
 
+			@Override
 			public void checkValueInteger(int i) throws SettingException
 			{
 				if (activated && i <= minimumPower.getDoubleValue())
 					throw new SettingException("Maximum power should be > Minimum power");
 			}
 
+			@Override
 			public void checkValueLong(long i) throws SettingException
 			{
 				if (activated && i <= minimumPower.getDoubleValue())
@@ -236,6 +248,7 @@ public class AxisSettings extends Observable implements SettingOwner
 		notifyObservers();
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {
@@ -260,16 +273,19 @@ public class AxisSettings extends Observable implements SettingOwner
 		return name;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return 14;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		return heading.getStringValue();
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		switch (index) {
@@ -306,11 +322,13 @@ public class AxisSettings extends Observable implements SettingOwner
 		}
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return prism.PropertyConstants.AXIS;
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "Axis";
@@ -327,6 +345,7 @@ public class AxisSettings extends Observable implements SettingOwner
 		gridInterval.setEnabled(!autoScale.getBooleanValue() && scaleType.getCurrentIndex() == NORMAL_SCALE);
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		doEnables();
@@ -680,11 +699,13 @@ public class AxisSettings extends Observable implements SettingOwner
 		notifyObservers(this);
 	}
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;
@@ -904,7 +925,7 @@ public class AxisSettings extends Observable implements SettingOwner
 		}
 	}
 
-	public void save(Element axis) throws SettingException
+	public void save(Element axis)
 	{
 		axis.setAttribute("heading", getHeading());
 

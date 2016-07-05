@@ -25,36 +25,44 @@ package jltl2ba;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class APElementIterator implements Iterator<APElement> {
-	
+public class APElementIterator implements Iterator<APElement>
+{
+
 	private APElement it;
 	private int _size;
-	
+
 	// Iterator linked to a bitset
-	public APElementIterator(APElement ap_elem) {
+	public APElementIterator(APElement ap_elem)
+	{
 		_size = ap_elem.size();
 		it = new APElement(_size);
 	}
-	
+
 	// Iterator to 2^size elements
-	public APElementIterator(int size) {
+	public APElementIterator(int size)
+	{
 		_size = size;
 		it = new APElement(size);
 	}
-	
-	public boolean hasNext() {
-		return !it.get(_size); 
+
+	@Override
+	public boolean hasNext()
+	{
+		return !it.get(_size);
 	}
-	
-	public APElement next() throws NoSuchElementException {
+
+	@Override
+	public APElement next() throws NoSuchElementException
+	{
 		if (hasNext()) {
 			APElement tmp = (APElement) it.clone();
 			it.increment();
 			return tmp;
-		}
-		else throw new NoSuchElementException();
+		} else
+			throw new NoSuchElementException();
 	}
-	
+
+	@Override
 	public void remove() throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

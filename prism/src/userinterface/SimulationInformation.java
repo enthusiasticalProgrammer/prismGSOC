@@ -38,15 +38,21 @@ public class SimulationInformation
 	private PrismSettings settings;
 
 	// Simulation method
-	public enum Method { CI, ACI, APMC, SPRT };
+	public enum Method {
+		CI, ACI, APMC, SPRT
+	}
+
 	private Method method;
+
 	// Unknown variable
-	public enum Unknown { WIDTH, CONFIDENCE, NUM_SAMPLES };
+	public enum Unknown {
+		WIDTH, CONFIDENCE, NUM_SAMPLES
+	}
+
 	private Unknown unknown;
 
 	// Settings
 	private Values initialState;
-
 
 	private double width;
 	private double confidence;
@@ -73,7 +79,6 @@ public class SimulationInformation
 		this.confidence = settings.getDouble(PrismSettings.SIMULATOR_DEFAULT_CONFIDENCE);
 		this.numSamples = settings.getInteger(PrismSettings.SIMULATOR_DEFAULT_NUM_SAMPLES);
 		this.maxPathLength = settings.getLong(PrismSettings.SIMULATOR_DEFAULT_MAX_PATH);
-
 
 		this.distributed = false;
 
@@ -109,7 +114,7 @@ public class SimulationInformation
 	{
 		if (name.equals("Width") || name.equals("Approximation")) {
 			setUnknown(Unknown.WIDTH);
-		} else if  (name.equals("Confidence")) {
+		} else if (name.equals("Confidence")) {
 			setUnknown(Unknown.CONFIDENCE);
 		} else if (name.equals("Number of samples")) {
 			setUnknown(Unknown.NUM_SAMPLES);
@@ -133,7 +138,7 @@ public class SimulationInformation
 	{
 		return unknown;
 	}
-	
+
 	/**
 	 * Getter for property initialState.
 	 * @return Value of property initialState.

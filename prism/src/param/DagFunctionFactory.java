@@ -34,100 +34,135 @@ import java.util.Random;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * TODO complete once needed
  */
-class DagFunctionFactory extends FunctionFactory {
-	private class Number extends DagOperator {
+class DagFunctionFactory extends FunctionFactory
+{
+	private class Number extends DagOperator
+	{
 		private BigInteger number;
-		Number(BigInteger number) {
+
+		Number(BigInteger number)
+		{
 			super(number);
 			this.number = number;
 		}
-		BigInteger getNumber() {
+
+		BigInteger getNumber()
+		{
 			return number;
 		}
-		
+
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return number.toString();
 		}
 	}
-	
-	private class Variable extends DagOperator {
+
+	private class Variable extends DagOperator
+	{
 		private int variable;
-		Variable(int variable) {
+
+		Variable(int variable)
+		{
 			super(randomPosition.getDimension(variable).getNum());
 			this.variable = variable;
 		}
-		int getVariable() {
+
+		int getVariable()
+		{
 			return variable;
 		}
-		
+
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return parameterNames[variable];
 		}
 	}
 
-	private class Negate extends DagOperator {
+	private class Negate extends DagOperator
+	{
 		private DagOperator what;
-		Negate(DagOperator what) {
+
+		Negate(DagOperator what)
+		{
 			super(what.getCValue().negate());
 			this.what = what;
 		}
-		DagOperator getWhat() {
+
+		DagOperator getWhat()
+		{
 			return what;
 		}
-		
+
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "-(" + what.toString() + ")";
 		}
 	}
 
-	private class Add extends DagOperator {
+	private class Add extends DagOperator
+	{
 		private DagOperator op1;
 		private DagOperator op2;
-		Add(DagOperator op1, DagOperator op2) {
+
+		Add(DagOperator op1, DagOperator op2)
+		{
 			super(op1.getCValue().add(op2.getCValue()));
 			this.op1 = op1;
 			this.op2 = op2;
 		}
-		DagOperator getOp1() {
+
+		DagOperator getOp1()
+		{
 			return op1;
 		}
-		DagOperator getOp2() {
+
+		DagOperator getOp2()
+		{
 			return op2;
 		}
-		
+
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "(" + op1.toString() + "+" + op2.toString() + ")";
 		}
 	}
-	
-	private class Multiply extends DagOperator {
+
+	private class Multiply extends DagOperator
+	{
 		private DagOperator op1;
 		private DagOperator op2;
-		Multiply(DagOperator op1, DagOperator op2) {
+
+		Multiply(DagOperator op1, DagOperator op2)
+		{
 			super(op1.getCValue().multiply(op2.getCValue()));
 
 			this.op1 = op1;
 			this.op2 = op2;
 		}
-		DagOperator getOp1() {
+
+		DagOperator getOp1()
+		{
 			return op1;
 		}
-		DagOperator getOp2() {
+
+		DagOperator getOp2()
+		{
 			return op2;
 		}
-		
+
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "(" + op1.toString() + "*" + op2.toString() + ")";
 		}
 	}
-	
+
 	private Point randomPosition;
-	private HashMap<DagOperator,DagOperator> polynomials;
+	private HashMap<DagOperator, DagOperator> polynomials;
 	private DagOperator zeroOp;
 	private DagOperator oneOp;
 	private DagFunction[] parameters;
@@ -136,10 +171,11 @@ class DagFunctionFactory extends FunctionFactory {
 	private DagFunction nan;
 	private DagFunction inf;
 	private DagFunction minf;
-	private HashMap<DagFunction,DagFunction> functions;
-//	private boolean negateToInner;
-	
-	DagFunctionFactory(String[] parameterNames, BigRational[] lowerBounds, BigRational[] upperBounds, double maxProbWrong, boolean negateToInner) {
+	private HashMap<DagFunction, DagFunction> functions;
+	//	private boolean negateToInner;
+
+	DagFunctionFactory(String[] parameterNames, BigRational[] lowerBounds, BigRational[] upperBounds, double maxProbWrong, boolean negateToInner)
+	{
 		super(parameterNames, lowerBounds, upperBounds);
 		Random random = new Random();
 		BigRational[] randomPosArr = new BigRational[parameterNames.length];
@@ -150,58 +186,64 @@ class DagFunctionFactory extends FunctionFactory {
 		}
 		randomPosition = new Point(randomPosArr);
 
-		polynomials = new HashMap<DagOperator,DagOperator>();
-		functions = new HashMap<DagFunction,DagFunction>();
+		polynomials = new HashMap<DagOperator, DagOperator>();
+		functions = new HashMap<DagFunction, DagFunction>();
 		zeroOp = new Number(BigInteger.ZERO);
-		polynomials.put(zeroOp,zeroOp);
+		polynomials.put(zeroOp, zeroOp);
 		oneOp = new Number(BigInteger.ONE);
-		polynomials.put(oneOp,oneOp);
+		polynomials.put(oneOp, oneOp);
 		zero = new DagFunction(this, zeroOp, oneOp);
-		functions.put(zero,zero);
+		functions.put(zero, zero);
 		one = new DagFunction(this, oneOp, oneOp);
-		functions.put(one,one);
+		functions.put(one, one);
 		nan = new DagFunction(this, DagFunction.NAN);
-		functions.put(nan,nan);
+		functions.put(nan, nan);
 		inf = new DagFunction(this, DagFunction.INF);
-		functions.put(inf,inf);
+		functions.put(inf, inf);
 		minf = new DagFunction(this, DagFunction.MINF);
-		functions.put(minf,minf);
+		functions.put(minf, minf);
 		parameters = new DagFunction[parameterNames.length];
 		for (int varNr = 0; varNr < parameterNames.length; varNr++) {
 			DagOperator paramOp = new Variable(varNr);
-			polynomials.put(paramOp,paramOp);
+			polynomials.put(paramOp, paramOp);
 			parameters[varNr] = new DagFunction(this, paramOp, oneOp);
-			functions.put(parameters[varNr],parameters[varNr]);
+			functions.put(parameters[varNr], parameters[varNr]);
 		}
-//		this.negateToInner = negateToInner;
+		//		this.negateToInner = negateToInner;
 	}
-	
+
 	@Override
-	Function getZero() {
+	Function getZero()
+	{
 		return zero;
 	}
-	
+
 	@Override
-	Function getOne() {
+	Function getOne()
+	{
 		return one;
 	}
 
 	@Override
-	Function getNaN() {
+	Function getNaN()
+	{
 		return nan;
 	}
 
 	@Override
-	Function getInf() {
+	Function getInf()
+	{
 		return inf;
 	}
 
 	@Override
-	Function getMInf() {
+	Function getMInf()
+	{
 		return minf;
 	}
-	
-	private DagOperator makeUnique(DagOperator op) {
+
+	private DagOperator makeUnique(DagOperator op)
+	{
 		DagOperator foundOp = polynomials.get(op);
 		if (foundOp == null) {
 			foundOp = op;
@@ -209,8 +251,9 @@ class DagFunctionFactory extends FunctionFactory {
 		}
 		return foundOp;
 	}
-	
-	private DagFunction makeUnique(DagFunction fn) {
+
+	private DagFunction makeUnique(DagFunction fn)
+	{
 		DagFunction foundFn = functions.get(fn);
 		if (foundFn == null) {
 			foundFn = fn;
@@ -218,79 +261,91 @@ class DagFunctionFactory extends FunctionFactory {
 		}
 		return foundFn;
 	}
-	
+
 	@Override
-	Function fromBigRational(BigRational bigRat) {
+	Function fromBigRational(BigRational bigRat)
+	{
 		bigRat = bigRat.cancel();
 		DagOperator num = new Number(bigRat.getNum());
 		num = makeUnique(num);
 		DagOperator den = new Number(bigRat.getDen());
 		den = makeUnique(den);
-		DagFunction result = new DagFunction(this,  num, den);
+		DagFunction result = new DagFunction(this, num, den);
 		return makeUnique(result);
 	}
 
 	@Override
-	Function getVar(int var) {
+	Function getVar(int var)
+	{
 		return parameters[var];
 	}
 
-	private DagOperator opMultiply(DagOperator op1, DagOperator op2) {
+	private DagOperator opMultiply(DagOperator op1, DagOperator op2)
+	{
 		return makeUnique(new Multiply(op1, op2));
 	}
-	
-	private DagOperator opAdd(DagOperator op1, DagOperator op2) {
+
+	private DagOperator opAdd(DagOperator op1, DagOperator op2)
+	{
 		return makeUnique(new Add(op1, op2));
 	}
-	
-	private DagOperator opNegate(DagOperator op) {
+
+	private DagOperator opNegate(DagOperator op)
+	{
 		return makeUnique(new Negate(op));
 	}
-	
-	public Function add(DagFunction op1, DagFunction op2) {
-		DagOperator num = opAdd(opMultiply(op1.getNum(), op2.getDen()),
-				opMultiply(op1.getDen(), op2.getNum()));
+
+	public Function add(DagFunction op1, DagFunction op2)
+	{
+		DagOperator num = opAdd(opMultiply(op1.getNum(), op2.getDen()), opMultiply(op1.getDen(), op2.getNum()));
 		DagOperator den = opMultiply(op1.getDen(), op2.getDen());
-		return makeUnique(new DagFunction(this, num,  den));
+		return makeUnique(new DagFunction(this, num, den));
 	}
 
-	public DagFunction negate(DagFunction dagFunction) {
+	public DagFunction negate(DagFunction dagFunction)
+	{
 		DagOperator neg = opNegate(dagFunction.getNum());
 		return makeUnique(new DagFunction(this, neg, dagFunction.getDen()));
 	}
-	
-	public Function subtract(DagFunction op1, DagFunction op2) {
+
+	public Function subtract(DagFunction op1, DagFunction op2)
+	{
 		DagFunction negOther = negate(op2);
 		return add(op1, negOther);
 	}
 
-	public Function multiply(DagFunction op1, DagFunction op2) {
+	public Function multiply(DagFunction op1, DagFunction op2)
+	{
 		DagOperator num = opMultiply(op1.getNum(), op2.getNum());
 		DagOperator den = opMultiply(op1.getDen(), op2.getDen());
 		return makeUnique(new DagFunction(this, num, den));
 	}
 
-	public Function divide(DagFunction op1, DagFunction op2) {
+	public Function divide(DagFunction op1, DagFunction op2)
+	{
 		DagOperator num = opMultiply(op1.getNum(), op2.getDen());
 		DagOperator den = opMultiply(op1.getDen(), op2.getNum());
 		return makeUnique(new DagFunction(this, num, den));
 	}
 
-	public Function star(DagFunction op) {
+	public Function star(DagFunction op)
+	{
 		DagOperator num = op.getDen();
 		DagOperator den = opAdd(op.getDen(), opNegate(op.getNum()));
 		return makeUnique(new DagFunction(this, num, den));
 	}
 
 	// TODO fix following
-	public Function toConstraint(DagFunction op) {
+	public Function toConstraint(DagFunction op)
+	{
 		DagOperator num = op.getNum();
 		DagOperator den = oneOp;
 		return makeUnique(new DagFunction(this, num, den));
 	}
 
 	// TODO use cache for faster evaluation
-	private BigRational evaluate(DagOperator op, Point point) {
+	private BigRational evaluate(DagOperator op, Point point)
+	{
 		if (op instanceof Number) {
 			Number opNum = (Number) op;
 			return new BigRational(opNum.getNumber());
@@ -310,15 +365,17 @@ class DagFunctionFactory extends FunctionFactory {
 			throw new RuntimeException("invalid operator");
 		}
 	}
-	
-	public BigRational evaluate(DagFunction op, Point point, boolean cancel) {
+
+	public BigRational evaluate(DagFunction op, Point point, boolean cancel)
+	{
 		if (op.getType() == DagFunction.NAN) {
 			return BigRational.NAN;
 		}
 		return evaluate(op.getNum(), point).divide(evaluate(op.getDen(), point));
 	}
 
-	public BigRational asBigRational(DagFunction op) {
+	public BigRational asBigRational(DagFunction op)
+	{
 		BigRational[] point = new BigRational[parameterNames.length];
 		for (int i = 0; i < parameterNames.length; i++) {
 			point[i] = BigRational.ZERO;
@@ -326,15 +383,18 @@ class DagFunctionFactory extends FunctionFactory {
 		return evaluate(op, new Point(point), true);
 	}
 
-	public boolean isOne(DagFunction op) {
+	public boolean isOne(DagFunction op)
+	{
 		return op == one;
 	}
 
-	public boolean isZero(DagFunction op) {
+	public boolean isZero(DagFunction op)
+	{
 		return op == zero;
 	}
 
-	public String toString(DagFunction op) {
+	public String toString(DagFunction op)
+	{
 		return "(" + op.getNum().toString() + ")/(" + op.getDen().toString() + ")";
 	}
 }

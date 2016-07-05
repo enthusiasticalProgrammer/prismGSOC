@@ -32,12 +32,13 @@ package param;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see CachedFunctionFactory
  */
-final class CachedFunction extends Function {
+final class CachedFunction extends Function
+{
 	/** unique number of cached function this function represents */
 	private int number;
 	/** factory this function belongs to */
 	private CachedFunctionFactory factory;
-	
+
 	/**
 	 * Constructs a new cached function.
 	 * 
@@ -50,7 +51,7 @@ final class CachedFunction extends Function {
 		this.factory = factory;
 		this.number = number;
 	}
-	
+
 	/**
 	 * Returns the unique number of the cached function this function represents. 
 	 * 
@@ -60,100 +61,116 @@ final class CachedFunction extends Function {
 	{
 		return number;
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return factory.getFunction(number).toString();
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof CachedFunction)) {
 			return false;
 		}
 		CachedFunction function = (CachedFunction) obj;
 		return number == function.number;
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		return number;
-	}
-	
-	@Override
-	public Function add(Function other) {
-		return factory.add(this,  other);
 	}
 
 	@Override
-	public Function negate() {
+	public Function add(Function other)
+	{
+		return factory.add(this, other);
+	}
+
+	@Override
+	public Function negate()
+	{
 		return factory.negate(this);
 	}
 
 	@Override
-	public Function multiply(Function other) {
+	public Function multiply(Function other)
+	{
 		return factory.multiply(this, other);
 	}
 
 	@Override
-	public Function divide(Function other) {
+	public Function divide(Function other)
+	{
 		return factory.divide(this, other);
 	}
 
 	@Override
-	public Function star() {
+	public Function star()
+	{
 		return factory.star(this);
 	}
 
 	@Override
-	public Function toConstraint() {
+	public Function toConstraint()
+	{
 		return factory.toConstraint(this);
 	}
 
 	@Override
-	public BigRational evaluate(Point point, boolean cancel) {
+	public BigRational evaluate(Point point, boolean cancel)
+	{
 		return factory.evaluate(this, point, cancel);
 	}
 
 	@Override
-	public BigRational evaluate(Point point) {
+	public BigRational evaluate(Point point)
+	{
 		return factory.evaluate(this, point);
 	}
 
 	@Override
-	public boolean check(Point point, boolean strict) {
+	public boolean check(Point point, boolean strict)
+	{
 		return factory.check(this, point, strict);
 	}
 
-	
 	@Override
-	public BigRational asBigRational() {
+	public BigRational asBigRational()
+	{
 		return factory.asBigRational(this);
 	}
 
 	@Override
-	public boolean isNaN() {
+	public boolean isNaN()
+	{
 		return factory.isNaN(this);
 	}
 
 	@Override
-	public boolean isInf() {
+	public boolean isInf()
+	{
 		return factory.isInf(this);
 	}
 
 	@Override
-	public boolean isMInf() {
+	public boolean isMInf()
+	{
 		return factory.isMInf(this);
 	}
 
 	@Override
-	public boolean isOne() {
+	public boolean isOne()
+	{
 		return factory.isOne(this);
 	}
 
 	@Override
-	public boolean isZero() {
+	public boolean isZero()
+	{
 		return factory.isZero(this);
 	}
 }

@@ -163,12 +163,6 @@ public class ExplicitModel2MTBDD
 		String moduleNames[] = modulesFile.getModuleNames(); // whose name is stored here
 		Values constantValues = new Values(); // no constants
 
-		/*JDDNode stateRewardsArray[] = new JDDNode[1];
-		stateRewardsArray[0] = stateRewards;
-		JDDNode transRewardsArray[] = new JDDNode[1];
-		transRewardsArray[0] = transRewards;
-		String rewardStructNames[] = new String[1];
-		rewardStructNames[0] = "";*/
 		JDDNode stateRewardsArray[] = new JDDNode[0];
 		JDDNode transRewardsArray[] = new JDDNode[0];
 		String rewardStructNames[] = new String[0];
@@ -473,7 +467,7 @@ public class ExplicitModel2MTBDD
 
 	// Build BDD for initial state(s)
 
-	private void buildInit() throws PrismException
+	private void buildInit()
 	{
 		start = JDD.Constant(0);
 		for (int r : modelExpl.getInitialStates()) {

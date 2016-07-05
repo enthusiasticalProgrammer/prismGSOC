@@ -65,13 +65,15 @@ public class ExportBuiltModelThread extends GUIComputationThread
 	{
 		this.propertiesFile = propertiesFile;
 	}
-	
+
+	@Override
 	public void run()
 	{
 		try {
 			// Notify the interface of the start of computation
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.startProgress();
@@ -102,6 +104,7 @@ public class ExportBuiltModelThread extends GUIComputationThread
 			} catch (FileNotFoundException e) {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						plug.stopProgress();
@@ -115,6 +118,7 @@ public class ExportBuiltModelThread extends GUIComputationThread
 				error(e2);
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						plug.stopProgress();
@@ -128,6 +132,7 @@ public class ExportBuiltModelThread extends GUIComputationThread
 			//If we get here export was successful, notify interface
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.stopProgress();

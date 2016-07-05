@@ -38,6 +38,7 @@ public class GraphException extends Exception
 		super(e);
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Error: " + getMessage() + ".";

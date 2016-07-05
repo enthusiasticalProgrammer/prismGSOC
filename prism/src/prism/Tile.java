@@ -44,7 +44,7 @@ public class Tile
 	protected ArrayList<Point> cornerPoints;
 
 	protected int dim;
-	
+
 	/**
 	 * Creates a new Tile with a given corner points
 	 * @param cornerPoints The number of corner points must be equal to the dimension.
@@ -56,7 +56,7 @@ public class Tile
 		dim = this.cornerPoints.size();
 		projectionUpperBound = new boolean[dim];
 	}
-	
+
 	/**
 	 * Returns a list containing the corner points representing this tile.
 	 */
@@ -64,14 +64,14 @@ public class Tile
 	{
 		return this.cornerPoints;
 	}
-	
+
 	/**
 	 * If true, this tile is already known to be part of a facet of a Pareto
 	 * curve, not just it's underapproximation.
 	 */
 	protected boolean upperBound;
 	protected boolean[] projectionUpperBound;
-	
+
 	protected boolean hyperplaneSuggested;
 
 	/**
@@ -85,35 +85,34 @@ public class Tile
 		else
 			return this.projectionUpperBound[index];
 	}
-	
+
 	/**
 	 * Returns true if {@code point} lies strictly above the hyperplane given
 	 * by this tile.
 	 */
-	protected boolean pointAboveHyperplane(Point point) throws PrismException
+	protected boolean pointAboveHyperplane(Point point)
 	{
 		//System.out.println("t: " + this);
 		for (Point cp : this.cornerPoints) {
 			if (point.isCloseTo(cp))
 				return false;
 		}
-		
+
 		Point w = Tile.getWeightsForTile(this);
-		
+
 		double productTile = 0;
 		for (int j = 0; j < dim; j++)
 			for (int i = 0; i < point.getDimension(); i++)
-				productTile += w.getCoord(i) * this.cornerPoints.get(j).getCoord(i); 
-		productTile = productTile/point.getDimension();
-		
-		
+				productTile += w.getCoord(i) * this.cornerPoints.get(j).getCoord(i);
+		productTile = productTile / point.getDimension();
+
 		double productPoint = 0;
 		for (int i = 0; i < point.getDimension(); i++)
 			productPoint += w.getCoord(i) * point.getCoord(i);
 		//System.out.println(productPoint + " " + productTile + " " + (productPoint - productTile));
 		return productPoint >= productTile + Point.SMALL_NUMBER;
 	}
-	
+
 	/**
 	 * Returns true if this tile will be changed when {@code point} is added
 	 * to a parent {@link TileList}. If {@code updateUpperBounds} is set, then also
@@ -132,11 +131,11 @@ public class Tile
 	 * @throws PrismException
 	 * 
 	 */
-	
+
 	public boolean processNewPoint(Point point, boolean updateUpperBounds, int upperBoundsIndex) throws PrismException
 	{
 		boolean ret = pointAboveHyperplane(point);
-		
+
 		if (ret) {
 			//System.out.println("is affected: " + this);
 			hyperplaneSuggested = false;
@@ -151,9 +150,9 @@ public class Tile
 			}
 			return false;
 		}
-	
+
 	}
-	
+
 	/**
 	 * Returns a list of tiles that should be added to the parent TileList
 	 * when {@code point} is added, replacing the current tile. For the computation
@@ -164,19 +163,19 @@ public class Tile
 	 * which is {@code tolerance} far from the original tiles, the new tile will
 	 * be considered finished.
 	 */
-	public List<Tile> splitByPoint(Point point, List<Point> otherPoints, double tolerance) throws PrismException
+	public List<Tile> splitByPoint(Point point, List<Point> otherPoints, double tolerance)
 	{
 		Point weights = Tile.getWeightsForTile(this);
 		double pointWeight = 0;
-		for (int i = 0; i< point.getDimension(); i++) {
+		for (int i = 0; i < point.getDimension(); i++) {
 			pointWeight += weights.getCoord(i) * point.getCoord(i);
 		}
-		
+
 		double thisTileWeight = 0;
-		for (int i = 0; i< point.getDimension(); i++) {
+		for (int i = 0; i < point.getDimension(); i++) {
 			thisTileWeight += weights.getCoord(i) * this.getCornerPoints().get(0).getCoord(i);
 		}
-		
+
 		boolean isClose = (pointWeight - thisTileWeight) < tolerance;
 
 		//System.out.println("SPLITTING");
@@ -185,20 +184,20 @@ public class Tile
 			ArrayList<Point> newPoints = (ArrayList<Point>) this.cornerPoints.clone();
 			newPoints.set(i, point);
 			Tile t = new Tile(newPoints);
-			
-			boolean onBorder=true;
-			for (int j = 0 ; j < t.cornerPoints.size(); j ++) {
+
+			boolean onBorder = true;
+			for (int j = 0; j < t.cornerPoints.size(); j++) {
 				onBorder = true;
-				for (int k = 0 ; k < t.cornerPoints.size(); k ++)
+				for (int k = 0; k < t.cornerPoints.size(); k++)
 					if (t.cornerPoints.get(k).getCoord(j) != 0.0) {
-						onBorder =false;
+						onBorder = false;
 						break;
 					}
 				if (onBorder)
 					break;
 			}
 			//System.out.println("hyperplane:" + t);
-			
+
 			boolean pointAboveExists = false;
 			for (Point p : otherPoints) {
 				//System.out.println("point " + p);
@@ -207,22 +206,22 @@ public class Tile
 					//System.out.println("is above");
 					break;
 				}
-					
+
 			}
-			
+
 			//the tile is upper bound if the original was (this is not a contradiction,
 			//due to the approx nature of computation even an upper bound tile could be
 			//improved), or is upper bound if the change is rather small.
 			if (isClose || this.isUpperBound(this.dim))
 				t.upperBound = true;
-			
+
 			if (!onBorder && !pointAboveExists)
 				tiles.add(t);
 		}
 		//System.out.println("RET: " + tiles);
 		return tiles;
 	}
-	
+
 	/**
 	 * Gets a weight vector representing the hyperplane given by the tile.
 	 * @param t The tile to compute the weight vector for.
@@ -231,7 +230,7 @@ public class Tile
 	protected static Point getWeightsForTile(Tile t)
 	{
 		int dim = t.cornerPoints.size();
-		
+
 		//First check if we have a nonzero point and remember one.
 		int nonzeroIndex = -1;
 		for (int j = 0; j < dim; j++) {
@@ -240,20 +239,19 @@ public class Tile
 				break;
 			}
 		}
-		
+
 		//If all are zero, we return anything meaningful
 		if (nonzeroIndex == -1) {
 			double[] pointCoords = new double[dim];
 			pointCoords[0] = 1;
 			return new Point(pointCoords);
 		}
-		
-		
-		double[][] d = new double [dim][dim];
-		double[] b = new double [dim];
-		
-		Point pFixed = t.cornerPoints.get(dim-1);
-		for (int j = 0; j < dim-1; j++) {
+
+		double[][] d = new double[dim][dim];
+		double[] b = new double[dim];
+
+		Point pFixed = t.cornerPoints.get(dim - 1);
+		for (int j = 0; j < dim - 1; j++) {
 			Point p = t.cornerPoints.get(j);
 			for (int i = 0; i < dim; i++) {
 				d[j][i] = p.getCoord(i) - pFixed.getCoord(i);
@@ -262,19 +260,19 @@ public class Tile
 		}
 
 		for (int i = 0; i < dim; i++) {
-			d[dim-1][i] = 1;
+			d[dim - 1][i] = 1;
 		}
-		b[dim-1] = 1;
-		
+		b[dim - 1] = 1;
+
 		double[] ret = MultiObjUtils.solveEqns(d, b);
 		double[] pointCoords = new double[dim];
 		for (int i = 0; i < dim; i++)
-			pointCoords[i] = ret[i];	
+			pointCoords[i] = ret[i];
 		//System.out.println("returned points: " + Arrays.toString(pointCoords));
-		
+
 		return new Point(pointCoords).normalize();
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -284,32 +282,32 @@ public class Tile
 			sb.append(this.cornerPoints.get(i).toString());
 			sb.append("; ");
 		}
-		sb.append(this.cornerPoints.get(this.cornerPoints.size()-1).toString());
+		sb.append(this.cornerPoints.get(this.cornerPoints.size() - 1).toString());
 		sb.append('}');
 		return sb.toString();
 	}
-	
-	
+
 	/**
 	 * True if there is one of the boundaries of the Tile is
 	 * a line orthogonal to {@code index}'s axis
 	 */
-	public boolean liesOnBoundary(int index) {
+	public boolean liesOnBoundary(int index)
+	{
 		int count = 0;
-		
+
 		for (Point p : this.cornerPoints) {
 			if (p.getCoord(index) == 0)
 				count++;
 		}
-		
+
 		//System.out.println(count);
-		
+
 		/*//this can happen in fact in all zeros
 		  if (count == 3) {
 			throw new Error("Error in design of Pareto curve algorithm. The whole Tile lies on a boundary.");
 		}*/
-		
+
 		return (count >= 2);
-				
+
 	}
 }

@@ -31,7 +31,8 @@ import jltl2ba.MyBitSet;
  * one containing the names of nodes that may be renamed and on
  * containing the names that are not allowed in the tree.
  */
-public class SafraTreeTemplate implements NBA2DAResult<SafraTree> {
+public class SafraTreeTemplate implements NBA2DAResult<SafraTree>
+{
 
 	private SafraTree _safraTree;
 	private MyBitSet _renameableNames;
@@ -49,54 +50,79 @@ public class SafraTreeTemplate implements NBA2DAResult<SafraTree> {
 	}
 
 	/** Get the SafraTree */
-	public SafraTree getSafraTree() {return _safraTree;}
+	public SafraTree getSafraTree()
+	{
+		return _safraTree;
+	}
 
 	/** Get the SafraTree */
-	public SafraTree getState() {return _safraTree;}
+	@Override
+	public SafraTree getState()
+	{
+		return _safraTree;
+	}
 
 	/** Get the names of nodes that may be renamed. */
-	public MyBitSet renameableNames() {return _renameableNames;}
+	public MyBitSet renameableNames()
+	{
+		return _renameableNames;
+	}
 
 	/** Get the names that can are not allowed to be used in the Safra tree */
-	public MyBitSet restrictedNames() {return _restrictedNames;}
+	public MyBitSet restrictedNames()
+	{
+		return _restrictedNames;
+	}
 
 	/** Set the 'renameable' flag for a name (former flag default: true) */
-	public void setRenameable(int name, boolean flag) { _renameableNames.set(name, flag); }
+	public void setRenameable(int name, boolean flag)
+	{
+		_renameableNames.set(name, flag);
+	}
 
 	/** Get the 'renameable' flag for a name */
-	public boolean isRenameable(int name) { return _renameableNames.get(name); }
+	public boolean isRenameable(int name)
+	{
+		return _renameableNames.get(name);
+	}
 
 	/** Set the 'restricted' flag for a name (former flag default: true) */
-	public void setRestricted(int name, boolean flag) { _restrictedNames.set(name, flag); }
+	public void setRestricted(int name, boolean flag)
+	{
+		_restrictedNames.set(name, flag);
+	}
 
 	/** Get the 'restricted' flag for a name */
-	public boolean isRestricted(int name) { return _restrictedNames.get(name); }
-
+	public boolean isRestricted(int name)
+	{
+		return _restrictedNames.get(name);
+	}
 
 	/**
 	 * Return true if this tree (taking into account the renameableNames and the restrictedNames) 
 	 * can be renamed to match the SafraTree other.
 	 * Can only be called for trees that are structural_equal!!!
 	 */
-	public boolean matches(SafraTree other) {
+	public boolean matches(SafraTree other)
+	{
 		SafraTreeNode this_root = _safraTree.getRootNode();
 		SafraTreeNode other_root = other.getRootNode();
 
 		if (this_root == null || other_root == null) {
-			assert(this_root == null && other_root == null);
+			assert (this_root == null && other_root == null);
 			return true;
 		}
 
 		return matches(this_root, other_root);
 	}
 
-
 	/**
 	 * Compare two subtrees to see if they match (taking into account the renameableNames
 	 * and the restrictedNames).
 	 */
-	private boolean matches(SafraTreeNode this_node, SafraTreeNode other_node) {
-		assert(this_node != null && other_node != null);
+	private boolean matches(SafraTreeNode this_node, SafraTreeNode other_node)
+	{
+		assert (this_node != null && other_node != null);
 
 		if (this_node == null || other_node == null) {
 			return false;
@@ -115,8 +141,8 @@ public class SafraTreeTemplate implements NBA2DAResult<SafraTree> {
 			}
 		}
 
-		assert(this_node.getLabeling().equals(other_node.getLabeling()));
-		assert(this_node.hasFinalFlag() == other_node.hasFinalFlag());
+		assert (this_node.getLabeling().equals(other_node.getLabeling()));
+		assert (this_node.hasFinalFlag() == other_node.hasFinalFlag());
 
 		// this node looks good, now the children
 		SafraTreeNode this_child = this_node.getOldestChild();
@@ -130,7 +156,7 @@ public class SafraTreeTemplate implements NBA2DAResult<SafraTree> {
 			this_child = this_child.getYoungerBrother();
 			other_child = other_child.getYoungerBrother();
 		}
-		assert(this_child == null && other_child == null);
+		assert (this_child == null && other_child == null);
 
 		return true;
 	}

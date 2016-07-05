@@ -87,7 +87,7 @@ public class PTAModelCheckerCL
 
 			// Parse command-line arguments
 			parseCommandLineArgs(args);
-			
+
 			// Process target info
 			// Strip any accidental quotes
 			targetLocString = targetLocString.replaceAll("['\"]", "");
@@ -109,10 +109,10 @@ public class PTAModelCheckerCL
 				System.out.print(" " + args[i]);
 			System.out.println();
 			abstractRefine.printSettings();
-			
+
 			// Expand any input files that are lists of PTAs
 			processPTAFiles();
-			
+
 			// Build PTA
 			System.out.println("\nBuilding PTA from \"" + ptaFiles.get(0) + "\"");
 			pta = PTA.buildPTAFromDesFile(ptaFiles.get(0));
@@ -133,7 +133,7 @@ public class PTAModelCheckerCL
 			// Export PTA if required
 			if (exportPTA)
 				pta.writeToDesFile("par.des");
-			
+
 			// Parse target clock constraint
 			if (targetConstraintString.equals("true")) {
 				targetConstraint = null;
@@ -167,8 +167,7 @@ public class PTAModelCheckerCL
 			// Display final target info
 			System.out.print("\nTarget locations: " + targetLocString);
 			System.out.println(" (" + targetLocs.cardinality() + " locations)");
-			System.out.println("Target constraint: "
-					+ (targetConstraint == null ? "true" : targetConstraint.toString(pta)));
+			System.out.println("Target constraint: " + (targetConstraint == null ? "true" : targetConstraint.toString(pta)));
 
 			// Do forward reach
 			// Default case: use game-based abstraction refinement
@@ -208,7 +207,7 @@ public class PTAModelCheckerCL
 			// Process a switch
 			if (s.charAt(0) == '-') {
 				s = s.substring(1);
-				
+
 				// Local options
 				if (s.equals("min")) {
 					min = true;
@@ -219,7 +218,7 @@ public class PTAModelCheckerCL
 				} else if (s.equals("mdp")) {
 					mdpReach = true;
 				}
-				
+
 				// Otherwise, try passing to abstraction-refinement engine
 				else {
 					abstractRefine.parseOption(s);
@@ -236,15 +235,15 @@ public class PTAModelCheckerCL
 		ptaFiles.remove(ptaFiles.size() - 1);
 		ptaFiles.remove(ptaFiles.size() - 1);
 	}
-	
+
 	/**
 	 * Expand any input files that are lists of PTAs. 
 	 */
 	private void processPTAFiles() throws PrismException
 	{
 		String s;
-		BufferedReader in =null;
-		
+		BufferedReader in = null;
+
 		ArrayList<String> ptaFilesNew = new ArrayList<String>();
 		for (String ptaFile : ptaFiles) {
 			if (ptaFile.endsWith(".deslist")) {
@@ -269,11 +268,11 @@ public class PTAModelCheckerCL
 					}
 				} catch (IOException e) {
 					throw new PrismException("Could not read from file \"" + ptaFile + "\"");
-				}finally{
+				} finally {
 					try {
 						in.close();
 					} catch (IOException e) {
-						throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+						throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 					}
 				}
 			} else {

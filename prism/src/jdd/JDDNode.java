@@ -4,6 +4,7 @@
 //	Authors:
 //	* Dave Parker <david.parker@comlab.ox.ac.uk> (University of Oxford, formerly University of Birmingham)
 //	* Christian von Essen <christian.vonessen@imag.fr> (VERIMAG)
+//	* Joachim Klein <klein@tcs.inf.tu-dresden.de> (TU Dresden)
 //	
 //------------------------------------------------------------------------------
 //	
@@ -30,20 +31,22 @@ package jdd;
 public class JDDNode
 {
 	private long ptr;
-	
+
 	// native methods (jni)
 	protected static native boolean DDN_IsConstant(long dd);
+
 	protected static native int DDN_GetIndex(long dd);
+
 	protected static native double DDN_GetValue(long dd);
+
 	protected static native long DDN_GetThen(long dd);
+
 	protected static native long DDN_GetElse(long dd);
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("jdd");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -58,7 +61,7 @@ public class JDDNode
 	{
 		ptr = p;
 	}
-	
+
 	public long ptr()
 	{
 		return ptr;
@@ -70,12 +73,12 @@ public class JDDNode
 	}
 
 	public int getIndex()
-	{	
+	{
 		return DDN_GetIndex(ptr);
 	}
 
 	public double getValue()
-	{	
+	{
 		return DDN_GetValue(ptr);
 	}
 
@@ -84,6 +87,10 @@ public class JDDNode
 	 * <br>
 	 * This method does NOT increase the reference count of the returned
 	 * node, it is therefore illegal to call JDD.Deref on the result.
+	 * Additionally, it is recommended to not use the returned node
+	 * as the argument to the JDD methods or call JDD.Ref on it.
+	 * Instead, if you need to obtain a "proper" node, call copy()
+	 * on the returned node.
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
 	public JDDNode getThen()
@@ -101,6 +108,10 @@ public class JDDNode
 	 * <br>
 	 * This method does NOT increase the reference count of the returned
 	 * node, it is therefore illegal to call JDD.Deref on the result.
+	 * Additionally, it is recommended to not use the returned node
+	 * as the argument to the JDD methods or call JDD.Ref on it.
+	 * Instead, if you need to obtain a "proper" node, call copy()
+	 * on the returned node.
 	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
 	 */
 	public JDDNode getElse()
@@ -110,24 +121,28 @@ public class JDDNode
 		// just return the node, even if DebugJDD is enabled
 		// DDN_GetElse will return NULL if the current node is a
 		// constant, raising an Exception in the JDDNode constructor
- 		return new JDDNode(DDN_GetElse(ptr));
+		return new JDDNode(DDN_GetElse(ptr));
 	}
 
-	public boolean equals(Object o)        
+	@Override
+	public boolean equals(Object o)
 	{
 		return (o instanceof JDDNode) && (((JDDNode) o).ptr == ptr);
 	}
-	
+
+	@Override
 	public int hashCode()
 	{
-		return (int)ptr; 
+		return (int) ptr;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		String result = "" + ptr;
 		if (ptr != 0) {
-			if (this.isConstant()) result += " value=" + this.getValue();
+			if (this.isConstant())
+				result += " value=" + this.getValue();
 			result += " references=" + DebugJDD.getRefCount(this);
 		}
 		return result;

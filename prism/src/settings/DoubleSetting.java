@@ -26,64 +26,64 @@
 
 package settings;
 
-public class DoubleSetting extends Setting 
+public class DoubleSetting extends Setting
 {
-    private static DoubleRenderer renderer;
-    private static DoubleEditor editor;
-    
-    static
-    {
-        renderer = new DoubleRenderer();
-        editor = new DoubleEditor();
-    }
-    
-    
-    /** Creates a new instance of DoubleSetting */
-    public DoubleSetting(String name, Double value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public DoubleSetting(String name, Double value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return Double.class;
-    }
-    
-    public double getDoubleValue()
-    {
-        return ((Double)getValue()).doubleValue();
-    }
-    
+	private static DoubleRenderer renderer;
+	private static DoubleEditor editor;
+
+	static {
+		renderer = new DoubleRenderer();
+		editor = new DoubleEditor();
+	}
+
+	/** Creates a new instance of DoubleSetting */
+	public DoubleSetting(String name, Double value, String comment, SettingOwner owner, boolean editableWhenMultiple, NumericConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	public DoubleSetting(String name, Double value, String comment, SettingOwner owner, boolean editableWhenMultiple)
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	@Override
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	@Override
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	@Override
+	public Class<Double> getValueClass()
+	{
+		return Double.class;
+	}
+
+	public double getDoubleValue()
+	{
+		return ((Double) getValue()).doubleValue();
+	}
+
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
-		try
-		{
+		try {
 			return new Double(string);
-		}
-		catch(NumberFormatException e)
-		{
-			throw new SettingException("Error when parsing: "+string+" as a Double value.");
+		} catch (NumberFormatException e) {
+			throw new SettingException("Error when parsing: " + string + " as a Double value.");
 		}
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return ""+getDoubleValue();
+		return "" + getDoubleValue();
 	}
-	
+
 }

@@ -56,19 +56,18 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 	/**
 	 * Default constructor.
 	 */
-	public PTAAbstractRefine(PrismComponent parent) throws PrismException
+	public PTAAbstractRefine(PrismComponent parent)
 	{
 		super(parent);
 		// Just do basic config for QuantAbstractRefine
 		setModelType(ModelType.MDP);
 		setPropertyType(QuantAbstractRefine.PropertyType.PROB_REACH);
 	}
-	
+
 	/**
 	 * Compute min/max PTA reachability probabilities using STPG abstraction refinement. 
 	 */
-	public double forwardsReachAbstractRefine(PTA pta, BitSet targetLocs, Constraint targetConstraint, boolean min)
-			throws PrismException
+	public double forwardsReachAbstractRefine(PTA pta, BitSet targetLocs, Constraint targetConstraint, boolean min) throws PrismException
 	{
 		// Store PTA/target info
 		this.pta = pta;
@@ -192,8 +191,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 	 * and build validity constraint ('valid') for each combination.
 	 * (Note: actually only consider transitions with distinct validity - see above.)
 	 */
-	protected void buildSTPGStateRec(int src, NCZone valid, BitSet bitSet, ArrayList<NCZone> valids, int[] map,
-			int level, int numValids) throws PrismException
+	protected void buildSTPGStateRec(int src, NCZone valid, BitSet bitSet, ArrayList<NCZone> valids, int[] map, int level, int numValids) throws PrismException
 	{
 		STPGAbstrSimple stpg;
 		ArrayList<SymbolicTransition> sts;
@@ -286,8 +284,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 	//  - target set 
 
 	@Override
-	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates,
-			Set<Integer> rebuildStates) throws PrismException
+	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates, Set<Integer> rebuildStates) throws PrismException
 	{
 		LocZone lzSplit;
 		DBMList z, valid1;
@@ -476,8 +473,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 	 * @param newStateMap: The indices of the new states
 	 * @param newSTs: Where to put the new symbolic transitions
 	 */
-	private void splitSymbolicTransition(int src, SymbolicTransition st, int splitState, int newStateMap[],
-			Set<SymbolicTransition> newSTs)
+	private void splitSymbolicTransition(int src, SymbolicTransition st, int splitState, int newStateMap[], Set<SymbolicTransition> newSTs)
 	{
 		// Take a copy of the transition, because we will modify it when analysing it
 		SymbolicTransition stNew = new SymbolicTransition(st);
@@ -485,8 +481,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 		splitSymbolicTransition(src, stNew, splitState, newStateMap, newSTs, 0, st.dests.length);
 	}
 
-	private void splitSymbolicTransition(int src, SymbolicTransition st, int splitState, int newStateMap[],
-			Set<SymbolicTransition> newSTs, int level, int n)
+	private void splitSymbolicTransition(int src, SymbolicTransition st, int splitState, int newStateMap[], Set<SymbolicTransition> newSTs, int level, int n)
 	{
 		if (level == n) {
 			Zone valid = graph.computeValidity(src, st.tr, st.dests);

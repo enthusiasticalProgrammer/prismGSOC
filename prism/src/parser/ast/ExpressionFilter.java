@@ -36,41 +36,43 @@ public class ExpressionFilter extends Expression
 	/**
 	 * Types of filter, for expressions of the form "filter(op, prop, states)",
 	 * with filter states "states" being optional (denoting "true").
-	 */ 
+	 */
 	public enum FilterOperator {
 		/** Minimum value of prop over all filter states */
-		MIN ("min"),
+		MIN("min"),
 		/** Maximum value of prop over all filter states */
-		MAX ("max"),
+		MAX("max"),
 		/** True for the filter states that yield the minimum value of prop */
-		ARGMIN ("argmin"),
+		ARGMIN("argmin"),
 		/** True for the filter states that yield the maximum value of prop */
-		ARGMAX ("argmax"),
+		ARGMAX("argmax"),
 		/** Number of filter states for which prop is true */
-		COUNT ("count"),
+		COUNT("count"),
 		/** Sum of the value of prop for all filter states */
-		SUM ("sum"),
+		SUM("sum"),
 		/** Average of the value of prop over all filter states */
-		AVG ("avg"),
+		AVG("avg"),
 		/** Value of prop for the first (lowest-indexed) filter state */
-		FIRST ("first"),
+		FIRST("first"),
 		/** Range (interval) of values of prop over all filter states */
-		RANGE ("range"),
+		RANGE("range"),
 		/** True iff prop is true for all filter states */
-		FORALL ("forall"),
+		FORALL("forall"),
 		/** True iff prop is true for some filter states */
-		EXISTS ("exists"),
+		EXISTS("exists"),
 		/** Print the (non-zero) values to the log */
-		PRINT ("print"),
+		PRINT("print"),
 		/** Print all (including zero) values to the log */
-		PRINTALL ("printall"),
+		PRINTALL("printall"),
 		/** Value for the single filter state (if there is more than one, this is an error) */
-		STATE ("state");
+		STATE("state");
 		public final String keyword;
-		FilterOperator(final String keyword) {
+
+		FilterOperator(final String keyword)
+		{
 			this.keyword = keyword;
 		}
-	};
+	}
 
 	// Operator used in filter
 	// (and string representation of)
@@ -81,7 +83,7 @@ public class ExpressionFilter extends Expression
 	// Expression defining states that filter is over
 	// (optional; can be null, denoting "true")
 	private Expression filter;
-	
+
 	// Filter can be invisible, meaning it is not actually displayed
 	// by toString(). This is used to add filters to P/R/S operators that
 	// were created with old-style filter syntax. 
@@ -92,7 +94,6 @@ public class ExpressionFilter extends Expression
 	private boolean storeVector = false;
 	// whether this is a filter over parameters
 	private boolean param = false;
-	
 
 	// Constructors
 
@@ -135,27 +136,27 @@ public class ExpressionFilter extends Expression
 	{
 		this.operand = operand;
 	}
-	
+
 	public void setFilter(Expression filter)
 	{
 		this.filter = filter;
 	}
-	
+
 	public void setInvisible(boolean invisible)
 	{
 		this.invisible = invisible;
 	}
-	
+
 	public void setExplanationEnabled(boolean explanationEnabled)
 	{
 		this.explanationEnabled = explanationEnabled;
 	}
-	
+
 	public void setStoreVector(boolean storeVector)
 	{
 		this.storeVector = storeVector;
 	}
-	
+
 	public void setParam()
 	{
 		param = true;
@@ -192,17 +193,17 @@ public class ExpressionFilter extends Expression
 	{
 		return explanationEnabled;
 	}
-	
+
 	public boolean getStoreVector()
 	{
 		return storeVector;
 	}
-	
+
 	public boolean isParam()
 	{
 		return param;
 	}
-	
+
 	// Methods required for Expression:
 
 	@Override
@@ -219,7 +220,7 @@ public class ExpressionFilter extends Expression
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -230,14 +231,20 @@ public class ExpressionFilter extends Expression
 	public boolean returnsSingleValue()
 	{
 		// Most filters return a single value, but there are some exceptions...
-		if (opType == FilterOperator.PRINT) return false;
-		else if (opType == FilterOperator.PRINTALL) return false;
-		else if (opType == FilterOperator.ARGMIN) return false;
-		else if (opType == FilterOperator.ARGMAX) return false;
-		else if (param) return false;
-		else return true;
+		if (opType == FilterOperator.PRINT)
+			return false;
+		else if (opType == FilterOperator.PRINTALL)
+			return false;
+		else if (opType == FilterOperator.ARGMIN)
+			return false;
+		else if (opType == FilterOperator.ARGMAX)
+			return false;
+		else if (param)
+			return false;
+		else
+			return true;
 	}
-	
+
 	// Methods required for ASTElement:
 
 	@Override
@@ -258,9 +265,9 @@ public class ExpressionFilter extends Expression
 
 		return e;
 	}
-	
+
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{
@@ -327,7 +334,7 @@ public class ExpressionFilter extends Expression
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Wrap a "default" ExpressionFilter around an Expression representing a property to be model checked,
 	 * in order to pick out a single value (the final result of model checking) from a vector of values for all states.
@@ -340,7 +347,7 @@ public class ExpressionFilter extends Expression
 	public static ExpressionFilter addDefaultFilterIfNeeded(Expression expr, boolean singleInit) throws PrismLangException
 	{
 		ExpressionFilter exprFilter = null;
-		
+
 		// The final result of model checking will be a single value. If the expression to be checked does not
 		// already yield a single value (e.g. because a filter has not been explicitly included), we need to wrap
 		// a new (invisible) filter around it. Note that some filters (e.g. print/argmin/argmax) also do not

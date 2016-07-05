@@ -29,7 +29,8 @@ import jltl2ba.APSet;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 
-public class DA {
+public class DA
+{
 
 	/**
 	 * A class representing a deterministic omega automaton.
@@ -73,15 +74,16 @@ public class DA {
 	 */
 	public DA(APSet ap_set)
 	{
-		_ap_set = ap_set; 
-		_start_state = null; 
+		_ap_set = ap_set;
+		_start_state = null;
 		_is_compact = true;
 		_comment = "";
 		_index = new Vector<DA_State>();
 		_acceptance = new RabinAcceptance();
 	}
-	
-	public static DA newInstance(APSet ap_set) {
+
+	public static DA newInstance(APSet ap_set)
+	{
 		return new DA(ap_set);
 	}
 
@@ -100,11 +102,12 @@ public class DA {
 	}
 
 	/** Make this automaton into an never accepting automaton */
-	public void constructEmpty() {
+	public void constructEmpty()
+	{
 		DA_State n = newState();
 		setStartState(n);
 
-		for (Iterator<APElement> it = getAPSet().elementIterator(); it.hasNext(); ){
+		for (Iterator<APElement> it = getAPSet().elementIterator(); it.hasNext();) {
 			n.edges().put(it.next(), n);
 		}
 	}
@@ -153,7 +156,7 @@ public class DA {
 		if (new_apset.size() != _ap_set.size()) {
 			throw new PrismException("New APSet has to have the same size as the old APSet!");
 		}
-		_ap_set=new_apset;
+		_ap_set = new_apset;
 	}
 
 	/**
@@ -167,7 +170,7 @@ public class DA {
 	/** Set the start state. */
 	public void setStartState(DA_State state)
 	{
-		_start_state=state;
+		_start_state = state;
 	}
 
 	/**
@@ -188,7 +191,7 @@ public class DA {
 	/** Set a comment for the automaton. */
 	public void setComment(String comment)
 	{
-		_comment=comment;
+		_comment = comment;
 	}
 
 	/** Get the comment for the automaton. */
@@ -209,7 +212,8 @@ public class DA {
 	 * Reorder states and acceptance conditions so that
 	 * the automaton becomes compact.
 	 */
-	public void makeCompact() throws PrismException {
+	public void makeCompact() throws PrismException
+	{
 		acceptance().makeCompact();
 
 		if (!_is_compact) {
@@ -226,8 +230,7 @@ public class DA {
 						moved = true;
 					}
 					j++;
-				}
-				else {
+				} else {
 					while (_index.get(i) == null && i < _index.size()) {
 						i++;
 					}
@@ -240,10 +243,9 @@ public class DA {
 				_index.setSize(j);
 				acceptance().moveStates(mapping);
 			}
-			_is_compact=true;
+			_is_compact = true;
 		}
 	}
-
 
 	/**
 	 * Print the DA in v2 format to the output stream.
@@ -251,7 +253,8 @@ public class DA {
 	 * @param da_type a string specifying the type of automaton ("DRA", "DSA").
 	 * @param out the output stream 
 	 */
-	public void	print(String da_type, PrintStream out) throws PrismException {
+	public void print(String da_type, PrintStream out) throws PrismException
+	{
 		// Ensure that this DA is compact...
 		if (!this.isCompact()) {
 			throw new PrismException("DA is not compact!");
@@ -262,8 +265,8 @@ public class DA {
 			throw new PrismException("No start state in DA!");
 		}
 
-		out.println(da_type+" v2 explicit");
-		
+		out.println(da_type + " v2 explicit");
+
 		if (_comment != "") {
 			out.println("Comment: \"" + _comment + "\"");
 		}
@@ -291,7 +294,7 @@ public class DA {
 			out.println();
 
 			_acceptance.outputAcceptanceForState(out, i_state);
-			
+
 			Iterator<APElement> it = _ap_set.elementIterator();
 			while (it.hasNext()) {
 				APElement e = it.next();
@@ -307,23 +310,25 @@ public class DA {
 	 * @param da_type a string specifying the type of automaton ("DRA", "DSA").
 	 * @param out the output stream
 	 */
-	public void printHOA(String da_type, PrintStream out) throws PrismException {
-		if (!da_type.equals("DRA")) throw new PrismNotSupportedException("HOA printing for "+da_type+" currently not supported");
+	public void printHOA(String da_type, PrintStream out) throws PrismException
+	{
+		if (!da_type.equals("DRA"))
+			throw new PrismNotSupportedException("HOA printing for " + da_type + " currently not supported");
 
 		out.println("HOA: v1");
-		out.println("States: "+size());
+		out.println("States: " + size());
 		_ap_set.print_hoa(out);
-		out.println("Start: "+getStartState().getName());
+		out.println("Start: " + getStartState().getName());
 		_acceptance.outputAcceptanceHeaderHOA(out);
 		out.println("properties: trans-labels explicit-labels state-acc no-univ-branch deterministic");
 		out.println("--BODY--");
 		for (DA_State state : _index) {
-			out.print("State: "+state.getName()+ " ");  // id
+			out.print("State: " + state.getName() + " "); // id
 			_acceptance.outputAcceptanceForStateHOA(out, state.getName());
 
 			for (Map.Entry<APElement, DA_State> edge : state.edges().entrySet()) {
 				APElement label = edge.getKey();
-				String labelString = "["+label.toStringHOA(_ap_set.size())+"]";
+				String labelString = "[" + label.toStringHOA(_ap_set.size()) + "]";
 				DA_State to = edge.getValue();
 				out.print(labelString);
 				out.print(" ");
@@ -339,7 +344,8 @@ public class DA {
 	 * @param da_type a string specifying the type of automaton ("DRA", "DSA").
 	 * @param out the output stream 
 	 */
-	public void	printDot(String da_type, PrintStream out) throws PrismException {
+	public void printDot(String da_type, PrintStream out) throws PrismException
+	{
 		// Ensure that this DA is compact...
 		if (!this.isCompact()) {
 			throw new PrismException("DA is not compact!");
@@ -354,33 +360,32 @@ public class DA {
 
 		out.println("digraph model {");
 		for (int i_state = 0; i_state < _index.size(); i_state++) {
-			if(i_state == start_state)
+			if (i_state == start_state)
 				out.println("	" + i_state + " [label=\"" + i_state + "\", shape=ellipse]");
 			else {
 				boolean isAcceptance = false;
 				for (int ap_i = 0; ap_i < _acceptance.size(); ap_i++) {
-					if(_acceptance.isStateInAcceptance_L(ap_i, i_state)) {
+					if (_acceptance.isStateInAcceptance_L(ap_i, i_state)) {
 						out.println("	" + i_state + " [label=\"" + i_state + "\", shape=doublecircle]");
 						isAcceptance = true;
 						break;
-					} else if(_acceptance.isStateInAcceptance_U(ap_i, i_state)) {
+					} else if (_acceptance.isStateInAcceptance_U(ap_i, i_state)) {
 						out.println("	" + i_state + " [label=\"" + i_state + "\", shape=box]");
 						isAcceptance = true;
 						break;
 					}
 				}
-				if(!isAcceptance)
+				if (!isAcceptance)
 					out.println("	" + i_state + " [label=\"" + i_state + "\", shape=circle]");
 			}
 		}
 		for (int i_state = 0; i_state < _index.size(); i_state++) {
 			DA_State cur_state = _index.get(i_state);
 			for (Map.Entry<APElement, DA_State> transition : cur_state.edges().entrySet()) {
-				out.println("	" + i_state + " -> " + transition.getValue().getName() + 
-						" [label=\"" + transition.getKey().toString(_ap_set, true) + "\"]");
+				out.println("	" + i_state + " -> " + transition.getValue().getName() + " [label=\"" + transition.getKey().toString(_ap_set, true) + "\"]");
 			}
 		}
 		out.println("}");
-		
+
 	}
 }

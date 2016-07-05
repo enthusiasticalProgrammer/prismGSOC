@@ -41,20 +41,20 @@ public class Declaration extends ASTElement
 	protected DeclarationType declType;
 	// Initial value - null if none specified
 	protected Expression start;
-		
+
 	public Declaration(String name, DeclarationType declType)
 	{
 		setName(name);
 		setDeclType(declType);
 		setStart(null);
 	}
-	
+
 	// Set methods
-	
+
 	public void setName(String name)
 	{
 		this.name = name;
-	}	
+	}
 
 	public void setDeclType(DeclarationType declType)
 	{
@@ -63,7 +63,7 @@ public class Declaration extends ASTElement
 		// is static - it is not computed during type checking.
 		// (But we re-use the existing "type" field for this purpose)
 		setType(declType.getType());
-	}	
+	}
 
 	public void setStart(Expression start)
 	{
@@ -80,7 +80,7 @@ public class Declaration extends ASTElement
 	public DeclarationType getDeclType()
 	{
 		return declType;
-	}	
+	}
 
 	/**
 	 * Get the specified initial value of this variable (null if it was not specified).
@@ -91,7 +91,7 @@ public class Declaration extends ASTElement
 	{
 		return start;
 	}
-	
+
 	/**
 	 * Get the specified initial value of this variable,
 	* using the default value for its type if not specified.
@@ -100,14 +100,14 @@ public class Declaration extends ASTElement
 	{
 		return isStartSpecified() ? start : declType.getDefaultStart();
 	}
-	
+
 	/**
 	 * Get the initial value of this variable, within a ModulesFile.
 	 * Will be null if parent ModulesFile passed in has an init...endinit.
 	 * Otherwise defaults to lower bound.
 	 * Can force lower bound to returned by passing in null. 
 	 */
-	
+
 	/** TODO public abstract Expression getStart(ModulesFile parent); */
 
 	public boolean isStartSpecified()
@@ -116,10 +116,11 @@ public class Declaration extends ASTElement
 	}
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -131,10 +132,11 @@ public class Declaration extends ASTElement
 	@Override
 	public String toString()
 	{
-		String s  = "";
+		String s = "";
 		s += name + " : ";
 		s += declType;
-		if (start != null) s += " init " + start;
+		if (start != null)
+			s += " init " + start;
 		return s;
 	}
 
@@ -144,7 +146,7 @@ public class Declaration extends ASTElement
 	@Override
 	public ASTElement deepCopy()
 	{
-		Declaration ret = new Declaration(getName(), (DeclarationType)getDeclType().deepCopy());
+		Declaration ret = new Declaration(getName(), (DeclarationType) getDeclType().deepCopy());
 		if (getStart() != null)
 			ret.setStart(getStart().deepCopy());
 		ret.setPosition(this);

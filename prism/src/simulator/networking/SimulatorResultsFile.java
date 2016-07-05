@@ -32,148 +32,139 @@ import prism.*;
 
 public class SimulatorResultsFile extends Observable
 {
-	
-	private ArrayList results;
-	
+
+	private List<SimulatorResult> results;
+
 	/** Creates a new instance of SimulatorResultsFile */
 	public SimulatorResultsFile()
 	{
-		results = new ArrayList();
+		results = new ArrayList<>();
 	}
-	
+
 	public void tellObservers()
 	{
 		setChanged();
 		notifyObservers(null);
 	}
-	
+
 	public synchronized void mergeResultsFile(File resultFile) throws PrismException
 	{
-		BufferedReader buff=null;
-		try
-		{
+		BufferedReader buff = null;
+		try {
 			buff = new BufferedReader(new FileReader(resultFile));
-			
+
 			int counter = 0;
-			while(buff.ready())
-			{
-				if(counter >= results.size())
-				{
+			while (buff.ready()) {
+				if (counter >= results.size()) {
 					results.add(new SimulatorResult(buff.readLine()));
-				}
-				else
-				{
-					((SimulatorResult)results.get(counter)).merge(buff.readLine());
+				} else {
+					((SimulatorResult) results.get(counter)).merge(buff.readLine());
 				}
 				counter++;
 			}
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new PrismException(e.getMessage());
-		}finally{
+		} finally {
 			try {
 				buff.close();
 			} catch (IOException e) {
-				throw new PrismException("Could not close input file. The following excption occurred: "+e.getMessage());
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
 	}
-	
+
 	public double getResult(int index)
 	{
-		if(index < results.size())
-		{
-			SimulatorResult res = (SimulatorResult)results.get(index);
-			return res.result / ((double)res.iterations);
-		}
-		else return -1.0;
+		if (index < results.size()) {
+			SimulatorResult res = (SimulatorResult) results.get(index);
+			return res.result / ((double) res.iterations);
+		} else
+			return -1.0;
 	}
-	
+
 	public int getIterations(int index)
 	{
-		if(index < results.size())
-		{
-			SimulatorResult res = (SimulatorResult)results.get(index);
+		if (index < results.size()) {
+			SimulatorResult res = (SimulatorResult) results.get(index);
 			return res.iterations;
-		}
-		else return -1;
+		} else
+			return -1;
 	}
-	
+
 	public double getSum(int index)
 	{
-		if(index < results.size())
-		{
-			SimulatorResult res = (SimulatorResult)results.get(index);
+		if (index < results.size()) {
+			SimulatorResult res = (SimulatorResult) results.get(index);
 			return res.result;
-		}
-		else return -1;
+		} else
+			return -1;
 	}
-	
+
 	public void reset()
 	{
-		results = new ArrayList();
+		results = new ArrayList<>();
 		tellObservers();
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		String str = "";
-		for(int i = 0 ; i < results.size(); i++)
-		{
-			str += results.get(i).toString()+"\n";
+		for (int i = 0; i < results.size(); i++) {
+			str += results.get(i).toString() + "\n";
 		}
 		return str;
 	}
-	
+
 	public int getNumResults()
 	{
 		return results.size();
 	}
-	
+
 	class SimulatorResult
 	{
 		int index;
 		int iterations;
 		double result;
-		
+
 		public SimulatorResult(int index, int iterations, double result)
 		{
 			this.index = index;
 			this.iterations = iterations;
 			this.result = result;
 		}
-		
+
 		public SimulatorResult(String line) throws Exception
 		{
 			StringTokenizer tokens = new StringTokenizer(line);
 			String token1 = tokens.nextToken();
 			String token2 = tokens.nextToken();
 			String token3 = tokens.nextToken();
-			
+
 			index = Integer.parseInt(token1);
 			iterations = Integer.parseInt(token2);
 			result = Double.parseDouble(token3);
 		}
-		
+
+		@Override
 		public String toString()
 		{
-			return index+"\t"+iterations+"\t"+result;
+			return index + "\t" + iterations + "\t" + result;
 		}
-		
+
 		public void merge(String line) throws PrismException
 		{
 			StringTokenizer tokens = new StringTokenizer(line);
 			String token1 = tokens.nextToken();
 			String token2 = tokens.nextToken();
 			String token3 = tokens.nextToken();
-			
-			if(index != Integer.parseInt(token1)) throw new PrismException("Invalid results file, bad merge");
+
+			if (index != Integer.parseInt(token1))
+				throw new PrismException("Invalid results file, bad merge");
 			iterations += Integer.parseInt(token2);
 			result += Double.parseDouble(token3);
 		}
-		
-		
+
 	}
-	
+
 }

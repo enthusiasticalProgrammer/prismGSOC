@@ -294,6 +294,7 @@ public class PrismSettings implements Observer
 			{ CHOICE_TYPE, PRISM_EXPORT_ADV, "Adversary export", "3.3", "None", "None,DTMC,MDP",
 					"Type of adversary to generate and export during MDP model checking" },
 			{ STRING_TYPE, PRISM_EXPORT_ADV_FILENAME, "Adversary export filename", "3.3", "adv.tra", "", "Name of file for MDP adversary export (if enabled)" },
+
 			// LTL2DA TOOLS
 			{ STRING_TYPE, PRISM_LTL2DA_TOOL, "Use external LTL->DA tool", "4.2.1", "", null,
 					"If non-empty, the path to the executable for the external LTL->DA tool." },
@@ -760,17 +761,17 @@ public class PrismSettings implements Observer
 	protected String exportPropAutType = "txt";
 	protected String exportPropAutFilename = "da.txt";
 
-	public void setExportPropAut(boolean b) throws PrismException
+	public void setExportPropAut(boolean b)
 	{
 		exportPropAut = b;
 	}
 
-	public void setExportPropAutType(String s) throws PrismException
+	public void setExportPropAutType(String s)
 	{
 		exportPropAutType = s;
 	}
 
-	public void setExportPropAutFilename(String s) throws PrismException
+	public void setExportPropAutFilename(String s)
 	{
 		exportPropAutFilename = s;
 	}
@@ -906,7 +907,6 @@ public class PrismSettings implements Observer
 		} else if (sw.equals("gurobi")) {
 			set(PRISM_MDP_MULTI_SOLN_METHOD, "Gurobi");
 		}
-
 		// Linear equation solver over-relaxation parameter
 		else if (sw.equals("omega")) {
 			if (i < args.length - 1) {
@@ -1460,7 +1460,7 @@ public class PrismSettings implements Observer
 	 * 
 	 * @return a pair containing the switch name and a mapping from options to values.  
 	 */
-	private static Pair<String, Map<String, String>> splitSwitch(String sw) throws PrismException
+	private static Pair<String, Map<String, String>> splitSwitch(String sw)
 	{
 		// Remove "-"
 		sw = sw.substring(1);
@@ -1748,6 +1748,7 @@ public class PrismSettings implements Observer
 		return modified;
 	}
 
+	@Override
 	public void update(Observable obs, Object obj)
 	{
 		modified = true;

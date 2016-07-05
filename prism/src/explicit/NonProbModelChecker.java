@@ -31,6 +31,9 @@ import java.util.BitSet;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import automata.LTL2NBA;
 import jltl2dstar.NBA;
 import common.IterableBitSet;
@@ -53,23 +56,23 @@ public class NonProbModelChecker extends StateModelChecker
 	/**
 	 * Create a new NonProbModelChecker, inherit basic state from parent (unless null).
 	 */
-	public NonProbModelChecker(PrismComponent parent) throws PrismException
+	public NonProbModelChecker(PrismComponent parent)
 	{
 		super(parent);
 	}
-	
+
 	@Override
-	public StateValues checkExpression(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	public StateValues checkExpression(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res;
 
 		// E operator
 		if (expr instanceof ExpressionExists) {
-			return checkExpressionExists(model, ((ExpressionExists)expr).getExpression(), statesOfInterest);
+			return checkExpressionExists(model, ((ExpressionExists) expr).getExpression(), statesOfInterest);
 		}
 		// A operator
 		else if (expr instanceof ExpressionForAll) {
-			return checkExpressionForAll(model, ((ExpressionForAll)expr).getExpression(), statesOfInterest);
+			return checkExpressionForAll(model, ((ExpressionForAll) expr).getExpression(), statesOfInterest);
 		}
 		// Otherwise, use the superclass
 		else {
@@ -89,11 +92,10 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ expr ]
 	 */
-	protected StateValues checkExpressionExists(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionExists(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		// Check whether we have to use LTL path formula handling
-		if (getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA)
-		    || !expr.isSimplePathFormula() ) {
+		if (getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA) || !expr.isSimplePathFormula()) {
 			return checkExistsLTL(model, expr, statesOfInterest);
 		}
 
@@ -104,9 +106,8 @@ public class NonProbModelChecker extends StateModelChecker
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
 
 		// next-step (3)
-		if (expr instanceof ExpressionTemporal &&
-		    ((ExpressionTemporal) expr).getOperator() == ExpressionTemporal.P_X) {
-			if (((ExpressionTemporal)expr).hasBounds()) {
+		if (expr instanceof ExpressionTemporal && ((ExpressionTemporal) expr).getOperator() == ExpressionTemporal.P_X) {
+			if (((ExpressionTemporal) expr).hasBounds()) {
 				throw new PrismNotSupportedException("Model checking of bounded CTL operators is not supported");
 			}
 			return checkExistsNext(model, ((ExpressionTemporal) expr).getOperand2(), statesOfInterest);
@@ -117,7 +118,7 @@ public class NonProbModelChecker extends StateModelChecker
 		if (Expression.isNot(expr)) {
 			// (2) !(a U b)
 			negated = true;
-			expr = ((ExpressionUnaryOp)expr).getOperand();
+			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
 
 		ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
@@ -131,9 +132,7 @@ public class NonProbModelChecker extends StateModelChecker
 
 		if (negated) {
 			// compute E[ !a R !b ] instead of E[ !(a U b) ]
-			result = checkExistsRelease(model,
-			                            Expression.Not(exprTemp.getOperand1()),
-			                            Expression.Not(exprTemp.getOperand2()));
+			result = checkExistsRelease(model, Expression.Not(exprTemp.getOperand1()), Expression.Not(exprTemp.getOperand2()));
 		} else {
 			// compute E[ a U b ]
 			result = checkExistsUntil(model, exprTemp.getOperand1(), exprTemp.getOperand2());
@@ -153,7 +152,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying A[ expr ]
 	 */
-	protected StateValues checkExpressionForAll(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionForAll(@NonNull Model model, Expression expr, @Nullable BitSet statesOfInterest) throws PrismException
 	{
 		StateValues result = checkExpressionExists(model, Expression.Not(expr), statesOfInterest);
 		result.complement();
@@ -168,7 +167,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ X expr ]
 	 */
-	protected StateValues checkExistsNext(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExistsNext(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		BitSet target = checkExpression(model, expr, null).getBitSet();
 		BitSet result = computeExistsNext(model, target, statesOfInterest);
@@ -182,8 +181,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states for target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ X "target" ]
+	 * @throws PrismNotSupportedException because it is thrown in CTMCModelChecker
 	 */
-	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		BitSet result = new BitSet();
 
@@ -203,8 +203,8 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param expr the expression for 'expr'
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying A[ X expr ]
-	 */	
-	protected StateValues checkForAllNext(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	 */
+	protected StateValues checkForAllNext(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		BitSet target = checkExpression(model, expr, null).getBitSet();
 		BitSet result = new BitSet();
@@ -225,6 +225,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states in target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying A[ X "target" ]
+	 * @throws PrismException because CTMCModelChecker throws it while overriding the method
 	 */
 	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
 	{
@@ -240,7 +241,6 @@ public class NonProbModelChecker extends StateModelChecker
 		return result;
 	}
 
-	
 	/**
 	 * Compute the set of states satisfying E[ a U b ].
 	 * @param model the model
@@ -248,7 +248,8 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param exprB the expression for 'b'
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ a U b ]
 	 */
-	protected StateValues checkExistsUntil(Model model, Expression exprA, Expression exprB) throws PrismException {
+	protected StateValues checkExistsUntil(@NonNull Model model, Expression exprA, Expression exprB) throws PrismException
+	{
 		// the set of states satisfying exprA
 		BitSet A = checkExpression(model, exprA, null).getBitSet();
 		// the set of states satisfying exprB
@@ -264,12 +265,13 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param model the model
 	 * @param A the BitSet of states for "a"
 	 * @param B the BitSet of states for "b"
-	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" U "b" ]
+	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" U "b" ] 
+	 * @throws PrismNotSupportedException is thrown in subclasses
 	 */
-	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
- 		PredecessorRelation pre = model.getPredecessorRelation(this, true);
- 		return pre.calculatePreStar(A, B, B);
+		PredecessorRelation pre = model.getPredecessorRelation(this, true);
+		return pre.calculatePreStar(A, B, B);
 	}
 
 	/**
@@ -278,7 +280,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param exprA the expression for 'a'
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ G a ]
 	 */
-	protected StateValues checkExistsGlobally(Model model, Expression exprA) throws PrismException
+	protected StateValues checkExistsGlobally(@NonNull Model model, Expression exprA) throws PrismException
 	{
 		return checkExistsRelease(model, Expression.False(), exprA);
 	}
@@ -302,7 +304,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param exprB the expression for 'b'
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ a R b ]
 	 */
-	protected StateValues checkExistsRelease(Model model, Expression exprA, Expression exprB) throws PrismException
+	protected StateValues checkExistsRelease(@NonNull Model model, Expression exprA, Expression exprB) throws PrismException
 	{
 		// the set of states satisfying exprA
 		BitSet A = checkExpression(model, exprA, null).getBitSet();
@@ -336,15 +338,16 @@ public class NonProbModelChecker extends StateModelChecker
 		// according to getSuccessorsIterator
 		int count[] = new int[model.getNumStates()];
 		for (int s : IterableBitSet.getSetBits(T)) {
-			if (AandB.get(s)) continue;
+			if (AandB.get(s))
+				continue;
 
-			int i=0;
+			int i = 0;
 			for (Iterator<Integer> it = model.getSuccessorsIterator(s); it.hasNext(); it.next()) {
 				i++;
 			}
-			count[s]=i;
+			count[s] = i;
 		}
-		
+
 		while (!E.isEmpty()) {
 			// get the first element of E
 			int t = E.nextSetBit(0);
@@ -358,7 +361,8 @@ public class NonProbModelChecker extends StateModelChecker
 			// For all predecessors s of t....
 			for (int s : pre.getPre(t)) {
 				// ... ignore if we have already proven that it does not satisfy E[ a R b ]
-				if (!T.get(s)) continue;
+				if (!T.get(s))
+					continue;
 
 				// decrement count, because s can not use t to stay in T
 				count[s]--;
@@ -381,8 +385,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param A the BitSet for the states in "a"
 	 * @param A the BitSet for the states in "a"
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" R "b" ]
+	 * @throws PrismNotSupportedException necessary, because the overriding methods use it 
 	 */
-	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		PredecessorRelation pre = model.getPredecessorRelation(this, true);
 
@@ -411,13 +416,14 @@ public class NonProbModelChecker extends StateModelChecker
 		// for all states s in T \ AandB, we compute count[s], the number of (unique) successors
 		int count[] = new int[model.getNumStates()];
 		for (int s : IterableBitSet.getSetBits(T)) {
-			if (AandB.get(s)) continue;
+			if (AandB.get(s))
+				continue;
 
-			int i=0;
+			int i = 0;
 			for (Iterator<Integer> it = model.getSuccessorsIterator(s); it.hasNext(); it.next()) {
 				i++;
 			}
-			count[s]=i;
+			count[s] = i;
 		}
 
 		while (!E.isEmpty()) {
@@ -434,7 +440,8 @@ public class NonProbModelChecker extends StateModelChecker
 
 			for (int s : pre.getPre(t)) {
 				// ... ignore if we have already proven that it does not satisfy E[ a R b ]
-				if (!T.get(s)) continue;
+				if (!T.get(s))
+					continue;
 
 				// decrement count, because s can not use t to stay in T
 				count[s]--;
@@ -458,7 +465,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param statesofInterest the states of interest
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ phi ]
 	 */
-	protected StateValues checkExistsLTL(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExistsLTL(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			throw new PrismNotSupportedException("Time-bounded operators not supported in LTL: " + expr);
@@ -474,7 +481,7 @@ public class NonProbModelChecker extends StateModelChecker
 		//  - Search for an accepting lasso in M', i.e., a reachable cycle
 		//    that visits F infinitely often
 
-		mainLog.println("Non-probabilistic LTL model checking for E[ " +expr + " ]");
+		mainLog.println("Non-probabilistic LTL model checking for E[ " + expr + " ]");
 		mainLog.print("Constructing NBA...");
 		mainLog.flush();
 		LTL2NBA ltl2nba = new LTL2NBA(this);
@@ -485,10 +492,10 @@ public class NonProbModelChecker extends StateModelChecker
 		// it would make sense to do a nested DFS and construct the product on the fly.
 		// But for now it's easier to rely on the existing infrastructure,
 		// construct the full product and just compute the SCCs.
-		mainLog.print("Constructing " + model.getModelType()+ "-NBA product as LTS...");
+		mainLog.print("Constructing " + model.getModelType() + "-NBA product as LTS...");
 		mainLog.flush();
 		LTSNBAProduct product = LTSNBAProduct.doProduct(model, nba, statesOfInterest, labelBS);
-		mainLog.println(" "+product.getProductModel().infoString()+", "+product.getAcceptingStates().cardinality()+" states accepting");
+		mainLog.println(" " + product.getProductModel().infoString() + ", " + product.getAcceptingStates().cardinality() + " states accepting");
 
 		// Note: As the NBA is not guaranteed to be complete, the product may contain
 		// terminal states. The SCC computer can correctly deal with that.
@@ -520,7 +527,7 @@ public class NonProbModelChecker extends StateModelChecker
 				accepting++;
 			}
 		}
-		mainLog.println(" "+accepting+" of "+sccs+" non-trivial SCCs are accepting");
+		mainLog.println(" " + accepting + " of " + sccs + " non-trivial SCCs are accepting");
 
 		BitSet allStates = new BitSet();
 		allStates.set(0, product.getProductModel().getNumStates());
@@ -538,4 +545,3 @@ public class NonProbModelChecker extends StateModelChecker
 	}
 
 }
-

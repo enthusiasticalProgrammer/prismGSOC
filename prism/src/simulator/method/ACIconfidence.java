@@ -73,7 +73,7 @@ public final class ACIconfidence extends CIMethod
 			throw new PrismException("Missing parameter not computed yet");
 		return confidence;
 	}
-	
+
 	@Override
 	public String getParametersString()
 	{
@@ -100,7 +100,7 @@ public final class ACIconfidence extends CIMethod
 		// Easy: percentage of iters done so far
 		return ((10 * iters) / numSamples) * 10;
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

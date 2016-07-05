@@ -63,7 +63,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 		setDefaultRenderer(Object.class, new PathChangeTableRenderer(true));
 		// Loop indicator
 		loopIndicatorModel = new LoopIndicatorListModel();
-		loopIndicator = new JList(loopIndicatorModel);
+		loopIndicator = new JList<>(loopIndicatorModel);
 		loopIndicator.setBackground(new JPanel().getBackground());
 		loopIndicator.setFixedCellWidth(25);
 		loopIndicator.setFixedCellHeight(getRowHeight());
@@ -71,6 +71,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 	}
 
 	/** Override set font to set row height(s) */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -96,6 +97,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 		repaint();
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -126,6 +128,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			 setFont(header.getFont());*/
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			//setText((value == null) ? "" : value.toString());
@@ -161,6 +164,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			return this;
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			Graphics2D g2 = (Graphics2D) g;
@@ -216,15 +220,17 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 
 	// Model for list representing loop indicator
 
-	class LoopIndicatorListModel extends AbstractListModel
+	class LoopIndicatorListModel extends AbstractListModel<String>
 	{
 		private static final long serialVersionUID = 1L;
 
-		public Object getElementAt(int index)
+		@Override
+		public String getElementAt(int index)
 		{
 			return "";
 		}
 
+		@Override
 		public int getSize()
 		{
 			return ptm.getRowCount();
@@ -293,8 +299,8 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 				}
 			} else if (value instanceof VariableValue) {
 				VariableValue variableValue = (VariableValue) value;
-				stringValue = (variableValue.getValue() instanceof Double) ? (simulator.formatDouble(((Double) variableValue.getValue()))) : variableValue
-						.getValue().toString();
+				stringValue = (variableValue.getValue() instanceof Double) ? (simulator.formatDouble(((Double) variableValue.getValue())))
+						: variableValue.getValue().toString();
 
 				this.setToolTipText("Value of variable \"" + variableValue.getVariable().getName() + "\" in state " + (row));
 			} else if (value instanceof RewardStructureValue) {
@@ -309,8 +315,8 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 					if (rewardValue.getRewardStructureColumn().isStateReward())
 						this.setToolTipText("State reward of reward structure " + rewardName + " in state " + (row) + " (not yet known)");
 					if (rewardValue.getRewardStructureColumn().isTransitionReward())
-						this.setToolTipText("Transition reward of reward structure " + rewardName + " from state " + (row) + " to " + (row + 1)
-								+ " (not yet known)");
+						this.setToolTipText(
+								"Transition reward of reward structure " + rewardName + " from state " + (row) + " to " + (row + 1) + " (not yet known)");
 				} else {
 					stringValue = simulator.formatDouble(rewardValue.getRewardValue());
 
@@ -325,6 +331,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 			}
 		}
 
+		@Override
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);
@@ -472,6 +479,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			PathChangeCellRenderer pctr = new PathChangeCellRenderer(this, value, isSelected, row);

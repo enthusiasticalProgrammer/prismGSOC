@@ -39,7 +39,7 @@ import simulator.*;
 /**
  * List of labels in the simulator GUI.
  */
-public class GUISimLabelList extends JList
+public class GUISimLabelList extends JList<Object>
 {
 	// Default serial ID
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class GUISimLabelList extends JList
 	private GUISimulator sim;
 	private SimulatorEngine engine;
 	// The list of labels
-	private DefaultListModel listModel;
+	private DefaultListModel<Object> listModel;
 
 	/**
 	 * Create a new instance of GUISimLabelList
@@ -58,7 +58,7 @@ public class GUISimLabelList extends JList
 	{
 		this.sim = sim;
 		this.engine = sim.getPrism().getSimulator();
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		setModel(listModel);
 		setCellRenderer(new SimLabelRenderer());
 	}
@@ -81,8 +81,7 @@ public class GUISimLabelList extends JList
 			int index = engine.addLabel(expr);
 			SimLabel sl = new SimLabel(name, index);
 			listModel.addElement(sl);
-		}
-		catch (PrismLangException e) {
+		} catch (PrismLangException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}
@@ -98,8 +97,7 @@ public class GUISimLabelList extends JList
 			int index = engine.addLabel(expr, pf);
 			SimLabel sl = new SimLabel(name, index);
 			listModel.addElement(sl);
-		}
-		catch (PrismLangException e) {
+		} catch (PrismLangException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}
@@ -129,6 +127,7 @@ public class GUISimLabelList extends JList
 			this.index = index;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name;
@@ -239,11 +238,13 @@ public class GUISimLabelList extends JList
 			text = "Unknown";
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return text;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
@@ -276,16 +277,19 @@ public class GUISimLabelList extends JList
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

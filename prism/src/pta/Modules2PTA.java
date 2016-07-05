@@ -54,7 +54,7 @@ public class Modules2PTA extends PrismComponent
 	/**
 	 * Constructor.
 	 */
-	public Modules2PTA(PrismComponent parent, ModulesFile modulesFile) throws PrismException
+	public Modules2PTA(PrismComponent parent, ModulesFile modulesFile)
 	{
 		super(parent);
 		sumRoundOff = settings.getDouble(PrismSettings.PRISM_SUM_ROUND_OFF);
@@ -87,18 +87,21 @@ public class Modules2PTA extends PrismComponent
 		{
 			private Module inModule = null;
 
-			public void visitPre(Module e) throws PrismLangException
+			@Override
+			public void visitPre(Module e)
 			{
 				// Register the fact we are entering a module
 				inModule = e;
 			}
 
-			public void visitPost(Module e) throws PrismLangException
+			@Override
+			public void visitPost(Module e)
 			{
 				// Register the fact we are leaving a module
 				inModule = null;
 			}
 
+			@Override
 			public void visitPost(ExpressionVar e) throws PrismLangException
 			{
 				// For PTAs, references to variables in modules have to be local
@@ -109,7 +112,7 @@ public class Modules2PTA extends PrismComponent
 				}
 			}
 		});
-		
+
 		// Clone the model file, replace any constants with values,
 		// and simplify any expressions as much as possible.
 		modulesFile = (ModulesFile) modulesFile.deepCopy().replaceConstants(constantValues).simplify();

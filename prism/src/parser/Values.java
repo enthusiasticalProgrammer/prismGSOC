@@ -42,13 +42,13 @@ import prism.PrismLangException;
  * Class to store a list of typed constant/variable values.
  * (Basically, just a mapping from String to Object)
  */
-public class Values
+public class Values //implements Comparable
 {
 	protected ArrayList<String> names;
 	protected ArrayList<Object> values;
-	
+
 	// Constructors
-	
+
 	/**
 	 * Construct a new, empty Values object
 	 */
@@ -57,17 +57,17 @@ public class Values
 		names = new ArrayList<String>();
 		values = new ArrayList<Object>();
 	}
-	
+
 	/**
 	 * Construct a new Values object by copying an existing one
 	 */
 	@SuppressWarnings("unchecked")
 	public Values(Values v)
 	{
-		names = (ArrayList<String>)v.names.clone();
-		values = (ArrayList<Object>)v.values.clone();
+		names = (ArrayList<String>) v.names.clone();
+		values = (ArrayList<Object>) v.values.clone();
 	}
-	
+
 	/**
 	 * Construct a new Values object by merging two existing ones.
 	 * There is no checking for duplicates.
@@ -77,7 +77,7 @@ public class Values
 		this(v1);
 		addValues(v2);
 	}
-	
+
 	/**
 	 * Construct a new Values object by copying existing State object.
 	 * Need access to model info for variable names.
@@ -93,7 +93,7 @@ public class Values
 			addValue(modelInfo.getVarName(i), s.varValues[i]);
 		}
 	}
-	
+
 	/**
 	 * Add a value (type of value determined by type of Object).
 	 * (Note: there is no checking for duplication/inconsistencies/etc.)
@@ -105,7 +105,7 @@ public class Values
 		names.add(name);
 		values.add(value);
 	}
-	
+
 	/**
 	 * Add multiple values.
 	 * (Note: there is no checking for duplication/inconsistencies/etc.)
@@ -113,14 +113,15 @@ public class Values
 	public void addValues(Values v)
 	{
 		int i, n;
-		
-		if (v == null) return;
+
+		if (v == null)
+			return;
 		n = v.getNumValues();
-		for (i = 0; i < n; i ++) {
+		for (i = 0; i < n; i++) {
 			addValue(v.getName(i), v.getValue(i));
 		}
 	}
-	
+
 	/**
 	 * Set a value (overwrite if already present)
 	 * Returns 0 if added, -1 if overwritten
@@ -133,13 +134,12 @@ public class Values
 		if (i == -1) {
 			addValue(name, value);
 			return 0;
-		}
-		else {
+		} else {
 			values.set(i, value);
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Set multiple values (overwrite if already present)
 	 * Returns number of values overwritten.
@@ -147,16 +147,18 @@ public class Values
 	public int setValues(Values v)
 	{
 		int i, n, c = 0;
-		
-		if (v == null) return c;
+
+		if (v == null)
+			return c;
 		n = v.getNumValues();
-		for (i = 0; i < n; i ++) {
-			if (setValue(v.getName(i), v.getValue(i)) == 0) c++;
+		for (i = 0; i < n; i++) {
+			if (setValue(v.getName(i), v.getValue(i)) == 0)
+				c++;
 		}
-		
+
 		return c;
 	}
-	
+
 	/**
 	 * Remove the {@code i}th value added (if present)
 	 */
@@ -167,7 +169,7 @@ public class Values
 			values.remove(i);
 		}
 	}
-	
+
 	/**
 	 * Remove the value for constant/variable {@code name} (if present)
 	 */
@@ -178,9 +180,9 @@ public class Values
 			removeValue(i);
 		}
 	}
-	
+
 	// Get methods
-	
+
 	/**
 	 * Get the number of values.
 	 */
@@ -188,7 +190,7 @@ public class Values
 	{
 		return names.size();
 	}
-	
+
 	/**
 	 * Get the variable/constant name for the {@code i}th value.
 	 */
@@ -204,7 +206,7 @@ public class Values
 	{
 		return names.indexOf(name);
 	}
-	
+
 	/**
 	 * Is there a value for variable/constant {@code name}?
 	 */
@@ -212,7 +214,7 @@ public class Values
 	{
 		return names.contains(name);
 	}
-	
+
 	/**
 	 * Get the type for the {@code i}th value.
 	 * (This is based on the type of the Object storing the value.)
@@ -220,10 +222,14 @@ public class Values
 	public Type getType(int i)
 	{
 		Object o = values.get(i);
-		if (o instanceof Integer) return TypeInt.getInstance();
-		if (o instanceof Double)  return TypeDouble.getInstance();
-		if (o instanceof Boolean) return TypeBool.getInstance();
-		else return null;
+		if (o instanceof Integer)
+			return TypeInt.getInstance();
+		if (o instanceof Double)
+			return TypeDouble.getInstance();
+		if (o instanceof Boolean)
+			return TypeBool.getInstance();
+		else
+			return null;
 	}
 
 	/**
@@ -233,7 +239,7 @@ public class Values
 	{
 		return values.get(i);
 	}
-	
+
 	/**
 	 * Evaluate {@code i}th value as an int.
 	 * (Note: Booleans get mapped to 0/1)
@@ -241,16 +247,16 @@ public class Values
 	public int getIntValue(int i) throws PrismLangException
 	{
 		Object o;
-		
+
 		o = values.get(i);
-		
+
 		if (o instanceof Boolean) {
-			return ((Boolean)o).booleanValue() ? 1 : 0;
+			return ((Boolean) o).booleanValue() ? 1 : 0;
 		}
 		if (o instanceof Integer) {
-			return ((Integer)o).intValue();
+			return ((Integer) o).intValue();
 		}
-		
+
 		throw new PrismLangException("Cannot get integer value for \"" + getName(i) + "\"");
 	}
 
@@ -261,19 +267,19 @@ public class Values
 	public double getDoubleValue(int i) throws PrismLangException
 	{
 		Object o;
-		
+
 		o = values.get(i);
-		
+
 		if (o instanceof Boolean) {
-			return ((Boolean)o).booleanValue() ? 1.0 : 0.0;
+			return ((Boolean) o).booleanValue() ? 1.0 : 0.0;
 		}
 		if (o instanceof Integer) {
-			return ((Integer)o).intValue();
+			return ((Integer) o).intValue();
 		}
 		if (o instanceof Double) {
-			return ((Double)o).doubleValue();
+			return ((Double) o).doubleValue();
 		}
-		
+
 		throw new PrismLangException("Cannot get double value for \"" + getName(i) + "\"");
 	}
 
@@ -283,14 +289,14 @@ public class Values
 	public boolean getBooleanValue(int i) throws PrismLangException
 	{
 		Object o;
-		
+
 		o = values.get(i);
-		
+
 		if (!(o instanceof Boolean)) {
 			throw new PrismLangException("Cannot get boolean value for \"" + getName(i) + "\"");
 		}
-		
-		return ((Boolean)o).booleanValue();
+
+		return ((Boolean) o).booleanValue();
 	}
 
 	/**
@@ -300,9 +306,10 @@ public class Values
 	public Object getValueOf(String name) throws PrismLangException
 	{
 		int i;
-		
+
 		i = getIndexOf(name);
-		if (i == -1) throw new PrismLangException("Couldn't get value for \"" + name + "\"");
+		if (i == -1)
+			throw new PrismLangException("Couldn't get value for \"" + name + "\"");
 		return getValue(i);
 	}
 
@@ -313,9 +320,10 @@ public class Values
 	public int getIntValueOf(String name) throws PrismLangException
 	{
 		int i;
-		
+
 		i = getIndexOf(name);
-		if (i == -1) throw new PrismLangException("Couldn't get value for \"" + name + "\"");
+		if (i == -1)
+			throw new PrismLangException("Couldn't get value for \"" + name + "\"");
 		return getIntValue(i);
 	}
 
@@ -326,9 +334,10 @@ public class Values
 	public double getDoubleValueOf(String n) throws PrismLangException
 	{
 		int i;
-		
+
 		i = getIndexOf(n);
-		if (i == -1) throw new PrismLangException("Couldn't get value for \"" + n + "\"");
+		if (i == -1)
+			throw new PrismLangException("Couldn't get value for \"" + n + "\"");
 		return getDoubleValue(i);
 	}
 
@@ -338,9 +347,10 @@ public class Values
 	public boolean getBooleanValueOf(String n) throws PrismLangException
 	{
 		int i;
-		
+
 		i = getIndexOf(n);
-		if (i == -1) throw new PrismLangException("Couldn't get value for \"" + n + "\"");
+		if (i == -1)
+			throw new PrismLangException("Couldn't get value for \"" + n + "\"");
 		return getBooleanValue(i);
 	}
 
@@ -350,21 +360,29 @@ public class Values
 		int i, j, n;
 		Values v;
 		String s;
-		
+
 		// trivial case: null arg
-		if (o == null) return false;
+		if (o == null)
+			return false;
 		// another trivial case: wrong type
-		try { v = (Values)o; } catch (ClassCastException e) { return false; }
+		try {
+			v = (Values) o;
+		} catch (ClassCastException e) {
+			return false;
+		}
 		// check sizes are equal
 		n = getNumValues();
-		if (v.getNumValues() != n) return false;
+		if (v.getNumValues() != n)
+			return false;
 		// check each value
 		for (i = 0; i < n; i++) {
 			s = getName(i);
 			j = v.getIndexOf(s);
-			if (j == -1) return false;
+			if (j == -1)
+				return false;
 			o = v.getValue(j);
-			if (!getValue(i).equals(o)) return false;
+			if (!getValue(i).equals(o))
+				return false;
 		}
 		return true;
 	}
@@ -376,18 +394,21 @@ public class Values
 		int i, n;
 		String s;
 		Object o;
-		
+
 		res = new Values();
 		n = getNumValues();
 		for (i = 0; i < n; i++) {
 			s = getName(i);
 			o = getValue(i);
-			if (o instanceof Integer) o = new Integer(((Integer)o).intValue());
-			else if (o instanceof Double) o = new Double(((Double)o).doubleValue());
-			else o = new Boolean(((Boolean)o).booleanValue());
+			if (o instanceof Integer)
+				o = new Integer(((Integer) o).intValue());
+			else if (o instanceof Double)
+				o = new Double(((Double) o).doubleValue());
+			else
+				o = new Boolean(((Boolean) o).booleanValue());
 			res.addValue(s, o);
 		}
-		
+
 		return res;
 	}
 
@@ -396,7 +417,7 @@ public class Values
 	{
 		return toString(true, ",");
 	}
-	
+
 	/**
 	 * Return a string representation of this Values object, e.g. "x=1,y=2".
 	 * If {@code printNames} is false, the "x="s are omitted.
@@ -414,13 +435,13 @@ public class Values
 				s += getName(i) + "=";
 			}
 			s += valToString(getValue(i));
-			if (i < n-1) {
+			if (i < n - 1) {
 				s += separator;
 			}
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Build a string for two Values objects, combined.
 	 * Either can be null, meaning an empty object
@@ -442,22 +463,22 @@ public class Values
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Format a value (as an Object) as a string.
 	 */
 	private String valToString(Object o)
 	{
 		String s;
-		
+
 		if (o instanceof Double) {
 			NumberFormat nf = DecimalFormat.getInstance(Locale.UK);
 			nf.setMaximumFractionDigits(6);
-			s = nf.format(((Double)o).doubleValue());
+			s = nf.format(((Double) o).doubleValue());
 		} else {
 			s = o.toString();
 		}
-		
+
 		return s;
 	}
 }

@@ -110,9 +110,9 @@ public final class ACIwidth extends CIMethod
 			computeMissingParameterAfterSim();
 		return super.getResult(sampler);
 	}
-	
+
 	@Override
-	public String getResultExplanation(Sampler sampler) throws PrismException
+	public String getResultExplanation(Sampler sampler)
 	{
 		// We may use 'width' to compute the result, so compute if necessary
 		// (this should never happen)
@@ -120,7 +120,7 @@ public final class ACIwidth extends CIMethod
 			computeMissingParameterAfterSim();
 		return super.getResultExplanation(sampler);
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

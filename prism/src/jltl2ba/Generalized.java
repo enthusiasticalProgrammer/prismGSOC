@@ -30,14 +30,14 @@ package jltl2ba;
 import java.util.Vector;
 import java.io.PrintStream;
 
-
-public class Generalized {
+public class Generalized
+{
 
 	public int init_size;
 	public Vector<GState> g_init;
 	public Vector<Integer> _final;
 	public GState gstates;
-	
+
 	private GState gstack;
 	private GState gremoved;
 	private GScc scc_stack;
@@ -48,29 +48,33 @@ public class Generalized {
 	private int scc_id;
 	private MyBitSet fin;
 	private MyBitSet bad_scc;
-	
-	public static class GScc {
+
+	public static class GScc
+	{
 		public GState gstate;
 		public int rank;
 		public int theta;
 		public GScc nxt;
-		
-		public GScc() {}
+
+		public GScc()
+		{
+		}
 	}
 
-	public static class GState {
+	public static class GState
+	{
 		public int id;
 		public int incoming;
 		public MyBitSet nodes_set;
 		public GTrans trans;
 		public GState nxt;
 		public GState prv;
-		
+
 		public GState()
 		{
 			nodes_set = new MyBitSet();
 		}
-		
+
 		public void free()
 		{
 			if (trans.nxt != null)
@@ -79,13 +83,14 @@ public class Generalized {
 		}
 	}
 
-	public static class GTrans {
+	public static class GTrans
+	{
 		public MyBitSet pos;
 		public MyBitSet neg;
 		public MyBitSet _final;
 		public GState to;
 		public GTrans nxt;
-		
+
 		public GTrans()
 		{
 			pos = new MyBitSet();
@@ -94,7 +99,7 @@ public class Generalized {
 			nxt = null;
 			to = null;
 		}
-		
+
 		public GTrans(MyBitSet _pos, MyBitSet _neg, MyBitSet _fin)
 		{
 			pos = (MyBitSet) _pos.clone();
@@ -103,7 +108,8 @@ public class Generalized {
 			nxt = null;
 			to = null;
 		}
-		
+
+		@Override
 		public GTrans clone()
 		{
 			GTrans rv = new GTrans(pos, neg, _final);
@@ -111,7 +117,7 @@ public class Generalized {
 			rv.nxt = nxt;
 			return rv;
 		}
-		
+
 		public void copyTo(GTrans g)
 		{
 			g.pos = (MyBitSet) pos.clone();
@@ -119,7 +125,7 @@ public class Generalized {
 			g._final = (MyBitSet) _final.clone();
 			g.to = to;
 		}
-		
+
 		public void free(GTrans sentinel, boolean fly)
 		{
 			if (this != sentinel) {
@@ -135,7 +141,7 @@ public class Generalized {
 	{
 		Alternating.ATrans t;
 		GState s;
-		
+
 		init_size = 0;
 		gstate_id = 1;
 		gstate_count = 0;
@@ -153,7 +159,7 @@ public class Generalized {
 		gstates.nxt = gstates;
 		gstates.prv = gstates;
 
-		for (t = a.transition.get(0); t != null; t = t.nxt) {	/* puts initial states in the stack */
+		for (t = a.transition.get(0); t != null; t = t.nxt) { /* puts initial states in the stack */
 			s = new GState();
 			s.id = t.to.isEmpty() ? 0 : gstate_id++;
 			s.incoming = 1;
@@ -172,7 +178,7 @@ public class Generalized {
 			g_init.add(s);
 			init_size++;
 		}
-		while (gstack.nxt != gstack) {	/* solves all states in the stack until it is empty */
+		while (gstack.nxt != gstack) { /* solves all states in the stack until it is empty */
 			s = gstack.nxt;
 			gstack.nxt = gstack.nxt.nxt;
 			if (s.incoming == 0) {
@@ -184,14 +190,14 @@ public class Generalized {
 
 		retarget_all_gtrans();
 		gstack = null;
-		
+
 		// System.out.println("Generalized Buchi automaton before simplification:");
 		// print(System.out, a.sym_table);
 
 		simplify_gscc(a);
 		simplifyGTrans();
 		simplify_gscc(a);
-		while (simplifyGStates() != 0) {	/* simplifies as much as possible */
+		while (simplifyGStates() != 0) { /* simplifies as much as possible */
 			simplify_gscc(a);
 			simplifyGTrans();
 			simplify_gscc(a);
@@ -199,7 +205,7 @@ public class Generalized {
 		// System.out.println("Generalized Buchi automaton after simplification:");
 		// print(System.out, a.sym_table);
 	}
-	
+
 	/** Get the highest ID of a GState */
 	public int getGStateID()
 	{
@@ -212,13 +218,11 @@ public class Generalized {
 		Alternating.ATrans t;
 		boolean in_to;
 		if (!at.to.get(i))
-		    return true;
+			return true;
 		in_to = at.to.get(i);
 		at.to.clear(i);
 		for (t = a.transition.get(i); t != null; t = t.nxt)
-			if (at.to.containsAll(t.to) &&
-			    at.pos.containsAll(t.pos) &&
-			    at.neg.containsAll(t.neg)) {
+			if (at.to.containsAll(t.to) && at.pos.containsAll(t.pos) && at.neg.containsAll(t.neg)) {
 				if (in_to)
 					at.to.set(i);
 				return true;
@@ -227,28 +231,28 @@ public class Generalized {
 			at.to.set(i);
 		return false;
 	}
-	
+
 	/* finds the corresponding state, or creates it */
 	private GState findGState(MyBitSet set, GState s)
 	{
 		if (set.equals(s.nodes_set))
-			return s;	/* same state */
+			return s; /* same state */
 
-		s = gstack.nxt;	/* in the stack */
+		s = gstack.nxt; /* in the stack */
 		gstack.nodes_set = set;
 		while (!set.equals(s.nodes_set))
 			s = s.nxt;
 		if (s != gstack)
 			return s;
 
-		s = gstates.nxt;	/* in the solved states */
+		s = gstates.nxt; /* in the solved states */
 		gstates.nodes_set = set;
 		while (!set.equals(s.nodes_set))
 			s = s.nxt;
 		if (s != gstates)
 			return s;
 
-		s = gremoved.nxt;	/* in the removed states */
+		s = gremoved.nxt; /* in the removed states */
 		gremoved.nodes_set = set;
 		while (!set.equals(s.nodes_set))
 			s = s.nxt;
@@ -269,21 +273,16 @@ public class Generalized {
 	/* returns 1 if the transitions are identical */
 	private boolean same_gtrans(GState a, GTrans s, GState b, GTrans t, boolean use_scc)
 	{
-		if ((s.to != t.to) ||
-			!s.pos.equals(t.pos) ||
-			!s.neg.equals(t.neg))
-			return false;	/* transitions differ */
+		if ((s.to != t.to) || !s.pos.equals(t.pos) || !s.neg.equals(t.neg))
+			return false; /* transitions differ */
 		if (s._final.equals(t._final))
-			return true;	/* same transitions exactly */
+			return true; /* same transitions exactly */
 		/* next we check whether acceptance conditions may be ignored */
-		if (use_scc && ( bad_scc.get(a.incoming)
-						|| bad_scc.get(b.incoming)
-						|| (a.incoming != s.to.incoming)
-						|| (b.incoming != t.to.incoming)))
+		if (use_scc && (bad_scc.get(a.incoming) || bad_scc.get(b.incoming) || (a.incoming != s.to.incoming) || (b.incoming != t.to.incoming)))
 			return true;
-		
+
 		return false;
-		
+
 		/* below is the old test to check whether acceptance conditions may be ignored */
 		//if (!use_scc)
 		//	return 0;	/* transitions differ */
@@ -293,9 +292,9 @@ public class Generalized {
 		/* if scc(a)>scc(b) and scc(a) is non-trivial then all_gtrans_match(a,b,use_scc) will fail */
 		/* if scc(a) is trivial then acceptance conditions of transitions from a need not be taken into account */
 		// return 1;	/* same transitions up to acceptance conditions */
-		
+
 	}
-	
+
 	/* decides if the states are equivalent */
 	private int allGTransMatch(GState a, GState b, boolean use_scc)
 	{
@@ -328,7 +327,7 @@ public class Generalized {
 		Vector<Integer> list;
 		GState s1;
 		Alternating.ATrans t1;
-		Alternating.AProd prod = new Alternating.AProd();	/* initialization */
+		Alternating.AProd prod = new Alternating.AProd(); /* initialization */
 		prod.nxt = prod;
 		prod.prv = prod;
 		prod.prod = new Alternating.ATrans();
@@ -349,20 +348,18 @@ public class Generalized {
 			p.prv.nxt = p;
 		}
 
-		while (trans_exist != 0) {	/* calculates all the transitions */
+		while (trans_exist != 0) { /* calculates all the transitions */
 			Alternating.AProd p = prod.nxt;
 			t1 = p.prod;
-			if (t1 != null) {	/* solves the current transition */
+			if (t1 != null) { /* solves the current transition */
 				GTrans trans, t2;
 				fin.clear();
 				for (i = 0; i < _final.size(); i++)
 					if (isFinal(a, s.nodes_set, t1, _final.get(i)))
 						fin.set(_final.get(i));
 				for (t2 = s.trans.nxt; t2 != s.trans;) {
-					if (t2.to.nodes_set.containsAll(t1.to) && 
-						t2.pos.containsAll(t1.pos) && 
-						t2.neg.containsAll(t1.neg) &&
-						fin.equals(t2._final)) {	/* t2 is redundant */
+					if (t2.to.nodes_set.containsAll(t1.to) && t2.pos.containsAll(t1.pos) && t2.neg.containsAll(t1.neg)
+							&& fin.equals(t2._final)) { /* t2 is redundant */
 						GTrans free = t2.nxt;
 						t2.to.incoming--;
 						t2.to = free.to;
@@ -374,13 +371,14 @@ public class Generalized {
 							s.trans = t2;
 						free = null;
 						state_trans--;
-					} else if (t1.to.containsAll(t2.to.nodes_set) && t1.pos.containsAll(t2.pos) && t1.neg.containsAll(t2.neg) && t2._final.equals(fin)) {	/* t1 is redundant */
+					} else if (t1.to.containsAll(t2.to.nodes_set) && t1.pos.containsAll(t2.pos) && t1.neg.containsAll(t2.neg)
+							&& t2._final.equals(fin)) { /* t1 is redundant */
 						break;
 					} else {
 						t2 = t2.nxt;
 					}
 				}
-				if (t2 == s.trans) {	/* adds the transition */
+				if (t2 == s.trans) { /* adds the transition */
 					trans = new GTrans();
 					trans.to = findGState(t1.to, s);
 					trans.to.incoming++;
@@ -394,7 +392,7 @@ public class Generalized {
 			}
 			if (p.trans == null)
 				break;
-			while (p.trans.nxt == null)	/* calculates the next transition */
+			while (p.trans.nxt == null) /* calculates the next transition */
 				p = p.nxt;
 			if (p == prod)
 				break;
@@ -418,7 +416,7 @@ public class Generalized {
 		prod.prod = null;
 		prod = null;
 
-		if (s.trans == s.trans.nxt) {	/* s has no transitions */
+		if (s.trans == s.trans.nxt) { /* s has no transitions */
 			s.trans.nxt.free(s.trans, true);
 			s.trans = null;
 			s.prv = null;
@@ -434,7 +432,7 @@ public class Generalized {
 		s1 = gstates.nxt;
 		while (allGTransMatch(s, s1, false) == 0)
 			s1 = s1.nxt;
-		if (s1 != gstates) {	/* s and s1 are equivalent */
+		if (s1 != gstates) { /* s and s1 are equivalent */
 			s.trans.nxt.free(s.trans, true);
 			s.trans = null;
 			s.prv = s1;
@@ -446,7 +444,7 @@ public class Generalized {
 			return;
 		}
 
-		s.nxt = gstates.nxt;	/* adds the current state to 'gstates' */
+		s.nxt = gstates.nxt; /* adds the current state to 'gstates' */
 		s.prv = gstates;
 		s.nxt.prv = s;
 		gstates.nxt = s;
@@ -461,13 +459,13 @@ public class Generalized {
 		GTrans t;
 		int i;
 		for (i = 0; i < init_size; i++)
-			if (g_init.get(i) != null && (g_init.get(i).trans == null))	/* g_init[i] has been removed */
+			if (g_init.get(i) != null && (g_init.get(i).trans == null)) /* g_init[i] has been removed */
 				g_init.set(i, g_init.get(i).prv);
 		for (s = gstates.nxt; s != gstates; s = s.nxt)
 			for (t = s.trans.nxt; t != s.trans;)
-				if (t.to.trans == null) {	/* t->to has been removed */
+				if (t.to.trans == null) { /* t->to has been removed */
 					t.to = t.to.prv;
-					if (t.to == null) {	/* t->to has no transitions */
+					if (t.to == null) { /* t->to has no transitions */
 						GTrans free = t.nxt;
 						t.to = free.to;
 						t.pos = (MyBitSet) free.pos.clone();
@@ -481,11 +479,11 @@ public class Generalized {
 						t = t.nxt;
 				} else
 					t = t.nxt;
-		while (gremoved.nxt != gremoved) {	/* clean the 'removed' list */
+		while (gremoved.nxt != gremoved) { /* clean the 'removed' list */
 			s = gremoved.nxt;
 			gremoved.nxt = gremoved.nxt.nxt;
 			if (s.nodes_set != null)
-					s.nodes_set = null;
+				s.nodes_set = null;
 			s = null;
 		}
 	}
@@ -518,19 +516,14 @@ public class Generalized {
 
 		for (s = gstates.nxt; s != gstates; s = s.nxt) {
 			t = s.trans.nxt;
-			while (t != s.trans) {	// tries to remove t
+			while (t != s.trans) { // tries to remove t
 				t.copyTo(s.trans);
 				t1 = s.trans.nxt;
-				while (!((t != t1)
-						&& (t1.to == t.to)
-						&& t.pos.containsAll(t1.pos)
-						&& t.neg.containsAll(t1.neg)
-						&& (t1._final.containsAll(t._final) ||
-							(s.incoming != t.to.incoming) || bad_scc.get(s.incoming)))
-						)
+				while (!((t != t1) && (t1.to == t.to) && t.pos.containsAll(t1.pos) && t.neg.containsAll(t1.neg)
+						&& (t1._final.containsAll(t._final) || (s.incoming != t.to.incoming) || bad_scc.get(s.incoming))))
 					t1 = t1.nxt;
-			
-			if (t1 != s.trans) {
+
+				if (t1 != s.trans) {
 					GTrans free = t.nxt;
 					t.to = free.to;
 					t.pos = (MyBitSet) free.pos.clone();
@@ -555,20 +548,20 @@ public class Generalized {
 		GState a, b;
 
 		for (a = gstates.nxt; a != gstates; a = a.nxt) {
-			if (a.trans == a.trans.nxt) {	/* a has no transitions */
+			if (a.trans == a.trans.nxt) { /* a has no transitions */
 				a = removeGState(a, null);
 				changed++;
 				continue;
 			}
 			gstates.trans = a.trans;
 			b = a.nxt;
-			while (allGTransMatch(a, b, true) == 0)	/* = and not == */
+			while (allGTransMatch(a, b, true) == 0) /* = and not == */
 				b = b.nxt;
-			if (b != gstates) {	/* a and b are equivalent */
+			if (b != gstates) { /* a and b are equivalent */
 				/* if scc(a)>scc(b) and scc(a) is non-trivial then all_gtrans_match(a,b,use_scc) must fail */
 				if (a.incoming > b.incoming) // scc(a) is trivial
 					a = removeGState(a, b);
-				else	// either scc(a)=scc(b) or scc(b) is trivial
+				else // either scc(a)=scc(b) or scc(b) is trivial
 					removeGState(b, a);
 				changed++;
 			}
@@ -621,15 +614,16 @@ public class Generalized {
 		GTrans t;
 		int i;
 		Vector<MyBitSet> scc_final;
-		
+
 		rank = 1;
 		scc_stack = null;
 		scc_id = 1;
 
-		if (gstates == gstates.nxt)	return;
+		if (gstates == gstates.nxt)
+			return;
 
 		for (s = gstates.nxt; s != gstates; s = s.nxt) {
-			s.incoming = 0;	/* state color = white */
+			s.incoming = 0; /* state color = white */
 		}
 
 		for (i = 0; i < init_size; i++) {
@@ -645,8 +639,7 @@ public class Generalized {
 		for (s = gstates.nxt; s != gstates; s = s.nxt) {
 			if (s.incoming == 0) {
 				s = removeGState(s, null);
-			}
-			else {
+			} else {
 				for (t = s.trans.nxt; t != s.trans; t = t.nxt) {
 					if (t.to.incoming == s.incoming) {
 						scc_final.get(s.incoming).or(t._final);
@@ -663,14 +656,14 @@ public class Generalized {
 		}
 		scc_final.clear();
 	}
-	
+
 	private void reverse_print_generalized(PrintStream out, GState s, APSet symtab)
-	{				/* dumps the generalized Buchi automaton */
+	{ /* dumps the generalized Buchi automaton */
 		GTrans t;
 		if (s == gstates)
 			return;
 
-		reverse_print_generalized(out, s.nxt, symtab);	/* begins with the last state */
+		reverse_print_generalized(out, s.nxt, symtab); /* begins with the last state */
 
 		out.format("state %d (", s.id);
 		s.nodes_set.print(out);

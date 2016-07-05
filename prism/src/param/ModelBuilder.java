@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import parser.State;
-import parser.ast.ConstantList;	
+import parser.ast.ConstantList;
 import parser.ast.Expression;
 import parser.ast.ExpressionBinaryOp;
 import parser.ast.ExpressionConstant;
@@ -42,10 +42,8 @@ import parser.visitor.ASTTraverseModify;
 import prism.ModelType;
 import prism.PrismComponent;
 import prism.PrismException;
-import prism.PrismLangException;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
-
 import explicit.IndexedSet;
 import explicit.StateStorage;
 
@@ -75,12 +73,12 @@ public final class ModelBuilder extends PrismComponent
 	private double dagMaxError;
 
 	/** local storage made static for use in anonymous class */
-	private static Map<String,Expression> constExprs;
-	
+	private static Map<String, Expression> constExprs;
+
 	/**
 	 * Constructor
 	 */
-	public ModelBuilder(PrismComponent parent) throws PrismException
+	public ModelBuilder(PrismComponent parent)
 	{
 		super(parent);
 		// If present, initialise settings from PrismSettings
@@ -89,7 +87,7 @@ public final class ModelBuilder extends PrismComponent
 			dagMaxError = settings.getDouble(PrismSettings.PRISM_PARAM_DAG_MAX_ERROR);
 		}
 	}
-	
+
 	/**
 	 * Transform PRISM expression to rational function.
 	 * If successful, a function representing the given expression will be
@@ -223,7 +221,8 @@ public final class ModelBuilder extends PrismComponent
 		modulesFile = (ModulesFile) modulesFile.deepCopy();
 		modulesFile = (ModulesFile) modulesFile.accept(new ASTTraverseModify()
 		{
-			public Object visit(ExpressionConstant e) throws PrismLangException
+			@Override
+			public Object visit(ExpressionConstant e)
 			{
 				Expression expr = constExprs.get(e.getName());
 				return (expr != null) ? expr.deepCopy() : e;
@@ -257,8 +256,8 @@ public final class ModelBuilder extends PrismComponent
 	 * @param states list of states to be filled by this method
 	 * @throws PrismException thrown if problems in underlying methods occur
 	 */
-	private void reserveMemoryAndExploreStates(ModulesFile modulesFile, ParamModel model, ModelType modelType, SymbolicEngine engine, StateStorage<State> states)
-			throws PrismException
+	private void reserveMemoryAndExploreStates(ModulesFile modulesFile, ParamModel model, ModelType modelType, SymbolicEngine engine,
+			StateStorage<State> states) throws PrismException
 	{
 		boolean isNonDet = modelType == ModelType.MDP;
 		int numStates = 0;
@@ -406,7 +405,7 @@ public final class ModelBuilder extends PrismComponent
 		model.setFunctionFactory(functionFactory);
 
 		mainLog.println();
-		
+
 		mainLog.print("Reachable states exploration and model construction");
 		mainLog.println(" done in " + ((System.currentTimeMillis() - timer) / 1000.0) + " secs.");
 

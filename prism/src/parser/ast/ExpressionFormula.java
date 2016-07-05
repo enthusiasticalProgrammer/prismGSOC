@@ -34,45 +34,45 @@ public class ExpressionFormula extends Expression
 {
 	protected String name;
 	protected Expression definition;
-	
+
 	// Constructors
-	
+
 	public ExpressionFormula()
 	{
 	}
-	
+
 	public ExpressionFormula(String n)
 	{
 		name = n;
 		definition = null;
 	}
-			
+
 	// Set method
-	
-	public void setName(String n) 
+
+	public void setName(String n)
 	{
 		name = n;
 	}
-	
-	public void setDefinition(Expression definition) 
+
+	public void setDefinition(Expression definition)
 	{
 		this.definition = definition;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public Expression getDefinition()
 	{
 		return definition;
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -86,7 +86,7 @@ public class ExpressionFormula extends Expression
 		// Unless defined, don't know so err on the side of caution
 		return definition == null ? false : definition.isProposition();
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -105,13 +105,13 @@ public class ExpressionFormula extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-		
+
 	@Override
 	public Expression deepCopy()
 	{
@@ -122,7 +122,7 @@ public class ExpressionFormula extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

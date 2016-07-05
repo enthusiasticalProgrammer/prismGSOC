@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Compute (maximum) number of nested probabilistic operators (P, S, R).
@@ -36,7 +35,7 @@ public class ComputeProbNesting extends ASTTraverse
 {
 	private int currentNesting;
 	private int maxNesting;
-	
+
 	public ComputeProbNesting()
 	{
 		currentNesting = 0;
@@ -47,38 +46,43 @@ public class ComputeProbNesting extends ASTTraverse
 	{
 		return maxNesting;
 	}
-	
-	public void visitPre(ExpressionProb e) throws PrismLangException
+
+	@Override
+	public void visitPre(ExpressionProb e)
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
 
-	public void visitPost(ExpressionProb e) throws PrismLangException
+	@Override
+	public void visitPost(ExpressionProb e)
 	{
 		currentNesting--;
 	}
 
-	public void visitPre(ExpressionReward e) throws PrismLangException
+	@Override
+	public void visitPre(ExpressionReward e)
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
 
-	public void visitPost(ExpressionReward e) throws PrismLangException
+	@Override
+	public void visitPost(ExpressionReward e)
 	{
 		currentNesting--;
 	}
 
-	public void visitPre(ExpressionSS e) throws PrismLangException
+	@Override
+	public void visitPre(ExpressionSS e)
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
-	
-	public void visitPost(ExpressionSS e) throws PrismLangException
+
+	@Override
+	public void visitPost(ExpressionSS e)
 	{
 		currentNesting--;
 	}
 }
-

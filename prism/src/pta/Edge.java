@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-import prism.PrismException;
-
 public class Edge
 {
 	// Parent transition;
@@ -67,7 +65,7 @@ public class Edge
 			addReset(e.getKey(), e.getValue());
 		}
 	}
-	
+
 	public void setProb(double prob)
 	{
 		this.prob = prob;
@@ -113,13 +111,7 @@ public class Edge
 		return resets.entrySet();
 	}
 
-	/**
-	 * Perform some basic syntactic checks.
-	 */
-	public void check() throws PrismException
-	{
-	}
-
+	@Override
 	public String toString()
 	{
 		boolean first = true;
@@ -137,8 +129,7 @@ public class Edge
 		return s;
 	}
 
-	public void writeToDesFile(Writer out, String actionPrefix, Iterable<Constraint> guard) throws PrismException,
-			IOException
+	public void writeToDesFile(Writer out, String actionPrefix, Iterable<Constraint> guard) throws IOException
 	{
 		boolean first;
 		PTA pta = parent.getParent();

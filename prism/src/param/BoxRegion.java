@@ -39,22 +39,23 @@ import java.util.Random;
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  * @see BoxRegionFactory
  */
-final class BoxRegion extends Region {
+final class BoxRegion extends Region
+{
 	/** used to produce random inner points of box regions */
 	static Random random = new Random();
-	
+
 	/** regions are only to be split at longest side */
 	static final int SPLIT_LONGEST = 1;
 	/** regions are to be split at all sides on each split */
 	static final int SPLIT_ALL = 2;
-	
+
 	/** lower bound for each parameter */
 	private BigRational[] lower;
 	/** upper bound for each parameter */
 	private BigRational[] upper;
-	
+
 	// constructors
-	
+
 	/**
 	 * Constructs a new box region.
 	 * Does not assign lower and upper bounds, that is the regions is
@@ -68,7 +69,7 @@ final class BoxRegion extends Region {
 		lower = new BigRational[factory.numVariables()];
 		upper = new BigRational[factory.numVariables()];
 	}
-	
+
 	/**
 	 * Constructs a new box region.
 	 * 
@@ -84,7 +85,7 @@ final class BoxRegion extends Region {
 		System.arraycopy(lower, 0, this.lower, 0, lower.length);
 		System.arraycopy(upper, 0, this.upper, 0, upper.length);
 	}
-	
+
 	/**
 	 * Copy constructor for box regions.
 	 * For internal use, because regions are generally immutable, so that
@@ -98,9 +99,9 @@ final class BoxRegion extends Region {
 		this.lower = new BigRational[other.lower.length];
 		this.upper = new BigRational[other.upper.length];
 		System.arraycopy(other.lower, 0, this.lower, 0, other.lower.length);
-		System.arraycopy(other.upper, 0, this.upper, 0, other.upper.length);		
+		System.arraycopy(other.upper, 0, this.upper, 0, other.upper.length);
 	}
-	
+
 	/**
 	 * Sets lower and upper bound of given parameter.
 	 * 
@@ -113,13 +114,13 @@ final class BoxRegion extends Region {
 		this.lower[dim] = lower;
 		this.upper[dim] = upper;
 	}
-	
+
 	@Override
 	int getDimensions()
 	{
 		return lower.length;
 	}
-	
+
 	/**
 	 * Get lower bound of given parameter in region.
 	 * 
@@ -136,24 +137,25 @@ final class BoxRegion extends Region {
 	 * 
 	 * @param dim parameter to get lower bound of
 	 * @return upper bound of given parameter in region
-	 */	
+	 */
 	BigRational getDimensionUpper(int dim)
 	{
 		return upper[dim];
 	}
 
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(Object object)
+	{
 		if (!(object instanceof BoxRegion)) {
 			return false;
 		}
-		
+
 		BoxRegion other = (BoxRegion) object;
-		
+
 		if (this.getDimensions() != other.getDimensions()) {
 			return false;
 		}
-		
+
 		for (int i = 0; i < getDimensions(); i++) {
 			if (!this.lower[i].equals(other.lower[i])) {
 				return false;
@@ -162,23 +164,23 @@ final class BoxRegion extends Region {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		int hash = 0;
-		
+
 		for (int i = 0; i < getDimensions(); i++) {
 			hash = lower[i].hashCode() + (hash << 6) + (hash << 16) - hash;
 			hash = upper[i].hashCode() + (hash << 6) + (hash << 16) - hash;
 		}
-		
+
 		return hash;
 	}
-	
+
 	/**
 	 * Gets the central points of the region.
 	 *
@@ -193,7 +195,7 @@ final class BoxRegion extends Region {
 		}
 		return new Point(point);
 	}
-	
+
 	/**
 	 * Get volume of the region.
 	 * The volumes of disjoint region which cover the whole parameter
@@ -212,7 +214,7 @@ final class BoxRegion extends Region {
 		}
 		return volume;
 	}
-	
+
 	@Override
 	boolean contains(Point point)
 	{
@@ -226,7 +228,7 @@ final class BoxRegion extends Region {
 		}
 		return true;
 	}
-	
+
 	@Override
 	boolean contains(Region region)
 	{
@@ -241,9 +243,10 @@ final class BoxRegion extends Region {
 		}
 		return true;
 	}
-	
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("(");
 		for (int dim = 0; dim < getDimensions(); dim++) {
@@ -261,9 +264,10 @@ final class BoxRegion extends Region {
 	}
 
 	@Override
-	RegionValues binaryOp(int op, StateValues values1, StateValues values2) {
+	RegionValues binaryOp(int op, StateValues values1, StateValues values2)
+	{
 		RegionValues result;
-		if ((op == Region.EQ || op == Region.NE || op == Region.GT || op == Region.GE || op ==  Region.LT || op == Region.LE)) {
+		if ((op == Region.EQ || op == Region.NE || op == Region.GT || op == Region.GE || op == Region.LT || op == Region.LE)) {
 			result = cmpOp(op, values1, values2);
 		} else {
 			result = new RegionValues(factory);
@@ -285,7 +289,8 @@ final class BoxRegion extends Region {
 		return result;
 	}
 
-	private RegionValues cmpOp(int op, StateValues op1, StateValues op2) {
+	private RegionValues cmpOp(int op, StateValues op1, StateValues op2)
+	{
 		ConstraintChecker checker = factory.getConstraintChecker();
 		RegionsTODO remaining = new RegionsTODO();
 		remaining.add(this);
@@ -304,14 +309,13 @@ final class BoxRegion extends Region {
 				Function op2ValFn = op2Val instanceof Function ? (Function) op2Val : null;
 				if (op == Region.EQ) {
 					if (op1Val instanceof StateBoolean) {
-						newValues.setStateValue(state, op1Val.equals(op2Val));						
-					}
-					else if (op1Val.equals(op2Val)) {
-						newValues.setStateValue(state, true);			
+						newValues.setStateValue(state, op1Val.equals(op2Val));
+					} else if (op1Val.equals(op2Val)) {
+						newValues.setStateValue(state, true);
 					} else if (checker.check(region, op1ValFn.subtract(op2ValFn), true)) {
-						newValues.setStateValue(state, false);	
+						newValues.setStateValue(state, false);
 					} else if (checker.check(region, op2ValFn.subtract(op1ValFn), true)) {
-						newValues.setStateValue(state, false);	
+						newValues.setStateValue(state, false);
 					} else {
 						allDecided = false;
 						break;
@@ -324,7 +328,7 @@ final class BoxRegion extends Region {
 					} else {
 						Function cmpFalse = (op == Region.LT || op == Region.LE) ? op1ValFn.subtract(op2ValFn) : op2ValFn.subtract(op1ValFn);
 						if (checker.check(region, cmpFalse, !strict)) {
-							newValues.setStateValue(state, false);	
+							newValues.setStateValue(state, false);
 						} else {
 							allDecided = false;
 							lastFunction = op2ValFn.subtract(op1ValFn);
@@ -340,10 +344,10 @@ final class BoxRegion extends Region {
 				remaining.addAll(region.split(lastFunction));
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Performs given operation on two rational functions.
 	 * 
@@ -352,7 +356,8 @@ final class BoxRegion extends Region {
 	 * @param op2  second operand
 	 * @return value of operation
 	 */
-	private Function arithOp(int op, Function op1, Function op2) {
+	private Function arithOp(int op, Function op1, Function op2)
+	{
 		Function result = null;
 		switch (op) {
 		case Region.PLUS:
@@ -381,9 +386,10 @@ final class BoxRegion extends Region {
 	 * @param op2  second operand
 	 * @return value of operation
 	 */
-	private boolean booleanOp(int op, boolean op1, boolean op2) {
+	private boolean booleanOp(int op, boolean op1, boolean op2)
+	{
 		boolean result = false;
-		
+
 		switch (op) {
 		case Region.IMPLIES:
 			result = !op1 || op2;
@@ -402,7 +408,7 @@ final class BoxRegion extends Region {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Split region in longest dimension.
 	 * 
@@ -419,7 +425,7 @@ final class BoxRegion extends Region {
 				longestLength = sideLength;
 			}
 		}
-		
+
 		ArrayList<Region> result = new ArrayList<Region>();
 		BoxRegion region1 = new BoxRegion(this);
 		BoxRegion region2 = new BoxRegion(this);
@@ -428,10 +434,10 @@ final class BoxRegion extends Region {
 		region2.lower[longestSide] = mid;
 		result.add(region1);
 		result.add(region2);
-				
+
 		return result;
 	}
-	
+
 	/**
 	 * Split region in all dimensions.
 	 * 
@@ -457,7 +463,7 @@ final class BoxRegion extends Region {
 		}
 		return result;
 	}
-	
+
 	@Override
 	ArrayList<Region> split(Function constraint)
 	{
@@ -469,8 +475,8 @@ final class BoxRegion extends Region {
 		} else {
 			throw new RuntimeException();
 		}
-	}	
-	
+	}
+
 	@Override
 	ArrayList<Point> specialPoints()
 	{
@@ -480,38 +486,39 @@ final class BoxRegion extends Region {
 			int regionRest = edgeNr;
 			BigRational[] point = new BigRational[lower.length];
 			for (int dim = 0; dim < lower.length; dim++) {
-				boolean useLower = ( 0 == (regionRest % 2));
+				boolean useLower = (0 == (regionRest % 2));
 				regionRest /= 2;
 				if (useLower) {
 					point[dim] = lower[dim];
 				} else {
-					point[dim] = upper[dim];					
+					point[dim] = upper[dim];
 				}
 			}
 			result.add(new Point(point));
 		}
 		return result;
 	}
-	
+
 	@Override
 	Point randomPoint()
 	{
 		BigRational[] point = new BigRational[lower.length];
-		BigInteger maxInt = new BigInteger(Long.toString((long) Math.pow(2, 60))); 
+		BigInteger maxInt = new BigInteger(Long.toString((long) Math.pow(2, 60)));
 		for (int dim = 0; dim < lower.length; dim++) {
 			BigInteger rndInt = new BigInteger(60, random);
 			BigRational rndRat = new BigRational(rndInt, maxInt);
 			rndRat = lower[dim].add(upper[dim].subtract(lower[dim]).multiply(rndRat));
 			point[dim] = rndRat;
 		}
-		
+
 		return new Point(point);
 	}
 
 	@Override
-	BoxRegion conjunct(Region region) {
+	BoxRegion conjunct(Region region)
+	{
 		BoxRegion other = (BoxRegion) region;
-		
+
 		BoxRegion result = new BoxRegion((BoxRegionFactory) factory);
 		for (int dim = 0; dim < lower.length; dim++) {
 			if (this.upper[dim].compareTo(other.lower[dim]) <= 0) {
@@ -551,7 +558,7 @@ final class BoxRegion extends Region {
 				}
 			}
 		}
-		
+
 		return this.getDimensionUpper(adjDim).equals(other.getDimensionLower(adjDim));
 	}
 
@@ -564,15 +571,16 @@ final class BoxRegion extends Region {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	Region glue(Region region) {
+	Region glue(Region region)
+	{
 		BoxRegion other = (BoxRegion) region;
 		BoxRegion result = new BoxRegion((BoxRegionFactory) this.getFactory());
-		
+
 		for (int dim = 0; dim < result.getDimensions(); dim++) {
 			result.setDimension(dim, this.getDimensionLower(dim), other.getDimensionUpper(dim));
 		}

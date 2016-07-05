@@ -44,72 +44,92 @@ public class LoadPropertiesThread extends Thread
 	private PropertiesFile props = null;
 	private boolean isInsert = false;
 	private Exception ex;
-	
+
 	/** Creates a new instance of LoadPropertiesThread */
 	public LoadPropertiesThread(GUIMultiProperties parent, ModulesFile mf, File file)
 	{
-	   this(parent, mf, file, false);
+		this(parent, mf, file, false);
 	}
-	
+
 	public LoadPropertiesThread(GUIMultiProperties parent, ModulesFile mf, File file, boolean isInsert)
 	{
 		this.parent = parent;
 		this.mf = mf;
 		this.file = file;
 		this.pri = parent.getPrism();
-		this.isInsert = isInsert; 
+		this.isInsert = isInsert;
 	}
-	
+
+	@Override
 	public void run()
 	{
-		try
-		{
+		try {
 			//notify interface of start of computation
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				parent.startProgress();
-				parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, parent));
-				parent.setTaskBarText("Loading properties...");
-			}});
-			
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					parent.startProgress();
+					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, parent));
+					parent.setTaskBarText("Loading properties...");
+				}
+			});
+
 			// do parsing
 			try {
 				props = pri.parsePropertiesFile(mf, file, false);
 			}
 			//If there was a problem with the loading, notify the interface.
 			catch (FileNotFoundException e) {
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					parent.stopProgress(); 
-					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
-					parent.setTaskBarText("Loading properties... error.");
-					parent.error("Could not open file \"" + file + "\"");
-				}});
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						parent.stopProgress();
+						parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
+						parent.setTaskBarText("Loading properties... error.");
+						parent.error("Could not open file \"" + file + "\"");
+					}
+				});
 				return;
-			}
-			catch (PrismException e) {
+			} catch (PrismException e) {
 				ex = e;
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					parent.stopProgress(); 
-					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
-					parent.setTaskBarText("Loading properties... error.");
-					parent.error(ex.getMessage());
-				}});
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						parent.stopProgress();
+						parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
+						parent.setTaskBarText("Loading properties... error.");
+						parent.error(ex.getMessage());
+					}
+				});
 				return;
 			}
-			
+
 			//If we get here, the load has been successful, notify the interface and tell the handler.
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				parent.stopProgress(); 
-				parent.setTaskBarText("Loading properties... done.");
-				parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, parent));
-				if(isInsert)
-					parent.propertyInsertSuccessful(props);
-				else
-					parent.propertyLoadSuccessful(props, file);
-				//System.out.println("In invokeAndWait after propertyLoadSuccessful ");
-			}});
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					parent.stopProgress();
+					parent.setTaskBarText("Loading properties... done.");
+					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, parent));
+					if (isInsert)
+						parent.propertyInsertSuccessful(props);
+					else
+						parent.propertyLoadSuccessful(props, file);
+					//System.out.println("In invokeAndWait after propertyLoadSuccessful ");
+				}
+			});
 		}
 		// catch and ignore any thread exceptions
-		catch (java.lang.InterruptedException e) {}
-		catch (java.lang.reflect.InvocationTargetException e) {}
+		catch (java.lang.InterruptedException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
 	}
 }

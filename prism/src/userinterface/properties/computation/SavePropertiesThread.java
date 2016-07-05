@@ -39,7 +39,7 @@ public class SavePropertiesThread extends Thread
 	private GUIPropConstantList consList;
 	private GUIPropLabelList labList;
 	private File f;
-	
+
 	/** Creates a new instance of SavePropertiesThread */
 	public SavePropertiesThread(GUIMultiProperties parent, GUIPropertiesList propList, GUIPropConstantList consList, GUIPropLabelList labList, File f)
 	{
@@ -49,18 +49,23 @@ public class SavePropertiesThread extends Thread
 		this.labList = labList;
 		this.f = f;
 	}
-	
+
+	@Override
 	public void run()
 	{
-		try
-		{
+		try {
 			//notify interface of start of computation
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				parent.startProgress();
-				parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, parent));
-				parent.setTaskBarText("Saving properties...");
-			}});
-			
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					parent.startProgress();
+					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, parent));
+					parent.setTaskBarText("Saving properties...");
+				}
+			});
+
 			// do output to file
 			try {
 				PrintWriter out = new PrintWriter(new FileWriter(f));
@@ -70,25 +75,36 @@ public class SavePropertiesThread extends Thread
 			}
 			//If there was a problem with the save, notify the interface.
 			catch (IOException e) {
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					parent.stopProgress(); 
-					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
-					parent.setTaskBarText("Saving properties... error.");
-					parent.error("Could not save to file \"" + f + "\"");
-				}});
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						parent.stopProgress();
+						parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, parent));
+						parent.setTaskBarText("Saving properties... error.");
+						parent.error("Could not save to file \"" + f + "\"");
+					}
+				});
 				return;
 			}
-			
+
 			//Computation successful, notify the user interface
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				parent.stopProgress(); 
-				parent.setTaskBarText("Saving properties... done.");
-				parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, parent));
-				parent.propertySaveSuccessful(f);
-			}});
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					parent.stopProgress();
+					parent.setTaskBarText("Saving properties... done.");
+					parent.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, parent));
+					parent.propertySaveSuccessful(f);
+				}
+			});
 		}
 		// catch and ignore any thread exceptions
-		catch (java.lang.InterruptedException e) {}
-		catch (java.lang.reflect.InvocationTargetException e) {}
+		catch (java.lang.InterruptedException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
 	}
 }

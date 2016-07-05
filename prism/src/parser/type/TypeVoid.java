@@ -28,47 +28,47 @@ package parser.type;
 
 import prism.PrismLangException;
 
-public class TypeVoid extends Type 
+public class TypeVoid extends Type
 {
 	private static TypeVoid singleton;
-	
-	static
-	{
+
+	static {
 		singleton = new TypeVoid();
 	}
-	
+
 	private TypeVoid()
-	{		
-	}	
-	
+	{
+	}
+
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeVoid);
 	}
-	
+
 	@Override
 	public String getTypeString()
 	{
 		return "void";
 	}
-	
+
 	@Override
 	public Object defaultValue()
 	{
 		return null;
 	}
-	
+
 	public static TypeVoid getInstance()
 	{
 		return singleton;
 	}
-	
+
 	@Override
 	public boolean canAssign(Type type)
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object castValueTo(Object value) throws PrismLangException
 	{

@@ -26,14 +26,14 @@
 
 package prism;
 
-@SuppressWarnings("serial")
 public class PrismException extends Exception
 {
 	public PrismException(String s)
 	{
 		super(s);
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "Error: " + getMessage() + ".";

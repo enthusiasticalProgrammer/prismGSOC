@@ -68,7 +68,7 @@ public class TileList
 	{
 		return storedTileLists;
 	}
-	 
+
 	/**
 	 * Stores a TileList so that it can be retrieved for visualisation in multi-objective
 	 * verification
@@ -85,7 +85,7 @@ public class TileList
 		storedTileLists.add(tl);
 
 	}
-	
+
 	/**
 	 * Formulas for X and Y axes (or multi-obj formulas) of the corresponding
 	 * elements of storedTileLists.
@@ -267,7 +267,7 @@ public class TileList
 			for (int i = 0; i < a.size(); i++) {
 				boolean covered = false;
 				for (int j = 0; j < a.size(); j++) {
-					if (i==j)
+					if (i == j)
 						continue;
 					if (a.get(i).isCoveredBy(a.get(j))) {
 						covered = true;
@@ -280,10 +280,9 @@ public class TileList
 					break;
 				}
 			}
-			
-		
-		} while(changed);
-		
+
+		} while (changed);
+
 		return a;
 	}
 
@@ -299,7 +298,7 @@ public class TileList
 		if (this.opsAndBoundsList != null) {
 			for (int i = 0; i < a.size(); i++) {
 				Point p = a.get(i).toRealProperties(this.opsAndBoundsList);
-				a.set(i,p);
+				a.set(i, p);
 			}
 		}
 		return a;

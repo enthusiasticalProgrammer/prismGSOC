@@ -35,14 +35,14 @@ public class ExpressionLabel extends Expression
 	String name;
 
 	// Constructor
-	
+
 	public ExpressionLabel(String s)
 	{
 		name = s;
 	}
 
 	// Get Method
-	
+
 	public String getName()
 	{
 		return name;
@@ -65,7 +65,7 @@ public class ExpressionLabel extends Expression
 	}
 
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -78,7 +78,7 @@ public class ExpressionLabel extends Expression
 	{
 		return true;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -92,13 +92,13 @@ public class ExpressionLabel extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public Expression deepCopy()
 	{

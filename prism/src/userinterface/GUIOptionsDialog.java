@@ -26,6 +26,7 @@
 //==============================================================================
 
 package userinterface;
+
 import java.util.*;
 import javax.swing.*;
 import prism.*;
@@ -33,26 +34,25 @@ import settings.*;
 
 public class GUIOptionsDialog extends javax.swing.JDialog
 {
-	
-	private ArrayList panels;
+
+	private List<SettingTable> panels;
 	private PrismSettings settings;
-	
+
 	/** Creates new form GUIOptionsDialog */
 	public GUIOptionsDialog(GUIPrism parent)
 	{
 		super(parent, true);
 		settings = parent.getPrism().getSettings();
-		panels = new ArrayList();
+		panels = new ArrayList<>();
 		initComponents();
 		this.getRootPane().setDefaultButton(cancelButton);
 		setLocationRelativeTo(getParent()); // centre
 		//setResizable(false);
-		
-		for(int i = 0; i < settings.optionOwners.length; i++)
-		{
+
+		for (int i = 0; i < settings.optionOwners.length; i++) {
 			SettingTable table = new SettingTable(this);
-			
-			ArrayList al = new ArrayList();
+
+			List<DefaultSettingOwner> al = new ArrayList<>();
 			settings.optionOwners[i].setDisplay(table);
 			al.add(settings.optionOwners[i]);
 			table.setOwners(al);
@@ -61,17 +61,18 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 			theTabs.setTitleAt(panels.indexOf(table), PrismSettings.propertyOwnerNames[i]);
 		}
 	}
-	
+
 	public void addPanel(OptionsPanel p)
 	{
 		// defunct
 	}
-	
+
+	@Override
 	public void show()
 	{
 		super.show();
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -90,6 +91,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -114,6 +116,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		defaultButton.setMaximumSize(new java.awt.Dimension(220, 50));
 		defaultButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				defaultButtonActionPerformed(evt);
@@ -127,6 +130,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		saveSettingsButton.setPreferredSize(new java.awt.Dimension(120, 25));
 		saveSettingsButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				saveSettingsButtonActionPerformed(evt);
@@ -145,6 +149,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		cancelButton.setPreferredSize(new java.awt.Dimension(80, 25));
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -156,57 +161,50 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 		jPanel2.add(jPanel4, java.awt.BorderLayout.EAST);
 
 		getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
-		
+
 		pack();
 	}//GEN-END:initComponents
-	
-	
-	
+
 	private void saveSettingsButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_saveSettingsButtonActionPerformed
 	{//GEN-HEADEREND:event_saveSettingsButtonActionPerformed
-		
+
 		settings.notifySettingsListeners();
-		
-		try
-		{
+
+		try {
 			settings.saveSettingsFile();
+		} catch (PrismException e) {
+			GUIPrism.getGUI().errorDialog("Error saving settings:\n" + e.getMessage());
 		}
-		catch(PrismException e)
-		{
-			GUIPrism.getGUI().errorDialog("Error saving settings:\n"+e.getMessage());
-		}
-		
+
 	}//GEN-LAST:event_saveSettingsButtonActionPerformed
-	
-	
-	
+
 	private void defaultButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_defaultButtonActionPerformed
 	{//GEN-HEADEREND:event_defaultButtonActionPerformed
-		
-		String[] selection =
-		{"Yes", "No"};
+
+		String[] selection = { "Yes", "No" };
 		int selectionNo = -1;
-		
-		selectionNo = JOptionPane.showOptionDialog(this, "Are you sure you wish to load the default settings?\nAll previous settings will be lost.", "Save Settings", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, selection, selection[0]);
+
+		selectionNo = JOptionPane.showOptionDialog(this, "Are you sure you wish to load the default settings?\nAll previous settings will be lost.",
+				"Save Settings", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, selection, selection[0]);
 		if (selectionNo == 0) {
 			settings.loadDefaults();
 			settings.notifySettingsListeners();
 		}
-		
+
 	}//GEN-LAST:event_defaultButtonActionPerformed
-	
+
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{//GEN-HEADEREND:event_cancelButtonActionPerformed
 		hide();
 	}//GEN-LAST:event_cancelButtonActionPerformed
-	
+
 	/** Closes the dialog */
 	private void closeDialog(java.awt.event.WindowEvent evt)//GEN-FIRST:event_closeDialog
 	{
 		setVisible(false);
 		dispose();
 	}//GEN-LAST:event_closeDialog
-	
+
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	javax.swing.JButton cancelButton;
 	javax.swing.JButton defaultButton;
@@ -217,5 +215,5 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 	private javax.swing.JButton saveSettingsButton;
 	javax.swing.JTabbedPane theTabs;
 	// End of variables declaration//GEN-END:variables
-	
+
 }

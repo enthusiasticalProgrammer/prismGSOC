@@ -26,7 +26,6 @@ import jltl2ba.APElement;
 import jltl2ba.APSet;
 import jltl2ba.MyBitSet;
 
-
 /** @file
  * Provides class NBA_State for storing a state of a nondeterministic Büchi automaton.
  */
@@ -35,9 +34,10 @@ import jltl2ba.MyBitSet;
  * A state of a deterministic omega-automaton.
  * For a description of the template parameters, see class NBA.
  */
-public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
+public class NBA_State implements Iterable<Map.Entry<APElement, MyBitSet>>
+{
 
-	 /** The automaton */
+	/** The automaton */
 	private NBA _graph;
 
 	/** Is this state accepting */
@@ -49,11 +49,10 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 	/** The EdgeManager*/
 	EdgeManager _edge_manager;
 
-	
-  /**
-   * Constructor.
-   * @param graph The automaton (NBA) that contains this state.
-   */
+	/**
+	 * Constructor.
+	 * @param graph The automaton (NBA) that contains this state.
+	 */
 	public NBA_State(NBA graph)
 	{
 		_graph = graph;
@@ -62,32 +61,33 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 		_description = "";
 	}
 
-
 	/** 
 	 * Add an edge from this state to the other state
 	 * @param label the label for the edge
 	 * @param state the target state 
 	 */
-	public void addEdge(APElement label, NBA_State state) {
+	public void addEdge(APElement label, NBA_State state)
+	{
 		_edge_manager.addEdge(label, state);
 	}
 
+	/** 
+	 * Add edge(s) from this state to the other state
+	 * @param monom an APMonom for the label(s)
+	 * @param to_state the target state
+	 */
+	public void addEdge(APMonom monom, NBA_State to_state)
+	{
+		_edge_manager.addEdge(monom, to_state);
+	}
 
 	/** 
 	 * Add edge(s) from this state to the other state
 	 * @param monom an APMonom for the label(s)
 	 * @param to_state the target state
 	 */
-	public void addEdge(APMonom monom, NBA_State to_state) {
-		_edge_manager.addEdge(monom, to_state);
-	}
-	
-	/** 
-	 * Add edge(s) from this state to the other state
-	 * @param monom an APMonom for the label(s)
-	 * @param to_state the target state
-	 */
-	public void addEdges(APElement monom, MyBitSet to_states) {
+	public void addEdges(APElement monom, MyBitSet to_states)
+	{
 		_edge_manager.addEdges(monom, to_states);
 	}
 
@@ -95,12 +95,14 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 	 * Get the target states of the labeled edge.
 	 * @return a pointer to a BitSet with the indizes of the target states.
 	 */
-	public MyBitSet getEdge(APElement label) {
+	public MyBitSet getEdge(APElement label)
+	{
 		return _edge_manager.getEdge(label);
 	}
 
 	/** Get the name (index) of this state. */
-	public int getName() {
+	public int getName()
+	{
 		return _graph.getIndexForState(this);
 	}
 
@@ -111,29 +113,33 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 	{
 		return _isFinal;
 	}
-  
+
 	/** Set the value of the final flag for this state */
-	public void setFinal(boolean f) {
-		_isFinal=f;
+	public void setFinal(boolean f)
+	{
+		_isFinal = f;
 		_graph.getFinalStates().set(_graph.getIndexForState(this), f);
 	}
 
 	// FIXME: ForEachSuccessor
-  	// FIXME: edge_to_bitset_iterator
-  	// FIXME: successor_iterator
-  
+	// FIXME: edge_to_bitset_iterator
+	// FIXME: successor_iterator
+
 	/** Set the description for this state. */
-	public void setDescription(String s) {
+	public void setDescription(String s)
+	{
 		_description = s;
 	}
-	
+
 	/** Get the description for this state. */
-	String getDescription() {
+	String getDescription()
+	{
 		return _description;
 	}
 
 	/** Check if this state has a description. */
-	public boolean hasDescription() {
+	public boolean hasDescription()
+	{
 		return (_description.length() != 0);
 	}
 
@@ -142,23 +148,25 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 	{
 		return _graph;
 	}
-	
-	public Iterator<Map.Entry<APElement,MyBitSet>> iterator()
+
+	@Override
+	public Iterator<Map.Entry<APElement, MyBitSet>> iterator()
 	{
 		return _edge_manager.getEdgeContainer().entrySet().iterator();
 	}
-	
+
 	public Iterator<Integer> successorIterator()
-	{	
+	{
 		MyBitSet successors = new MyBitSet(_graph.getStateCount());
 		for (MyBitSet dest : _edge_manager.getEdgeContainer().values()) {
 			successors.or(dest);
 		}
 		return new MyBitSet.MyBitSetIterator(successors);
 	}
-	
+
 	/** The EdgeManager for the NBA_State */
-	public static class EdgeManager {
+	public static class EdgeManager
+	{
 
 		/** The state owning this EdgeManager */
 		private NBA_State _state;
@@ -171,7 +179,7 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 		 * @param state the NBA_State owning this EdgeManager
 		 * @param apset the underlying APSet   
 		 */
-		public EdgeManager(NBA_State state, APSet apset) 
+		public EdgeManager(NBA_State state, APSet apset)
 		{
 			_apset_size = apset.size();
 			_state = state;
@@ -179,7 +187,8 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 		}
 
 		/** Get the target states */
-		public MyBitSet getEdge(APElement label) {
+		public MyBitSet getEdge(APElement label)
+		{
 			if (_container.get(label) == null)
 				_container.put(label, new MyBitSet(_apset_size));
 			return _container.get(label);
@@ -191,17 +200,19 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 		}
 
 		/** Add an edge. */
-		public void addEdge(APElement label, NBA_State state) {
+		public void addEdge(APElement label, NBA_State state)
+		{
 			if (_container.get(label) == null)
 				_container.put(label, new MyBitSet(_apset_size));
 			_container.get(label).set(state.getName());
 		}
 
 		/** Add an edge. */
-		public void addEdge(APMonom label, NBA_State state) {
+		public void addEdge(APMonom label, NBA_State state)
+		{
 			APSet ap_set = _state.getGraph().getAPSet();
-			
-			for (Iterator<APElement> it = label.APElementIterator(ap_set); it.hasNext(); ) {
+
+			for (Iterator<APElement> it = label.APElementIterator(ap_set); it.hasNext();) {
 				APElement cur = it.next();
 				addEdge(cur, state);
 				// System.out.println("State " + _state.getName() + " added edge to " + state.getName() + " through " + cur);
@@ -209,8 +220,9 @@ public class NBA_State implements Iterable<Map.Entry<APElement,MyBitSet>> {
 		}
 
 		/** Get the EdgeContainer. */
-		public HashMap<APElement, MyBitSet> getEdgeContainer() {
+		public HashMap<APElement, MyBitSet> getEdgeContainer()
+		{
 			return _container;
 		}
 	}
- }
+}

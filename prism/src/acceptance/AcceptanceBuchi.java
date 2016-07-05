@@ -68,11 +68,12 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	}
 
 	/** Make a copy of the acceptance condition. */
+	@Override
 	public AcceptanceBuchi clone()
 	{
-		return new AcceptanceBuchi((BitSet)acceptingStates.clone());
+		return new AcceptanceBuchi((BitSet) acceptingStates.clone());
 	}
-	
+
 	@Override
 	public boolean isBSCCAccepting(BitSet bscc_states)
 	{
@@ -156,7 +157,7 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	@Override
 	public void lift(LiftBitSet lifter)
 	{
-		acceptingStates=lifter.lift(acceptingStates);
+		acceptingStates = lifter.lift(acceptingStates);
 	}
 
 	@Override
@@ -176,7 +177,7 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	{
 		return acceptingStates.get(i) ? "!" : " ";
 	}
-	
+
 	@Override
 	public String getSignatureForStateHOA(int stateIndex)
 	{
@@ -197,7 +198,7 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	@Override
 	public String getSizeStatistics()
 	{
-		return acceptingStates.cardinality()+" accepting states";
+		return acceptingStates.cardinality() + " accepting states";
 	}
 
 	@Override

@@ -72,142 +72,138 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 {
 	public static final int CONTINUE = 0;
 	public static final int CANCEL = 1;
-	
+
 	private SettingTable settingTable;
 	private DefaultTreeModel treeModel;
 	private SimulatorNetworkHandler networkHandler;
-	
+
 	private FileSystem selectedFileSystem = null;
 	private SSHHost selectedHost = null;
-	
+
 	private JPopupMenu networkPopup, fileSystemPopup, hostPopup;
 	private JMenu fileMenu, editMenu;
 	private Action newNetwork, open, save, saveAs, close;
 	private Action cut, copy, paste, delete;
-	
-	private ArrayList clipboardHosts;
-	private ArrayList clipboardFSs;
-	
+
+	private ArrayList<SSHHost> clipboardHosts;
+	private ArrayList<FileSystem> clipboardFSs;
+
 	private boolean modified = false;
 	private File activeFile = null;
-	
+
 	private FileNameExtensionFilter netFilter;
 
-	
-	
 	/** Creates new form GUINetworkEditor */
 	public GUINetworkEditor(Frame parent, SimulatorNetworkHandler networkHandler)
 	{
 		super(parent, true);
-		
+
 		setActiveFile(null);
-		
+
 		initComponents();
 		setLocationRelativeTo(getParent()); // centre
 		initPopups();
 		theMenu.add(fileMenu);
 		theMenu.add(editMenu);
-		
+
 		this.networkHandler = networkHandler;
 		networkHandler.addObserver(this);
-		
+
 		settingTable = new SettingTable(parent);
 		bottomPanel.add(settingTable, BorderLayout.CENTER);
-		
+
 		treeModel = new DefaultTreeModel(networkHandler);
 		networkTree.setModel(treeModel);
-		
+
 		networkTree.setCellRenderer(new GUINetworkEditor.NetworkNodeRenderer());
 		networkTree.addTreeSelectionListener(this);
 		networkTree.addMouseListener(this);
-		
+
 		netFilter = new FileNameExtensionFilter("PRISM networks (*.xml)", "xml");
 	}
-	
+
 	public int doModificationCheck()
 	{
-		if (!modified) return CONTINUE;
-		if (!hasActiveFile())
-		{
-			String[] selection =
-			{"Yes", "No", "Cancel"};
+		if (!modified)
+			return CONTINUE;
+		if (!hasActiveFile()) {
+			String[] selection = { "Yes", "No", "Cancel" };
 			int selectionNo = -1;
-			selectionNo = optionPane("Network profile has been modified.\nDo you wish to save it?", "Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, selection, selection[0]);
-			switch(selectionNo)
-			{
-				case 0: return a_saveAs();
-				case 1: return CONTINUE;
-				case 2: return CANCEL;
-				default: return CANCEL;
+			selectionNo = optionPane("Network profile has been modified.\nDo you wish to save it?", "Question", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, selection, selection[0]);
+			switch (selectionNo) {
+			case 0:
+				return a_saveAs();
+			case 1:
+				return CONTINUE;
+			case 2:
+				return CANCEL;
+			default:
+				return CANCEL;
 			}
-		}
-		else
-		{
-			String[] selection =
-			{"Yes", "No", "Save As...", "Cancel"};
+		} else {
+			String[] selection = { "Yes", "No", "Save As...", "Cancel" };
 			int selectionNo = -1;
-			selectionNo = optionPane("Network profile has been modified.\nDo you wish to save it?", "Question", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, selection, selection[0]);
-			switch(selectionNo)
-			{
-				case 0: return a_save();
-				case 1: return CONTINUE;
-				case 2: return a_saveAs();
-				case 3: return CANCEL;
-				default: return CANCEL;
+			selectionNo = optionPane("Network profile has been modified.\nDo you wish to save it?", "Question", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE, selection, selection[0]);
+			switch (selectionNo) {
+			case 0:
+				return a_save();
+			case 1:
+				return CONTINUE;
+			case 2:
+				return a_saveAs();
+			case 3:
+				return CANCEL;
+			default:
+				return CANCEL;
 			}
 		}
 	}
-	
+
 	public void setActiveFile(File f)
 	{
 		activeFile = f;
-		if(f == null)
-		{
+		if (f == null) {
 			setTitle("Network Profile <Untitled>");
-		}
-		else
-		{
-			setTitle("Network Profile "+f.getName());
+		} else {
+			setTitle("Network Profile " + f.getName());
 		}
 	}
-	
+
 	public boolean hasActiveFile()
 	{
 		return activeFile != null;
 	}
-	
+
 	public void a_new()
 	{
 		int cont = doModificationCheck();
-		if(cont == CONTINUE)
-		{
+		if (cont == CONTINUE) {
 			networkHandler.newNetwork("New Profile");
 			treeModel.nodeStructureChanged(networkHandler);
-			settingTable.setOwners(new ArrayList());
+			settingTable.setOwners(new ArrayList<Object>());
 			modified = false;
 		}
 	}
-	
+
 	public void a_open()
 	{
 		int cont = doModificationCheck();
-		if(cont == CONTINUE)
-		{
+		if (cont == CONTINUE) {
 
-			if (showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION||showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION)
+			if (showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION || showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION)
 
 			{
 				File file = GUIPrism.getGUI().getChooser().getSelectedFile();
-				if (file == null)
-				{
+				if (file == null) {
 					errorDialog("Error: No file selected");
 					return;
 				}
 				// guess model type based on extension
-				try
-				{
+				try {
 					SimulatorNetworkHandler newHandler = new SimulatorNetworkHandler();
-					
+
 					newHandler.loadNetworkFromXML(file);
 					modified = false;
 					setActiveFile(file);
@@ -216,142 +212,116 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 					networkHandler.addObserver(this);
 					treeModel.setRoot(networkHandler);
 					treeModel.nodeStructureChanged(networkHandler);
-                                        networkTree.revalidate();
-                                        
-				}
-				catch(PrismException ee)
-				{
+					networkTree.revalidate();
+
+				} catch (PrismException ee) {
 					errorDialog(ee.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	public int a_save()
 	{
-		if(!hasActiveFile())
-		{
+		if (!hasActiveFile()) {
 			return a_saveAs();
-		}
-		else
-		{	try
-			{
+		} else {
+			try {
 				networkHandler.saveNetworkToXML(activeFile);
 				modified = false;
 				return CONTINUE;
-			}
-			catch(PrismException ee)
-			{
+			} catch (PrismException ee) {
 				errorDialog(ee.getMessage());
 				return CANCEL;
 			}
 		}
 	}
-	
+
 	public int a_saveAs()
 	{
-		
-		if (showSaveFileDialog(netFilter) != JFileChooser.APPROVE_OPTION)
-		{
+
+		if (showSaveFileDialog(netFilter) != JFileChooser.APPROVE_OPTION) {
 			return CANCEL;
 		}
 		// do save
-		try
-		{
+		try {
 			File file = GUIPrism.getGUI().getChooser().getSelectedFile();
 			networkHandler.saveNetworkToXML(file);
 			setActiveFile(file);
 			modified = false;
 			return CONTINUE;
-		}
-		catch(PrismException ee)
-		{
+		} catch (PrismException ee) {
 			errorDialog(ee.getMessage());
 			return CANCEL;
 		}
 	}
-	
+
 	public void a_close()
 	{
 		int cont = doModificationCheck();
-		if(cont == CONTINUE)
-		{
+		if (cont == CONTINUE) {
 			hide();
 		}
 	}
-	
+
 	public void a_addNetworkCluster()
 	{
 		networkHandler.addFileSystem("New FileSystem", "~", "~");
-		treeModel.nodesWereInserted(networkHandler, new int []
-		{ networkHandler.getChildCount() - 1});
+		treeModel.nodesWereInserted(networkHandler, new int[] { networkHandler.getChildCount() - 1 });
 		modified = true;
 	}
-	
+
 	public void a_cut()
 	{
-		
+
 	}
-	
+
 	public void a_copy()
 	{
-		clipboardHosts = new ArrayList();
-		clipboardFSs = new ArrayList();
-		
+		clipboardHosts = new ArrayList<SSHHost>();
+		clipboardFSs = new ArrayList<FileSystem>();
+
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
-		
-		for(int i = 0; i <selectedPaths.length; i++)
-		{
-			
-			if(selectedPaths[i].getLastPathComponent() instanceof SSHHost)
-			{
+
+		for (int i = 0; i < selectedPaths.length; i++) {
+
+			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
 				SSHHost host = (SSHHost) selectedPaths[i].getLastPathComponent();
 				clipboardHosts.add(host);
-			}
-			else if(selectedPaths[i].getLastPathComponent() instanceof FileSystem)
-			{
+			} else if (selectedPaths[i].getLastPathComponent() instanceof FileSystem) {
 				FileSystem fs = (FileSystem) selectedPaths[i].getLastPathComponent();
 				clipboardFSs.add(fs);
-				
-				
+
 			}
 		}
-		
+
 		networkTree.setSelectionInterval(-1, -1);
-		
-		
+
 	}
-	
+
 	public void a_paste()
 	{
-		if(selectedFileSystem != null)
-		{
-			if(clipboardHosts != null)
-			{
-				for(int i = 0; i < clipboardHosts.size(); i++)
-				{
-					SSHHost host = (SSHHost)clipboardHosts.get(i);
+		if (selectedFileSystem != null) {
+			if (clipboardHosts != null) {
+				for (int i = 0; i < clipboardHosts.size(); i++) {
+					SSHHost host = clipboardHosts.get(i);
 					selectedFileSystem.addHost(host.getHostName(), host.getUserName());
 				}
-				
+
 				treeModel.nodeStructureChanged(selectedFileSystem);
 			}
-			
-		}
-		else if(selectedHost == null) //i.e. it is the network that should be pasted to
+
+		} else if (selectedHost == null) //i.e. it is the network that should be pasted to
 		{
-			if(clipboardFSs != null)
-			{
+			if (clipboardFSs != null) {
 				int[] indices = new int[clipboardFSs.size()];
-				for(int i = 0; i < clipboardFSs.size(); i++)
-				{
-					FileSystem fs = (FileSystem)clipboardFSs.get(i);
+				for (int i = 0; i < clipboardFSs.size(); i++) {
+					FileSystem fs = clipboardFSs.get(i);
 					int index = networkHandler.addFileSystem(fs.getName(), fs.getInputDir(), fs.getOutputDir());
 					indices[i] = index;
 					FileSystem newFS = networkHandler.getFileSystem(index);
-					
-					for(int j = 0; j < fs.getNumHosts(); j++)
-					{
+
+					for (int j = 0; j < fs.getNumHosts(); j++) {
 						SSHHost host = fs.getHost(j);
 						newFS.addHost(host.getHostName(), host.getUserName());
 						System.out.println("adding new hosts to new filesystem");
@@ -359,197 +329,178 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 				}
 				treeModel.nodesWereInserted(networkHandler, indices);
 			}
-			
+
 		}
 		modified = true;
-		
+
 	}
-	
+
 	public void a_delete()
 	{
 		// delete hosts first
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
-		
-		
-		
-		
-		ArrayList fss = new ArrayList();
-		for(int i = 0; i <selectedPaths.length; i++)
-		{
-			
-			if(selectedPaths[i].getLastPathComponent() instanceof SSHHost)
-			{
+
+		ArrayList<TreeNode> fss = new ArrayList<>();
+		for (int i = 0; i < selectedPaths.length; i++) {
+
+			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
 				SSHHost host = (SSHHost) selectedPaths[i].getLastPathComponent();
-				((FileSystem)host.getParent()).deleteHost(host);
+				((FileSystem) host.getParent()).deleteHost(host);
 				fss.add(host.getParent());
-				
+
 			}
 		}
-		for(int i = 0; i < fss.size(); i++)
-		{
-			treeModel.nodeStructureChanged((FileSystem)fss.get(i));
+		for (int i = 0; i < fss.size(); i++) {
+			treeModel.nodeStructureChanged((FileSystem) fss.get(i));
 		}
-		
-		ArrayList indices = new ArrayList();
-		
-		for(int i = 0; i < selectedPaths.length; i++)
-		{
-			if(selectedPaths[i].getLastPathComponent() instanceof FileSystem)
-			{
-				indices.add(new Integer(networkHandler.getIndex((FileSystem)selectedPaths[i].getLastPathComponent())));
+
+		ArrayList<Integer> indices = new ArrayList<>();
+
+		for (int i = 0; i < selectedPaths.length; i++) {
+			if (selectedPaths[i].getLastPathComponent() instanceof FileSystem) {
+				indices.add(new Integer(networkHandler.getIndex((FileSystem) selectedPaths[i].getLastPathComponent())));
 			}
 		}
-		
+
 		int[] inds = new int[indices.size()];
-		for(int i = 0; i < indices.size(); i++)
-		{
-			inds[i] = ((Integer)indices.get(i)).intValue();
+		for (int i = 0; i < indices.size(); i++) {
+			inds[i] = indices.get(i).intValue();
 		}
-		Object[]objs = new Object[indices.size()];
-		
-		int j =0;
-		
-		for(int i = 0; i < selectedPaths.length; i++)
-		{
-			if(selectedPaths[i].getLastPathComponent() instanceof FileSystem)
-			{
+		Object[] objs = new Object[indices.size()];
+
+		int j = 0;
+
+		for (int i = 0; i < selectedPaths.length; i++) {
+			if (selectedPaths[i].getLastPathComponent() instanceof FileSystem) {
 				FileSystem fs = (FileSystem) selectedPaths[i].getLastPathComponent();
 				objs[j++] = fs;
-				((SimulatorNetworkHandler)fs.getParent()).deleteFileSystem(fs);
-				
+				((SimulatorNetworkHandler) fs.getParent()).deleteFileSystem(fs);
+
 			}
 		}
-		
-		if(inds.length > 0)
-		{
+
+		if (inds.length > 0) {
 			treeModel.nodesWereRemoved(networkHandler, inds, objs);
 		}
-		
+
 		//treeModel.nodeStructureChanged(networkHandler);
-		
-		settingTable.setOwners(new ArrayList());
+
+		settingTable.setOwners(new ArrayList<Object>());
 		modified = true;
 	}
-	
+
 	public void a_addHost()
 	{
-		if(selectedFileSystem != null)
-		{
+		if (selectedFileSystem != null) {
 			selectedFileSystem.addHost("new_host", "user_name");
-			treeModel.nodesWereInserted(selectedFileSystem, new int[]
-			{ selectedFileSystem.getChildCount()- 1 });
+			treeModel.nodesWereInserted(selectedFileSystem, new int[] { selectedFileSystem.getChildCount() - 1 });
 			modified = true;
 		}
 	}
-	
+
 	public void a_testHosts()
 	{
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
-		
-		for(int i = 0; i <selectedPaths.length; i++)
-		{
-			
-			if(selectedPaths[i].getLastPathComponent() instanceof SSHHost)
-			{
+
+		for (int i = 0; i < selectedPaths.length; i++) {
+
+			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
 				SSHHost host = (SSHHost) selectedPaths[i].getLastPathComponent();
 				host.testHost();
-				
+
 			}
 		}
 	}
-	
+
 	public void a_testAllHosts()
 	{
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
-		for(int i = 0; i < selectedPaths.length; i++)
-		{
-			if(selectedPaths[i].getLastPathComponent() instanceof FileSystem)
-			{
+		for (int i = 0; i < selectedPaths.length; i++) {
+			if (selectedPaths[i].getLastPathComponent() instanceof FileSystem) {
 				FileSystem fs = (FileSystem) selectedPaths[i].getLastPathComponent();
-				for(int j = 0; j < fs.getNumHosts(); j++)
-				{
+				for (int j = 0; j < fs.getNumHosts(); j++) {
 					fs.getHost(j).testHost();
 				}
-				
+
 			}
 		}
 	}
-	
+
 	public void a_testAll()
 	{
-		for(int i = 0; i < networkHandler.getNumFileSystems(); i++)
-		{
+		for (int i = 0; i < networkHandler.getNumFileSystems(); i++) {
 			FileSystem fs = networkHandler.getFileSystem(i);
-			for(int j = 0; j < fs.getNumHosts(); j++)
-			{
+			for (int j = 0; j < fs.getNumHosts(); j++) {
 				fs.getHost(j).testHost();
 			}
 		}
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
 	 * always regenerated by the Form Editor.
 	 */
-    private void initComponents()//GEN-BEGIN:initComponents
-    {
-        javax.swing.JScrollPane jScrollPane1;
-        javax.swing.JSplitPane jSplitPane1;
+	private void initComponents()//GEN-BEGIN:initComponents
+	{
+		javax.swing.JScrollPane jScrollPane1;
+		javax.swing.JSplitPane jSplitPane1;
 
-        jSplitPane1 = new javax.swing.JSplitPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        networkTree = new javax.swing.JTree();
-        bottomPanel = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        theMenu = new javax.swing.JMenuBar();
+		jSplitPane1 = new javax.swing.JSplitPane();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		networkTree = new javax.swing.JTree();
+		bottomPanel = new javax.swing.JPanel();
+		jPanel1 = new javax.swing.JPanel();
+		jButton1 = new javax.swing.JButton();
+		theMenu = new javax.swing.JMenuBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        networkTree.setPreferredSize(new java.awt.Dimension(500, 300));
-        jScrollPane1.setViewportView(networkTree);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+		networkTree.setPreferredSize(new java.awt.Dimension(500, 300));
+		jScrollPane1.setViewportView(networkTree);
 
-        jSplitPane1.setLeftComponent(jScrollPane1);
+		jSplitPane1.setLeftComponent(jScrollPane1);
 
-        bottomPanel.setLayout(new java.awt.BorderLayout());
+		bottomPanel.setLayout(new java.awt.BorderLayout());
 
-        bottomPanel.setPreferredSize(new java.awt.Dimension(500, 300));
-        jSplitPane1.setRightComponent(bottomPanel);
+		bottomPanel.setPreferredSize(new java.awt.Dimension(500, 300));
+		jSplitPane1.setRightComponent(bottomPanel);
 
-        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+		getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+		jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                jButton1ActionPerformed(evt);
-            }
-        });
+		jButton1.setText("Close");
+		jButton1.addActionListener(new java.awt.event.ActionListener()
+		{
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				jButton1ActionPerformed(evt);
+			}
+		});
 
-        jPanel1.add(jButton1);
+		jPanel1.add(jButton1);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+		getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
-        setJMenuBar(theMenu);
+		setJMenuBar(theMenu);
 
-        pack();
-    }//GEN-END:initComponents
-	
+		pack();
+	}//GEN-END:initComponents
+
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
 	{//GEN-HEADEREND:event_jButton1ActionPerformed
 		a_close();
 	}//GEN-LAST:event_jButton1ActionPerformed
-	
+
 	public void initPopups()
 	{
 		networkPopup = new JPopupMenu();
-		
+
 		AbstractAction addFileSystem = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addNetworkCluster();
@@ -560,11 +511,12 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		addFileSystem.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_C));
 		addFileSystem.putValue(Action.NAME, "Add Network Cluster");
 		addFileSystem.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallAdd.png"));
-		
+
 		networkPopup.add(addFileSystem);
-		
+
 		AbstractAction testAll = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testAll();
@@ -573,15 +525,16 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		testAll.putValue(Action.LONG_DESCRIPTION, "Test All");
 		//computeSS.putValue(Action.SHORT_DESCRIPTION, "Compute steady-state probabilities");
 		testAll.putValue(Action.NAME, "Test");
-		
+
 		networkPopup.addSeparator();
 		networkPopup.add(testAll);
 		networkPopup.addSeparator();
-		
+
 		fileSystemPopup = new JPopupMenu();
-		
+
 		AbstractAction addHost = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_addHost();
@@ -592,9 +545,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		addHost.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_H));
 		addHost.putValue(Action.NAME, "Add Host");
 		addHost.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallAdd.png"));
-		
+
 		cut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_cut();
@@ -606,9 +560,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		cut.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_T));
 		cut.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallCut.png"));
 		cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
+
 		copy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_copy();
@@ -620,9 +575,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		copy.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_C));
 		copy.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallCopy.png"));
 		copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
+
 		paste = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_paste();
@@ -634,9 +590,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		paste.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_P));
 		paste.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallPaste.png"));
 		paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
+
 		delete = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_delete();
@@ -648,9 +605,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		delete.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_D));
 		delete.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallDelete.png"));
 		delete.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		
+
 		AbstractAction testAllHosts = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testAllHosts();
@@ -659,7 +617,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		testAllHosts.putValue(Action.LONG_DESCRIPTION, "Test Hosts");
 		//computeSS.putValue(Action.SHORT_DESCRIPTION, "Compute steady-state probabilities");
 		testAllHosts.putValue(Action.NAME, "Test Hosts");
-		
+
 		fileSystemPopup.add(addHost);
 		fileSystemPopup.addSeparator();
 		fileSystemPopup.add(testAllHosts);
@@ -668,9 +626,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		fileSystemPopup.add(copy);
 		fileSystemPopup.add(paste);
 		fileSystemPopup.add(delete);
-		
+
 		AbstractAction testHost = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_testHosts();
@@ -679,30 +638,27 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		testHost.putValue(Action.LONG_DESCRIPTION, "Test");
 		//computeSS.putValue(Action.SHORT_DESCRIPTION, "Compute steady-state probabilities");
 		testHost.putValue(Action.NAME, "Test");
-		
-		
-		
-		
-		
+
 		hostPopup = new JPopupMenu();
-		
+
 		hostPopup.add(testHost);
 		hostPopup.addSeparator();
 		//hostPopup.add(cut);
 		hostPopup.add(copy);
 		//hostPopup.add(paste);
 		hostPopup.add(delete);
-		
+
 		networkPopup.add(paste);
-		
+
 		editMenu = new JMenu("Edit");
 		//editMenu.add(cut);
 		editMenu.add(copy);
 		editMenu.add(paste);
 		editMenu.add(delete);
-		
+
 		newNetwork = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_new();
@@ -713,9 +669,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		newNetwork.putValue(Action.NAME, "New Profile");
 		newNetwork.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_N));
 		newNetwork.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallNew.png"));
-		
+
 		open = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_open();
@@ -726,9 +683,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		open.putValue(Action.NAME, "Open Profile");
 		open.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
 		open.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallOpen.png"));
-		
+
 		save = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_save();
@@ -740,9 +698,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		save.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_S));
 		save.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallSave.png"));
 		save.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
+
 		saveAs = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_saveAs();
@@ -754,9 +713,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		saveAs.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_S));
 		saveAs.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallSaveAs.png"));
 		saveAs.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		
+
 		close = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_close();
@@ -766,9 +726,9 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		//computeSS.putValue(Action.SHORT_DESCRIPTION, "Compute steady-state probabilities");
 		close.putValue(Action.NAME, "Close");
 		close.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_L));
-		
+
 		fileMenu = new JMenu("File");
-		
+
 		fileMenu.add(newNetwork);
 		fileMenu.addSeparator();
 		fileMenu.add(open);
@@ -777,127 +737,121 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		fileMenu.addSeparator();
 		fileMenu.add(close);
 	}
-	
+
+	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		ArrayList owners = new ArrayList();
+		ArrayList<Object> owners = new ArrayList<Object>();
 		TreePath[] nodes = networkTree.getSelectionPaths();
-		if(nodes == null) return;
-		for(int i = 0; i < nodes.length; i++)
-		{
+		if (nodes == null)
+			return;
+		for (int i = 0; i < nodes.length; i++) {
 			owners.add(nodes[i].getLastPathComponent());
 		}
 		settingTable.setOwners(owners);
-		
+
 	}
-	
+
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		TreePath path = networkTree.getClosestPathForLocation(e.getX(), e.getY());
-		
+
 		Object node = path.getLastPathComponent();
-		
-		if(node == null) return;
-		else if(node instanceof SimulatorNetworkHandler)
-		{
+
+		if (node == null)
+			return;
+		else if (node instanceof SimulatorNetworkHandler) {
 			selectedFileSystem = null;
 			selectedHost = null;
-		}
-		else if(node instanceof FileSystem)
-		{
-			selectedFileSystem = (FileSystem)node;
+		} else if (node instanceof FileSystem) {
+			selectedFileSystem = (FileSystem) node;
 			selectedHost = null;
-		}
-		else if(node instanceof SSHHost)
-		{
+		} else if (node instanceof SSHHost) {
 			selectedHost = (SSHHost) node;
 			selectedFileSystem = null;
 		}
 	}
-	
+
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
-	
+
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
-	
+
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		if(e.isPopupTrigger())
+		if (e.isPopupTrigger())
 			mousePopupTrigger(e);
 	}
-	
+
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
-		if(e.isPopupTrigger())
+		if (e.isPopupTrigger())
 			mousePopupTrigger(e);
 	}
-	
+
 	public void mousePopupTrigger(MouseEvent e)
 	{
 		TreePath path = networkTree.getClosestPathForLocation(e.getX(), e.getY());
-		
+
 		Object node = path.getLastPathComponent();
-		
-		if(node == null) return;
-		else if(node instanceof SimulatorNetworkHandler)
-		{
+
+		if (node == null)
+			return;
+		else if (node instanceof SimulatorNetworkHandler) {
 			selectedFileSystem = null;
 			selectedHost = null;
-			if(!isPathSelected(path))
+			if (!isPathSelected(path))
 				networkTree.setSelectionPath(path);
 			networkPopup.show(networkTree, e.getX(), e.getY());
-		}
-		else if(node instanceof FileSystem)
-		{
-			selectedFileSystem = (FileSystem)node;
+		} else if (node instanceof FileSystem) {
+			selectedFileSystem = (FileSystem) node;
 			selectedHost = null;
-			if(!isPathSelected(path))
+			if (!isPathSelected(path))
 				networkTree.setSelectionPath(path);
-			fileSystemPopup.show(networkTree,e.getX(), e.getY());
-		}
-		else if(node instanceof SSHHost)
-		{
+			fileSystemPopup.show(networkTree, e.getX(), e.getY());
+		} else if (node instanceof SSHHost) {
 			selectedHost = (SSHHost) node;
 			selectedFileSystem = null;
-			if(!isPathSelected(path))
+			if (!isPathSelected(path))
 				networkTree.setSelectionPath(path);
 			hostPopup.show(networkTree, e.getX(), e.getY());
 		}
 	}
-	
+
 	public boolean isPathSelected(TreePath path)
 	{
 		return networkTree.getSelectionModel().isPathSelected(path);
 	}
-	
+
+	@Override
 	public void update(Observable o, Object arg)
 	{
-		if(arg instanceof SSHHost)
-		{
-			treeModel.nodeChanged((SSHHost)arg);
+		if (arg instanceof SSHHost) {
+			treeModel.nodeChanged((SSHHost) arg);
+		} else if (arg instanceof FileSystem) {
+			treeModel.nodeChanged((FileSystem) arg);
+		} else if (arg instanceof SimulatorNetworkHandler) {
+			treeModel.nodeChanged((SimulatorNetworkHandler) arg);
 		}
-		else if(arg instanceof FileSystem)
-		{
-			treeModel.nodeChanged((FileSystem)arg);
-		}
-		else if(arg instanceof SimulatorNetworkHandler)
-		{
-			treeModel.nodeChanged((SimulatorNetworkHandler)arg);
-		}
-		
+
 		settingTable.refreshGroupNames();
-		
+
 		modified = true;
 	}
-	
-	public int optionPane(String message, String title, int buttonType, int messageType, String[]choices, String defa)
+
+	public int optionPane(String message, String title, int buttonType, int messageType, String[] choices, String defa)
 	{
 		return JOptionPane.showOptionDialog(this, message, title, buttonType, messageType, null, choices, defa);
 	}
-	
+
 	/** Produces an error dialog box and puts it to the screen with the given message
 	 * and default heading
 	 * @param errorMessage The error message to be displayed.
@@ -906,7 +860,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	{
 		errorDialog("Error", errorMessage);
 	}
-	
+
 	/** Produces an error dialog box and puts it to the screen with the given message
 	 * and a given heading
 	 * @param errorHeading The error dialog box's heading
@@ -917,7 +871,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		JOptionPane.showMessageDialog(this, errorMessage, errorHeading, JOptionPane.ERROR_MESSAGE);
 		//taskbar.setText(errorHeading);
 	}
-	
+
 	/** A utility method to show a file opening dialog with the given file filter as a
 	 * default.
 	 * @param ffs The list of file filters to be used within the filechooser.
@@ -932,18 +886,19 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		choose.setFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		return choose.showOpenDialog(this);
-}
+	}
+
 	public int showOpenFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
 	{
 		JFileChooser choose = GUIPrism.getGUI().getChooser();
 		choose.resetChoosableFileFilters();
-		for(int j = 0; j < ffs.length; j++)
+		for (int j = 0; j < ffs.length; j++)
 			choose.addChoosableFileFilter(ffs[j]);
 		choose.setFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		return choose.showOpenDialog(this);
 	}
-	
+
 	/** A utility method to show a file saving dialog with the given file filter as a
 	 * default.
 	 * @param ffs The list of file filters to be used within the filechooser.
@@ -957,89 +912,87 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		choose.addChoosableFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		int res = choose.showSaveDialog(this);
-		if (res != JFileChooser.APPROVE_OPTION) return res;
+		if (res != JFileChooser.APPROVE_OPTION)
+			return res;
 		File file = choose.getSelectedFile();
 		// check file is non-null
-		if (file == null)
-		{
+		if (file == null) {
 			GUIPrism.getGUI().errorDialog("Error: No file selected");
 			return JFileChooser.CANCEL_OPTION;
 		}
 		// check for file overwrite
-		if(file.exists())
-		{
+		if (file.exists()) {
 			int selectionNo = JOptionPane.CANCEL_OPTION;
 			selectionNo = optionPane("File exists. Overwrite?", "Confirm Overwrite", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null);
-			if (selectionNo != JOptionPane.OK_OPTION) return JFileChooser.CANCEL_OPTION;
+			if (selectionNo != JOptionPane.OK_OPTION)
+				return JFileChooser.CANCEL_OPTION;
 		}
 		return JFileChooser.APPROVE_OPTION;
 	}
 
-public int showSaveFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
-{
-	JFileChooser choose = GUIPrism.getGUI().getChooser();
-	choose.resetChoosableFileFilters();
-	for(int j = 0; j < ffs.length; j++)
-		choose.addChoosableFileFilter(ffs[j]);
+	public int showSaveFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
+	{
+		JFileChooser choose = GUIPrism.getGUI().getChooser();
+		choose.resetChoosableFileFilters();
+		for (int j = 0; j < ffs.length; j++)
+			choose.addChoosableFileFilter(ffs[j]);
 		choose.setFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		int res = choose.showSaveDialog(this);
-		if (res != JFileChooser.APPROVE_OPTION) return res;
+		if (res != JFileChooser.APPROVE_OPTION)
+			return res;
 		File file = choose.getSelectedFile();
 		// check file is non-null
-		if (file == null)
-		{
+		if (file == null) {
 			GUIPrism.getGUI().errorDialog("Error: No file selected");
 			return JFileChooser.CANCEL_OPTION;
 		}
 		// check for file overwrite
-		if(file.exists())
-		{
+		if (file.exists()) {
 			int selectionNo = JOptionPane.CANCEL_OPTION;
 			selectionNo = optionPane("File exists. Overwrite?", "Confirm Overwrite", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null);
-			if (selectionNo != JOptionPane.OK_OPTION) return JFileChooser.CANCEL_OPTION;
+			if (selectionNo != JOptionPane.OK_OPTION)
+				return JFileChooser.CANCEL_OPTION;
 		}
 		return JFileChooser.APPROVE_OPTION;
 	}
-	
+
+	@Override
 	public File getFile(Frame parent, File defaultFile)
 	{
 		modified = false;
 		a_new();
 		SimulatorNetworkHandler newHandler = new SimulatorNetworkHandler();
-		try
-		{
+		try {
 			newHandler.loadNetworkFromXML(defaultFile);
 			modified = false;
 			setActiveFile(defaultFile);
 			networkHandler.deleteObservers();
-					this.networkHandler = newHandler;
-					
+			this.networkHandler = newHandler;
+
 			treeModel.setRoot(networkHandler);
 			treeModel.nodeStructureChanged(networkHandler);
-					networkHandler.addObserver(this);
-			
-		}
-		catch(PrismException e)
-		{
+			networkHandler.addObserver(this);
+
+		} catch (PrismException e) {
 			setActiveFile(null);
 			modified = true;
-			
+
 		}
-		
+
 		show();
 		return activeFile;
-		
+
 	}
-	
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel bottomPanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTree networkTree;
-    private javax.swing.JMenuBar theMenu;
-    // End of variables declaration//GEN-END:variables
-	
+
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JPanel bottomPanel;
+	private javax.swing.JButton jButton1;
+	private javax.swing.JPanel jPanel1;
+	private javax.swing.JTree networkTree;
+	private javax.swing.JMenuBar theMenu;
+	// End of variables declaration//GEN-END:variables
+
 	class NetworkNodeRenderer extends DefaultTreeCellRenderer
 	{
 		ImageIcon NET = GUIPrism.getIconFromImage("smallNetwork.png");
@@ -1048,40 +1001,39 @@ public int showSaveFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
 		ImageIcon GOOD_HOST = GUIPrism.getIconFromImage("smallHost.png");
 		ImageIcon ERROR_HOST = GUIPrism.getIconFromImage("smallError.png");
 		ImageIcon RUNNING_HOST = GUIPrism.getIconFromImage("smallClockAnim1.png");
-		
+
+		@Override
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus)
 		{
-			super.getTreeCellRendererComponent(tree,value,selected,expanded,leaf,row,hasFocus);
-			TreeNode node = (TreeNode)value;
-			
-			if(node instanceof SimulatorNetworkHandler)
-			{
+			super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+			TreeNode node = (TreeNode) value;
+
+			if (node instanceof SimulatorNetworkHandler) {
 				setIcon(NET);
-			}
-			else if(node instanceof FileSystem)
-			{
+			} else if (node instanceof FileSystem) {
 				setIcon(SERV);
-			}
-			else if(node instanceof SSHHost)
-			{
+			} else if (node instanceof SSHHost) {
 				SSHHost host = (SSHHost) node;
-				switch(host.getHostState())
-				{
-					case (SSHHost.READY_UNKNOWN_STATUS): setIcon(QUESTION_HOST);break;
-					case (SSHHost.READY_OKAY): setIcon(GOOD_HOST); break;
-					case (SSHHost.ERROR): 
-					{
-						setIcon(ERROR_HOST); 
-						setText(getText()+" ("+host.getErrorMessage()+")");
-						break;
-					} 
-					default: setIcon(RUNNING_HOST);break;
+				switch (host.getHostState()) {
+				case (SSHHost.READY_UNKNOWN_STATUS):
+					setIcon(QUESTION_HOST);
+					break;
+				case (SSHHost.READY_OKAY):
+					setIcon(GOOD_HOST);
+					break;
+				case (SSHHost.ERROR): {
+					setIcon(ERROR_HOST);
+					setText(getText() + " (" + host.getErrorMessage() + ")");
+					break;
 				}
-				
+				default:
+					setIcon(RUNNING_HOST);
+					break;
+				}
+
 			}
 			return this;
 		}
 	}
-	
-	
+
 }

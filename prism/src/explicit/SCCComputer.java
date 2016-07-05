@@ -31,7 +31,6 @@ import java.util.BitSet;
 import java.util.List;
 
 import prism.PrismComponent;
-import prism.PrismException;
 
 /**
  * Abstract class for (explicit) classes that compute (B)SCCs,
@@ -51,12 +50,12 @@ public abstract class SCCComputer extends PrismComponent
 				return this.toString();
 			}
 		}
-	};
+	}
 
 	/**
 	 * Static method to create a new SCCComputer object, depending on current settings.
 	 */
-	public static SCCComputer createSCCComputer(PrismComponent parent, Model model) throws PrismException
+	public static SCCComputer createSCCComputer(PrismComponent parent, Model model)
 	{
 		// Only one algorithm implemented currently
 		return new SCCComputerTarjan(parent, model);
@@ -65,7 +64,7 @@ public abstract class SCCComputer extends PrismComponent
 	/**
 	 * Base constructor.
 	 */
-	public SCCComputer(PrismComponent parent) throws PrismException
+	public SCCComputer(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -99,7 +98,7 @@ public abstract class SCCComputer extends PrismComponent
 	 * Get the list of computed BSCCs.
 	 */
 	public abstract List<BitSet> getBSCCs();
-	
+
 	/**
 	 * Get the states not in any BSCC.
 	 */

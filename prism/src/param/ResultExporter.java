@@ -41,10 +41,13 @@ import java.util.Map.Entry;
 /**
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class ResultExporter {
-	class PointComparator implements Comparator<Point> {
+final class ResultExporter
+{
+	class PointComparator implements Comparator<Point>
+	{
 		@Override
-		public int compare(Point o1, Point o2) {
+		public int compare(Point o1, Point o2)
+		{
 			int numDims = o1.size();
 			for (int dim = numDims - 2; dim > 0; dim--) {
 				int cmp = o1.getDimension(dim).compareTo(o2.getDimension(dim));
@@ -55,28 +58,28 @@ final class ResultExporter {
 			return 0;
 		}
 	}
-	
+
 	private RegionValues values;
 	private BoxRegionFactory regionFactory;
 	private OutputStream output;
 	private int pointsPerDim;
-	
+
 	ResultExporter()
 	{
-		
+
 	}
-	
+
 	void setRegionValues(RegionValues values)
 	{
 		this.values = values;
 		this.regionFactory = (BoxRegionFactory) values.getRegionFactory();
 	}
-	
+
 	void setOutputStream(OutputStream output)
 	{
 		this.output = output;
 	}
-	
+
 	void setPointsPerDimension(int pointsPerDim)
 	{
 		this.pointsPerDim = pointsPerDim;
@@ -87,7 +90,7 @@ final class ResultExporter {
 		PrintStream print = new PrintStream(output);
 		int numVariables = regionFactory.numVariables();
 		boolean isBoolean = values.booleanValues();
-		
+
 		if (numVariables == 2 && isBoolean) {
 			printBooleanTwoVars(print);
 		} else if (numVariables == 2 && !isBoolean) {
@@ -95,7 +98,7 @@ final class ResultExporter {
 		} else {
 			throw new RuntimeException("not implemented");
 		}
-				
+
 		print.flush();
 	}
 
@@ -108,19 +111,19 @@ final class ResultExporter {
 		print.print(" rectangle ");
 		print.print("(" + regionFactory.getUpperBound(0).doubleValue());
 		print.print("," + regionFactory.getUpperBound(1).doubleValue() + ");\n");
-		for (Entry<Region,StateValues> entry : values) {
+		for (Entry<Region, StateValues> entry : values) {
 			boolean value = entry.getValue().getInitStateValueAsBoolean();
 			BoxRegion region = (BoxRegion) entry.getKey();
 			String fillColor = value ? "white" : "black";
 			String drawColor = value ? "black" : "white";
 			print.print("\\draw[rectangle,");
 			print.print("fill=" + fillColor + ",");
-			print.print("draw=" + drawColor + "] ");			
+			print.print("draw=" + drawColor + "] ");
 			print.print("(" + region.getDimensionLower(0).doubleValue());
 			print.print("," + region.getDimensionLower(1).doubleValue() + ")");
 			print.print(" rectangle ");
 			print.print("(" + region.getDimensionUpper(0).doubleValue());
-			print.print("," + region.getDimensionUpper(1).doubleValue() + ");\n");					
+			print.print("," + region.getDimensionUpper(1).doubleValue() + ");\n");
 		}
 		print.print("\\draw[rectangle,draw=black] ");
 		print.print("(" + regionFactory.getLowerBound(0).doubleValue());
@@ -130,7 +133,7 @@ final class ResultExporter {
 		print.print("," + regionFactory.getUpperBound(1).doubleValue() + ");\n");
 		print.println("\\end{tikzpicture}");
 	}
-	
+
 	private ArrayList<Point> samplePoints()
 	{
 		// compute step width
@@ -154,11 +157,11 @@ final class ResultExporter {
 			}
 			points.add(new Point(point));
 		}
-		
+
 		// compute values of points contained in a region
-		HashMap<Point,BigRational> pointValues = new HashMap<Point,BigRational>();
+		HashMap<Point, BigRational> pointValues = new HashMap<Point, BigRational>();
 		for (Point point : points) {
-			for (Entry<Region,StateValues> entry : values) {
+			for (Entry<Region, StateValues> entry : values) {
 				Region region = entry.getKey();
 				Function value = entry.getValue().getInitStateValueAsFunction();
 				if (region.contains(point)) {
@@ -167,10 +170,10 @@ final class ResultExporter {
 				}
 			}
 		}
-				
+
 		// interpolate values of points not in a region
 		HashSet<Function> allFunctions = new HashSet<Function>();
-		for (Entry<Region,StateValues> entry : values) {
+		for (Entry<Region, StateValues> entry : values) {
 			allFunctions.add(entry.getValue().getInitStateValueAsFunction());
 		}
 		for (Point point : points) {
@@ -210,8 +213,8 @@ final class ResultExporter {
 				}
 				pointValues.put(point, bestValue);
 			}
-		}		
-		
+		}
+
 		// combine points and their values in result list and sort
 		ArrayList<Point> result = new ArrayList<Point>();
 		for (Point point : points) {
@@ -221,24 +224,24 @@ final class ResultExporter {
 			}
 			entry[numVariables] = pointValues.get(point);
 			result.add(new Point(entry));
-		}		
+		}
 		PointComparator comparator = new PointComparator();
 		Collections.sort(result, comparator);
 
 		return result;
 	}
-	
+
 	private void printFunctionTwoVars(PrintStream print)
 	{
 		print.println("\\begin{tikzpicture}");
 		print.println("\\begin{axis}[");
 		print.println("  view={30}{30}");
-//		print.println("  x tick label style={right=1pt},");
-//		print.println("  xtick={0,0.2,0.4,0.6,0.8,1.0},");
-//		print.println("  ytick={0.2}");
+		//		print.println("  x tick label style={right=1pt},");
+		//		print.println("  xtick={0,0.2,0.4,0.6,0.8,1.0},");
+		//		print.println("  ytick={0.2}");
 		print.println("  ]");
 		print.println("  \\addplot3[mesh,color=black] coordinates {");
-		ArrayList<Point> points =  samplePoints();
+		ArrayList<Point> points = samplePoints();
 		BigRational lastY = points.get(0).getDimension(1);
 		for (Point point : points) {
 			if (!lastY.equals(point.getDimension(1))) {

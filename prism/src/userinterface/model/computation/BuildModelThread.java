@@ -49,11 +49,13 @@ public class BuildModelThread extends GUIComputationThread
 		this.handler = handler;
 	}
 
+	@Override
 	public void run()
 	{
 		// Notify user interface of the start of computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				plug.startProgress();
@@ -69,6 +71,7 @@ public class BuildModelThread extends GUIComputationThread
 			error(e.getMessage());
 			SwingUtilities.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.stopProgress();
@@ -82,6 +85,7 @@ public class BuildModelThread extends GUIComputationThread
 		// If we are here, the build was successful, notify the interface
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				plug.stopProgress();

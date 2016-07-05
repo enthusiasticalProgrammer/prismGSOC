@@ -42,7 +42,6 @@ import acceptance.AcceptanceRabinDD;
 import acceptance.AcceptanceType;
 import automata.DA;
 import automata.LTL2DA;
-
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -65,7 +64,7 @@ public class LTLModelChecker extends PrismComponent
 	/**
 	 * Create a new DTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public LTLModelChecker(PrismComponent parent) throws PrismException
+	public LTLModelChecker(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -211,7 +210,7 @@ public class LTLModelChecker extends PrismComponent
 	/**
 	 * Construct the product of a DA and a DTMC/CTMC.
 	 * @param da The DA
-	 * @param model The  DTMC/CTMC
+	 * @param model The DTMC/CTMC
 	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
 	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
@@ -223,42 +222,28 @@ public class LTLModelChecker extends PrismComponent
 	}
 
 	/**
-	 * Construct the product of a DRA and a DTMC/CTMC.
-	 * @param dra The DRA
+	 * Construct the product of a DA and a DTMC/CTMC.
+	 * @param da The DA
 	 * @param model The  DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 */
-	public ProbModel constructProductMC(DRA<BitSet> dra, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
 	{
-		return constructProductMC(dra, model, labelDDs, null, null);
+		return constructProductMC(da, model, labelDDs, null, null, true);
 	}
 
 	/**
-	 * Construct the product of a DRA and a DTMC/CTMC.
-	 * @param dra The DRA
+	 * Construct the product of a DA and a DTMC/CTMC.
+	 * @param da The DA
 	 * @param model The  DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
-	 * @param draDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DRA
-	 * @param draDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DRA
-	 */
-	public ProbModel constructProductMC(DRA<BitSet> dra, ProbModel model, Vector<JDDNode> labelDDs, JDDVars draDDRowVarsCopy, JDDVars draDDColVarsCopy)
-			throws PrismException
-	{
-		return constructProductMC(dra, model, labelDDs, draDDRowVarsCopy, draDDColVarsCopy);
-	}
-
-	/**
-	 * Construct the product of a DRA and a DTMC/CTMC.
-	 * @param dra The DRA
-	 * @param model The  DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
-	 * @param draDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DRA
-	 * @param draDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DRA
+	 * @param labelDDs BDDs giving the set of states for each AP in the DA
+	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
+	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
 	 * @param allInit Do we assume that all states of the original model are initial states?
 	 *        (just for the purposes of reachability)
 	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars draDDRowVarsCopy,
-			JDDVars draDDColVarsCopy, boolean allInit) throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy, boolean allInit) throws PrismException
 	{
 		// Existing model - dds, vars, etc.
 		JDDVars varDDRowVars[];
@@ -396,10 +381,10 @@ public class LTLModelChecker extends PrismComponent
 		modelProd.setStart(newStart);
 
 		// if possible, return copies of the DA DD variables via the method parameters
-		if (draDDRowVarsCopy != null)
-			draDDRowVarsCopy.copyVarsFrom(daDDRowVars);
-		if (draDDColVarsCopy != null)
-			draDDColVarsCopy.copyVarsFrom(daDDColVars);
+		if (daDDRowVarsCopy != null)
+			daDDRowVarsCopy.copyVarsFrom(daDDRowVars);
+		if (daDDColVarsCopy != null)
+			daDDColVarsCopy.copyVarsFrom(daDDColVars);
 
 		daDDRowVars.derefAll();
 		daDDColVars.derefAll();
@@ -439,7 +424,6 @@ public class LTLModelChecker extends PrismComponent
 	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
 	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
-	
 	 * @param allInit Do we assume that all states of the original model are initial states?
 	 *        (just for the purposes of reachability) If not, the required initial states should be given
 	 * @param init The initial state(s) (of the original model) used to build the product;
@@ -738,7 +722,6 @@ public class LTLModelChecker extends PrismComponent
 	 * @param fairness Consider fairness?
 	 * @return A referenced BDD for the union of all states in accepting MECs
 	 */
-	@SuppressWarnings("deprecation")
 	public JDDNode findAcceptingECStates(AcceptanceOmegaDD acceptance, NondetModel model, JDDVars daDDRowVars, JDDVars daDDColVars, boolean fairness)
 			throws PrismException
 	{
@@ -1017,7 +1000,7 @@ public class LTLModelChecker extends PrismComponent
 
 		allAcceptingStates = JDD.Constant(0);
 
-		// for each acceptance pair (H_i, L_i) in the DRA, build H'_i = S x H_i
+		// for each acceptance pair (H_i, L_i) in the DA, build H'_i = S x H_i
 		// and compute the maximal ECs in H'_i
 		for (i = 0; i < dra.getAcceptance().size(); i++) {
 			// build the acceptance vectors H_i and L_i
@@ -1032,10 +1015,8 @@ public class LTLModelChecker extends PrismComponent
 				if (candidateStates.equals(ec)) {
 					//mainLog.println(" ------------- ec is not modified ------------- ");
 					ecs = new Vector<JDDNode>();
-					//JDDNode ec1 = ec;
-					//JDD.Ref(ec);
-					ecs.add(ec);
-					//JDD.Deref(candidateStates);
+					ecs.add(ec.copy());
+					JDD.Deref(candidateStates);
 				} else if (candidateStates.equals(JDD.ZERO)) {
 					//mainLog.println(" ------------- ec is ZERO ------------- ");
 					JDD.Deref(candidateStates);

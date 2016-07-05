@@ -26,57 +26,60 @@
 
 package settings;
 
-public class MultipleLineStringSetting extends Setting 
+public class MultipleLineStringSetting extends Setting
 {
-    private static MultipleLineStringRenderer renderer;
-    private static MultipleLineStringEditor editor;
-    
-    static
-    {
-        renderer = new MultipleLineStringRenderer();
-        editor = new MultipleLineStringEditor();
-    }
-    
-    
-    /** Creates a new instance of MultipleLineStringSetting */
+	private static MultipleLineStringRenderer renderer;
+	private static MultipleLineStringEditor editor;
+
+	static {
+		renderer = new MultipleLineStringRenderer();
+		editor = new MultipleLineStringEditor();
+	}
+
+	/** Creates a new instance of MultipleLineStringSetting */
 	public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
-    public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple, StringConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return String.class;
-    }
-    
-    public String getStringValue()
-    {
-        return getValue().toString();
-    }
-    
-	public Object parseStringValue(String string) throws SettingException
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple, StringConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	@Override
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	@Override
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	@Override
+	public Class<String> getValueClass()
+	{
+		return String.class;
+	}
+
+	public String getStringValue()
+	{
+		return getValue().toString();
+	}
+
+	@Override
+	public Object parseStringValue(String string)
 	{
 		return string;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return getStringValue();
 	}
-	
+
 }

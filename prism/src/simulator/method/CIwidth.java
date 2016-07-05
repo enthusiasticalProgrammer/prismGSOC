@@ -113,7 +113,7 @@ public final class CIwidth extends CIMethod
 	}
 
 	@Override
-	public String getResultExplanation(Sampler sampler) throws PrismException
+	public String getResultExplanation(Sampler sampler)
 	{
 		// We may use 'width' to compute the result, so compute if necessary
 		// (this should never happen)

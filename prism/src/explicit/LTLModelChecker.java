@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import parser.State;
 import parser.VarList;
 import parser.ast.Declaration;
@@ -68,7 +70,6 @@ import automata.DA;
 import automata.LTL2DA;
 
 import common.IterableStateSet;
-import prism.DRA;
 
 /**
  * LTL model checking functionality
@@ -82,7 +83,7 @@ public class LTLModelChecker extends PrismComponent
 		private int invMap[];
 		private AcceptanceOmega acceptance;
 
-		public LTLProduct(M productModel, M originalModel, AcceptanceOmega acceptance, int daSize, int[] invMap)
+		public LTLProduct(@NonNull M productModel, @NonNull M originalModel, AcceptanceOmega acceptance, int daSize, int[] invMap)
 		{
 			super(productModel, originalModel);
 			this.daSize = daSize;
@@ -102,11 +103,13 @@ public class LTLModelChecker extends PrismComponent
 			return invMap[productState] % daSize;
 		}
 
-		public AcceptanceOmega getAcceptance() {
+		public AcceptanceOmega getAcceptance()
+		{
 			return acceptance;
 		}
 
-		public void setAcceptance(AcceptanceOmega acceptance) {
+		public void setAcceptance(AcceptanceOmega acceptance)
+		{
 			this.acceptance = acceptance;
 		}
 	}
@@ -133,7 +136,7 @@ public class LTLModelChecker extends PrismComponent
 				// Only support temporal bounds for discrete time models
 				return false;
 			}
-			
+
 			if (!expr.isSimplePathFormula()) {
 				// Only support temporal bounds for simple path formulas
 				return false;
@@ -149,7 +152,7 @@ public class LTLModelChecker extends PrismComponent
 	 * actual true/false, and duplicate results (or their negations) reuse the same label. BitSets giving the states which
 	 * satisfy each label are put into the vector labelBS, which should be empty when this function is called.
 	 */
-	public Expression checkMaximalStateFormulas(StateModelChecker mc, Model model, Expression expr, Vector<BitSet> labelBS) throws PrismException
+	public Expression checkMaximalStateFormulas(StateModelChecker mc, @NonNull Model model, Expression expr, Vector<BitSet> labelBS) throws PrismException
 	{
 		// A state formula
 		if (expr.getType() instanceof TypeBool) {
@@ -205,7 +208,7 @@ public class LTLModelChecker extends PrismComponent
 		}
 		return expr;
 	}
-			
+
 	/**
 	 * Construct a deterministic automaton (DA) for an LTL formula, having first extracted maximal state formulas
 	 * and model checked them with the passed in model checker. The maximal state formulas are assigned labels
@@ -219,15 +222,16 @@ public class LTLModelChecker extends PrismComponent
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the DA
 	 */
-	public DA<BitSet,? extends AcceptanceOmega> constructDAForLTLFormula(ProbModelChecker mc, Model model, Expression expr, Vector<BitSet> labelBS, AcceptanceType... allowedAcceptance) throws PrismException
+	public DA<BitSet, ? extends AcceptanceOmega> constructDAForLTLFormula(ProbModelChecker mc, @NonNull Model model, Expression expr, Vector<BitSet> labelBS,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		Expression ltl;
-		DA<BitSet,? extends AcceptanceOmega> da;
+		DA<BitSet, ? extends AcceptanceOmega> da;
 		long time;
 
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			if (model.getModelType().continuousTime()) {
-				throw new PrismException("Automaton construction for time-bounded operators not supported for " + model.getModelType()+".");
+				throw new PrismException("Automaton construction for time-bounded operators not supported for " + model.getModelType() + ".");
 			}
 
 			if (!expr.isSimplePathFormula()) {
@@ -243,10 +247,10 @@ public class LTLModelChecker extends PrismComponent
 		time = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(this);
 		da = ltl2da.convertLTLFormulaToDA(ltl, mc.getConstantValues(), allowedAcceptance);
-		mainLog.println(da.getAutomataType()+" has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
+		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		da.checkForCanonicalAPs(labelBS.size());
 		time = System.currentTimeMillis() - time;
-		mainLog.println("Time for "+da.getAutomataType()+" translation: " + time / 1000.0 + " seconds.");
+		mainLog.println("Time for " + da.getAutomataType() + " translation: " + time / 1000.0 + " seconds.");
 		// If required, export DA
 		if (settings.getExportPropAut()) {
 			mainLog.println("Exporting " + da.getAutomataType() + " to file \"" + settings.getExportPropAutFilename() + "\"...");
@@ -254,10 +258,10 @@ public class LTLModelChecker extends PrismComponent
 			da.print(out, settings.getExportPropAutType());
 			out.close();
 		}
-		
+
 		return da;
 	}
-	
+
 	/**
 	 * Generate a deterministic automaton for the given LTL formula
 	 * and construct the product of this automaton with a Markov chain.
@@ -265,19 +269,20 @@ public class LTLModelChecker extends PrismComponent
 	 * @param mc a ProbModelChecker, used for checking maximal state formulas
 	 * @param model the model
 	 * @param expr a path expression
- 	 * @param statesOfInterest the set of states for which values should be calculated (null = all states)
- 	 * @param allowedAcceptance the allowed acceptance types
+	 * @param statesOfInterest the set of states for which values should be calculated (null = all states)
+	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the product with the DA
 	 */
-	public LTLProduct<DTMC> constructProductMC(ProbModelChecker mc, DTMC model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<DTMC> constructProductMC(ProbModelChecker mc, @NonNull DTMC model, Expression expr, BitSet statesOfInterest,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<BitSet>();
-		DA<BitSet,? extends AcceptanceOmega> da;
+		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
 		// Build product of model and automaton
-		mainLog.println("\nConstructing MC-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MC-" + da.getAutomataType() + " product...");
 		LTLProduct<DTMC> product = constructProductModel(da, model, labelBS, statesOfInterest);
 		mainLog.print("\n" + product.getProductModel().infoStringTable());
 
@@ -296,15 +301,16 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public LTLProduct<MDP> constructProductMDP(ProbModelChecker mc, MDP model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<MDP> constructProductMDP(ProbModelChecker mc, @NonNull MDP model, Expression expr, BitSet statesOfInterest,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<BitSet>();
-		DA<BitSet,? extends AcceptanceOmega> da;
+		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
 		// Build product of model and automaton
-		mainLog.println("\nConstructing MDP-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MDP-" + da.getAutomataType() + " product...");
 		LTLProduct<MDP> product = constructProductModel(da, model, labelBS, statesOfInterest);
 		mainLog.print("\n" + product.getProductModel().infoStringTable());
 
@@ -323,21 +329,22 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public LTLProduct<STPG> constructProductSTPG(ProbModelChecker mc, STPG model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<STPG> constructProductSTPG(ProbModelChecker mc, @NonNull STPG model, Expression expr, BitSet statesOfInterest,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<BitSet>();
-		DA<BitSet,? extends AcceptanceOmega> da;
+		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
 		// Build product of model and automaton
-		mainLog.println("\nConstructing STPG-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing STPG-" + da.getAutomataType() + " product...");
 		LTLProduct<STPG> product = constructProductModel(da, model, labelBS, statesOfInterest);
 		mainLog.print("\n" + product.getProductModel().infoStringTable());
 
 		return product;
 	}
-	
+
 	/**
 	 * Generate a deterministic automaton for the given LTL formula
 	 * and construct the product of this automaton with a model.
@@ -350,11 +357,12 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public <M extends Model> LTLProduct<M> constructProductModel(ProbModelChecker mc, M model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance) throws PrismException
+	public <M extends Model> LTLProduct<M> constructProductModel(ProbModelChecker mc, @NonNull M model, Expression expr, BitSet statesOfInterest,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<BitSet>();
-		DA<BitSet,? extends AcceptanceOmega> da;
+		DA<BitSet, ? extends AcceptanceOmega> da;
 		da = constructDAForLTLFormula(mc, model, expr, labelBS, allowedAcceptance);
 
 		// Build product of model and automaton
@@ -364,7 +372,7 @@ public class LTLModelChecker extends PrismComponent
 
 		return product;
 	}
-	
+
 	/**
 	 * Construct the product of a DA and a model.
 	 * @param da The DA
@@ -373,7 +381,8 @@ public class LTLModelChecker extends PrismComponent
 	 * @param statesOfInterest the set of states for which values should be calculated (null = all states)
 	 * @return The product model
 	 */
-	 public <M extends Model> LTLProduct<M> constructProductModel(DA<BitSet,? extends AcceptanceOmega> da, M model, Vector<BitSet> labelBS, BitSet statesOfInterest) throws PrismException
+	public <M extends Model> LTLProduct<M> constructProductModel(DA<BitSet, ? extends AcceptanceOmega> da, M model, Vector<BitSet> labelBS,
+			BitSet statesOfInterest) throws PrismException
 	{
 		ModelType modelType = model.getModelType();
 		int daSize = da.size();
@@ -466,7 +475,7 @@ public class LTLModelChecker extends PrismComponent
 				break;
 			default:
 				prodModel.addState();
-			break;
+				break;
 			}
 			prodModel.addInitialState(prodModel.getNumStates() - 1);
 			map[s_0 * daSize + q_0] = prodModel.getNumStates() - 1;
@@ -594,7 +603,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param model The model
 	 * @param acceptance The acceptance condition
 	 */
-	public BitSet findAcceptingBSCCs(Model model, AcceptanceOmega acceptance) throws PrismException
+	public BitSet findAcceptingBSCCs(Model model, AcceptanceOmega acceptance)
 	{
 		// Compute bottom strongly connected components (BSCCs)
 		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, model);
@@ -631,7 +640,8 @@ public class LTLModelChecker extends PrismComponent
 		} else if (acceptance instanceof AcceptanceGenRabin) {
 			return findAcceptingECStatesForGeneralizedRabin(model, (AcceptanceGenRabin) acceptance);
 		}
-		throw new PrismNotSupportedException("Computing end components for acceptance type '"+acceptance.getType()+"' currently not supported (explicit engine).");
+		throw new PrismNotSupportedException(
+				"Computing end components for acceptance type '" + acceptance.getType() + "' currently not supported (explicit engine).");
 	}
 
 	/**
@@ -670,7 +680,7 @@ public class LTLModelChecker extends PrismComponent
 	{
 		BitSet allAcceptingStates = new BitSet();
 		int numStates = model.getNumStates();
-		
+
 		// Go through the DRA acceptance pairs (L_i, K_i) 
 		for (int i = 0; i < acceptance.size(); i++) {
 			// Find model states *not* satisfying L_i
@@ -704,7 +714,8 @@ public class LTLModelChecker extends PrismComponent
 	 */
 	public BitSet findAcceptingECStatesForStreett(NondetModel model, AcceptanceStreett acceptance) throws PrismException
 	{
-		class ECandPairs {
+		class ECandPairs
+		{
 			BitSet MEC;
 			BitSet activePairs;
 		}
@@ -725,19 +736,17 @@ public class LTLModelChecker extends PrismComponent
 
 		while (!todo.empty()) {
 			ECandPairs ecp = todo.pop();
-			BitSet newActivePairs = (BitSet)ecp.activePairs.clone();
+			BitSet newActivePairs = (BitSet) ecp.activePairs.clone();
 			BitSet restrict = null;
 
 			// check for acceptance
 			boolean allAccepting = true;
-			for (int pair = ecp.activePairs.nextSetBit(0);
-				 pair != -1;
-				 pair = ecp.activePairs.nextSetBit(pair + 1)) {
+			for (int pair = ecp.activePairs.nextSetBit(0); pair != -1; pair = ecp.activePairs.nextSetBit(pair + 1)) {
 
 				if (!acceptance.get(pair).isBSCCAccepting(ecp.MEC)) {
 					// this pair is not accepting
 					if (restrict == null) {
-						restrict = (BitSet)ecp.MEC.clone();
+						restrict = (BitSet) ecp.MEC.clone();
 					}
 					restrict.andNot(acceptance.get(pair).getR());
 					newActivePairs.clear(pair);
@@ -773,10 +782,10 @@ public class LTLModelChecker extends PrismComponent
 	{
 		BitSet allAcceptingStates = new BitSet();
 		int numStates = model.getNumStates();
-		
+
 		// Go through the GR acceptance pairs (L_i, K_i_1, ..., K_i_n) 
 		for (int i = 0; i < acceptance.size(); i++) {
-			
+
 			// Find model states *not* satisfying L_i
 			BitSet bitsetLi = acceptance.get(i).getL();
 			BitSet statesLi_not = new BitSet();
@@ -818,7 +827,8 @@ public class LTLModelChecker extends PrismComponent
 		AcceptanceOmega lifted = acceptance.clone();
 
 		// lift state sets
-		lifted.lift(new AcceptanceOmega.LiftBitSet() {
+		lifted.lift(new AcceptanceOmega.LiftBitSet()
+		{
 			@Override
 			public BitSet lift(BitSet states)
 			{
@@ -828,44 +838,4 @@ public class LTLModelChecker extends PrismComponent
 
 		return lifted;
 	}
-	
-	/**
-	 * Find the set of states belong to accepting BSCCs in a model wrt a Rabin acceptance condition.
-	 * @param dra The DRA
-	 * @param model The model
-	 * @param invMap The map returned by the constructProduct method(s)
-	 */
-	public BitSet findAcceptingBSCCsForRabin(DRA<BitSet> dra, Model model, int invMap[]) throws PrismException
-	{
-		// Compute bottom strongly connected components (BSCCs)
-		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, model);
-		sccComputer.computeBSCCs();
-		List<BitSet> bsccs = sccComputer.getBSCCs();
-
-		int draSize = dra.size();
-		int numAcceptancePairs = dra.getNumAcceptancePairs();
-		BitSet result = new BitSet();
-
-		for (BitSet bscc : bsccs) {
-			boolean isLEmpty = true;
-			boolean isKEmpty = true;
-			for (int acceptancePair = 0; acceptancePair < numAcceptancePairs && isLEmpty && isKEmpty; acceptancePair++) {
-				BitSet L = dra.getAcceptanceL(acceptancePair);
-				BitSet K = dra.getAcceptanceK(acceptancePair);
-				for (int state = bscc.nextSetBit(0); state != -1; state = bscc.nextSetBit(state + 1)) {
-					int draState = invMap[state] % draSize;
-					isLEmpty &= !L.get(draState);
-					isKEmpty &= !K.get(draState);
-				}
-				// Stop as soon as we find the first acceptance pair that is satisfied
-				if (isLEmpty && !isKEmpty) {
-					result.or(bscc);
-					break;
-				}
-			}
-		}
-
-		return result;
-	}
-
 }

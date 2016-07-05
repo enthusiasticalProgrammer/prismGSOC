@@ -122,7 +122,6 @@ public class PathFull extends Path implements PathFullInfo
 		addStep(0.0, choice, moduleOrActionIndex, probability, transitionRewards, newState, newStateRewards, transitionList, stratState);
 	}
 
-
 	@Override
 	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
 			double[] newStateRewards, TransitionList transitionList)
@@ -366,11 +365,14 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).stateRewards[rsi];
 	}
 
+	/**
+	 * Get an array of state rewards for the state at a given step of the path.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	protected double[] getStateRewards(int step)
 	{
 		return steps.get(step).stateRewards;
 	}
-
 
 	@Override
 	public double getCumulativeTime(int step)
@@ -414,6 +416,10 @@ public class PathFull extends Path implements PathFullInfo
 			return "?";
 	}
 
+	/**
+	 * Get the probability or rate associated with a given step.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	public double getProbability(int step)
 	{
 		return steps.get(steps.size() - 2).probability;
@@ -425,6 +431,10 @@ public class PathFull extends Path implements PathFullInfo
 		return steps.get(step).transitionRewards[rsi];
 	}
 
+	/**
+	 * Get an array of transitions reward associated with a given step.
+	 * @param step Step index (0 = initial state/step of path)
+	 */
 	protected double[] getTransitionRewards(int step)
 	{
 		return steps.get(step).transitionRewards;
@@ -462,7 +472,7 @@ public class PathFull extends Path implements PathFullInfo
 
 	public Object getStrategyState(long step)
 	{
-		return steps.get((int)step).stratState;
+		return steps.get((int) step).stratState;
 	}
 
 	// Other methods
@@ -496,7 +506,7 @@ public class PathFull extends Path implements PathFullInfo
 	 * Pass the path to a PathDisplayer object, running in a new thread. 
 	 * @param displayer The PathDisplayer
 	 */
-	public void displayThreaded(PathDisplayer displayer) throws PrismException
+	public void displayThreaded(PathDisplayer displayer)
 	{
 		// In the absence of model info, do nothing
 		if (modulesFile == null) {
@@ -526,7 +536,7 @@ public class PathFull extends Path implements PathFullInfo
 	 * Plot path on a graph.
 	 * @param graphModel Graph on which to plot path
 	 */
-	public void plotOnGraph(Graph graphModel) throws PrismException
+	public void plotOnGraph(Graph graphModel)
 	{
 		PathToGraph displayer = new PathToGraph(graphModel, modulesFile);
 		displayThreaded(displayer);
@@ -596,6 +606,7 @@ public class PathFull extends Path implements PathFullInfo
 			this.displayer = displayer;
 		}
 
+		@Override
 		public void run()
 		{
 			try {

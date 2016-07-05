@@ -59,7 +59,7 @@ public class LocZoneSet
 
 	public boolean contains(LocZone lz)
 	{
-			return set.get(lz) != null;
+		return set.get(lz) != null;
 	}
 
 	public int getIndexOfLastAdd()
@@ -83,7 +83,7 @@ public class LocZoneSet
 
 		n = set.size();
 		ArrayList<LocZone> list = new ArrayList<LocZone>(n);
-		for (i = 0; i < n ; i++)
+		for (i = 0; i < n; i++)
 			list.add(null);
 		for (Map.Entry<LocZone, Integer> e : set.entrySet()) {
 			list.set(e.getValue(), e.getKey());
@@ -91,6 +91,7 @@ public class LocZoneSet
 		return list;
 	}
 
+	@Override
 	public String toString()
 	{
 		String s = "";

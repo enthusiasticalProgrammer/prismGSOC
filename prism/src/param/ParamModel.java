@@ -34,7 +34,6 @@ import java.util.TreeSet;
 
 import parser.Values;
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import explicit.ModelExplicit;
 
@@ -115,7 +114,7 @@ final class ParamModel extends ModelExplicit
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
@@ -142,37 +141,37 @@ final class ParamModel extends ModelExplicit
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void checkForDeadlocks()
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicit(String baseFilename) throws PrismException
+	public void exportToPrismExplicit(String baseFilename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicitTra(String filename) throws PrismException
+	public void exportToPrismExplicitTra(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToPrismExplicitTra(File file) throws PrismException
+	public void exportToPrismExplicitTra(File file)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -184,13 +183,13 @@ final class ParamModel extends ModelExplicit
 	}
 
 	@Override
-	public void exportToDotFile(String filename) throws PrismException
+	public void exportToDotFile(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void exportToDotFile(String filename, BitSet mark) throws PrismException
+	public void exportToDotFile(String filename, BitSet mark)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -212,9 +211,9 @@ final class ParamModel extends ModelExplicit
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
-	public void exportToPrismLanguage(String filename) throws PrismException
+	public void exportToPrismLanguage(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -235,7 +234,7 @@ final class ParamModel extends ModelExplicit
 	}
 
 	// Other
-	
+
 	public int getNumChoices(int state)
 	{
 		return stateEnd(state) - stateBegin(state);
@@ -440,7 +439,7 @@ final class ParamModel extends ModelExplicit
 	}
 
 	@Override
-	public void buildFromPrismExplicit(String filename) throws PrismException
+	public void buildFromPrismExplicit(String filename)
 	{
 		throw new UnsupportedOperationException();
 	}

@@ -171,7 +171,7 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 				throw new PrismException("Duplicate reaction id \"" + reaction.id + "\"");
 			reactionIDs.add(reaction.id);
 		}
-		
+
 		// Look at initial amounts for all species
 		// If any exceed MAX_AMOUNT, increase it accordingly
 		for (Species species : speciesList) {
@@ -479,6 +479,7 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 			this.boundaryCondition = false;
 		}
 
+		@Override
 		public String toString()
 		{
 			return id + (name != null && name.length() > 0 ? (" (" + name + ")") : "");
@@ -498,6 +499,7 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 			this.prismName = null;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name + "=" + value;
@@ -629,6 +631,7 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 			return s;
 		}
 
+		@Override
 		public String toString()
 		{
 			String s = "";

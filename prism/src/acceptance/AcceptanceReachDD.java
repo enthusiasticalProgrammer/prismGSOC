@@ -51,7 +51,7 @@ public class AcceptanceReachDD implements AcceptanceOmegaDD
 	{
 		this.goalStates = goalStates;
 	}
-	
+
 	/**
 	 * Constructor, from a BitSet-based AcceptanceReach.
 	 *
@@ -106,13 +106,15 @@ public class AcceptanceReachDD implements AcceptanceOmegaDD
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 
