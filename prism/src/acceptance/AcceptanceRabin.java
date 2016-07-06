@@ -321,20 +321,6 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	}
 
 	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
-	}
-
-	@Override
 	public void outputHOAHeader(PrintStream out)
 	{
 		out.println("acc-name: Rabin " + size());

@@ -237,20 +237,6 @@ public class AcceptanceGeneric implements AcceptanceOmega
 	}
 
 	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
-	}
-
-	@Override
 	public AcceptanceGeneric clone()
 	{
 		switch (kind) {
