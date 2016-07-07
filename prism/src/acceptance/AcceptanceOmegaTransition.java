@@ -2,11 +2,8 @@ package acceptance;
 
 public interface AcceptanceOmegaTransition<Symbol> extends AcceptanceOmega
 {
-	/** Get the acceptance signature for edge {@code stateIndex}.
-	 **/
-	public String getSignatureForEdge(int startState,Symbol sym); //TODO write
-
+	//TODO if necessary: also write something like a getSignatureForEdge, which outputs the edge-signature in Dot
 	/** Get the acceptance signature for state {@code stateIndex} (HOA format).
 	 */
-	public String getSignatureForEdgeHOA(int startState, Symbol sym); //TODO write
+	public String getSignatureForEdgeHOA(int startState, Symbol sym);
 }

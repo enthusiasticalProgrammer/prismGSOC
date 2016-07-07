@@ -26,7 +26,7 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 	 * @param numStates the number of states in the underlying model / automaton (needed for complementing BitSets)
 	 * @param allowedAcceptance the allowed acceptance types that may be used for complementing
 	 */
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException;
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException;
 
 	/** 
 	 * Get the acceptance signature for state {@code stateIndex}

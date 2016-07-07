@@ -206,7 +206,7 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.STREETT)) {
 			return complementToStreett();

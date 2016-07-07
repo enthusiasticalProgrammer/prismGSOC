@@ -284,7 +284,7 @@ public class AcceptanceGeneric implements AcceptanceOmegaState
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC)) {
 			return this.complementToGeneric();

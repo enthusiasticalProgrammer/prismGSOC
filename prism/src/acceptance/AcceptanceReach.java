@@ -123,7 +123,7 @@ public class AcceptanceReach implements AcceptanceOmegaState
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN)) {
 			return complementToRabin(numStates);

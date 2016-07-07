@@ -202,7 +202,7 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC)) {
 			return complementToGeneric();
