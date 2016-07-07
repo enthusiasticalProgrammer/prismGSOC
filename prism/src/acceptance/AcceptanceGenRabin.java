@@ -46,7 +46,7 @@ import jdd.JDDVars;
  * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPair> implements AcceptanceOmega
+public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPair> implements AcceptanceOmegaState
 {
 
 	/**

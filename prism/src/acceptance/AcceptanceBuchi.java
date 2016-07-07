@@ -29,9 +29,9 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.BitSet;
 
+import jdd.JDDVars;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
-import jdd.JDDVars;
 
 /**
  * A Büchi acceptance condition (based on BitSet state sets).
@@ -39,7 +39,7 @@ import jdd.JDDVars;
  * (sometimes also called final states) and is accepting if
  *  "infinitely often an accepting state is visited"
  */
-public class AcceptanceBuchi implements AcceptanceOmega
+public class AcceptanceBuchi implements AcceptanceOmegaState
 {
 	/** The set of goal states */
 	private BitSet acceptingStates = new BitSet();

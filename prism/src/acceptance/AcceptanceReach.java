@@ -39,7 +39,7 @@ import jdd.JDDVars;
  * has to be "upward-closed", i.e., once a goal state has been reached,
  * all successor states are goal states as well.
  */
-public class AcceptanceReach implements AcceptanceOmega
+public class AcceptanceReach implements AcceptanceOmegaState
 {
 	/** The set of goal states */
 	private BitSet goalStates = new BitSet();

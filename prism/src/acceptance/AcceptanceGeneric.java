@@ -33,6 +33,7 @@ import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 
+import acceptance.AcceptanceOmegaState.LiftBitSet;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 import jdd.JDDVars;
@@ -48,7 +49,7 @@ import jdd.JDDVars;
  *  Fin(states)  <=> F G !states
  *  Fin(!states) <=> F G states
  */
-public class AcceptanceGeneric implements AcceptanceOmega
+public class AcceptanceGeneric implements AcceptanceOmegaState
 {
 
 	/** The types of elements in the AST */

@@ -45,7 +45,7 @@ import jdd.JDDVars;
  * The Streett condition is accepting if all pairs are accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> implements AcceptanceOmega
+public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> implements AcceptanceOmegaState
 {
 
 	/**
