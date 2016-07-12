@@ -30,6 +30,8 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -211,13 +213,13 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		for (GenRabinPair pair : this) {
-			pair.L = lifter.lift(pair.L);
+			pair.L = liftBitSet(lifter, pair.L);
 			int n = pair.K_list.size();
 			for (int j = 0; j < n; j++)
-				pair.K_list.set(j, lifter.lift(pair.K_list.get(j)));
+				pair.K_list.set(j, liftBitSet(lifter, pair.K_list.get(j)));
 		}
 	}
 

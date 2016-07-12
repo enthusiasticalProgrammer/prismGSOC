@@ -1,25 +1,14 @@
 package acceptance;
 
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import jdd.JDDVars;
 import prism.PrismException;
 
 public interface AcceptanceOmegaState extends AcceptanceOmega
 {
-	/** Abstract functor for use with the lift function. */
-	public static abstract class LiftBitSet
-	{
-		public abstract BitSet lift(BitSet states);
-	}
-
-	/**
-	 * Lift the state sets in the acceptance condition.
-	 * For each state set {@code states} in the condition,
-	 * {@code lifter.lift(states)} is called and the state set is
-	 * replaced by the result.
-	 **/
-	public void lift(LiftBitSet lifter);
 
 	/**
 	 * Complement the acceptance condition if possible.

@@ -27,6 +27,10 @@
 package explicit;
 
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -95,20 +99,20 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 	}
 
 	/**
-	 * Lifts a BitSet over states in the automaton to a BitSet
-	 * over states in the product model: A bit is set in the
-	 * result for a product state if the bit is set in the parameter
-	 * for the corresponding automaton state.
-	 * @param automataStates a BitSet over states of the automaton for this product.
+	 * This method lifts the state sets to the desired numbers in a way such that the resulting map
+	 * associates each automatonState with its corresponding product states.
 	 */
-	public BitSet liftFromAutomaton(BitSet automataStates)
+	public Map<Integer, Collection<Integer>> liftFromAutomaton()
 	{
-		BitSet result = new BitSet();
+		Map<Integer, Collection<Integer>> result = new HashMap<>();
 
 		for (int productState = 0; productState < productModel.getNumStates(); productState++) {
-			if (automataStates.get(getAutomatonState(productState))) {
-				result.set(productState, true);
+			Collection<Integer> oldResult = result.get(getAutomatonState(productState));
+			if (oldResult == null) {
+				oldResult = new HashSet<>();
 			}
+			oldResult.add(productState);
+			result.put(getAutomatonState(productState), oldResult);
 		}
 
 		return result;

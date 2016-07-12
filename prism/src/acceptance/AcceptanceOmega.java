@@ -53,4 +53,18 @@ public interface AcceptanceOmega extends Cloneable
 
 	/** Make a copy of the acceptance condition. */
 	public AcceptanceOmega clone();
+	/**
+	 * The lifter basically maps an automaton-state to its corresponding states in the Product construction.
+	 * This function should lift the numbers of the BitSets according to the lifter.
+	 **/
+	public void lift(Map<Integer, Collection<Integer>> lifter);
+
+	default BitSet liftBitSet(Map<Integer, Collection<Integer>> lifter, BitSet bs)
+	{
+		BitSet result = new BitSet();
+		bs.stream().forEach(bit -> {
+			lifter.get(bit).stream().forEach(result::set);
+		});
+		return result;
+	}
 }

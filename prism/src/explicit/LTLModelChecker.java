@@ -587,7 +587,7 @@ public class LTLModelChecker extends PrismComponent
 		LTLProduct<M> product = new LTLProduct<>((M) prodModel, model, null, daSize, invMap);
 
 		// generate acceptance for the product model by lifting
-		product.setAcceptance(liftAcceptance(product, da.getAcceptance()));
+		product.getAcceptance().lift(product.liftFromAutomaton());
 
 		// lift the labels
 		for (String label : model.getLabels()) {
@@ -818,24 +818,5 @@ public class LTLModelChecker extends PrismComponent
 		}
 
 		return allAcceptingStates;
-	}
-
-	/** Lift the acceptance condition from the automaton to the product states. */
-	private AcceptanceOmega liftAcceptance(final LTLProduct<?> product, AcceptanceOmega acceptance)
-	{
-		// make a copy of the acceptance condition
-		AcceptanceOmega lifted = acceptance.clone();
-
-		// lift state sets
-		lifted.lift(new AcceptanceOmega.LiftBitSet()
-		{
-			@Override
-			public BitSet lift(BitSet states)
-			{
-				return product.liftFromAutomaton(states);
-			}
-		});
-
-		return lifted;
 	}
 }

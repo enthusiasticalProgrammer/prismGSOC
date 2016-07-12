@@ -28,6 +28,8 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -136,9 +138,9 @@ public class AcceptanceReach implements AcceptanceOmegaState
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
-		goalStates = lifter.lift(goalStates);
+		goalStates = liftBitSet(lifter, goalStates);
 	}
 
 	@Override

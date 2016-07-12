@@ -28,6 +28,8 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import jdd.JDDVars;
 import prism.PrismException;
@@ -155,9 +157,9 @@ public class AcceptanceBuchi implements AcceptanceOmegaState
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer,Collection<Integer>> lifter)
 	{
-		acceptingStates = lifter.lift(acceptingStates);
+		acceptingStates = liftBitSet(lifter,acceptingStates);
 	}
 
 	@Override

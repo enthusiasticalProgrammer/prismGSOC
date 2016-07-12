@@ -29,6 +29,8 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -173,11 +175,11 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		for (StreettPair pair : this) {
-			pair.R = lifter.lift(pair.R);
-			pair.G = lifter.lift(pair.G);
+			pair.R = liftBitSet(lifter, pair.R);
+			pair.G = liftBitSet(lifter, pair.G);
 		}
 	}
 

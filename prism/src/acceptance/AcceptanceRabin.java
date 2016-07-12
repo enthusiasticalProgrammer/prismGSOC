@@ -29,6 +29,8 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -172,11 +174,11 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		for (RabinPair pair : this) {
-			pair.L = lifter.lift(pair.L);
-			pair.K = lifter.lift(pair.K);
+			pair.L = liftBitSet(lifter, pair.L);
+			pair.K = liftBitSet(lifter, pair.K);
 		}
 	}
 

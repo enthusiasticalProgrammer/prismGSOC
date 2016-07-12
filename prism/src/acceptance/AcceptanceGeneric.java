@@ -30,10 +30,11 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import acceptance.AcceptanceOmegaState.LiftBitSet;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 import jdd.JDDVars;
@@ -293,7 +294,7 @@ public class AcceptanceGeneric implements AcceptanceOmegaState
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		switch (kind) {
 		case TRUE:
@@ -303,7 +304,7 @@ public class AcceptanceGeneric implements AcceptanceOmegaState
 		case INF_NOT:
 		case FIN:
 		case FIN_NOT:
-			states = lifter.lift(states);
+			states = liftBitSet(lifter,states);
 			return;
 		case AND:
 		case OR:
