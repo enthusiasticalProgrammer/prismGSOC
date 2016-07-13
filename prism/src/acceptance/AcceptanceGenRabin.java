@@ -221,6 +221,7 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 			for (int j = 0; j < n; j++)
 				pair.K_list.set(j, liftBitSet(lifter, pair.K_list.get(j)));
 		}
+
 	}
 
 	/**

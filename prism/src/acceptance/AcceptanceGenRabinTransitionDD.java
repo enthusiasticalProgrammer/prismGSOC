@@ -23,13 +23,14 @@ public class AcceptanceGenRabinTransitionDD<Symbol> implements AcceptanceOmegaDD
 		return this.acceptanceGenRabinTransition.isBSCCAccepting(transformJDDToBitSet(bscc_states));
 	}
 
-	private BitSet transformJDDToBitSet(JDDNode bscc){
-			BitSet result = new BitSet(ddRowVars.getNumVars());
-			for(int i=0; i< ddRowVars.getNumVars();i++){
-				if(JDD.GetVectorElement(bscc, ddRowVars, i)>0.5){
-					result.set(i);
-				}
+	private BitSet transformJDDToBitSet(JDDNode bscc)
+	{
+		BitSet result = new BitSet(ddRowVars.getNumVars());
+		for (int i = 0; i < ddRowVars.getNumVars(); i++) {
+			if (JDD.GetVectorElement(bscc, ddRowVars, i) > 0.5) {
+				result.set(i);
 			}
+		}
 		return result;
 	}
 

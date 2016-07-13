@@ -29,8 +29,6 @@
 
 package prism;
 
-import hybrid.PrismHybrid;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -39,6 +37,17 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Vector;
 
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaDD;
+import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceReachDD;
+import acceptance.AcceptanceType;
+import automata.DA;
+import automata.LTL2DA;
+import dv.DoubleVector;
+import dv.IntegerVector;
+import explicit.MinMax;
+import hybrid.PrismHybrid;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -62,16 +71,6 @@ import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
 import sparse.PrismSparse;
 import strat.MDStrategyIV;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceOmegaDD;
-import acceptance.AcceptanceRabin;
-import acceptance.AcceptanceReachDD;
-import acceptance.AcceptanceType;
-import automata.DA;
-import automata.LTL2DA;
-import dv.DoubleVector;
-import dv.IntegerVector;
-import explicit.MinMax;
 
 /*
  * Model checker for MDPs

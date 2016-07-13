@@ -157,9 +157,9 @@ public class AcceptanceBuchi implements AcceptanceOmegaState
 	}
 
 	@Override
-	public void lift(Map<Integer,Collection<Integer>> lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
-		acceptingStates = liftBitSet(lifter,acceptingStates);
+		acceptingStates = liftBitSet(lifter, acceptingStates);
 	}
 
 	@Override

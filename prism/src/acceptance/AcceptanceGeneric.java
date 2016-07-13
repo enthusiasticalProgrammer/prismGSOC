@@ -304,7 +304,7 @@ public class AcceptanceGeneric implements AcceptanceOmegaState
 		case INF_NOT:
 		case FIN:
 		case FIN_NOT:
-			states = liftBitSet(lifter,states);
+			states = liftBitSet(lifter, states);
 			return;
 		case AND:
 		case OR:

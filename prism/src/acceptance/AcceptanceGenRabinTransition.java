@@ -82,7 +82,6 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		 */
 		public boolean isBSCCAccepting(BitSet bscc_states)
 		{
-
 			for (Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> edgesFromState : Finite) {
 				for (DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge edge : edgesFromState) {
 					if (bscc_states.get(edge.dest)) {

@@ -26,8 +26,6 @@
 
 package prism;
 
-import hybrid.PrismHybrid;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -41,6 +39,8 @@ import acceptance.AcceptanceReachDD;
 import acceptance.AcceptanceType;
 import automata.DA;
 import automata.LTL2DA;
+import dv.DoubleVector;
+import hybrid.PrismHybrid;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -58,7 +58,6 @@ import parser.type.TypeBool;
 import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
 import sparse.PrismSparse;
-import dv.DoubleVector;
 
 /*
  * Model checker for DTMCs.
