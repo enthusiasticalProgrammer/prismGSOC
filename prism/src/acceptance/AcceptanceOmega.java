@@ -28,6 +28,10 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
+
+import jdd.JDDVars;
 
 /**
  * Generic interface for an omega-regular acceptance condition (BitSet-based).
@@ -53,6 +57,16 @@ public interface AcceptanceOmega extends Cloneable
 
 	/** Make a copy of the acceptance condition. */
 	public AcceptanceOmega clone();
+	/** 
+	 * Get the acceptance signature for state {@code stateIndex}
+	 */
+	public String getSignatureForState(int stateIndex);
+
+	/** 
+	 * Get the acceptance signature for state {@code stateIndex} in HOA format.
+	 */
+	public String getSignatureForStateHOA(int stateIndex);
+
 	/**
 	 * The lifter basically maps an automaton-state to its corresponding states in the Product construction.
 	 * This function should lift the numbers of the BitSets according to the lifter.

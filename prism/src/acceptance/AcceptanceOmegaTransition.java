@@ -6,4 +6,19 @@ public interface AcceptanceOmegaTransition<Symbol> extends AcceptanceOmega
 	/** Get the acceptance signature for state {@code stateIndex} (HOA format).
 	 */
 	public String getSignatureForEdgeHOA(int startState, Symbol sym);
+
+	/** Make a copy of the acceptance condition. */
+	public AcceptanceOmegaTransition<Symbol> clone();
+
+	@Override
+	public default String getSignatureForState(int stateIndex)
+	{
+		return "";
+	}
+
+	@Override
+	public default String getSignatureForStateHOA(int stateIndex)
+	{
+		return "";
+	}
 }
