@@ -34,7 +34,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.IntStream;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import automata.DA;
 import jdd.JDDVars;
@@ -49,9 +51,30 @@ import jdd.JDDVars;
  *
  * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
  */
-public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGenRabinTransition<Symbol>.GenRabinPair>
-		implements AcceptanceOmegaTransition<Symbol>
+public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 {
+	/**
+	 * These two attributes are important for mapping the edges to numbers, such that we can store them in BitSets.
+	 * The number for a BitSet of an edge from x with BitSet bs is computed as follows: x*(2^{amountOfAPs})+sum_{bs}(2^i * bs.get(i)) 
+	 */
+	private int amountOfStates;
+	private final int amountOfAPs;
+
+	public @NonNull final List<@NonNull AcceptanceGenRabinTransition.GenRabinPair> accList;
+
+	public AcceptanceGenRabinTransition(DA<BitSet, ?> da)
+	{
+		amountOfStates = da.size();
+		amountOfAPs = da.getAPList().size();
+		accList = new ArrayList<>();
+	}
+
+	public AcceptanceGenRabinTransition(int amountOfStates, int amountOfAPs)
+	{
+		this.amountOfStates = amountOfStates;
+		this.amountOfAPs = amountOfAPs;
+		accList = new ArrayList<>();
+	}
 
 	/**
 	 * A pair in a Generalized Rabin acceptance condition, i.e., with
@@ -62,42 +85,30 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		/** Edge set Finite (should be visited only finitely often) 
 		 * The offset of the list is equal to the number of the source state 
 		 */
-		private final List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> Finite;
+		private @NonNull BitSet Finite;
 
 		/** Edge sets Infinite (should all be visited infinitely often) */
-		private final List<List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>>> Infinite;
+		private final @NonNull List<@NonNull BitSet> Infinite;
 
 		/** Constructor with L and K_j state sets */
-		public GenRabinPair(List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> Finite,
-				List<List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>>> Infinite)
+		public GenRabinPair(@NonNull BitSet Finite, @NonNull List<@NonNull BitSet> Infinite)
 		{
 			this.Finite = Finite;
 			this.Infinite = Infinite;
 		}
 
-		//TODO this can give sometimes false negatives (e.g. if a Fin-set is present, but the inf-sets can still be used,
-		// without the Fin-edges. I am not sure whether this is desired or not, therefore I leave it.
 		/** Returns true if the bottom strongly connected component
-		 * given by bscc_states is accepting for this pair.
+		 * given by bsccEdges is accepting for this pair.
 		 */
-		public boolean isBSCCAccepting(BitSet bscc_states)
+		public boolean isBSCCAccepting(BitSet bsccEdges)
 		{
-			for (Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> edgesFromState : Finite) {
-				for (DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge edge : edgesFromState) {
-					if (bscc_states.get(edge.dest)) {
-						// there is some state in bscc_states that is
-						// forbidden by L
-						return false;
-					}
-				}
+			if (bsccEdges.intersects(Finite)) {
+				return false;
 			}
 
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : Infinite) {
-				for (Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> edgesFromState : inf) {
-					if (edgesFromState.stream().allMatch(edge -> !bscc_states.get(edge.dest))) {
-						//there is no edge for an infinite set in the bscc 
-						return false;
-					}
+			for (BitSet inf : Infinite) {
+				if (!bsccEdges.intersects(inf)) {
+					return false;
 				}
 			}
 			return true;
@@ -106,15 +117,20 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		@Override
 		public GenRabinPair clone()
 		{
-			List<List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>>> newInfList = new ArrayList<>();
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : Infinite) {
-				newInfList.add(new ArrayList<>(inf));
-
-				for (int i = 0; i < inf.size(); i++) {
-					newInfList.get(newInfList.size() - 1).add(new HashSet<>(inf.get(i)));
+			@NonNull
+			List<@NonNull BitSet> newInfList = new ArrayList<>();
+			for (BitSet inf : Infinite) {
+				BitSet newInf = (BitSet) inf.clone();
+				if (newInf != null) {
+					newInfList.add(newInf);
+				} else {
+					throw new NullPointerException("Cloning a BitSet returned null");
 				}
 			}
-			return new GenRabinPair(new ArrayList<>(Finite), newInfList);
+			BitSet newFinite = (BitSet) Finite.clone();
+			if (newFinite != null)
+				return new GenRabinPair(newFinite, newInfList);
+			throw new NullPointerException("Cloning a BitSet returned null");
 		}
 
 		/** Returns a textual representation of this Generalized Rabin pair. */
@@ -122,7 +138,7 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		public String toString()
 		{
 			String s = "(" + Finite;
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : Infinite)
+			for (BitSet inf : Infinite)
 				s += "," + inf;
 			s += ")";
 			return s;
@@ -130,61 +146,42 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 
 		private void lift(Map<Integer, Collection<Integer>> lifter)
 		{
-			//first, adjust the target edges
-			Finite.replaceAll(set -> mapEdgeSetFromSingleState(lifter, set));
-
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : Infinite) {
-				inf.replaceAll(set -> mapEdgeSetFromSingleState(lifter, set));
-			}
-
-			//second, adjust the source edges (being represented by the indices of the lists)
-			int maxOffset = lifter.values().stream().map(set -> set.stream().reduce(0, (a, b) -> a > b ? a : b)).reduce(0, (a, b) -> a > b ? a : b);
-			transformSingleList(Finite, lifter, maxOffset);
-
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : Infinite) {
-				transformSingleList(inf, lifter, maxOffset);
-			}
+			Finite = transformSingleBitSet(Finite, lifter);
+			Infinite.replaceAll(inf -> transformSingleBitSet(inf, lifter));
 		}
 
-		private void transformSingleList(List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> oldList,
-				Map<Integer, Collection<Integer>> lifter, int maxOffset)
+		private @NonNull BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
 		{
-			Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>[] newAsArray = new Set[maxOffset + 1];
-			for (int i = 0; i < oldList.size(); i++) {
-				Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> toCopy = oldList.get(i);
-				lifter.get(i).stream().forEach(j -> newAsArray[j] = new HashSet<>(toCopy));
-			}
-			oldList.clear();
-			for (int i = 0; i < newAsArray.length; i++) {
-				if (newAsArray[i] == null) {
-					oldList.add(new HashSet<>());
-				} else {
-					oldList.add(newAsArray[i]);
-				}
-			}
+			BitSet newBs = new BitSet(amountOfStates * (1 << amountOfAPs));
+			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> lifter.get(i)).reduce(new HashSet<>(), (a, b) -> {
+				a.addAll(b);
+				return a;
+			}).forEach(i -> newBs.set(i));
+			return newBs;
 		}
 	}
 
 	/** Make a copy of the acceptance condition. */
 	@Override
-	public AcceptanceGenRabinTransition<Symbol> clone()
+	public AcceptanceGenRabinTransition clone()
 	{
-		AcceptanceGenRabinTransition<Symbol> result = new AcceptanceGenRabinTransition<>();
-		for (GenRabinPair pair : this) {
-			result.add(pair.clone());
+		AcceptanceGenRabinTransition result = new AcceptanceGenRabinTransition(amountOfStates, amountOfAPs);
+		for (GenRabinPair pair : this.accList) {
+			result.accList.add(pair.clone());
 		}
 
 		return result;
 	}
 
 	/** Returns true if the bottom strongly connected component
-	 * given by bscc_states is accepting for this Rabin condition,
-	 * i.e., there is a pair that accepts for bscc_states.
+	 * given by bscc_edges is accepting for this Rabin condition,
+	 * i.e., there is a pair that accepts for bsccEdges.
+	 * Nota bene: the BitSet corresponds here to edges and not states
 	 */
 	@Override
-	public boolean isBSCCAccepting(BitSet bscc_states)
+	public boolean isBSCCAccepting(BitSet bsccEdges)
 	{
-		return this.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
+		return this.accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bsccEdges));
 	}
 
 	/**
@@ -194,34 +191,36 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 	 * @param other the other GeneralizedRabin acceptance condition
 	 * @return new AcceptanceGenRabin, disjunction of this and other
 	 */
-	public AcceptanceGenRabinTransition<Symbol> or(AcceptanceGenRabinTransition<Symbol> other)
+	public AcceptanceGenRabinTransition or(AcceptanceGenRabinTransition other)
 	{
-		AcceptanceGenRabinTransition<Symbol> result = new AcceptanceGenRabinTransition<>();
-		for (GenRabinPair pair : this) {
-			result.add(pair.clone());
+		if (other.amountOfAPs != this.amountOfAPs || other.amountOfStates != this.amountOfStates) {
+			throw new IllegalArgumentException("It was tried to connect two acceptance condition, which correspond to different automata.");
 		}
-		for (GenRabinPair pair : other) {
-			result.add(pair.clone());
+		AcceptanceGenRabinTransition result = new AcceptanceGenRabinTransition(amountOfStates, amountOfAPs);
+		for (GenRabinPair pair : this.accList) {
+			result.accList.add(pair.clone());
+		}
+		for (GenRabinPair pair : other.accList) {
+			result.accList.add(pair.clone());
 		}
 		return result;
 	}
 
 	@Override
-	public String getSignatureForEdgeHOA(int startState, Symbol sym)
+	public String getSignatureForEdgeHOA(int startState, BitSet label)
 	{
 		String result = "";
+		int edgeOffset = computeOffsetForEdge(startState, label);
 
 		int set_index = 0;
-		for (GenRabinPair pair : this) {
-			Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> finEdgeFromState = pair.Finite.get(startState);
-			if (finEdgeFromState.stream().anyMatch(edge -> edge.label.equals(sym))) {
+		for (GenRabinPair pair : this.accList) {
+			if (pair.Finite.get(edgeOffset)) {
 				result += (result.isEmpty() ? "" : " ") + set_index;
 			}
 
 			set_index++;
-			for (List<Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge>> inf : pair.Infinite) {
-				Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> infEdgeFromState = inf.get(startState);
-				if (infEdgeFromState.stream().anyMatch(edge -> edge.label.equals(sym))) {
+			for (BitSet inf : pair.Infinite) {
+				if (inf.get(edgeOffset)) {
 					result += (result.isEmpty() ? "" : " ") + set_index;
 				}
 				set_index++;
@@ -234,12 +233,25 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		return result;
 	}
 
+	public int computeOffsetForEdge(int startState, BitSet label)
+	{
+		return startState * (1 << amountOfAPs) + computeOffsetForEdgeLabel(label);
+	}
+
+	private int computeOffsetForEdgeLabel(BitSet label)
+	{
+		if (label.size() > this.amountOfAPs) {
+			throw new IllegalArgumentException("The BitSet cannot correspond to the same automaton as the acceptance set. It is too large.");
+		}
+		return IntStream.range(0, label.size()).map(i -> label.get(i) ? 1 << i : 0).sum();
+	}
+
 	/** Returns a textual representation of this acceptance condition. */
 	@Override
 	public String toString()
 	{
 		String result = "";
-		for (GenRabinPair pair : this) {
+		for (GenRabinPair pair : accList) {
 			result += pair.toString();
 		}
 		return result;
@@ -248,7 +260,7 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 	@Override
 	public String getSizeStatistics()
 	{
-		return size() + " Generalized Rabin pairs";
+		return accList.size() + " Generalized Rabin pairs";
 	}
 
 	@Override
@@ -261,8 +273,8 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 	public void outputHOAHeader(PrintStream out)
 	{
 		int sets = 0;
-		out.print("acc-name: generalized-Rabin " + size());
-		for (GenRabinPair pair : this) {
+		out.print("acc-name: generalized-Rabin " + accList.size());
+		for (GenRabinPair pair : accList) {
 			sets++; // the Fin
 			out.print(" " + pair.Infinite.size());
 			sets += pair.Infinite.size();
@@ -275,7 +287,7 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 		}
 
 		int set_index = 0;
-		for (GenRabinPair pair : this) {
+		for (GenRabinPair pair : accList) {
 			if (set_index > 0)
 				out.print(" | ");
 			out.print("( Fin(" + set_index + ")");
@@ -292,18 +304,13 @@ public class AcceptanceGenRabinTransition<Symbol> extends ArrayList<AcceptanceGe
 	@Override
 	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
-		for (AcceptanceGenRabinTransition<Symbol>.GenRabinPair pair : this) {
+		amountOfStates = lifter.values().stream().reduce(new HashSet<>(), (a, b) -> {
+			a.addAll(b);
+			return a;
+		}).stream().reduce(0, Integer::max) + 1;
+		for (GenRabinPair pair : accList) {
 			pair.lift(lifter);
 		}
-	}
-
-	private Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> mapEdgeSetFromSingleState(Map<Integer, Collection<Integer>> lifter,
-			Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> edgeSet)
-	{
-		Set<DA<Symbol, ? extends AcceptanceOmegaTransition<Symbol>>.Edge> newEdgeSet = new HashSet<>();
-		edgeSet.stream().forEach(edge -> lifter.get(edge.dest).stream()
-				.forEach(integer -> newEdgeSet.add(new DA<Symbol, AcceptanceGenRabinTransition<Symbol>>(0).new Edge(edge.label, edge.dest))));
-		return newEdgeSet;
 	}
 
 	@Override

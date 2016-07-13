@@ -19,7 +19,7 @@ import rabinizer.exec.CLIParser;
 
 public class LTL2DA
 {
-	public static DA<BitSet, AcceptanceGenRabinTransition<BitSet>> getDA(SimpleLTL ltlFormula)
+	public static DA<BitSet, AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
 		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
 		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);

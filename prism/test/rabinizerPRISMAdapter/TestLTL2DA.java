@@ -28,19 +28,19 @@ public class TestLTL2DA
 	@Test
 	public void HasEdgesWithFirstPropositionNegated() throws PrismException
 	{
-		DA<BitSet, AcceptanceGenRabinTransition<BitSet>> da = LTL2DA.getDA(formula1);
+		DA<BitSet, AcceptanceGenRabinTransition> da = LTL2DA.getDA(formula1);
 		BitSet negatedA = new BitSet(1);
 		negatedA.set(0, false);
 		assertTrue(da.hasEdge(da.getStartState(), negatedA));
 	}
 
 	@Test
-	public void EdgesDoNotEndInStateLessThanZero()
+	public void EdgeOffsetIsNeverNegative()
 	{
-		DA<BitSet, AcceptanceGenRabinTransition<BitSet>> da = LTL2DA.getDA(formula1);
+		DA<BitSet, AcceptanceGenRabinTransition> da = LTL2DA.getDA(formula1);
 		for (int i = 0; i < da.size(); i++) {
-			Set<DA<BitSet, AcceptanceGenRabinTransition<BitSet>>.Edge> edgesFromState = da.getAllEdgesFrom(i);
-			for (DA<BitSet, AcceptanceGenRabinTransition<BitSet>>.Edge edge : edgesFromState) {
+			Set<DA<BitSet, AcceptanceGenRabinTransition>.Edge> edgesFromState = da.getAllEdgesFrom(i);
+			for (DA<BitSet, AcceptanceGenRabinTransition>.Edge edge : edgesFromState) {
 				assertTrue(edge.dest >= 0);
 			}
 		}
@@ -49,7 +49,7 @@ public class TestLTL2DA
 	@Test
 	public void OneStateHasNotOutgoingEdgesForEachBitSet() throws PrismException
 	{
-		DA<BitSet, AcceptanceGenRabinTransition<BitSet>> da = LTL2DA.getDA(formula1);
+		DA<BitSet, AcceptanceGenRabinTransition> da = LTL2DA.getDA(formula1);
 		BitSet bs = new BitSet(1);
 		bs.set(0, false);
 		assertTrue(IntStream.range(0, da.size()).anyMatch(s -> !da.hasEdge(s, bs)));

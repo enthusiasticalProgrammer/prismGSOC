@@ -6,12 +6,12 @@ import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
 
-public class AcceptanceGenRabinTransitionDD<Symbol> implements AcceptanceOmegaDD
+public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 {
-	private final AcceptanceGenRabinTransition<Symbol> acceptanceGenRabinTransition;
+	private final AcceptanceGenRabinTransition acceptanceGenRabinTransition;
 	private final JDDVars ddRowVars;
 
-	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition<Symbol> acceptanceGenRabinTransition, JDDVars ddRowVars)
+	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars ddRowVars)
 	{
 		this.acceptanceGenRabinTransition = acceptanceGenRabinTransition;
 		this.ddRowVars = ddRowVars;

@@ -338,7 +338,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 				out.print(" ");
 				out.print(edge.dest);
 				if (acceptance instanceof AcceptanceOmegaTransition) {
-					out.println(((AcceptanceOmegaTransition) acceptance).getSignatureForEdgeHOA(i, edge.label));
+					out.println(((AcceptanceOmegaTransition) acceptance).getSignatureForEdgeHOA(i, (BitSet) edge.label));
 				} else {
 					out.println("");
 				}
