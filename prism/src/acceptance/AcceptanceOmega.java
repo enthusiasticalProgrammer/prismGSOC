@@ -73,6 +73,12 @@ public interface AcceptanceOmega extends Cloneable
 	 **/
 	public void lift(Map<Integer, Collection<Integer>> lifter);
 
+	/**
+	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
+	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 */
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
+
 	default BitSet liftBitSet(Map<Integer, Collection<Integer>> lifter, BitSet bs)
 	{
 		BitSet result = new BitSet();
