@@ -42,11 +42,20 @@ import java.util.Vector;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import acceptance.AcceptanceBuchi;
+import acceptance.AcceptanceGenRabin;
+import acceptance.AcceptanceGenRabinTransition;
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceStreett;
+import acceptance.AcceptanceType;
+import automata.DA;
+import automata.LTL2DA;
+import common.IterableStateSet;
 import parser.State;
 import parser.VarList;
 import parser.ast.Declaration;
 import parser.ast.DeclarationInt;
-
 import parser.ast.Expression;
 import parser.ast.ExpressionBinaryOp;
 import parser.ast.ExpressionLabel;
@@ -60,16 +69,6 @@ import prism.PrismException;
 import prism.PrismLangException;
 import prism.PrismNotSupportedException;
 import prism.PrismUtils;
-import acceptance.AcceptanceBuchi;
-import acceptance.AcceptanceGenRabin;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceRabin;
-import acceptance.AcceptanceStreett;
-import acceptance.AcceptanceType;
-import automata.DA;
-import automata.LTL2DA;
-
-import common.IterableStateSet;
 
 /**
  * LTL model checking functionality
@@ -637,7 +636,7 @@ public class LTLModelChecker extends PrismComponent
 			return findAcceptingECStatesForRabin(model, (AcceptanceRabin) acceptance);
 		} else if (acceptance instanceof AcceptanceStreett) {
 			return findAcceptingECStatesForStreett(model, (AcceptanceStreett) acceptance);
-		} else if (acceptance instanceof AcceptanceGenRabin) {
+		} else if (acceptance instanceof AcceptanceGenRabinTransition) {
 			return findAcceptingECStatesForGeneralizedRabin(model, (AcceptanceGenRabin) acceptance);
 		}
 		throw new PrismNotSupportedException(
