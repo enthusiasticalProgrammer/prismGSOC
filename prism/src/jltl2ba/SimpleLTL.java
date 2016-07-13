@@ -29,7 +29,9 @@ package jltl2ba;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,41 +148,34 @@ public class SimpleLTL
 			return false;
 	}
 
-	public APSet getAPs()
+	public Collection<String> getAPs()
 	{
-		APSet rv;
-
 		switch (kind) {
 		case NOT:
 		case NEXT:
 		case GLOBALLY:
 		case FINALLY:
-			rv = left.getAPs();
-			break;
+			return left.getAPs();
 		case OR:
 		case AND:
 		case EQUIV:
 		case IMPLIES:
 		case UNTIL:
 		case RELEASE:
-			rv = left.getAPs();
-			for (String s : right.getAPs())
-				rv.addAP(s);
-			break;
+			Collection<String> result = left.getAPs();
+			result.addAll(right.getAPs());
+			return result;
 		// terminals
 		case FALSE:
 		case TRUE:
-			rv = new APSet();
-			break;
+			return new HashSet<>();
 		case AP:
-			rv = new APSet();
-			rv.addAP(ap);
-			break;
+			Collection<String> result2 = new HashSet<>();
+			result2.add(ap);
+			return result2;
 		default:
-			rv = new APSet();
-			break;
+			throw new AssertionError();
 		}
-		return rv;
 	}
 
 	@Override
@@ -889,62 +884,6 @@ public class SimpleLTL
 		return true;
 	}
 
-	public SimpleLTL toDNF() throws PrismException
-	{
-		switch (kind) {
-		case TRUE:
-			return new SimpleLTL(true);
-		case FALSE:
-			return new SimpleLTL(false);
-		case NOT:
-			return new SimpleLTL(LTLType.NOT, left.toDNF());
-		case AP:
-			return new SimpleLTL(ap);
-		case OR:
-			return new SimpleLTL(LTLType.OR, left.toDNF(), right.toDNF());
-		case AND:
-			SimpleLTL l = left.toDNF();
-			SimpleLTL r = right.toDNF();
-
-			if (l.kind == LTLType.OR) {
-				SimpleLTL a, b;
-				a = l.left;
-				b = l.right;
-
-				if (r.kind == LTLType.OR) {
-					SimpleLTL c, d;
-					c = r.left;
-					d = r.right;
-
-					SimpleLTL a_c = new SimpleLTL(LTLType.AND, a, c);
-					SimpleLTL b_c = new SimpleLTL(LTLType.AND, b, c);
-					SimpleLTL a_d = new SimpleLTL(LTLType.AND, a, d);
-					SimpleLTL b_d = new SimpleLTL(LTLType.AND, b, d);
-
-					return new SimpleLTL(LTLType.OR, (new SimpleLTL(LTLType.OR, a_c, b_c)).toDNF(), (new SimpleLTL(LTLType.OR, a_d, b_d)).toDNF());
-				} else {
-					SimpleLTL a_c = new SimpleLTL(LTLType.AND, a, r);
-					SimpleLTL b_c = new SimpleLTL(LTLType.AND, b, r);
-
-					return new SimpleLTL(LTLType.OR, a_c.toDNF(), b_c.toDNF());
-				}
-			} else if (r.kind == LTLType.OR) {
-				SimpleLTL a, b;
-				a = r.left;
-				b = r.right;
-
-				SimpleLTL a_c = new SimpleLTL(LTLType.AND, l, a);
-				SimpleLTL b_c = new SimpleLTL(LTLType.AND, l, b);
-
-				return new SimpleLTL(LTLType.OR, a_c.toDNF(), b_c.toDNF());
-			} else {
-				return new SimpleLTL(LTLType.AND, l, r);
-			}
-		default:
-			throw new PrismException("Illegal operator for DNF!");
-		}
-	}
-
 	/** Returns an APMonom representing the formula rooted at
 	 * this node. Formula has to be in DNF. */
 	public APMonom toMonom(APSet apset) throws PrismException
@@ -1268,15 +1207,15 @@ public class SimpleLTL
 		}
 	}
 
-	public NBA toNBA(APSet apset) throws PrismException
+	public NBA toNBA(APSet _apset) throws PrismException
 	{
-		Alternating a = new Alternating(this, apset);
+		Alternating a = new Alternating(this, _apset);
 		// a.print(System.out);
 		Generalized g = new Generalized(a);
 		// g.print(System.out, apset);
 		Buchi b = new Buchi(g);
 		// b.print_spin(System.out, apset);
-		NBA nba = b.toNBA(apset);
+		NBA nba = b.toNBA(_apset);
 		// nba.print(System.out);
 
 		// jltl2ba should never produce disjoint NBA,
@@ -1353,5 +1292,4 @@ public class SimpleLTL
 
 		return id;
 	}
-
 }
