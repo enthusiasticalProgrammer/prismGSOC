@@ -27,7 +27,9 @@ Features:
 	- This DTMC is wrapped up such that it fullfills the necessary interface such that we can operate it in MultiLongRun and verify it
 	- 
 
-
+-Rabinizer-integration:
+	-splitted AcceptanceOmega-interface
+	-converted Rabinizer to PRISM (in the sense of rabinizer.automaton -> prism.automaton)
 
 
 
@@ -59,19 +61,21 @@ Code Style improvements:
 	dropped memorylessness, aka mlessmulti
 -Dropped unused throws-clauses
 -parametrised raw types (not yet completely done)
+-replaced unneccessary type parameters by <> operator
 
 Features in Rabinizer:
 -Rabinizer supports the controller-synthesis construction
-
+	- the six trivial rules are implemented
+	- the output is now readable
 
 
 --------------------------------------------------------------TIMEPLAN--------------------------------------------------------------------
 
--4.7.-8.7.: put Rabinizer-standard-construction into PRISM
--11.7.-22.7.: connect DTMGRA and conjunctive-SAT
--25.7.-29.7.: Do the optional (but extremely strongly desired things):
+-4.7.-15.7.: put Rabinizer-standard-construction into PRISM
+-18.7.-29.7.: connect DTMGRA and conjunctive-SAT
+-1.8.-5.8.: Do the optional (but extremely strongly desired things):
     simulation of strategies, joint-SAT
--1.8.-13.8.: Do more optional things, if they come up regarding the DTMGRA-related implementation.
+-8.8.-13.8.: Do more optional things, if they come up regarding the DTMGRA-related implementation.
     -when the optional things are done: test and document: Also write junit-test-script
     -Also I will have to adjust the user-manual a bit
 -15.8-end: Reserve: note that I have to submit the code according to the website from 15.8.-23.8. 
