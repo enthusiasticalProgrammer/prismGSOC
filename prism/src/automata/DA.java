@@ -32,21 +32,29 @@ package automata;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaTransition;
+import acceptance.AcceptanceRabin;
 import jltl2ba.APElement;
 import jltl2ba.APElementIterator;
 import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismNotSupportedException;
 import prism.PrismPrintStreamLog;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceRabin;
 
 /**
  * Class to store a deterministic automata of some acceptance type Acceptance.
  * States are 0-indexed integers; class is parameterised by edge labels (Symbol).
  */
+//TODO everybody seems to use BitSet as Symbol, can we replace it by BitSet?
 public class DA<Symbol, Acceptance extends AcceptanceOmega>
 {
 	/** AP list */
@@ -55,26 +63,45 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	private int size;
 	/** Start state (index) */
 	private int start;
-	/** Edges of DRA */
+	/** Edges of DA */
 	private List<List<Edge>> edges;
 	/** The acceptance condition (as BitSets) */
 	private Acceptance acceptance;
 
-	/** Local class to represent DRA edge */
-	class Edge
+	/** Public class to represent DA edge */
+	public class Edge
 	{
-		private Symbol label;
-		private int dest;
+		public @NonNull Symbol label;
+		public int dest;
 
-		public Edge(Symbol label, int dest)
+		public Edge(@NonNull Symbol label, int dest)
 		{
 			this.label = label;
 			this.dest = dest;
 		}
+
+		@Override
+		public boolean equals(Object other)
+		{
+			if (other == null) {
+				return false;
+			} else if (!(other instanceof DA.Edge)) {
+				return false;
+			} else {
+				Edge that = (DA<Symbol, Acceptance>.Edge) other;
+				return this.label.equals(that.label) && this.dest == that.dest;
+			}
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(this.label, this.dest);
+		}
 	}
 
 	/**
-	 * Construct a DRA of fixed size (i.e. fixed number of states).
+	 * Construct a DA of fixed size (i.e. fixed number of states).
 	 */
 	public DA(int size)
 	{
@@ -134,8 +161,12 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	/**
 	 * Add an edge
 	 */
-	public void addEdge(int src, Symbol label, int dest)
+	public void addEdge(int src, @Nullable Symbol label, int dest)
 	{
+		System.out.println("added edge, src: " + src + " label: " + label + " dest:" + dest);
+		if (label == null) {
+			throw new NullPointerException();
+		}
 		edges.get(src).add(new Edge(label, dest));
 	}
 
@@ -226,7 +257,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Print the DRA in ltl2dstar v2 format to the output stream.
+	 * Print the DA in ltl2dstar v2 format to the output stream.
 	 * @param out the output stream 
 	 */
 	public static void printLtl2dstar(DA<BitSet, AcceptanceRabin> dra, PrintStream out) throws PrismException
@@ -238,7 +269,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			throw new PrismException("No start state in DA!");
 		}
 
-		out.println("DRA v2 explicit");
+		out.println("DA v2 explicit");
 		out.println("States: " + dra.size());
 		out.println("Acceptance-Pairs: " + acceptance.size());
 		out.println("Start: " + dra.getStartState());
@@ -305,29 +336,15 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 				String labelString = "[" + APElement.toStringHOA((BitSet) label, apList.size()) + "]";
 				out.print(labelString);
 				out.print(" ");
-				out.println(edge.dest);
+				out.print(edge.dest);
+				if (acceptance instanceof AcceptanceOmegaTransition) {
+					out.println(((AcceptanceOmegaTransition) acceptance).getSignatureForEdgeHOA(i, edge.label));
+				} else {
+					out.println("");
+				}
 			}
 		}
 		out.println("--END--");
-	}
-
-	/**
-	 * Print automaton to a PrismLog in a specified format ("dot" or "txt").
-	 */
-	public void print(PrismLog out, String type)
-	{
-		switch (type) {
-		case "txt":
-			out.println(toString());
-			break;
-		case "dot":
-			printDot(out);
-			break;
-		// Default to txt
-		default:
-			out.println(toString());
-			break;
-		}
 	}
 
 	/**
@@ -429,5 +446,10 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			}
 		}
 		// We are fine with an empty apList or an apList that lacks some of the expected Li.
+	}
+
+	public Set<Edge> getAllEdgesFrom(int i)
+	{
+		return new HashSet<>(edges.get(i));
 	}
 }
