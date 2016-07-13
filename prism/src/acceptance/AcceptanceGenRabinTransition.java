@@ -85,10 +85,11 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		/** Edge set Finite (should be visited only finitely often) 
 		 * The offset of the list is equal to the number of the source state 
 		 */
-		private @NonNull BitSet Finite;
+		@NonNull
+		BitSet Finite;
 
 		/** Edge sets Infinite (should all be visited infinitely often) */
-		private final @NonNull List<@NonNull BitSet> Infinite;
+		final @NonNull List<@NonNull BitSet> Infinite;
 
 		/** Constructor with L and K_j state sets */
 		public GenRabinPair(@NonNull BitSet Finite, @NonNull List<@NonNull BitSet> Infinite)

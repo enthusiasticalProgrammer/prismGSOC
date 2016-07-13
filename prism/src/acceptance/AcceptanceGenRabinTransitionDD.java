@@ -1,43 +1,41 @@
 package acceptance;
 
+import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
+import common.IterableBitSet;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
 
 public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 {
-	private final AcceptanceGenRabinTransition acceptanceGenRabinTransition;
 	private final JDDVars ddRowVars;
+	private final @NonNull List<@NonNull GenRabinPairTransitionDD> pairs;
 
 	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars ddRowVars)
 	{
-		this.acceptanceGenRabinTransition = acceptanceGenRabinTransition;
 		this.ddRowVars = ddRowVars;
+		this.pairs = new ArrayList<>();
+		for (AcceptanceGenRabinTransition.GenRabinPair pair : acceptanceGenRabinTransition.accList) {
+			pairs.add(new GenRabinPairTransitionDD(pair));
+		}
 	}
 
 	@Override
-	public boolean isBSCCAccepting(JDDNode bscc_states)
+	public boolean isBSCCAccepting(JDDNode bsccEdges)
 	{
-		return this.acceptanceGenRabinTransition.isBSCCAccepting(transformJDDToBitSet(bscc_states));
-	}
-
-	private BitSet transformJDDToBitSet(JDDNode bscc)
-	{
-		BitSet result = new BitSet(ddRowVars.getNumVars());
-		for (int i = 0; i < ddRowVars.getNumVars(); i++) {
-			if (JDD.GetVectorElement(bscc, ddRowVars, i) > 0.5) {
-				result.set(i);
-			}
-		}
-		return result;
+		return pairs.stream().anyMatch(pair -> pair.isBSCCAccepting(bsccEdges));
 	}
 
 	@Override
 	public String getSizeStatistics()
 	{
-		return this.acceptanceGenRabinTransition.getSizeStatistics();
+		return pairs.size() + " Generalized Rabin pairs";
 	}
 
 	@Override
@@ -49,6 +47,47 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 	@Override
 	public void clear()
 	{
-		//Nothing to do
+		pairs.forEach(p -> p.clear());
+	}
+
+
+	private JDDNode convertBitSetToJDDNode(@NonNull BitSet bitset)
+	{
+		JDDNode result = JDD.Constant(0);
+		for (int i : IterableBitSet.getSetBits(bitset)) {
+			result = JDD.SetVectorElement(result, ddRowVars, i, 1.0);
+		}
+		return result;
+	}
+
+	private class GenRabinPairTransitionDD
+	{
+		private final JDDNode finite;
+		private final @NonNull List<JDDNode> infinite;
+
+		public GenRabinPairTransitionDD(GenRabinPair pair)
+		{
+			finite = convertBitSetToJDDNode(pair.Finite);
+			infinite = new ArrayList<>();
+			for (BitSet inf : pair.Infinite) {
+				infinite.add(convertBitSetToJDDNode(inf));
+			}
+		}
+
+		private boolean isBSCCAccepting(JDDNode bsccEdges)
+		{
+			if (JDD.AreIntersecting(bsccEdges, finite)) {
+				return false;
+			}
+			return infinite.stream().allMatch(inf -> JDD.AreIntersecting(inf, bsccEdges));
+		}
+
+		private void clear()
+		{
+			if (finite != null) {
+				JDD.Deref(finite);
+			}
+			infinite.stream().filter(inf -> inf != null).forEach(JDD::Deref);
+		}
 	}
 }
