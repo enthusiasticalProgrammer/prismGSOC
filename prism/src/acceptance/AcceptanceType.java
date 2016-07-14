@@ -41,6 +41,8 @@ public enum AcceptanceType {
 	REACH("Finite", "F"),
 	/** Generalized Rabin acceptance */
 	GENERALIZED_RABIN("generalized-Rabin", "GR"),
+	/**Generalized Rabin transition based*/
+	GENERALIZED_RABIN_TRANSITION_BASED("generalized-transition-Rabin", "GTR"),
 	/** Generic acceptance, i.e., a boolean formula over Inf and Fin as in HOA format */
 	GENERIC("generic", ""); // abbreviation for generic is empty, results in DA
 

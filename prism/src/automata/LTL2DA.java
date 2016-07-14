@@ -34,14 +34,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaState;
+import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceType;
 import jhoafparser.consumer.HOAIntermediateStoreAndManipulate;
 import jhoafparser.parser.HOAFParser;
 import jhoafparser.parser.generated.ParseException;
 import jhoafparser.transformations.ToStateAcceptance;
-import jltl2ba.APSet;
 import jltl2ba.SimpleLTL;
 import jltl2dstar.LTL2Rabin;
 import parser.Values;
@@ -50,13 +55,11 @@ import prism.PrismComponent;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 import prism.PrismSettings;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceRabin;
-import acceptance.AcceptanceType;
 
 /**
  * Infrastructure for constructing deterministic automata for LTL formulas.
  */
+//TODO Christopher: expand this class for coping with rabinizer
 public class LTL2DA extends PrismComponent
 {
 
@@ -100,7 +103,13 @@ public class LTL2DA extends PrismComponent
 		if (!useExternal) {
 			try {
 				// checking the library first
-				result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
+				if (useRabinizer() /*&& Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)*/) {
+					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+					result.printHOA(System.out);
+				} else {
+					result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
+				}
+
 				if (result != null) {
 					getLog().println("Taking " + result.getAutomataType() + " from library...");
 				}
@@ -281,10 +290,10 @@ public class LTL2DA extends PrismComponent
 		AcceptanceOmega acceptance = result.getAcceptance();
 		if (AcceptanceType.contains(allowedAcceptance, acceptance.getType())) {
 			return result;
-		} else if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC)) {
+		} else if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC) && (acceptance instanceof AcceptanceOmegaState)) {
 			// The specific acceptance type is not allowed, but GENERIC is allowed
 			//   -> transform to generic acceptance and switch acceptance condition
-			DA.switchAcceptance(result, acceptance.toAcceptanceGeneric());
+			DA.switchAcceptance(result, ((AcceptanceOmegaState) acceptance).toAcceptanceGeneric());
 			return result;
 		} else {
 			throw new PrismException("The external LTL->DA tool returned an automaton with " + acceptance.getType()
@@ -297,6 +306,16 @@ public class LTL2DA extends PrismComponent
 	{
 		String ltl2da_tool = getSettings().getString(PrismSettings.PRISM_LTL2DA_TOOL);
 		if (ltl2da_tool != null && !ltl2da_tool.isEmpty()) {
+			return !useRabinizer();
+		}
+		return false;
+	}
+
+	private boolean useRabinizer()
+	{
+
+		String ltl2da_tool = getSettings().getString(PrismSettings.PRISM_LTL2DA_TOOL);
+		if (ltl2da_tool != null && !ltl2da_tool.isEmpty() && ltl2da_tool.equals("rabinizer")) {
 			return true;
 		}
 		return false;
@@ -305,9 +324,9 @@ public class LTL2DA extends PrismComponent
 	/** Check the atomic propositions of the (externally generated) automaton */
 	private void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
-		APSet ltlAPs = ltl.getAPs();
+		Collection<String> ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {
-			if (!ltlAPs.hasAP(ap)) {
+			if (!ltlAPs.contains(ap)) {
 				throw new PrismException("Generated automaton has extra atomic proposition \"" + ap + "\"");
 			}
 		}
