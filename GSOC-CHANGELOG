@@ -30,7 +30,7 @@ Features:
 -Rabinizer-integration:
 	-splitted AcceptanceOmega-interface
 	-converted Rabinizer to PRISM (in the sense of rabinizer.automaton -> prism.automaton)
-
+	- rabinizer used if '-ltl2datool rabinizer' is set (Nota Bene: this does not work if you call xprism)
 
 
 
