@@ -31,7 +31,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Vector;
 
+import automata.DA;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
@@ -113,6 +115,24 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 			result.put(getAutomatonState(productState), oldResult);
 		}
 
+		return result;
+	}
+
+	/**
+	 * This method checks, which DA-edges are used in the Product. The state -> edge-label relation is unique.
+	 * This method is only useful for edge-based acceptance.
+	 */
+	public Map<Integer, BitSet> computeUsedDAEdgesFromState(Vector<BitSet> label, DA<BitSet, ?> da)
+	{
+		Map<Integer, BitSet> result = new HashMap<>();
+		for (int productState = 0; productState < productModel.getNumStates(); productState++) {
+			int modelState = getModelState(productState);
+			BitSet edge = new BitSet();
+			for (int k = 0; k < da.getAPList().size(); k++) {
+				edge.set(k, label.get(Integer.parseInt(da.getAPList().get(k).substring(1))).get(modelState));
+			}
+			result.put(productState, edge);
+		}
 		return result;
 	}
 

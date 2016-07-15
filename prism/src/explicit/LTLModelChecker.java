@@ -44,6 +44,7 @@ import acceptance.AcceptanceBuchi;
 import acceptance.AcceptanceGenRabin;
 import acceptance.AcceptanceGenRabinTransition;
 import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaTransition;
 import acceptance.AcceptanceRabin;
 import acceptance.AcceptanceStreett;
 import acceptance.AcceptanceType;
@@ -585,6 +586,9 @@ public class LTLModelChecker extends PrismComponent
 
 		// generate acceptance for the product model by lifting
 		product.getAcceptance().lift(product.liftFromAutomaton());
+		if (product.getAcceptance() instanceof AcceptanceOmegaTransition) {
+			((AcceptanceGenRabinTransition) product.getAcceptance()).removeUnneccessaryProductEdges(product.computeUsedDAEdgesFromState(labelBS, da));
+		}
 
 		// lift the labels
 		for (String label : model.getLabels()) {
