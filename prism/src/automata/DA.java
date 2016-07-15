@@ -269,7 +269,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			throw new PrismException("No start state in DA!");
 		}
 
-		out.println("DA v2 explicit");
+		out.println("DRA v2 explicit");
 		out.println("States: " + dra.size());
 		out.println("Acceptance-Pairs: " + acceptance.size());
 		out.println("Start: " + dra.getStartState());
