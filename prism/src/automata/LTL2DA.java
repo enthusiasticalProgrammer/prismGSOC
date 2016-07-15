@@ -136,8 +136,8 @@ public class LTL2DA extends PrismComponent
 					if (useRabinizer() /*&& Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)*/) {
 						result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 					} else {
-						result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
 					}
+					result = LTL2Rabin.ltl2da(ltl.convertForJltl2ba(), allowedAcceptance);
 				}
 			} else {
 				throw new PrismNotSupportedException("Could not convert LTL formula to deterministic automaton, formula had time-bounds");
