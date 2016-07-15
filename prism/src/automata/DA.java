@@ -160,7 +160,6 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 */
 	public void addEdge(int src, Symbol label, int dest)
 	{
-		System.out.println("added edge, src: " + src + " label: " + label + " dest:" + dest);
 		if (label == null) {
 			throw new NullPointerException();
 		}
