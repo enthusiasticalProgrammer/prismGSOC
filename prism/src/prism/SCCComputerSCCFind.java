@@ -207,9 +207,10 @@ public class SCCComputerSCCFind extends SCCComputer
 		}
 	}
 
-	// Compute a forward set and skeleton of node
-	// Derefs: nothing
-	// Refs: SkelForwardResult contents
+	/**Compute a forward set and skeleton of node
+	 * Derefs: nothing
+	 * Refs: SkelForwardResult contents
+	 */
 	private SkelForwardResult skelForward(JDDNode nodes, JDDNode edges, JDDNode node)
 	{
 
@@ -260,11 +261,6 @@ public class SCCComputerSCCFind extends SCCComputer
 			JDD.Deref(spineSetNode);
 			return;
 		}
-
-		/* if (prism.getVerbose()) {
-			mainLog.println("SCC-Find pass on nodes: ");
-			JDD.PrintVector(nodes, rows);
-		} */
 
 		if (spineSetPath.equals(JDD.ZERO)) {
 			JDD.Deref(spineSetNode);
