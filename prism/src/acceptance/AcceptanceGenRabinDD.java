@@ -56,10 +56,10 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 	public static class GenRabinPairDD
 	{
 		/** State set L (should be visited only finitely often) */
-		private JDDNode finite;
+		private final JDDNode finite;
 
 		/** State sets K_j (should all be visited infinitely often) */
-		private List<JDDNode> infinite;
+		private final List<JDDNode> infinite;
 
 		/**
 		 * Constructor with L and K_j state sets.

@@ -51,7 +51,6 @@ import prism.PrismPrintStreamLog;
  * Class to store a deterministic automata of some acceptance type Acceptance.
  * States are 0-indexed integers; class is parameterised by edge labels (Symbol).
  */
-//TODO everybody seems to use BitSet as Symbol, can we replace it by BitSet?
 public class DA<Symbol, Acceptance extends AcceptanceOmega>
 {
 	/** AP list */
