@@ -5,8 +5,6 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Vector;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
 import common.IterableBitSet;
 import jdd.JDD;
@@ -16,10 +14,10 @@ import jdd.JDDVars;
 public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 {
 	private final JDDVars ddRowVars;
-	private final @NonNull List<@NonNull GenRabinPairTransitionDD> pairs;
-	private final @NonNull AcceptanceGenRabinTransition accRabinTransition;
+	private final List<GenRabinPairTransitionDD> pairs;
+	private final AcceptanceGenRabinTransition accRabinTransition;
 
-	public AcceptanceGenRabinTransitionDD(@NonNull AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars ddRowVars, Vector<JDDNode> labelForAPs)
+	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars ddRowVars, Vector<JDDNode> labelForAPs)
 	{
 		this.ddRowVars = ddRowVars;
 		this.pairs = new ArrayList<>();
@@ -58,7 +56,7 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 	 * The JDD.Ref and JDD.Deref calls should cancel out in a way such that only
 	 * the final result is Ref'd and everything else stays as before. 
 	 */
-	private JDDNode convertAccSetToJDDNode(@NonNull BitSet accSet, Vector<JDDNode> labelAPs)
+	private JDDNode convertAccSetToJDDNode(BitSet accSet, Vector<JDDNode> labelAPs)
 	{
 		JDDNode result = JDD.Constant(0);
 		for (int edge : IterableBitSet.getSetBits(accSet)) {
@@ -98,7 +96,7 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 		/**finite and infinite are states (respectively state-sets) of the product automaton.
 		 * Therefore this class could be treated analogously to AcceptanceGenRabinDD after creation.*/
 		private final JDDNode finite;
-		private final @NonNull List<JDDNode> infinite;
+		private final List<JDDNode> infinite;
 
 		public GenRabinPairTransitionDD(GenRabinPair pair, Vector<JDDNode> labelForAPs)
 		{

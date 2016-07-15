@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.stream.IntStream;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -62,7 +60,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	private int amountOfStates;
 	private final int amountOfAPs;
 
-	public @NonNull final List<@NonNull AcceptanceGenRabinTransition.GenRabinPair> accList;
+	public final List<AcceptanceGenRabinTransition.GenRabinPair> accList;
 
 	public AcceptanceGenRabinTransition(DA<BitSet, ?> da)
 	{
@@ -87,14 +85,13 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		/** Edge set Finite (should be visited only finitely often) 
 		 * The offset of the list is equal to the number of the source state 
 		 */
-		@NonNull
 		BitSet Finite;
 
 		/** Edge sets Infinite (should all be visited infinitely often) */
-		final @NonNull List<@NonNull BitSet> Infinite;
+		final List<BitSet> Infinite;
 
 		/** Constructor with L and K_j state sets */
-		public GenRabinPair(@NonNull BitSet Finite, @NonNull List<@NonNull BitSet> Infinite)
+		public GenRabinPair(BitSet Finite, List<BitSet> Infinite)
 		{
 			this.Finite = Finite;
 			this.Infinite = Infinite;
@@ -124,8 +121,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		@Override
 		public GenRabinPair clone()
 		{
-			@NonNull
-			List<@NonNull BitSet> newInfList = new ArrayList<>();
+			List<BitSet> newInfList = new ArrayList<>();
 			for (BitSet inf : Infinite) {
 				BitSet newInf = (BitSet) inf.clone();
 				if (newInf != null) {
@@ -157,7 +153,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			Infinite.replaceAll(inf -> transformSingleBitSet(inf, lifter));
 		}
 
-		private @NonNull BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
+		private BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
 		{
 			BitSet newBs = new BitSet(amountOfStates * (1 << amountOfAPs));
 			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> lifter.get(i)).reduce(new HashSet<>(), (a, b) -> {
@@ -347,7 +343,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	}
 
 	@Override
-	public @NonNull AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
 	{
 		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, labelAPs);
 	}

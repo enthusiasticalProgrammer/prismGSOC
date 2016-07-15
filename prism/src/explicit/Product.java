@@ -32,8 +32,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
@@ -52,8 +50,8 @@ import prism.PrismNotSupportedException;
  */
 public abstract class Product<M extends Model> implements ModelTransformation<M, M>
 {
-	protected final @NonNull M originalModel;
-	protected final @NonNull M productModel;
+	protected final M originalModel;
+	protected final M productModel;
 
 	/**
 	 * For the given productState index, return the corresponding
@@ -72,7 +70,7 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 	 * @param productModel the product model
 	 * @param originalModel the original model
 	 */
-	public Product(@NonNull M productModel, @NonNull M originalModel)
+	public Product(M productModel, M originalModel)
 	{
 		this.originalModel = originalModel;
 		this.productModel = productModel;

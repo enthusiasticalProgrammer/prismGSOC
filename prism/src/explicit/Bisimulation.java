@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.State;
 import prism.PrismComponent;
 import prism.PrismException;
@@ -64,7 +62,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	public @NonNull Model minimise(Model model, List<String> propNames, List<BitSet> propBSs) throws PrismException
+	public Model minimise(Model model, List<String> propNames, List<BitSet> propBSs) throws PrismException
 	{
 		switch (model.getModelType()) {
 		case DTMC:
@@ -82,7 +80,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	private @NonNull DTMC minimiseDTMC(DTMC dtmc, List<String> propNames, List<BitSet> propBSs)
+	private DTMC minimiseDTMC(DTMC dtmc, List<String> propNames, List<BitSet> propBSs)
 	{
 		// Create initial partition based on propositions
 		initialisePartitionInfo(dtmc, propBSs);
@@ -113,7 +111,7 @@ public class Bisimulation extends PrismComponent
 	 * @param propNames Names of the propositions in {@code propBSs}
 	 * @param propBSs Propositions (satisfying sets of states) to be preserved by bisimulation.
 	 */
-	private @NonNull CTMC minimiseCTMC(CTMC ctmc, List<String> propNames, List<BitSet> propBSs)
+	private CTMC minimiseCTMC(CTMC ctmc, List<String> propNames, List<BitSet> propBSs)
 	{
 		// Create initial partition based on propositions
 		initialisePartitionInfo(ctmc, propBSs);

@@ -33,8 +33,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.State;
 import parser.Values;
 import parser.ast.Expression;
@@ -131,7 +129,7 @@ public class ConstructRewards
 	 * @param rewStr The reward structure
 	 * @param constantValues Values for any undefined constants needed
 	 */
-	public @NonNull MDPReward buildMDPRewardStructure(MDP mdp, RewardStruct rewStr, Values constantValues) throws PrismException
+	public MDPReward buildMDPRewardStructure(MDP mdp, RewardStruct rewStr, Values constantValues) throws PrismException
 	{
 		List<State> statesList;
 		Expression guard;

@@ -33,8 +33,6 @@ import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -126,7 +124,7 @@ public class ConstructModel extends PrismComponent
 	 * Construct an explicit-state model and return it.
 	 * @param modelGen The ModelGenerator interface providing the model 
 	 */
-	public @NonNull Model constructModel(ModelGenerator modelGen) throws PrismException
+	public Model constructModel(ModelGenerator modelGen) throws PrismException
 	{
 		return constructModel(modelGen, false);
 	}
@@ -138,7 +136,7 @@ public class ConstructModel extends PrismComponent
 	 * @param modelGen The ModelGenerator interface providing the model 
 	 * @param justReach If true, just build the reachable state set, not the model
 	 */
-	public @NonNull Model constructModel(ModelGenerator modelGen, boolean justReach) throws PrismException
+	public Model constructModel(ModelGenerator modelGen, boolean justReach) throws PrismException
 	{
 		// Model info
 		ModelType modelType;

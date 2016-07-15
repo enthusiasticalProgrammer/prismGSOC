@@ -37,9 +37,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaTransition;
 import acceptance.AcceptanceRabin;
@@ -71,10 +68,10 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	/** Public class to represent DA edge */
 	public class Edge
 	{
-		public @NonNull Symbol label;
+		public Symbol label;
 		public int dest;
 
-		public Edge(@NonNull Symbol label, int dest)
+		public Edge(Symbol label, int dest)
 		{
 			this.label = label;
 			this.dest = dest;
@@ -161,7 +158,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	/**
 	 * Add an edge
 	 */
-	public void addEdge(int src, @Nullable Symbol label, int dest)
+	public void addEdge(int src, Symbol label, int dest)
 	{
 		System.out.println("added edge, src: " + src + " label: " + label + " dest:" + dest);
 		if (label == null) {

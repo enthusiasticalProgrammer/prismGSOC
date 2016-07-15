@@ -32,8 +32,6 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.ast.Coalition;
 import parser.ast.Expression;
 import parser.ast.ExpressionProb;
@@ -489,7 +487,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	// Model checking functions
 
 	@Override
-	public StateValues checkExpression(@NonNull Model model, Expression expr, BitSet statesOfInterest) throws PrismException
+	public StateValues checkExpression(Model model, Expression expr, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues res;
 
@@ -525,7 +523,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	 * Model check a <<>> or [[]] operator expression and return the values for the statesOfInterest.
 	 * * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkExpressionStrategy(@NonNull Model model, ExpressionStrategy expr, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkExpressionStrategy(Model model, ExpressionStrategy expr, BitSet statesOfInterest) throws PrismException
 	{
 		// Only support <<>>/[[]] for MDPs right now
 		if (!(this instanceof MDPModelChecker))
@@ -617,7 +615,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	 * Compute probabilities for the contents of a P operator.
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
-	protected StateValues checkProbPathFormula(@NonNull Model model, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
+	protected StateValues checkProbPathFormula(Model model, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Test whether this is a simple path formula (i.e. PCTL)
 		// and whether we want to use the corresponding algorithms
@@ -640,7 +638,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a simple, non-LTL path operator.
 	 */
-	protected StateValues checkProbPathFormulaSimple(@NonNull Model model, Expression expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr, MinMax minMax) throws PrismException
 	{
 		boolean negated = false;
 		StateValues probs = null;
@@ -686,7 +684,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a next operator.
 	 */
-	protected StateValues checkProbNext(@NonNull Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// Model check the operand for all states
 		BitSet target = checkExpression(model, expr.getOperand2(), null).getBitSet();
@@ -716,7 +714,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a bounded until operator.
 	 */
-	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// This method just handles discrete time
 		// Continuous-time model checkers will override this method
@@ -820,7 +818,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for an (unbounded) until operator.
 	 */
-	protected StateValues checkProbUntil(@NonNull Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		// Model check operands for all states
 		BitSet remain = checkExpression(model, expr.getOperand1(), null).getBitSet();
@@ -927,8 +925,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for the contents of an R operator.
 	 */
-	protected StateValues checkRewardFormula(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkRewardFormula(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		StateValues rewards = null;
 
@@ -1066,7 +1063,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for a path formula in a reward operator.
 	 */
-	protected StateValues checkRewardPathFormula(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
+	protected StateValues checkRewardPathFormula(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
 			throws PrismException
 	{
 		if (Expression.isReach(expr)) {
@@ -1080,7 +1077,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for a reachability reward operator.
 	 */
-	protected StateValues checkRewardReach(@NonNull Model model, Rewards modelRewards, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest)
+	protected StateValues checkRewardReach(Model model, Rewards modelRewards, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest)
 			throws PrismException
 	{
 		// No time bounds allowed
@@ -1117,8 +1114,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// To be overridden by subclasses
 		throw new PrismException("Computation not implemented yet");
@@ -1151,7 +1147,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute steady-state probabilities for an S operator.
 	 */
-	protected StateValues checkSteadyStateFormula(@NonNull Model model, Expression expr, MinMax minMax) throws PrismException
+	protected StateValues checkSteadyStateFormula(Model model, Expression expr, MinMax minMax) throws PrismException
 	{
 		// Model check operand for all states
 		BitSet b = checkExpression(model, expr, null).getBitSet();
@@ -1216,7 +1212,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	 * they belong in here (since this is the super-class) 
 	 */
 
-	protected StateValues checkExpressionMultiObjective(@NonNull Model model, ExpressionFunc expr) throws PrismException
+	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
 	{
 
 		// Make sure we are only expected to compute a value for a single state
@@ -1301,14 +1297,11 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		return sv;
 	}
 
-	public MultiLongRun<? extends NondetModel> createMultiLongRun(@NonNull Model model, ExpressionFunc expr) throws PrismException
+	public MultiLongRun<? extends NondetModel> createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
 	{
-		@NonNull
-		Collection<@NonNull MDPConstraint> constraints = new ArrayList<>();
-		@NonNull
-		Collection<@NonNull MDPObjective> objectives = new ArrayList<>();
-		@NonNull
-		Collection<@NonNull MDPExpectationConstraint> expConstraints = new ArrayList<>();
+		Collection<MDPConstraint> constraints = new ArrayList<>();
+		Collection<MDPObjective> objectives = new ArrayList<>();
+		Collection<MDPExpectationConstraint> expConstraints = new ArrayList<>();
 
 		//extract data
 		for (int i = 0; i < expr.getNumOperands(); i++) {
@@ -1406,9 +1399,8 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
 	}
 
-	protected abstract MultiLongRun<?> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
-			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method) throws PrismException;
+	protected abstract MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException;
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException
 	{

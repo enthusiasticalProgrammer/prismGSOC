@@ -40,8 +40,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import acceptance.AcceptanceBuchi;
 import acceptance.AcceptanceGenRabin;
 import acceptance.AcceptanceGenRabinTransition;
@@ -82,7 +80,7 @@ public class LTLModelChecker extends PrismComponent
 		private int invMap[];
 		private AcceptanceOmega acceptance;
 
-		public LTLProduct(@NonNull M productModel, @NonNull M originalModel, AcceptanceOmega acceptance, int daSize, int[] invMap)
+		public LTLProduct(M productModel, M originalModel, AcceptanceOmega acceptance, int daSize, int[] invMap)
 		{
 			super(productModel, originalModel);
 			this.daSize = daSize;
@@ -151,7 +149,7 @@ public class LTLModelChecker extends PrismComponent
 	 * actual true/false, and duplicate results (or their negations) reuse the same label. BitSets giving the states which
 	 * satisfy each label are put into the vector labelBS, which should be empty when this function is called.
 	 */
-	public Expression checkMaximalStateFormulas(StateModelChecker mc, @NonNull Model model, Expression expr, Vector<BitSet> labelBS) throws PrismException
+	public Expression checkMaximalStateFormulas(StateModelChecker mc, Model model, Expression expr, Vector<BitSet> labelBS) throws PrismException
 	{
 		// A state formula
 		if (expr.getType() instanceof TypeBool) {
@@ -221,7 +219,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the DA
 	 */
-	public DA<BitSet, ? extends AcceptanceOmega> constructDAForLTLFormula(ProbModelChecker mc, @NonNull Model model, Expression expr, Vector<BitSet> labelBS,
+	public DA<BitSet, ? extends AcceptanceOmega> constructDAForLTLFormula(ProbModelChecker mc, Model model, Expression expr, Vector<BitSet> labelBS,
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		Expression ltl;
@@ -272,8 +270,8 @@ public class LTLModelChecker extends PrismComponent
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the product with the DA
 	 */
-	public LTLProduct<DTMC> constructProductMC(ProbModelChecker mc, @NonNull DTMC model, Expression expr, BitSet statesOfInterest,
-			AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<DTMC> constructProductMC(ProbModelChecker mc, DTMC model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance)
+			throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<>();
@@ -300,8 +298,8 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public LTLProduct<MDP> constructProductMDP(ProbModelChecker mc, @NonNull MDP model, Expression expr, BitSet statesOfInterest,
-			AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<MDP> constructProductMDP(ProbModelChecker mc, MDP model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance)
+			throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<>();
@@ -328,8 +326,8 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public LTLProduct<STPG> constructProductSTPG(ProbModelChecker mc, @NonNull STPG model, Expression expr, BitSet statesOfInterest,
-			AcceptanceType... allowedAcceptance) throws PrismException
+	public LTLProduct<STPG> constructProductSTPG(ProbModelChecker mc, STPG model, Expression expr, BitSet statesOfInterest, AcceptanceType... allowedAcceptance)
+			throws PrismException
 	{
 		// Convert LTL formula to automaton
 		Vector<BitSet> labelBS = new Vector<>();
@@ -356,7 +354,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @return the product with the DA
 	 * @throws PrismException
 	 */
-	public <M extends Model> LTLProduct<M> constructProductModel(ProbModelChecker mc, @NonNull M model, Expression expr, BitSet statesOfInterest,
+	public <M extends Model> LTLProduct<M> constructProductModel(ProbModelChecker mc, M model, Expression expr, BitSet statesOfInterest,
 			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		// Convert LTL formula to automaton

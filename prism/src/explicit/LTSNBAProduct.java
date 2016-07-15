@@ -33,8 +33,6 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import prism.PrismLog;
 import common.IterableBitSet;
 import common.IterableStateSet;
@@ -119,7 +117,7 @@ public class LTSNBAProduct extends Product<Model>
 	private BitSet acceptingStates;
 
 	/** Constructor for storing the product */
-	private LTSNBAProduct(@NonNull LTS productModel, @NonNull Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
+	private LTSNBAProduct(LTS productModel, Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
 	{
 		super(productModel, originalModel);
 		this.productStates = productStates;

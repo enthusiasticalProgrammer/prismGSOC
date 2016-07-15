@@ -27,16 +27,18 @@
 package explicit;
 
 import java.io.File;
-import java.util.*;
-
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.BitSet;
+import java.util.Map;
 
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.StateRewardsArray;
-import parser.ast.*;
-import parser.type.*;
-import prism.*;
+import parser.ast.Expression;
+import parser.ast.ExpressionTemporal;
+import parser.type.TypeDouble;
+import prism.PrismComponent;
+import prism.PrismException;
+import prism.PrismNotSupportedException;
 
 /**
  * Explicit-state model checker for continuous-time Markov chains (CTMCs).
@@ -131,7 +133,7 @@ public class CTMCModelChecker extends DTMCModelChecker
 	 * Model check a time-bounded until operator; return vector of probabilities for all states.
 	 */
 	@Override
-	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;

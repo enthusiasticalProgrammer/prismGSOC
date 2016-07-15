@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -142,7 +140,7 @@ public class SimulatorEngine extends PrismComponent
 	protected Updater updater;
 
 	// strategy information
-	private @NonNull Map<State, Integer> stateIds;
+	private Map<State, Integer> stateIds;
 
 	// TODO: remove this (not in trunk any more)
 	private Prism prism;

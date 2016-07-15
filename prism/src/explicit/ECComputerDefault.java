@@ -35,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import prism.PrismComponent;
 import prism.PrismException;
 
@@ -51,7 +49,7 @@ public class ECComputerDefault extends ECComputer
 	private NondetModel model;
 
 	/** Computed list of MECs **/
-	private @NonNull List<@NonNull BitSet> mecs = new ArrayList<>();
+	private List<BitSet> mecs = new ArrayList<>();
 
 	/**
 	 * Build (M)EC computer for a given model.
@@ -83,7 +81,7 @@ public class ECComputerDefault extends ECComputer
 	}
 
 	@Override
-	public @NonNull List<@NonNull BitSet> getMECStates()
+	public List<BitSet> getMECStates()
 	{
 		return mecs;
 	}
@@ -100,7 +98,7 @@ public class ECComputerDefault extends ECComputer
 	 * @param accept BitSet for the set of accepting states
 	 * @return a list of BitSets representing the MECs
 	 */
-	private @NonNull List<@NonNull BitSet> findEndComponents(BitSet restrict, BitSet accept)
+	private List<BitSet> findEndComponents(BitSet restrict, BitSet accept)
 	{
 		// If restrict is null, look within set of all reachable states
 		if (restrict == null) {
@@ -108,8 +106,7 @@ public class ECComputerDefault extends ECComputer
 			restrict.set(0, model.getNumStates());
 		}
 		// Initialise L with set of all states to look in (if non-empty)
-		@NonNull
-		List<@NonNull BitSet> L = new ArrayList<>();
+		List<BitSet> L = new ArrayList<>();
 		if (restrict.isEmpty())
 			return L;
 		L.add(restrict);
@@ -119,8 +116,7 @@ public class ECComputerDefault extends ECComputer
 			changed = false;
 			BitSet E = L.remove(0);
 			SubNondetModel submodel = restrict(E);
-			@NonNull
-			List<@NonNull BitSet> sccs = translateStates(submodel, computeSCCs(submodel));
+			List<BitSet> sccs = translateStates(submodel, computeSCCs(submodel));
 			L = replaceEWithSCCs(L, E, sccs);
 			changed = canLBeChanged(L, E);
 		}
@@ -151,11 +147,10 @@ public class ECComputerDefault extends ECComputer
 		return false;
 	}
 
-	private @NonNull List<@NonNull BitSet> replaceEWithSCCs(@NonNull List<@NonNull BitSet> L, BitSet E, @NonNull List<@NonNull BitSet> sccs)
+	private List<BitSet> replaceEWithSCCs(List<BitSet> L, BitSet E, List<BitSet> sccs)
 	{
 		if (sccs.size() > 0) {
-			@NonNull
-			List<@NonNull BitSet> toAdd = new ArrayList<>();
+			List<BitSet> toAdd = new ArrayList<>();
 			for (int i = 0; i < sccs.size(); i++) {
 				if (!L.contains(sccs.get(i))) {
 					toAdd.add(sccs.get(i));
@@ -205,10 +200,9 @@ public class ECComputerDefault extends ECComputer
 		return sccc.getSCCs();
 	}
 
-	private @NonNull List<@NonNull BitSet> translateStates(SubNondetModel model, List<BitSet> sccs)
+	private List<BitSet> translateStates(SubNondetModel model, List<BitSet> sccs)
 	{
-		@NonNull
-		List<@NonNull BitSet> r = new ArrayList<>();
+		List<BitSet> r = new ArrayList<>();
 		for (int i = 0; i < sccs.size(); i++) {
 			BitSet set = sccs.get(i);
 			BitSet set2 = new BitSet();

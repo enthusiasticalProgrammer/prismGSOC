@@ -33,8 +33,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.VarList;
 import parser.ast.Declaration;
 import parser.ast.DeclarationIntUnbounded;
@@ -72,7 +70,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute probabilities for a next operator.
 	 */
-	protected StateValues checkProbNext(@NonNull Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet target = null;
 		ModelCheckerResult res = null;
@@ -87,7 +85,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute probabilities for a bounded until operator.
 	 */
-	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
 	{
 		int time;
 		BitSet b1, b2;
@@ -125,8 +123,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	@Override
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MCRewards productRewards;
@@ -195,7 +192,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute probabilities for an (unbounded) until operator.
 	 */
-	protected StateValues checkProbUntil(@NonNull Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet b1, b2;
 		StateValues probs = null;
@@ -220,7 +217,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for the contents of an R operator.
 	 */
-	protected StateValues checkRewardFormula(@NonNull Model model, MCRewards modelRewards, Expression expr) throws PrismException
+	protected StateValues checkRewardFormula(Model model, MCRewards modelRewards, Expression expr) throws PrismException
 	{
 		StateValues rewards = null;
 
@@ -250,7 +247,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	/**
 	 * Compute rewards for a reachability reward operator.
 	 */
-	protected StateValues checkRewardReach(@NonNull Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkRewardReach(Model model, MCRewards modelRewards, ExpressionTemporal expr) throws PrismException
 	{
 		BitSet b;
 		StateValues rewards = null;
@@ -1770,9 +1767,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * 
 	 */
 	@Override
-	protected MultiLongRun<ArtificialNondetModelFromModel> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
-			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method) throws PrismException
+	protected MultiLongRun<ArtificialNondetModelFromModel> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints,
+			Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);
 	}

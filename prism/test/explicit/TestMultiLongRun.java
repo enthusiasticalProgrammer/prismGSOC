@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ import simulator.ModulesFileModelGenerator;
 //TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
-	public @NonNull MDP m1;
+	public MDP m1;
 	public MDPModelChecker mdp11;
 	public MDPModelChecker mdp12;
 	public MDPModelChecker mdp13;
@@ -135,8 +134,8 @@ public class TestMultiLongRun
 	@Test
 	public void isFeasibleWithNoConstraints() throws PrismException
 	{
-		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<@NonNull MDPConstraint>(), new HashSet<@NonNull MDPObjective>(),
-				new HashSet<@NonNull MDPExpectationConstraint>(), "Linear programming");
+		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<MDPConstraint>(), new HashSet<MDPObjective>(), new HashSet<MDPExpectationConstraint>(),
+				"Linear programming");
 		mlr.createMultiLongRunLP();
 		mlr.solveDefault();
 		assertNotNull(mlr.getStrategy());

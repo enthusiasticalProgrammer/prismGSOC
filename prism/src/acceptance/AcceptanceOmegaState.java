@@ -2,8 +2,6 @@ package acceptance;
 
 import java.util.Vector;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.PrismException;
@@ -27,10 +25,10 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
 	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
 	 */
-	public @NonNull AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
 
 	@Override
-	default @NonNull AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
+	default AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
 	{
 		return toAcceptanceDD(ddRowVars);
 	}

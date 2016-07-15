@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import explicit.rewards.MCRewards;
 import parser.State;
 import parser.Values;
@@ -32,16 +30,16 @@ import strat.MultiLongRunStrategy;
  */
 public class DTMCProductMLRStrategyAndMDP implements DTMC
 {
-	private final @NonNull MDP mdp;
-	private final @NonNull MultiLongRunStrategy mlrs;
+	private final MDP mdp;
+	private final MultiLongRunStrategy mlrs;
 
-	public DTMCProductMLRStrategyAndMDP(@NonNull MDP mdp, @NonNull MultiLongRunStrategy mlrs)
+	public DTMCProductMLRStrategyAndMDP(MDP mdp, MultiLongRunStrategy mlrs)
 	{
 		this.mdp = mdp;
 		this.mlrs = mlrs;
 	}
 
-	public @NonNull MDP getMDP()
+	public MDP getMDP()
 	{
 		return mdp;
 	}

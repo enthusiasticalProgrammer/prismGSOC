@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -49,7 +47,7 @@ public class RabinizerToDA
 		return result;
 	}
 
-	private static @NonNull AcceptanceGenRabinTransition transformRabinizerToPrismAcceptance(ProductRabinizer automaton,
+	private static AcceptanceGenRabinTransition transformRabinizerToPrismAcceptance(ProductRabinizer automaton,
 			BiMap<ProductRabinizer.ProductState, Integer> stateIntMap, DA<BitSet, AcceptanceGenRabinTransition> da)
 	{
 		List<Tuple<TranSet<ProductRabinizer.ProductState>, List<TranSet<ProductRabinizer.ProductState>>>> acceptance = automaton
@@ -59,7 +57,7 @@ public class RabinizerToDA
 
 		for (Tuple<TranSet<ProductRabinizer.ProductState>, List<TranSet<ProductRabinizer.ProductState>>> genRabinPair : acceptance) {
 			BitSet Finite = transformSingleAcceptingSetFromRabinizerToPrism(genRabinPair.left, stateIntMap, result);
-			List<@NonNull BitSet> Infinite = genRabinPair.right.stream().map(set -> transformSingleAcceptingSetFromRabinizerToPrism(set, stateIntMap, result))
+			List<BitSet> Infinite = genRabinPair.right.stream().map(set -> transformSingleAcceptingSetFromRabinizerToPrism(set, stateIntMap, result))
 					.collect(Collectors.toList());
 			if (Infinite != null) {
 				result.accList.add(result.new GenRabinPair(Finite, Infinite));
@@ -70,7 +68,7 @@ public class RabinizerToDA
 		return result;
 	}
 
-	private static @NonNull BitSet transformSingleAcceptingSetFromRabinizerToPrism(TranSet<ProductRabinizer.ProductState> accSet,
+	private static BitSet transformSingleAcceptingSetFromRabinizerToPrism(TranSet<ProductRabinizer.ProductState> accSet,
 			BiMap<ProductRabinizer.ProductState, Integer> stateIntMap, AcceptanceGenRabinTransition acc)
 	{
 		BitSet result = new BitSet();
