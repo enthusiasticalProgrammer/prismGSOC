@@ -4,51 +4,53 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
+import acceptance.AcceptanceRabinDD.RabinPairDD;
 import common.IterableBitSet;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
 
-public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
+public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD implements AcceptanceOmegaDD
 {
 	private final JDDVars ddRowVars;
-	private final List<GenRabinPairTransitionDD> pairs;
 	private final AcceptanceGenRabinTransition accRabinTransition;
 
 	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars ddRowVars, Vector<JDDNode> labelForAPs)
 	{
+		super();
 		this.ddRowVars = ddRowVars;
-		this.pairs = new ArrayList<>();
 		this.accRabinTransition = acceptanceGenRabinTransition;
 		for (AcceptanceGenRabinTransition.GenRabinPair pair : acceptanceGenRabinTransition.accList) {
-			pairs.add(new GenRabinPairTransitionDD(pair, labelForAPs));
+			super.add(makeGenRabinPairTransitionDD(pair, labelForAPs));
 		}
+	}
+
+	private GenRabinPairTransitionDD makeGenRabinPairTransitionDD(GenRabinPair pair, Vector<JDDNode> labelForAPs)
+	{
+		JDDNode fin = convertAccSetToJDDNode(pair.Finite, labelForAPs);
+		List<JDDNode> inf = pair.Infinite.stream().map(set -> convertAccSetToJDDNode(set, labelForAPs)).collect(Collectors.toList());
+		return new GenRabinPairTransitionDD(fin, inf);
 	}
 
 	@Override
 	public boolean isBSCCAccepting(JDDNode bscc_states)
 	{
-		return pairs.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
+		return this.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
 	}
 
 	@Override
 	public String getSizeStatistics()
 	{
-		return pairs.size() + " Generalized Rabin pairs";
+		return this.size() + " Generalized Rabin pairs";
 	}
 
 	@Override
 	public AcceptanceType getType()
 	{
-		return AcceptanceType.GENERALIZED_RABIN;
-	}
-
-	@Override
-	public void clear()
-	{
-		pairs.forEach(p -> p.clear());
+		return AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED;
 	}
 
 	/**
@@ -79,45 +81,14 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 		return result;
 	}
 
-	//TODO: this might be thrown out
-	private BitSet transformJDDToBitSet(JDDNode bscc)
-	{
-		BitSet result = new BitSet(ddRowVars.getNumVars());
-		for (int i = 0; i < ddRowVars.getNumVars(); i++) {
-			if (JDD.GetVectorElement(bscc, ddRowVars, i) > 0.5) {
-				result.set(i);
-			}
-		}
-		return result;
-	}
-
-	private class GenRabinPairTransitionDD
+	public class GenRabinPairTransitionDD extends GenRabinPairDD
 	{
 		/**finite and infinite are states (respectively state-sets) of the product automaton.
 		 * Therefore this class could be treated analogously to AcceptanceGenRabinDD after creation.*/
-		private final JDDNode finite;
-		private final List<JDDNode> infinite;
 
-		public GenRabinPairTransitionDD(GenRabinPair pair, Vector<JDDNode> labelForAPs)
+		public GenRabinPairTransitionDD(JDDNode L, List<JDDNode> K_list)
 		{
-			finite = convertAccSetToJDDNode(pair.Finite, labelForAPs);
-			infinite = new ArrayList<>();
-			for (BitSet inf : pair.Infinite) {
-				infinite.add(convertAccSetToJDDNode(inf, labelForAPs));
-			}
-		}
-
-		public boolean isBSCCAccepting(JDDNode bscc_states)
-		{
-			return (!JDD.AreIntersecting(bscc_states, finite)) && infinite.stream().allMatch(inf -> JDD.AreIntersecting(inf, bscc_states));
-		}
-
-		private void clear()
-		{
-			if (finite != null) {
-				JDD.Deref(finite);
-			}
-			infinite.stream().filter(inf -> inf != null).forEach(JDD::Deref);
+			super(L,K_list);
 		}
 	}
 }

@@ -731,6 +731,7 @@ public class LTLModelChecker extends PrismComponent
 		case RABIN:
 			return findAcceptingECStatesForRabin((AcceptanceRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
 		case GENERALIZED_RABIN:
+		case GENERALIZED_RABIN_TRANSITION_BASED:
 			return findAcceptingECStatesForGeneralizedRabin((AcceptanceGenRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
 		default:
 			StringBuilder stringBuilder = new StringBuilder();
@@ -961,7 +962,7 @@ public class LTLModelChecker extends PrismComponent
 		for (int i = 0; i < acceptance.size(); i++) {
 
 			// Filter out L_i states from the model and find the MECs
-			JDDNode notL = JDD.Not(acceptance.get(i).getL());
+			JDDNode notL = JDD.Not(acceptance.get(i).getFinite());
 			JDD.Ref(model.getTrans01());
 			JDD.Ref(notL);
 			JDDNode candidateStates = JDD.Apply(JDD.TIMES, model.getTrans01(), notL);
