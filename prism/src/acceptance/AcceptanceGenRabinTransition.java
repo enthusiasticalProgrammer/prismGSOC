@@ -34,11 +34,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.stream.IntStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import automata.DA;
+import jdd.JDDNode;
 import jdd.JDDVars;
 
 /**
@@ -99,16 +101,20 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		}
 
 		/** Returns true if the bottom strongly connected component
-		 * given by bsccEdges is accepting for this pair.
+		 * given by bscc_states is accepting for this pair.
+		 * Nota Bene: bscc_states is a BitSet corresponding to states and our acceptance-BitSets
+		 * are BitSets over edges.
 		 */
-		public boolean isBSCCAccepting(BitSet bsccEdges)
+		public boolean isBSCCAccepting(BitSet bscc_states)
 		{
-			if (bsccEdges.intersects(Finite)) {
+			//First: check if bscc_states and Fin are intersecting:
+			if (Finite.stream().map(finEdge -> computeStartStateOfEdge(finEdge)).anyMatch(i -> bscc_states.get(i))) {
 				return false;
 			}
 
+			//Check intersection for Infinite sets
 			for (BitSet inf : Infinite) {
-				if (!bsccEdges.intersects(inf)) {
+				if (!inf.stream().map(infEdge -> computeStartStateOfEdge(infEdge)).anyMatch(i -> bscc_states.get(i))) {
 					return false;
 				}
 			}
@@ -160,6 +166,12 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			}).forEach(i -> newBs.set(i));
 			return newBs;
 		}
+
+		public void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+		{
+			Finite.stream().filter(fin -> usedEdges.get(computeStartStateOfEdge(fin)) == null || !computeBitSetOfEdge(fin).equals(usedEdges.get(fin)))
+					.forEach(fin -> Finite.clear(fin));
+		}
 	}
 
 	/** Make a copy of the acceptance condition. */
@@ -175,14 +187,14 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	}
 
 	/** Returns true if the bottom strongly connected component
-	 * given by bscc_edges is accepting for this Rabin condition,
-	 * i.e., there is a pair that accepts for bsccEdges.
-	 * Nota bene: the BitSet corresponds here to edges and not states
+	 * given by bscc_states is accepting for this Rabin condition,
+	 * i.e., there is a pair that accepts for bscc_states.
+	 * Nota bene: the BitSet corresponds here to states and our acceptance BitSets are edges.
 	 */
 	@Override
-	public boolean isBSCCAccepting(BitSet bsccEdges)
+	public boolean isBSCCAccepting(BitSet bscc_states)
 	{
-		return this.accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bsccEdges));
+		return this.accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
 	}
 
 	/**
@@ -241,10 +253,30 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	private int computeOffsetForEdgeLabel(BitSet label)
 	{
-		if (label.size() > this.amountOfAPs) {
+		if (IntStream.range(this.amountOfAPs, label.size()).anyMatch(i -> label.get(i))) {
 			throw new IllegalArgumentException("The BitSet cannot correspond to the same automaton as the acceptance set. It is too large.");
 		}
 		return IntStream.range(0, label.size()).map(i -> label.get(i) ? 1 << i : 0).sum();
+	}
+
+	int computeStartStateOfEdge(int edge)
+	{
+		return edge / (1 << amountOfAPs);
+	}
+
+	BitSet computeBitSetOfEdge(int fin)
+	{
+		int relevantSets = fin % (1 << amountOfAPs);
+		BitSet result = new BitSet();
+		int index = 0;
+		while (relevantSets != 0) {
+			if (relevantSets % 2 != 0) {
+				result.set(index);
+			}
+			index++;
+			relevantSets = relevantSets >>> 1;
+		}
+		return result;
 	}
 
 	/** Returns a textual representation of this acceptance condition. */
@@ -315,8 +347,14 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	}
 
 	@Override
-	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars)
+	public @NonNull AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
 	{
-		return new AcceptanceGenRabinTransitionDD(this, ddRowVars);
+		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, labelAPs);
+	}
+
+	@Override
+	public void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+	{
+		this.accList.forEach(pair -> pair.removeUnneccessaryProductEdges(usedEdges));
 	}
 }

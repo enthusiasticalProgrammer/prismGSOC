@@ -30,7 +30,11 @@ import java.io.PrintStream;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Vector;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import jdd.JDDNode;
 import jdd.JDDVars;
 
 /**
@@ -57,6 +61,7 @@ public interface AcceptanceOmega extends Cloneable
 
 	/** Make a copy of the acceptance condition. */
 	public AcceptanceOmega clone();
+
 	/** 
 	 * Get the acceptance signature for state {@code stateIndex}
 	 */
@@ -73,12 +78,6 @@ public interface AcceptanceOmega extends Cloneable
 	 **/
 	public void lift(Map<Integer, Collection<Integer>> lifter);
 
-	/**
-	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
-	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
-	 */
-	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
-
 	default BitSet liftBitSet(Map<Integer, Collection<Integer>> lifter, BitSet bs)
 	{
 		BitSet result = new BitSet();
@@ -87,4 +86,11 @@ public interface AcceptanceOmega extends Cloneable
 		});
 		return result;
 	}
+
+	/**
+	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
+	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
+	 */
+	public @NonNull AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs);
 }

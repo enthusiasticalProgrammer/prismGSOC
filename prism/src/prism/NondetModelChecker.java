@@ -1195,7 +1195,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Find accepting states + compute reachability probabilities
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, labelDDs);
 		JDDNode acc;
 		if (acceptance instanceof AcceptanceReachDD) {
 			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
@@ -1456,7 +1456,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
 
 		// Find accepting states + compute reachability rewards
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, labelDDs);
 		JDDNode acc = null;
 		if (acceptance instanceof AcceptanceReachDD) {
 			// For a DFA, just collect the accept states
