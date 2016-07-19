@@ -758,7 +758,7 @@ public abstract class Expression extends ASTElement
 						for (int i = 0; i < e.getNumOperands(); i++) {
 							Expression exp = e.getOperand(i);
 							if (exp instanceof ExpressionProb) {
-								if (((ExpressionProb) expr).getRelOp() != RelOp.GEQ) {
+								if (((ExpressionProb) exp).getRelOp() != RelOp.GEQ) {
 									return;
 								}
 								exp = ((ExpressionProb) exp).getExpression();
