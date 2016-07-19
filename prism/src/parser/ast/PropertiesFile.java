@@ -292,7 +292,6 @@ public class PropertiesFile extends ASTElement
 
 		// Find all instances of variables (i.e. locate idents which are variables).
 		findAllVars(modelInfo.getVarNames(), modelInfo.getVarTypes());
-		findAllVars(modulesFile.getVarNames(), modulesFile.getVarTypes());
 
 		// Find all instances of property refs
 		findAllPropRefs(null, this);
@@ -301,9 +300,6 @@ public class PropertiesFile extends ASTElement
 
 		// Various semantic checks 
 		doSemanticChecks();
-
-		// Various semantic checks 
-		semanticCheck(modulesFile, this);
 		// Type checking
 		typeCheck(this);
 

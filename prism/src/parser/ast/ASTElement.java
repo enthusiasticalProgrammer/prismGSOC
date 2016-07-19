@@ -441,14 +441,6 @@ public abstract class ASTElement
 	}
 
 	/**
-	 * Perform any required semantic checks.
-	 */
-	public void semanticCheck(ModulesFile modulesFile) throws PrismLangException
-	{
-		semanticCheck(modulesFile, null);
-	}
-
-	/**
 	 * Perform any required semantic checks. Optionally pass in parent ModulesFile
 	 * and PropertiesFile for some additional checks (or leave null);
 	 * These checks are done *before* any undefined constants have been defined.
