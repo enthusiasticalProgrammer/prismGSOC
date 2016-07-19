@@ -1793,46 +1793,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	}
 
 	/**
-	 * Load a (built) model, with an accompanying (parsed) PRISM model.
-	 * These will be stored and used for subsequent model checking etc.
-	 * Pass in nulls to clear storage of the current model.
-	 * @param modulesFile The PRISM model
-	 */
-	public void loadPRISMModelAndBuiltModel(ModulesFile modulesFile, Model model)
-	{
-		currentModelSource = ModelSource.PRISM_MODEL;
-		// Clear any existing built model(s)
-		clearBuiltModel();
-		// Store model info
-		currentModulesFile = modulesFile;
-		currentModel = model;
-		// Reset dependent info
-		currentModelType = currentModulesFile == null ? null : currentModulesFile.getModelType();
-		currentDefinedMFConstants = null;
-		currentModelExpl = null;
-	}
-
-	/**
-	 * Load a (built) model, without an accompanying (parsed) PRISM model.
-	 * The model will be stored and used for subsequent model checking etc.
-	 * Pass in null to clear storage of the current model.
-	 * @param model The built model
-	 */
-	public void loadBuiltModel(Model model)
-	{
-		currentModelSource = ModelSource.BUILT_MODEL;
-		// Clear any existing built model(s)
-		clearBuiltModel();
-		// Store model info
-		currentModulesFile = null;
-		currentModel = model;
-		// Reset dependent info
-		currentModelType = currentModel == null ? null : currentModel.getModelType();
-		currentDefinedMFConstants = null;
-		currentModelExpl = null;
-	}
-
-	/**
 	 * Load files containing an explicit list of transitions/etc. for subsequent model building.
 	 * A corresponding ModulesFile object is created and returned.
 	 * @param statesFile File containing a list of states (optional, can be null)
@@ -2109,24 +2069,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				throw new PrismException("Timelock in PTA, e.g. in state " + dls);
 			}
 		}
-
-		/*// Create new model checker object and do model checking
-		PropertiesFile pf = parsePropertiesString(currentModulesFile, "filter(exists,!\"invariants\"); E[F!\"invariants\"]");
-		if (!getExplicit()) {
-			ModelChecker mc = new NondetModelChecker(this, currentModel, pf);
-			if (((Boolean) mc.check(pf.getProperty(0)).getResult()).booleanValue()) {
-				mainLog.println(mc.check(pf.getProperty(1)).getCounterexample());
-			}
-			//sv.pr
-			//mainLog.println("XX" + res.getResult());
-		} else {
-			explicit.StateModelChecker mc = new MDPModelChecker();
-			mc.setLog(mainLog);
-			mc.setSettings(settings);
-			mc.setModulesFileAndPropertiesFile(currentModulesFile, pf);
-			explicit.StateValues sv = mc.checkExpression(currentModelExpl, pf.getProperty(0));
-			sv.print(mainLog, 1);
-		}*/
 	}
 
 	/**
@@ -3784,172 +3726,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 
 	/**
 	 * Old API:
-	 * Load a (built) model and export its transition matrix to a Spy file.
-	 * @param model The model
-	 * @param file File to export to
-	 */
-	public void exportToSpyFile(Model model, File file) throws PrismException
-	{
-		loadBuiltModel(model);
-		exportToSpyFile(file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export the MTBDD for its transition matrix to a Dot file.
-	 * @param model The model
-	 * @param file File to export to
-	 */
-	public void exportToDotFile(Model model, File file) throws PrismException
-	{
-		loadBuiltModel(model);
-		exportToDotFile(file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its transition matrix to a file
-	 * @param model The model
-	 * @param ordered Ensure that (source) states are in ascending order?
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * <li> {@link #EXPORT_DOT}
-	 * <li> {@link #EXPORT_MRMC}
-	 * <li> {@link #EXPORT_ROWS}
-	 * <li> {@link #EXPORT_DOT_STATES}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
-	{
-		exportTransToFile(model, ordered, exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its transition matrix to a file (or to the log)
-	 * @param model The model
-	 * @param ordered Ensure that (source) states are in ascending order?
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * <li> {@link #EXPORT_DOT}
-	 * <li> {@link #EXPORT_MRMC}
-	 * <li> {@link #EXPORT_ROWS}
-	 * <li> {@link #EXPORT_DOT_STATES}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
-	{
-		loadBuiltModel(model);
-		exportTransToFile(ordered, exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its state rewards to a file
-	 * @param model The model
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * <li> {@link #EXPORT_MRMC}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportStateRewardsToFile(Model model, int exportType, File file) throws FileNotFoundException, PrismException
-	{
-		loadBuiltModel(model);
-		exportStateRewardsToFile(exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its transition rewards to a file
-	 * @param model The model
-	 * @param ordered Ensure that (source) states are in ascending order?
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * <li> {@link #EXPORT_MRMC}
-	 * <li> {@link #EXPORT_ROWS}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportTransRewardsToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
-	{
-		loadBuiltModel(model);
-		exportTransRewardsToFile(ordered, exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its bottom strongly connected components (BSCCs) to a file
-	 * @param model The model
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportBSCCsToFile(Model model, int exportType, File file) throws PrismException
-	{
-		loadBuiltModel(model);
-		exportBSCCsToFile(exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export the states satisfying labels from it and a properties file to a file
-	 * The PropertiesFile should correspond to the model. 
-	 * @param model The model
-	 * @param modulesFile The corresponding (parsed) PRISM model (for the labels)
-	 * @param propertiesFile The properties file (for further labels)
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportLabelsToFile(Model model, ModulesFile modulesFile, PropertiesFile propertiesFile, int exportType, File file)
-			throws FileNotFoundException, PrismException
-	{
-		loadPRISMModelAndBuiltModel(modulesFile, model);
-		exportLabelsToFile(propertiesFile, exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model and export its states to a file
-	 * @param model The model
-	 * @param exportType Type of export; one of: <ul>
-	 * <li> {@link #EXPORT_PLAIN} 
-	 * <li> {@link #EXPORT_MATLAB}
-	 * </ul>
-	 * @param file File to export to (if null, print to the log instead)
-	 */
-	public void exportStatesToFile(Model model, int exportType, File file) throws FileNotFoundException, PrismException
-	{
-		loadBuiltModel(model);
-		exportStateRewardsToFile(exportType, file);
-	}
-
-	/**
-	 * Old API:
-	 * Load a (built) model, perform model checking of a property on it and return result.
-	 * @param model The model to check
-	 * @param propertiesFile Parent property file of property (for labels/constants/...)
-	 * @param expr The property to check
-	 */
-	public Result modelCheck(Model model, PropertiesFile propertiesFile, Expression expr) throws PrismException, PrismLangException
-	{
-		loadBuiltModel(model);
-		return modelCheck(propertiesFile, expr);
-	}
-
-	/**
-	 * Old API:
 	 * Load a PRISM PTA model, perform model checking of a property on it and return result.
 	 * @param modulesFile The corresponding (parsed) PRISM model (for the labels)
 	 * @param propertiesFile Parent property file of property (for labels/constants/...)
@@ -3969,16 +3745,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	{
 		loadPRISMModel(modulesFile);
 		return modelCheckSimulator(propertiesFile, expr, null, initialState, maxPathLength, simMethod);
-	}
-
-	/**
-	 * Old API:
-	 */
-	public Result[] modelCheckSimulatorSimultaneously(ModulesFile modulesFile, PropertiesFile propertiesFile, List<Expression> exprs, State initialState,
-			long maxPathLength, SimulationMethod simMethod) throws PrismException
-	{
-		loadPRISMModel(modulesFile);
-		return modelCheckSimulatorSimultaneously(propertiesFile, exprs, null, initialState, maxPathLength, simMethod);
 	}
 }
 
