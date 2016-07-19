@@ -743,8 +743,10 @@ public abstract class Expression extends ASTElement
 
 	/**
 	 * Test if an expression contains a multi(...) property within 
+	 * TODO this is an irksome hack (what happens e.g. when expr.accept(astt) throws another PrismLangException?)
+	 *  		This is basically a rebuild of ProbModelChecker::createMultiLongRun (for the types)
 	 */
-	public static boolean containsMultiObjective(Expression expr)
+	public static boolean containsMultiObjectiveRequiringExplicitEngine(Expression expr)
 	{
 		try {
 			ASTTraverse astt = new ASTTraverse()
@@ -752,8 +754,16 @@ public abstract class Expression extends ASTElement
 				@Override
 				public void visitPost(ExpressionFunc e) throws PrismLangException
 				{
-					if (e.getNameCode() == ExpressionFunc.MULTI)
-						throw new PrismLangException("Found one", e);
+					if (e.getNameCode() == ExpressionFunc.MULTI){
+						for(int i=0;i<e.getNumOperands();i++){
+							Expression exp=e.getOperand(i);
+							if (!(exp instanceof ExpressionReward) && !(exp instanceof ExpressionProb && ((ExpressionProb) exp).getRelOp() == RelOp.GEQ
+									&& ((ExpressionProb) exp).getExpression() instanceof ExpressionReward)) {
+								return;
+							}
+						}
+					}
+					throw new PrismLangException("found a multi-objective");
 				}
 			};
 			expr.accept(astt);

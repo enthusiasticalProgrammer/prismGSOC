@@ -2846,14 +2846,14 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			return fauMC.check(prop.getExpression());
 		}
 		// Auto-switch engine if required
-		else if (currentModelType == ModelType.MDP && !Expression.containsMultiObjective(prop.getExpression())) {
+		else if (currentModelType == ModelType.MDP && !Expression.containsMultiObjectiveRequiringExplicitEngine(prop.getExpression())) {
 			if (getMDPSolnMethod() != Prism.MDP_VALITER && !getExplicit()) {
 				mainLog.printWarning("Switching to explicit engine to allow use of chosen MDP solution method.");
 				engineSwitch = true;
 				lastEngine = getEngine();
 				setEngine(Prism.EXPLICIT);
 			}
-		} else if (currentModelType == ModelType.MDP && Expression.containsMultiObjective(prop.getExpression())) {
+		} else if (currentModelType == ModelType.MDP && Expression.containsMultiObjectiveRequiringExplicitEngine(prop.getExpression())) {
 			if (settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_LP
 					&& settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
 				mainLog.printWarning("Switching to linear programming method to allow verification of the formula.");
