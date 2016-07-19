@@ -582,9 +582,9 @@ public class LTLModelChecker extends PrismComponent
 		}
 
 		@SuppressWarnings("unchecked")
-		LTLProduct<M> product = new LTLProduct<>((M) prodModel, model, null, daSize, invMap);
+		LTLProduct<M> product = new LTLProduct<>((M) prodModel, model, da.getAcceptance(), daSize, invMap);
 
-		// generate acceptance for the product model by lifting
+		// adjust acceptance for the product model by lifting
 		product.getAcceptance().lift(product.liftFromAutomaton());
 		if (product.getAcceptance() instanceof AcceptanceOmegaTransition) {
 			((AcceptanceGenRabinTransition) product.getAcceptance()).removeUnneccessaryProductEdges(product.computeUsedDAEdgesFromState(labelBS, da));
