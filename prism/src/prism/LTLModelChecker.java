@@ -167,7 +167,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param mc a ModelChecker, used for checking maximal state formulas
 	 * @param model the model
 	 * @param expr a path expression, i.e. the LTL formula
-	 * @param labelBS empty vector to be filled with JDDNodes for subformulas 
+	 * @param labelDDs empty vector to be filled with JDDNodes for subformulas 
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the DA
 	 */
