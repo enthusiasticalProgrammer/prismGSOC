@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import automata.DA;
@@ -156,7 +157,11 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		private BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
 		{
 			BitSet newBs = new BitSet(amountOfStates * (1 << amountOfAPs));
-			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> lifter.get(i)).reduce(new HashSet<>(), (a, b) -> {
+			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> {
+				int start=computeStartStateOfEdge(i);
+				BitSet label = computeBitSetOfEdge(i);
+				return lifter.get(start).stream().map(x-> computeOffsetForEdge(x,label)).collect(Collectors.toSet());
+			}).reduce(new HashSet<>(), (a,b)->{
 				a.addAll(b);
 				return a;
 			}).forEach(i -> newBs.set(i));
