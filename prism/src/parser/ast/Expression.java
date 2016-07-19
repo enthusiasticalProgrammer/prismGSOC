@@ -754,16 +754,32 @@ public abstract class Expression extends ASTElement
 				@Override
 				public void visitPost(ExpressionFunc e) throws PrismLangException
 				{
-					if (e.getNameCode() == ExpressionFunc.MULTI){
-						for(int i=0;i<e.getNumOperands();i++){
-							Expression exp=e.getOperand(i);
-							if (!(exp instanceof ExpressionReward) && !(exp instanceof ExpressionProb && ((ExpressionProb) exp).getRelOp() == RelOp.GEQ
-									&& ((ExpressionProb) exp).getExpression() instanceof ExpressionReward)) {
-								return;
+					if (e.getNameCode() == ExpressionFunc.MULTI) {
+						for (int i = 0; i < e.getNumOperands(); i++) {
+							Expression exp = e.getOperand(i);
+							if (exp instanceof ExpressionProb) {
+								if (((ExpressionProb) expr).getRelOp() != RelOp.GEQ) {
+									return;
+								}
+								exp = ((ExpressionProb) exp).getExpression();
 							}
+
+							if (exp instanceof ExpressionReward) {
+								ExpressionReward reward = (ExpressionReward) exp;
+								if (!(reward.getExpression() instanceof ExpressionTemporal)) {
+									return;
+								} else {
+									ExpressionTemporal temporal = (ExpressionTemporal) reward.getExpression();
+									if (temporal.getOperator() == ExpressionTemporal.R_S) {
+										continue;
+									}
+									return;
+								}
+							}
+							return;
 						}
+						throw new PrismLangException("found a multi-objective");
 					}
-					throw new PrismLangException("found a multi-objective");
 				}
 			};
 			expr.accept(astt);
