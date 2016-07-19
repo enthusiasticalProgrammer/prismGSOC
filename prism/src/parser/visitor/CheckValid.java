@@ -55,12 +55,6 @@ public class CheckValid extends ASTTraverse
 		}
 		// PTA only support upper time bounds
 		if (e.getLowerBound() != null) {
-			if (modelType == ModelType.DTMC) {
-				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol() + " operator for DTMCs");
-			}
-			if (modelType == ModelType.MDP) {
-				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol() + " operator for MDPs");
-			}
 			if (modelType == ModelType.PTA) {
 				throw new PrismLangException("Only upper time bounds are allowed on the " + e.getOperatorSymbol() + " operator for PTAs");
 			}
