@@ -901,7 +901,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
 		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
-		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
+		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, false, allowedAcceptance);
 		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for deterministic automaton translation: " + l / 1000.0 + " seconds.");

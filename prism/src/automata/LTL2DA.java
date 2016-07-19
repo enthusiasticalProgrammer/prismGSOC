@@ -75,7 +75,7 @@ public class LTL2DA extends PrismComponent
 	 */
 	public DA<BitSet, AcceptanceRabin> convertLTLFormulaToDRA(Expression ltl, Values constantValues) throws PrismException
 	{
-		return (DA<BitSet, AcceptanceRabin>) convertLTLFormulaToDA(ltl, constantValues, AcceptanceType.RABIN);
+		return (DA<BitSet, AcceptanceRabin>) convertLTLFormulaToDA(ltl, constantValues, true, AcceptanceType.RABIN);
 	}
 
 	/**
@@ -84,10 +84,12 @@ public class LTL2DA extends PrismComponent
 	 * in which atomic propositions are represented by ExpressionLabel objects.
 	 * @param ltl the formula
 	 * @param constants the values of constants, may be {@code null}
+	 * @param hasToBeComplete communicates, whether the resulting DA has to be complete.
+	 *                 This is only important for Rabinizer, where it is not complete by default.
 	 * @param allowedAcceptance the AcceptanceTypes that are allowed to be returned
 	 */
-	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDA(Expression ltl, Values constants, AcceptanceType... allowedAcceptance)
-			throws PrismException
+	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDA(Expression ltl, Values constants, boolean hasToBeComplete,
+			AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		DA<BitSet, ? extends AcceptanceOmega> result = null;
 
@@ -102,6 +104,9 @@ public class LTL2DA extends PrismComponent
 				// checking the library first
 				if (useRabinizer() /*&& Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)*/) {
 					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+					if (hasToBeComplete) {
+						result.complete();
+					}
 					result.printHOA(System.out);
 				} else {
 					result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
@@ -365,7 +370,7 @@ public class LTL2DA extends PrismComponent
 
 			// Build/export DA
 			LTL2DA ltl2da = new LTL2DA(new PrismComponent());
-			DA<BitSet, ? extends AcceptanceOmega> da = ltl2da.convertLTLFormulaToDA(expr, null, AcceptanceType.RABIN, AcceptanceType.REACH);
+			DA<BitSet, ? extends AcceptanceOmega> da = ltl2da.convertLTLFormulaToDA(expr, null, true, AcceptanceType.RABIN, AcceptanceType.REACH);
 			PrintStream out = (args.length < 2 || "-".equals(args[1])) ? System.out : new PrintStream(args[1]);
 			String format = (args.length < 3) ? "hoa" : args[2];
 			da.print(out, format);

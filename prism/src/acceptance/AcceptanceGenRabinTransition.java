@@ -354,4 +354,19 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	{
 		this.accList.forEach(pair -> pair.removeUnneccessaryProductEdges(usedEdges));
 	}
+
+	/**
+	 * This method converts the state trapState to a trap-state, it est it makes
+	 *       all outgoing transitons from it as finite. It does not check,
+	 *       whether the input really is a trap-state.
+	 */
+	public void makeTrapState(int trapState, DA<?, ?> da)
+	{
+		Collection<BitSet> allPossibleEdges = da.getAllPossibleSymbols();
+
+		this.accList.forEach(pair -> {
+			for (BitSet bs : allPossibleEdges)
+				pair.Finite.set(computeOffsetForEdge(trapState, bs));
+		});
+	}
 }

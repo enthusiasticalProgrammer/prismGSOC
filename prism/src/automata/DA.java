@@ -32,12 +32,18 @@ package automata;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import acceptance.AcceptanceGenRabi
+Transition;
 import acceptance.AcceptanceOmega;
+iimport acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaTransition;
 import acceptance.AcceptanceRabin;
 import jltl2ba.APElement;
@@ -447,4 +453,64 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	{
 		return new HashSet<>(edges.get(i));
 	}
+DA by adding a trapState and adjusting the acceptance.
+	 * This method is currently only used for an automaton obtained by Rabinizer; therefore,
+	 *  it currently supports only AcceptanceGenRabinTransition as acceptance (and Bitset as Symbol).
+	 */
+	public void complete()
+	{
+		Collection<Integer> uncompleteStates = statesWhichAreNotComplete();
+		if (uncompleteStates.isEmpty()) {
+			return; //We are already complete
+		}
+
+		//Add trapstate
+		this.size++;
+		int trapState = this.size - 1;
+		this.edges.add(new ArrayList<>());
+		uncompleteStates.add(trapState);
+
+		Collection<BitSet> allSymbols = getAllPossibleSymbols();
+		for (int state : uncompleteStates) {
+			for (BitSet bs : allSymbols) {
+				if (!hasEdge(state, (Symbol) bs)) {
+					this.addEdge(state, (Symbol) bs, trapState);
+				}
+			}
+		}
+
+		if (this.acceptance instanceof AcceptanceGenRabinTransition) {
+			((AcceptanceGenRabinTransition) this.acceptance).makeTrapState(trapState, this);
+		} else {
+			throw new UnsupportedOperationException("Making the DA complete is currently" + " only supported for AcceptanceGenRabinTransition as acceptance"
+					+ " and not for " + this.acceptance.getClass());
+		}
+	}
+
+	/**
+	 * This method returns a list of states, which are not complete,
+	 *         such that the state has not 2^{APList.size()} many outgoing edges. 
+	 */
+	private Collection<Integer> statesWhichAreNotComplete()
+	{
+		return IntStream.range(0, size).filter(state -> edges.get(state).size() < 1 << apList.size()).mapToObj(i -> i).collect(Collectors.toSet());
+	}
+
+	/**
+	 * @return Set of all possible symbols (aka BitSets), marking an edge.
+	 *                Beware that this set has 2^{apList.size()} many elments. 
+	 */
+	public Collection<BitSet> getAllPossibleSymbols()
+	{
+		Set<BitSet> result = new HashSet<>();
+		for (int i = 0; i < 1 << apList.size(); i++) {
+			BitSet bs = new BitSet(apList.size());
+			for (int offset = 0; offset < apList.size(); offset++) {
+				bs.set(offset, (i & (1 << offset)) != 0);
+			}
+			result.add(bs);
+		}
+		return result;
+	}
 }
+                                  }

@@ -244,7 +244,7 @@ public class LTLModelChecker extends PrismComponent
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		time = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(this);
-		da = ltl2da.convertLTLFormulaToDA(ltl, mc.getConstantValues(), allowedAcceptance);
+		da = ltl2da.convertLTLFormulaToDA(ltl, mc.getConstantValues(), true, allowedAcceptance);
 		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		da.checkForCanonicalAPs(labelBS.size());
 		time = System.currentTimeMillis() - time;
