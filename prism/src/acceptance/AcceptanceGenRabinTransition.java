@@ -343,9 +343,10 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	}
 
 	@Override
-	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
+			Vector<JDDNode> labelAPs)
 	{
-		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, labelAPs);
+		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, daColVars, allddRowVars, allddColVars, da, labelAPs);
 	}
 
 	@Override

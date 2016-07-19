@@ -1,7 +1,9 @@
 package acceptance;
 
+import java.util.BitSet;
 import java.util.Vector;
 
+import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.PrismException;
@@ -27,8 +29,13 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
 
+	/**
+	 * It is not recommended to override this method, due to the fact that the other parameters are
+	 * not necessary for state-based acceptance. It is better to override the other toAcceptanceDD method. 
+	 */
 	@Override
-	default AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs)
+	default AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
+			Vector<JDDNode> labelAPs)
 	{
 		return toAcceptanceDD(ddRowVars);
 	}

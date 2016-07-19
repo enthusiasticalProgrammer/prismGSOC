@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Vector;
 
+import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
 
@@ -87,8 +88,13 @@ public interface AcceptanceOmega extends Cloneable
 
 	/**
 	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
-	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * @param daRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * @param daColVars JDDVars of the col variables from the model checker
+	 * @param allddRowVars JDDVars of the row of the product
+	 * @param allddColVars JDDVars of the col of the product
+	 * @param da DA to which this acceptance corresponds
 	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
 	 */
-	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, Vector<JDDNode> labelAPs);
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
+			Vector<JDDNode> labelAPs);
 }
