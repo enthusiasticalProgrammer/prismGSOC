@@ -39,7 +39,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
-import javax.validation.constraints.NotNull;
 
 import prism.Prism;
 import prism.PrismSettingsListener;
@@ -221,7 +220,7 @@ public abstract class GUIPlugin extends JPanel implements GUIEventListener, Pris
 	/** Method to get the file selected by the filechooser
 	 * @return The file from the file chooser
 	 */
-	public @NotNull File getChooserFile()
+	public File getChooserFile()
 	{
 		return gui.getChooser().getSelectedFile();
 	}
