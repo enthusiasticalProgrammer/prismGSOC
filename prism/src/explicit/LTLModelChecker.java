@@ -638,8 +638,10 @@ public class LTLModelChecker extends PrismComponent
 			return findAcceptingECStatesForRabin(model, (AcceptanceRabin) acceptance);
 		} else if (acceptance instanceof AcceptanceStreett) {
 			return findAcceptingECStatesForStreett(model, (AcceptanceStreett) acceptance);
-		} else if (acceptance instanceof AcceptanceGenRabinTransition) {
+		} else if (acceptance instanceof AcceptanceGenRabin) {
 			return findAcceptingECStatesForGeneralizedRabin(model, (AcceptanceGenRabin) acceptance);
+		} else if (acceptance instanceof AcceptanceGenRabinTransition) {
+			return findAcceptingECStatesForGeneralizedRabinTransition(model, (AcceptanceGenRabinTransition) acceptance);
 		}
 		throw new PrismNotSupportedException(
 				"Computing end components for acceptance type '" + acceptance.getType() + "' currently not supported (explicit engine).");
@@ -808,6 +810,50 @@ public class LTLModelChecker extends PrismComponent
 				boolean allj = true;
 				for (int j = 0; j < n; j++) {
 					if (!mec.intersects(acceptance.get(i).getK(j))) {
+						allj = false;
+						break;
+					}
+				}
+				if (allj) {
+					allAcceptingStates.or(mec);
+				}
+			}
+		}
+
+		return allAcceptingStates;
+	}
+
+	/**
+	 * Find the set of states in accepting end components (ECs) in a nondeterministic model wrt a Generalized Rabin transition based acceptance condition.
+	 * Note that this method is more or less the analogous than the method above. TODO Christopher maybe we can merge them.
+	 * @param model The model
+	 * @param acceptance The acceptance condition. Note that this method only works if the acceptance is lifted
+	 */
+	public BitSet findAcceptingECStatesForGeneralizedRabinTransition(NondetModel model, AcceptanceGenRabinTransition acceptance) throws PrismException
+	{
+		BitSet allAcceptingStates = new BitSet();
+		int numStates = model.getNumStates();
+
+		for (AcceptanceGenRabinTransition.GenRabinPair pair : acceptance.accList) {
+
+			BitSet finite = pair.Finite;
+			BitSet notFinite = new BitSet();
+			for (int s = 0; s < numStates; s++) {
+				notFinite.set(s, !finite.get(s));
+			}
+
+			if (notFinite.cardinality() == 0)
+				continue;
+
+			// Compute maximum end components (MECs) in notFinite
+			ECComputer ecComputer = ECComputer.createECComputer(this, model);
+			ecComputer.computeMECStates(notFinite);
+			List<BitSet> mecs = ecComputer.getMECStates();
+			// Check which MECs contain a state from each Infinite set
+			for (BitSet mec : mecs) {
+				boolean allj = true;
+				for (int j = 0; j < pair.Infinite.size(); j++) {
+					if (!mec.intersects(pair.Infinite.get(j))) {
 						allj = false;
 						break;
 					}
