@@ -102,7 +102,7 @@ public class LTL2DA extends PrismComponent
 		if (!useExternal) {
 			try {
 				// checking the library first
-				if (useRabinizer() /*&& Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)*/) {
+				if (useRabinizer() && Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)) {
 					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 					if (hasToBeComplete) {
 						result.complete();
@@ -135,7 +135,7 @@ public class LTL2DA extends PrismComponent
 					result = convertLTLFormulaToDAWithExternalTool(ltl, constants, allowedAcceptance);
 				} else {
 					// default tool:
-					if (useRabinizer() /*&& Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)*/) {
+					if (useRabinizer() && Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)) {
 						result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 					} else {
 					}
