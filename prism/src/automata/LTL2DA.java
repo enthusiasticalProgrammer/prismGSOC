@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +58,6 @@ import prism.PrismSettings;
 /**
  * Infrastructure for constructing deterministic automata for LTL formulas.
  */
-//TODO Christopher: expand this class for coping with rabinizer
 public class LTL2DA extends PrismComponent
 {
 
@@ -75,7 +73,6 @@ public class LTL2DA extends PrismComponent
 	 * @param ltl the formula
 	 * @param constantValues the values of constants, may be {@code null}
 	 */
-	@SuppressWarnings("unchecked")
 	public DA<BitSet, AcceptanceRabin> convertLTLFormulaToDRA(Expression ltl, Values constantValues) throws PrismException
 	{
 		return (DA<BitSet, AcceptanceRabin>) convertLTLFormulaToDA(ltl, constantValues, AcceptanceType.RABIN);
@@ -317,7 +314,6 @@ public class LTL2DA extends PrismComponent
 
 	private boolean useRabinizer()
 	{
-
 		String ltl2da_tool = getSettings().getString(PrismSettings.PRISM_LTL2DA_TOOL);
 		if (ltl2da_tool != null && !ltl2da_tool.isEmpty() && ltl2da_tool.equals("rabinizer")) {
 			return true;
@@ -326,7 +322,7 @@ public class LTL2DA extends PrismComponent
 	}
 
 	/** Check the atomic propositions of the (externally generated) automaton */
-	private void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
+	private static void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
 		Collection<String> ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {
@@ -373,6 +369,7 @@ public class LTL2DA extends PrismComponent
 			PrintStream out = (args.length < 2 || "-".equals(args[1])) ? System.out : new PrintStream(args[1]);
 			String format = (args.length < 3) ? "hoa" : args[2];
 			da.print(out, format);
+			out.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
