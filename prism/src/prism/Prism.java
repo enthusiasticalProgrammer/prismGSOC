@@ -1089,7 +1089,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 */
 	public ECComputer getECComputer(NondetModel model) throws PrismException
 	{
-		return ECComputer.createECComputer(this, model);
+		return ECComputer.createECComputer(this, model, null, null);
 	}
 
 	/**

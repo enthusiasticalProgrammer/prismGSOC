@@ -163,7 +163,7 @@ public class MultiObjModelChecker extends PrismComponent
 		candidateStates = JDD.ThereExists(candidateStates, modelProduct.getAllDDColVars());
 		candidateStates = JDD.ThereExists(candidateStates, modelProduct.getAllDDNondetVars());
 		// find all maximal end components
-		List<JDDNode> allecs = mcLtl.findMECStates(modelProduct, candidateStates, acceptanceVector_L);
+		List<JDDNode> allecs = mcLtl.findMECStates(modelProduct, candidateStates, acceptanceVector_L, null);
 		JDD.Deref(candidateStates);
 		JDD.Deref(acceptanceVector_L);
 		return allecs;
@@ -194,7 +194,7 @@ public class MultiObjModelChecker extends PrismComponent
 	protected void removeNonZeroMecsForMax(NondetModel modelProduct, LTLModelChecker mcLtl, List<JDDNode> rewardsIndex, OpsAndBoundsList opsAndBounds,
 			int numTargets, DA<BitSet, AcceptanceRabin> dra[], JDDVars draDDRowVars[], JDDVars draDDColVars[]) throws PrismException
 	{
-		List<JDDNode> mecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach());
+		List<JDDNode> mecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach(), null);
 		JDDNode removedActions = JDD.Constant(0);
 		JDDNode rmecs = JDD.Constant(0);
 		for (int i = 0; i < rewardsIndex.size(); i++)
@@ -411,7 +411,7 @@ public class MultiObjModelChecker extends PrismComponent
 		candidateStates = JDD.ThereExists(candidateStates, modelProduct.getAllDDColVars());
 		candidateStates = JDD.ThereExists(candidateStates, modelProduct.getAllDDNondetVars());
 		// find all maximal end components
-		allecs = mcLtl.findMECStates(modelProduct, candidateStates, acceptanceVector_L);
+		allecs = mcLtl.findMECStates(modelProduct, candidateStates, acceptanceVector_L, null);
 		JDD.Deref(candidateStates);
 		JDD.Deref(acceptanceVector_L);
 
@@ -578,7 +578,7 @@ public class MultiObjModelChecker extends PrismComponent
 			no = JDD.Constant(0);
 			bottomec = PrismMTBDD.Prob0A(modelMDP.getTrans01(), modelMDP.getReach(), modelMDP.getAllDDRowVars(), modelMDP.getAllDDColVars(),
 					modelMDP.getAllDDNondetVars(), modelMDP.getReach(), yes);
-			List<JDDNode> becs = mcLtl.findMECStates(modelMDP, bottomec);
+			List<JDDNode> becs = mcLtl.findMECStates(modelMDP, bottomec, null);
 			JDD.Deref(bottomec);
 			bottomec = JDD.Constant(0);
 			for (JDDNode ec : becs)

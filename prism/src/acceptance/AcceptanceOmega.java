@@ -94,7 +94,8 @@ public interface AcceptanceOmega extends Cloneable
 	 * @param allddColVars JDDVars of the col of the product
 	 * @param da DA to which this acceptance corresponds
 	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
+	 * @param product The product of the DA and the Model
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs);
+			Vector<JDDNode> labelAPs, ProbModel product);
 }

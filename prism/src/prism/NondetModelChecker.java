@@ -807,7 +807,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	protected void addDummyFormula(NondetModel modelProduct, LTLModelChecker mcLtl, List<JDDNode> targetDDs, OpsAndBoundsList opsAndBounds)
 			throws PrismException
 	{
-		List<JDDNode> tmpecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach());
+		List<JDDNode> tmpecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach(), null);
 		JDDNode acceptingStates = JDD.Constant(0);
 		for (JDDNode set : tmpecs)
 			acceptingStates = JDD.Or(acceptingStates, set);
@@ -1196,7 +1196,7 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// Find accepting states + compute reachability probabilities
 		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
-				labelDDs);
+				labelDDs, modelProduct);
 		JDDNode acc;
 		if (acceptance instanceof AcceptanceReachDD) {
 			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
@@ -1458,7 +1458,7 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// Find accepting states + compute reachability rewards
 		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
-				labelDDs);
+				labelDDs, modelProduct);
 		JDDNode acc = null;
 		if (acceptance instanceof AcceptanceReachDD) {
 			// For a DFA, just collect the accept states

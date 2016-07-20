@@ -1,5 +1,6 @@
 package acceptance;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Vector;
@@ -11,8 +12,9 @@ import common.IterableBitSet;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.ProbModel;
 
-public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
+public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 {
 	private final JDDVars daRowVars;
 	private final JDDVars daColVars;
@@ -20,10 +22,11 @@ public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
 	private final JDDVars allDDColVars;
 	private final DA<BitSet, ?> da;
 	private final AcceptanceGenRabinTransition accRabinTransition;
+	public final List<GenRabinPairTransitionDD> accList;
+	private final ProbModel product;
 
 	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars daRowVars, JDDVars daColVars, JDDVars allDDRowVars,
-			JDDVars allDDColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelForAPs)
+			JDDVars allDDColVars, DA<BitSet, ?> da, Vector<JDDNode> labelForAPs, ProbModel product)
 	{
 		super();
 		this.daRowVars = daRowVars;
@@ -32,8 +35,10 @@ public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
 		this.allDDColVars = allDDColVars;
 		this.da = da;
 		this.accRabinTransition = acceptanceGenRabinTransition;
+		this.accList = new ArrayList<>(acceptanceGenRabinTransition.accList.size());
+		this.product = product;
 		for (AcceptanceGenRabinTransition.GenRabinPair pair : acceptanceGenRabinTransition.accList) {
-			super.add(makeGenRabinPairTransitionDD(pair, labelForAPs));
+			accList.add(makeGenRabinPairTransitionDD(pair, labelForAPs));
 		}
 	}
 
@@ -47,13 +52,13 @@ public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
 	@Override
 	public boolean isBSCCAccepting(JDDNode bscc_states)
 	{
-		return this.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
+		return accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
 	}
 
 	@Override
 	public String getSizeStatistics()
 	{
-		return this.size() + " Generalized Rabin pairs";
+		return this.accList.size() + " Generalized Rabin pairs";
 	}
 
 	@Override
@@ -73,10 +78,7 @@ public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
 		for (int edge : IterableBitSet.getSetBits(accSet)) {
 			int state = this.accRabinTransition.computeStartStateOfEdge(edge);
 			BitSet edgeLabel = accRabinTransition.computeBitSetOfEdge(edge);
-			JDDNode label = JDD.Constant(0);
-			label = JDD.SetVectorElement(JDD.Constant(0), daRowVars, state, 1.0);
-			label = JDD.PermuteVariables(label, daRowVars, allDDRowVars);
-			JDD.Ref(label);
+			JDDNode label = JDD.Constant(1);
 			for (int i = 0; i < labelAPs.size(); i++) {
 				JDD.Ref(labelAPs.get(i));
 				JDDNode ap = labelAPs.get(i);
@@ -85,21 +87,41 @@ public class AcceptanceGenRabinTransitionDD extends AcceptanceGenRabinDD
 				}
 				label = JDD.And(label, ap);
 			}
-
-			result = JDD.Or(result, label);
+			label = JDD.PermuteVariables(label, allDDRowVars, allDDColVars);
+			JDDNode transition = JDD.SetMatrixElement(JDD.Constant(0), daRowVars, daColVars, state, da.getEdgeDestByLabel(state, edgeLabel), 1);
+			transition = JDD.And(transition, label);
+			result = JDD.Or(result, transition);
 		}
-		JDD.Ref(result);
 		return result;
 	}
 
-	public class GenRabinPairTransitionDD extends GenRabinPairDD
+	public class GenRabinPairTransitionDD
 	{
-		/**finite and infinite are states (respectively state-sets) of the product automaton.
-		 * Therefore this class could be treated analogously to AcceptanceGenRabinDD after creation.*/
+		public final JDDNode finTransitions;
+		public final List<JDDNode> infTransitions;
 
-		public GenRabinPairTransitionDD(JDDNode L, List<JDDNode> K_list)
+		private GenRabinPairTransitionDD(JDDNode finTransitions, List<JDDNode> infTransitions)
 		{
-			super(L,K_list);
+			this.finTransitions = finTransitions;
+			this.infTransitions = infTransitions;
 		}
+
+		public boolean isBSCCAccepting(JDDNode bsccStates)
+		{
+			JDDNode bsccEdges = JDD.Apply(JDD.TIMES, product.getTrans(), bsccStates);
+			return (!JDD.AreIntersecting(bsccEdges, finTransitions)) && infTransitions.stream().allMatch(inf -> JDD.AreIntersecting(inf, bsccEdges));
+		}
+
+		private void clear()
+		{
+			JDD.Deref(finTransitions);
+			infTransitions.forEach(JDD::Deref);
+		}
+	}
+
+	@Override
+	public void clear()
+	{
+		this.accList.forEach(a -> a.clear());
 	}
 }

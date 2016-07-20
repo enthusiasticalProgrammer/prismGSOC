@@ -35,7 +35,7 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 	 */
 	@Override
 	default AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs)
+			Vector<JDDNode> labelAPs, ProbModel modelProduct)
 	{
 		return toAcceptanceDD(ddRowVars);
 	}

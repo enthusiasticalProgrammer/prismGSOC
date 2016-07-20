@@ -687,7 +687,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param model The model
 	 * @return A referenced BDD for the union of all states in accepting BSCCs
 	 */
-	public JDDNode findAcceptingBSCCs(AcceptanceOmegaDD acceptance, ProbModel model) throws PrismException
+	protected JDDNode findAcceptingBSCCs(AcceptanceOmegaDD acceptance, ProbModel model) throws PrismException
 	{
 		JDDNode allAcceptingStates;
 		List<JDDNode> vectBSCCs;
@@ -731,13 +731,17 @@ public class LTLModelChecker extends PrismComponent
 		case RABIN:
 			return findAcceptingECStatesForRabin((AcceptanceRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
 		case GENERALIZED_RABIN:
-		case GENERALIZED_RABIN_TRANSITION_BASED:
 			return findAcceptingECStatesForGeneralizedRabin((AcceptanceGenRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
+		case GENERALIZED_RABIN_TRANSITION_BASED:
+			return findAcceptingECStatesForGeneralizedRabinTransitionBased((AcceptanceGenRabinTransitionDD) acceptance, model, daDDRowVars, daDDColVars,
+					fairness);
 		default:
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append("Computing the accepting EC states for ");
 			stringBuilder.append(acceptance.getTypeName());
 			stringBuilder.append(" acceptance is not yet implemented (symbolic engine)");
+			stringBuilder.append(acceptance.getType());
+			stringBuilder.append("is not yet implemented (symbolic engine)");
 			throw new PrismNotSupportedException(stringBuilder.toString());
 		}
 	}
@@ -755,7 +759,7 @@ public class LTLModelChecker extends PrismComponent
 
 		// Normal case (no fairness): find accepting MECs
 		if (!fairness) {
-			List<JDDNode> ecs = findMECStates(model, model.getReach().copy());
+			List<JDDNode> ecs = findMECStates(model, model.getReach().copy(), null);
 			acceptingStates = filteredUnion(ecs, acceptance.getAcceptingStates());
 		}
 		// For case of fairness...
@@ -813,7 +817,7 @@ public class LTLModelChecker extends PrismComponent
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDColVars());
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDNondetVars());
 			// find all maximal end components
-			List<JDDNode> allecs = findMECStates(model, candidateStates, acceptanceVector_K);
+			List<JDDNode> allecs = findMECStates(model, candidateStates, acceptanceVector_K, null);
 			JDD.Deref(acceptanceVector_K);
 			JDD.Deref(candidateStates);
 
@@ -871,7 +875,7 @@ public class LTLModelChecker extends PrismComponent
 						newcandidateStates = JDD.Apply(JDD.TIMES, candidateStates, newcandidateStates);
 						newcandidateStates = JDD.ThereExists(newcandidateStates, model.getAllDDColVars());
 						candidateStates = JDD.ThereExists(newcandidateStates, model.getAllDDNondetVars());
-						ecs = findMECStates(model, candidateStates, acceptanceVector_K);
+						ecs = findMECStates(model, candidateStates, acceptanceVector_K, null);
 					}
 					JDD.Deref(candidateStates);
 
@@ -911,7 +915,7 @@ public class LTLModelChecker extends PrismComponent
 				candidateStates = JDD.ThereExists(candidateStates, model.getAllDDNondetVars());
 				// Normal case (no fairness): find accepting MECs within !L_i 
 				if (!fairness) {
-					List<JDDNode> ecs = findMECStates(model, candidateStates);
+					List<JDDNode> ecs = findMECStates(model, candidateStates, null);
 					JDD.Deref(candidateStates);
 					acceptingStates = filteredUnion(ecs, statesK_i);
 				}
@@ -970,7 +974,7 @@ public class LTLModelChecker extends PrismComponent
 			candidateStates = JDD.Apply(JDD.TIMES, candidateStates, notL);
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDColVars());
 			candidateStates = JDD.ThereExists(candidateStates, model.getAllDDNondetVars());
-			List<JDDNode> mecs = findMECStates(model, candidateStates);
+			List<JDDNode> mecs = findMECStates(model, candidateStates, null);
 			JDD.Deref(candidateStates);
 
 			// Check which MECs are accepting for this pair, calculate union
@@ -989,6 +993,51 @@ public class LTLModelChecker extends PrismComponent
 			allAcceptingStates = JDD.Or(allAcceptingStates, acceptingStates);
 		}
 
+		return allAcceptingStates;
+	}
+
+	/**
+	 * Find the set of states in accepting end components (ECs) in a nondeterministic model wrt a transition based Generalized Rabin acceptance condition.
+	 * @param acceptance the transition-based Generalized Rabin acceptance condition
+	 * @param model The model
+	 * @param draDDRowVars BDD row variables for the DRA part of the model
+	 * @param draDDColVars BDD column variables for the DRA part of the model
+	 * @param fairness Consider fairness?
+	 * @return A referenced BDD for the union of all states in accepting MECs
+	 */
+	private JDDNode findAcceptingECStatesForGeneralizedRabinTransitionBased(AcceptanceGenRabinTransitionDD acceptance, NondetModel model, JDDVars daDDRowVars,
+			JDDVars daDDColVars, boolean fairness) throws PrismException
+	{
+		if (fairness) {
+			throw new PrismNotSupportedException("Accepting end-component computation for generalized Rabin is currently not supported with fairness");
+		}
+
+		//Compute the candidate states (aka all states of the model)
+		JDDNode candidateStates = JDD.Constant(0);
+		for (int i = 0; i < model.getNumStates(); i++) {
+			candidateStates = JDD.SetVectorElement(candidateStates, model.getAllDDRowVars(), i, 1.0);
+		}
+
+		JDDNode allAcceptingStates = JDD.Constant(0);
+
+		for (GenRabinPairTransitionDD pair : acceptance.accList) {
+			List<JDDNode> mecs = findMECStates(model, candidateStates, pair.finTransitions);
+
+			// Check which MECs are accepting for this pair, calculate union
+			JDDNode acceptingStates = JDD.Constant(0);
+			for (int k = 0; k < mecs.size(); k++) {
+				// Is the induced BSCC by this MEC accepting?
+				// (note we only really need to check K_i_1, ..., K_i_n here, not L too,
+				// but this should not really affect efficiency)
+				if (pair.isBSCCAccepting(mecs.get(k))) {
+					acceptingStates = JDD.Or(acceptingStates, mecs.get(k));
+				} else {
+					JDD.Deref(mecs.get(k));
+				}
+			}
+			// Add to the set of accepting states for all pairs
+			allAcceptingStates = JDD.Or(allAcceptingStates, acceptingStates);
+		}
 		return allAcceptingStates;
 	}
 
@@ -1031,7 +1080,7 @@ public class LTLModelChecker extends PrismComponent
 					newcandidateStates = JDD.Apply(JDD.TIMES, candidateStates, newcandidateStates);
 					newcandidateStates = JDD.ThereExists(newcandidateStates, model.getAllDDColVars());
 					candidateStates = JDD.ThereExists(newcandidateStates, model.getAllDDNondetVars());
-					ecs = findMECStates(model, candidateStates, acceptanceVector_L);
+					ecs = findMECStates(model, candidateStates, acceptanceVector_L, null);
 					JDD.Deref(candidateStates);
 				}
 
@@ -1140,7 +1189,7 @@ public class LTLModelChecker extends PrismComponent
 					JDD.Ref(nextstatesL.get(k));
 					JDDNode acceptanceVector_L = JDD.And(e.statesL.get(j), nextstatesL.get(k));
 					List<JDDNode> ecs = null;
-					ecs = findMECStates(model, candidateStates1, acceptanceVector_L);
+					ecs = findMECStates(model, candidateStates1, acceptanceVector_L, null);
 					JDD.Deref(candidateStates1);
 
 					// For each ec, test if it has non-empty intersection with L states
@@ -1298,13 +1347,12 @@ public class LTLModelChecker extends PrismComponent
 	 *
 	 * <br>[ REFS: <i>results</i>, DEREFS: <i>none</i> ]
 	 * @param states BDD of the set of containing states
+	 * @param forbiddenTransitions Marks the transitions, which are forbidden (for state-based acceptance: null)
 	 * @return a vector of (referenced) BDDs representing the ECs
 	 */
-	public List<JDDNode> findMECStates(NondetModel model, JDDNode states) throws PrismException
+	public List<JDDNode> findMECStates(NondetModel model, JDDNode states, JDDNode forbiddenTransitions) throws PrismException
 	{
-		ECComputer ecComputer = ECComputer.createECComputer(this, model);
-		ecComputer.computeMECStates(states, null);
-		return ecComputer.getMECStates();
+		return findMECStates(model, states, null, forbiddenTransitions);
 	}
 
 	/**
@@ -1315,41 +1363,34 @@ public class LTLModelChecker extends PrismComponent
 	 * <br>[ REFS: <i>results</i>, DEREFS: <i>none</i> ]
 	 * @param states BDD of the set of containing states
 	 * @param filter BDD for the set of accepting states
+	 * @param forbiddenTransitions The transitions, which are forbidden (null for state-based acceptance)
 	 * @return a vector of (referenced) BDDs representing the ECs
 	 */
-	public List<JDDNode> findMECStates(NondetModel model, JDDNode states, JDDNode filter) throws PrismException
+	public List<JDDNode> findMECStates(NondetModel model, JDDNode states, JDDNode filter, JDDNode forbiddenTransitions) throws PrismException
 	{
-		ECComputer ecComputer = ECComputer.createECComputer(this, model);
-		ecComputer.computeMECStates(states, filter);
-		return ecComputer.getMECStates();
-	}
+		JDDNode allowedTransitions = model.getTrans();
+		JDDNode allowedTransitions01 = model.getTrans01();
+		if (forbiddenTransitions != null) {
+			JDD.Ref(allowedTransitions);
+			JDD.Ref(forbiddenTransitions);
+			allowedTransitions = JDD.Apply(JDD.TIMES, allowedTransitions, JDD.Not(forbiddenTransitions));
 
-	/**
-	 * Find all maximal end components (ECs) contained within {@code states}
-	 * and whose states have no outgoing transitions.
-	 * @param states BDD of the set of containing states
-	 * @return a vector of (referenced) BDDs representing the ECs
-	 */
-	public List<JDDNode> findBottomEndComponents(NondetModel model, JDDNode states) throws PrismException
-	{
-		List<JDDNode> ecs = findMECStates(model, states);
-		List<JDDNode> becs = new Vector<>();
-		JDDNode out;
-
-		for (JDDNode scc : ecs) {
-			JDD.Ref(model.getTrans01());
-			JDD.Ref(scc);
-			out = JDD.And(model.getTrans01(), scc);
-			JDD.Ref(scc);
-			out = JDD.And(out, JDD.Not(JDD.PermuteVariables(scc, model.getAllDDRowVars(), model.getAllDDColVars())));
-			if (out.equals(JDD.ZERO)) {
-				becs.add(scc);
-			} else {
-				JDD.Deref(scc);
-			}
-			JDD.Deref(out);
+			JDD.Ref(allowedTransitions01);
+			JDD.Ref(forbiddenTransitions);
+			allowedTransitions01 = JDD.Apply(JDD.TIMES, allowedTransitions01, JDD.Not(JDD.GreaterThan(forbiddenTransitions, 0.0)));
 		}
-		return becs;
+
+		ECComputer ecComputer = ECComputer.createECComputer(this, model, allowedTransitions, allowedTransitions01);
+		ecComputer.computeMECStates(states, filter);
+		List<JDDNode> result = ecComputer.getMECStates();
+
+		if (forbiddenTransitions != null) {
+			/** cleaning up the resources */
+			JDD.Deref(allowedTransitions);
+			JDD.Deref(allowedTransitions01);
+		}
+
+		return result;
 	}
 
 	public JDDNode maxStableSetTrans1(NondetModel model, JDDNode b)
