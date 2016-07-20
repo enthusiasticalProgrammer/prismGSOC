@@ -40,10 +40,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import acceptance.AcceptanceGenRabi
-Transition;
+import acceptance.AcceptanceGenRabinTransition;
 import acceptance.AcceptanceOmega;
-iimport acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaTransition;
 import acceptance.AcceptanceRabin;
 import jltl2ba.APElement;
@@ -453,7 +451,9 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	{
 		return new HashSet<>(edges.get(i));
 	}
-DA by adding a trapState and adjusting the acceptance.
+
+	/**
+	 * This method completes the DA by adding a trapState and adjusting the acceptance.
 	 * This method is currently only used for an automaton obtained by Rabinizer; therefore,
 	 *  it currently supports only AcceptanceGenRabinTransition as acceptance (and Bitset as Symbol).
 	 */
@@ -513,4 +513,3 @@ DA by adding a trapState and adjusting the acceptance.
 		return result;
 	}
 }
-                                  }
