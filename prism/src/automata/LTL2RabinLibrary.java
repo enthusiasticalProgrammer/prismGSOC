@@ -79,7 +79,8 @@ public final class LTL2RabinLibrary
 	 * one of the allowed acceptance conditions) by direct translation methods of the library:
 	 *
 	 * Relies on getDRAForLTL, with appropriate pre/post-processing for acceptance types
-	 * that are not Rabin.
+	 * that are not Rabin. This method should only be called by automata.LTL2DA in order to
+	 * keep LTL2DSTAR with LTL2BA and Rabinizer exchangeable during runtime.
 	 *
 	 * Return {@code null} if the automaton can not be constructed using the library.
 	 * <br> The LTL formula is represented as a PRISM Expression,

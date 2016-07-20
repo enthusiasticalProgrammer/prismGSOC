@@ -19,6 +19,15 @@ import rabinizer.exec.CLIParser;
 
 public class LTL2DA
 {
+	/**
+	 * returns a DA recognising the specified LTL-formula computed by Rabinizer. This method
+	 * should be only called by automata.LTL2DA, in order to keep Rabinizer and LTL2DSTAR
+	 * with LTL2BA exchangeable during runtime.
+	 * 
+	 *    @param an LTL-formula specified by SimpleLTL
+	 *    @return A DA with Edges specified as BitSet and generalised Rabin acceptance,
+	 *    					which is transition-based.
+	 */
 	public static DA<BitSet, AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
 		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
