@@ -248,7 +248,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		return labelList.getLabelIndex(label);
 	}
-	
+
 	public LabelList getLabelList()
 	{
 		return labelList;
@@ -335,7 +335,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		}
 		return systemDefns.get(0);
 	}
-	
+
 	/**
 	 * Get the number of "system...endsystem" constructs for this model.
 	 */
@@ -370,7 +370,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		int n = systemDefns.size();
 		for (int i = 0; i < n; i++) {
-			String s = systemDefnNames.get(i); 
+			String s = systemDefnNames.get(i);
 			if ((s == null && name == null) || (s != null && s.equals(name)))
 				return i;
 		}
@@ -468,7 +468,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		return null;
 	}
-	
+
 	/**
 	 * Check if an identifier is used by this model
 	 * (as a formula, constant, or variable)
@@ -591,7 +591,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Method to "tidy up" after parsing (must be called)
 	 * (do some checks and extract some information)
@@ -606,7 +606,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		varDecls.clear();
 		varNames.clear();
 		varTypes.clear();
-		
+
 		// Expansion of formulas and renaming
 
 		// Check formula identifiers
@@ -644,13 +644,13 @@ public class ModulesFile extends ASTElement implements ModelInfo
 
 		// Find all instances of property refs
 		findAllPropRefs(this, null);
-		
+
 		// Check reward structure names
 		checkRewardStructNames();
 
 		// Check "system...endsystem" constructs
 		checkSystemDefns();
-		
+
 		// Get synchronising action names
 		// (NB: Do this *after* checking for cycles in system defns above)
 		getSynchNames();
@@ -661,7 +661,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		doSemanticChecks();
 		// Type checking
 		typeCheck();
-		
+
 		// If there are no undefined constants, set up values for constants
 		// (to avoid need for a later call to setUndefinedConstants).
 		// NB: Can't call setUndefinedConstants if there are undefined constants
@@ -720,13 +720,12 @@ public class ModulesFile extends ASTElement implements ModelInfo
 			for (i2 = 0; i2 < n2; i2++) {
 				s = module.getOldName(i2);
 				if (!renamedSoFar.add(s)) {
-					throw new PrismLangException("Identifier \"" + s + "\" is renamed more than once in module \""
-							+ module.getName() + "\"", module.getOldNameASTElement(i2));
+					throw new PrismLangException("Identifier \"" + s + "\" is renamed more than once in module \"" + module.getName() + "\"",
+							module.getOldNameASTElement(i2));
 				}
 				if (formulaList.getFormulaIndex(s) != -1) {
-					throw new PrismLangException("Formula \"" + s
-							+ "\" cannot be renamed since formulas are expanded before module renaming", module
-							.getOldNameASTElement(i2));
+					throw new PrismLangException("Formula \"" + s + "\" cannot be renamed since formulas are expanded before module renaming",
+							module.getOldNameASTElement(i2));
 				}
 			}
 			// Then rename (a copy of) base module and replace
@@ -780,8 +779,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 			s = getModule(i).getName();
 			for (j = 0; j < i; j++) {
 				if (s.equals(moduleNames[j])) {
-					throw new PrismLangException("Duplicated module name \"" + s + "\"", getModule(i)
-							.getNameASTElement());
+					throw new PrismLangException("Duplicated module name \"" + s + "\"", getModule(i).getNameASTElement());
 				}
 			}
 			moduleNames[i] = s;
@@ -830,8 +828,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		for (i = 0; i < n; i++) {
 			s = constantList.getConstantName(i);
 			if (isIdentUsed(s)) {
-				throw new PrismLangException("Duplicated identifier \"" + s + "\"", constantList
-						.getConstantNameIdent(i));
+				throw new PrismLangException("Duplicated identifier \"" + s + "\"", constantList.getConstantNameIdent(i));
 			} else {
 				constantIdents.add(s);
 			}
@@ -909,9 +906,9 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	private void checkSystemDefns() throws PrismLangException
 	{
 		int n = systemDefns.size();
-		
+
 		// Check there is a most one un-named system...endsystem...
-		
+
 		// None is ok
 		if (n == 0)
 			return;
@@ -920,7 +917,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		int numUnnamed = 0;
 		HashSet<String> names = new HashSet<String>();
 		for (int i = 0; i < n; i++) {
-			String s = systemDefnNames.get(i); 
+			String s = systemDefnNames.get(i);
 			if (s == null) {
 				numUnnamed++;
 			} else {
@@ -932,7 +929,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		}
 
 		// Check for cyclic dependencies...
-		
+
 		// Create boolean matrix of dependencies
 		// (matrix[i][j] is true if prop i contains a ref to prop j)
 		boolean matrix[][] = new boolean[n][n];
@@ -954,7 +951,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 			throw new PrismLangException(s, getSystemDefn(firstCycle));
 		}
 	}
-	
+
 	/**
 	  * Perform any required semantic checks.
 	  * These checks are done *before* any undefined constants have been defined.
@@ -963,9 +960,9 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		ModulesFileSemanticCheck visitor = new ModulesFileSemanticCheck(this);
 		accept(visitor);
-		
+
 	}
-	
+
 	/**
 	 * Perform further semantic checks that can only be done once values
 	 * for any undefined constants have been defined.
@@ -1021,7 +1018,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		return constantList.isDefinedConstant(name);
 	}
-	
+
 	/**
 	 * Get access to the values that have been provided for undefined constants in the model 
 	 * (e.g. via the method {@link #setUndefinedConstants(Values)}).
@@ -1249,7 +1246,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		int i, n;
 		ModulesFile ret = new ModulesFile();
-		
+
 		// Copy ASTElement stuff
 		ret.setPosition(this);
 		// Copy type
@@ -1277,20 +1274,20 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		if (initStates != null)
 			ret.setInitialStates(initStates.deepCopy());
 		// Copy other (generated) info
-		ret.formulaIdents = (formulaIdents == null) ? null : (Vector<String>)formulaIdents.clone();
-		ret.constantIdents = (constantIdents == null) ? null : (Vector<String>)constantIdents.clone();
-		ret.varIdents = (varIdents == null) ? null : (Vector<String>)varIdents.clone();
+		ret.formulaIdents = (formulaIdents == null) ? null : (Vector<String>) formulaIdents.clone();
+		ret.constantIdents = (constantIdents == null) ? null : (Vector<String>) constantIdents.clone();
+		ret.varIdents = (varIdents == null) ? null : (Vector<String>) varIdents.clone();
 		ret.moduleNames = (moduleNames == null) ? null : moduleNames.clone();
-		ret.synchs = (synchs == null) ? null : (Vector<String>)synchs.clone();
+		ret.synchs = (synchs == null) ? null : (Vector<String>) synchs.clone();
 		if (varDecls != null) {
 			ret.varDecls = new Vector<Declaration>();
 			for (Declaration d : varDecls)
 				ret.varDecls.add((Declaration) d.deepCopy());
 		}
-		ret.varNames = (varNames == null) ? null : (Vector<String>)varNames.clone();
-		ret.varTypes = (varTypes == null) ? null : (Vector<Type>)varTypes.clone();
+		ret.varNames = (varNames == null) ? null : (Vector<String>) varNames.clone();
+		ret.varTypes = (varTypes == null) ? null : (Vector<Type>) varTypes.clone();
 		ret.constantValues = (constantValues == null) ? null : new Values(constantValues);
-		
+
 		return ret;
 	}
 }

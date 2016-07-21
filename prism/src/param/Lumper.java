@@ -40,16 +40,15 @@ import java.util.HashSet;
  * @see StrongLumper
  * @see WeakLumper
  */
-abstract class Lumper {
+abstract class Lumper
+{
 	/**
 	 * Kind of lumping to be used.
 	 */
 	enum BisimType {
-		NULL,
-		STRONG,
-		WEAK
+		NULL, STRONG, WEAK
 	}
-	
+
 	/** stores the original model to be lumped */
 	protected MutablePMC origPmc;
 	/** stores the lumped model */
@@ -84,7 +83,7 @@ abstract class Lumper {
 	 */
 	protected Lumper()
 	{
-		
+
 	}
 
 	/**
@@ -100,18 +99,19 @@ abstract class Lumper {
 		final Function reward;
 		/** time for this entry */
 		final Function time;
-		
+
 		/**
 		 * Creates a new reward entry.
 		 * 
 		 * @param reward reward for this entry
 		 * @param time time for this entry.
 		 */
-		RewardEntry(Function reward, Function time) {
+		RewardEntry(Function reward, Function time)
+		{
 			this.reward = reward;
 			this.time = time;
 		}
-		
+
 		@Override
 		public int hashCode()
 		{
@@ -121,14 +121,14 @@ abstract class Lumper {
 			}
 			return hash;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj)
 		{
 			if (!(obj instanceof RewardEntry)) {
 				return false;
 			}
-			
+
 			RewardEntry other = (RewardEntry) obj;
 			if (!this.reward.equals(other.reward)) {
 				return false;
@@ -142,7 +142,7 @@ abstract class Lumper {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Creates an initial partitioning appropriate for analysis to perform.
 	 * For reachability, takes care that only target-states / non-target
@@ -165,7 +165,7 @@ abstract class Lumper {
 					safeStates.add(state);
 				}
 			}
-			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>(); 
+			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
 			if (safeStates.size() != 0) {
 				newBlocks.add(safeStates);
 			}
@@ -189,7 +189,7 @@ abstract class Lumper {
 				}
 				block.add(state);
 			}
-			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>(); 
+			ArrayList<HashSet<Integer>> newBlocks = new ArrayList<HashSet<Integer>>();
 			for (HashSet<Integer> block : rewardToStateMap.values()) {
 				if (block.size() != 0) {
 					newBlocks.add(block);
@@ -199,7 +199,7 @@ abstract class Lumper {
 		}
 		partition.markAllBlocksAsNew();
 	}
-	
+
 	/**
 	 * Return the quotient of the original model.
 	 * Before calling this method, {@code lump()} must have been called.
@@ -210,7 +210,7 @@ abstract class Lumper {
 	{
 		return optPmc;
 	}
-	
+
 	/**
 	 * Enumerates the blocks after refinement is finished.
 	 * This is done as a preparation to create the quotient and the
@@ -230,7 +230,7 @@ abstract class Lumper {
 			nextBlockNumber++;
 		}
 	}
-	
+
 	/**
 	 * Returns a mapping from original model states to quotient states.
 	 * Thus, {@result[state]} is the state of the quotient to which
@@ -242,7 +242,7 @@ abstract class Lumper {
 	{
 		return originalToOptimised;
 	}
-	
+
 	/**
 	 * Perform the lumping process.
 	 * Refines blocks from the list of blocks to refine, it is clear that
@@ -259,7 +259,7 @@ abstract class Lumper {
 			partition.addBlocks(newBlocks);
 		}
 	}
-	
+
 	/**
 	 * Refine a given block.
 	 * The exact way of how this is done depends on the type of bisimulation used.
@@ -268,7 +268,7 @@ abstract class Lumper {
 	 * @param newBlocks list of new blocks generated
 	 */
 	abstract protected void refineBlock(HashSet<Integer> oldBlock, ArrayList<HashSet<Integer>> newBlocks);
-	
+
 	/**
 	 * Build the quotients after refinement has finished.
 	 * Each state of the quotient will be a block of states from the original

@@ -44,12 +44,12 @@ public abstract class PrismLanguageTranslator
 	 * Get a name associated with the language to be translated from.
 	 */
 	public abstract String getName();
-	
+
 	/**
 	 * Load a model to be translated from an input stream.
 	 */
 	public abstract void load(InputStream in) throws PrismException;
-	
+
 	/**
 	 * Load a model to be translated from a string.
 	 */
@@ -57,7 +57,7 @@ public abstract class PrismLanguageTranslator
 	{
 		load(new ByteArrayInputStream(modelString.getBytes()));
 	}
-	
+
 	/**
 	 * Load a model to be translated from a file.
 	 */
@@ -71,12 +71,12 @@ public abstract class PrismLanguageTranslator
 		}
 		load(in);
 	}
-	
+
 	/**
 	 * Translate the loaded model to a PRISM language model and write it to an output stream.
 	 */
 	public abstract void translate(PrintStream out) throws PrismException;
-	
+
 	/**
 	 * Translate the loaded model to a PRISM language model and return it as a string.
 	 */

@@ -237,7 +237,7 @@ public class ConstructRewards
 
 		return rewSA;
 	}
-	
+
 	/**
 	 * Construct the rewards for an MDP from files exported explicitly by PRISM.
 	 * @param model The MDP

@@ -28,5 +28,5 @@ package settings;
 
 public interface SettingDisplay
 {
-    public void redisplaySetting(Setting setting);
+	public void redisplaySetting(Setting setting);
 }

@@ -26,9 +26,10 @@
 //==============================================================================
 
 package userinterface.util;
+
 import java.util.EventListener;
 
 public interface SelectionListener extends EventListener
 {
-    public void selectionPerformed(SelectionEvent e);
+	public void selectionPerformed(SelectionEvent e);
 }

@@ -28,47 +28,46 @@ package parser.type;
 
 import prism.PrismLangException;
 
-public class TypeDouble extends Type 
+public class TypeDouble extends Type
 {
 	private static TypeDouble singleton;
-	
-	static
-	{
+
+	static {
 		singleton = new TypeDouble();
 	}
-	
+
 	private TypeDouble()
-	{		
-	}	
-	
+	{
+	}
+
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypeDouble);
 	}
-	
+
 	@Override
 	public String getTypeString()
 	{
 		return "double";
 	}
-	
+
 	@Override
 	public Object defaultValue()
 	{
 		return new Double(0.0);
 	}
-	
+
 	public static TypeDouble getInstance()
 	{
 		return singleton;
 	}
-	
+
 	@Override
 	public boolean canAssign(Type type)
 	{
 		return (type instanceof TypeDouble || type instanceof TypeInt);
 	}
-	
+
 	@Override
 	public Double castValueTo(Object value) throws PrismLangException
 	{

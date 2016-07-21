@@ -31,25 +31,25 @@ import java.awt.*;
 
 public class Style
 {
-    public Color c;
-    public int style;
-	
-    public Style(Color c, int style)
-    {
-        this.c = c;
-        this.style = style;
-    }
-    
-    public static Style defaultStyle()
-    {
-        Style s = new Style(Color.black, Font.PLAIN);
-        return s;
-    }
-    
-    public Style copy()//grrrr
-    {
-        int r = c.getRed(), g = c.getGreen(), b = c.getBlue();
-        Color cc = new Color(r,g,b);
-        return new Style(cc, style);
-    }
+	public Color c;
+	public int style;
+
+	public Style(Color c, int style)
+	{
+		this.c = c;
+		this.style = style;
+	}
+
+	public static Style defaultStyle()
+	{
+		Style s = new Style(Color.black, Font.PLAIN);
+		return s;
+	}
+
+	public Style copy()//grrrr
+	{
+		int r = c.getRed(), g = c.getGreen(), b = c.getBlue();
+		Color cc = new Color(r, g, b);
+		return new Style(cc, style);
+	}
 }

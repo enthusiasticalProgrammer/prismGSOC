@@ -44,12 +44,12 @@ public class GraphResultListener implements ResultListener
 	// A graph.
 	private Graph graph;
 	// The name of the series.
-	private Graph.SeriesKey seriesKey;		
+	private Graph.SeriesKey seriesKey;
 	// The constant on the x-axis.
 	private String rangeConstant;
 	// The other constants.
-	private Values otherValues;	
-		
+	private Values otherValues;
+
 	/** 
 	 * Creates a new instance of GraphResultListener 
 	 * It presumes that the seriesKey is returned by a call of {@link userinterface.graph.Graph#addSeries graph.addSeries(...)}. 
@@ -63,32 +63,31 @@ public class GraphResultListener implements ResultListener
 		this.graph = graph;
 		this.seriesKey = seriesKey;
 		this.rangeConstant = rangeConstant;
-		this.otherValues = otherValues;		
-	}	
-	
-	
+		this.otherValues = otherValues;
+	}
+
 	public void notifyResult(ResultsCollection resultsCollection, Values values, Object result)
 	{
 		Object xObj = isInSeries(values);
-		
+
 		/* This is a result of our series, xObj is our x-coordinate. */
-		if(xObj != null)
-		{
-			double x,y;
-			
+		if (xObj != null) {
+			double x, y;
+
 			// Get x coordinate
-			if(xObj instanceof Integer) {	
-				x = ((Integer)xObj).intValue(); // Use integer value.  	
-			} else if(xObj instanceof Double) {
-				x = ((Double)xObj).doubleValue(); // Use double value.
-			} else if(xObj instanceof BigRational) {
-				x = ((BigRational)xObj).doubleValue(); // Use double value.
-			} else return; // Cancel if non integer/double			
-			
+			if (xObj instanceof Integer) {
+				x = ((Integer) xObj).intValue(); // Use integer value.  	
+			} else if (xObj instanceof Double) {
+				x = ((Double) xObj).doubleValue(); // Use double value.
+			} else if (xObj instanceof BigRational) {
+				x = ((BigRational) xObj).doubleValue(); // Use double value.
+			} else
+				return; // Cancel if non integer/double			
+
 			// Cancel if x = +/- infinity or NaN
-			if (x == Double.POSITIVE_INFINITY || x == Double.NEGATIVE_INFINITY || Double.isNaN(x)) 
+			if (x == Double.POSITIVE_INFINITY || x == Double.NEGATIVE_INFINITY || Double.isNaN(x))
 				return;
-						
+
 			// Add point to graph (if of valid type) 
 			if (result instanceof Double) {
 				y = ((Double) result).doubleValue();
@@ -115,7 +114,7 @@ public class GraphResultListener implements ResultListener
 			}
 		}
 	}
-	
+
 	/**	
 	 *  Looks at the values and sees whether it matches otherValues, apart
 	 *	from one which should match 'rangeConstant'. If so this method returns
@@ -123,34 +122,27 @@ public class GraphResultListener implements ResultListener
 	 **/
 	private Object isInSeries(Values v)
 	{
-		for(int i = 0; i < otherValues.getNumValues(); i++)
-		{
+		for (int i = 0; i < otherValues.getNumValues(); i++) {
 			String name = otherValues.getName(i);
 			Object value = otherValues.getValue(i);
-			if(!name.equals(rangeConstant))
-			{
-				try
-				{
+			if (!name.equals(rangeConstant)) {
+				try {
 					Object compare = v.getValueOf(name);
-					if(compare.equals(value))
+					if (compare.equals(value))
 						continue;
-					else throw new PrismException("value not same");
-				}
-				catch(PrismException e)
-				{
+					else
+						throw new PrismException("value not same");
+				} catch (PrismException e) {
 					return null;
 				}
 			}
 		}
-		try
-		{
+		try {
 			Object value = v.getValueOf(rangeConstant);
 			return value;
-		}
-		catch(PrismException e)
-		{
+		} catch (PrismException e) {
 			return null;
 		}
 	}
-	
+
 }

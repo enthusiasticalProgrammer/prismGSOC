@@ -38,7 +38,7 @@ public class PathFullPrefix extends Path
 	private PathFull pathFull;
 	// Length (number of states) in the prefix
 	private int prefixLength;
-	
+
 	/**
 	 * Constructor: create from an existing PathFull object and a prefix length.
 	 */
@@ -57,24 +57,26 @@ public class PathFullPrefix extends Path
 	}
 
 	@Override
-	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards, TransitionList transitionList)
+	public void addStep(int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards,
+			TransitionList transitionList)
 	{
 		// Do nothing (we are not allowed to modify the underlying PathFull)
 	}
 
 	@Override
-	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState, double[] newStateRewards, TransitionList transitionList)
+	public void addStep(double time, int choice, int moduleOrActionIndex, double probability, double[] transitionRewards, State newState,
+			double[] newStateRewards, TransitionList transitionList)
 	{
 		// Do nothing (we are not allowed to modify the underlying PathFull)
 	}
 
 	// MUTATORS (additional)
-	
+
 	public void setPrefixLength(int prefixLength)
 	{
 		this.prefixLength = prefixLength;
 	}
-	
+
 	// ACCESSORS (for Path)
 
 	@Override
@@ -82,7 +84,7 @@ public class PathFullPrefix extends Path
 	{
 		return pathFull.continuousTime();
 	}
-	
+
 	@Override
 	public long size()
 	{
@@ -112,7 +114,7 @@ public class PathFullPrefix extends Path
 	{
 		return pathFull.getModuleOrAction(prefixLength - 1);
 	}
-	
+
 	@Override
 	public double getPreviousProbability()
 	{
@@ -136,55 +138,55 @@ public class PathFullPrefix extends Path
 	{
 		return pathFull.getCumulativeReward(prefixLength, rsi);
 	}
-	
+
 	@Override
 	public double getPreviousStateReward(int rsi)
 	{
 		return pathFull.getStateReward(prefixLength - 1, rsi);
 	}
-	
+
 	@Override
 	public double[] getPreviousStateRewards()
 	{
 		return pathFull.getStateRewards(prefixLength - 1);
 	}
-	
+
 	@Override
 	public double getPreviousTransitionReward(int rsi)
 	{
 		return pathFull.getTransitionReward(prefixLength - 1, rsi);
 	}
-	
+
 	@Override
 	public double[] getPreviousTransitionRewards()
 	{
 		return pathFull.getTransitionRewards(prefixLength - 1);
 	}
-	
+
 	@Override
 	public double getCurrentStateReward(int rsi)
 	{
 		return pathFull.getStateReward(prefixLength, rsi);
 	}
-	
+
 	@Override
 	public double[] getCurrentStateRewards()
 	{
 		return pathFull.getStateRewards(prefixLength);
 	}
-	
+
 	@Override
 	public boolean isLooping()
 	{
 		return pathFull.isLooping() && pathFull.loopEnd() < prefixLength;
 	}
-	
+
 	@Override
 	public long loopStart()
 	{
 		return isLooping() ? pathFull.loopStart() : -1;
 	}
-	
+
 	@Override
 	public long loopEnd()
 	{

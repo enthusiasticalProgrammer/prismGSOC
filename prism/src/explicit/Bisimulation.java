@@ -160,7 +160,7 @@ public class Bisimulation extends PrismComponent
 			for (int j = 0; j < m; j++) {
 				bs1 = all.get(j);
 				bs0 = (BitSet) bs1.clone();
- 				bs0.andNot(bs);
+				bs0.andNot(bs);
 				bs1.and(bs);
 				if (bs1.isEmpty()) {
 					all.set(j, bs0);

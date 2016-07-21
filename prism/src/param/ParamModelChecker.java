@@ -112,12 +112,12 @@ final public class ParamModelChecker extends PrismComponent
 
 	// The result of model checking will be stored here
 	private Result result;
-	
+
 	// Flags/settings
 
 	// Verbosity level
 	private int verbosity = 0;
-	
+
 	private BigRational[] paramLower;
 	private BigRational[] paramUpper;
 
@@ -125,7 +125,7 @@ final public class ParamModelChecker extends PrismComponent
 	private RegionFactory regionFactory;
 	private ConstraintChecker constraintChecker;
 	private ValueComputer valueComputer;
-	
+
 	private BigRational precision;
 	private int splitMethod;
 	private EliminationOrder eliminationOrder;
@@ -134,57 +134,57 @@ final public class ParamModelChecker extends PrismComponent
 	private boolean simplifyRegions;
 
 	private ModelBuilder modelBuilder;
-	
+
 	/**
 	 * Constructor
 	 */
 	public ParamModelChecker(PrismComponent parent) throws PrismException
 	{
 		super(parent);
-		
+
 		// If present, initialise settings from PrismSettings
 		if (settings != null) {
-		verbosity = settings.getBoolean(PrismSettings.PRISM_VERBOSE) ? 10 : 1;
-		precision = new BigRational(settings.getString(PrismSettings.PRISM_PARAM_PRECISION));
-		String splitMethodString = settings.getString(PrismSettings.PRISM_PARAM_SPLIT);
-		if (splitMethodString.equals("Longest")) {
-			splitMethod = BoxRegion.SPLIT_LONGEST;
-		} else if (splitMethodString.equals("All")) {
-			splitMethod = BoxRegion.SPLIT_ALL;
-		} else {
-			throw new PrismException("unknown region splitting method " + splitMethodString);				
-		}
-		String eliminationOrderString = settings.getString(PrismSettings.PRISM_PARAM_ELIM_ORDER);
-		if (eliminationOrderString.equals("Arbitrary")) {
-			eliminationOrder = EliminationOrder.ARBITRARY;
-		} else if (eliminationOrderString.equals("Forward")) {
-			eliminationOrder = EliminationOrder.FORWARD;
-		} else if (eliminationOrderString.equals("Forward-reversed")) {
-			eliminationOrder = EliminationOrder.FORWARD_REVERSED;
-		} else if (eliminationOrderString.equals("Backward")) {
-			eliminationOrder = EliminationOrder.BACKWARD;
-		} else if (eliminationOrderString.equals("Backward-reversed")) {
-			eliminationOrder = EliminationOrder.BACKWARD_REVERSED;
-		} else if (eliminationOrderString.equals("Random")) {
-			eliminationOrder = EliminationOrder.RANDOM;
-		} else {
-			throw new PrismException("unknown state elimination order " + eliminationOrderString);				
-		}
-		numRandomPoints = settings.getInteger(PrismSettings.PRISM_PARAM_RANDOM_POINTS);
-		String bisimTypeString = settings.getString(PrismSettings.PRISM_PARAM_BISIM);
-		if (bisimTypeString.equals("Weak")) {
-			bisimType = BisimType.WEAK;
-		} else if (bisimTypeString.equals("Strong")) {
-			bisimType = BisimType.STRONG;
-		} else if (bisimTypeString.equals("None")) {
-			bisimType = BisimType.NULL;
-		} else {
-			throw new PrismException("unknown bisimulation type " + bisimTypeString);							
-		}
-		simplifyRegions = settings.getBoolean(PrismSettings.PRISM_PARAM_SUBSUME_REGIONS);
+			verbosity = settings.getBoolean(PrismSettings.PRISM_VERBOSE) ? 10 : 1;
+			precision = new BigRational(settings.getString(PrismSettings.PRISM_PARAM_PRECISION));
+			String splitMethodString = settings.getString(PrismSettings.PRISM_PARAM_SPLIT);
+			if (splitMethodString.equals("Longest")) {
+				splitMethod = BoxRegion.SPLIT_LONGEST;
+			} else if (splitMethodString.equals("All")) {
+				splitMethod = BoxRegion.SPLIT_ALL;
+			} else {
+				throw new PrismException("unknown region splitting method " + splitMethodString);
+			}
+			String eliminationOrderString = settings.getString(PrismSettings.PRISM_PARAM_ELIM_ORDER);
+			if (eliminationOrderString.equals("Arbitrary")) {
+				eliminationOrder = EliminationOrder.ARBITRARY;
+			} else if (eliminationOrderString.equals("Forward")) {
+				eliminationOrder = EliminationOrder.FORWARD;
+			} else if (eliminationOrderString.equals("Forward-reversed")) {
+				eliminationOrder = EliminationOrder.FORWARD_REVERSED;
+			} else if (eliminationOrderString.equals("Backward")) {
+				eliminationOrder = EliminationOrder.BACKWARD;
+			} else if (eliminationOrderString.equals("Backward-reversed")) {
+				eliminationOrder = EliminationOrder.BACKWARD_REVERSED;
+			} else if (eliminationOrderString.equals("Random")) {
+				eliminationOrder = EliminationOrder.RANDOM;
+			} else {
+				throw new PrismException("unknown state elimination order " + eliminationOrderString);
+			}
+			numRandomPoints = settings.getInteger(PrismSettings.PRISM_PARAM_RANDOM_POINTS);
+			String bisimTypeString = settings.getString(PrismSettings.PRISM_PARAM_BISIM);
+			if (bisimTypeString.equals("Weak")) {
+				bisimType = BisimType.WEAK;
+			} else if (bisimTypeString.equals("Strong")) {
+				bisimType = BisimType.STRONG;
+			} else if (bisimTypeString.equals("None")) {
+				bisimType = BisimType.NULL;
+			} else {
+				throw new PrismException("unknown bisimulation type " + bisimTypeString);
+			}
+			simplifyRegions = settings.getBoolean(PrismSettings.PRISM_PARAM_SUBSUME_REGIONS);
 		}
 	}
-	
+
 	// Setters/getters
 
 	/**
@@ -216,12 +216,12 @@ final public class ParamModelChecker extends PrismComponent
 		ParamModel paramModel = (ParamModel) model;
 		functionFactory = paramModel.getFunctionFactory();
 		constraintChecker = new ConstraintChecker(numRandomPoints);
-		regionFactory = new BoxRegionFactory(functionFactory, constraintChecker, precision,
-				model.getNumStates(), model.getFirstInitialState(), simplifyRegions, splitMethod);
+		regionFactory = new BoxRegionFactory(functionFactory, constraintChecker, precision, model.getNumStates(), model.getFirstInitialState(), simplifyRegions,
+				splitMethod);
 		valueComputer = new ValueComputer(paramModel, regionFactory, precision, eliminationOrder, bisimType);
-		
+
 		long timer = 0;
-		
+
 		// Remove labels from property, using combined label list (on a copy of the expression)
 		// This is done now so that we can handle labels nested below operators that are not
 		// handled natively by the model checker yet (just evaluate()ed in a loop).
@@ -246,7 +246,7 @@ final public class ParamModelChecker extends PrismComponent
 		result = new Result();
 		vals.clearExceptInit();
 		result.setResult(vals);
-		
+
 		/* // Output plot to tex file
 		if (paramLower.length == 2) {
 			try {
@@ -261,10 +261,10 @@ final public class ParamModelChecker extends PrismComponent
 				throw new PrismException("file could not be written");
 			}
 		}*/
-		
+
 		return result;
 	}
-	
+
 	private int parserBinaryOpToRegionOp(int parserOp) throws PrismException
 	{
 		int regionOp;
@@ -312,8 +312,7 @@ final public class ParamModelChecker extends PrismComponent
 			regionOp = Region.DIVIDE;
 			break;
 		default:
-			throw new PrismNotSupportedException("operator \"" + ExpressionBinaryOp.opSymbols[parserOp]
-					+ "\" not currently supported for parametric analyses");				
+			throw new PrismNotSupportedException("operator \"" + ExpressionBinaryOp.opSymbols[parserOp] + "\" not currently supported for parametric analyses");
 		}
 		return regionOp;
 	}
@@ -332,8 +331,7 @@ final public class ParamModelChecker extends PrismComponent
 			regionOp = Region.PARENTH;
 			break;
 		default:
-			throw new PrismNotSupportedException("operator \"" + ExpressionBinaryOp.opSymbols[parserOp]
-					+ "\" not currently supported for parametric analyses");				
+			throw new PrismNotSupportedException("operator \"" + ExpressionBinaryOp.opSymbols[parserOp] + "\" not currently supported for parametric analyses");
 		}
 		return regionOp;
 	}
@@ -377,7 +375,7 @@ final public class ParamModelChecker extends PrismComponent
 	private RegionValues checkExpressionAtomic(ParamModel model, Expression expr, BitSet needStates) throws PrismException
 	{
 		expr = (Expression) expr.deepCopy().replaceConstants(constantValues);
-		
+
 		int numStates = model.getNumStates();
 		List<State> statesList = model.getStatesList();
 		StateValues stateValues = new StateValues(numStates, model.getFirstInitialState());
@@ -409,10 +407,10 @@ final public class ParamModelChecker extends PrismComponent
 				if (exprVar.getType() instanceof TypeBool) {
 					stateValues.setStateValue(state, false);
 				} else {
-					stateValues.setStateValue(state, functionFactory.getZero());						
+					stateValues.setStateValue(state, functionFactory.getZero());
 				}
 			}
-		}	
+		}
 		return regionFactory.completeCover(stateValues);
 	}
 
@@ -444,7 +442,7 @@ final public class ParamModelChecker extends PrismComponent
 	{
 		LabelList ll;
 		int i;
-		
+
 		// treat special cases
 		if (expr.isDeadlockLabel()) {
 			int numStates = model.getNumStates();
@@ -493,7 +491,7 @@ final public class ParamModelChecker extends PrismComponent
 			filter = Expression.True();
 		}
 		boolean filterTrue = Expression.isTrue(filter);
-		
+
 		BitSet needStatesInner = new BitSet(needStates.size());
 		needStatesInner.set(0, needStates.size());
 		RegionValues rvFilter = checkExpression(model, filter, needStatesInner);
@@ -518,14 +516,14 @@ final public class ParamModelChecker extends PrismComponent
 		if (bsFilter.isEmpty()) {
 			throw new PrismException("Filter satisfies no states");
 		}
-		
+
 		// Remember whether filter is for the initial state and, if so, whether there's just one
 		boolean filterInit = (filter instanceof ExpressionLabel && ((ExpressionLabel) filter).isInitLabel());
 		// Print out number of states satisfying filter
 		if (!filterInit) {
 			mainLog.println("\nStates satisfying filter " + filter + ": " + bsFilter.cardinality());
 		}
-			
+
 		// Compute result according to filter type
 		RegionValues resVals = null;
 		switch (op) {
@@ -581,7 +579,7 @@ final public class ParamModelChecker extends PrismComponent
 	}
 
 	// check filter over parameters
-	
+
 	protected RegionValues checkExpressionFilterParam(ParamModel model, ExpressionFilter expr, BitSet needStates) throws PrismException
 	{
 		// Filter info
@@ -595,7 +593,7 @@ final public class ParamModelChecker extends PrismComponent
 
 		Optimiser opt = new Optimiser(vals, rvFilter, expr.getOperatorType() == FilterOperator.MIN);
 		System.out.println("\n" + opt.optimise());
-		
+
 		return null;
 
 		/*
@@ -605,7 +603,7 @@ final public class ParamModelChecker extends PrismComponent
 		// Print out number of states satisfying filter
 		if (!filterInit)
 			mainLog.println("\nStates satisfying filter " + filter + ": " + bsFilter.cardinality());
-
+		
 		// Compute result according to filter type
 		op = expr.getOperatorType();
 		switch (op) {
@@ -810,7 +808,7 @@ final public class ParamModelChecker extends PrismComponent
 		default:
 			throw new PrismException("Unrecognised filter type \"" + expr.getOperatorName() + "\"");
 		}
-
+		
 		// For some operators, print out some matching states
 		if (bsMatch != null) {
 			states = RegionValues.createFromBitSet(bsMatch, model);
@@ -826,7 +824,7 @@ final public class ParamModelChecker extends PrismComponent
 			}
 			
 		}
-
+		
 		// Store result
 		result.setResult(resObj);
 		// Set result explanation (if none or disabled, clear)
@@ -835,15 +833,15 @@ final public class ParamModelChecker extends PrismComponent
 		} else {
 			result.setExplanation(null);
 		}
-
+		
 		// Clear up
 		if (vals != null)
 			vals.clear();
-
+		
 		return resVals;
 		*/
 	}
-	
+
 	/**
 	 * Model check a P operator expression and return the values for all states.
 	 */
@@ -890,24 +888,23 @@ final public class ParamModelChecker extends PrismComponent
 			return probs.binaryOp(Region.getOp(relOp.toString()), p);
 		}
 	}
-	
+
 	private RegionValues checkProbPathFormulaSimple(ParamModel model, Expression expr, boolean min, BitSet needStates) throws PrismException
 	{
 		boolean negated = false;
 		RegionValues probs = null;
-		
+
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
-		
+
 		// Negation
-		if (expr instanceof ExpressionUnaryOp &&
-		    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
+		if (expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.NOT) {
 			negated = true;
-			expr = ((ExpressionUnaryOp)expr).getOperand();
+			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
-			
+
 		if (expr instanceof ExpressionTemporal) {
 			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
-			
+
 			// Next
 			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
 				throw new PrismNotSupportedException("Next operator not supported by parametric engine");
@@ -925,7 +922,7 @@ final public class ParamModelChecker extends PrismComponent
 				}
 			}
 		}
-		
+
 		if (probs == null)
 			throw new PrismException("Unrecognised path operator in P operator");
 
@@ -933,15 +930,17 @@ final public class ParamModelChecker extends PrismComponent
 			// Subtract from 1 for negation
 			probs = probs.binaryOp(new BigRational(1, 1), parserBinaryOpToRegionOp(ExpressionBinaryOp.MINUS));
 		}
-		
+
 		return probs;
 	}
 
-	private RegionValues checkProbUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min, BitSet needStates) throws PrismException {
+	private RegionValues checkProbUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min, BitSet needStates) throws PrismException
+	{
 		return valueComputer.computeUnbounded(b1, b2, min, null);
 	}
-		
-	private RegionValues checkProbBoundedUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min) throws PrismException {
+
+	private RegionValues checkProbBoundedUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min) throws PrismException
+	{
 		ModelType modelType = model.getModelType();
 		//RegionValues probs;
 		switch (modelType) {
@@ -1000,11 +999,11 @@ final public class ParamModelChecker extends PrismComponent
 			return rews.binaryOp(Region.getOp(relOp.toString()), r);
 		}
 	}
-	
-	private RegionValues checkRewardFormula(ParamModel model,
-			ParamRewardStruct rew, Expression expr, boolean min, BitSet needStates) throws PrismException {
+
+	private RegionValues checkRewardFormula(ParamModel model, ParamRewardStruct rew, Expression expr, boolean min, BitSet needStates) throws PrismException
+	{
 		RegionValues rewards = null;
-		
+
 		if (expr instanceof ExpressionTemporal) {
 			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
 			switch (exprTemp.getOperator()) {
@@ -1012,31 +1011,34 @@ final public class ParamModelChecker extends PrismComponent
 				rewards = checkRewardReach(model, rew, exprTemp, min, needStates);
 				break;
 			case ExpressionTemporal.R_S:
-				rewards = checkRewardSteady(model, rew, exprTemp, min, needStates);				
+				rewards = checkRewardSteady(model, rew, exprTemp, min, needStates);
 				break;
 			default:
-				throw new PrismNotSupportedException("Parametric engine does not yet handle the " + exprTemp.getOperatorSymbol() + " operator in the R operator");
+				throw new PrismNotSupportedException(
+						"Parametric engine does not yet handle the " + exprTemp.getOperatorSymbol() + " operator in the R operator");
 			}
 		}
-		
+
 		if (rewards == null) {
 			throw new PrismException("Unrecognised operator in R operator");
 		}
-		
+
 		return rewards;
 	}
 
-	private RegionValues checkRewardReach(ParamModel model,
-			ParamRewardStruct rew, ExpressionTemporal expr, boolean min, BitSet needStates) throws PrismException {
+	private RegionValues checkRewardReach(ParamModel model, ParamRewardStruct rew, ExpressionTemporal expr, boolean min, BitSet needStates)
+			throws PrismException
+	{
 		RegionValues allTrue = regionFactory.completeCover(true);
 		BitSet needStatesInner = new BitSet(needStates.size());
 		needStatesInner.set(0, needStates.size());
 		RegionValues reachSet = checkExpression(model, expr.getOperand2(), needStatesInner);
 		return valueComputer.computeUnbounded(allTrue, reachSet, min, rew);
 	}
-	
-	private RegionValues checkRewardSteady(ParamModel model,
-			ParamRewardStruct rew, ExpressionTemporal expr, boolean min, BitSet needStates) throws PrismException {
+
+	private RegionValues checkRewardSteady(ParamModel model, ParamRewardStruct rew, ExpressionTemporal expr, boolean min, BitSet needStates)
+			throws PrismException
+	{
 		if (model.getModelType() != ModelType.DTMC && model.getModelType() != ModelType.CTMC) {
 			throw new PrismNotSupportedException("Parametric long-run average rewards are only supported for DTMCs and CTMCs");
 		}
@@ -1046,8 +1048,8 @@ final public class ParamModelChecker extends PrismComponent
 		return valueComputer.computeSteadyState(allTrue, min, rew);
 	}
 
-	private ParamRewardStruct constructRewards(ParamModel model, RewardStruct rewStruct, Values constantValues2)
-			throws PrismException {
+	private ParamRewardStruct constructRewards(ParamModel model, RewardStruct rewStruct, Values constantValues2) throws PrismException
+	{
 		int numStates = model.getNumStates();
 		List<State> statesList = model.getStatesList();
 		ParamRewardStruct rewSimple = new ParamRewardStruct(functionFactory, model.getNumTotalChoices());
@@ -1088,7 +1090,7 @@ final public class ParamModelChecker extends PrismComponent
 		}
 		return rewSimple;
 	}
-	
+
 	/**
 	 * Model check an S operator expression and return the values for all states.
 	 */
@@ -1133,14 +1135,12 @@ final public class ParamModelChecker extends PrismComponent
 		}
 	}
 
-	private RegionValues checkProbSteadyState(ParamModel model, Expression expr, boolean min, BitSet needStates)
-	throws PrismException
+	private RegionValues checkProbSteadyState(ParamModel model, Expression expr, boolean min, BitSet needStates) throws PrismException
 	{
 		BitSet needStatesInner = new BitSet(model.getNumStates());
 		needStatesInner.set(0, model.getNumStates());
-		RegionValues b = checkExpression(model,expr, needStatesInner);
-		if (model.getModelType() != ModelType.DTMC
-				&& model.getModelType() != ModelType.CTMC) {
+		RegionValues b = checkExpression(model, expr, needStatesInner);
+		if (model.getModelType() != ModelType.DTMC && model.getModelType() != ModelType.CTMC) {
 			throw new PrismNotSupportedException("Parametric engine currently only implements steady state for DTMCs and CTMCs.");
 		}
 		return valueComputer.computeSteadyState(b, min, null);
@@ -1153,32 +1153,34 @@ final public class ParamModelChecker extends PrismComponent
 	 * @param lower lower bounds of parameters
 	 * @param upper upper bounds of parameters
 	 */
-	public void setParameters(String[] paramNames, String[] lower, String[] upper) {
+	public void setParameters(String[] paramNames, String[] lower, String[] upper)
+	{
 		if (paramNames == null || lower == null || upper == null) {
 			throw new IllegalArgumentException("all arguments of this functions must be non-null");
 		}
 		if (paramNames.length != lower.length || lower.length != upper.length) {
 			throw new IllegalArgumentException("all arguments of this function must have the same length");
 		}
-		
+
 		paramLower = new BigRational[lower.length];
 		paramUpper = new BigRational[upper.length];
-		
+
 		for (int i = 0; i < paramNames.length; i++) {
-			if (paramNames[i] == null || lower[i] == null || upper[i] == null)  {
+			if (paramNames[i] == null || lower[i] == null || upper[i] == null) {
 				throw new IllegalArgumentException("all entries in arguments of this function must be non-null");
 			}
 			paramLower[i] = new BigRational(lower[i]);
 			paramUpper[i] = new BigRational(upper[i]);
 		}
-	}	
-			
-	public static void closeDown() {
+	}
+
+	public static void closeDown()
+	{
 		ComputerThreads.terminate();
 	}
 
 	public void setModelBuilder(ModelBuilder builder)
 	{
 		this.modelBuilder = builder;
-	}	
+	}
 }

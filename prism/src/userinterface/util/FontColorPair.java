@@ -30,17 +30,19 @@ package userinterface.util;
 import java.awt.*;
 
 public class FontColorPair
-    {
-        
-        public FontColorPair(Font f, Color c)
-        {
-            this.f = f;
-            this.c = c;
-        }
-        public FontColorPair()
-        {
-           
-        }
-        public Font f;
-        public Color c;
-    }
+{
+
+	public FontColorPair(Font f, Color c)
+	{
+		this.f = f;
+		this.c = c;
+	}
+
+	public FontColorPair()
+	{
+
+	}
+
+	public Font f;
+	public Color c;
+}

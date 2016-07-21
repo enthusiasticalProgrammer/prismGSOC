@@ -47,7 +47,7 @@ public class Result
 	private Strategy strat;
 	// Solution vector (optional)
 	private StateVector vect;
-	
+
 	/**
 	 * Construct an empty Result object.
 	 */
@@ -59,7 +59,7 @@ public class Result
 		this.strat = null;
 		this.vect = null;
 	}
-	
+
 	/**
 	 * Create a Result object based on a result.
 	 */
@@ -68,7 +68,7 @@ public class Result
 		this();
 		setResult(result);
 	}
-	
+
 	/**
 	 * Set the result.
 	 */
@@ -76,7 +76,7 @@ public class Result
 	{
 		this.result = result;
 	}
-	
+
 	/**
 	 * Set the string of explanatory text (null denotes absent).
 	 */
@@ -84,7 +84,7 @@ public class Result
 	{
 		this.explanation = explanation;
 	}
-	
+
 	/**
 	 * Set the counterexample (null denotes n/a).
 	 */
@@ -92,7 +92,7 @@ public class Result
 	{
 		this.cex = cex;
 	}
-	
+
 	/**
 	 * Set the strategy (null denotes n/a).
 	 */
@@ -100,7 +100,7 @@ public class Result
 	{
 		this.strat = strat;
 	}
-	
+
 	/**
 	 * Set the result vector (null denotes n/a).
 	 */
@@ -108,7 +108,7 @@ public class Result
 	{
 		this.vect = vect;
 	}
-	
+
 	/**
 	 * Get the result.
 	 */
@@ -132,7 +132,7 @@ public class Result
 	{
 		return cex;
 	}
-	
+
 	/**
 	 * Get the strategy (null denotes n/a).
 	 */
@@ -140,7 +140,7 @@ public class Result
 	{
 		return strat;
 	}
-	
+
 	/**
 	 * Get the result vector (null denotes n/a).
 	 */
@@ -148,7 +148,7 @@ public class Result
 	{
 		return vect;
 	}
-	
+
 	/**
 	 * Get a string of the result and (if present) explanatory text
 	 */
@@ -156,10 +156,10 @@ public class Result
 	{
 		String s = result.toString();
 		if (explanation != null)
-			s += " (" + explanation +")";
+			s += " (" + explanation + ")";
 		return s;
 	}
-	
+
 	/**
 	 * Get the string representation of the actual result value.
 	 */

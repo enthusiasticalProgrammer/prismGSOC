@@ -32,10 +32,11 @@ package param;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class Scheduler {
+final class Scheduler
+{
 	/** represents the choice taken for each state */
 	private int[] choices;
-	
+
 	/**
 	 * Constructs a new scheduler for {@code model}.
 	 * The scheduler is legal, but not necessarily optimal in any sense.
@@ -49,29 +50,32 @@ final class Scheduler {
 			choices[state] = model.stateEnd(state) - 1;
 		}
 	}
-	
+
 	/**
 	 * Set choice for given state.
 	 * 
 	 * @param state state to set choice for
 	 * @param choice choice to set for given state 
 	 */
-	void setChoice(int state, int choice) {
+	void setChoice(int state, int choice)
+	{
 		choices[state] = choice;
 	}
-	
+
 	/**
 	 * Get choice for given state.
 	 * 
 	 * @param state state to get choice of
 	 * @return choice for given state
 	 */
-	int getChoice(int state) {
+	int getChoice(int state)
+	{
 		return choices[state];
 	}
-	
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj)
+	{
 		if (!(obj instanceof Scheduler)) {
 			return false;
 		}
@@ -83,15 +87,16 @@ final class Scheduler {
 		}
 		return true;
 	}
-	
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		int hash = 0;
-		
+
 		for (int state = 0; state < choices.length; state++) {
 			hash = choices[state] + (hash << 6) + (hash << 16) - hash;
 		}
-		
+
 		return hash;
 	}
 }

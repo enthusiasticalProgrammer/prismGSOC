@@ -90,7 +90,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		initComponents();
 
 		pngFilter = new FileNameExtensionFilter("PNG files (*.png)", "png");
-		jpgFilter = new FileNameExtensionFilter("JPEG files (*.jpg, *.jpeg)", "jpg", "jpeg"); 
+		jpgFilter = new FileNameExtensionFilter("JPEG files (*.jpg, *.jpeg)", "jpg", "jpeg");
 		epsFilter = new FileNameExtensionFilter("Encapsulated PostScript files (*.eps)", "eps");
 		graFilter = new FileNameExtensionFilter("PRISM graph files (*.gra, *.xml)", "gra", "xml");
 		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
@@ -106,7 +106,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		setLayout(new BorderLayout());
 		add(theTabs, BorderLayout.CENTER);
-		
+
 		graphOptions = new AbstractAction()
 		{
 			public void actionPerformed(ActionEvent e)

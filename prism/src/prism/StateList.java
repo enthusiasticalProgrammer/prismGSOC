@@ -41,28 +41,28 @@ public interface StateList
 	 * Get the number of states in the list.
 	 */
 	int size();
-	
+
 	/**
 	 * Get the number of states in the list as a string
 	 * (useful when the number is too big to fit in an integer).
 	 */
 	String sizeString();
-	
+
 	/**
 	 * Print the states to a log.
 	 */
 	void print(PrismLog log);
-	
+
 	/**
 	 * Print the first {@code n} states in the list to a log.
 	 */
 	void print(PrismLog log, int n);
-	
+
 	/**
 	 * Print the states to a log, in Matlab format.
 	 */
 	void printMatlab(PrismLog log);
-	
+
 	/**
 	 * Print the first {@code n} states in the list to a log, in Matlab format.
 	 */
@@ -77,24 +77,24 @@ public interface StateList
 	 * Format the list of states as a list of strings.
 	 */
 	public List<String> exportToStringList();
-	
+
 	/**
 	 * Check whether a set of states, specified as a BDD, is *partially* included in this list,
 	 * i.e. whether there is any intersection between the two sets. 
 	 */
 	boolean includes(JDDNode set);
-	
+
 	/**
 	 * Check whether a set of states, specified as a BDD, is *fully* included in this list,
 	 * i.e. whether every state in {@code set} is in this list. 
 	 */
 	boolean includesAll(JDDNode set);
-	
+
 	/**
 	 * Get the first state in this list, as a {@link parser.Values} object.
 	 */
 	Values getFirstAsValues() throws PrismException;
-	
+
 	/**
 	 * Get the index of a state in the list, specified as a State object.
 	 * Returns -1 if the state is not on the list or there is a problem with the lookup. 

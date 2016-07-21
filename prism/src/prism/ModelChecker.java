@@ -35,8 +35,11 @@ import parser.ast.*;
 public interface ModelChecker
 {
 	public Result check(Expression expr) throws PrismException;
+
 	public StateValues checkExpression(Expression expr) throws PrismException;
+
 	public JDDNode checkExpressionDD(Expression expr) throws PrismException;
+
 	public Values getConstantValues();
 }
 

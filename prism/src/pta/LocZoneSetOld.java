@@ -55,7 +55,7 @@ public class LocZoneSetOld extends ArrayList<LocZone>
 			return false;
 		}
 	}
-	
+
 	public ArrayList<LocZone> toArrayList()
 	{
 		return this;

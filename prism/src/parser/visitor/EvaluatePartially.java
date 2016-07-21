@@ -36,12 +36,12 @@ import prism.PrismLangException;
 public class EvaluatePartially extends ASTTraverseModify
 {
 	private EvaluateContext ec;
-	
+
 	public EvaluatePartially(EvaluateContext ec)
 	{
 		this.ec = ec;
 	}
-	
+
 	public Object visit(ExpressionConstant e) throws PrismLangException
 	{
 		Object val = ec.getConstantValue(e.getName());
@@ -51,7 +51,7 @@ public class EvaluatePartially extends ASTTraverseModify
 			return new ExpressionLiteral(e.getType(), val);
 		}
 	}
-	
+
 	public Object visit(ExpressionVar e) throws PrismLangException
 	{
 		Object val = ec.getVarValue(e.getName(), e.getIndex());

@@ -74,18 +74,16 @@ public class ForwardsReach
 	 * The set of target states found and the (singleton) set of initial states are stored separately
 	 * and can be obtained subsequently using getTarget() and getInitialStates().
 	 */
-	public ReachabilityGraph buildForwardsGraph(PTA pta, BitSet targetLocs, Constraint targetConstraint)
-			throws PrismException
+	public ReachabilityGraph buildForwardsGraph(PTA pta, BitSet targetLocs, Constraint targetConstraint) throws PrismException
 	{
 		return buildForwardsGraphFormats10(pta, targetLocs, targetConstraint);
 		//return buildForwardsGraphFormats09(pta, targetLocs, targetConstraint);
 	}
-	
+
 	/**
 	 * Implementation of {@link #buildForwardsGraph} using FORMATS'10 definition.
 	 */
-	private ReachabilityGraph buildForwardsGraphFormats10(PTA pta, BitSet targetLocs, Constraint targetConstraint)
-	throws PrismException
+	private ReachabilityGraph buildForwardsGraphFormats10(PTA pta, BitSet targetLocs, Constraint targetConstraint) throws PrismException
 	{
 		LocZone init, lz, lz2;
 		LinkedList<LocZone> X;
@@ -110,7 +108,7 @@ public class ForwardsReach
 		// Re-compute max clock constraint value if required
 		if (targetConstraint != null)
 			pta.recomputeMaxClockConstraint(targetConstraint);
-		
+
 		// Initialise data structures
 		graph = new ReachabilityGraph(pta);
 		Yset = new IndexedSet<LocZone>();
@@ -259,15 +257,14 @@ public class ForwardsReach
 
 		return graph;
 	}
-	
+
 	/**
 	 * Implementation of {@link #buildForwardsGraph} using FORMATS'09 definition.
 	 * This should not be used any more since changes/improvements to e.g. timelock detection
 	 * have been implemented under the assumption that the default (FORMATS'10) algorithm is used.
 	 */
 	@SuppressWarnings("unused")
-	private ReachabilityGraph buildForwardsGraphFormats09(PTA pta, BitSet targetLocs, Constraint targetConstraint)
-	throws PrismException
+	private ReachabilityGraph buildForwardsGraphFormats09(PTA pta, BitSet targetLocs, Constraint targetConstraint) throws PrismException
 	{
 		Zone z;
 		LocZone init, lz, lz2;

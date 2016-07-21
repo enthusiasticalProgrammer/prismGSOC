@@ -35,78 +35,78 @@ public class SystemModule extends SystemDefn
 {
 	// Module name
 	String name;
-	
+
 	// Constructors
-	
+
 	public SystemModule()
 	{
 	}
-	
+
 	public SystemModule(String n)
 	{
 		name = n;
 	}
-	
+
 	// Set method
-	
+
 	public void setName(String n)
 	{
 		name = n;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	public void getModules(Vector<String> v)
 	{
 		v.addElement(name);
 	}
-	
+
 	@Override
 	public void getModules(Vector<String> v, ModulesFile modulesFile)
 	{
 		v.addElement(name);
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v)
 	{
 		// do nothing
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v, ModulesFile modulesFile)
 	{
 		// do nothing
 	}
-	
+
 	@Override
 	public void getReferences(Vector<String> v)
 	{
 		// do nothing
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return name;
 	}
-	
+
 	@Override
 	public SystemDefn deepCopy()
 	{

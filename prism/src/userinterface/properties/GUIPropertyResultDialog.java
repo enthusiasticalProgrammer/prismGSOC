@@ -32,22 +32,22 @@ import java.awt.Font;
 public class GUIPropertyResultDialog extends javax.swing.JDialog
 {
 	private static int noOpen = 0;
-	
+
 	private GUIProperty gp;
 	private GUIMultiProperties gmp;
-	
+
 	/** Creates new form GUIPropertyResultDialog */
 	public GUIPropertyResultDialog(java.awt.Frame parent, GUIMultiProperties gmp, GUIProperty gp)
 	{
 		super(parent, false);
-		
+
 		initComponents();
 		getRootPane().setDefaultButton(jButton1);
 		setTitle("Property Details");
 
 		if (!("Result".equals(gp.getProperty().getResultName())))
-			jLabel8.setText("Result ("+gp.getProperty().getResultName().toLowerCase()+"):");
-		
+			jLabel8.setText("Result (" + gp.getProperty().getResultName().toLowerCase() + "):");
+
 		propertyLabel.setText(gp.getPropString());
 		constantsLabel.setText(gp.getConstantsString());
 		methodLabel.setText(gp.getMethodString());
@@ -59,14 +59,14 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		} else {
 			warningLabel.setText(gp.getNumberOfWarnings() + " warnings (see log)");
 		}
-			
+
 		this.gp = gp;
 		this.gmp = gmp;
-		
+
 		pack();
 		setLocation(getParent().getX(), getParent().getY());
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -112,12 +112,14 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		jPanel12 = new javax.swing.JPanel();
 		jPanel13 = new javax.swing.JPanel();
 
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                closeDialog();
-            }
-        });
-        
+		addWindowListener(new java.awt.event.WindowAdapter()
+		{
+			public void windowClosing(java.awt.event.WindowEvent evt)
+			{
+				closeDialog();
+			}
+		});
+
 		jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
 		jButton1.setText("Okay");
@@ -132,7 +134,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		jPanel2.add(jButton1);
 
 		getContentPane().add(jPanel2, java.awt.BorderLayout.SOUTH);
-		
+
 		jPanel10.setLayout(new java.awt.GridBagLayout());
 
 		jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -243,7 +245,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 12;
 		jPanel1.add(jPanel9, gridBagConstraints);
-		
+
 		warningLabel.setText("dummy dummy");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
@@ -257,7 +259,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 14;
 		jPanel1.add(jPanel14, gridBagConstraints);
-		
+
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
@@ -287,7 +289,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 	{//GEN-HEADEREND:event_jButton1ActionPerformed
 		closeDialog();
 	}//GEN-LAST:event_jButton1ActionPerformed
-	
+
 	/** Closes the dialog */
 	private void closeDialog()
 	{
@@ -300,16 +302,16 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 	public void display()
 	{
 		noOpen++;
-		setLocation(getX()+(noOpen*50), getY()+(noOpen*50));
+		setLocation(getX() + (noOpen * 50), getY() + (noOpen * 50));
 		super.setVisible(true);
 	}
-	
+
 	public void dispose()
 	{
 		noOpen--;
 		super.dispose();
 	}
-	
+
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel constantsLabel;
 	private javax.swing.JButton jButton1;
@@ -336,5 +338,5 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 	private javax.swing.JLabel propertyLabel;
 	private javax.swing.JLabel resultLabel;
 	// End of variables declaration//GEN-END:variables
-	
+
 }

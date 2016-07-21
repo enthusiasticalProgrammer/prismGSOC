@@ -159,14 +159,14 @@ public class NondetModel extends ProbModel
 		JDD.Ref(nondetMask);
 		JDDNode tmp = JDD.And(reach, JDD.And(JDD.LessThanEquals(transActions, 0), JDD.Not(nondetMask)));
 		tmp = JDD.SumAbstract(tmp, allDDNondetVars);
-		double max = JDD.FindMax(tmp); 
+		double max = JDD.FindMax(tmp);
 		JDD.Deref(tmp);
 		if (max > 1)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	// set methods for things not set up in constructor
 
 	public void setTransInd(JDDNode transInd)
@@ -242,7 +242,7 @@ public class NondetModel extends ProbModel
 			JDD.Ref(reach);
 			transReln = JDD.Apply(JDD.TIMES, reach, transReln);
 		}
-		
+
 		// build mask for nondeterminstic choices
 		// (and work out number of choices)
 		JDD.Ref(trans01);
@@ -267,7 +267,7 @@ public class NondetModel extends ProbModel
 		// find reachable states with no transitions
 		JDD.Ref(reach);
 		deadlocks = JDD.And(reach, JDD.Not(deadlocks));
-		
+
 		if (fix && !deadlocks.equals(JDD.ZERO)) {
 			// remove deadlocks by adding self-loops to trans
 			// (also update transInd (if necessary) at same time)

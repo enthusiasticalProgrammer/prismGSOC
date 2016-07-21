@@ -32,8 +32,10 @@ import java.util.NoSuchElementException;
 /**
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class RegionValuesIntersections implements Iterable<RegionIntersection> {
-	final private class RegionIntersectionOperator implements Iterator<RegionIntersection> {
+final class RegionValuesIntersections implements Iterable<RegionIntersection>
+{
+	final private class RegionIntersectionOperator implements Iterator<RegionIntersection>
+	{
 		private RegionValues regions1;
 		private RegionValues regions2;
 		private int numRegions1;
@@ -54,8 +56,9 @@ final class RegionValuesIntersections implements Iterable<RegionIntersection> {
 			stateValues2 = null;
 			findNext();
 		}
-		
-		private void findNext() {
+
+		private void findNext()
+		{
 			boolean found = false;
 			while (regions1Index < numRegions1 && !found) {
 				region = regions1.getRegion(regions1Index);
@@ -68,12 +71,14 @@ final class RegionValuesIntersections implements Iterable<RegionIntersection> {
 		}
 
 		@Override
-		public boolean hasNext() {
+		public boolean hasNext()
+		{
 			return hasNext;
 		}
 
 		@Override
-		public RegionIntersection next() {
+		public RegionIntersection next()
+		{
 			if (hasNext) {
 				RegionIntersection result = new RegionIntersection(region, stateValues1, stateValues2);
 				findNext();
@@ -84,7 +89,8 @@ final class RegionValuesIntersections implements Iterable<RegionIntersection> {
 		}
 
 		@Override
-		public void remove() {
+		public void remove()
+		{
 			throw new UnsupportedOperationException();
 		}
 	}
@@ -92,14 +98,16 @@ final class RegionValuesIntersections implements Iterable<RegionIntersection> {
 	private RegionValues regions1;
 	private RegionValues regions2;
 
-	public RegionValuesIntersections(RegionValues regions1, RegionValues regions2) {
+	public RegionValuesIntersections(RegionValues regions1, RegionValues regions2)
+	{
 		regions1.cosplit(regions2);
 		this.regions1 = regions1;
 		this.regions2 = regions2;
 	}
 
 	@Override
-	public Iterator<RegionIntersection> iterator() {
+	public Iterator<RegionIntersection> iterator()
+	{
 		return new RegionIntersectionOperator(regions1, regions2);
 	}
 

@@ -81,8 +81,7 @@ public class GUISimLabelList extends JList
 			int index = engine.addLabel(expr);
 			SimLabel sl = new SimLabel(name, index);
 			listModel.addElement(sl);
-		}
-		catch (PrismLangException e) {
+		} catch (PrismLangException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}
@@ -98,8 +97,7 @@ public class GUISimLabelList extends JList
 			int index = engine.addLabel(expr, pf);
 			SimLabel sl = new SimLabel(name, index);
 			listModel.addElement(sl);
-		}
-		catch (PrismLangException e) {
+		} catch (PrismLangException e) {
 			// Silently ignore any problems - just don't add label to list
 		}
 	}

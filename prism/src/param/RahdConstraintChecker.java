@@ -34,14 +34,16 @@ import java.io.InputStreamReader;
  * TODO complete
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class RahdConstraintChecker extends ConstraintChecker {
+final class RahdConstraintChecker extends ConstraintChecker
+{
 	// TODO read from PrismSettings
-	final static String rahdBin = "/home/scratch/svn/pers-sb/rahd/rahd-bin";	
+	final static String rahdBin = "/home/scratch/svn/pers-sb/rahd/rahd-bin";
 
-	public RahdConstraintChecker(int numRandomPoints) {
+	public RahdConstraintChecker(int numRandomPoints)
+	{
 		super(numRandomPoints);
 	}
-	
+
 	private boolean runRahd(Region region, String formula)
 	{
 		boolean ok = false;
@@ -51,8 +53,8 @@ final class RahdConstraintChecker extends ConstraintChecker {
 			varBuilder.append(var);
 			varBuilder.append(" ");
 		}
-			
-		String[] command = {"timeout", "5m", rahdBin, "-v", varBuilder.toString(), "-f", formula};
+
+		String[] command = { "timeout", "5m", rahdBin, "-v", varBuilder.toString(), "-f", formula };
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec(command);
@@ -69,7 +71,7 @@ final class RahdConstraintChecker extends ConstraintChecker {
 		}
 		return ok;
 	}
-	
+
 	private String buildRegionString(Region region)
 	{
 		BoxRegion boxRegion = (BoxRegion) region;
@@ -88,12 +90,13 @@ final class RahdConstraintChecker extends ConstraintChecker {
 				result.append(" /\\ ");
 			}
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	@Override
-	boolean mainCheck(Region region, Function poly, boolean strict) {
+	boolean mainCheck(Region region, Function poly, boolean strict)
+	{
 		String regionString = buildRegionString(region);
 
 		return runRahd(region, regionString + " /\\ " + poly + (strict ? " <= 0" : " < 0"));

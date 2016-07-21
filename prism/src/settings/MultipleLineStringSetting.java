@@ -26,57 +26,55 @@
 
 package settings;
 
-public class MultipleLineStringSetting extends Setting 
+public class MultipleLineStringSetting extends Setting
 {
-    private static MultipleLineStringRenderer renderer;
-    private static MultipleLineStringEditor editor;
-    
-    static
-    {
-        renderer = new MultipleLineStringRenderer();
-        editor = new MultipleLineStringEditor();
-    }
-    
-    
-    /** Creates a new instance of MultipleLineStringSetting */
+	private static MultipleLineStringRenderer renderer;
+	private static MultipleLineStringEditor editor;
+
+	static {
+		renderer = new MultipleLineStringRenderer();
+		editor = new MultipleLineStringEditor();
+	}
+
+	/** Creates a new instance of MultipleLineStringSetting */
 	public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple)
-    {
-        super(name, value, comment, owner, editableWhenMultiple);
-    }
-	
-    public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple, StringConstraint constraint)
-    {
-        super(name, value, comment, owner, editableWhenMultiple, constraint);
-    }
-    
-    public SettingEditor getSettingEditor()
-    {
-        return editor;
-    }
-    
-    public SettingRenderer getSettingRenderer()
-    {
-        return renderer;
-    }
-    
-    public Class getValueClass()
-    {
-        return String.class;
-    }
-    
-    public String getStringValue()
-    {
-        return getValue().toString();
-    }
-    
+	{
+		super(name, value, comment, owner, editableWhenMultiple);
+	}
+
+	public MultipleLineStringSetting(String name, String value, String comment, SettingOwner owner, boolean editableWhenMultiple, StringConstraint constraint)
+	{
+		super(name, value, comment, owner, editableWhenMultiple, constraint);
+	}
+
+	public SettingEditor getSettingEditor()
+	{
+		return editor;
+	}
+
+	public SettingRenderer getSettingRenderer()
+	{
+		return renderer;
+	}
+
+	public Class getValueClass()
+	{
+		return String.class;
+	}
+
+	public String getStringValue()
+	{
+		return getValue().toString();
+	}
+
 	public Object parseStringValue(String string) throws SettingException
 	{
 		return string;
 	}
-	
+
 	public String toString()
 	{
 		return getStringValue();
 	}
-	
+
 }

@@ -258,7 +258,7 @@ public class StateValuesDV implements StateValues
 	{
 		return values.getSize();
 	}
-	
+
 	@Override
 	public Object getValue(int i)
 	{

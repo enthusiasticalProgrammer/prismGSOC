@@ -171,7 +171,7 @@ public abstract class Reactions2Prism extends PrismLanguageTranslator
 				throw new PrismException("Duplicate reaction id \"" + reaction.id + "\"");
 			reactionIDs.add(reaction.id);
 		}
-		
+
 		// Look at initial amounts for all species
 		// If any exceed MAX_AMOUNT, increase it accordingly
 		for (Species species : speciesList) {

@@ -37,12 +37,12 @@ import prism.PrismLangException;
 public class GetAllLabels extends ASTTraverse
 {
 	private Vector<String> v;
-	
+
 	public GetAllLabels(Vector<String> v)
 	{
 		this.v = v;
 	}
-	
+
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {
@@ -50,4 +50,3 @@ public class GetAllLabels extends ASTTraverse
 		}
 	}
 }
-

@@ -43,20 +43,20 @@ public interface ModelGenerator extends ModelInfo
 	 * Does the model have a single initial state?
 	 */
 	public boolean hasSingleInitialState() throws PrismException;
-	
+
 	/**
 	 * Get the initial states of the model.
 	 * The returned list should contain fresh State objects that can be kept/modified. 
 	 */
 	public List<State> getInitialStates() throws PrismException;
-	
+
 	/**
 	 * Get the initial state of the model, if there is just one,
 	 * or the first of the initial states if there are more than one.
 	 * The returned State object should be fresh, i.e. can be kept/modified. 
 	 */
 	public State getInitialState() throws PrismException;
-	
+
 	/**
 	 * Explore a given state of the model. After a call to this method,
 	 * the class should be able to respond to the various methods that are
@@ -70,7 +70,7 @@ public interface ModelGenerator extends ModelInfo
 	 * {@link #exploreState(State)} was called. Can return null if there is no such state. 
 	 */
 	public State getExploreState();
-	
+
 	/**
 	 * Get the number of nondeterministic choices in the current state.
 	 */
@@ -129,24 +129,24 @@ public interface ModelGenerator extends ModelInfo
 	 * @param offset Index of the transition within the choice
 	 */
 	public State computeTransitionTarget(int i, int offset) throws PrismException;
-	
+
 	/**
 	 * Is label {@code label} true in the state currently being explored?
 	 * @param label The name of the label to check 
 	 */
 	public boolean isLabelTrue(String label) throws PrismException;
-	
+
 	/**
 	 * Is the {@code i}th label of the model true in the state currently being explored?
 	 * @param i The index of the label to check 
 	 */
 	public boolean isLabelTrue(int i) throws PrismException;
-	
+
 	/**
 	 * Get the state reward for state {@code state} using the reward structure with index {@code index}.
 	 */
 	public double getStateReward(int index, State state) throws PrismException;
-	
+
 	// TODO: can we remove this?
 	public VarList createVarList();
 }

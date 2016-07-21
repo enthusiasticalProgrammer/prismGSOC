@@ -74,7 +74,7 @@ public class TransitionList
 		numTransitions += tr.size();
 		probSum += tr.getProbabilitySum();
 	}
-	
+
 	/**
 	 * Scale probability/rate of all transitions in all choices, multiplying by d.
 	 */
@@ -84,7 +84,7 @@ public class TransitionList
 			getChoice(i).scaleProbabilitiesBy(d);
 		}
 	}
-	
+
 	// ACCESSORS
 
 	/**
@@ -253,9 +253,9 @@ public class TransitionList
 	{
 		return getChoiceOfTransition(index).computeTarget(transitionOffsets.get(index), currentState);
 	}
-	
+
 	// Other checks and queries
-	
+
 	/**
 	 * Is there a deadlock (i.e. no available transitions)?
 	 */
@@ -312,7 +312,7 @@ public class TransitionList
 			ch.checkValid(modelType);
 		}
 	}
-	
+
 	/**
 	 * Check whether the available transitions (from a particular state)
 	 * would cause any errors, mainly variable overflows.
@@ -325,7 +325,7 @@ public class TransitionList
 			ch.checkForErrors(currentState, varList);
 		}
 	}
-	
+
 	@Override
 	public String toString()
 	{

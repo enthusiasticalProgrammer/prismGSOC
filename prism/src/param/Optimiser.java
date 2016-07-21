@@ -34,25 +34,28 @@ import java.util.ArrayList;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class Optimiser {
+final class Optimiser
+{
 	RegionValues values;
 	RegionValues filter;
 	boolean min;
 
-	public Optimiser(RegionValues values, RegionValues filter, boolean min) {
+	public Optimiser(RegionValues values, RegionValues filter, boolean min)
+	{
 		this.values = values;
 		this.filter = filter;
 		this.min = min;
 	}
 
-	public String optimise() {
+	public String optimise()
+	{
 		int numStates = values.getResult(0).getNumStates();
 		BigRational[] bounds = new BigRational[numStates];
 		for (int state = 0; state < numStates; state++) {
 			bounds[state] = min ? BigRational.INF : BigRational.MINF;
 		}
 		Point[] optPoints = new Point[numStates];
-		
+
 		RegionValuesIntersections co = new RegionValuesIntersections(values, filter);
 		for (RegionIntersection inter : co) {
 			Region region = inter.getRegion();
@@ -71,9 +74,9 @@ final class Optimiser {
 				}
 			}
 		}
-		
+
 		BigRational initBound = bounds[values.getInitState()];
-		
+
 		return (min ? "at most " : "at least ") + initBound.doubleValue() + " at " + optPoints[values.getInitState()];
 	}
 

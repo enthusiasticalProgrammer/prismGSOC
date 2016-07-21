@@ -55,8 +55,8 @@ public class SimulateModelCheckThread extends GUIComputationThread
 	private SimulationInformation info;
 
 	/** Creates a new instance of SimulateModelCheckThread */
-	public SimulateModelCheckThread(GUIMultiProperties parent, PropertiesFile prFi, ArrayList<GUIProperty> guiProps,
-			Values definedPFConstants, SimulationInformation info)
+	public SimulateModelCheckThread(GUIMultiProperties parent, PropertiesFile prFi, ArrayList<GUIProperty> guiProps, Values definedPFConstants,
+			SimulationInformation info)
 	{
 		super(parent);
 		this.parent = parent;

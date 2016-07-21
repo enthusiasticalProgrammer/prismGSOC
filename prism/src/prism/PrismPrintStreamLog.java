@@ -34,7 +34,7 @@ import java.io.*;
 public class PrismPrintStreamLog extends PrismLog
 {
 	PrintStream out = null;
-	
+
 	public PrismPrintStreamLog(PrintStream out)
 	{
 		setPrintStream(out);
@@ -49,7 +49,7 @@ public class PrismPrintStreamLog extends PrismLog
 	{
 		this.out = out;
 	}
-	
+
 	public boolean ready()
 	{
 		return out != null;
@@ -60,7 +60,7 @@ public class PrismPrintStreamLog extends PrismLog
 		// This implementation is Java only so does not return a file pointer.
 		return -1;
 	}
-	
+
 	public void flush()
 	{
 		out.flush();
@@ -70,9 +70,9 @@ public class PrismPrintStreamLog extends PrismLog
 	{
 		out.close();
 	}
-	
+
 	// Basic print methods
-	
+
 	public void print(boolean b)
 	{
 		out.print(b);

@@ -29,28 +29,26 @@ package prism;
 /**
  * Set methods to pass options to native code.
  * And a few utility methods, relying on native methods in the "prism" shared library.
- */ 
+ */
 public class PrismNative
 {
 	// Load "prism" shared library
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("prism");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
 	}
-	
+
 	// Initialise/close down methods
-	
+
 	public static void initialise(Prism prism)
 	{
 		setPrism(prism);
 	}
-	
+
 	public static void closeDown()
 	{
 		// Tidy up any JNI stuff
@@ -61,110 +59,132 @@ public class PrismNative
 	private static native void PN_FreeGlobalRefs();
 
 	// Prism object
-	
+
 	// Place to store Prism object for Java code
 	private static Prism prism;
+
 	// JNI method to set Prism object for native code
 	private static native void PN_SetPrism(Prism prism);
+
 	// Method to set Prism object both in Java and C++
 	public static void setPrism(Prism prism)
 	{
 		PrismNative.prism = prism;
 		PN_SetPrism(prism);
 	}
-	
+
 	// Options passing
-	
+
 	private static native void PN_SetCompact(boolean b);
+
 	public static void setCompact(boolean b)
 	{
 		PN_SetCompact(b);
 	}
 
 	private static native void PN_SetLinEqMethod(int i);
+
 	public static void setLinEqMethod(int i)
 	{
 		PN_SetLinEqMethod(i);
 	}
-	
+
 	private static native void PN_SetLinEqMethodParam(double d);
+
 	public static void setLinEqMethodParam(double d)
 	{
 		PN_SetLinEqMethodParam(d);
 	}
-	
+
 	private static native void PN_SetTermCrit(int i);
+
 	public static void setTermCrit(int i)
 	{
 		PN_SetTermCrit(i);
 	}
-	
+
 	private static native void PN_SetTermCritParam(double d);
+
 	public static void setTermCritParam(double d)
 	{
 		PN_SetTermCritParam(d);
 	}
-	
+
 	private static native void PN_SetMaxIters(int i);
+
 	public static void setMaxIters(int i)
 	{
 		PN_SetMaxIters(i);
 	}
 
 	private static native void PN_SetSBMaxMem(int i);
+
 	public static void setSBMaxMem(int i)
 	{
 		PN_SetSBMaxMem(i);
 	}
-	
+
 	private static native void PN_SetNumSBLevels(int i);
+
 	public static void setNumSBLevels(int i)
 	{
 		PN_SetNumSBLevels(i);
 	}
-	
+
 	private static native void PN_SetSORMaxMem(int i);
+
 	public static void setSORMaxMem(int i)
 	{
 		PN_SetSORMaxMem(i);
 	}
-	
+
 	private static native void PN_SetNumSORLevels(int i);
+
 	public static void setNumSORLevels(int i)
 	{
 		PN_SetNumSORLevels(i);
 	}
-	
+
 	private static native void PN_SetDoSSDetect(boolean b);
+
 	public static void setDoSSDetect(boolean b)
 	{
 		PN_SetDoSSDetect(b);
 	}
 
 	private static native void PN_SetExportAdv(int i);
+
 	public static void setExportAdv(int i)
 	{
 		PN_SetExportAdv(i);
 	}
-	
+
 	private static native void PN_SetExportAdvFilename(String filename);
+
 	public static void setExportAdvFilename(String filename)
 	{
 		PN_SetExportAdvFilename(filename);
 	}
 
 	private static native int PN_SetWorkingDirectory(String dirname);
+
 	/** Changes the current working directory. Returns 0 on success. */
-	public static int setWorkingDirectory(String dirname) {
+	public static int setWorkingDirectory(String dirname)
+	{
 		return PN_SetWorkingDirectory(dirname);
 	}
-	
+
 	// Some miscellaneous native methods
 	public static native long PN_GetStdout();
+
 	public static native long PN_OpenFile(String filename);
+
 	public static native long PN_OpenFileAppend(String filename);
+
 	public static native void PN_PrintToFile(long fp, String s);
+
 	public static native void PN_FlushFile(long fp);
+
 	public static native void PN_CloseFile(long fp);
 }
 

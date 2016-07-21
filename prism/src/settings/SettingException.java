@@ -28,9 +28,9 @@ package settings;
 
 public class SettingException extends Exception
 {
-    /** Creates a new instance of SettingException */
-    public SettingException(String message)
-    {
-        super(message);
-    }
+	/** Creates a new instance of SettingException */
+	public SettingException(String message)
+	{
+		super(message);
+	}
 }

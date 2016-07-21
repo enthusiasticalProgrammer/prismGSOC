@@ -38,62 +38,57 @@ import javax.swing.*;
 public class SeriesSettingsList extends AbstractListModel implements Observer
 {
 	private Graph graph;
-	
+
 	private HashMap<Integer, Graph.SeriesKey> seriesKeys;
-	
+
 	public SeriesSettingsList(Graph graph)
 	{
 		this.graph = graph;
 		this.seriesKeys = new HashMap<Integer, Graph.SeriesKey>();
-	}	
-
-	public Object getElementAt(int index) 
-	{
-		synchronized (graph.getSeriesLock())
-		{
-			return graph.getGraphSeries(seriesKeys.get(index));
-		}		
 	}
-	
+
+	public Object getElementAt(int index)
+	{
+		synchronized (graph.getSeriesLock()) {
+			return graph.getGraphSeries(seriesKeys.get(index));
+		}
+	}
+
 	public Graph.SeriesKey getKeyAt(int index)
 	{
-		synchronized (graph.getSeriesLock())
-		{
+		synchronized (graph.getSeriesLock()) {
 			return seriesKeys.get(index);
 		}
 	}
 
-	public int getSize() 
+	public int getSize()
 	{
 		return seriesKeys.size();
 	}
-	
+
 	public void updateSeriesList()
 	{
-		synchronized (graph.getSeriesLock())
-		{
-			for (Map.Entry<Integer, Graph.SeriesKey> entry : seriesKeys.entrySet())
-			{			
+		synchronized (graph.getSeriesLock()) {
+			for (Map.Entry<Integer, Graph.SeriesKey> entry : seriesKeys.entrySet()) {
 				SeriesSettings series = graph.getGraphSeries(entry.getValue());
 				if (series != null)
 					series.deleteObserver(this);
 			}
-			
+
 			seriesKeys.clear();
-			
-			for (Graph.SeriesKey key: graph.getAllSeriesKeys())
-			{
+
+			for (Graph.SeriesKey key : graph.getAllSeriesKeys()) {
 				seriesKeys.put(graph.getJFreeChartIndex(key), key);
 				graph.getGraphSeries(key).updateSeries();
-				graph.getGraphSeries(key).addObserver(this);				
+				graph.getGraphSeries(key).addObserver(this);
 			}
 		}
-		
-		fireContentsChanged(this, 0, this.getSize());		
+
+		fireContentsChanged(this, 0, this.getSize());
 	}
-	
-	public void update(Observable o, Object arg) 
-	{		
+
+	public void update(Observable o, Object arg)
+	{
 		fireContentsChanged(this, 0, this.getSize());
 	}
 }

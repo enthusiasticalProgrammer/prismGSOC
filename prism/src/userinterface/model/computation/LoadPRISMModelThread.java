@@ -44,7 +44,7 @@ public class LoadPRISMModelThread extends Thread
 	private GUITextModelEditor textEdit;
 	private boolean replace;
 	private Exception ex;
-	
+
 	/** Creates a new instance of LoadPRISMModelThread */
 	public LoadPRISMModelThread(GUIMultiModelHandler handler, GUIModelEditor edit, File f, boolean reload)
 	{
@@ -59,58 +59,64 @@ public class LoadPRISMModelThread extends Thread
 
 	public void run()
 	{
-		if(edit instanceof GUITextModelEditor)
-		{
-			textEdit = (GUITextModelEditor)edit;
+		if (edit instanceof GUITextModelEditor) {
+			textEdit = (GUITextModelEditor) edit;
 			replace = false;
-		}
-		else
-		{
-			textEdit = new GUITextModelEditor("",handler);
+		} else {
+			textEdit = new GUITextModelEditor("", handler);
 			replace = true;
 		}
-		
-		try
-		{
+
+		try {
 			//notify interface of start of computation and start the read into textEdit
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				try
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
 				{
-					plug.startProgress();
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
-					plug.setTaskBarText("Loading model...");
-					textEdit.read(new FileReader(f), f);
+					try {
+						plug.startProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_START, plug));
+						plug.setTaskBarText("Loading model...");
+						textEdit.read(new FileReader(f), f);
+					} catch (IOException e) {
+						ex = e;
+					}
 				}
-				catch(IOException e)
-				{
-					ex = e;
-				}
-			}});
-			
+			});
+
 			//If there was a problem with the loading, notify the interface.
-			if(ex != null) {
-				SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-					plug.stopProgress(); 
-					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
-					plug.setTaskBarText("Loading model... error.");
-					plug.error("Could not open file \"" + f + "\"");
-				}});
+			if (ex != null) {
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						plug.stopProgress();
+						plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
+						plug.setTaskBarText("Loading model... error.");
+						plug.error("Could not open file \"" + f + "\"");
+					}
+				});
 				return;
 			}
-			
+
 			//If we get here, the load has been successful, notify the interface and tell the handler.
-			SwingUtilities.invokeAndWait(new Runnable() { public void run() {
-				plug.stopProgress(); 
-				plug.setTaskBarText("Loading model... done.");
-				plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
-				if(!reload)
-					handler.prismModelLoaded(textEdit, f ,replace);
-				else
-					handler.prismModelReLoaded(f);
-			}});
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
+				{
+					plug.stopProgress();
+					plug.setTaskBarText("Loading model... done.");
+					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_DONE, plug));
+					if (!reload)
+						handler.prismModelLoaded(textEdit, f, replace);
+					else
+						handler.prismModelReLoaded(f);
+				}
+			});
 		}
 		// catch and ignore any thread exceptions
-		catch (java.lang.InterruptedException e) {}
-		catch (java.lang.reflect.InvocationTargetException e) {}
+		catch (java.lang.InterruptedException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
 	}
 }

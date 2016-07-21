@@ -54,10 +54,10 @@ import javax.swing.text.ViewFactory;
  */
 class PepaEditorKit extends DefaultEditorKit
 {
-	
+
 	private PepaContext preferences;
 	private GUIMultiModelHandler handler;
-	
+
 	/** Creates a new instance of the Pepa editor kit.
 	 * 
 	 * @param handler The GUI handler for this component.
@@ -66,45 +66,44 @@ class PepaEditorKit extends DefaultEditorKit
 	{
 		this.handler = handler;
 	}
-	
+
 	public PepaContext getStylePreferences()
 	{
-		if (preferences == null)
-		{
+		if (preferences == null) {
 			preferences = new PepaContext(handler);
 		}
 		return preferences;
 	}
-	
+
 	public void setStylePreferences(PepaContext prefs)
 	{
 		preferences = prefs;
 	}
-	
+
 	public String getContentType()
 	{
 		return "text/pepa";
 	}
-	
+
 	public Document createDefaultDocument()
 	{
 		return new PlainDocument();
 	}
-	
+
 	public final ViewFactory getViewFactory()
 	{
 		return getStylePreferences();
 	}
-	
+
 }
 
 class PepaContext extends StyleContext implements ViewFactory
 {
 
 	public static final String COMMENT_D = "Single Line Comment";
-	
+
 	private GUIMultiModelHandler handler;
-	
+
 	/** Creates a new instance of PepaContext.
 	 * 
 	 * @param handler The GUI handler for this component. 
@@ -113,221 +112,193 @@ class PepaContext extends StyleContext implements ViewFactory
 	{
 		this.handler = handler;
 	}
-	
+
 	public View create(Element elem)
 	{
 		return new PepaView(elem, handler);
 	}
-	
+
 }
 
 class PepaView extends PlainView
 {
-	
+
 	static final userinterface.model.Style PLAIN_S = new userinterface.model.Style(Color.black, Font.PLAIN);
 	private Matcher match;
 	private Pattern pattern;
 	private GUIMultiModelHandler handler;
-	
+
 	public PepaView(Element elem, GUIMultiModelHandler handler)
 	{
 		super(elem);
 		this.handler = handler;
 		pattern = Pattern.compile("%.*");
 	}
-	
+
 	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = findStartOfLine(p0, getDocument());
 		int enLine = findEndOfLine(p1, getDocument());
 
 		if (g instanceof Graphics2D) {
-			Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
-        
-		try
-		{
+
+		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
 			Segment segment = getLineBuffer();
-			
-			
+
 			//String s = doc.getText(p0, p1-p0);
-			String s = doc.getText(stLine, enLine-stLine);
-			userinterface.model.Style[] styles = highlight(s, (p0-stLine), (p1-p0));
+			String s = doc.getText(stLine, enLine - stLine);
+			userinterface.model.Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			int currStart = 0;
 			int currEnd = 0;
 			Color last = null;
 			String fname = handler.getPepaEditorFontFast().getName();
 			int fsize = handler.getPepaEditorFontFast().getSize();
-			
-			for(int curr = 0; curr < styles.length; curr++)
-			{
-				
+
+			for (int curr = 0; curr < styles.length; curr++) {
+
 				userinterface.model.Style c = styles[curr];
-				
+
 				g.setColor(c.c);
 				g.setFont(new Font(fname, c.style, fsize));
 				Segment segm = getLineBuffer();
-				doc.getText(p0+curr, 1, segm);
-				x = Utilities.drawTabbedText(segm, x, y, g, this, p0+curr);
-				
+				doc.getText(p0 + curr, 1, segm);
+				x = Utilities.drawTabbedText(segm, x, y, g, this, p0 + curr);
+
 			}
 			g.setColor(Color.black);
 			g.setFont(new Font(fname, Font.PLAIN, fsize));
-		}
-		catch(BadLocationException ex)
-		{
+		} catch (BadLocationException ex) {
 			//System.out.println("ex = "+ex);
 			//ex.printStackTrace();
 		}
 		return x;
 	}
-	
+
 	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = findStartOfLine(p0, getDocument());
 		int enLine = findEndOfLine(p1, getDocument());
 
 		if (g instanceof Graphics2D) {
-			Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
-        
-		try
-		{
+
+		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
 			Segment segment = getLineBuffer();
-			
-			
+
 			//String s = doc.getText(p0, p1-p0);
-			String s = doc.getText(stLine, enLine-stLine);
-			userinterface.model.Style[] styles = highlight(s, (p0-stLine), (p1-p0));
+			String s = doc.getText(stLine, enLine - stLine);
+			userinterface.model.Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			int currStart = 0;
 			int currEnd = 0;
 			Color last = null;
 			String fname = handler.getPepaEditorFontFast().getName();
 			int fsize = handler.getPepaEditorFontFast().getSize();
-			
-			for(int curr = 0; curr < styles.length; curr++)
-			{
-				
+
+			for (int curr = 0; curr < styles.length; curr++) {
+
 				userinterface.model.Style c = styles[curr];
-				
+
 				g.setColor(c.c);
 				g.setFont(new Font(fname, c.style, fsize));
 				Segment segm = getLineBuffer();
-				doc.getText(p0+curr, 1, segm);
-				x = Utilities.drawTabbedText(segm, x, y, g, this, p0+curr);
-				
+				doc.getText(p0 + curr, 1, segm);
+				x = Utilities.drawTabbedText(segm, x, y, g, this, p0 + curr);
+
 			}
 			g.setColor(Color.black);
 			g.setFont(new Font(fname, Font.PLAIN, fsize));
-		}
-		catch(BadLocationException ex)
-		{
+		} catch (BadLocationException ex) {
 			//System.out.println("ex = "+ex);
 			//ex.printStackTrace();
 		}
 		return x;
 	}
-	
+
 	private synchronized userinterface.model.Style[] highlight(String s, int offset, int length)
 	{
 		userinterface.model.Style[] styles = new userinterface.model.Style[s.length()];
-		for(int i = 0; i < styles.length; i++)
+		for (int i = 0; i < styles.length; i++)
 			styles[i] = PLAIN_S;
-		
+
 		match = pattern.matcher(s);
-		
-		
+
 		int starter = 0;
 		int end = 0;
 		boolean contain = match.find();
-		while(contain)
-		{
+		while (contain) {
 			starter = match.start();
 			end = match.end();
-			
-			for(int j = starter; j < end; j++)
-			{
+
+			for (int j = starter; j < end; j++) {
 				styles[j] = handler.getPepaEditorCommentFast();
 			}
 			contain = match.find();
 		}
-		
+
 		//System.out.println("styles.length = "+styles.length);
 		//System.out.println("ret.length = "+length);
 		//System.out.println("offset = "+offset);
-		userinterface.model.Style[]ret = new userinterface.model.Style[length];
-		for(int i = 0; i < ret.length; i++)
-		{
-			ret[i] = styles[i+offset];
+		userinterface.model.Style[] ret = new userinterface.model.Style[length];
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = styles[i + offset];
 		}
-		
+
 		return ret;
 	}
-	
-	
+
 	private synchronized int findStartOfLine(int p0, Document d)
 	{
 		int index = p0;
 		String s = "";
-		try
-		{
+		try {
 			s = d.getText(index, 1);
-		}
-		catch(BadLocationException e)
-		{
+		} catch (BadLocationException e) {
 			return 0;
 		}
 		index--;
-		if(!(!s.equals("\n") && index >= -1)) index--;//botch of the century, an alternative good code
-		while(!s.equals("\n") && index >= -1)
-		{
-			try
-			{
+		if (!(!s.equals("\n") && index >= -1))
+			index--;//botch of the century, an alternative good code
+		while (!s.equals("\n") && index >= -1) {
+			try {
 				s = d.getText(index, 1);
-			}
-			catch(BadLocationException e)
-			{
+			} catch (BadLocationException e) {
 				return 0;
 			}
 			index--;
 		}
-		index+=2;
+		index += 2;
 		return index;
 	}
-	
+
 	private synchronized int findEndOfLine(int p1, Document d)
 	{
 		int index = p1;
 		String s = "";
-		try
-		{
+		try {
 			s = d.getText(index, 1);
-		}
-		catch(BadLocationException e)
-		{
+		} catch (BadLocationException e) {
 			return d.getLength();
 		}
 		index++;
-		while(!s.equals("\n") && index <= d.getLength())
-		{
-			try
-			{
+		while (!s.equals("\n") && index <= d.getLength()) {
+			try {
 				s = d.getText(index, 1);
-			}
-			catch(BadLocationException e)
-			{
-				return d.getLength()-1;
+			} catch (BadLocationException e) {
+				return d.getLength() - 1;
 			}
 			index++;
 		}
 		index--;
 		return index;
 	}
-	
+
 }

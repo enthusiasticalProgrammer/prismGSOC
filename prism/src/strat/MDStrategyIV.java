@@ -47,7 +47,7 @@ public class MDStrategyIV extends MDStrategy
 	private List<String> actions;
 	// Array storing MD strategy: *action* index (not choice index) for each state
 	private IntegerVector iv;
-	
+
 	/**
 	 * Create an MDStrategyIV from an IntegerVector.
 	 */
@@ -58,15 +58,15 @@ public class MDStrategyIV extends MDStrategy
 		actions = model.getSynchs();
 		this.iv = iv;
 	}
-	
+
 	// Methods for MDStrategy
-	
+
 	@Override
 	public int getNumStates()
 	{
 		return numStates;
 	}
-	
+
 	@Override
 	public boolean isChoiceDefined(int s)
 	{
@@ -88,22 +88,22 @@ public class MDStrategyIV extends MDStrategy
 			return Choice.INDEX;
 		}
 	}
-	
+
 	@Override
 	public int getChoiceIndex(int s)
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public Object getChoiceAction(int s)
 	{
 		int c = iv.getElement(s);
 		return c >= 0 ? actions.get(c) : c == -1 ? "?" : c == -2 ? "*" : "-";
 	}
-	
+
 	// Methods for Strategy
-	
+
 	@Override
 	public void exportInducedModel(PrismLog out)
 	{
@@ -123,7 +123,7 @@ public class MDStrategyIV extends MDStrategy
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void clear()
 	{

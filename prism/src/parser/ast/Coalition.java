@@ -41,10 +41,10 @@ public class Coalition
 {
 	/** Is coalition all players? (denoted by *) */
 	protected boolean allPlayers;
-	
+
 	/** Coalition: list of player names/indices */
-	protected List<String> players; 
-	
+	protected List<String> players;
+
 	// Constructors
 
 	/**
@@ -76,7 +76,8 @@ public class Coalition
 	public void setAllPlayers()
 	{
 		allPlayers = true;
-		players.clear();;
+		players.clear();
+		;
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class Coalition
 	{
 		return allPlayers;
 	}
-	
+
 	/**
 	 * Is this coalition empty?
 	 */
@@ -107,7 +108,7 @@ public class Coalition
 	{
 		return !allPlayers && players.isEmpty();
 	}
-	
+
 	/**
 	 * Get a list of strings describing the coalition
 	 * (each string can be a player name or an integer player index).
@@ -117,7 +118,7 @@ public class Coalition
 	{
 		return allPlayers ? null : players;
 	}
-	
+
 	/**
 	 * Check if a given player (specified by its index) is in the coalition,
 	 * i.e., if the index or the name of the player with this index is in the list.
@@ -137,7 +138,7 @@ public class Coalition
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString()
 	{

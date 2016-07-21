@@ -166,7 +166,8 @@ public class PathToText extends PathDisplayer
 	}
 
 	@Override
-	public void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex, State newState, double[] newStateRewards)
+	public void displayStep(double timeSpent, double timeCumul, Object action, double probability, double[] transitionRewards, long newStateIndex,
+			State newState, double[] newStateRewards)
 	{
 		if (!showChangesOnly || changed) {
 			// display rewards for last state
@@ -305,7 +306,7 @@ public class PathToText extends PathDisplayer
 			log.println();
 		}
 	}
-	
+
 	@Override
 	public void close()
 	{

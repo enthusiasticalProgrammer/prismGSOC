@@ -45,17 +45,17 @@ import java.util.List;
  */
 public class OpsAndBoundsList
 {
- 
+
 	/**
 	 * Used when printing info to user.
 	 */
 	private BitSet probNegated;
-	
+
 	protected List<OpRelOpBound> opInfos;
 	protected List<Operator> relOps, relOpsProb, relOpsReward;
-	protected List<Double> bounds,  boundsProb, boundsReward;
-	protected List<Integer> stepBounds,  stepBoundsProb, stepBoundsReward, origPositionsReward, origPositionsProb;
-	
+	protected List<Double> bounds, boundsProb, boundsReward;
+	protected List<Integer> stepBounds, stepBoundsProb, stepBoundsReward, origPositionsReward, origPositionsProb;
+
 	/**
 	 * The default constructor which allocates the lists with size 1.
 	 */
@@ -63,7 +63,7 @@ public class OpsAndBoundsList
 	{
 		this(1);
 	}
-	
+
 	/**
 	 * Creates an instance of the class in which the "big" lists
 	 * are allocated with size numTargets.
@@ -85,7 +85,7 @@ public class OpsAndBoundsList
 		origPositionsReward = new ArrayList<Integer>(numObjectives);
 		origPositionsProb = new ArrayList<Integer>(numObjectives);
 	}
-	
+
 	/**
 	 * Adds a new tuple (op, bound) to the list. 
 	 * @param op
@@ -100,29 +100,27 @@ public class OpsAndBoundsList
 		bounds.add(quantityBound);
 		stepBounds.add(stepBound);
 
-		switch (op)
-		{
-			case P_MAX:
-			case P_MIN:
-			case P_GE:
-			case P_LE:
-				relOpsProb.add(op);
-				boundsProb.add(quantityBound);
-				stepBoundsProb.add(stepBound);
-				origPositionsProb.add(origPosition);
-				break;
-			case R_MAX:
-			case R_MIN:
-			case R_GE:
-			case R_LE:
-				relOpsReward.add(op);
-				boundsReward.add(quantityBound);
-				stepBoundsReward.add(stepBound);
-				origPositionsReward.add(origPosition);
-				break;
-			default:
-				throw new UnsupportedOperationException("Don't know how to add" +
-						" operator " + op + ", the handling code does not exist.");
+		switch (op) {
+		case P_MAX:
+		case P_MIN:
+		case P_GE:
+		case P_LE:
+			relOpsProb.add(op);
+			boundsProb.add(quantityBound);
+			stepBoundsProb.add(stepBound);
+			origPositionsProb.add(origPosition);
+			break;
+		case R_MAX:
+		case R_MIN:
+		case R_GE:
+		case R_LE:
+			relOpsReward.add(op);
+			boundsReward.add(quantityBound);
+			stepBoundsReward.add(stepBound);
+			origPositionsReward.add(origPosition);
+			break;
+		default:
+			throw new UnsupportedOperationException("Don't know how to add" + " operator " + op + ", the handling code does not exist.");
 		}
 	}
 
@@ -141,7 +139,7 @@ public class OpsAndBoundsList
 	{
 		return origPositionsProb.get(i);
 	}
-	
+
 	/**
 	 * Returns the operator at i-th position.
 	 */
@@ -149,7 +147,7 @@ public class OpsAndBoundsList
 	{
 		return relOps.get(i);
 	}
-	
+
 	/**
 	 * Returns the bound on quantity at i-th position.
 	 */
@@ -157,7 +155,7 @@ public class OpsAndBoundsList
 	{
 		return bounds.get(i);
 	}
-	
+
 	/**
 	 * Returns the number-of-steps step bound at i-th position.
 	 */
@@ -165,7 +163,7 @@ public class OpsAndBoundsList
 	{
 		return stepBounds.get(i);
 	}
-	
+
 	/**
 	 * Returns the operator/relop info at i-th position.
 	 */
@@ -200,7 +198,7 @@ public class OpsAndBoundsList
 	{
 		return stepBoundsProb.get(i);
 	}
-	
+
 	/**
 	 * Returns the operator at i-th position in the subsequence containing only reward
 	 * operators.
@@ -209,7 +207,7 @@ public class OpsAndBoundsList
 	{
 		return relOpsReward.get(i);
 	}
-	
+
 	/**
 	 * Returns the bound on reward at i-th position in the subsequence containing only reward
 	 * operators.
@@ -218,7 +216,7 @@ public class OpsAndBoundsList
 	{
 		return boundsReward.get(i);
 	}
-	
+
 	/**
 	 * Returns the number-of-steps bound at i-th position in the subsequence containing only reward
 	 * operators.
@@ -227,21 +225,20 @@ public class OpsAndBoundsList
 	{
 		return stepBoundsReward.get(i);
 	}
-	
+
 	/**
 	 * Returns true iff the i-th objective is probability objective.
 	 */
 	public boolean isProbabilityObjective(int i)
 	{
-		switch (relOps.get(i))
-		{
-			case P_MAX:
-			case P_MIN:
-			case P_GE:
-			case P_LE:
-				return true;
-			default:
-				return false;
+		switch (relOps.get(i)) {
+		case P_MAX:
+		case P_MIN:
+		case P_GE:
+		case P_LE:
+			return true;
+		default:
+			return false;
 		}
 	}
 
@@ -256,7 +253,7 @@ public class OpsAndBoundsList
 	{
 		return this.probNegated.get(i);
 	}
-	
+
 	/**
 	 *  Replace min by max and &lt;= by &gt;= in prob.
 	 */
@@ -267,15 +264,15 @@ public class OpsAndBoundsList
 			if (relOpsProb.get(i) == Operator.P_MIN) {
 				relOpsProb.remove(i);
 				relOpsProb.add(i, Operator.P_MAX);
-			    probNegated.set(i);
+				probNegated.set(i);
 			} else if (relOpsProb.get(i) == Operator.P_LE) {
 				relOpsProb.remove(i);
 				relOpsProb.add(i, Operator.P_GE);
-			    probNegated.set(i);
+				probNegated.set(i);
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the number of reward (R) operators added so far.
 	 */
@@ -283,7 +280,7 @@ public class OpsAndBoundsList
 	{
 		return this.relOpsReward.size();
 	}
-	
+
 	/**
 	 * Returns the number of probabilistic (P) operators added so far.
 	 */
@@ -291,7 +288,7 @@ public class OpsAndBoundsList
 	{
 		return this.relOpsProb.size();
 	}
-	
+
 	/**
 	 * Returns true if the list contains the operator op.
 	 */
@@ -299,7 +296,7 @@ public class OpsAndBoundsList
 	{
 		return relOps.contains(op);
 	}
-	
+
 	/**
 	 * Returns the number of numerical (=?) operators.
 	 */
@@ -311,7 +308,7 @@ public class OpsAndBoundsList
 				num++;
 		return num;
 	}
-	
+
 	/**
 	 * Returns the number of step-bounded (<=k) objectives.
 	 */
@@ -325,7 +322,7 @@ public class OpsAndBoundsList
 		}
 		return num;
 	}
-	
+
 	@Override
 	public String toString()
 	{

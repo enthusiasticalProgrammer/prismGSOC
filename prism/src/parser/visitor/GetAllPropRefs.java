@@ -37,12 +37,12 @@ import prism.PrismLangException;
 public class GetAllPropRefs extends ASTTraverse
 {
 	private Vector<String> v;
-	
+
 	public GetAllPropRefs(Vector<String> v)
 	{
 		this.v = v;
 	}
-	
+
 	public void visitPost(ExpressionProp e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {
@@ -50,4 +50,3 @@ public class GetAllPropRefs extends ASTTraverse
 		}
 	}
 }
-

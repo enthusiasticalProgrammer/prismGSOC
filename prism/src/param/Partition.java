@@ -40,15 +40,18 @@ import java.util.PriorityQueue;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class Partition {
+final class Partition
+{
 	/**
 	 * Comparator class comparing integer hash sets according to their size.
 	 *
 	 * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
 	 */
-	final class HashSetSizeComparator implements Comparator<HashSet<Integer>> {
+	final class HashSetSizeComparator implements Comparator<HashSet<Integer>>
+	{
 		@Override
-		public int compare(HashSet<Integer> o1, HashSet<Integer> o2) {
+		public int compare(HashSet<Integer> o1, HashSet<Integer> o2)
+		{
 			int size1 = o1.size();
 			int size2 = o2.size();
 			// TODO should actually be other way round, but slower then... ??
@@ -60,14 +63,16 @@ final class Partition {
 				return -1;
 			}
 		}
-		
+
 		@Override
-		public boolean equals(Object obj) {
+		public boolean equals(Object obj)
+		{
 			return obj instanceof HashSetSizeComparator;
 		}
-		
+
 		@Override
-		public int hashCode() {
+		public int hashCode()
+		{
 			return 0;
 		}
 	}
@@ -131,7 +136,7 @@ final class Partition {
 	void addBlocks(ArrayList<HashSet<Integer>> newBlocks)
 	{
 		blocks.addAll(newBlocks);
-		
+
 		for (HashSet<Integer> block : newBlocks) {
 			for (int state : block) {
 				stateToBlock.set(state, block);
@@ -143,7 +148,7 @@ final class Partition {
 			mayChangeHash.add(block);
 		}
 		for (HashSet<Integer> block : newBlocks) {
-			for (int state : block) {		
+			for (int state : block) {
 				for (int predec : pmc.incoming.get(state)) {
 					HashSet<Integer> predecBlock = stateToBlock.get(predec);
 					if (!nextBlock.contains(predec) && !mayChangeHash.contains(predecBlock) && (predecBlock.size() > 1)) {
@@ -164,7 +169,7 @@ final class Partition {
 	{
 		return !mayChange.isEmpty();
 	}
-	
+
 	/**
 	 * Obtain a list of all blocks of the partition. 
 	 * 
@@ -176,10 +181,10 @@ final class Partition {
 		for (HashSet<Integer> block : blocks) {
 			allBlocks.add(block);
 		}
-		
+
 		return allBlocks;
 	}
-	
+
 	/**
 	 * Get the block in which a given state is contained.
 	 * 
@@ -190,7 +195,7 @@ final class Partition {
 	{
 		return stateToBlock.get(state);
 	}
-	
+
 	/**
 	 * Marks all blocks as being new.
 	 */

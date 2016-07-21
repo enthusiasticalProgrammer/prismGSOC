@@ -28,42 +28,42 @@ package settings;
 
 public interface SettingOwner extends Comparable
 {
-    /**
-     *  One for each type of owner
-     */
-    public int getSettingOwnerID();
-    
-    /** One for each owner
-     *  This will be displayed when only
-     *  this owner is being displayed.
-     */
-    public String getSettingOwnerName();
-    
-    /** ONe for each type of property collection
-     *  When only one owner is being displayed,
-     *  we see the result of this method, and then
-     *  the result of getDescriptor.
-     *  If there is more than one owner being
-     *  displayed, we see the number of
-     *  owners, then the result of this method
-     *  followed by an "s".
-     */
-    public String getSettingOwnerClassName();
-    
-    public int getNumSettings();
-    
-    public Setting getSetting(int index);
-    
-    /**
-     *  Called if a setting has been changed externally to this SettingOwner.
-     */
-    public void notifySettingChanged(Setting setting);
-    
-    /**
-     *  Return null if no display
-     */
-    public SettingDisplay getDisplay();
-    
-    public void setDisplay(SettingDisplay display);
-    
+	/**
+	 *  One for each type of owner
+	 */
+	public int getSettingOwnerID();
+
+	/** One for each owner
+	 *  This will be displayed when only
+	 *  this owner is being displayed.
+	 */
+	public String getSettingOwnerName();
+
+	/** ONe for each type of property collection
+	 *  When only one owner is being displayed,
+	 *  we see the result of this method, and then
+	 *  the result of getDescriptor.
+	 *  If there is more than one owner being
+	 *  displayed, we see the number of
+	 *  owners, then the result of this method
+	 *  followed by an "s".
+	 */
+	public String getSettingOwnerClassName();
+
+	public int getNumSettings();
+
+	public Setting getSetting(int index);
+
+	/**
+	 *  Called if a setting has been changed externally to this SettingOwner.
+	 */
+	public void notifySettingChanged(Setting setting);
+
+	/**
+	 *  Return null if no display
+	 */
+	public SettingDisplay getDisplay();
+
+	public void setDisplay(SettingDisplay display);
+
 }

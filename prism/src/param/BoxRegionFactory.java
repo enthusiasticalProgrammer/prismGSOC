@@ -33,11 +33,12 @@ package param;
  * @see RegionFactory
  * @see BoxRegion
  */
-final class BoxRegionFactory extends RegionFactory {
+final class BoxRegionFactory extends RegionFactory
+{
 	/** method to use to split boxes produces with this factory.
 	 * split either at all or only at the longest side. */
 	private int splitMethod;
-	
+
 	/**
 	 * Constructs a new box region factory.
 	 * 
@@ -49,8 +50,8 @@ final class BoxRegionFactory extends RegionFactory {
 	 * @param subsumeRegions whether to subsume regions if possible
 	 * @param splitMethod method to split regions
 	 */
-	BoxRegionFactory(FunctionFactory functionFactory, ConstraintChecker constraintChecker, BigRational precision,
-			int numStates, int initialState, boolean subsumeRegions, int splitMethod)
+	BoxRegionFactory(FunctionFactory functionFactory, ConstraintChecker constraintChecker, BigRational precision, int numStates, int initialState,
+			boolean subsumeRegions, int splitMethod)
 	{
 		this.functionFactory = functionFactory;
 		this.constraintChecker = constraintChecker;
@@ -60,7 +61,7 @@ final class BoxRegionFactory extends RegionFactory {
 		this.subsumeRegions = subsumeRegions;
 		this.splitMethod = splitMethod;
 	}
-	
+
 	@Override
 	RegionValues completeCover(StateValues values)
 	{

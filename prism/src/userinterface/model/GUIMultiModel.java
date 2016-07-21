@@ -78,17 +78,17 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 	private JMenu modelMenu, newMenu, viewMenu, exportMenu, computeMenu, computeExportMenu;
 	private JMenu exportStatesMenu, exportTransMenu, exportStateRewardsMenu, exportTransRewardsMenu, exportLabelsMenu, exportSSMenu, exportTrMenu;
 	private AbstractAction viewStates, viewTrans, viewStateRewards, viewTransRewards, viewLabels, viewPrismCode, computeSS, computeTr, newPRISMModel,
-			newPEPAModel, loadModel, reloadModel, saveModel, saveAsModel, parseModel, buildModel, exportStatesPlain, exportStatesMatlab,
-			exportTransPlain, exportTransMatlab, exportTransDot, exportTransDotStates, exportTransMRMC, exportStateRewardsPlain, exportStateRewardsMatlab,
-			exportStateRewardsMRMC, exportTransRewardsPlain, exportTransRewardsMatlab, exportTransRewardsMRMC, exportLabelsPlain, exportLabelsMatlab,
-			exportSSPlain, exportSSMatlab, exportTrPlain, exportTrMatlab;
+			newPEPAModel, loadModel, reloadModel, saveModel, saveAsModel, parseModel, buildModel, exportStatesPlain, exportStatesMatlab, exportTransPlain,
+			exportTransMatlab, exportTransDot, exportTransDotStates, exportTransMRMC, exportStateRewardsPlain, exportStateRewardsMatlab, exportStateRewardsMRMC,
+			exportTransRewardsPlain, exportTransRewardsMatlab, exportTransRewardsMRMC, exportLabelsPlain, exportLabelsMatlab, exportSSPlain, exportSSMatlab,
+			exportTrPlain, exportTrMatlab;
 	private JPopupMenu popup;
 	//Contents
 	private GUIMultiModelHandler handler;
-	private Map<String,FileFilter> modelFilters;
-	private Map<String,FileFilter> staFilters;
-	private Map<String,FileFilter> traFilters;
-	private Map<String,FileFilter> labFilters;
+	private Map<String, FileFilter> modelFilters;
+	private Map<String, FileFilter> staFilters;
+	private Map<String, FileFilter> traFilters;
+	private Map<String, FileFilter> labFilters;
 	private FileFilter textFilter;
 	private FileFilter matlabFilter;
 	private FileFilter dotFilter;
@@ -134,7 +134,7 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 	{
 		return computing;
 	}
-	
+
 	public void doEnables()
 	{
 		// do nothing if not initialised yet
@@ -523,10 +523,8 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 
 			}
 		};
-		loadModel
-				.putValue(
-						Action.LONG_DESCRIPTION,
-						"Brings up a file loading dialogue and loads the file into the editor.  The editor will change mode according to the format of the file.  The loaded file is active for saving.");
+		loadModel.putValue(Action.LONG_DESCRIPTION,
+				"Brings up a file loading dialogue and loads the file into the editor.  The editor will change mode according to the format of the file.  The loaded file is active for saving.");
 		//loadModel.putValue(Action.SHORT_DESCRIPTION, "Open Model");
 		loadModel.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
 		loadModel.putValue(Action.NAME, "Open model...");
@@ -1175,19 +1173,19 @@ public class GUIMultiModel extends GUIPlugin implements PrismSettingsListener
 			popup.add(viewPrismCode);
 		}
 
-		modelFilters = new HashMap<String,FileFilter>();
-		modelFilters.put("prism", new FileNameExtensionFilter("PRISM models (*.prism, *.pm, *.nm, *.sm)", "prism", "pm", "nm", "sm")); 
+		modelFilters = new HashMap<String, FileFilter>();
+		modelFilters.put("prism", new FileNameExtensionFilter("PRISM models (*.prism, *.pm, *.nm, *.sm)", "prism", "pm", "nm", "sm"));
 		modelFilters.put("pepa", new FileNameExtensionFilter("PEPA models (*.pepa)", "pepa"));
-		staFilters = new HashMap<String,FileFilter>();
+		staFilters = new HashMap<String, FileFilter>();
 		staFilters.put("sta", new FileNameExtensionFilter("State list files (*.sta)", "sta"));
 		staFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		traFilters = new HashMap<String,FileFilter>();
+		traFilters = new HashMap<String, FileFilter>();
 		traFilters.put("tra", new FileNameExtensionFilter("Transition matrix files (*.tra)", "tra"));
 		traFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		labFilters = new HashMap<String,FileFilter>();
+		labFilters = new HashMap<String, FileFilter>();
 		labFilters.put("lab", new FileNameExtensionFilter("Label files (*.lab)", "lab"));
 		labFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		textFilter =  new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
+		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
 		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
 		dotFilter = new FileNameExtensionFilter("Dot files (*.dot)", "dot");
 

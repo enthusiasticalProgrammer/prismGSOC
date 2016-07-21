@@ -46,7 +46,8 @@ import java.util.ListIterator;
  * 
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class StateEliminator {
+final class StateEliminator
+{
 	/**
 	 * The order in which states shall be eliminated.
 	 */
@@ -62,14 +63,14 @@ final class StateEliminator {
 		/** states close to target states last */
 		BACKWARD_REVERSED,
 		/** random */
-		RANDOM;	
+		RANDOM;
 	}
-	
+
 	/** the mutable parametric Markov chain to compute values of */
 	private MutablePMC pmc;
 	/** order in which states are eliminated */
 	private EliminationOrder eliminationOrder;
-	
+
 	/**
 	 * Create a new state eliminator object.
 	 * 
@@ -81,7 +82,7 @@ final class StateEliminator {
 		this.pmc = pmc;
 		this.eliminationOrder = eliminationOrder;
 	}
-	
+
 	/**
 	 * Orders states so that states near initial states are eliminated first.
 	 * 
@@ -119,7 +120,7 @@ final class StateEliminator {
 		}
 		return states;
 	}
-	
+
 	/**
 	 * Orders states so that states near target states are eliminated first.
 	 * States which do not reach target states are eliminated last. In case
@@ -155,7 +156,7 @@ final class StateEliminator {
 			}
 			current = next;
 		}
-		
+
 		/* might not find all states when doing as above,
 		 * so add missing ones */
 		HashSet<Integer> allStates = new HashSet<Integer>();
@@ -169,10 +170,10 @@ final class StateEliminator {
 				nextStateNr++;
 			}
 		}
-		
+
 		return states;
 	}
-	
+
 	/**
 	 * Performs precomputation before actual state elimination.
 	 * This handles cases in which all or some states can or have to
@@ -196,7 +197,7 @@ final class StateEliminator {
 			}
 			return false;
 		}
-		
+
 		/* search for states which might never reach a target state and thus
 		 * have to be assigned a reward of infinity. */
 		if (pmc.isUseRewards()) {
@@ -208,12 +209,12 @@ final class StateEliminator {
 			for (int state = 0; state < pmc.getNumStates(); state++) {
 				if (!pmc.isUseTime() && !reaching.contains(state)) {
 					pmc.setReward(state, pmc.getFunctionFactory().getInf());
-				} 
+				}
 			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Eliminate all states of the model.
 	 * The order of elimination is given by {@code eliminationOrder}.
@@ -223,7 +224,7 @@ final class StateEliminator {
 		if (!precompute()) {
 			return;
 		}
-		
+
 		int[] states = new int[pmc.getNumStates()];
 		List<Integer> statesList = new ArrayList<Integer>();
 		switch (eliminationOrder) {
@@ -270,7 +271,7 @@ final class StateEliminator {
 		default:
 			throw new RuntimeException("unknown state elimination order");
 		}
-		
+
 		for (int stateNr = 0; stateNr < pmc.getNumStates(); stateNr++) {
 			eliminate(states[stateNr]);
 		}
@@ -279,7 +280,8 @@ final class StateEliminator {
 	/**
 	 * Stores a transition which shall be added to the model later.
 	 */
-	class NewTransition {
+	class NewTransition
+	{
 		/** source state of transition */
 		final int fromState;
 		/** target state of transition */
@@ -300,7 +302,7 @@ final class StateEliminator {
 			this.toState = toState;
 			this.prob = prob;
 		}
-		
+
 	}
 
 	/**
@@ -316,8 +318,8 @@ final class StateEliminator {
 			return;
 		}
 		/* slStar = 1/(1-x), where x is the self-loop probability */
-		Function slStar = loopProb.star(); 
-		
+		Function slStar = loopProb.star();
+
 		/* adapt rewards and time spent in state accordingly. The new
 		 * values correspond to adding the expected reward/time obtained
 		 * from moving to the midState from one of its predecessors, times
@@ -346,7 +348,7 @@ final class StateEliminator {
 		 * / (1-<self-loop-prob>). (If there already was a transition from fromState
 		 * to toState, probabilities will be added up.). All transitions to
 		 * midState will be removed. */
-		ArrayList<NewTransition> newTransitions = new ArrayList<NewTransition>(); 
+		ArrayList<NewTransition> newTransitions = new ArrayList<NewTransition>();
 		for (int fromState : pmc.incoming.get(midState)) {
 			if (fromState != midState) {
 				Function fromToMid = pmc.getTransProb(fromState, midState);
@@ -405,7 +407,7 @@ final class StateEliminator {
 		}
 		pmc.incoming.get(midState).clear();
 	}
-	
+
 	/**
 	 * Obtain result for a given state.
 	 * Before calling this method, all states must have been eliminated.
@@ -419,14 +421,14 @@ final class StateEliminator {
 		 * A) either has only a self-loop, or
 		 * B) has no self loop and only transitions to one or more states
 		 *    of the form A. */
-		
+
 		if (pmc.isUseRewards() && !pmc.isUseTime()) {
 			/* states which do not reach target states with probability one
 			 * are assigned a reward of infinity. Target states have a reward
 			 * of zero and only self-loops. Because of this, and from the state
 			 * elimination (see above), we can read the reward directly from
 			 * the according reward structure. */
-			
+
 			return pmc.getReward(state);
 		} else if (pmc.isUseRewards() && pmc.isUseTime()) {
 			/* due to state elimination, each state either: A) has a self loop
@@ -444,7 +446,7 @@ final class StateEliminator {
 				Function toProb = toProbIter.next();
 				result = result.add(toProb.multiply(pmc.getReward(toState)).divide(pmc.getTime(toState)));
 			}
-			return result;			
+			return result;
 		} else {
 			/* due to state elimination, each state either: A) has a self loop
 			 * and then is a target state or cannot reach a target state at all,

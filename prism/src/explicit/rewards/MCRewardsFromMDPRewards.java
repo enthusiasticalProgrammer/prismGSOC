@@ -29,7 +29,6 @@ package explicit.rewards;
 import explicit.Model;
 import explicit.Product;
 
-
 /**
  * Explicit-state representation of a DTMC rewards structure, constructed (implicitly)
  * from an MDP rewards structure and a memoryless deterministic strategy, specified as an array of integer indices.
@@ -58,7 +57,7 @@ public class MCRewardsFromMDPRewards implements MCRewards
 		// This works fine for cumulative rewards, but not instantaneous ones
 		return mdpRewards.getStateReward(s) + mdpRewards.getTransitionReward(s, strat[s]);
 	}
-	
+
 	@Override
 	public MCRewards liftFromModel(Product<? extends Model> product)
 	{

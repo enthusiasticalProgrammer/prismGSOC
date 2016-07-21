@@ -35,36 +35,36 @@ public class SystemReference extends SystemDefn
 {
 	// Name of SystemDefn referenced
 	private String name;
-	
+
 	// Constructors
-	
+
 	public SystemReference(String name)
 	{
 		this.name = name;
 	}
-	
+
 	// Set method
-	
+
 	public void setName(String name)
 	{
 		this.name = name;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	// Methods required for SystemDefn (all subclasses should implement):
-	
+
 	@Override
 	public void getModules(Vector<String> v)
 	{
 		v.addElement(name);
 	}
-	
+
 	@Override
 	public void getModules(Vector<String> v, ModulesFile modulesFile)
 	{
@@ -74,13 +74,13 @@ public class SystemReference extends SystemDefn
 			ref.getModules(v, modulesFile);
 		}
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v)
 	{
 		// do nothing
 	}
-	
+
 	@Override
 	public void getSynchs(Vector<String> v, ModulesFile modulesFile)
 	{
@@ -90,28 +90,28 @@ public class SystemReference extends SystemDefn
 			ref.getSynchs(v, modulesFile);
 		}
 	}
-	
+
 	@Override
 	public void getReferences(Vector<String> v)
 	{
 		if (!v.contains(name))
 			v.add(name);
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public String toString()
 	{
 		return "\"" + name + "\"";
 	}
-	
+
 	@Override
 	public SystemDefn deepCopy()
 	{

@@ -290,7 +290,7 @@ public class Property extends ASTElement
 			}
 			if (result instanceof PrismNotSupportedException) {
 				// not supported -> handle in caller
-				throw (PrismNotSupportedException)result;
+				throw (PrismNotSupportedException) result;
 			}
 			throw new PrismException("Unexpected error: " + errMsg);
 		} else if (strExpected.startsWith("Error")) {
@@ -451,13 +451,13 @@ public class Property extends ASTElement
 			if (!m.find()) {
 				throw new PrismException("The expected result does not contain any points, or does not have the required format.");
 			}
-			
+
 			do {
 				double x = Double.parseDouble(m.group(1));
 				double y = Double.parseDouble(m.group(2));
-				Point point = new Point(new double[] {x,y});
+				Point point = new Point(new double[] { x, y });
 				liExpected.add(point);
-			} while(m.find());
+			} while (m.find());
 
 			List<Point> liResult = ((TileList) result).getRealPoints();
 
@@ -465,38 +465,37 @@ public class Property extends ASTElement
 				throw new PrismException("The expected Pareto curve and the computed Pareto curve have a different number of points.");
 
 			//check if we can find a matching point for every point on the expected Pareto curve
-			for(Point point : liExpected) {
+			for (Point point : liExpected) {
 				boolean foundClose = false;
-				for(Point point2 : liResult) {
+				for (Point point2 : liResult) {
 					if (point2.isCloseTo(point)) {
 						foundClose = true;
 						break;
 					}
 				}
-				if (!foundClose)
-				{
-					throw new PrismException("The point " + point + " in the expected Pareto curve has no match among the points in the computed Pareto curve.");
+				if (!foundClose) {
+					throw new PrismException(
+							"The point " + point + " in the expected Pareto curve has no match among the points in the computed Pareto curve.");
 				}
 			}
 
 			//check if we can find a matching point for every point on the computed Pareto curve
 			//(we did check if both lists have the same number of points, but that does
 			//not rule out the possibility of two very similar points contained in one list)
-			for(Point point : liResult) {
+			for (Point point : liResult) {
 				boolean foundClose = false;
-				for(Point point2 : liExpected) {
+				for (Point point2 : liExpected) {
 					if (point2.isCloseTo(point)) {
 						foundClose = true;
 						break;
 					}
 				}
-				if (!foundClose)
-				{
+				if (!foundClose) {
 					throw new PrismException("The point " + point + " in the computed Pareto curve has no match among the points in the expected Pareto curve");
 				}
 			}
 		}
-		
+
 		// Unknown type
 		else {
 			throw new PrismException("Don't know how to test properties of type " + type);

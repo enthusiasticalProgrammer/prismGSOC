@@ -32,41 +32,41 @@ import parser.*;
 
 public class GUIPropertiesEvent extends GUIEvent
 {
-    public static final int REQUEST_MODEL_BUILD = 0;
-    public static final int REQUEST_MODEL_PARSE = 1;
-    public static final int EXPERIMENT_START =3;
-    public static final int EXPERIMENT_END = 4;
-    public static final int PROPERTIES_LIST_CHANGED = 5;
-    public static final int VERIFY_END = 6;
-    //private UndefinedConstants mfUndefined;
-    private Values buildValues;
-    
-    /** Creates a new instance of GUIPropertiesEvent */
-    public GUIPropertiesEvent(int id)
-    {
-        super(id);
-    }
-    
-    public GUIPropertiesEvent(int id, Values buildValues)
-    {
-        super(id);
-        this.buildValues = buildValues;
-    }
-    
-    public Values getBuildValues()
-    {
-        return buildValues;
-    }
-    /*
-    public GUIPropertiesEvent(int id, UndefinedConstants mfUndefined)
-    {
-        super(id);
-        this.mfUndefined = mfUndefined;
-    }
-    
-    public UndefinedConstants getMFUndefined()
-    {
-        return mfUndefined;
-    }*/
-    
+	public static final int REQUEST_MODEL_BUILD = 0;
+	public static final int REQUEST_MODEL_PARSE = 1;
+	public static final int EXPERIMENT_START = 3;
+	public static final int EXPERIMENT_END = 4;
+	public static final int PROPERTIES_LIST_CHANGED = 5;
+	public static final int VERIFY_END = 6;
+	//private UndefinedConstants mfUndefined;
+	private Values buildValues;
+
+	/** Creates a new instance of GUIPropertiesEvent */
+	public GUIPropertiesEvent(int id)
+	{
+		super(id);
+	}
+
+	public GUIPropertiesEvent(int id, Values buildValues)
+	{
+		super(id);
+		this.buildValues = buildValues;
+	}
+
+	public Values getBuildValues()
+	{
+		return buildValues;
+	}
+	/*
+	public GUIPropertiesEvent(int id, UndefinedConstants mfUndefined)
+	{
+	    super(id);
+	    this.mfUndefined = mfUndefined;
+	}
+	
+	public UndefinedConstants getMFUndefined()
+	{
+	    return mfUndefined;
+	}*/
+
 }

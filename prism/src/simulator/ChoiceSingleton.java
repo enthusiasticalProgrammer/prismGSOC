@@ -35,19 +35,19 @@ import prism.*;
 public class ChoiceSingleton implements Choice
 {
 	protected String action;
-	protected List<Update> updates; 
+	protected List<Update> updates;
 	protected double probability;
 	protected Command command;
 
 	// Constructor
-	
+
 	public ChoiceSingleton()
 	{
 		updates = new ArrayList<Update>(1);
 	}
-	
+
 	// Set methods
-	
+
 	public void setAction(String action)
 	{
 		this.action = action;
@@ -70,7 +70,7 @@ public class ChoiceSingleton implements Choice
 	}
 
 	// Get methods
-	
+
 	public int getModuleOrActionIndex()
 	{
 		return 0; // TODO
@@ -85,12 +85,12 @@ public class ChoiceSingleton implements Choice
 	{
 		return 1;
 	}
-	
+
 	public int getIndexByProbabilitySum(double x)
 	{
 		return 0;
 	}
-	
+
 	public String getAction()
 	{
 		return action;
@@ -104,12 +104,12 @@ public class ChoiceSingleton implements Choice
 		s += ")";
 		return s;
 	}
-	
+
 	public String getUpdateStringFull(int i)
 	{
 		return null;
 	}
-	
+
 	public State computeTarget(State oldState) throws PrismLangException
 	{
 		State newState = new State(oldState);
@@ -126,14 +126,18 @@ public class ChoiceSingleton implements Choice
 
 	public State computeTarget(int i, State oldState) throws PrismLangException
 	{
-		if (i == 0) return computeTarget(oldState);
-		else throw new PrismLangException("Choice does not have an element " + i);
+		if (i == 0)
+			return computeTarget(oldState);
+		else
+			throw new PrismLangException("Choice does not have an element " + i);
 	}
 
 	public void computeTarget(int i, State oldState, State newState) throws PrismLangException
 	{
-		if (i == 0) computeTarget(oldState, newState);
-		else throw new PrismLangException("Choice does not have an element " + i);
+		if (i == 0)
+			computeTarget(oldState, newState);
+		else
+			throw new PrismLangException("Choice does not have an element " + i);
 	}
 
 	public double getProbability()
@@ -166,16 +170,16 @@ public class ChoiceSingleton implements Choice
 	{
 		// TODO
 	}
-	
+
 	@Override
 	public void checkForErrors(State currentState, VarList varList) throws PrismException
 	{
 		// TODO
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "-{" + ("".equals(action) ?  "" : action+"," ) + probability + "}->" + updates; 
+		return "-{" + ("".equals(action) ? "" : action + ",") + probability + "}->" + updates;
 	}
 }

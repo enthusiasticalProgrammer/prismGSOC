@@ -190,7 +190,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	{
 		// Will we be quantifying universally or existentially over strategies/adversaries?
 		boolean forAll = !expr.isThereExists();
-		
+
 		// Extract coalition info
 		Coalition coalition = expr.getCoalition();
 		// Deal with the coalition operator here and then remove it
@@ -218,7 +218,7 @@ public class NondetModelChecker extends NonProbModelChecker
 			return checkExpressionMultiObjective(exprs, forAll);
 		}
 	}
-	
+
 	/**
 	 * Model check a P operator expression and return the values for all states.
 	 */
@@ -228,7 +228,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		// (i.e. quantification over all strategies)
 		return checkExpressionProb(expr, true);
 	}
-	
+
 	/**
 	 * Model check a P operator expression and return the values for all states.
 	 * @param expr The P operator expression
@@ -239,7 +239,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		// Get info from P operator
 		OpRelOpBound opInfo = expr.getRelopBoundInfo(constantValues);
 		MinMax minMax = opInfo.getMinMax(model.getModelType(), forAll);
-		
+
 		// Check for trivial (i.e. stupid) cases
 		if (opInfo.isTriviallyTrue()) {
 			mainLog.printWarning("Checking for probability " + opInfo.relOpBoundString() + " - formula trivially satisfies all states");
@@ -285,7 +285,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		// (i.e. quantification over all strategies)
 		return checkExpressionReward(expr, true);
 	}
-	
+
 	/**
 	 * Model check an R operator expression and return the values for all states.
 	 * @param expr The R operator expression
@@ -419,7 +419,7 @@ public class NondetModelChecker extends NonProbModelChecker
 			throw new PrismException("Multi-objective model checking not supported for: " + exprSub);
 		}
 	}
-	
+
 	/**
 	 * Model check a multi-objective expression and return the result.
 	 * For multi-objective queries, we only find the value for one state.
@@ -434,7 +434,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 		return checkExpressionMultiObjective(exprs);
 	}
-	
+
 	/**
 	 * Model check a multi-objective expression and return the result.
 	 * For multi-objective queries, we only find the value for one state.
@@ -451,7 +451,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		MultiObjModelChecker mcMo;
 		LTLModelChecker mcLtl;
 		Expression[] ltl;
-		DA<BitSet,AcceptanceRabin>[] dra;
+		DA<BitSet, AcceptanceRabin>[] dra;
 		// State index info
 		// Misc
 		boolean negateresult = false;
@@ -486,11 +486,10 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		//currently we do 1 numerical subject to booleans, or multiple numericals only 
-		if (opsAndBounds.numberOfNumerical() > 1 &&
-				opsAndBounds.numberOfNumerical() < opsAndBounds.probSize() + opsAndBounds.rewardSize()) {
+		if (opsAndBounds.numberOfNumerical() > 1 && opsAndBounds.numberOfNumerical() < opsAndBounds.probSize() + opsAndBounds.rewardSize()) {
 			throw new PrismException("Multiple min/max queries cannot be combined with boolean queries.");
 		}
-		
+
 		negateresult = opsAndBounds.contains(Operator.P_MIN);
 		hasMaxReward = opsAndBounds.contains(Operator.R_GE) || opsAndBounds.contains(Operator.R_MAX);
 
@@ -590,8 +589,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Find accepting maximum end components for each LTL formula
-		List<JDDNode> allecs = mcMo.computeAllEcs(modelProduct, mcLtl, allstatesH, allstatesL, acceptanceVector_H, acceptanceVector_L, draDDRowVars, draDDColVars,
-				opsAndBounds, numObjectives);
+		List<JDDNode> allecs = mcMo.computeAllEcs(modelProduct, mcLtl, allstatesH, allstatesL, acceptanceVector_H, acceptanceVector_L, draDDRowVars,
+				draDDColVars, opsAndBounds, numObjectives);
 
 		// Create array to store BDDs for targets (i.e. accepting EC states); probability objectives only 
 		List<JDDNode> targetDDs = new ArrayList<JDDNode>(numObjectives);
@@ -616,8 +615,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		if (conflictformulae > 1) {
 			multitargetDDs = new ArrayList<JDDNode>();
 			multitargetIDs = new ArrayList<Integer>();
-			mcMo.checkConflictsInObjectives(modelProduct, mcLtl, conflictformulae, numObjectives, opsAndBounds, dra, draDDRowVars, draDDColVars, targetDDs, allstatesH,
-					allstatesL, multitargetDDs, multitargetIDs);
+			mcMo.checkConflictsInObjectives(modelProduct, mcLtl, conflictformulae, numObjectives, opsAndBounds, dra, draDDRowVars, draDDColVars, targetDDs,
+					allstatesH, allstatesL, multitargetDDs, multitargetIDs);
 		}
 
 		for (JDDNode ec : allecs)
@@ -644,9 +643,9 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Do multi-objective computation
-		Object value = mcMo.computeMultiReachProbs(modelProduct, mcLtl, transRewardsListProduct, modelProduct.getStart(), targetDDs, multitargetDDs, multitargetIDs, opsAndBounds,
-				conflictformulae > 1);
-		
+		Object value = mcMo.computeMultiReachProbs(modelProduct, mcLtl, transRewardsListProduct, modelProduct.getStart(), targetDDs, multitargetDDs,
+				multitargetIDs, opsAndBounds, conflictformulae > 1);
+
 		// Deref, clean up
 		if (ddStateIndex != null)
 			JDD.Deref(ddStateIndex);
@@ -665,8 +664,8 @@ public class NondetModelChecker extends NonProbModelChecker
 				JDD.Deref(t);
 
 		if (value instanceof TileList) {
-			if (opsAndBounds.numberOfNumerical() == 2) {			
-				synchronized(TileList.getStoredTileLists()) {
+			if (opsAndBounds.numberOfNumerical() == 2) {
+				synchronized (TileList.getStoredTileLists()) {
 					TileList.storedFormulasX.add(exprs.get(0));
 					TileList.storedFormulasY.add(exprs.get(1));
 
@@ -676,17 +675,16 @@ public class NondetModelChecker extends NonProbModelChecker
 			} //else, i.e. in 3D, the output was treated in the algorithm itself.
 
 			return new StateValuesVoid(value);
-		}
-		else if (value instanceof Double) {
+		} else if (value instanceof Double) {
 			// Return result. Note: we only compute the value for a single state.
 			if (negateresult) {
 				value = 1 - (Double) value;
 			}
-	
+
 			return new StateValuesMTBDD(JDD.Constant((Double) value), model);
-		}
-		else throw new PrismException("Do not know how to treat the returned value " + value);
-			
+		} else
+			throw new PrismException("Do not know how to treat the returned value " + value);
+
 	}
 
 	/**
@@ -704,7 +702,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	{
 		ExpressionProb exprProb = null;
 		ExpressionReward exprReward = null;
-		
+
 		// Check if it's a P or an R operator
 		if (exprQuant instanceof ExpressionProb) {
 			exprProb = (ExpressionProb) exprQuant;
@@ -727,7 +725,7 @@ public class NondetModelChecker extends NonProbModelChecker
 			// Add transition rewards to list
 			transRewardsList.add(getTransitionRewardsByIndexObject(rs, model, constantValues));
 		}
-		
+
 		// Check that the temporal/reward operator is supported, and store step bounds if present
 		int stepBound = 0;
 		if (exprProb != null) {
@@ -767,7 +765,7 @@ public class NondetModelChecker extends NonProbModelChecker
 				stepBound = -1;
 			}
 		}
-		
+
 		// Get/check/store info about relational operator and bound
 		OpRelOpBound opInfo = exprQuant.getRelopBoundInfo(constantValues);
 		RelOp relOp = opInfo.getRelOp();
@@ -841,7 +839,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	}
 
 	// Model checking functions
-	
+
 	/**
 	 * Compute probabilities for the contents of a P operator.
 	 */
@@ -851,9 +849,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		// and whether we want to use the corresponding algorithms
 		boolean useSimplePathAlgo = expr.isSimplePathFormula();
 
-		if (useSimplePathAlgo &&
-		    prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA) &&
-		    LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
+		if (useSimplePathAlgo && prism.getSettings().getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA)
+				&& LTLModelChecker.isSupportedLTLFormula(model.getModelType(), expr)) {
 			// If PRISM_PATH_VIA_AUTOMATA is true, we want to use the LTL engine
 			// whenever possible
 			useSimplePathAlgo = false;
@@ -877,12 +874,11 @@ public class NondetModelChecker extends NonProbModelChecker
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
 
 		// Negation
-		if (expr instanceof ExpressionUnaryOp &&
-		    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
+		if (expr instanceof ExpressionUnaryOp && ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.NOT) {
 			// mark as negated, switch from min to max and vice versa
 			negated = true;
 			min = !min;
-			expr = ((ExpressionUnaryOp)expr).getOperand();
+			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
 
 		if (expr instanceof ExpressionTemporal) {
@@ -971,7 +967,7 @@ public class NondetModelChecker extends NonProbModelChecker
 			lowerBound = 0;
 		}
 
-		Integer windowSize = null;  // unbounded
+		Integer windowSize = null; // unbounded
 		if (bounds.hasUpperBound()) {
 			windowSize = bounds.getHighestInteger() - lowerBound;
 		}
@@ -1166,19 +1162,14 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// For LTL model checking routines
 		mcLtl = new LTLModelChecker(prism);
-		
+
 		// Convert LTL formula to deterministic automaton (DA)
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.BUCHI,
-				AcceptanceType.RABIN,
-				AcceptanceType.GENERALIZED_RABIN,
-				AcceptanceType.REACH
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.BUCHI, AcceptanceType.RABIN, AcceptanceType.GENERALIZED_RABIN, AcceptanceType.REACH };
 		da = mcLtl.constructDAForLTLFormula(this, model, expr, labelDDs, allowedAcceptance);
 
 		// Build product of MDP and automaton
 		l = System.currentTimeMillis();
-		mainLog.println("\nConstructing MDP-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MDP-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		modelProduct = mcLtl.constructProductMDP(da, model, labelDDs, daDDRowVars, daDDColVars);
@@ -1226,12 +1217,12 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// Output vector over product, if required
 		if (prism.getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + prism.getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(prism.getExportProductVectorFilename());
-				probsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + prism.getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(prism.getExportProductVectorFilename());
+			probsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Convert probability vector to original model
 		// First, filter over DRA start states
 		startMask = mcLtl.buildStartMask(da, labelDDs, daDDRowVars);
@@ -1325,13 +1316,12 @@ public class NondetModelChecker extends NonProbModelChecker
 	{
 		if (Expression.isReach(expr)) {
 			return checkRewardReach((ExpressionTemporal) expr, stateRewards, transRewards, min);
-		}
-		else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
+		} else if (Expression.isCoSafeLTLSyntactic(expr, true)) {
 			return checkRewardCoSafeLTL(expr, stateRewards, transRewards, min);
 		}
 		throw new PrismException("R operator contains a path formula that is not syntactically co-safe: " + expr);
 	}
-	
+
 	// reach reward
 
 	protected StateValues checkRewardReach(ExpressionTemporal expr, JDDNode stateRewards, JDDNode transRewards, boolean min) throws PrismException
@@ -1343,7 +1333,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		if (expr.hasBounds()) {
 			throw new PrismNotSupportedException("R operator cannot contain a bounded F operator: " + expr);
 		}
-		
+
 		// model check operand first
 		b = checkExpressionDD(expr.getOperand2());
 
@@ -1383,7 +1373,7 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		if (Expression.containsTemporalTimeBounds(expr)) {
 			if (model.getModelType().continuousTime()) {
-				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType()+".");
+				throw new PrismException("DA construction for time-bounded operators not supported for " + model.getModelType() + ".");
 			}
 
 			if (expr.isSimplePathFormula()) {
@@ -1416,12 +1406,9 @@ public class NondetModelChecker extends NonProbModelChecker
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
 		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
-		mainLog.println(da.getAutomataType()+" has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics()+".");
+		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for deterministic automaton translation: " + l / 1000.0 + " seconds.");
 		// If required, export DA 
@@ -1434,7 +1421,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Build product of MDP and automaton
-		mainLog.println("\nConstructing MDP-"+da.getAutomataType()+" product...");
+		mainLog.println("\nConstructing MDP-" + da.getAutomataType() + " product...");
 		daDDRowVars = new JDDVars();
 		daDDColVars = new JDDVars();
 		l = System.currentTimeMillis();
@@ -1466,7 +1453,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		JDD.Ref(transRewards);
 		JDD.Ref(modelProduct.getTrans01());
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
-		
+
 		// Find accepting states + compute reachability rewards
 		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
 		JDDNode acc = null;
@@ -1484,7 +1471,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		acceptance.clear();
 		mainLog.println("\nComputing reachability rewards...");
 		mcProduct = new NondetModelChecker(prism, modelProduct, null);
-		rewardsProduct = mcProduct.computeReachRewards(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getTrans01(), stateRewardsProduct, transRewardsProduct, acc, min);
+		rewardsProduct = mcProduct.computeReachRewards(modelProduct.getTrans(), modelProduct.getTransActions(), modelProduct.getTrans01(), stateRewardsProduct,
+				transRewardsProduct, acc, min);
 
 		// Convert reward vector to original model
 		// First, filter over DRA start states
@@ -2174,7 +2162,6 @@ public class NondetModelChecker extends NonProbModelChecker
 		return result;
 	}
 
-	
 }
 
 // ------------------------------------------------------------------------------

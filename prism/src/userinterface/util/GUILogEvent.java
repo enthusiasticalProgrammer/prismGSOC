@@ -29,92 +29,92 @@ package userinterface.util;
 
 public class GUILogEvent extends GUIEvent
 {
-    public static final int PRINTLN = 0;
-    public static final int PRINT = 1;
-    public static final int PRINTSEPARATOR = 2;
-    public static final int PRINTWARNING = 3;
-    
-    /**
-     * Constructs an instance of <code>GUILogEvent</code> with the specified detail message.
-     * @param message the detail message.
-     */
-    public GUILogEvent(int type, Object message)
-    {
-        super(type, message);
-    }
-    
-    public GUILogEvent(int type, int message)
-    {
-        super(type, new Integer(message));
-    }
-    
-    public GUILogEvent(int type, double message)
-    {
-        super(type, new Double(message));
-    }
-    
-    public GUILogEvent(int type, float message)
-    {
-        super(type, new Float(message));
-    }
-    
-    public GUILogEvent(int type, long message)
-    {
-        super(type, new Long(message));
-    }
-    
-    public GUILogEvent(int type, short message)
-    {
-        super(type, new Short(message));
-    }
-    
-    public GUILogEvent(int type, byte message)
-    {
-        super(type, new Byte(message));
-    }
-    
-    public GUILogEvent(int type, boolean message)
-    {
-        super(type, new Boolean(message));
-    }
-    
-    public GUILogEvent(Object message)
-    {
-        this(PRINTLN, message);
-    }
-    
-    public GUILogEvent(int message)
-    {
-        this(PRINTLN, new Integer(message));
-    }
-    
-    public GUILogEvent(double message)
-    {
-        this(PRINTLN, new Double(message));
-    }
-    
-    public GUILogEvent(float message)
-    {
-        this(PRINTLN, new Float(message));
-    }
-    
-    public GUILogEvent(long message)
-    {
-        this(PRINTLN, new Long(message));
-    }
-    
-    public GUILogEvent(short message)
-    {
-        this(PRINTLN, new Short(message));
-    }
-    
-    public GUILogEvent(byte message)
-    {
-        this(PRINTLN, new Byte(message));
-    }
-    
-    public GUILogEvent(boolean message)
-    {
-        this(PRINTLN, new Boolean(message));
-    }
+	public static final int PRINTLN = 0;
+	public static final int PRINT = 1;
+	public static final int PRINTSEPARATOR = 2;
+	public static final int PRINTWARNING = 3;
+
+	/**
+	 * Constructs an instance of <code>GUILogEvent</code> with the specified detail message.
+	 * @param message the detail message.
+	 */
+	public GUILogEvent(int type, Object message)
+	{
+		super(type, message);
+	}
+
+	public GUILogEvent(int type, int message)
+	{
+		super(type, new Integer(message));
+	}
+
+	public GUILogEvent(int type, double message)
+	{
+		super(type, new Double(message));
+	}
+
+	public GUILogEvent(int type, float message)
+	{
+		super(type, new Float(message));
+	}
+
+	public GUILogEvent(int type, long message)
+	{
+		super(type, new Long(message));
+	}
+
+	public GUILogEvent(int type, short message)
+	{
+		super(type, new Short(message));
+	}
+
+	public GUILogEvent(int type, byte message)
+	{
+		super(type, new Byte(message));
+	}
+
+	public GUILogEvent(int type, boolean message)
+	{
+		super(type, new Boolean(message));
+	}
+
+	public GUILogEvent(Object message)
+	{
+		this(PRINTLN, message);
+	}
+
+	public GUILogEvent(int message)
+	{
+		this(PRINTLN, new Integer(message));
+	}
+
+	public GUILogEvent(double message)
+	{
+		this(PRINTLN, new Double(message));
+	}
+
+	public GUILogEvent(float message)
+	{
+		this(PRINTLN, new Float(message));
+	}
+
+	public GUILogEvent(long message)
+	{
+		this(PRINTLN, new Long(message));
+	}
+
+	public GUILogEvent(short message)
+	{
+		this(PRINTLN, new Short(message));
+	}
+
+	public GUILogEvent(byte message)
+	{
+		this(PRINTLN, new Byte(message));
+	}
+
+	public GUILogEvent(boolean message)
+	{
+		this(PRINTLN, new Boolean(message));
+	}
 }

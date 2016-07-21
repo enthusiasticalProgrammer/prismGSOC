@@ -87,15 +87,15 @@ public class ConvertForJltl2ba
 
 		// do the actual conversion
 		if (e instanceof ExpressionTemporal) {
-			res = convertTemporal((ExpressionTemporal)e);
+			res = convertTemporal((ExpressionTemporal) e);
 		} else if (e instanceof ExpressionBinaryOp) {
-			res = convertBinaryOp((ExpressionBinaryOp)e);
+			res = convertBinaryOp((ExpressionBinaryOp) e);
 		} else if (e instanceof ExpressionUnaryOp) {
-			res = convertUnaryOp((ExpressionUnaryOp)e);
+			res = convertUnaryOp((ExpressionUnaryOp) e);
 		} else if (e instanceof ExpressionLiteral) {
-			res = convertLiteral((ExpressionLiteral)e);
+			res = convertLiteral((ExpressionLiteral) e);
 		} else if (e instanceof ExpressionLabel) {
-			res = convertLabel((ExpressionLabel)e);
+			res = convertLabel((ExpressionLabel) e);
 		}
 
 		if (allowSharing) {
@@ -122,8 +122,10 @@ public class ConvertForJltl2ba
 	{
 		SimpleLTL ltl1 = null, ltl2 = null, res = null;
 		Expression until;
-		if (e.getOperand1() != null) ltl1 = convert(e.getOperand1());
-		if (e.getOperand2() != null) ltl2 = convert(e.getOperand2());
+		if (e.getOperand1() != null)
+			ltl1 = convert(e.getOperand1());
+		if (e.getOperand2() != null)
+			ltl2 = convert(e.getOperand2());
 		switch (e.getOperator()) {
 		case ExpressionTemporal.P_X:
 			res = new SimpleLTL(SimpleLTL.LTLType.NEXT, ltl2);
@@ -158,8 +160,10 @@ public class ConvertForJltl2ba
 	private SimpleLTL convertBinaryOp(ExpressionBinaryOp e) throws PrismLangException
 	{
 		SimpleLTL ltl1 = null, ltl2 = null, res = null;
-		if (e.getOperand1() != null) ltl1 = convert(e.getOperand1());
-		if (e.getOperand2() != null) ltl2 = convert(e.getOperand2());
+		if (e.getOperand1() != null)
+			ltl1 = convert(e.getOperand1());
+		if (e.getOperand2() != null)
+			ltl2 = convert(e.getOperand2());
 		switch (e.getOperator()) {
 		case ExpressionBinaryOp.IMPLIES:
 			res = new SimpleLTL(SimpleLTL.LTLType.IMPLIES, ltl1, ltl2);
@@ -183,7 +187,8 @@ public class ConvertForJltl2ba
 	private SimpleLTL convertUnaryOp(ExpressionUnaryOp e) throws PrismLangException
 	{
 		SimpleLTL ltl1 = null, res = null;
-		if (e.getOperand() != null) ltl1 = convert(e.getOperand());
+		if (e.getOperand() != null)
+			ltl1 = convert(e.getOperand());
 		switch (e.getOperator()) {
 		case ExpressionUnaryOp.NOT:
 			res = new SimpleLTL(SimpleLTL.LTLType.NOT, ltl1);

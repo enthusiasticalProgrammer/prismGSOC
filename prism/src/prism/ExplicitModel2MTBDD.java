@@ -500,13 +500,13 @@ public class ExplicitModel2MTBDD
 		int i, j, lineNum = 0;
 		double d;
 		JDDNode tmp;
-
+		
 		// initialise mtbdd
 		stateRewards = JDD.Constant(0);
-
+		
 		if (statesFile == null)
 			return;
-
+		
 		try {
 			// open file for reading
 			in = new BufferedReader(new FileReader(statesFile));

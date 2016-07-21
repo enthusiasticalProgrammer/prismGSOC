@@ -45,19 +45,18 @@ import jdd.JDDVars;
  * The Streett condition is accepting if all pairs are accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceStreettDD
-       extends ArrayList<AcceptanceStreettDD.StreettPairDD>
-       implements AcceptanceOmegaDD
+public class AcceptanceStreettDD extends ArrayList<AcceptanceStreettDD.StreettPairDD> implements AcceptanceOmegaDD
 {
 
 	/**
 	 * A pair in a Streett acceptance condition, i.e., with
 	 *  (G F "R") -> (G F "G")
 	 **/
-	public static class StreettPairDD {
+	public static class StreettPairDD
+	{
 		/** State set R */
 		private JDDNode R;
-		
+
 		/** State set G */
 		private JDDNode G;
 
@@ -74,8 +73,10 @@ public class AcceptanceStreettDD
 		/** Clear resources of the state sets */
 		public void clear()
 		{
-			if (R != null) JDD.Deref(R);
-			if (G != null) JDD.Deref(G);
+			if (R != null)
+				JDD.Deref(R);
+			if (G != null)
+				JDD.Deref(G);
 		}
 
 		/** Get a referenced copy of the state set R.
@@ -149,12 +150,12 @@ public class AcceptanceStreettDD
 			for (int i : IterableBitSet.getSetBits(pair.getR())) {
 				newR = JDD.SetVectorElement(newR, ddRowVars, i, 1.0);
 			}
-	
+
 			JDDNode newG = JDD.Constant(0);
 			for (int i : IterableBitSet.getSetBits(pair.getG())) {
 				newG = JDD.SetVectorElement(newG, ddRowVars, i, 1.0);
 			}
-	
+
 			StreettPairDD newPair = new StreettPairDD(newR, newG);
 			this.add(newPair);
 		}
@@ -218,7 +219,8 @@ public class AcceptanceStreettDD
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		String result = "";
 		for (StreettPairDD pair : this) {
 			result += pair.toString();
@@ -240,13 +242,15 @@ public class AcceptanceStreettDD
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 }

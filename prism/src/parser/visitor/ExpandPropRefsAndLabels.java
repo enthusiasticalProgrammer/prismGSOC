@@ -42,24 +42,24 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 	private PropertiesFile propertiesFile;
 	// The LabelList for label definitions
 	private LabelList labelList;
-	
+
 	public ExpandPropRefsAndLabels(PropertiesFile propertiesFile, LabelList labelList)
 	{
 		this.propertiesFile = propertiesFile;
 		this.labelList = labelList;
 	}
-	
+
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		int i;
 		Type t;
 		Expression expr;
-		
+
 		// Skip this if label list is missing
 		if (labelList == null) {
 			return e;
 		}
-		
+
 		// See if identifier corresponds to a label
 		i = labelList.getLabelIndex(e.getName());
 		if (i != -1) {
@@ -79,7 +79,7 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 			// Return replacement expression
 			return expr;
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
@@ -89,12 +89,12 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 		Property prop;
 		Type t;
 		Expression expr;
-		
+
 		// Skip this if label list is missing
 		if (propertiesFile == null) {
 			return e;
 		}
-		
+
 		// See if name corresponds to a property
 		prop = propertiesFile.lookUpPropertyObjectByName(e.getName());
 		if (prop != null) {
@@ -113,9 +113,8 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 			// Return replacement expression
 			return expr;
 		}
-		
+
 		// Couldn't find definition - leave unchanged.
 		return e;
 	}
 }
-

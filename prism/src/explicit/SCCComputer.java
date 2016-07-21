@@ -99,7 +99,7 @@ public abstract class SCCComputer extends PrismComponent
 	 * Get the list of computed BSCCs.
 	 */
 	public abstract List<BitSet> getBSCCs();
-	
+
 	/**
 	 * Get the states not in any BSCC.
 	 */

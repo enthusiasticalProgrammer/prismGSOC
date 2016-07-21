@@ -34,34 +34,34 @@ import prism.PrismLangException;
 public class ExpressionForAll extends Expression
 {
 	protected Expression expression = null;
-	
+
 	// Constructors
-	
+
 	public ExpressionForAll()
 	{
 	}
-	
+
 	public ExpressionForAll(Expression e)
 	{
 		expression = e;
 	}
 
 	// Set methods
-	
+
 	public void setExpression(Expression e)
 	{
 		expression = e;
 	}
 
 	// Get methods
-	
+
 	public Expression getExpression()
 	{
 		return expression;
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -73,7 +73,7 @@ public class ExpressionForAll extends Expression
 	{
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -93,13 +93,13 @@ public class ExpressionForAll extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
 	}
-	
+
 	@Override
 	public Expression deepCopy()
 	{
@@ -110,14 +110,14 @@ public class ExpressionForAll extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{
 		String s = "";
-		
+
 		s += "A [ " + expression + " ]";
-		
+
 		return s;
 	}
 

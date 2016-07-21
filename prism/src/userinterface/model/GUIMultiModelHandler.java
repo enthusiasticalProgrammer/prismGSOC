@@ -931,7 +931,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	{
 		// Store existing status
 		boolean autoParseOld = autoParse;
-		
+
 		// Is auto-parse switched on?
 		autoParse = theModel.getPrism().getSettings().getBoolean(PrismSettings.MODEL_AUTO_PARSE);
 
@@ -1023,7 +1023,7 @@ public class GUIMultiModelHandler extends JPanel implements PrismModelListener
 	public void notifySettings(PrismSettings settings)
 	{
 		updateAutoParse();
-		
+
 		prismEditorFontFast = settings.getFontColorPair(PrismSettings.MODEL_PRISM_EDITOR_FONT).f;
 		if (editor instanceof GUITextModelEditor)
 			((GUITextModelEditor) editor).setEditorFont(prismEditorFontFast);

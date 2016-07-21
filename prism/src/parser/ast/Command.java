@@ -43,9 +43,9 @@ public class Command extends ASTElement
 	private Updates updates;
 	// Parent module
 	private Module parent;
-	
+
 	// Constructor
-	
+
 	public Command()
 	{
 		synch = "";
@@ -53,30 +53,30 @@ public class Command extends ASTElement
 		guard = null;
 		updates = null;
 	}
-	
+
 	// Set methods
-	
+
 	public void setSynch(String s)
 	{
 		synch = s;
 	}
-	
+
 	public void setSynchIndex(int i)
 	{
 		synchIndex = i;
 	}
-	
+
 	public void setGuard(Expression g)
 	{
 		guard = g;
 	}
-	
+
 	public void setUpdates(Updates u)
 	{
 		updates = u;
 		u.setParent(this);
 	}
-	
+
 	public void setParent(Module m)
 	{
 		parent = m;
@@ -92,7 +92,7 @@ public class Command extends ASTElement
 	{
 		return synch;
 	}
-	
+
 	/**
 	 * Get the index of the action label for this command (in the model's list of actions).
 	 * This is 1-indexed, with 0 denoting an independent ("tau"-labelled) command.
@@ -102,24 +102,24 @@ public class Command extends ASTElement
 	{
 		return synchIndex;
 	}
-	
+
 	public Expression getGuard()
 	{
 		return guard;
 	}
-	
+
 	public Updates getUpdates()
 	{
 		return updates;
 	}
-	
+
 	public Module getParent()
 	{
 		return parent;
 	}
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */
@@ -127,7 +127,7 @@ public class Command extends ASTElement
 	{
 		return v.visit(this);
 	}
-	
+
 	/**
 	 * Convert to string.
 	 */
@@ -137,7 +137,7 @@ public class Command extends ASTElement
 		s += "] " + guard + " -> " + updates;
 		return s;
 	}
-	
+
 	/**
 	 * Perform a deep copy.
 	 */
@@ -147,7 +147,7 @@ public class Command extends ASTElement
 		ret.setSynch(getSynch());
 		ret.setSynchIndex(getSynchIndex());
 		ret.setGuard(getGuard().deepCopy());
-		ret.setUpdates((Updates)getUpdates().deepCopy());
+		ret.setUpdates((Updates) getUpdates().deepCopy());
 		ret.setPosition(this);
 		return ret;
 	}

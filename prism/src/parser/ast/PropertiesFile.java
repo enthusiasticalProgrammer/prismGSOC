@@ -75,7 +75,7 @@ public class PropertiesFile extends ASTElement
 	public void setModelInfo(ModelInfo modelInfo)
 	{
 		// Store ModelInfo. Need a ModulesFile too for now. Create a dummy one if needed.
-		if (modelInfo  == null) {
+		if (modelInfo == null) {
 			this.modelInfo = this.modulesFile = new ModulesFile();
 			this.modulesFile.setFormulaList(new FormulaList());
 			this.modulesFile.setConstantList(new ConstantList());

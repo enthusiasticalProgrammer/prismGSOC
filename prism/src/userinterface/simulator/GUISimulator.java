@@ -511,7 +511,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		try {
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -548,7 +549,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		try {
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -650,7 +652,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (currentUpdatesTable.getSelectedRow() == -1)
 				throw new PrismException("No current update is selected");
 			if (displayPathLoops && pathTableModel.isPathLooping()) {
-				if (questionYesNo("The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
+				if (questionYesNo(
+						"The current path contains a deterministic loop. \nDo you wish to disable detection of such loops and extend the path anyway?") == 0) {
 					displayPathLoops = false;
 					pathTable.repaint();
 				} else
@@ -879,8 +882,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 				Vector<String> propertyConstants = gp.getProperty().getAllConstants();
 				boolean allConstantsDefined = true;
 				for (String propertyConstant : propertyConstants) {
-					if (!parsedModel.isDefinedConstant(propertyConstant) &&
-					    !propertiesFile.isDefinedConstant(propertyConstant)) {
+					if (!parsedModel.isDefinedConstant(propertyConstant) && !propertiesFile.isDefinedConstant(propertyConstant)) {
 						// we found one that has not been defined in the model
 						// or the property file
 						allConstantsDefined = false;
@@ -890,8 +892,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 				// If the property has no unresolved constants
 				// and is simulate-able...
-				if (allConstantsDefined &&
-				    gp.isValidForSimulation()) {
+				if (allConstantsDefined && gp.isValidForSimulation()) {
 					// Add them to the list
 					thePathFormulaeList.addProperty(gp.getProperty(), propertiesFile);
 				}
@@ -1174,8 +1175,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		innerButtonPanel.add(configureViewButton);
 
-		pathTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		pathTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		jSplitPane1.setLeftComponent(jPanel3);
 
 		jSplitPane1.setRightComponent(jPanel4);
@@ -1439,8 +1441,9 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		innerManualUpdatesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		manualUpdateTableScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		currentUpdatesTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		currentUpdatesTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		manualUpdateTableScrollPane.setViewportView(currentUpdatesTable);
 
 		innerManualUpdatesPanel.add(manualUpdateTableScrollPane, java.awt.BorderLayout.CENTER);
@@ -1504,7 +1507,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	private void inputBacktrackFieldActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_inputBacktrackFieldActionPerformed
-		// TODO add your handling code here:
+			// TODO add your handling code here:
 	}//GEN-LAST:event_inputBacktrackFieldActionPerformed
 
 	private void backtrackButtonActionPerformed(java.awt.event.ActionEvent evt)
@@ -1954,8 +1957,8 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (e.getClickCount() == 2 && (e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll)) {
 				if (newPath.isEnabled())
 					a_newPath(false);
-			} else if (e.isPopupTrigger()
-					&& (e.getSource() == pathTablePlaceHolder || e.getSource() == pathTable || e.getSource() == pathTable.getTableHeader() || e.getSource() == tableScroll)) {
+			} else if (e.isPopupTrigger() && (e.getSource() == pathTablePlaceHolder || e.getSource() == pathTable || e.getSource() == pathTable.getTableHeader()
+					|| e.getSource() == tableScroll)) {
 				randomExploration
 						.setEnabled(!(e.getSource() == pathTable.getTableHeader() || e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll));
 				backtrack.setEnabled(!(e.getSource() == pathTable.getTableHeader() || e.getSource() == pathTablePlaceHolder || e.getSource() == tableScroll));

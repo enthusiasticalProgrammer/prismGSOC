@@ -199,7 +199,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 
 	private void optionCheckBoxActionPerformed(java.awt.event.ActionEvent evt)
 	{//GEN-FIRST:event_optionCheckBoxActionPerformed
-	// TODO add your handling code here:
+			// TODO add your handling code here:
 	}//GEN-LAST:event_optionCheckBoxActionPerformed
 
 	public static double log(double base, double x)

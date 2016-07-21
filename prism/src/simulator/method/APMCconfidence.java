@@ -70,7 +70,7 @@ public class APMCconfidence extends APMCMethod
 		else
 			return "approximation=" + approximation + ", confidence=" + confidence + ", number of samples=" + numSamples;
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

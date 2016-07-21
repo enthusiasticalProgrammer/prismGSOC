@@ -53,8 +53,8 @@ public class Updater extends PrismComponent
 	protected boolean doProbChecks = true;
 	// The precision to which we check probabilities sum to 1
 	protected double sumRoundOff = 1e-5;
-	
-	// Info on model being explored
+
+	//Info on model being explored
 	protected ModulesFile modulesFile;
 	protected ModelType modelType;
 	protected int numModules;
@@ -82,14 +82,14 @@ public class Updater extends PrismComponent
 	{
 		this(modulesFile, varList, null);
 	}
-	
+
 	public Updater(ModulesFile modulesFile, VarList varList, PrismComponent parent)
 	{
 		// Store some settings
 		doProbChecks = parent.getSettings().getBoolean(PrismSettings.PRISM_DO_PROB_CHECKS);
 		sumRoundOff = parent.getSettings().getDouble(PrismSettings.PRISM_SUM_ROUND_OFF);
-		
-		// Get info from model
+
+		// Get info from simulator/model
 		this.modulesFile = modulesFile;
 		modelType = modulesFile.getModelType();
 		numModules = modulesFile.getNumModules();
@@ -242,7 +242,7 @@ public class Updater extends PrismComponent
 				transitionList.add(ch);
 			}
 		}
-		
+
 		// For a DTMC, we need to normalise across all transitions
 		// This is partly to handle "local nondeterminism"
 		// and also to handle any dubious trickery done by disabling probability checks
@@ -250,14 +250,14 @@ public class Updater extends PrismComponent
 			double probSum = transitionList.getProbabilitySum();
 			transitionList.scaleProbabilitiesBy(1.0 / probSum);
 		}
-	
+
 		// Check validity of the computed transitions
 		// (not needed currently)
 		//transitionList.checkValid(modelType);
-		
+
 		// Check for errors (e.g. overflows) in the computed transitions
 		//transitionList.checkForErrors(state, varList);
-		
+
 		//System.out.println(transitionList);
 	}
 
@@ -308,9 +308,9 @@ public class Updater extends PrismComponent
 			store[i] = d;
 		}
 	}
-	
+
 	// Private helpers
-	
+
 	/**
 	 * Determine the enabled updates for the 'm'th module from (global) state 'state'.
 	 * Update information in updateLists, enabledSynchs and enabledModules.

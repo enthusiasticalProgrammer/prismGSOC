@@ -28,13 +28,13 @@ package parser.type;
 
 import prism.PrismLangException;
 
-public abstract class Type 
+public abstract class Type
 {
 	/**
 	 * Returns the string denoting this type, e.g. "int", "bool".
 	 */
 	public abstract String getTypeString();
-	
+
 	/**
 	 * Returns the default value for this type, assuming no initialisation specified.
 	 */
@@ -43,7 +43,7 @@ public abstract class Type
 		// Play safe: assume null
 		return null;
 	}
-	
+
 	/**
 	 * Returns true iff a variable of this type can be assigned a value that is of type {@code type}. 
 	 */
@@ -52,7 +52,7 @@ public abstract class Type
 		// Play safe: assume not possible, unless explicitly overridden.
 		return false;
 	}
-	
+
 	/**
 	 * Make sure that a value, stored as an Object (Integer, Boolean, etc.) is of this type.
 	 * Basically, implement some implicit casts, e.g. Integer -> Double.
@@ -64,7 +64,7 @@ public abstract class Type
 		// Play safe: assume error unless explicitly overridden.
 		throw new PrismLangException("Cannot cast a value to type " + getTypeString());
 	}
-	
+
 	@Override
 	public String toString()
 	{

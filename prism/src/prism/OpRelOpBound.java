@@ -97,9 +97,9 @@ public class OpRelOpBound
 				minMax = relOp.isMin() ? MinMax.min() : MinMax.max();
 			} else {
 				if (forAll) {
-					minMax = (relOp.isLowerBound() ) ? MinMax.min() : MinMax.max();
+					minMax = (relOp.isLowerBound()) ? MinMax.min() : MinMax.max();
 				} else {
-					minMax = (relOp.isLowerBound() ) ? MinMax.max() : MinMax.min();
+					minMax = (relOp.isLowerBound()) ? MinMax.max() : MinMax.min();
 				}
 			}
 		}

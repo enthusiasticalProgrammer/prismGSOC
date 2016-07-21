@@ -29,8 +29,12 @@ package pta;
 public abstract class NCZone extends Zone
 {
 	public abstract void intersectComplement(Zone z);
+
 	public abstract void complement();
+
 	public abstract void union(Zone z);
+
 	public abstract Zone getAZone();
+
 	public abstract NCZone deepCopy();
 }

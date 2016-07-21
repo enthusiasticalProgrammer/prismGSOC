@@ -41,7 +41,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 {
 	/** Name of the original file */
 	protected String parsedFileName;
-	
+
 	// Enums
 
 	private enum SectionType {
@@ -85,7 +85,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 		Parameter parameter;
 		Reaction reaction;
 		String reactionId = null, reactionName = null;
-		
+
 		// Initialise storage
 		speciesList = new ArrayList<Species>();
 		parameterList = new ArrayList<Parameter>();
@@ -249,7 +249,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 		// Reset filename storage
 		parsedFileName = null;
 	}
-	
+
 	/**
 	 * Calling point for command-line script:
 	 * e.g. java -cp classes prism.ReactionsText2Prism myfile.txt 100

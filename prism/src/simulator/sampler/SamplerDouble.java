@@ -39,9 +39,9 @@ public abstract class SamplerDouble extends Sampler
 {
 	/** Value of current path */
 	protected double value;
-	
+
 	// Stats over all paths
-	
+
 	/** Number of samples so far */
 	protected int numSamples;
 	/** Sum of values (used to compute mean) */
@@ -59,7 +59,7 @@ public abstract class SamplerDouble extends Sampler
 	 * estimate of the mean (for which, we just use the first value sampled). 
 	 * Source: "Algorithms for Computing the Sample Variance: Analysis and Recommendations", T.F. Chan et al.
 	 */
-	
+
 	@Override
 	public void reset()
 	{
@@ -112,7 +112,7 @@ public abstract class SamplerDouble extends Sampler
 			double meanShifted = valueSumShifted / numSamples;
 			return (valueSumShiftedSq - numSamples * meanShifted * meanShifted) / (numSamples - 1.0);
 		}
-		
+
 		// Note:
 		// * As explained at the top of this class, variance is computed using
 		//   a shifted version of the mean to improve numerical stability

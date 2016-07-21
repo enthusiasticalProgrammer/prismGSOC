@@ -143,7 +143,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	// State
 	private boolean modified;
 	private boolean computing;
-	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification, exportLabelsAfterReceiveParseNotification;
+	private boolean verifyAfterReceiveParseNotification, experimentAfterReceiveParseNotification, simulateAfterReceiveParseNotification,
+			exportLabelsAfterReceiveParseNotification;
 	private PropertiesFile parsedProperties;
 	private ArrayList<GUIProperty> propertiesToBeVerified;
 	private File activeFile;
@@ -154,7 +155,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 	// GUI
 	private FileFilter propsFilter;
-	private Map<String,FileFilter> labFilters;
+	private Map<String, FileFilter> labFilters;
 	private FileFilter textFilter;
 	private FileFilter csvFilter;
 	private FileFilter matlabFilter;
@@ -917,7 +918,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				this.getGraphHandler().addGraph(graph);
 			}
 		}*/
-		
+
 		// For a single property with a displayable counterexample, offer to do show it
 		if (selected.length == 1) {
 			GUIProperty gp = propList.getProperty(selected[0]);
@@ -1112,7 +1113,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		exportLabelsAfterReceiveParseNotification = true;
 		notifyEventListeners(new GUIPropertiesEvent(GUIPropertiesEvent.REQUEST_MODEL_PARSE));
 	}
-	
+
 	public void exportLabelsAfterParse()
 	{
 		// Switch off flag
@@ -1145,7 +1146,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			return;
 		}
 	}
-	
+
 	public void a_newExperiment()
 	{
 		// Reset warnings counter 
@@ -1797,11 +1798,11 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		createPopups();
 		//file filters
 		propsFilter = new FileNameExtensionFilter("PRISM properties (*.props, *.pctl, *.csl)", "props", "pctl", "csl");
-		labFilters = new HashMap<String,FileFilter>();
+		labFilters = new HashMap<String, FileFilter>();
 		labFilters.put("lab", new FileNameExtensionFilter("Label files (*.lab)", "lab"));
 		labFilters.put("txt", new FileNameExtensionFilter("Plain text files (*.txt)", "txt"));
-		textFilter =  new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
-		csvFilter =  new FileNameExtensionFilter("Comma-separated values (*.csv)", "csv");
+		textFilter = new FileNameExtensionFilter("Plain text files (*.txt)", "txt");
+		csvFilter = new FileNameExtensionFilter("Comma-separated values (*.csv)", "csv");
 		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
 	}
 
@@ -1962,10 +1963,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				a_verifySelected();
 			}
 		};
-		verifySelected
-				.putValue(
-						Action.LONG_DESCRIPTION,
-						"Model checks the selected properties against the model that is built.  If there is no built model, the parsed model is automatically built.  If the parsed model has changed since the last build, the user is prompted as to whether they wish to re-build the model.  If the model text has been modified since the last build, the user is asked whether they want to re-parse and re-build.");
+		verifySelected.putValue(Action.LONG_DESCRIPTION,
+				"Model checks the selected properties against the model that is built.  If there is no built model, the parsed model is automatically built.  If the parsed model has changed since the last build, the user is prompted as to whether they wish to re-build the model.  If the model text has been modified since the last build, the user is asked whether they want to re-parse and re-build.");
 		//verifySelected.putValue(Action.SHORT_DESCRIPTION, "Verify Selected Properties");
 		verifySelected.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_V));
 		verifySelected.putValue(Action.NAME, "Verify");
@@ -2176,7 +2175,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		exportLabelsMatlab.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_M));
 		exportLabelsMatlab.putValue(Action.NAME, "Matlab file");
 		exportLabelsMatlab.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallFileMatlab.png"));
-		
+
 		stopExperiment = new AbstractAction()
 		{
 			public void actionPerformed(ActionEvent e)

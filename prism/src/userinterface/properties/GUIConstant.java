@@ -37,7 +37,7 @@ class GUIConstant
 	public String constant;
 	public Type type;
 	public Exception parseError;
-	
+
 	public GUIConstant(GUIMultiProperties parent, String name, String constant, Type type)
 	{
 		this.parent = parent;
@@ -46,7 +46,7 @@ class GUIConstant
 		this.type = type;
 		this.parseError = null;
 	}
-	
+
 	public void parse()
 	{
 		Expression expr = null;
@@ -65,17 +65,22 @@ class GUIConstant
 			this.parseError = e;
 		}
 	}
-	
-	public boolean isParseable() { return parseError==null; }
-	
+
+	public boolean isParseable()
+	{
+		return parseError == null;
+	}
+
 	public String toString()
 	{
-		return "const "+type.getTypeString()+" "+name+getValueString()+";";
+		return "const " + type.getTypeString() + " " + name + getValueString() + ";";
 	}
-	
+
 	public String getValueString()
 	{
-		if ("".equals(constant)) return "";
-		else return " = " + constant; 
+		if ("".equals(constant))
+			return "";
+		else
+			return " = " + constant;
 	}
 }

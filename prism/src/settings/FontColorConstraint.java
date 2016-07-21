@@ -28,24 +28,21 @@ package settings;
 
 public abstract class FontColorConstraint implements SettingConstraint
 {
-	
+
 	/** Creates a new instance of FontColorConstraint */
 	public FontColorConstraint()
 	{
 	}
-	
+
 	public void checkValue(Object value) throws SettingException
 	{
-		if(value instanceof FontColorPair)
-		{
-			checkValueFontColor((FontColorPair)value);
-		}
-		else
-		{
+		if (value instanceof FontColorPair) {
+			checkValueFontColor((FontColorPair) value);
+		} else {
 			throw new SettingException("Invalid type for property, should be a Font Colour pair.");
 		}
 	}
-	
+
 	public abstract void checkValueFontColor(FontColorPair col) throws SettingException;
-	
+
 }

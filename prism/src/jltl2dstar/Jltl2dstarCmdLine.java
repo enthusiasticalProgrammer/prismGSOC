@@ -39,9 +39,11 @@ import jltl2ba.SimpleLTL;
 /**
  * Command-line interface to the jltl2dstar LTL->DRA translator.
  */
-public class Jltl2dstarCmdLine {
+public class Jltl2dstarCmdLine
+{
 
-	public int run(String formula, PrintStream output) throws Exception {
+	public int run(String formula, PrintStream output) throws Exception
+	{
 		SimpleLTL ltl = SimpleLTL.parseFormulaLBT(formula);
 		ltl = ltl.simplify();
 
@@ -50,8 +52,9 @@ public class Jltl2dstarCmdLine {
 		//DA.printLtl2dstar(dra, output);
 		return 0;
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args)
+	{
 		int rv = 0;
 		int outfile_pos = 1;
 		BufferedReader r = null;
@@ -94,7 +97,7 @@ public class Jltl2dstarCmdLine {
 			System.err.println(e.toString());
 			rv = 1;
 		}
-		
+
 		if (rv != 0) {
 			System.exit(rv);
 		}

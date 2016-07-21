@@ -23,21 +23,26 @@ package jltl2dstar;
 /**
  * Provides CandidateMatcher for SafraTrees
  */
-public class SafraTreeCandidateMatcher {
+public class SafraTreeCandidateMatcher
+{
 
-	public static boolean isMatch(SafraTreeTemplate temp, SafraTree tree) {
+	public static boolean isMatch(SafraTreeTemplate temp, SafraTree tree)
+	{
 		return temp.matches(tree);
 	}
 
-	public static boolean abstract_equal_to(SafraTree t1, SafraTree t2) {
+	public static boolean abstract_equal_to(SafraTree t1, SafraTree t2)
+	{
 		return t1.structural_equal_to(t2);
 	}
 
-	public static boolean abstract_less_than(SafraTree t1, SafraTree t2) {
+	public static boolean abstract_less_than(SafraTree t1, SafraTree t2)
+	{
 		return t1.structural_less_than(t2);
 	}
-	
-	public static int hash(SafraTree t1) {
+
+	public static int hash(SafraTree t1)
+	{
 		return t1.hashCode();
 	}
 }

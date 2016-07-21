@@ -45,7 +45,7 @@ public class ResultsCollection
 
 	// Info about other constants (over which these results do *not* range)
 	private Values nonRangingConstantValues;
-	
+
 	// Storage of the actual results
 	private TreeNode root;
 	private int currentIteration = 0;
@@ -71,7 +71,7 @@ public class ResultsCollection
 		for (int i = 0; i < tmpRangingConstants.size(); i++) {
 			rangingConstants.add(tmpRangingConstants.get(i));
 		}
-		numMFRangingConstants = uCons.getNumModelRangingConstants(); 
+		numMFRangingConstants = uCons.getNumModelRangingConstants();
 		numPFRangingConstants = uCons.getNumPropertyRangingConstants();
 		nonRangingConstantValues = uCons.getNonRangingConstantValues();
 
@@ -296,7 +296,7 @@ public class ResultsCollection
 		exporter.end();
 		return exporter;
 	}
-	
+
 	/**
 	 * Create string representation of the data for a partial evaluation
 	 * @param partial Values for a subset of the constants
@@ -522,7 +522,7 @@ public class ResultsCollection
 				kids[i].exportRec(values, export);
 			}
 		}
-		
+
 		/**
 		 * Create string representation of the data for a partial evaluation
 		 * @param partial Values for a subset of the constants
@@ -584,14 +584,14 @@ public class ResultsCollection
 
 			res = "";
 			n = constant.getNumSteps();
-			
+
 			// Print constants/indices for matrix
 			// NB: need to enclose in quotes for CSV
 			if (rangingConstants.size() == 1 || rangingConstants.size() - level == 2) {
 				if (sep.equals(", "))
 					res += "\"";
 				if (rangingConstants.size() > 2)
-					res += head+", ";
+					res += head + ", ";
 				if (rangingConstants.size() == 1)
 					res += constant.getName();
 				else
@@ -672,7 +672,7 @@ public class ResultsCollection
 		{
 			export.exportResult(values, val);
 		}
-		
+
 		public String toStringPartialRec(Values partial, boolean first, boolean pv, String sep, String eq, String head)
 		{
 			return head + eq + val + "\n";

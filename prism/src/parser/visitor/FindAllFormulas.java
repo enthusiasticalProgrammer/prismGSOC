@@ -35,12 +35,12 @@ import prism.PrismLangException;
 public class FindAllFormulas extends ASTTraverseModify
 {
 	private FormulaList formulaList;
-	
+
 	public FindAllFormulas(FormulaList formulaList)
 	{
 		this.formulaList = formulaList;
 	}
-	
+
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;
@@ -56,4 +56,3 @@ public class FindAllFormulas extends ASTTraverseModify
 		return e;
 	}
 }
-

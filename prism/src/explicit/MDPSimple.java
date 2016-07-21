@@ -909,10 +909,10 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 			d += prob * vect[k];
 		}
 		d += mcRewards.getStateReward(s);
-		
+
 		return d;
 	}
-	
+
 	@Override
 	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
 	{

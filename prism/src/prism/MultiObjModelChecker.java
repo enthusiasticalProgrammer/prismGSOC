@@ -1011,8 +1011,8 @@ public class MultiObjModelChecker extends PrismComponent
 		mainLog.println("Number of weight vectors used: " + numberOfPoints);
 
 		if (!decided)
-			throw new PrismException("The computation did not finish in " + maxIters
-					+ " target point iterations, try increasing this number using the -multimaxpoints switch.");
+			throw new PrismException(
+					"The computation did not finish in " + maxIters + " target point iterations, try increasing this number using the -multimaxpoints switch.");
 		else {
 			String paretoFile = settings.getString(PrismSettings.PRISM_EXPORT_PARETO_FILENAME);
 
@@ -1070,8 +1070,10 @@ public class MultiObjModelChecker extends PrismComponent
 			}
 		}
 
-		boolean maximizingProb = (opsAndBounds.probSize() > 0 && (opsAndBounds.getProbOperator(0) == Operator.P_MAX || opsAndBounds.getProbOperator(0) == Operator.P_MIN));
-		boolean maximizingReward = (opsAndBounds.rewardSize() > 0 && (opsAndBounds.getRewardOperator(0) == Operator.R_MAX || opsAndBounds.getRewardOperator(0) == Operator.R_MIN));
+		boolean maximizingProb = (opsAndBounds.probSize() > 0
+				&& (opsAndBounds.getProbOperator(0) == Operator.P_MAX || opsAndBounds.getProbOperator(0) == Operator.P_MIN));
+		boolean maximizingReward = (opsAndBounds.rewardSize() > 0
+				&& (opsAndBounds.getRewardOperator(0) == Operator.R_MAX || opsAndBounds.getRewardOperator(0) == Operator.R_MIN));
 		boolean maximizingNegated = (maximizingProb && opsAndBounds.getProbOperator(0) == Operator.P_MIN)
 				|| (maximizingReward && opsAndBounds.getRewardOperator(0) == Operator.R_MIN);
 
@@ -1267,8 +1269,8 @@ public class MultiObjModelChecker extends PrismComponent
 		mainLog.println("Number of weight vectors used: " + numberOfPoints);
 
 		if (!decided)
-			throw new PrismException("The computation did not finish in " + maxIters
-					+ " target point iterations, try increasing this number using the -multimaxpoints switch.");
+			throw new PrismException(
+					"The computation did not finish in " + maxIters + " target point iterations, try increasing this number using the -multimaxpoints switch.");
 		if (maximizingProb || maximizingReward) {
 			int maximizingCoord = (maximizingProb) ? 0 : dimProb;
 			return (maximizingNegated) ? -targetPoint.getCoord(maximizingCoord) : targetPoint.getCoord(maximizingCoord);

@@ -37,7 +37,7 @@ public interface PathFullInfo
 	 * Get the size of the path (number of steps; or number of states - 1).
 	 */
 	public abstract long size();
-	
+
 	/**
 	 * Get the state at a given step of the path.
 	 * @param step Step index (0 = initial state/step of path)
@@ -104,45 +104,45 @@ public interface PathFullInfo
 	 * @param rsi Reward structure index
 	 */
 	public abstract double getTransitionReward(int step, int rsi);
-	
+
 	/**
 	 * Does the path contain a deterministic loop?
 	 * If no loop info is stored ({@link #hasLoopInfo()} is false), returns false. 
 	 */
 	public abstract boolean isLooping();
-	
+
 	/**
 	 * What is the step index of the start of the deterministic loop, if it exists?
 	 * If no loop info is stored ({@link #hasLoopInfo()} is false), returns 0. 
 	 */
 	public abstract long loopStart();
-	
+
 	/**
 	 * What is the step index of the end of the deterministic loop, if it exists?
 	 * If no loop info is stored ({@link #hasLoopInfo()} is false), returns 0. 
 	 */
 	public abstract long loopEnd();
-	
+
 	/**
 	 * Does this object store information about rewards?
 	 */
 	public abstract boolean hasRewardInfo();
-	
+
 	/**
 	 * Does this object store information about which choices were taken?
 	 */
 	public abstract boolean hasChoiceInfo();
-	
+
 	/**
 	 * Does this object store information about rewards?
 	 */
 	public abstract boolean hasActionInfo();
-	
+
 	/**
 	 * Does this object store information about time elapse (for continuous-time models)?
 	 */
 	public abstract boolean hasTimeInfo();
-	
+
 	/**
 	 * Does this object store information about loops in the path?
 	 */

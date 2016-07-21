@@ -76,7 +76,7 @@ public class APMCapproximation extends APMCMethod
 			computeMissingParameterBeforeSim();
 		return super.getResult(sampler);
 	}
-	
+
 	@Override
 	public SimulationMethod clone()
 	{

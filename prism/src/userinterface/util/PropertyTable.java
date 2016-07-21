@@ -78,7 +78,7 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 			//int lines = 1;
 
 			//if (theModel.getValueAt(i, 1) instanceof SingleProperty)
-				//lines = getNumLines(value);
+			//lines = getNumLines(value);
 			//theTable.setRowHeight(i, (lineWidth*lines)+2);
 			//int heightWanted = (int)area.getPreferredSize().getHeight();
 			//      if(heightWanted != theTable.getRowHeight(row));
@@ -212,8 +212,9 @@ public class PropertyTable extends JPanel implements ListSelectionListener, Tabl
 		jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 		jScrollPane1.setBorder(new javax.swing.border.LineBorder(java.awt.SystemColor.textInactiveText));
 		jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		theTable.setModel(new javax.swing.table.DefaultTableModel(
+				new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		theTable.setDoubleBuffered(true);
 		theTable.setGridColor(new java.awt.Color(198, 197, 197));
 		jScrollPane1.setViewportView(theTable);

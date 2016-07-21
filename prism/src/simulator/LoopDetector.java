@@ -45,7 +45,7 @@ public class LoopDetector
 		isLooping = false;
 		loopStart = loopEnd = -1;
 	}
-	
+
 	/**
 	 * Update loop detector after a step has just been added to the path.
 	 */
@@ -67,7 +67,7 @@ public class LoopDetector
 			loopEnd = path.size();
 		}
 	}
-	
+
 	/**
 	 * Update loop detector after a backtrack within the path has been made.
 	 */
@@ -80,7 +80,7 @@ public class LoopDetector
 			}
 		}
 	}
-	
+
 	/**
 	 * Update loop detector after a prefix of the path has been removed.
 	 * @param path Path object (already updated)
@@ -98,7 +98,7 @@ public class LoopDetector
 			}
 		}
 	}
-	
+
 	/**
 	 * Does the path contain a deterministic loop?
 	 */
@@ -106,7 +106,7 @@ public class LoopDetector
 	{
 		return isLooping;
 	}
-	
+
 	/**
 	 * What is the step index of the start of the deterministic loop, if it exists?
 	 */
@@ -114,7 +114,7 @@ public class LoopDetector
 	{
 		return loopStart;
 	}
-	
+
 	/**
 	 * What is the step index of the end of the deterministic loop, if it exists?
 	 */

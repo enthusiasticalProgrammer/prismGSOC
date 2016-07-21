@@ -39,21 +39,21 @@ public class ExpressionProp extends Expression
 	private String name;
 
 	// Constructor
-	
+
 	public ExpressionProp(String s)
 	{
 		name = s;
 	}
 
 	// Get Method
-	
+
 	public String getName()
 	{
 		return name;
 	}
 
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -67,7 +67,7 @@ public class ExpressionProp extends Expression
 		// Don't know - err on the side of caution
 		return false;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -87,7 +87,7 @@ public class ExpressionProp extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
@@ -104,7 +104,7 @@ public class ExpressionProp extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

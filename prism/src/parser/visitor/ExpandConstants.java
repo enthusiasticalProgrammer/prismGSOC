@@ -36,18 +36,18 @@ import prism.PrismLangException;
 public class ExpandConstants extends ASTTraverseModify
 {
 	private ConstantList constantList;
-	
+
 	public ExpandConstants(ConstantList constantList)
 	{
 		this.constantList = constantList;
 	}
-	
+
 	public Object visit(ExpressionConstant e) throws PrismLangException
 	{
 		int i;
 		Type t;
 		Expression expr;
-		
+
 		// See if identifier corresponds to a constant
 		i = constantList.getConstantIndex(e.getName());
 		if (i != -1) {
@@ -65,16 +65,13 @@ public class ExpandConstants extends ASTTraverseModify
 				expr.setType(t);
 				// Return replacement expression
 				return expr;
-			}
-			else {
+			} else {
 				// Error (should never happen)
 				throw new PrismLangException("Undefined constant", e);
 			}
-		}
-		else {
+		} else {
 			// Error (should never happen)
 			throw new PrismLangException("Undefined constant", e);
 		}
 	}
 }
-

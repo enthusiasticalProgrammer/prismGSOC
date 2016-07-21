@@ -99,7 +99,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 			throw new PrismLangException("Reference to system " + e.getName() + " which does not exist", e);
 		return null;
 	}
-	
+
 	public Object visit(FormulaList e) throws PrismLangException
 	{
 		// Override - don't need to do any semantic checks on formulas
@@ -107,7 +107,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		// (and we shouldn't check them - e.g. clock vars appearing in errors would show as an error)
 		return null;
 	}
-	
+
 	public void visitPost(LabelList e) throws PrismLangException
 	{
 		int i, n;
@@ -187,7 +187,8 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		int i, n;
 		n = e.getNumDeclarations();
 		for (i = 0; i < n; i++) {
-			if (e.getDeclaration(i) != null) e.getDeclaration(i).accept(this);
+			if (e.getDeclaration(i) != null)
+				e.getDeclaration(i).accept(this);
 		}
 		inInvariant = e.getInvariant();
 		if (e.getInvariant() != null)
@@ -195,7 +196,8 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		inInvariant = null;
 		n = e.getNumCommands();
 		for (i = 0; i < n; i++) {
-			if (e.getCommand(i) != null) e.getCommand(i).accept(this);
+			if (e.getCommand(i) != null)
+				e.getCommand(i).accept(this);
 		}
 		visitPost(e);
 		return null;
@@ -218,7 +220,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		visitPost(e);
 		return null;
 	}
-	
+
 	public void visitPre(Update e) throws PrismLangException
 	{
 		// Register the fact we are entering an update

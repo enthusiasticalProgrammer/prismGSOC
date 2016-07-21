@@ -66,7 +66,7 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return 1;
 	}
-	
+
 	@Override
 	public List<String> getVarNames()
 	{
@@ -84,7 +84,7 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return 1;
 	}
-	
+
 	@Override
 	public String getLabelName(int i) throws PrismException
 	{
@@ -100,12 +100,12 @@ public class TestModelGenerator extends DefaultModelGenerator
 	{
 		return ("goal".equals(label)) ? 0 : -1;
 	}
-	
+
 	@Override
 	public State getInitialState() throws PrismException
 	{
 		State s = new State(1);
-		s.varValues[0] = n/2;
+		s.varValues[0] = n / 2;
 		return s;
 	}
 
@@ -159,11 +159,11 @@ public class TestModelGenerator extends DefaultModelGenerator
 		if (x == 0 || x == n) {
 			s.varValues[i] = x;
 		} else {
-			s.varValues[i] = (offset == 0) ? x -1 : x + 1;
+			s.varValues[i] = (offset == 0) ? x - 1 : x + 1;
 		}
 		return s;
 	}
-	
+
 	@Override
 	public boolean isLabelTrue(int i) throws PrismException
 	{
@@ -186,7 +186,7 @@ public class TestModelGenerator extends DefaultModelGenerator
 		}
 		return varList;
 	}
-	
+
 	public static void main(String args[])
 	{
 		try {
