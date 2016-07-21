@@ -29,20 +29,23 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Vector;
 
 import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.ProbModel;
 
 /**
  * Generic interface for an omega-regular acceptance condition (BitSet-based).
  */
 public interface AcceptanceOmega extends Cloneable
 {
-	/** Returns true if the bottom strongly connected component (BSSC)
+	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
+	 *  This method does not test, if bscc_states is an SCC or not!
 	 **/
 	public boolean isBSCCAccepting(BitSet bscc_states);
 
@@ -81,7 +84,7 @@ public interface AcceptanceOmega extends Cloneable
 	{
 		BitSet result = new BitSet();
 		bs.stream().forEach(bit -> {
-			lifter.get(bit).stream().forEach(result::set);
+			lifter.getOrDefault(bit, Collections.emptySet()).stream().forEach(result::set);
 		});
 		return result;
 	}
