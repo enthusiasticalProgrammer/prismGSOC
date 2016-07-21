@@ -36,6 +36,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -737,7 +738,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		ArrayList<Object> owners = new ArrayList<>();
+		List<Object> owners = new ArrayList();
 		TreePath[] nodes = networkTree.getSelectionPaths();
 		if (nodes == null)
 			return;

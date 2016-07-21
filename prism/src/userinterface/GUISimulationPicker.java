@@ -81,7 +81,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	// Note: this code has now been modified manually; form is no longer used.
 	javax.swing.JTextField widthField;
-	javax.swing.JComboBox selectSimulationMethod;
+	javax.swing.JComboBox<String> selectSimulationMethod;
 	javax.swing.JComboBox automaticCalculateCombo;
 	private javax.swing.JButton cancelButton;
 	javax.swing.JTextField confidenceField;
@@ -236,7 +236,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		jLabel7 = new javax.swing.JLabel();
 		jPanel11 = new javax.swing.JPanel();
 		jPanel12 = new javax.swing.JPanel();
-		selectSimulationMethod = new javax.swing.JComboBox(); // new
+		selectSimulationMethod = new javax.swing.JComboBox<>(); // new
 		automaticCalculateCombo = new javax.swing.JComboBox();
 		jPanel13 = new javax.swing.JPanel();
 		widthField = new javax.swing.JTextField();
@@ -406,7 +406,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			methods.add("APMC");
 		if (!atLeastOneQuant)
 			methods.add("SPRT");
-		selectSimulationMethod.setModel(new javax.swing.DefaultComboBoxModel(methods));
+		selectSimulationMethod.setModel(new javax.swing.DefaultComboBoxModel<>(methods));
 
 		selectSimulationMethod.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -417,7 +417,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 			}
 		});
 
-		automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+		automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
 		automaticCalculateCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			@Override
@@ -613,22 +613,22 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		case CI:
 			jLabel5.setText("Width:");
 			jLabel6.setText("Confidence:");
-			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Width", "Confidence", "Number of samples" }));
+			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Width", "Confidence", "Number of samples" }));
 			break;
 		case ACI:
 			jLabel5.setText("Width:");
 			jLabel6.setText("Confidence:");
-			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Width", "Confidence", "Number of samples" }));
+			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Width", "Confidence", "Number of samples" }));
 			break;
 		case APMC:
 			jLabel5.setText("Approximation:");
 			jLabel6.setText("Confidence:");
-			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Approximation", "Confidence", "Number of samples" }));
+			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Approximation", "Confidence", "Number of samples" }));
 			break;
 		case SPRT:
 			jLabel5.setText("Indifference:");
 			jLabel6.setText("Type I/II error:");
-			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Number of samples" }));
+			automaticCalculateCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Number of samples" }));
 			break;
 		}
 		// Restore choice for "Automatically calculate"

@@ -60,14 +60,14 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 
 	private int networkState;
 
-	private Vector fileSystems;
+	private Vector<FileSystem> fileSystems;
 
 	private File networkFile;
 
 	/** Creates a new instance of SimulatorNetworkHandler */
 	public SimulatorNetworkHandler()
 	{
-		fileSystems = new Vector();
+		fileSystems = new Vector<>();
 
 		this.networkName = new SingleLineStringSetting("network name", "default",
 				"A name for this network profile.  Each network profile is a collection of network clusters.  Each cluster has the characteristic that it has the same filesystem.",
@@ -227,7 +227,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 
 	public FileSystem getFileSystem(int index)
 	{
-		return (FileSystem) fileSystems.get(index);
+		return fileSystems.get(index);
 	}
 
 	public int getNumFileSystems()
@@ -251,7 +251,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	private boolean feedback, resultsFeedback;
 	private SimulatorResultsFile srf = new SimulatorResultsFile();
 	private Values modelConstants;
-	private ArrayList propertyConstantRanges;
+	private List propertyConstantRanges;
 	private ResultsCollection resultsCollection;
 
 	public void doTesting()
@@ -299,7 +299,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 
 	public void doNetworking(int noIteration, long maxPathLengt, File simBinar, boolean feedbac, boolean resultsFeed, Values modelConstant,
-			ArrayList propertyConstants, ResultsCollection rc)
+			List propertyConstants, ResultsCollection rc)
 	{
 		this.simBinary = simBinar;
 		this.maxPathLength = maxPathLengt;
@@ -644,7 +644,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	//TreeNode Methods
 
 	@Override
-	public Enumeration children()
+	public Enumeration<FileSystem> children()
 	{
 		return fileSystems.elements();
 	}
@@ -658,7 +658,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	@Override
 	public TreeNode getChildAt(int childIndex)
 	{
-		return (TreeNode) fileSystems.get(childIndex);
+		return fileSystems.get(childIndex);
 	}
 
 	@Override
@@ -795,7 +795,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 
 	@Override
-	public Class getColumnClass(int columnIndex)
+	public Class<?> getColumnClass(int columnIndex)
 	{
 		return tableModel.getColumnClass(columnIndex);
 	}

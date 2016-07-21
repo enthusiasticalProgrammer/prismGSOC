@@ -61,7 +61,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	//Current execution progress
 	private int totalDone;
 	private int totalStints;
-	private ArrayList resultFiles;
+	private List<File> resultFiles;
 
 	File localResults; //TO-DO deal with results handling
 
@@ -119,7 +119,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		noToDoThisStint = 0;
 		noDoneThisStint = 0;
 
-		resultFiles = new ArrayList();
+		resultFiles = new ArrayList<>();
 
 		owner.notifyChange(this);
 	}
@@ -166,7 +166,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 	public File getResultsFile(int i)
 	{
-		return (File) resultFiles.get(i);
+		return resultFiles.get(i);
 	}
 
 	public String getHostName()
@@ -648,7 +648,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	//TreeNode Methods
 
 	@Override
-	public Enumeration children()
+	public Enumeration<?> children()
 	{
 		return null;
 	}

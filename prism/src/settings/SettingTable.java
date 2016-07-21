@@ -32,6 +32,8 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.table.*;
 
 public class SettingTable extends JPanel implements ListSelectionListener, TableModelListener, ItemListener, SettingDisplay
@@ -85,9 +87,9 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 	}
 
-	public void setOwners(ArrayList owners)
+	public void setOwners(List al)
 	{
-		theModel.setOwners(owners);
+		theModel.setOwners(al);
 	}
 
 	public void refreshGroupNames()
@@ -530,7 +532,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	class SettingTableModel extends AbstractTableModel
 	{
 		//All of the data
-		private ArrayList owners;
+		private List owners;
 
 		//Current sorted data
 		private ArrayList groupNames;
@@ -558,7 +560,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			this.theTable = tab;
 		}
 
-		public void setOwners(ArrayList owners)
+		public void setOwners(List owners)
 		{
 			this.owners = owners;
 			Collections.sort(owners);
