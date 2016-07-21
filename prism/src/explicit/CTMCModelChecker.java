@@ -44,7 +44,7 @@ public class CTMCModelChecker extends ProbModelChecker
 	/**
 	 * Create a new CTMCModelChecker, inherit basic state from parent (unless null).
 	 */
-	public CTMCModelChecker(PrismComponent parent) throws PrismException
+	public CTMCModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 	}
