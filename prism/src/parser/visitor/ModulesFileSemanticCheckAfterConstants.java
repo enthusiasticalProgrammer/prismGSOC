@@ -55,7 +55,7 @@ public class ModulesFileSemanticCheckAfterConstants extends ASTTraverse
 	{
 		int i, n;
 		String var;
-		Vector<String> varsUsed = new Vector<String>();
+		Vector<String> varsUsed = new Vector<>();
 
 		// Check that no variables are set twice in the same update
 		// Currently, could do this *before* constants are defined,

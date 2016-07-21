@@ -70,7 +70,7 @@ public class Modules2PTA extends PrismComponent
 		int i, numModules;
 		Module module, moduleNew;
 		ArrayList<String> nonClocks;
-		ArrayList<String> allNonClocks = new ArrayList<String>();
+		ArrayList<String> allNonClocks = new ArrayList<>();
 		ArrayList<ArrayList<State>> pcStates;
 		PTA pta, pta2;
 
@@ -126,11 +126,11 @@ public class Modules2PTA extends PrismComponent
 
 		// Go through list of modules
 		numModules = modulesFile.getNumModules();
-		pcStates = new ArrayList<ArrayList<State>>(numModules);
+		pcStates = new ArrayList<>(numModules);
 		for (i = 0; i < numModules; i++) {
 			// Find non-clock variables in module
 			module = modulesFile.getModule(i);
-			nonClocks = new ArrayList<String>();
+			nonClocks = new ArrayList<>();
 			for (Declaration decl : module.getDeclarations()) {
 				if (!(decl.getType() instanceof TypeClock)) {
 					nonClocks.add(decl.getName());
@@ -192,7 +192,7 @@ public class Modules2PTA extends PrismComponent
 		pc = module.getDeclaration(0).getName();
 		pcMax = ((DeclarationInt) module.getDeclaration(0).getDeclType()).getHigh().evaluateInt();
 		numVars = module.getNumDeclarations();
-		clocks = new ArrayList<String>();
+		clocks = new ArrayList<>();
 		for (i = 1; i < numVars; i++) {
 			clocks.add(module.getDeclaration(i).getName());
 		}
@@ -375,7 +375,7 @@ public class Modules2PTA extends PrismComponent
 		ExpressionBinaryOp exprRelOp;
 		Expression expr1, expr2;
 		int x, y, v;
-		List<Constraint> res = new ArrayList<Constraint>();
+		List<Constraint> res = new ArrayList<>();
 
 		// Check is rel op and split into parts
 		if (!Expression.isRelOp(expr))
@@ -556,8 +556,8 @@ public class Modules2PTA extends PrismComponent
 		// Explore local state space of module
 
 		// Initialise states storage
-		states = new IndexedSet<State>();
-		explore = new LinkedList<State>();
+		states = new IndexedSet<>();
+		explore = new LinkedList<>();
 		// Add initial state
 		state = pcInit;
 		states.add(state);

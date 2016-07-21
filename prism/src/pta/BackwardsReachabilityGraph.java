@@ -68,18 +68,18 @@ public class BackwardsReachabilityGraph
 
 	public BackwardsReachabilityGraph()
 	{
-		initialStates = new ArrayList<Integer>();
+		initialStates = new ArrayList<>();
 		target = new BitSet();
-		trans = new ArrayList<List<List<List<Integer>>>>();
+		trans = new ArrayList<>();
 	}
 
 	public void addState(List<Transition> trs)
 	{
 		int numTransitions = trs.size();
-		List<List<List<Integer>>> list = new ArrayList<List<List<Integer>>>(numTransitions);
+		List<List<List<Integer>>> list = new ArrayList<>(numTransitions);
 		for (int i = 0; i < numTransitions; i++) {
 			int numEdges = trs.get(i).getNumEdges();
-			List<List<Integer>> list2 = new ArrayList<List<Integer>>(numEdges);
+			List<List<Integer>> list2 = new ArrayList<>(numEdges);
 			for (int j = 0; j < numEdges; j++) {
 				list2.add(new ArrayList<Integer>());
 			}

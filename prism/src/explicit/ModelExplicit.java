@@ -70,7 +70,7 @@ public abstract class ModelExplicit implements Model
 	protected VarList varList;
 	/** (Optionally) some labels (atomic propositions) associated with the model,
 	 * represented as a String->BitSet mapping from their names to the states that satisfy them. */
-	protected Map<String, BitSet> labels = new TreeMap<String, BitSet>();
+	protected Map<String, BitSet> labels = new TreeMap<>();
 
 	/**
 	 * (Optionally) the stored predecessor relation. Becomes inaccurate after the model is changed!
@@ -129,12 +129,12 @@ public abstract class ModelExplicit implements Model
 	public void initialise(int numStates)
 	{
 		this.numStates = numStates;
-		initialStates = new ArrayList<Integer>();
-		deadlocks = new TreeSet<Integer>();
+		initialStates = new ArrayList<>();
+		deadlocks = new TreeSet<>();
 		statesList = null;
 		constantValues = null;
 		varList = null;
-		labels = new TreeMap<String, BitSet>();
+		labels = new TreeMap<>();
 	}
 
 	/**

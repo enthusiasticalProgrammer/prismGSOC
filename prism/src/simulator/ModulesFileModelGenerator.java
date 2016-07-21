@@ -216,7 +216,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	@Override
 	public List<State> getInitialStates() throws PrismException
 	{
-		List<State> initStates = new ArrayList<State>();
+		List<State> initStates = new ArrayList<>();
 		// Easy (normal) case: just one initial state
 		if (modulesFile.getInitialStates() == null) {
 			State state = modulesFile.getDefaultInitialState();

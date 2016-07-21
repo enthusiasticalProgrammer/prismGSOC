@@ -83,8 +83,8 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	private Action newNetwork, open, save, saveAs, close;
 	private Action cut, copy, paste, delete;
 
-	private ArrayList clipboardHosts;
-	private ArrayList clipboardFSs;
+	private ArrayList<SSHHost> clipboardHosts;
+	private ArrayList<FileSystem> clipboardFSs;
 
 	private boolean modified = false;
 	private File activeFile = null;
@@ -180,7 +180,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		if (cont == CONTINUE) {
 			networkHandler.newNetwork("New Profile");
 			treeModel.nodeStructureChanged(networkHandler);
-			settingTable.setOwners(new ArrayList());
+			settingTable.setOwners(new ArrayList<>());
 			modified = false;
 		}
 	}
@@ -273,8 +273,8 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 	public void a_copy()
 	{
-		clipboardHosts = new ArrayList();
-		clipboardFSs = new ArrayList();
+		clipboardHosts = new ArrayList<>();
+		clipboardFSs = new ArrayList<>();
 
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
@@ -299,7 +299,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		if (selectedFileSystem != null) {
 			if (clipboardHosts != null) {
 				for (int i = 0; i < clipboardHosts.size(); i++) {
-					SSHHost host = (SSHHost) clipboardHosts.get(i);
+					SSHHost host = clipboardHosts.get(i);
 					selectedFileSystem.addHost(host.getHostName(), host.getUserName());
 				}
 
@@ -311,7 +311,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 			if (clipboardFSs != null) {
 				int[] indices = new int[clipboardFSs.size()];
 				for (int i = 0; i < clipboardFSs.size(); i++) {
-					FileSystem fs = (FileSystem) clipboardFSs.get(i);
+					FileSystem fs = clipboardFSs.get(i);
 					int index = networkHandler.addFileSystem(fs.getName(), fs.getInputDir(), fs.getOutputDir());
 					indices[i] = index;
 					FileSystem newFS = networkHandler.getFileSystem(index);
@@ -335,7 +335,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		// delete hosts first
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
-		ArrayList fss = new ArrayList();
+		ArrayList<TreeNode> fss = new ArrayList<>();
 		for (int i = 0; i < selectedPaths.length; i++) {
 
 			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
@@ -346,10 +346,10 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 			}
 		}
 		for (int i = 0; i < fss.size(); i++) {
-			treeModel.nodeStructureChanged((FileSystem) fss.get(i));
+			treeModel.nodeStructureChanged(fss.get(i));
 		}
 
-		ArrayList indices = new ArrayList();
+		ArrayList<Integer> indices = new ArrayList<>();
 
 		for (int i = 0; i < selectedPaths.length; i++) {
 			if (selectedPaths[i].getLastPathComponent() instanceof FileSystem) {
@@ -359,7 +359,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		int[] inds = new int[indices.size()];
 		for (int i = 0; i < indices.size(); i++) {
-			inds[i] = ((Integer) indices.get(i)).intValue();
+			inds[i] = indices.get(i).intValue();
 		}
 		Object[] objs = new Object[indices.size()];
 
@@ -380,7 +380,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		//treeModel.nodeStructureChanged(networkHandler);
 
-		settingTable.setOwners(new ArrayList());
+		settingTable.setOwners(new ArrayList<>());
 		modified = true;
 	}
 
@@ -397,7 +397,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	{
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
-		ArrayList fss = new ArrayList();
+		ArrayList<TreeNode> fss = new ArrayList<>();
 		for (int i = 0; i < selectedPaths.length; i++) {
 
 			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {
@@ -737,7 +737,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		ArrayList owners = new ArrayList();
+		ArrayList<Object> owners = new ArrayList<>();
 		TreePath[] nodes = networkTree.getSelectionPaths();
 		if (nodes == null)
 			return;

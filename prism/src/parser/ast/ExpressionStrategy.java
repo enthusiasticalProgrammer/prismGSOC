@@ -47,7 +47,7 @@ public class ExpressionStrategy extends Expression
 	protected Coalition coalition = new Coalition();
 
 	/** Child expression(s) */
-	protected List<Expression> operands = new ArrayList<Expression>();
+	protected List<Expression> operands = new ArrayList<>();
 
 	/** Is there just a single operand (P/R operator)? If not, the operand list will be parenthesised. **/
 	protected boolean singleOperand = false;
@@ -207,7 +207,7 @@ public class ExpressionStrategy extends Expression
 		expr.setThereExists(isThereExists());
 		expr.coalition = new Coalition(coalition);
 		for (Expression operand : operands) {
-			expr.addOperand((Expression) operand.deepCopy());
+			expr.addOperand(operand.deepCopy());
 		}
 		expr.singleOperand = singleOperand;
 		expr.setType(type);

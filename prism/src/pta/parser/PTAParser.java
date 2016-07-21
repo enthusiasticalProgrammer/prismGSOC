@@ -8,6 +8,7 @@ import java.util.*;
 import pta.*;
 import prism.PrismLangException;
 
+@SuppressWarnings("all")
 public class PTAParser implements PTAParserConstants
 {
 	//-----------------------------------------------------------------------------------
@@ -89,10 +90,10 @@ public class PTAParser implements PTAParserConstants
 		// Methods
 		public astPTA()
 		{
-			clockNames = new ArrayList<String>();
-			locationNames = new ArrayList<String>();
-			invariants = new HashMap<String, LinkedHashSet<Constraint>>();
-			transitions = new HashMap<String, ArrayList<astTransition>>();
+			clockNames = new ArrayList<>();
+			locationNames = new ArrayList<>();
+			invariants = new HashMap<>();
+			transitions = new HashMap<>();
 		}
 
 		public int getOrAddClock(String name)
@@ -179,8 +180,8 @@ public class PTAParser implements PTAParserConstants
 		// Methods
 		public astTransition()
 		{
-			guard = new ArrayList<Constraint>();
-			edges = new ArrayList<astEdge>();
+			guard = new ArrayList<>();
+			edges = new ArrayList<>();
 		}
 
 		public void setAction(String action)
@@ -222,7 +223,7 @@ public class PTAParser implements PTAParserConstants
 		{
 			this.prob = prob;
 			this.dest = dest;
-			resets = new HashMap<Integer, Integer>();
+			resets = new HashMap<>();
 		}
 
 		public void addReset(int clock, int val)
@@ -377,7 +378,7 @@ public class PTAParser implements PTAParserConstants
 
 	static final public LinkedHashSet<Constraint> ConstraintList(astPTA pta) throws ParseException
 	{
-		LinkedHashSet<Constraint> constrs = new LinkedHashSet<Constraint>();
+		LinkedHashSet<Constraint> constrs = new LinkedHashSet<>();
 		switch ((jj_ntk == -1) ? jj_ntk_f() : jj_ntk) {
 		case REG_IDENT: {
 			Constraint(pta, constrs);
@@ -491,7 +492,7 @@ public class PTAParser implements PTAParserConstants
 
 	static final public HashMap<Integer, Integer> Resets(astPTA pta) throws ParseException
 	{
-		HashMap<Integer, Integer> resets = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> resets = new HashMap<>();
 		switch ((jj_ntk == -1) ? jj_ntk_f() : jj_ntk) {
 		case REG_IDENT: {
 			Reset(pta, resets);
@@ -778,7 +779,7 @@ public class PTAParser implements PTAParserConstants
 			return (jj_ntk = jj_nt.kind);
 	}
 
-	static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+	static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<>();
 	static private int[] jj_expentry;
 	static private int jj_kind = -1;
 

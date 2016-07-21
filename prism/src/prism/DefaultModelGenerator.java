@@ -135,7 +135,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	public List<State> getInitialStates() throws PrismException
 	{
 		// Default to the case of a single initial state
-		ArrayList<State> initStates = new ArrayList<State>();
+		ArrayList<State> initStates = new ArrayList<>();
 		initStates.add(getInitialState());
 		return initStates;
 	}

@@ -41,7 +41,7 @@ public class DBMListFactory implements ZoneFactory
 	public DBMList createZero(PTA pta)
 	{
 		DBMList list = new DBMList(pta);
-		list.addDBM((DBM) dbmf.createZero(pta));
+		list.addDBM(dbmf.createZero(pta));
 		return list;
 	}
 
@@ -52,7 +52,7 @@ public class DBMListFactory implements ZoneFactory
 	public DBMList createTrue(PTA pta)
 	{
 		DBMList list = new DBMList(pta);
-		list.addDBM((DBM) dbmf.createTrue(pta));
+		list.addDBM(dbmf.createTrue(pta));
 		return list;
 	}
 
@@ -63,7 +63,7 @@ public class DBMListFactory implements ZoneFactory
 	public DBMList createFromConstraints(PTA pta, Iterable<Constraint> constrs)
 	{
 		DBMList list = new DBMList(pta);
-		list.addDBM((DBM) dbmf.createFromConstraints(pta, constrs));
+		list.addDBM(dbmf.createFromConstraints(pta, constrs));
 		return list;
 	}
 }

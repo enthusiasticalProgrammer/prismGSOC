@@ -81,18 +81,18 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		labelList = new LabelList();
 		constantList = new ConstantList();
 		modelType = ModelType.MDP; // default type
-		globals = new Vector<Declaration>();
-		modules = new Vector<Object>();
-		systemDefns = new ArrayList<SystemDefn>();
-		systemDefnNames = new ArrayList<String>();
-		rewardStructs = new ArrayList<RewardStruct>();
+		globals = new Vector<>();
+		modules = new Vector<>();
+		systemDefns = new ArrayList<>();
+		systemDefnNames = new ArrayList<>();
+		rewardStructs = new ArrayList<>();
 		initStates = null;
-		formulaIdents = new Vector<String>();
-		constantIdents = new Vector<String>();
-		varIdents = new Vector<String>();
-		varDecls = new Vector<Declaration>();
-		varNames = new Vector<String>();
-		varTypes = new Vector<Type>();
+		formulaIdents = new Vector<>();
+		constantIdents = new Vector<>();
+		varIdents = new Vector<>();
+		varDecls = new Vector<>();
+		varNames = new Vector<>();
+		varTypes = new Vector<>();
 		undefinedConstantValues = null;
 		constantValues = null;
 	}
@@ -724,7 +724,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 			}
 			// Check for invalid renames
 			n2 = module.getNumRenames();
-			renamedSoFar = new HashSet<String>();
+			renamedSoFar = new HashSet<>();
 			for (i2 = 0; i2 < n2; i2++) {
 				s = module.getOldName(i2);
 				if (!renamedSoFar.add(s)) {
@@ -755,7 +755,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 
 		// go thru labels
 		n = labelList.size();
-		labelIdents = new Vector<String>();
+		labelIdents = new Vector<>();
 		for (i = 0; i < n; i++) {
 			s = labelList.getLabelName(i);
 			// see if ident has been used already for a label
@@ -803,7 +803,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		int i, j, n, m;
 
 		// create vector to store names
-		synchs = new Vector<String>();
+		synchs = new Vector<>();
 
 		// go thru modules and extract names which appear in their commands
 		n = modules.size();
@@ -898,7 +898,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	{
 		int i, n;
 		String s;
-		HashSet<String> names = new HashSet<String>();
+		HashSet<String> names = new HashSet<>();
 		n = getNumRewardStructs();
 		for (i = 0; i < n; i++) {
 			s = getRewardStruct(i).getName();
@@ -923,7 +923,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		// If there are any, at most one should be un-named
 		// and names should be unique 
 		int numUnnamed = 0;
-		HashSet<String> names = new HashSet<String>();
+		HashSet<String> names = new HashSet<>();
 		for (int i = 0; i < n; i++) {
 			String s = systemDefnNames.get(i);
 			if (s == null) {
@@ -943,7 +943,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		boolean matrix[][] = new boolean[n][n];
 		for (int i = 0; i < n; i++) {
 			SystemDefn sys = systemDefns.get(i);
-			Vector<String> v = new Vector<String>();
+			Vector<String> v = new Vector<>();
 			sys.getReferences(v);
 			for (int j = 0; j < v.size(); j++) {
 				int k = getSystemDefnIndex(v.elementAt(j));
@@ -1148,9 +1148,9 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		int i, n;
 
 		// Recompute lists of all variables and types
-		varDecls = new Vector<Declaration>();
-		varNames = new Vector<String>();
-		varTypes = new Vector<Type>();
+		varDecls = new Vector<>();
+		varNames = new Vector<>();
+		varTypes = new Vector<>();
 		// Globals
 		for (Declaration decl : globals) {
 			varDecls.add(decl);
@@ -1293,7 +1293,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		ret.moduleNames = (moduleNames == null) ? null : moduleNames.clone();
 		ret.synchs = (synchs == null) ? null : (Vector<String>) synchs.clone();
 		if (varDecls != null) {
-			ret.varDecls = new Vector<Declaration>();
+			ret.varDecls = new Vector<>();
 			for (Declaration d : varDecls)
 				ret.varDecls.add((Declaration) d.deepCopy());
 		}

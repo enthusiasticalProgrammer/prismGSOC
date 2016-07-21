@@ -441,7 +441,7 @@ public class GUIPathPlotDialog extends JDialog
 						JScrollPane varsScroll = new JScrollPane();
 						varsCheckList = new CheckBoxList();
 						varsScroll.setViewportView(varsCheckList);
-						varsCheckBoxes = new Vector<JCheckBox>();
+						varsCheckBoxes = new Vector<>();
 						varsCheckList.setListData(varsCheckBoxes);
 						GridBagConstraints gbc_varsScroll = new GridBagConstraints();
 						gbc_varsScroll.anchor = GridBagConstraints.NORTH;

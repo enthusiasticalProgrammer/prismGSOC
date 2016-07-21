@@ -76,8 +76,8 @@ final class ParamModel extends ModelExplicit
 		numStates = 0;
 		numTotalChoices = 0;
 		numTotalTransitions = 0;
-		initialStates = new LinkedList<Integer>();
-		deadlocks = new TreeSet<Integer>();
+		initialStates = new LinkedList<>();
+		deadlocks = new TreeSet<>();
 	}
 
 	/**
@@ -423,7 +423,7 @@ final class ParamModel extends ModelExplicit
 	{
 		ParamModel result = new ParamModel();
 		result.reserveMem(numStates, numTotalChoices, numTotalTransitions);
-		result.initialStates = new LinkedList<Integer>(this.initialStates);
+		result.initialStates = new LinkedList<>(this.initialStates);
 		for (int state = 0; state < numStates; state++) {
 			for (int choice = stateBegin(state); choice < stateEnd(state); choice++) {
 				for (int succ = choiceBegin(choice); succ < choiceEnd(choice); succ++) {

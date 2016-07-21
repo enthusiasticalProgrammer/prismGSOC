@@ -189,7 +189,7 @@ public class LTL2DA extends PrismComponent
 			ltlWriter.write(ltlOutput);
 			ltlWriter.close();
 
-			List<String> arguments = new ArrayList<String>();
+			List<String> arguments = new ArrayList<>();
 			arguments.add(ltl2daTool);
 
 			getLog().print("Calling external LTL->DA tool: ");

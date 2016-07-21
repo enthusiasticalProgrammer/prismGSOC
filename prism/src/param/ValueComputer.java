@@ -241,8 +241,8 @@ final class ValueComputer
 		this.functionFactory = regionFactory.getFunctionFactory();
 		this.constraintChecker = regionFactory.getConstraintChecker();
 		this.precision = precision;
-		this.schedCache = new HashMap<SchedulerCacheKey, ArrayList<Scheduler>>();
-		this.resultCache = new HashMap<ResultCacheKey, ResultCacheEntry>();
+		this.schedCache = new HashMap<>();
+		this.resultCache = new HashMap<>();
 		this.eliminationOrder = eliminationOrder;
 		this.bisimType = bisimType;
 	}
@@ -305,7 +305,7 @@ final class ValueComputer
 
 	private Function[] computeCompare(StateValues b1, StateValues b2, ParamRewardStruct rew, Scheduler scheduler, boolean min, StateValues values)
 	{
-		HashSet<Function> allValues = new HashSet<Function>();
+		HashSet<Function> allValues = new HashSet<>();
 
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (!b1.getStateValueAsBoolean(state) || b2.getStateValueAsBoolean(state)) {
@@ -401,7 +401,7 @@ final class ValueComputer
 		SchedulerCacheKey cacheKey = new SchedulerCacheKey(propType, b1, b2, min, rew, null);
 		ArrayList<Scheduler> schedulers = schedCache.get(cacheKey);
 		if (schedulers == null) {
-			schedulers = new ArrayList<Scheduler>();
+			schedulers = new ArrayList<>();
 			schedCache.put(cacheKey, schedulers);
 		}
 		schedulers.add(scheduler);

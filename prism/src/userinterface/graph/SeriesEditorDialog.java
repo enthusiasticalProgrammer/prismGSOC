@@ -91,7 +91,7 @@ public class SeriesEditorDialog extends JDialog
 		super(parent, "Graph Series Editor", true);
 
 		this.plugin = plugin;
-		this.editors = new ArrayList<SeriesEditor>();
+		this.editors = new ArrayList<>();
 
 		initComponents();
 
@@ -304,8 +304,8 @@ public class SeriesEditorDialog extends JDialog
 			this.settings = settings;
 			this.xySeries = xySeries;
 
-			this.xAxisBuffer = new ArrayList<Double>(bufferSize);
-			this.yAxisBuffer = new ArrayList<Double>(bufferSize);
+			this.xAxisBuffer = new ArrayList<>(bufferSize);
+			this.yAxisBuffer = new ArrayList<>(bufferSize);
 
 			for (int b = 0; b < bufferSize; b++) {
 				xAxisBuffer.add(null);

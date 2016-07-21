@@ -859,7 +859,7 @@ public class SimpleLTL
 	{
 		// use an IdentityHashMap with (formula,formula) pairs indicating that formula
 		// has already been seen (due to lack of IdentityHashSet)
-		IdentityHashMap<SimpleLTL, SimpleLTL> seen = new IdentityHashMap<SimpleLTL, SimpleLTL>();
+		IdentityHashMap<SimpleLTL, SimpleLTL> seen = new IdentityHashMap<>();
 		return isTree(seen);
 	}
 
@@ -1182,13 +1182,13 @@ public class SimpleLTL
 	{
 		formula = formula.trim(); // remove leading, trailing spaces
 		String[] split = formula.split("[ ]+");
-		List<String> formulaList = new ArrayList<String>();
+		List<String> formulaList = new ArrayList<>();
 		for (String s : split)
 			formulaList.add(s);
 
 		// set up operator -> SimpleLTL.LTLType mapping for the standard operators
-		Map<String, SimpleLTL.LTLType> unaryOps = new HashMap<String, SimpleLTL.LTLType>();
-		Map<String, SimpleLTL.LTLType> binaryOps = new HashMap<String, SimpleLTL.LTLType>();
+		Map<String, SimpleLTL.LTLType> unaryOps = new HashMap<>();
+		Map<String, SimpleLTL.LTLType> binaryOps = new HashMap<>();
 		unaryOps.put("!", SimpleLTL.LTLType.NOT);
 		unaryOps.put("F", SimpleLTL.LTLType.FINALLY);
 		unaryOps.put("G", SimpleLTL.LTLType.GLOBALLY);
@@ -1295,7 +1295,7 @@ public class SimpleLTL
 	/** Print a DOT representation of the syntax tree of this SimpleLTL formula */
 	public void toDot(PrintStream out)
 	{
-		IdentityHashMap<SimpleLTL, String> map = new IdentityHashMap<SimpleLTL, String>();
+		IdentityHashMap<SimpleLTL, String> map = new IdentityHashMap<>();
 
 		out.println("digraph {");
 		toDot(out, map);

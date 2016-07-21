@@ -139,7 +139,7 @@ public class UndefinedConstants
 	public void addProperty(Property prop)
 	{
 		if (props == null)
-			props = new ArrayList<Property>();
+			props = new ArrayList<>();
 		props.add(prop);
 	}
 
@@ -156,9 +156,9 @@ public class UndefinedConstants
 	{
 		Vector<String> mfv, pfv;
 		// determine which constants are undefined
-		mfv = (modulesFile == null) ? new Vector<String>() : modulesFile.getUndefinedConstants();
+		mfv = (modulesFile == null) ? new Vector<>() : modulesFile.getUndefinedConstants();
 		if (propertiesFile == null) {
-			pfv = new Vector<String>();
+			pfv = new Vector<>();
 		} else {
 			if (props == null) {
 				if (justLabels) {
@@ -181,7 +181,7 @@ public class UndefinedConstants
 	 */
 	private Vector<String> orderConstantsByPropertiesFile(Vector<String> oldList, PropertiesFile propertiesFile)
 	{
-		Vector<String> newList = new Vector<String>();
+		Vector<String> newList = new Vector<>();
 		Vector<String> pfList = propertiesFile.getUndefinedConstants();
 		for (String s : pfList) {
 			if (oldList.contains(s))
@@ -201,14 +201,14 @@ public class UndefinedConstants
 		mfNumConsts = mfv.size();
 		pfNumConsts = pfv.size();
 		// create storage for info about constant definitions
-		mfConsts = new ArrayList<DefinedConstant>(mfNumConsts);
+		mfConsts = new ArrayList<>(mfNumConsts);
 		for (i = 0; i < mfNumConsts; i++) {
-			s = (String) mfv.elementAt(i);
+			s = mfv.elementAt(i);
 			mfConsts.add(new DefinedConstant(s, modulesFile.getConstantList().getConstantType(modulesFile.getConstantList().getConstantIndex(s))));
 		}
-		pfConsts = new ArrayList<DefinedConstant>(pfNumConsts);
+		pfConsts = new ArrayList<>(pfNumConsts);
 		for (i = 0; i < pfNumConsts; i++) {
-			s = (String) pfv.elementAt(i);
+			s = pfv.elementAt(i);
 			pfConsts.add(new DefinedConstant(s, propertiesFile.getConstantList().getConstantType(propertiesFile.getConstantList().getConstantIndex(s))));
 		}
 		// initialise storage just created
@@ -377,10 +377,10 @@ public class UndefinedConstants
 		String parts[], args[];
 
 		// create storage for info
-		constSwitchNames = new Vector<String>();
-		constSwitchLows = new Vector<String>();
-		constSwitchHighs = new Vector<String>();
-		constSwitchSteps = new Vector<String>();
+		constSwitchNames = new Vector<>();
+		constSwitchLows = new Vector<>();
+		constSwitchHighs = new Vector<>();
+		constSwitchSteps = new Vector<>();
 
 		// if string is null, nothing more to do
 		if (constSwitch == null)
@@ -525,7 +525,7 @@ public class UndefinedConstants
 	{
 		int i, n;
 		String s;
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 
 		for (i = 0; i < mfNumConsts; i++) {
 			if (mfConsts.get(i).getLow() == null) {
@@ -709,7 +709,7 @@ public class UndefinedConstants
 	 */
 	public Vector<DefinedConstant> getRangingConstants()
 	{
-		Vector<DefinedConstant> res = new Vector<DefinedConstant>();
+		Vector<DefinedConstant> res = new Vector<>();
 		for (int i = 0; i < mfNumConsts; i++)
 			if (mfConsts.get(i).getNumSteps() > 1)
 				res.addElement(mfConsts.get(i));

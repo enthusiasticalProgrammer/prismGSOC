@@ -75,11 +75,11 @@ public class DRAOptimizations
 		{
 			_nr_of_colors = 0;
 			_detailed = detailed;
-			_coloring = new Vector<Integer>(dra.size());
+			_coloring = new Vector<>(dra.size());
 			_coloring.setSize(dra.size());
-			_color2state = new Vector<Integer>();
+			_color2state = new Vector<>();
 			if (_detailed) {
-				_color2states = new Vector<MyBitSet>();
+				_color2states = new Vector<>();
 			} else {
 				_color2states = null;
 			}
@@ -94,12 +94,12 @@ public class DRAOptimizations
 		{
 			_nr_of_colors = 0;
 			_detailed = detailed;
-			_coloring = new Vector<Integer>(size);
+			_coloring = new Vector<>(size);
 			_coloring.setSize(size);
-			_color2state = new Vector<Integer>();
+			_color2state = new Vector<>();
 
 			if (_detailed) {
-				_color2states = new Vector<MyBitSet>();
+				_color2states = new Vector<>();
 			} else {
 				_color2states = null;
 			}
@@ -293,7 +293,7 @@ public class DRAOptimizations
 		 */
 		public AcceptanceSignatureContainer(DRA dra)
 		{
-			_acceptancesig_vector = new Vector<AcceptanceSignature>(dra.size());
+			_acceptancesig_vector = new Vector<>(dra.size());
 
 			for (int i = 0; i < dra.size(); i++) {
 				_acceptancesig_vector.add(new AcceptanceSignature());
@@ -359,7 +359,7 @@ public class DRAOptimizations
 		if (!dra.isCompact())
 			dra.makeCompact();
 
-		Vector<Integer> states = new Vector<Integer>(dra.size());
+		Vector<Integer> states = new Vector<>(dra.size());
 		states.setSize(dra.size());
 
 		for (int i = 0; i < dra.size(); i++) {
@@ -412,9 +412,9 @@ public class DRAOptimizations
 	 */
 	private <T extends Comparator<Integer>> Coloring generateColoring(Vector<Integer> states, Coloring coloring, T comp)
 	{
-		Integer[] statearray = (Integer[]) states.toArray(new Integer[0]);
+		Integer[] statearray = states.toArray(new Integer[0]);
 		Arrays.sort(statearray, comp);
-		Vector<Integer> sortedstates = new Vector<Integer>(Arrays.asList(statearray));
+		Vector<Integer> sortedstates = new Vector<>(Arrays.asList(statearray));
 
 		Coloring result = new Coloring(coloring.size(), coloring.getFlagDetailed());
 

@@ -121,15 +121,15 @@ final class CachedFunctionFactory extends FunctionFactory
 	{
 		super(context.parameterNames, context.lowerBounds, context.upperBounds);
 		this.context = context;
-		functionToNumber = new HashMap<Function, Integer>();
-		cachedFunctions = new ArrayList<CachedFunction>();
-		functions = new ArrayList<Function>();
+		functionToNumber = new HashMap<>();
+		cachedFunctions = new ArrayList<>();
+		functions = new ArrayList<>();
 		nextFunctionNumber = 0;
 		one = makeUnique(context.getOne());
 		zero = makeUnique(context.getZero());
-		addCache = new HashMap<OpCacheKey, CachedFunction>();
-		multCache = new HashMap<OpCacheKey, CachedFunction>();
-		starCache = new HashMap<CachedFunction, CachedFunction>();
+		addCache = new HashMap<>();
+		multCache = new HashMap<>();
+		starCache = new HashMap<>();
 		useOpCache = true;
 	}
 

@@ -53,8 +53,8 @@ public final class RegionValues implements Iterable<Entry<Region, StateValues>>
 
 	public RegionValues(RegionFactory factory)
 	{
-		regions = new ArrayList<Region>();
-		values = new HashMap<Region, StateValues>();
+		regions = new ArrayList<>();
+		values = new HashMap<>();
 		this.factory = factory;
 	}
 
@@ -84,9 +84,9 @@ public final class RegionValues implements Iterable<Entry<Region, StateValues>>
 	private boolean simplifyIter()
 	{
 		boolean changed = false;
-		ArrayList<Region> newRegions = new ArrayList<Region>();
-		HashMap<Region, StateValues> newValues = new HashMap<Region, StateValues>();
-		HashSet<Region> done = new HashSet<Region>();
+		ArrayList<Region> newRegions = new ArrayList<>();
+		HashMap<Region, StateValues> newValues = new HashMap<>();
+		HashSet<Region> done = new HashSet<>();
 
 		for (Region region1 : regions) {
 			for (Region region2 : regions) {
@@ -152,9 +152,9 @@ public final class RegionValues implements Iterable<Entry<Region, StateValues>>
 		this.simplify();
 		other.simplify();
 
-		ArrayList<Region> newRegions = new ArrayList<Region>();
-		HashMap<Region, StateValues> thisNewStateValues = new HashMap<Region, StateValues>();
-		HashMap<Region, StateValues> otherNewStateValues = new HashMap<Region, StateValues>();
+		ArrayList<Region> newRegions = new ArrayList<>();
+		HashMap<Region, StateValues> thisNewStateValues = new HashMap<>();
+		HashMap<Region, StateValues> otherNewStateValues = new HashMap<>();
 		for (Region thisRegion : this.regions) {
 			for (Region otherRegion : other.regions) {
 				Region newRegion = thisRegion.conjunct(otherRegion);
@@ -166,9 +166,9 @@ public final class RegionValues implements Iterable<Entry<Region, StateValues>>
 			}
 		}
 
-		this.regions = new ArrayList<Region>(newRegions);
+		this.regions = new ArrayList<>(newRegions);
 		this.values = thisNewStateValues;
-		other.regions = new ArrayList<Region>(newRegions);
+		other.regions = new ArrayList<>(newRegions);
 		other.values = otherNewStateValues;
 	}
 

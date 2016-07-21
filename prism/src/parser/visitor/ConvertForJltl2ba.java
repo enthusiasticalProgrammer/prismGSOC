@@ -67,7 +67,7 @@ public class ConvertForJltl2ba
 	{
 		this.allowSharing = allowSharing;
 		if (allowSharing) {
-			formulas = new HashMap<ASTElement, SimpleLTL>();
+			formulas = new HashMap<>();
 		}
 	}
 

@@ -95,8 +95,8 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		graFilter = new FileNameExtensionFilter("PRISM graph files (*.gra, *.xml)", "gra", "xml");
 		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
 
-		models = new ArrayList<Graph>();
-		options = new ArrayList<GraphOptions>();
+		models = new ArrayList<>();
+		options = new ArrayList<>();
 	}
 
 	private void initComponents()

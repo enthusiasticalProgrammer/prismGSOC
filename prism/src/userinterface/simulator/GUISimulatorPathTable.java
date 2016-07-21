@@ -291,7 +291,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 					else
 						this.setToolTipText("Time spent in state " + (row) + " (not yet known)");
 				} else {
-					stringValue = (simulator.formatDouble((Double) timeValue.getValue()));
+					stringValue = (simulator.formatDouble(timeValue.getValue()));
 					if (timeValue.isCumulative())
 						this.setToolTipText("Cumulative time up until entering state " + (row));
 					else

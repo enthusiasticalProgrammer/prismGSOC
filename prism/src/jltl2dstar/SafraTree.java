@@ -43,7 +43,7 @@ public class SafraTree implements NBA2DAState
 	public SafraTree(int N)
 	{
 		MAX_NODES = (N == 0 ? 1 : N);
-		_nodes = new Vector<SafraTreeNode>(MAX_NODES);
+		_nodes = new Vector<>(MAX_NODES);
 		_nodes.setSize(MAX_NODES);
 
 		// create root-node
@@ -55,7 +55,7 @@ public class SafraTree implements NBA2DAState
 	{
 		MAX_NODES = other.MAX_NODES;
 
-		_nodes = new Vector<SafraTreeNode>(MAX_NODES);
+		_nodes = new Vector<>(MAX_NODES);
 		_nodes.setSize(MAX_NODES);
 		for (int i = 0; i < MAX_NODES; i++) {
 			if (other._nodes.get(i) != null) {
@@ -138,7 +138,7 @@ public class SafraTree implements NBA2DAState
 	 */
 	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkTreePostOrder(V visitor)
 	{
-		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
+		SafraTreeWalker<V> stw = new SafraTreeWalker<>(visitor);
 		stw.walkTreePostOrder(this);
 	}
 
@@ -149,7 +149,7 @@ public class SafraTree implements NBA2DAState
 	 */
 	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkSubTreePostOrder(V visitor, SafraTreeNode top)
 	{
-		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
+		SafraTreeWalker<V> stw = new SafraTreeWalker<>(visitor);
 		stw.walkSubTreePostOrder(this, top, true);
 	}
 
@@ -160,7 +160,7 @@ public class SafraTree implements NBA2DAState
 	 */
 	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkChildrenPostOrder(V visitor, SafraTreeNode top)
 	{
-		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
+		SafraTreeWalker<V> stw = new SafraTreeWalker<>(visitor);
 		stw.walkSubTreePostOrder(this, top, false); // = don't visit top
 	}
 

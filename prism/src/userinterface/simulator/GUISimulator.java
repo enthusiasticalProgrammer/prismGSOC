@@ -464,7 +464,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		} catch (PrismException e) {
 			this.error(e.getMessage());
 			if (e instanceof PrismLangException) {
-				guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+				guiMultiModel.getHandler().modelParseFailed(e, false);
 				guiMultiModel.tabToFront();
 			}
 		}
@@ -543,7 +543,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		} catch (PrismException e) {
 			this.error(e.getMessage());
-			guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+			guiMultiModel.getHandler().modelParseFailed(e, false);
 			guiMultiModel.tabToFront();
 		}
 	}
@@ -832,7 +832,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		} catch (PrismException e) {
 			this.error(e.getMessage());
 			if (e instanceof PrismLangException) {
-				guiMultiModel.getHandler().modelParseFailed((PrismLangException) e, false);
+				guiMultiModel.getHandler().modelParseFailed(e, false);
 				guiMultiModel.tabToFront();
 			}
 		}

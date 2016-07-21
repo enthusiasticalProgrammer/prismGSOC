@@ -268,7 +268,7 @@ public class DBM extends Zone
 					continue;
 				if (DB.isInfty(d[i][j]))
 					continue;
-				dbmNew = (DBM) new DBMFactory().createTrue(pta);
+				dbmNew = new DBMFactory().createTrue(pta);
 				dbmNew.addConstraint(j, i, DB.dual(d[i][j]));
 				if (!dbmNew.isEmpty()) {
 					list.addDBM(dbmNew);

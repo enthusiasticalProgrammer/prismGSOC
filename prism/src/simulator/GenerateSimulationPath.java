@@ -45,7 +45,7 @@ public class GenerateSimulationPath
 	private PrismLog mainLog;
 
 	// Store warnings
-	private List<String> warnings = new ArrayList<String>();
+	private List<String> warnings = new ArrayList<>();
 
 	// Enums
 	private enum PathType {
@@ -202,7 +202,7 @@ public class GenerateSimulationPath
 				varsOptionGiven = true;
 				// Build list of indices of variables to display
 				VarList varList = modulesFile.createVarList();
-				simVars = new ArrayList<Integer>();
+				simVars = new ArrayList<>();
 				done = false;
 				s = ss[i].substring(5);
 				if (s.length() < 1 || s.charAt(0) != '(')

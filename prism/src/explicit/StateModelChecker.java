@@ -422,8 +422,8 @@ public class StateModelChecker extends PrismComponent
 		// If required, do bisimulation minimisation
 		if (doBisim) {
 			mainLog.println("\nPerforming bisimulation minimisation...");
-			ArrayList<String> propNames = new ArrayList<String>();
-			ArrayList<BitSet> propBSs = new ArrayList<BitSet>();
+			ArrayList<String> propNames = new ArrayList<>();
+			ArrayList<BitSet> propBSs = new ArrayList<>();
 			Expression exprNew = checkMaximalPropositionalFormulas(model, expr.deepCopy(), propNames, propBSs);
 			Bisimulation bisim = new Bisimulation(this);
 			model = bisim.minimise(model, propNames, propBSs);
@@ -1135,7 +1135,7 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public Expression handleMaximalStateFormulas(ModelExplicit model, Expression expr) throws PrismException
 	{
-		Vector<BitSet> labelBS = new Vector<BitSet>();
+		Vector<BitSet> labelBS = new Vector<>();
 
 		LTLModelChecker ltlMC = new LTLModelChecker(this);
 		// check the maximal state subformulas and gather
@@ -1144,7 +1144,7 @@ public class StateModelChecker extends PrismComponent
 		// returned formula
 		Expression exprNew = ltlMC.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelBS);
 
-		HashMap<String, String> labelReplacements = new HashMap<String, String>();
+		HashMap<String, String> labelReplacements = new HashMap<>();
 		for (int i = 0; i < labelBS.size(); i++) {
 			String currentLabel = "L" + i;
 			// Attach satisfaction set for Li to the model, record necessary
@@ -1329,7 +1329,7 @@ public class StateModelChecker extends PrismComponent
 				throw new PrismException("Empty labels file");
 			}
 			ss = s.split(" ");
-			labels = new ArrayList<String>(ss.length);
+			labels = new ArrayList<>(ss.length);
 			for (i = 0; i < ss.length; i++) {
 				s = ss[i];
 				j = s.indexOf('=');
@@ -1370,7 +1370,7 @@ public class StateModelChecker extends PrismComponent
 			// Close file
 			in.close();
 			// Build BitSet map
-			res = new HashMap<String, BitSet>();
+			res = new HashMap<>();
 			for (i = 0; i < labels.size(); i++) {
 				if (!labels.get(i).equals("?")) {
 					res.put(labels.get(i), bitsets[i]);
@@ -1394,7 +1394,7 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public void exportLabels(Model model, List<String> labelNames, int exportType, PrismLog out) throws PrismException
 	{
-		List<BitSet> labels = new ArrayList<BitSet>();
+		List<BitSet> labels = new ArrayList<>();
 		for (String labelName : labelNames) {
 			StateValues sv = checkExpression(model, new ExpressionLabel(labelName), null);
 			labels.add(sv.getBitSet());

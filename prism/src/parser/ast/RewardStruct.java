@@ -43,7 +43,7 @@ public class RewardStruct extends ASTElement
 	public RewardStruct()
 	{
 		name = "";
-		items = new Vector<RewardStructItem>();
+		items = new Vector<>();
 		numStateItems = 0;
 		numTransItems = 0;
 	}

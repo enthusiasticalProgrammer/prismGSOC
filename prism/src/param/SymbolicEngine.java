@@ -79,9 +79,9 @@ public class SymbolicEngine
 
 		// Compute count of number of modules using each synch action
 		// First, compute and cache the synch actions for each of the modules
-		List<HashSet<String>> synchsPerModule = new ArrayList<HashSet<String>>(numModules);
+		List<HashSet<String>> synchsPerModule = new ArrayList<>(numModules);
 		for (int i = 0; i < numModules; i++) {
-			synchsPerModule.add(new HashSet<String>(modulesFile.getModule(i).getAllSynchs()));
+			synchsPerModule.add(new HashSet<>(modulesFile.getModule(i).getAllSynchs()));
 		}
 		// Second, do the counting
 		synchModuleCounts = new int[numSynchs];
@@ -95,7 +95,7 @@ public class SymbolicEngine
 		}
 
 		// Build lists/bitsets for later use
-		updateLists = new ArrayList<List<List<Updates>>>(numModules);
+		updateLists = new ArrayList<>(numModules);
 		for (int i = 0; i < numModules; i++) {
 			updateLists.add(new ArrayList<List<Updates>>(numSynchs + 1));
 			for (int j = 0; j < numSynchs + 1; j++) {
@@ -164,7 +164,7 @@ public class SymbolicEngine
 			}
 		}
 		// Add synchronous transitions to list
-		chs = new ArrayList<ChoiceListFlexi>();
+		chs = new ArrayList<>();
 		for (i = enabledSynchs.nextSetBit(1); i >= 0; i = enabledSynchs.nextSetBit(i + 1)) {
 			chs.clear();
 			// Check counts to see if this action is blocked by some module

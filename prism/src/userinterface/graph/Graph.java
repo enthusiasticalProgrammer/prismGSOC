@@ -143,9 +143,9 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	{
 		super(ChartFactory.createXYLineChart(title, "X", "Y", new XYSeriesCollection(), PlotOrientation.VERTICAL, true, true, false));
 
-		graphCache = new HashMap<SeriesKey, LinkedList<XYDataItem>>();
-		keyToSeries = new HashMap<SeriesKey, XYSeries>();
-		keyToGraphSeries = new HashMap<SeriesKey, SeriesSettings>();
+		graphCache = new HashMap<>();
+		keyToSeries = new HashMap<>();
+		keyToGraphSeries = new HashMap<>();
 		graphTitle = new MultipleLineStringSetting("title", title, "The main title heading for the chart.", this, false);
 		titleFont = new FontColorSetting("title font", new FontColorPair(new Font("SansSerif", Font.PLAIN, 14), Color.black), "The font for the chart's title",
 				this, false);
@@ -160,7 +160,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		// Some easy references
 		chart = super.getChart();
 		plot = chart.getXYPlot();
-		plot.setBackgroundPaint((Paint) Color.white);
+		plot.setBackgroundPaint(Color.white);
 		seriesCollection = (XYSeriesCollection) plot.getDataset();
 
 		xAxisSettings = new AxisSettings("X", true, this);
@@ -377,7 +377,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	public java.util.Vector<SeriesKey> getAllSeriesKeys()
 	{
 		synchronized (seriesCollection) {
-			java.util.Vector<SeriesKey> result = new java.util.Vector<SeriesKey>();
+			java.util.Vector<SeriesKey> result = new java.util.Vector<>();
 
 			for (Map.Entry<SeriesKey, XYSeries> entries : keyToSeries.entrySet()) {
 				result.add(entries.getKey());
@@ -629,7 +629,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	{
 		synchronized (seriesCollection) {
 			XYSeries[] newOrder = new XYSeries[seriesCollection.getSeriesCount()];
-			java.util.Vector<XYSeries> moveUpSet = new java.util.Vector<XYSeries>();
+			java.util.Vector<XYSeries> moveUpSet = new java.util.Vector<>();
 
 			for (int i = 0; i < newOrder.length; i++)
 				newOrder[i] = seriesCollection.getSeries(i);
@@ -663,7 +663,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	{
 		synchronized (seriesCollection) {
 			XYSeries[] newOrder = new XYSeries[seriesCollection.getSeriesCount()];
-			java.util.Vector<XYSeries> moveDownSet = new java.util.Vector<XYSeries>();
+			java.util.Vector<XYSeries> moveDownSet = new java.util.Vector<>();
 
 			for (int i = 0; i < newOrder.length; i++)
 				newOrder[i] = seriesCollection.getSeries(i);
@@ -1067,7 +1067,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			chartFormat.setAttribute("titleFontSize", "" + titleFont.getSize());
 			chartFormat.setAttribute("titleFontStyle", "" + titleFont.getStyle());
 
-			Color titleFontColor = (Color) getTitleFont().c;
+			Color titleFontColor = getTitleFont().c;
 			chartFormat.setAttribute("titleFontColourR", "" + titleFontColor.getRed());
 			chartFormat.setAttribute("titleFontColourG", "" + titleFontColor.getGreen());
 			chartFormat.setAttribute("titleFontColourB", "" + titleFontColor.getBlue());

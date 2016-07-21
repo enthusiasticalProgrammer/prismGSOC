@@ -399,7 +399,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		jPanel8.add(jPanel12, gridBagConstraints);
 
 		// Populate simulation method choices
-		Vector<String> methods = new Vector<String>();
+		Vector<String> methods = new Vector<>();
 		methods.add("CI");
 		methods.add("ACI");
 		if (!atLeastOneRwd)
@@ -882,7 +882,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	public static SimulationInformation defineSimulationWithDialog(GUIPrism parent, Expression expr, ModulesFile modulesFile, String titleExtra)
 			throws PrismException
 	{
-		List<Expression> exprs = new ArrayList<Expression>(1);
+		List<Expression> exprs = new ArrayList<>(1);
 		exprs.add(expr);
 		return new GUISimulationPicker(parent, exprs, modulesFile, titleExtra).defineValues();
 	}
@@ -1052,7 +1052,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 
 		public DefineValuesTable()
 		{
-			values = new ArrayList<Value>();
+			values = new ArrayList<>();
 		}
 
 		public void addValue(Value v)

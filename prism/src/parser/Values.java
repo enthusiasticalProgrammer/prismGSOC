@@ -54,8 +54,8 @@ public class Values //implements Comparable
 	 */
 	public Values()
 	{
-		names = new ArrayList<String>();
-		values = new ArrayList<Object>();
+		names = new ArrayList<>();
+		values = new ArrayList<>();
 	}
 
 	/**

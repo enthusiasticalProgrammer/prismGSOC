@@ -416,7 +416,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		synchronized (theModel.getSeriesLock()) {
 			int[] sel = seriesList.getSelectedIndices();
 
-			java.util.List<Graph.SeriesKey> selected = new ArrayList<Graph.SeriesKey>();
+			java.util.List<Graph.SeriesKey> selected = new ArrayList<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				selected.add(((SeriesSettings) theModel.getGraphSeriesList().getElementAt(sel[i])).getSeriesKey());
@@ -448,7 +448,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 			SeriesSettingsList listModel = theModel.getGraphSeriesList();
 
-			Vector<Graph.SeriesKey> toMove = new Vector<Graph.SeriesKey>();
+			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
@@ -474,7 +474,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 			SeriesSettingsList listModel = theModel.getGraphSeriesList();
 
-			Vector<Graph.SeriesKey> toMove = new Vector<Graph.SeriesKey>();
+			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
@@ -500,7 +500,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 			SeriesSettingsList listModel = theModel.getGraphSeriesList();
 
-			Vector<Graph.SeriesKey> toRemove = new Vector<Graph.SeriesKey>();
+			Vector<Graph.SeriesKey> toRemove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);

@@ -224,7 +224,7 @@ final class JasFunction extends Function
 		for (Monomial<BigInteger> jasMono : j) {
 			java.math.BigInteger coeff = (jasMono.coefficient()).getVal();
 			ExpVector jasExpo = jasMono.exponent();
-			ArrayList<Integer> expo = new ArrayList<Integer>();
+			ArrayList<Integer> expo = new ArrayList<>();
 			for (int var = 0; var < numVariables; var++) {
 				expo.add((int) jasExpo.getVal(var));
 			}

@@ -54,8 +54,8 @@ public class ChoiceListFlexi implements Choice
 	 */
 	public ChoiceListFlexi()
 	{
-		updates = new ArrayList<List<Update>>();
-		probability = new ArrayList<Double>();
+		updates = new ArrayList<>();
+		probability = new ArrayList<>();
 	}
 
 	/**
@@ -65,15 +65,15 @@ public class ChoiceListFlexi implements Choice
 	public ChoiceListFlexi(ChoiceListFlexi ch)
 	{
 		moduleOrActionIndex = ch.moduleOrActionIndex;
-		updates = new ArrayList<List<Update>>(ch.updates.size());
+		updates = new ArrayList<>(ch.updates.size());
 		for (List<Update> list : ch.updates) {
-			List<Update> listNew = new ArrayList<Update>(list.size());
+			List<Update> listNew = new ArrayList<>(list.size());
 			updates.add(listNew);
 			for (Update up : list) {
 				listNew.add(up);
 			}
 		}
-		probability = new ArrayList<Double>(ch.size());
+		probability = new ArrayList<>(ch.size());
 		for (double p : ch.probability) {
 			probability.add(p);
 		}
@@ -129,7 +129,7 @@ public class ChoiceListFlexi implements Choice
 			// Loop through each (jth) element of existing choice
 			for (j = 0; j < n2; j++) {
 				// Create new element (i,j) of product 
-				list = new ArrayList<Update>(updates.get(j).size() + ch.updates.get(i).size());
+				list = new ArrayList<>(updates.get(j).size() + ch.updates.get(i).size());
 				for (Update u : updates.get(j)) {
 					list.add(u);
 				}

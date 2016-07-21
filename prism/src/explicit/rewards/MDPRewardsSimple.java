@@ -67,7 +67,7 @@ public class MDPRewardsSimple implements MDPRewards
 		if (rews.stateRewards == null) {
 			stateRewards = null;
 		} else {
-			stateRewards = new ArrayList<Double>(numStates);
+			stateRewards = new ArrayList<>(numStates);
 			for (int i = 0; i < numStates; i++) {
 				stateRewards.add(rews.stateRewards.get(i));
 			}
@@ -75,14 +75,14 @@ public class MDPRewardsSimple implements MDPRewards
 		if (rews.transRewards == null) {
 			transRewards = null;
 		} else {
-			transRewards = new ArrayList<List<Double>>(numStates);
+			transRewards = new ArrayList<>(numStates);
 			for (int i = 0; i < numStates; i++) {
 				List<Double> list = rews.transRewards.get(i);
 				if (list == null) {
 					transRewards.add(null);
 				} else {
 					int n = list.size();
-					List<Double> list2 = new ArrayList<Double>(n);
+					List<Double> list2 = new ArrayList<>(n);
 					transRewards.add(list2);
 					for (int j = 0; j < n; j++) {
 						list2.add(list.get(j));
@@ -101,7 +101,7 @@ public class MDPRewardsSimple implements MDPRewards
 	{
 		// If no rewards array created yet, create it
 		if (stateRewards == null) {
-			stateRewards = new ArrayList<Double>(numStates);
+			stateRewards = new ArrayList<>(numStates);
 			for (int j = 0; j < numStates; j++)
 				stateRewards.add(0.0);
 		}
@@ -125,13 +125,13 @@ public class MDPRewardsSimple implements MDPRewards
 		List<Double> list;
 		// If no rewards array created yet, create it
 		if (transRewards == null) {
-			transRewards = new ArrayList<List<Double>>(numStates);
+			transRewards = new ArrayList<>(numStates);
 			for (int j = 0; j < numStates; j++)
 				transRewards.add(null);
 		}
 		// If no rewards for state s yet, create list
 		if (transRewards.get(s) == null) {
-			list = new ArrayList<Double>();
+			list = new ArrayList<>();
 			transRewards.set(s, list);
 		} else {
 			list = transRewards.get(s);

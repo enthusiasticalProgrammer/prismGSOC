@@ -315,7 +315,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Unless we've been told to skip it
 			else {
 				mainLog.println("\nSkipping BSCC computation...");
-				bsccs = new Vector<JDDNode>();
+				bsccs = new Vector<>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
 				notInBSCCs = JDD.Constant(0);
@@ -505,7 +505,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct = null, probs = null;
-		Vector<JDDNode> labelDDs = new Vector<JDDNode>();
+		Vector<JDDNode> labelDDs = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		ProbModel modelProduct;
 		ProbModelChecker mcProduct;
@@ -888,7 +888,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		mcLtl = new LTLModelChecker(prism);
 
 		// Model check maximal state formulas
-		labelDDs = new Vector<JDDNode>();
+		labelDDs = new Vector<>();
 		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelDDs);
 
 		// Convert LTL formula to deterministic automaton (DA)
@@ -1018,7 +1018,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		// unless we've been told to skip it
 		else {
 			mainLog.println("\nSkipping BSCC computation...");
-			vectBSCCs = new Vector<JDDNode>();
+			vectBSCCs = new Vector<>();
 			JDD.Ref(reach);
 			vectBSCCs.add(reach);
 			notInBSCCs = JDD.Constant(0);
@@ -1876,7 +1876,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Unless we've been told to skip it
 			else {
 				mainLog.println("\nSkipping BSCC computation...");
-				bsccs = new Vector<JDDNode>();
+				bsccs = new Vector<>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
 				notInBSCCs = JDD.Constant(0);

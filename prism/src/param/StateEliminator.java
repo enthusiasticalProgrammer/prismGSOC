@@ -92,7 +92,7 @@ final class StateEliminator
 	{
 		int[] states = new int[pmc.getNumStates()];
 		BitSet seen = new BitSet(pmc.getNumStates());
-		HashSet<Integer> current = new HashSet<Integer>();
+		HashSet<Integer> current = new HashSet<>();
 		int nextStateNr = 0;
 		/* put initial states in queue */
 		for (int state = 0; state < pmc.getNumStates(); state++) {
@@ -105,7 +105,7 @@ final class StateEliminator
 		}
 		/* perform breadth-first search */
 		while (!current.isEmpty()) {
-			HashSet<Integer> next = new HashSet<Integer>();
+			HashSet<Integer> next = new HashSet<>();
 			for (int state : current) {
 				for (int succState : pmc.transitionTargets.get(state)) {
 					if (!seen.get(succState)) {
@@ -132,7 +132,7 @@ final class StateEliminator
 	{
 		int[] states = new int[pmc.getNumStates()];
 		BitSet seen = new BitSet(pmc.getNumStates());
-		HashSet<Integer> current = new HashSet<Integer>();
+		HashSet<Integer> current = new HashSet<>();
 		int nextStateNr = 0;
 		for (int state = 0; state < pmc.getNumStates(); state++) {
 			if (pmc.isTargetState(state)) {
@@ -143,7 +143,7 @@ final class StateEliminator
 			}
 		}
 		while (!current.isEmpty()) {
-			HashSet<Integer> next = new HashSet<Integer>();
+			HashSet<Integer> next = new HashSet<>();
 			for (int state : current) {
 				for (int succState : pmc.incoming.get(state)) {
 					if (!seen.get(succState)) {
@@ -159,7 +159,7 @@ final class StateEliminator
 
 		/* might not find all states when doing as above,
 		 * so add missing ones */
-		HashSet<Integer> allStates = new HashSet<Integer>();
+		HashSet<Integer> allStates = new HashSet<>();
 		for (int stateNr = 0; stateNr < states.length; stateNr++) {
 			int state = states[stateNr];
 			allStates.add(state);
@@ -202,7 +202,7 @@ final class StateEliminator
 		 * have to be assigned a reward of infinity. */
 		if (pmc.isUseRewards()) {
 			int[] backStatesArr = collectStatesBackward();
-			HashSet<Integer> reaching = new HashSet<Integer>();
+			HashSet<Integer> reaching = new HashSet<>();
 			for (int stateNr = 0; stateNr < backStatesArr.length; stateNr++) {
 				reaching.add(backStatesArr[stateNr]);
 			}
@@ -226,7 +226,7 @@ final class StateEliminator
 		}
 
 		int[] states = new int[pmc.getNumStates()];
-		List<Integer> statesList = new ArrayList<Integer>();
+		List<Integer> statesList = new ArrayList<>();
 		switch (eliminationOrder) {
 		case ARBITRARY:
 			for (int state = 0; state < pmc.getNumStates(); state++) {
@@ -348,7 +348,7 @@ final class StateEliminator
 		 * / (1-<self-loop-prob>). (If there already was a transition from fromState
 		 * to toState, probabilities will be added up.). All transitions to
 		 * midState will be removed. */
-		ArrayList<NewTransition> newTransitions = new ArrayList<NewTransition>();
+		ArrayList<NewTransition> newTransitions = new ArrayList<>();
 		for (int fromState : pmc.incoming.get(midState)) {
 			if (fromState != midState) {
 				Function fromToMid = pmc.getTransProb(fromState, midState);

@@ -228,10 +228,10 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	{
 		AcceptanceRabin result = new AcceptanceRabin();
 		for (RabinPair pair : this) {
-			result.add((RabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		for (RabinPair pair : other) {
-			result.add((RabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		return result;
 	}

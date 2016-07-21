@@ -172,7 +172,7 @@ public class Generalized
 		}
 
 		if (init_size != 0)
-			g_init = new Vector<GState>();
+			g_init = new Vector<>();
 		init_size = 0;
 		for (s = gstack.nxt; s != gstack; s = s.nxt) {
 			g_init.add(s);
@@ -632,7 +632,7 @@ public class Generalized
 			}
 		}
 
-		scc_final = new Vector<MyBitSet>();
+		scc_final = new Vector<>();
 		for (i = 0; i < scc_id; i++) {
 			scc_final.add(new MyBitSet());
 		}

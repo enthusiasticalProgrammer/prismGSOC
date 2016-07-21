@@ -734,9 +734,9 @@ public class SimulatorEngine extends PrismComponent
 		strategy = null;
 
 		// Create storage for labels/properties
-		labels = new ArrayList<Expression>();
-		properties = new ArrayList<Expression>();
-		propertySamplers = new ArrayList<Sampler>();
+		labels = new ArrayList<>();
+		properties = new ArrayList<>();
+		propertySamplers = new ArrayList<>();
 	}
 
 	/**
@@ -1126,7 +1126,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public Path getPath()
 	{
-		return (Path) path;
+		return path;
 	}
 
 	/**
@@ -1443,7 +1443,7 @@ public class SimulatorEngine extends PrismComponent
 		Object res[];
 
 		// Just do this via the 'multiple properties' method
-		exprs = new ArrayList<Expression>();
+		exprs = new ArrayList<>();
 		exprs.add(expr);
 		res = modelCheckMultipleProperties(modulesFile, propertiesFile, exprs, initialState, maxPathLength, simMethod);
 

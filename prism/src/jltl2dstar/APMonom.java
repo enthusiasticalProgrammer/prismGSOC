@@ -343,7 +343,7 @@ public class APMonom
 
 	public Iterator<APElement> APElementIterator(APSet s)
 	{
-		return (Iterator<APElement>) new APMonom2APElements(s, this);
+		return new APMonom2APElements(s, this);
 	}
 
 	public void setFromPosNeg(MyBitSet pos, MyBitSet neg) throws PrismException

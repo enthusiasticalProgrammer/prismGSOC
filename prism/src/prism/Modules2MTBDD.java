@@ -152,7 +152,7 @@ public class Modules2MTBDD
 		public SystemDDs(int n)
 		{
 			synchs = new ComponentDDs[n];
-			allSynchs = new HashSet<String>();
+			allSynchs = new HashSet<>();
 		}
 	}
 
@@ -348,7 +348,7 @@ public class Modules2MTBDD
 		JDDNode v, vr, vc;
 		int i, j, m, n, last;
 		int ddVarsUsed = 0;
-		ddVarNames = new Vector<String>();
+		ddVarNames = new Vector<>();
 
 		switch (prism.getOrdering()) {
 
@@ -1750,7 +1750,7 @@ public class Modules2MTBDD
 			// find sections of state space
 			// which have exactly i nondet. choices in this module
 			JDD.Ref(overlaps);
-			equalsi = JDD.Equals(overlaps, (double) i);
+			equalsi = JDD.Equals(overlaps, i);
 			// if there aren't any for this i, skip the iteration
 			if (equalsi.equals(JDD.ZERO)) {
 				JDD.Deref(equalsi);

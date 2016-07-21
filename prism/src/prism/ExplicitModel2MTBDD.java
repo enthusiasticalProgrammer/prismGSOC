@@ -202,7 +202,7 @@ public class ExplicitModel2MTBDD
 		// TODO: disable if not required?
 		model.setSynchs(synchs);
 		if (modelType != ModelType.MDP) {
-			model.setTransPerAction((JDDNode[]) transPerAction.toArray(new JDDNode[0]));
+			model.setTransPerAction(transPerAction.toArray(new JDDNode[0]));
 		} else {
 			model.setTransActions(transActions);
 		}
@@ -259,7 +259,7 @@ public class ExplicitModel2MTBDD
 		JDDNode v, vr, vc;
 		int i, j, n;
 		int ddVarsUsed = 0;
-		ddVarNames = new Vector<String>();
+		ddVarNames = new Vector<>();
 
 		// create arrays/etc. first
 
@@ -371,12 +371,12 @@ public class ExplicitModel2MTBDD
 		mainLog.print("Converting to MTBDD: ");
 
 		// Initialise action list
-		synchs = new Vector<String>();
+		synchs = new Vector<>();
 		// Initialise mtbdds
 		trans = JDD.Constant(0);
 		transRewards = JDD.Constant(0);
 		if (modelType != ModelType.MDP) {
-			transPerAction = new Vector<JDDNode>();
+			transPerAction = new Vector<>();
 			transPerAction.add(JDD.Constant(0));
 		} else {
 			transActions = JDD.Constant(0);
@@ -394,8 +394,8 @@ public class ExplicitModel2MTBDD
 				Iterator<Map.Entry<Integer, Double>> iter = dtmc.getTransitionsIterator(r);
 				while (iter.hasNext()) {
 					Map.Entry<Integer, Double> e = iter.next();
-					c = (Integer) e.getKey();
-					d = (Double) e.getValue();
+					c = e.getKey();
+					d = e.getValue();
 					a = "";
 					// construct element of matrix mtbdd
 					elem = encodeStatePair(r, c);
@@ -441,8 +441,8 @@ public class ExplicitModel2MTBDD
 					Iterator<Map.Entry<Integer, Double>> iter = mdp.getTransitionsIterator(r, k);
 					while (iter.hasNext()) {
 						Map.Entry<Integer, Double> e = iter.next();
-						c = (Integer) e.getKey();
-						d = (Double) e.getValue();
+						c = e.getKey();
+						d = e.getValue();
 						a = "";
 						// construct element of matrix mtbdd
 						elem = JDD.SetVectorElement(JDD.Constant(0), allDDChoiceVars, k, 1.0);

@@ -30,6 +30,7 @@ package userinterface;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.BoxLayout;
@@ -43,6 +44,7 @@ import javax.swing.table.AbstractTableModel;
 import parser.Values;
 import prism.PrismException;
 import prism.UndefinedConstants;
+import userinterface.GUIConstantsPicker.Constant;
 
 public class GUIConstantsPicker extends javax.swing.JDialog
 {
@@ -345,11 +347,11 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 
 	class DefineConstantTable extends AbstractTableModel
 	{
-		ArrayList constants;
+		List<Constant> constants;
 
 		public DefineConstantTable()
 		{
-			constants = new ArrayList();
+			constants = new ArrayList<>();
 		}
 
 		public void addConstant(Constant c)
@@ -365,7 +367,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 
 		public Constant getConstant(int i)
 		{
-			return (Constant) constants.get(i);
+			return constants.get(i);
 		}
 
 		@Override
@@ -384,7 +386,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 
-			Constant c = (Constant) constants.get(rowIndex);
+			Constant c = constants.get(rowIndex);
 			switch (columnIndex) {
 			case 0:
 				return c.name;
@@ -425,7 +427,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2) {
-				Constant c = (Constant) constants.get(rowIndex);
+				Constant c = constants.get(rowIndex);
 				String s = (String) aValue;
 				c.value = s;
 				fireTableCellUpdated(rowIndex, columnIndex);
@@ -437,7 +439,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		{
 			String str = "";
 			for (int i = 0; i < constants.size(); i++) {
-				Constant c = (Constant) constants.get(i);
+				Constant c = constants.get(i);
 				str += c.toString();
 				if (i != constants.size() - 1)
 					str += ",";

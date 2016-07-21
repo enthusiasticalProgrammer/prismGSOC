@@ -100,7 +100,7 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	public void initialise(int numStates)
 	{
 		super.initialise(numStates);
-		trans = new ArrayList<Distribution>(numStates);
+		trans = new ArrayList<>(numStates);
 		for (int i = 0; i < numStates; i++) {
 			trans.add(new Distribution());
 		}
@@ -305,8 +305,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		distr = trans.get(s);
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 
@@ -324,8 +324,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		diag = 1.0;
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			if (k != s) {
 				d += prob * vect[k];
 			} else {
@@ -348,8 +348,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		distr = trans.get(s);
 		d = mcRewards.getStateReward(s);
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 
@@ -371,8 +371,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		for (i = 0; i < numStates; i++) {
 			distr = trans.get(i);
 			for (Map.Entry<Integer, Double> e : distr) {
-				j = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				j = e.getKey();
+				prob = e.getValue();
 				result[j] += prob * vect[i];
 			}
 

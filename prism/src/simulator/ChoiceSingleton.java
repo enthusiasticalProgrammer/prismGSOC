@@ -43,7 +43,7 @@ public class ChoiceSingleton implements Choice
 
 	public ChoiceSingleton()
 	{
-		updates = new ArrayList<Update>(1);
+		updates = new ArrayList<>(1);
 	}
 
 	// Set methods

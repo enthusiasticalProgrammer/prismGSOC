@@ -58,11 +58,11 @@ public class SimulationView extends Observable
 	{
 		this.simulator = simulator;
 
-		this.visibleVariables = new ArrayList<Variable>();
-		this.hiddenVariables = new ArrayList<Variable>();
+		this.visibleVariables = new ArrayList<>();
+		this.hiddenVariables = new ArrayList<>();
 
-		this.visibleRewardColumns = new ArrayList<RewardStructureColumn>();
-		this.rewards = new ArrayList<RewardStructure>();
+		this.visibleRewardColumns = new ArrayList<>();
+		this.rewards = new ArrayList<>();
 
 		this.stepsVisible = true;
 		this.actionsVisible = true;
@@ -151,7 +151,7 @@ public class SimulationView extends Observable
 
 	public void setVisibleRewardListItems(ArrayList<RewardListItem> visibleRewardListItems)
 	{
-		ArrayList<RewardStructureColumn> visibleRewardColumns = new ArrayList<RewardStructureColumn>();
+		ArrayList<RewardStructureColumn> visibleRewardColumns = new ArrayList<>();
 
 		for (RewardListItem item : visibleRewardListItems) {
 			if (item.isCumulative())
@@ -204,7 +204,7 @@ public class SimulationView extends Observable
 				canUseCurrentView = false;
 
 			// Make a set of all variable names.
-			TreeSet<String> allVarNames = new TreeSet<String>();
+			TreeSet<String> allVarNames = new TreeSet<>();
 
 			for (Variable var : visibleVariables)
 				allVarNames.add(var.getName());
@@ -229,7 +229,7 @@ public class SimulationView extends Observable
 				canUseCurrentView = false;
 
 			// Make a list of all reward structures
-			ArrayList<RewardStructure> allrew = new ArrayList<RewardStructure>();
+			ArrayList<RewardStructure> allrew = new ArrayList<>();
 
 			for (RewardStructure rew : rewards) {
 				allrew.add(rew);

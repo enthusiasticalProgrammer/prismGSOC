@@ -289,7 +289,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// add this Prism object as a results listener
 		settings.addSettingsListener(this);
 		// create list of model listeners
-		modelListeners = new ArrayList<PrismModelListener>();
+		modelListeners = new ArrayList<>();
 	}
 
 	/**
@@ -2690,7 +2690,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		mainLog.println(getDestinationStringForFile(file));
 
 		// Collect labels to export
-		List<String> labelNames = new ArrayList<String>();
+		List<String> labelNames = new ArrayList<>();
 		labelNames.add("init");
 		labelNames.add("deadlock");
 		for (int i = 0; i < numLabels; i++) {
@@ -3476,14 +3476,14 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 						initDist = mc.readDistributionFromFile(fileIn);
 						initTimeDouble = 0;
 					}
-					probs = ((StochModelChecker) mc).doTransient(timeDouble - initTimeDouble, initDist);
+					probs = mc.doTransient(timeDouble - initTimeDouble, initDist);
 				} else {
 					ProbModelChecker mc = new ProbModelChecker(this, currentModel, null);
 					if (i == 0) {
 						initDist = mc.readDistributionFromFile(fileIn);
 						initTimeInt = 0;
 					}
-					probs = ((ProbModelChecker) mc).doTransient(timeInt - initTimeInt, initDist);
+					probs = mc.doTransient(timeInt - initTimeInt, initDist);
 				}
 			}
 			// Explicit

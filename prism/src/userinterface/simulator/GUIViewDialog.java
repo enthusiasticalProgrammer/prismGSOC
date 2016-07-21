@@ -141,8 +141,8 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		visibleVariableList.setModel(visibleVariableListModel);
 		hiddenVariableList.setModel(hiddenVariableListModel);
 
-		ArrayList<RewardListItem> visibleRewardColumn = new ArrayList<RewardListItem>();
-		ArrayList<RewardListItem> hiddenRewardColumn = new ArrayList<RewardListItem>();
+		ArrayList<RewardListItem> visibleRewardColumn = new ArrayList<>();
+		ArrayList<RewardListItem> hiddenRewardColumn = new ArrayList<>();
 
 		for (RewardStructure reward : view.getRewards()) {
 			hiddenRewardColumn.add(new RewardListItem(reward, false));
@@ -768,7 +768,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		public ArrayList<Variable> getVariables()
 		{
-			ArrayList<Variable> list = new ArrayList<Variable>();
+			ArrayList<Variable> list = new ArrayList<>();
 			for (int i = 0; i < super.getSize(); i++) {
 				list.add((Variable) super.getElementAt(i));
 			}
@@ -878,7 +878,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		public ArrayList<RewardListItem> getRewards()
 		{
-			ArrayList<RewardListItem> list = new ArrayList<RewardListItem>();
+			ArrayList<RewardListItem> list = new ArrayList<>();
 			for (int i = 0; i < super.getSize(); i++) {
 				list.add((RewardListItem) super.getElementAt(i));
 			}

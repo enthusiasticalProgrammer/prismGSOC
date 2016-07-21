@@ -728,7 +728,7 @@ public class Buchi
 	public NBA toNBA(APSet apset) throws PrismException
 	{
 		NBA nba = new NBA(apset);
-		HashMap<LTL2BAState, Integer> map = new HashMap<LTL2BAState, Integer>();
+		HashMap<LTL2BAState, Integer> map = new HashMap<>();
 		int stateindex;
 		boolean accept_all = false;
 

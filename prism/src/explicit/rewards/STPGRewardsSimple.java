@@ -74,13 +74,13 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 			return;
 		// If no rewards array created yet, create it
 		if (nestedTransRewards == null) {
-			nestedTransRewards = new ArrayList<List<List<Double>>>(numStates);
+			nestedTransRewards = new ArrayList<>(numStates);
 			for (int k = 0; k < numStates; k++)
 				nestedTransRewards.add(null);
 		}
 		// If no rewards for state s yet, create list1
 		if (nestedTransRewards.get(s) == null) {
-			list1 = new ArrayList<List<Double>>();
+			list1 = new ArrayList<>();
 			nestedTransRewards.set(s, list1);
 		} else {
 			list1 = nestedTransRewards.get(s);
@@ -94,7 +94,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 		}
 		// If no rewards for state s, choice i, create list2
 		if (list1.get(i) == null) {
-			list2 = new ArrayList<Double>();
+			list2 = new ArrayList<>();
 			list1.set(i, list2);
 		} else {
 			list2 = list1.get(i);

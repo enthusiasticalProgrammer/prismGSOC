@@ -54,7 +54,7 @@ public class SCCComputerXB extends SCCComputer
 		mainLog.println("\nComputing (B)SCCs...");
 
 		// vector to be filled with SCCs
-		sccs = new Vector<JDDNode>();
+		sccs = new Vector<>();
 		// BDD of non-SCC states (initially zero BDD)
 		notInSCCs = JDD.Constant(0);
 

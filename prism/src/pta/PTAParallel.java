@@ -77,9 +77,9 @@ public class PTAParallel
 		alpha2 = pta2.getAlphabet();
 		//System.out.println("alpha1: " + alpha1);
 		//System.out.println("alpha2: " + alpha2);
-		sync = new LinkedHashSet<String>();
-		alpha1only = new LinkedHashSet<String>();
-		alpha2only = new LinkedHashSet<String>();
+		sync = new LinkedHashSet<>();
+		alpha1only = new LinkedHashSet<>();
+		alpha2only = new LinkedHashSet<>();
 		for (String a : alpha1) {
 			if (!("".equals(a)) && alpha2.contains(a)) {
 				sync.add(a);
@@ -100,8 +100,8 @@ public class PTAParallel
 		//System.out.println("sync: " + sync);
 
 		// Initialise states storage
-		states = new IndexedSet<IndexPair>();
-		explore = new LinkedList<IndexPair>();
+		states = new IndexedSet<>();
+		explore = new LinkedList<>();
 		// Add initial location
 		addState(0, 0);
 		src = -1;

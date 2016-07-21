@@ -40,7 +40,7 @@ public class SystemFullParallel extends SystemDefn
 
 	public SystemFullParallel()
 	{
-		operands = new Vector<SystemDefn>();
+		operands = new Vector<>();
 	}
 
 	// Set methods

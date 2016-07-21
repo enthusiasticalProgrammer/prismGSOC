@@ -46,9 +46,9 @@ public class ChoiceList implements Choice
 
 	public ChoiceList(int n)
 	{
-		updates = new ArrayList<List<Update>>(n);
-		probability = new ArrayList<Double>(n);
-		command = new ArrayList<Command>(n);
+		updates = new ArrayList<>(n);
+		probability = new ArrayList<>(n);
+		command = new ArrayList<>(n);
 	}
 
 	// Set methods

@@ -48,7 +48,7 @@ public class GUIGroupedTableColumnModel extends DefaultTableColumnModel implemen
 	 */
 	public GUIGroupedTableColumnModel()
 	{
-		lastColumn = new ArrayList<Integer>();
+		lastColumn = new ArrayList<>();
 
 		//this.elementTableColumnModel = new DefaultTableColumnModel();
 		this.groupTableColumnModel = new DefaultTableColumnModel();

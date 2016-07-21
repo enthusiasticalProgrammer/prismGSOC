@@ -46,7 +46,7 @@ public class APMCiterations extends APMCMethod
 	public void computeMissingParameterBeforeSim() throws PrismException
 	{
 		double missing = Math.ceil(0.5 * Math.log(2.0 / confidence) / (approximation * approximation));
-		if (missing < (double) Integer.MAX_VALUE) {
+		if (missing < Integer.MAX_VALUE) {
 			numSamples = (int) missing;
 			missingParameterComputed = true;
 		} else {

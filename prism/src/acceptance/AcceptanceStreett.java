@@ -228,10 +228,10 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	{
 		AcceptanceStreett result = new AcceptanceStreett();
 		for (StreettPair pair : this) {
-			result.add((StreettPair) pair.clone());
+			result.add(pair.clone());
 		}
 		for (StreettPair pair : other) {
-			result.add((StreettPair) pair.clone());
+			result.add(pair.clone());
 		}
 		return result;
 	}

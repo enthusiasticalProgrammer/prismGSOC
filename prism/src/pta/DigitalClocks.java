@@ -445,9 +445,9 @@ public class DigitalClocks
 
 		public ComputeClockInformation()
 		{
-			clockLists = new HashMap<String, List<String>>();
-			clockMaxs = new HashMap<String, Integer>();
-			allClockVals = new HashSet<Integer>();
+			clockLists = new HashMap<>();
+			clockMaxs = new HashMap<>();
+			allClockVals = new HashSet<>();
 		}
 
 		private void updateMax(String clock, int val)
@@ -460,7 +460,7 @@ public class DigitalClocks
 		public List<String> getClocksForModule(String module)
 		{
 			List<String> list = clockLists.get(module);
-			return (list == null) ? new ArrayList<String>() : list;
+			return (list == null) ? new ArrayList<>() : list;
 		}
 
 		public int getClockMax(String clock)
@@ -520,7 +520,7 @@ public class DigitalClocks
 		public void visitPre(Module e) throws PrismLangException
 		{
 			// Create new array to store clocks for this module
-			currentClockList = new ArrayList<String>();
+			currentClockList = new ArrayList<>();
 			clockLists.put(e.getName(), currentClockList);
 		}
 

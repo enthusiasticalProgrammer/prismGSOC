@@ -41,8 +41,8 @@ public abstract class SelectionModel extends Observable
 
 	public SelectionModel()
 	{
-		listeners = new ArrayList<SelectionListener>();
-		currentSelection = new ArrayList<PropertyOwner>();
+		listeners = new ArrayList<>();
+		currentSelection = new ArrayList<>();
 	}
 
 	public void addSelectionListener(SelectionListener s)

@@ -44,7 +44,7 @@ public class SeriesSettingsList extends AbstractListModel implements Observer
 	public SeriesSettingsList(Graph graph)
 	{
 		this.graph = graph;
-		this.seriesKeys = new HashMap<Integer, Graph.SeriesKey>();
+		this.seriesKeys = new HashMap<>();
 	}
 
 	@Override

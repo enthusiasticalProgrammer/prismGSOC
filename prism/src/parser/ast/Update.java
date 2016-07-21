@@ -56,11 +56,11 @@ public class Update extends ASTElement
 	 */
 	public Update()
 	{
-		vars = new ArrayList<String>();
-		exprs = new ArrayList<Expression>();
-		types = new ArrayList<Type>();
-		varIdents = new ArrayList<ExpressionIdent>();
-		indices = new ArrayList<Integer>();
+		vars = new ArrayList<>();
+		exprs = new ArrayList<>();
+		types = new ArrayList<>();
+		varIdents = new ArrayList<>();
+		indices = new ArrayList<>();
 	}
 
 	// Set methods

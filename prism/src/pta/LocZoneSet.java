@@ -35,7 +35,7 @@ public class LocZoneSet
 
 	public LocZoneSet()
 	{
-		set = new HashMap<LocZone, Integer>();
+		set = new HashMap<>();
 		indexOfLastAdd = -1;
 	}
 
@@ -82,7 +82,7 @@ public class LocZoneSet
 		int i, n;
 
 		n = set.size();
-		ArrayList<LocZone> list = new ArrayList<LocZone>(n);
+		ArrayList<LocZone> list = new ArrayList<>(n);
 		for (i = 0; i < n; i++)
 			list.add(null);
 		for (Map.Entry<LocZone, Integer> e : set.entrySet()) {

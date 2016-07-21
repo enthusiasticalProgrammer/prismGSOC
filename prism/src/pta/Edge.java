@@ -54,7 +54,7 @@ public class Edge
 		this.parent = parent;
 		this.prob = prob;
 		this.dest = dest;
-		resets = new HashMap<Integer, Integer>();
+		resets = new HashMap<>();
 	}
 
 	/**

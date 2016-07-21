@@ -66,7 +66,7 @@ public class PathFull extends Path implements PathFullInfo
 		continuousTime = modulesFile.getModelType().continuousTime();
 		numRewardStructs = modulesFile.getNumRewardStructs();
 		// Create list to store path
-		steps = new ArrayList<Step>(100);
+		steps = new ArrayList<>(100);
 		// Initialise variables
 		clear();
 		// Create loop detector

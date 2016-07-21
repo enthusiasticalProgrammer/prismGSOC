@@ -70,7 +70,7 @@ public class SimulatorResultsFile extends Observable
 	{
 		if (index < results.size()) {
 			SimulatorResult res = (SimulatorResult) results.get(index);
-			return res.result / ((double) res.iterations);
+			return res.result / (res.iterations);
 		} else
 			return -1.0;
 	}

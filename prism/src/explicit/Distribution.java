@@ -85,7 +85,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	 */
 	public void clear()
 	{
-		map = new HashMap<Integer, Double>();
+		map = new HashMap<>();
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	 */
 	public boolean add(int j, double prob)
 	{
-		Double d = (Double) map.get(j);
+		Double d = map.get(j);
 		if (d == null) {
 			map.put(j, prob);
 			return false;
@@ -122,7 +122,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	public double get(int j)
 	{
 		Double d;
-		d = (Double) map.get(j);
+		d = map.get(j);
 		return d == null ? 0.0 : d.doubleValue();
 	}
 
@@ -142,7 +142,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
 			Map.Entry<Integer, Double> e = i.next();
-			if (!set.get((Integer) e.getKey()))
+			if (!set.get(e.getKey()))
 				return false;
 		}
 		return true;
@@ -156,7 +156,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		Iterator<Entry<Integer, Double>> i = iterator();
 		while (i.hasNext()) {
 			Map.Entry<Integer, Double> e = i.next();
-			if (set.get((Integer) e.getKey()))
+			if (set.get(e.getKey()))
 				return true;
 		}
 		return false;

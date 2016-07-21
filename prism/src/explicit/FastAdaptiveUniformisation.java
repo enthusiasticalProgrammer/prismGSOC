@@ -676,17 +676,17 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			initDist.type = TypeDouble.getInstance();
 			initDist.size = 1;
 			initDist.valuesD = new double[1];
-			initDist.statesList = new ArrayList<State>();
+			initDist.statesList = new ArrayList<>();
 			initDist.valuesD[0] = 1.0;
 			initDist.statesList.add(modelGen.getInitialState());
 		}
 
 		/* prepare fast adaptive uniformisation */
-		addDistr = new ArrayList<State>();
-		deleteStates = new ArrayList<State>();
-		states = new LinkedHashMap<State, StateProp>(initSize);
+		addDistr = new ArrayList<>();
+		deleteStates = new ArrayList<>();
+		states = new LinkedHashMap<>(initSize);
 		value = 0.0;
-		initStates = new HashSet<State>();
+		initStates = new HashSet<>();
 		ListIterator<State> it = initDist.statesList.listIterator();
 		double[] values = initDist.getDoubleArray();
 		maxRate = 0.0;
@@ -706,7 +706,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		computeTransientProbsAdaptive(time);
 
 		/* prepare and return results */
-		ArrayList<State> statesList = new ArrayList<State>(states.size());
+		ArrayList<State> statesList = new ArrayList<>(states.size());
 		double[] probsArr = new double[states.size()];
 		int probsArrEntry = 0;
 		for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
@@ -737,9 +737,9 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	public void computeTransientProbsAdaptive(double time) throws PrismException
 	{
 		if (addDistr == null) {
-			addDistr = new ArrayList<State>();
-			deleteStates = new ArrayList<State>();
-			states = new LinkedHashMap<State, StateProp>(initSize);
+			addDistr = new ArrayList<>();
+			deleteStates = new ArrayList<>();
+			states = new LinkedHashMap<>(initSize);
 			value = 0.0;
 			prepareInitialDistribution();
 		}
@@ -855,7 +855,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			numTransitions += prop.getNumSuccs() + 1;
 		}
 		int stateNr = 0;
-		HashMap<StateProp, Integer> stateToNumber = new HashMap<StateProp, Integer>(numStates);
+		HashMap<StateProp, Integer> stateToNumber = new HashMap<>(numStates);
 		StateProp[] numberToState = new StateProp[numStates];
 		for (StateProp prop : states.values()) {
 			if (prop.isAlive()) {
@@ -1081,7 +1081,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	 */
 	private void prepareInitialDistribution() throws PrismException
 	{
-		initStates = new HashSet<State>();
+		initStates = new HashSet<>();
 		State initState = modelGen.getInitialState();
 		initStates.add(initState);
 		addToModel(initState);

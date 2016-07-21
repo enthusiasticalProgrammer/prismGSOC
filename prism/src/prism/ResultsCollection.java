@@ -65,8 +65,8 @@ public class ResultsCollection
 
 	public ResultsCollection(UndefinedConstants uCons, String resultName)
 	{
-		resultListeners = new Vector<ResultListener>();
-		rangingConstants = new Vector<DefinedConstant>();
+		resultListeners = new Vector<>();
+		rangingConstants = new Vector<>();
 		Vector<DefinedConstant> tmpRangingConstants = uCons.getRangingConstants();
 		for (int i = 0; i < tmpRangingConstants.size(); i++) {
 			rangingConstants.add(tmpRangingConstants.get(i));
@@ -448,7 +448,7 @@ public class ResultsCollection
 		 */
 		public ArrayList<String[]> toArrayList()
 		{
-			ArrayList<String[]> a = new ArrayList<String[]>();
+			ArrayList<String[]> a = new ArrayList<>();
 			String line[] = new String[rangingConstants.size() + 1];
 			toArrayListRec(a, line);
 			return a;

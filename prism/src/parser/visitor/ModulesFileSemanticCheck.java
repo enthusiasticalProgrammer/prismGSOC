@@ -79,7 +79,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		// Check system...endsystem construct (if present)
 		// Each module should appear exactly once
 		if (e.getSystemDefn() != null) {
-			e.getSystemDefn().getModules(v = new Vector<String>(), modulesFile);
+			e.getSystemDefn().getModules(v = new Vector<>(), modulesFile);
 			n = e.getNumModules();
 			for (i = 0; i < n; i++) {
 				int k = v.indexOf(e.getModuleName(i));
@@ -284,7 +284,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		// Check all actions are valid and ensure no duplicates
 		// (only check "from": OK to introduce new actions and to map to same
 		// action)
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumRenames();
 		for (i = 0; i < n; i++) {
 			s = e.getFrom(i);
@@ -307,7 +307,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		Vector<String> v;
 
 		// Check all actions are valid and ensure no duplicates
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumActions();
 		for (i = 0; i < n; i++) {
 			s = e.getAction(i);
@@ -330,7 +330,7 @@ public class ModulesFileSemanticCheck extends SemanticCheck
 		Vector<String> v;
 
 		// Check all actions are valid and ensure no duplicates
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = e.getNumActions();
 		for (i = 0; i < n; i++) {
 			s = e.getAction(i);

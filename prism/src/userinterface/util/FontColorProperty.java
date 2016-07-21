@@ -53,7 +53,7 @@ public class FontColorProperty extends SingleProperty
 		renderer.setBorder(null);
 		pan.add(renderer);
 
-		actionListeners = new ArrayList<ActionListener>();
+		actionListeners = new ArrayList<>();
 
 		edit = new JButton("...");
 		edit.setPreferredSize(new Dimension(20, 30));

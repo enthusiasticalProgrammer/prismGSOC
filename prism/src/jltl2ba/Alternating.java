@@ -110,8 +110,8 @@ public class Alternating
 		astate_count = 0;
 		atrans_count = 0;
 		final_set = new MyBitSet();
-		transition = new Vector<ATrans>();
-		done = new Vector<SimpleLTL>();
+		transition = new Vector<>();
+		done = new Vector<>();
 		sym_table = apset;
 		SimpleLTL p = formula.clone();
 		// System.out.println("formula: " + p.toString());
