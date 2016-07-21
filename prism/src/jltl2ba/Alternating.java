@@ -101,7 +101,6 @@ public class Alternating
 
 		public AProd()
 		{
-			;
 		}
 	}
 

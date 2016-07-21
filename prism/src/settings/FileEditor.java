@@ -131,7 +131,6 @@ public class FileEditor implements SettingEditor, ActionListener, FocusListener
 				}
 				if (allSame) {
 					renderer.setText(last.toString());
-					;
 				} else {
 					renderer.setText("(Different values)");
 					renderer.setFont(new Font("monospaced", Font.ITALIC, 12));

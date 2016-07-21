@@ -37,7 +37,7 @@ public interface Strategy
 	// Types of info stored for each choice
 	public enum Choice {
 		INDEX, ACTION, UNKNOWN, ARBITRARY, UNREACHABLE;
-	};
+	}
 
 	/**
 	 * Export the strategy to a PrismLog, displaying strategy choices as action names.

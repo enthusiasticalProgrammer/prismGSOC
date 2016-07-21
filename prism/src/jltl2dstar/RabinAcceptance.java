@@ -40,7 +40,7 @@ public class RabinAcceptance implements Iterable<Integer>
 	/** The 3 different colors for RabinAcceptance */
 	public enum RabinColor {
 		RABIN_WHITE, RABIN_GREEN, RABIN_RED
-	};
+	}
 
 	/** The number of acceptance pairs */
 	private int _acceptance_count;
@@ -198,7 +198,7 @@ public class RabinAcceptance implements Iterable<Integer>
 	public void addState(int state_index)
 	{
 		// TODO: Assert that state_index > highest set bit
-		;
+
 	}
 
 	// ---- Rabin/Streett acceptance specific

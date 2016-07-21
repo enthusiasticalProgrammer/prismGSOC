@@ -160,7 +160,7 @@ public class PredecessorRelation
 		for (Integer s : IterableBitSet.getSetBits(target)) {
 			todo.add(s);
 		}
-		;
+
 
 		// the set of states that are finished
 		BitSet done = new BitSet();

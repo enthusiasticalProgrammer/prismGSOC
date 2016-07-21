@@ -85,20 +85,20 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	// Property type
 	public enum PropertyType {
 		PROB_REACH, EXP_REACH, PROB_REACH_BOUNDED;
-	};
+	}
 
 	// Refinement termination criteria
 	public enum RefineTermCrit {
 		ABSOLUTE, RELATIVE
-	};
+	}
 
 	public enum RefineStratWhere {
 		ALL, ALL_MAX, FIRST, FIRST_MAX, LAST, LAST_MAX
-	};
+	}
 
 	public enum RefineStratHow {
 		ALL, VAL
-	};
+	}
 
 	// Concrete model info
 	/** Type of (concrete) model; default is MDP. */

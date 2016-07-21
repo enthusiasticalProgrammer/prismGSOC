@@ -34,7 +34,7 @@ public class Filter
 	// Enums for types of filter
 	public enum FilterOperator {
 		STATE;
-	};
+	}
 
 	// Filter operator
 	private FilterOperator op = null;

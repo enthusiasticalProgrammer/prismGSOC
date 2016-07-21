@@ -70,7 +70,7 @@ public class StateListMTBDD implements StateList
 	// output format
 	protected enum OutputFormat {
 		NORMAL, MATLAB, DOT, STRINGS
-	};
+	}
 
 	protected OutputFormat outputFormat = OutputFormat.NORMAL;
 

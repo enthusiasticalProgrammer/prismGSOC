@@ -46,7 +46,7 @@ public class ReactionsText2Prism extends Reactions2Prism
 
 	private enum SectionType {
 		SPECIES, PARAMETERS, REACTIONS, RR, R
-	};
+	}
 
 	// Constructors
 

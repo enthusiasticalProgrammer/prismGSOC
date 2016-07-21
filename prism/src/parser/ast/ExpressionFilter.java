@@ -73,7 +73,7 @@ public class ExpressionFilter extends Expression
 		{
 			this.keyword = keyword;
 		}
-	};
+	}
 
 	// Operator used in filter
 	// (and string representation of)

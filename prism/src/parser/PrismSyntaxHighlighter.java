@@ -128,7 +128,7 @@ public class PrismSyntaxHighlighter
 	}
 
 	// resulting output
-	private static StringBuffer resStringBuffer;;
+	private static StringBuffer resStringBuffer;
 	private static int resNewLine;
 	private static boolean resStart;
 	private static int resTypeArray[];

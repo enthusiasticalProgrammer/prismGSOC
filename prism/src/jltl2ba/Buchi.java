@@ -68,7 +68,6 @@ public class Buchi
 
 		public BState()
 		{
-			;
 		}
 
 		public void free()
@@ -87,7 +86,6 @@ public class Buchi
 
 		public BScc()
 		{
-			;
 		}
 	}
 

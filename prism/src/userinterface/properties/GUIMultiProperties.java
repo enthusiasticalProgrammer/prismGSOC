@@ -167,7 +167,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 	private JTextField fileTextField;
 	private Action newProps, openProps, saveProps, savePropsAs, insertProps, verifySelected, newProperty, editProperty, newConstant, removeConstant, newLabel,
 			removeLabel, newExperiment, deleteExperiment, stopExperiment, parametric, viewResults, plotResults, exportResultsListText, exportResultsListCSV,
-			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab;;
+			exportResultsMatrixText, exportResultsMatrixCSV, simulate, details, exportLabelsPlain, exportLabelsMatlab;
 
 	// Current properties
 	private GUIPropertiesList propList;
@@ -954,7 +954,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 								return Double.compare(o1.getCoord(1), o2.getCoord(1));
 							else
 								return Double.compare(o1.getCoord(0), o2.getCoord(0));
-						};
+						}
 					};
 
 					Collections.sort(l, c);

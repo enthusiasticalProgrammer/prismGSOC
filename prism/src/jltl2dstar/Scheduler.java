@@ -102,7 +102,7 @@ public class Scheduler
 		/** Hook that is called after calculate() finishes */
 		public void hook_after_calculate()
 		{
-		};
+		}
 
 		/** Calculate the automaton for this building block, by default
 		 * calculate the automata for the children and then choose the smallest.

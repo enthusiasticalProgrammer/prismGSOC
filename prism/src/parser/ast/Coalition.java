@@ -77,7 +77,6 @@ public class Coalition
 	{
 		allPlayers = true;
 		players.clear();
-		;
 	}
 
 	/**

@@ -91,7 +91,7 @@ public interface AcceptanceOmega extends Cloneable
 	public static abstract class LiftBitSet
 	{
 		public abstract BitSet lift(BitSet states);
-	};
+	}
 
 	/**
 	 * Lift the state sets in the acceptance condition.

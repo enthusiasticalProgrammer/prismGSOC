@@ -40,14 +40,14 @@ public class SimulationInformation
 	// Simulation method
 	public enum Method {
 		CI, ACI, APMC, SPRT
-	};
+	}
 
 	private Method method;
 
 	// Unknown variable
 	public enum Unknown {
 		WIDTH, CONFIDENCE, NUM_SAMPLES
-	};
+	}
 
 	private Unknown unknown;
 

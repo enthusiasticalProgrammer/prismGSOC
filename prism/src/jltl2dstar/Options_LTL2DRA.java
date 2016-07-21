@@ -120,7 +120,7 @@ public class Options_LTL2DRA implements Cloneable
 	/** Type of the automata that should be generated */
 	public static enum AutomataType {
 		STREETT, RABIN, RABIN_AND_STREETT
-	};
+	}
 
 	public AutomataType automata;
 
