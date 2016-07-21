@@ -38,42 +38,42 @@ public class ExpressionVar extends Expression
 	private String name;
 	// The index of the variable in the model to which it belongs
 	private int index;
-	
+
 	// Constructors
-	
+
 	public ExpressionVar(String n, Type t)
 	{
 		setType(t);
 		name = n;
 		index = -1;
 	}
-			
+
 	// Set method
-	
-	public void setName(String n) 
+
+	public void setName(String n)
 	{
 		name = n;
 	}
-	
-	public void setIndex(int i) 
+
+	public void setIndex(int i)
 	{
 		index = i;
 	}
-	
+
 	// Get method
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public int getIndex()
 	{
 		return index;
 	}
-	
+
 	// Methods required for Expression:
-	
+
 	@Override
 	public boolean isConstant()
 	{
@@ -85,7 +85,7 @@ public class ExpressionVar extends Expression
 	{
 		return true;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -111,7 +111,7 @@ public class ExpressionVar extends Expression
 	}
 
 	// Methods required for ASTElement:
-	
+
 	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
@@ -128,7 +128,7 @@ public class ExpressionVar extends Expression
 	}
 
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

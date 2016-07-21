@@ -28,7 +28,8 @@ import jltl2ba.MyBitSet;
 /** 
  * A Safra tree, an ordered tree of SafraTreeNodes.
  */
-public class SafraTree implements NBA2DAState {
+public class SafraTree implements NBA2DAState
+{
 
 	/** The maximum number of nodes */
 	private int MAX_NODES;
@@ -39,7 +40,8 @@ public class SafraTree implements NBA2DAState {
 	 * Constructor.
 	 * @param N the maximum number of nodes.
 	 */
-	public SafraTree(int N) {
+	public SafraTree(int N)
+	{
 		MAX_NODES = (N == 0 ? 1 : N);
 		_nodes = new Vector<SafraTreeNode>(MAX_NODES);
 		_nodes.setSize(MAX_NODES);
@@ -49,7 +51,8 @@ public class SafraTree implements NBA2DAState {
 	}
 
 	/** Copy constructor. */
-	public SafraTree(SafraTree other) {
+	public SafraTree(SafraTree other)
+	{
 		MAX_NODES = other.MAX_NODES;
 
 		_nodes = new Vector<SafraTreeNode>(MAX_NODES);
@@ -64,23 +67,29 @@ public class SafraTree implements NBA2DAState {
 
 		copySubTree(_nodes.get(0), other._nodes.get(0));
 	}
-	
+
 	/** Get the root node of the tree. */
-	public SafraTreeNode getRootNode() {return _nodes.get(0);}
+	public SafraTreeNode getRootNode()
+	{
+		return _nodes.get(0);
+	}
 
 	/** Create a new node. The name is the next free node name. */
-	public SafraTreeNode newNode() {
+	public SafraTreeNode newNode()
+	{
 		if (_nodes.indexOf(null) != -1)
-			return newNode(_nodes.indexOf(null));	// FIXME: hmm, inconsistent with newNode(int)
-		else return null;
+			return newNode(_nodes.indexOf(null)); // FIXME: hmm, inconsistent with newNode(int)
+		else
+			return null;
 	}
 
 	/** Create a new node with name <i>id</i>. */
-	public SafraTreeNode newNode(int id) {
-		assert(id < MAX_NODES);
-		assert(_nodes.get(id) == null);
+	public SafraTreeNode newNode(int id)
+	{
+		assert (id < MAX_NODES);
+		assert (_nodes.get(id) == null);
 
-		_nodes.set(id,new SafraTreeNode(id));
+		_nodes.set(id, new SafraTreeNode(id));
 
 		return _nodes.get(id);
 	}
@@ -89,8 +98,9 @@ public class SafraTree implements NBA2DAState {
 	 * Remove a SafraTreeNode from the tree, 
 	 * the node can have no children.
 	 */
-	public void remove(SafraTreeNode node) {
-		assert(_nodes.get(node.getID()) == node);
+	public void remove(SafraTreeNode node)
+	{
+		assert (_nodes.get(node.getID()) == node);
 		remove(node.getID());
 	}
 
@@ -98,19 +108,20 @@ public class SafraTree implements NBA2DAState {
 	 * Remove the SafraTreeNode <i>id</i> from the tree,
 	 * the node can have no children.
 	 */
-	public void remove(int id) {
-		assert(id >= 0 && id < MAX_NODES);
+	public void remove(int id)
+	{
+		assert (id >= 0 && id < MAX_NODES);
 
 		_nodes.get(id).removeFromTree();
 		_nodes.set(id, null);
 	}
 
-
 	/**
 	 * Remove all children of the SafraTreeNode <i>id</i>.
 	 */
-	public void removeAllChildren(int id) {
-		assert(id < MAX_NODES);
+	public void removeAllChildren(int id)
+	{
+		assert (id < MAX_NODES);
 
 		SafraTreeNode n = _nodes.get(id);
 		SafraTreeNode child;
@@ -125,7 +136,8 @@ public class SafraTree implements NBA2DAState {
 	 * void visit(SafraTree& tree, SafraTreeNode *node) 
 	 * in the SafraTreeVisitor on each node.
 	 */
-	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkTreePostOrder(V visitor) {
+	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkTreePostOrder(V visitor)
+	{
 		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
 		stw.walkTreePostOrder(this);
 	}
@@ -135,7 +147,8 @@ public class SafraTree implements NBA2DAState {
 	 * calling the function void visit(SafraTree& tree, SafraTreeNode *node) 
 	 * in the SafraTreeVisitor on each node.
 	 */
-	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkSubTreePostOrder(V visitor, SafraTreeNode top) {
+	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkSubTreePostOrder(V visitor, SafraTreeNode top)
+	{
 		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
 		stw.walkSubTreePostOrder(this, top, true);
 	}
@@ -145,27 +158,28 @@ public class SafraTree implements NBA2DAState {
 	 * post-order, calling the function void visit(SafraTree& tree, SafraTreeNode *node) 
 	 * in the SafraTreeVisitor on each node.
 	 */
-	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkChildrenPostOrder(V visitor, SafraTreeNode top) {
+	public <V extends SafrasAlgorithm.SafraTreeVisitor> void walkChildrenPostOrder(V visitor, SafraTreeNode top)
+	{
 		SafraTreeWalker<V> stw = new SafraTreeWalker<V>(visitor);
 		stw.walkSubTreePostOrder(this, top, false); // = don't visit top
 	}
 
-
 	/**
 	 * Calculate the height of the tree.
 	 */
-	public int treeHeight() {
+	public int treeHeight()
+	{
 		if (getRootNode() != null) {
 			return getRootNode().treeHeight();
 		}
 		return 0;
 	}
 
-
 	/**
 	 * Calculate the width of the tree.
 	 */
-	public int treeWidth() {
+	public int treeWidth()
+	{
 		if (getRootNode() != null) {
 			return getRootNode().treeWidth();
 		}
@@ -175,29 +189,37 @@ public class SafraTree implements NBA2DAState {
 	/**
 	 * Equality operator.
 	 */
-	public boolean equals(SafraTree other) {
-		if (other.MAX_NODES != MAX_NODES) {return false;}
+	public boolean equals(SafraTree other)
+	{
+		if (other.MAX_NODES != MAX_NODES) {
+			return false;
+		}
 		return _nodes.equals(other._nodes);
 	}
 
-	public boolean equals(Object other) {
+	public boolean equals(Object other)
+	{
 		if (other instanceof SafraTree)
 			return this.equals((SafraTree) other);
-		else return false;
+		else
+			return false;
 	}
-		
+
 	/**
 	 * Checks equality when ignoring the node names.
 	 */
-	public boolean structural_equal_to(SafraTree other) {
-		if (other.MAX_NODES!=MAX_NODES) {return false;}
+	public boolean structural_equal_to(SafraTree other)
+	{
+		if (other.MAX_NODES != MAX_NODES) {
+			return false;
+		}
 
 		SafraTreeNode this_root = this.getRootNode();
 		SafraTreeNode other_root = other.getRootNode();
 
 		if (this_root == null || other_root == null) {
 			// return true if both are 0
-			return (this_root==other_root);
+			return (this_root == other_root);
 		}
 
 		return this_root.structuralEquals(other_root);
@@ -206,20 +228,25 @@ public class SafraTree implements NBA2DAState {
 	/**
 	 * Less-than operator when ignoring the node names.
 	 */
-	public boolean structural_less_than(SafraTree other) {
-		if (other.MAX_NODES<MAX_NODES) {return true;}
+	public boolean structural_less_than(SafraTree other)
+	{
+		if (other.MAX_NODES < MAX_NODES) {
+			return true;
+		}
 
 		SafraTreeNode this_root = this.getRootNode();
 		SafraTreeNode other_root = other.getRootNode();
 
 		if (this_root == null) {
-			if (other_root!= null) {
+			if (other_root != null) {
 				return true;
 			} else {
 				return false;
 			}
 		} else { // this_root !=0 
-			if (other_root == null) {return false;}
+			if (other_root == null) {
+				return false;
+			}
 
 			return this_root.structuralLessThan(other_root);
 		}
@@ -228,8 +255,11 @@ public class SafraTree implements NBA2DAState {
 	/**
 	 * Less-than operator
 	 */
-	public boolean lessThan(SafraTree other) {
-		if (MAX_NODES < other.MAX_NODES) {return true;}
+	public boolean lessThan(SafraTree other)
+	{
+		if (MAX_NODES < other.MAX_NODES) {
+			return true;
+		}
 
 		for (int i = 0; i < MAX_NODES; i++) {
 			if (_nodes.get(i) == null && other._nodes.get(i) == null) {
@@ -252,19 +282,25 @@ public class SafraTree implements NBA2DAState {
 	}
 
 	/** Get the maximum number of nodes. */
-	public int getNodeMax() {return MAX_NODES;}
+	public int getNodeMax()
+	{
+		return MAX_NODES;
+	}
 
 	/** Get SafraTreeNode with index <i>i</i>*/
-	public SafraTreeNode get(int i) {
+	public SafraTreeNode get(int i)
+	{
 		return _nodes.get(i);
 	}
 
-	public void set(int i, SafraTreeNode node) {
+	public void set(int i, SafraTreeNode node)
+	{
 		_nodes.set(i, node);
 	}
 
 	/** Print the SafraTree on an output stream. */
-	public void print(PrintStream out) {
+	public void print(PrintStream out)
+	{
 		if (getRootNode() == null) {
 			out.println("<empty>");
 		} else {
@@ -280,7 +316,8 @@ public class SafraTree implements NBA2DAState {
 	// }
 
 	/** Returns a string representation in HTML of the SafraTree */
-	public String toHTML() {
+	public String toHTML()
+	{
 		if (getRootNode() == null) {
 			return "<TABLE><TR><TD>[empty]</TD></TR></TABLE>";
 		} else {
@@ -302,17 +339,20 @@ public class SafraTree implements NBA2DAState {
 	// 			root->hashCode(hashfunction, only_structure);
 	// 		}
 	// }
-	
-	public int hashCode() {
+
+	public int hashCode()
+	{
 		if (getRootNode() != null)
 			return getRootNode().hashCode();
-		else return 0;
+		else
+			return 0;
 	}
 
 	/**
 	 * Generate the appropriate acceptance signature for Rabin Acceptance for this tree  
 	 */
-	public void generateAcceptance(AcceptanceForState acceptance) {
+	public void generateAcceptance(AcceptanceForState acceptance)
+	{
 		for (int i = 0; i < getNodeMax(); i++) {
 			SafraTreeNode stn = this.get(i);
 			if (stn == null) {
@@ -325,10 +365,11 @@ public class SafraTree implements NBA2DAState {
 		}
 	}
 
-	public void generateAcceptance(RabinSignature acceptance) {
+	public void generateAcceptance(RabinSignature acceptance)
+	{
 		acceptance.setSize(getNodeMax());
 		for (int i = 0; i < getNodeMax(); i++) {
-			SafraTreeNode  stn = this.get(i);
+			SafraTreeNode stn = this.get(i);
 			if (stn == null) {
 				acceptance.setColor(i, RabinAcceptance.RabinColor.RABIN_RED);
 			} else {
@@ -341,19 +382,22 @@ public class SafraTree implements NBA2DAState {
 		}
 	}
 
-	public RabinSignature generateAcceptance() {
+	public RabinSignature generateAcceptance()
+	{
 		RabinSignature s = new RabinSignature(getNodeMax());
 		generateAcceptance(s);
 		return s;
 	}
 
-
 	/**
 	 * Copy the subtree (the children) of *other
 	 * to *top, becoming the children of *top
 	 */
-	private void copySubTree(SafraTreeNode top, SafraTreeNode other) {
-		if (other == null) {return;}
+	private void copySubTree(SafraTreeNode top, SafraTreeNode other)
+	{
+		if (other == null) {
+			return;
+		}
 
 		for (SafraTreeNode child : other) {
 			SafraTreeNode n = _nodes.get(child.getID());
@@ -368,7 +412,8 @@ public class SafraTree implements NBA2DAState {
 	 * @param prefix the number of spaces ' ' in front of each node
 	 * @param top the current tree sub root
 	 */
-	private void printSubTree(PrintStream out, int prefix, SafraTreeNode top) {
+	private void printSubTree(PrintStream out, int prefix, SafraTreeNode top)
+	{
 		for (int i = 0; i < prefix; i++) {
 			out.print(" ");
 		}
@@ -376,7 +421,7 @@ public class SafraTree implements NBA2DAState {
 		out.println();
 
 		for (SafraTreeNode child : top) {
-			printSubTree(out, prefix+1, child);
+			printSubTree(out, prefix + 1, child);
 		}
 	}
 }

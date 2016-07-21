@@ -227,8 +227,7 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 
 	// Implementation of splitState(...) for abstraction-refinement loop; see superclass for details 
 
-	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates,
-			Set<Integer> rebuildStates) throws PrismException
+	protected int splitState(int splitState, List<List<Integer>> choiceLists, Set<Integer> rebuiltStates, Set<Integer> rebuildStates) throws PrismException
 	{
 		List<Set<Integer>> list, listNew;
 		Set<Integer> concreteStates, concreteStatesNew;

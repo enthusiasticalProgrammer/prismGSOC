@@ -45,16 +45,15 @@ import jdd.JDDVars;
  * The Streett condition is accepting if all pairs are accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceStreett
-       extends ArrayList<AcceptanceStreett.StreettPair>
-       implements AcceptanceOmega
+public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> implements AcceptanceOmega
 {
 
 	/**
 	 * A pair in a Streett acceptance condition, i.e., with
 	 *  (G F "R") -> (G F "G")
 	 **/
-	public static class StreettPair {
+	public static class StreettPair
+	{
 		/** State set R */
 		private BitSet R;
 
@@ -106,8 +105,8 @@ public class AcceptanceStreett
 
 		public AcceptanceGeneric toAcceptanceGeneric()
 		{
-			AcceptanceGeneric genericR = new AcceptanceGeneric(AcceptanceGeneric.ElementType.FIN, (BitSet)R.clone());
-			AcceptanceGeneric genericG = new AcceptanceGeneric(AcceptanceGeneric.ElementType.INF, (BitSet)G.clone());
+			AcceptanceGeneric genericR = new AcceptanceGeneric(AcceptanceGeneric.ElementType.FIN, (BitSet) R.clone());
+			AcceptanceGeneric genericG = new AcceptanceGeneric(AcceptanceGeneric.ElementType.INF, (BitSet) G.clone());
 			//      G F "R" -> G F "G"
 			// <=>  ! G F "R"  | G F "G"
 			// <=>  F G ! "R"  | G F "G"
@@ -124,9 +123,9 @@ public class AcceptanceStreett
 		public String getSignatureForState(int stateIndex, int pairIndex)
 		{
 			if (G.get(stateIndex)) {
-				return "+"+pairIndex;
+				return "+" + pairIndex;
 			} else if (R.get(stateIndex)) {
-				return "-"+pairIndex;
+				return "-" + pairIndex;
 			} else {
 				return "";
 			}
@@ -135,12 +134,13 @@ public class AcceptanceStreett
 		@Override
 		public StreettPair clone()
 		{
-			return new StreettPair((BitSet)R.clone(), (BitSet)G.clone());
+			return new StreettPair((BitSet) R.clone(), (BitSet) G.clone());
 		}
 
 		/** Returns a textual representation of this Streett pair. */
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return "(" + R + "->" + G + ")";
 		}
 	}
@@ -171,9 +171,9 @@ public class AcceptanceStreett
 		return true;
 	}
 
-
 	@Override
-	public void lift(LiftBitSet lifter) {
+	public void lift(LiftBitSet lifter)
+	{
 		for (StreettPair pair : this) {
 			pair.R = lifter.lift(pair.R);
 			pair.G = lifter.lift(pair.G);
@@ -215,7 +215,6 @@ public class AcceptanceStreett
 		}
 		throw new PrismNotSupportedException("Can not complement " + getType() + " acceptance to a supported acceptance type");
 	}
-
 
 	/**
 	 * Returns a new Streett acceptance condition that corresponds to the conjunction
@@ -267,9 +266,9 @@ public class AcceptanceStreett
 	{
 		String result = "";
 
-		for (int pairIndex=0; pairIndex<size(); pairIndex++) {
+		for (int pairIndex = 0; pairIndex < size(); pairIndex++) {
 			StreettPair pair = get(pairIndex);
-			result += pair.getSignatureForState(stateIndex,  pairIndex);
+			result += pair.getSignatureForState(stateIndex, pairIndex);
 		}
 
 		return result;
@@ -280,18 +279,18 @@ public class AcceptanceStreett
 	{
 		String result = "";
 
-		for (int pairIndex=0; pairIndex<size(); pairIndex++) {
+		for (int pairIndex = 0; pairIndex < size(); pairIndex++) {
 			StreettPair pair = get(pairIndex);
 			if (pair.getR().get(stateIndex)) {
-				result += (result.isEmpty() ? "" : " ") + pairIndex*2;
+				result += (result.isEmpty() ? "" : " ") + pairIndex * 2;
 			}
 			if (pair.getG().get(stateIndex)) {
-				result += (result.isEmpty() ? "" : " ") + (pairIndex*2+1);
+				result += (result.isEmpty() ? "" : " ") + (pairIndex * 2 + 1);
 			}
 		}
 
 		if (!result.isEmpty())
-			result = "{"+result+"}";
+			result = "{" + result + "}";
 
 		return result;
 	}
@@ -320,29 +319,32 @@ public class AcceptanceStreett
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 
 	@Override
 	public void outputHOAHeader(PrintStream out)
 	{
-		out.println("acc-name: Streett "+size());
-		out.print("Acceptance: " + (size()*2)+" ");
+		out.println("acc-name: Streett " + size());
+		out.print("Acceptance: " + (size() * 2) + " ");
 		if (size() == 0) {
 			out.println("t");
 			return;
 		}
 
 		for (int pair = 0; pair < size(); pair++) {
-			if (pair > 0) out.print(" & ");
-			out.print("( Fin(" + (2*pair) + ") | Inf(" + (2*pair+1) +") )");
+			if (pair > 0)
+				out.print(" & ");
+			out.print("( Fin(" + (2 * pair) + ") | Inf(" + (2 * pair + 1) + ") )");
 		}
 		out.println();
 	}

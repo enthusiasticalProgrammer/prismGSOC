@@ -74,8 +74,8 @@ public final class ModelBuilder extends PrismComponent
 	private double dagMaxError;
 
 	/** local storage made static for use in anonymous class */
-	private static Map<String,Expression> constExprs;
-	
+	private static Map<String, Expression> constExprs;
+
 	/**
 	 * Constructor
 	 */
@@ -88,7 +88,7 @@ public final class ModelBuilder extends PrismComponent
 			dagMaxError = settings.getDouble(PrismSettings.PRISM_PARAM_DAG_MAX_ERROR);
 		}
 	}
-	
+
 	/**
 	 * Transform PRISM expression to rational function.
 	 * If successful, a function representing the given expression will be
@@ -256,8 +256,8 @@ public final class ModelBuilder extends PrismComponent
 	 * @param states list of states to be filled by this method
 	 * @throws PrismException thrown if problems in underlying methods occur
 	 */
-	private void reserveMemoryAndExploreStates(ModulesFile modulesFile, ParamModel model, ModelType modelType, SymbolicEngine engine, StateStorage<State> states)
-			throws PrismException
+	private void reserveMemoryAndExploreStates(ModulesFile modulesFile, ParamModel model, ModelType modelType, SymbolicEngine engine,
+			StateStorage<State> states) throws PrismException
 	{
 		boolean isNonDet = modelType == ModelType.MDP;
 		int numStates = 0;
@@ -405,7 +405,7 @@ public final class ModelBuilder extends PrismComponent
 		model.setFunctionFactory(functionFactory);
 
 		mainLog.println();
-		
+
 		mainLog.print("Reachable states exploration and model construction");
 		mainLog.println(" done in " + ((System.currentTimeMillis() - timer) / 1000.0) + " secs.");
 

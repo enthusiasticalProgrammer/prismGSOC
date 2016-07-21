@@ -75,17 +75,13 @@ public class DTMCModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of Markov chain and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH,
-				AcceptanceType.GENERIC
-		};
-		product = mcLtl.constructProductMC(this, (DTMC)model, expr, statesOfInterest, allowedAcceptance);
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERIC };
+		product = mcLtl.constructProductMC(this, (DTMC) model, expr, statesOfInterest, allowedAcceptance);
 
 		// Output product, if required
 		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+			mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+			product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
 		}
 		if (getExportProductStates()) {
 			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
@@ -99,12 +95,12 @@ public class DTMCModelChecker extends ProbModelChecker
 			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
 			out.close();
 		}
-		
+
 		// Find accepting states + compute reachability probabilities
 		BitSet acc;
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
 		} else {
 			mainLog.println("\nFinding accepting BSCCs...");
 			acc = mcLtl.findAcceptingBSCCs(product.getProductModel(), product.getAcceptance());
@@ -116,12 +112,12 @@ public class DTMCModelChecker extends ProbModelChecker
 
 		// Output vector over product, if required
 		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				probsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+			probsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Mapping probabilities in the original model
 		probs = product.projectToOriginalModel(probsProduct);
 		probsProduct.clear();
@@ -144,19 +140,16 @@ public class DTMCModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of Markov chain and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
-		product = mcLtl.constructProductMC(this, (DTMC)model, expr, statesOfInterest, allowedAcceptance);
-		
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		product = mcLtl.constructProductMC(this, (DTMC) model, expr, statesOfInterest, allowedAcceptance);
+
 		// Adapt reward info to product model
 		productRewards = ((MCRewards) modelRewards).liftFromModel(product);
-		
+
 		// Output product, if required
 		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+			mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+			product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
 		}
 		if (getExportProductStates()) {
 			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
@@ -170,12 +163,12 @@ public class DTMCModelChecker extends ProbModelChecker
 			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
 			out.close();
 		}
-		
+
 		// Find accepting states + compute reachability rewards
 		BitSet acc;
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
 		} else {
 			mainLog.println("\nFinding accepting BSCCs...");
 			acc = mcLtl.findAcceptingBSCCs(product.getProductModel(), product.getAcceptance());
@@ -183,23 +176,24 @@ public class DTMCModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability probabilities...");
 		mcProduct = new DTMCModelChecker(this);
 		mcProduct.inheritSettings(this);
-		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc).soln, product.getProductModel());
-		
+		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc).soln,
+				product.getProductModel());
+
 		// Output vector over product, if required
 		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				rewardsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+			rewardsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Mapping rewards in the original model
 		rewards = product.projectToOriginalModel(rewardsProduct);
 		rewardsProduct.clear();
-		
+
 		return rewards;
 	}
-	
+
 	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
@@ -332,13 +326,13 @@ public class DTMCModelChecker extends ProbModelChecker
 			}
 		}
 		mainLog.print("States in non-zero reward BSCCs: " + bsccsNonZero.cardinality());
-		
+
 		// Find states with infinite reward (those reach a non-zero reward BSCC with prob > 0)
 		BitSet inf = prob0(dtmc, null, bsccsNonZero);
 		inf.flip(0, n);
 		int numInf = inf.cardinality();
 		mainLog.println(", inf=" + numInf + ", maybe=" + (n - numInf));
-		
+
 		// Compute rewards
 		// (do this using the functions for "reward reachability" properties but with no targets)
 		switch (linEqMethod) {
@@ -614,7 +608,6 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-
 	/**
 	 * Prob0 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a DTMC which, with probability 0,
@@ -734,7 +727,8 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param pre The predecessor relation of the DTMC
 	 */
-	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target, PredecessorRelation pre) {
+	public BitSet prob1(DTMC dtmc, BitSet remain, BitSet target, PredecessorRelation pre)
+	{
 		// Implements the constrained reachability algorithm from
 		// Baier, Katoen: Principles of Model Checking (Corollary 10.31 Qualitative Constrained Reachability)
 		long timer;

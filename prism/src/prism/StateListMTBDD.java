@@ -42,35 +42,38 @@ public class StateListMTBDD implements StateList
 {
 	// States list, as a (0-1) MTBDD
 	protected JDDNode states;
-	
+
 	// Info needed from model
 	protected JDDVars vars;
 	protected int numVars;
 	protected ODDNode odd;
 	protected VarList varList;
 	protected double size;
-	
+
 	// stuff to keep track of variable values in print method
 	protected int[] varSizes;
 	protected int[] varValues;
 	protected int currentVar;
 	protected int currentVarLevel;
-	
+
 	// stuff to control printing limit
 	protected boolean limit;
 	protected int numToPrint;
 	protected int count;
-	
+
 	// log for output from print method
 	protected PrismLog outputLog;
-	
+
 	// string array when exporting
 	protected List<String> strList;
-	
+
 	// output format
-	protected enum OutputFormat { NORMAL, MATLAB, DOT, STRINGS };
+	protected enum OutputFormat {
+		NORMAL, MATLAB, DOT, STRINGS
+	};
+
 	protected OutputFormat outputFormat = OutputFormat.NORMAL;
-	
+
 	// Constructors
 
 	/**
@@ -81,19 +84,19 @@ public class StateListMTBDD implements StateList
 	public StateListMTBDD(JDDNode states, Model model)
 	{
 		int i;
-		
+
 		// store states list bdd
 		this.states = states;
-		
+
 		// get info from model
 		vars = model.getAllDDRowVars();
 		numVars = vars.n();
 		odd = model.getODD();
 		varList = model.getVarList();
-		
+
 		// count number of states in list
 		size = JDD.GetNumMinterms(states, model.getNumDDRowVars());
-		
+
 		// initialise arrays
 		varSizes = new int[varList.getNumVars()];
 		for (i = 0; i < varList.getNumVars(); i++) {
@@ -136,9 +139,9 @@ public class StateListMTBDD implements StateList
 	@Override
 	public int size()
 	{
-		return (size > Integer.MAX_VALUE) ? -1 : (int)Math.round(size);
+		return (size > Integer.MAX_VALUE) ? -1 : (int) Math.round(size);
 	}
-	
+
 	@Override
 	public String sizeString()
 	{
@@ -155,7 +158,7 @@ public class StateListMTBDD implements StateList
 		if (count == 0)
 			outputLog.println("(none)");
 	}
-	
+
 	@Override
 	public void print(PrismLog log, int n)
 	{
@@ -167,7 +170,7 @@ public class StateListMTBDD implements StateList
 		if (count == 0)
 			outputLog.println("(none)");
 	}
-	
+
 	@Override
 	public void printMatlab(PrismLog log)
 	{
@@ -176,7 +179,7 @@ public class StateListMTBDD implements StateList
 		outputLog = log;
 		doPrint();
 	}
-	
+
 	@Override
 	public void printMatlab(PrismLog log, int n)
 	{
@@ -186,7 +189,7 @@ public class StateListMTBDD implements StateList
 		outputLog = log;
 		doPrint();
 	}
-	
+
 	@Override
 	public void printDot(PrismLog log)
 	{
@@ -195,24 +198,24 @@ public class StateListMTBDD implements StateList
 		outputLog = log;
 		doPrint();
 	}
-	
+
 	@Override
 	public List<String> exportToStringList()
 	{
-		strList = new ArrayList<String>((int)size);
+		strList = new ArrayList<String>((int) size);
 		outputFormat = OutputFormat.STRINGS;
 		limit = false;
 		doPrint();
 		return strList;
 	}
-	
+
 	/**
 	 * Implementation of printing.
 	 */
 	private void doPrint()
 	{
 		int i;
-		
+
 		count = 0;
 		for (i = 0; i < varList.getNumVars(); i++) {
 			varValues[i] = 0;
@@ -234,64 +237,96 @@ public class StateListMTBDD implements StateList
 		int i, j;
 		JDDNode e, t;
 		String varsString;
-		
+
 		// if we've printed enough states, stop
-		if (limit) if (count >= numToPrint) return;
-		
+		if (limit)
+			if (count >= numToPrint)
+				return;
+
 		// zero constant - bottom out of recursion
-		if (dd.equals(JDD.ZERO)) return;
-		
+		if (dd.equals(JDD.ZERO))
+			return;
+
 		// base case - at bottom (nonzero terminal)
 		if (level == numVars) {
-			
+
 			switch (outputFormat) {
-			case NORMAL: outputLog.print(n + ":("); break;
-			case MATLAB: break;
-			case DOT: outputLog.print(n + " [label=\"" + n + "\\n("); break;
-			case STRINGS: break;
+			case NORMAL:
+				outputLog.print(n + ":(");
+				break;
+			case MATLAB:
+				break;
+			case DOT:
+				outputLog.print(n + " [label=\"" + n + "\\n(");
+				break;
+			case STRINGS:
+				break;
 			}
 			j = varList.getNumVars();
 			varsString = "";
 			for (i = 0; i < j; i++) {
 				// integer variable
 				if (varList.getType(i) instanceof TypeInt) {
-					varsString += varValues[i]+varList.getLow(i);
+					varsString += varValues[i] + varList.getLow(i);
 				}
 				// boolean variable
 				else {
 					varsString += (varValues[i] == 1);
 				}
-				if (i < j-1) varsString += ",";
+				if (i < j - 1)
+					varsString += ",";
 			}
 			switch (outputFormat) {
-			case NORMAL: outputLog.println(varsString + ")"); break;
-			case MATLAB: outputLog.println(varsString); break;
-			case DOT: outputLog.println(varsString + ")\"];"); break;
-			case STRINGS: strList.add(varsString);
+			case NORMAL:
+				outputLog.println(varsString + ")");
+				break;
+			case MATLAB:
+				outputLog.println(varsString);
+				break;
+			case DOT:
+				outputLog.println(varsString + ")\"];");
+				break;
+			case STRINGS:
+				strList.add(varsString);
 			}
 			count++;
-			
+
 			return;
 		}
-		
+
 		// select else and then branches
 		else if (dd.getIndex() > vars.getVarIndex(level)) {
 			e = t = dd;
-		}
-		else {
+		} else {
 			e = dd.getElse();
 			t = dd.getThen();
 		}
-		
+
 		// then recurse...
-		currentVarLevel++; if (currentVarLevel == varSizes[currentVar]) { currentVar++; currentVarLevel=0; }
-		printRec(e, level+1, o.getElse(), n);
-		currentVarLevel--; if (currentVarLevel == -1) { currentVar--; currentVarLevel=varSizes[currentVar]-1; }
-		varValues[currentVar] += (1 << (varSizes[currentVar]-1-currentVarLevel));
-		currentVarLevel++; if (currentVarLevel == varSizes[currentVar]) { currentVar++; currentVarLevel=0; }
-		printRec(t, level+1, o.getThen(), n+o.getEOff());
-		currentVarLevel--; if (currentVarLevel == -1) { currentVar--; currentVarLevel=varSizes[currentVar]-1; }
-		varValues[currentVar] -= (1 << (varSizes[currentVar]-1-currentVarLevel));
+		currentVarLevel++;
+		if (currentVarLevel == varSizes[currentVar]) {
+			currentVar++;
+			currentVarLevel = 0;
+		}
+		printRec(e, level + 1, o.getElse(), n);
+		currentVarLevel--;
+		if (currentVarLevel == -1) {
+			currentVar--;
+			currentVarLevel = varSizes[currentVar] - 1;
+		}
+		varValues[currentVar] += (1 << (varSizes[currentVar] - 1 - currentVarLevel));
+		currentVarLevel++;
+		if (currentVarLevel == varSizes[currentVar]) {
+			currentVar++;
+			currentVarLevel = 0;
+		}
+		printRec(t, level + 1, o.getThen(), n + o.getEOff());
+		currentVarLevel--;
+		if (currentVarLevel == -1) {
+			currentVar--;
+			currentVarLevel = varSizes[currentVar] - 1;
+		}
+		varValues[currentVar] -= (1 << (varSizes[currentVar] - 1 - currentVarLevel));
 	}
 
 	@Override
@@ -299,14 +334,14 @@ public class StateListMTBDD implements StateList
 	{
 		JDDNode tmp;
 		boolean incl;
-		
+
 		JDD.Ref(states);
 		JDD.Ref(set);
 		tmp = JDD.And(states, set);
 		incl = !tmp.equals(JDD.ZERO);
 		JDD.Deref(tmp);
-		
-		return incl;	
+
+		return incl;
 	}
 
 	@Override
@@ -314,14 +349,14 @@ public class StateListMTBDD implements StateList
 	{
 		JDDNode tmp;
 		boolean incl;
-		
+
 		JDD.Ref(states);
 		JDD.Ref(set);
 		tmp = JDD.And(states, set);
 		incl = tmp.equals(set);
 		JDD.Deref(tmp);
-		
-		return incl;	
+
+		return incl;
 	}
 
 	@Override
@@ -331,14 +366,15 @@ public class StateListMTBDD implements StateList
 		int i, j, n, n2, level, v;
 		JDDNode first, tmp;
 		Object o;
-		
+
 		// check there is a first state
-		if (size < 1) throw new PrismException("The state list contains no states");
-		
+		if (size < 1)
+			throw new PrismException("The state list contains no states");
+
 		// get bdd of first state
 		JDD.Ref(states);
 		first = JDD.RestrictToFirst(states, vars);
-		
+
 		// traverse bdd, top to bottom, getting val (v) for each var
 		tmp = states;
 		values = new Values();
@@ -354,7 +390,7 @@ public class StateListMTBDD implements StateList
 					tmp = tmp.getElse();
 				} else {
 					tmp = tmp.getThen();
-					v += (1 << (n2-1-j));
+					v += (1 << (n2 - 1 - j));
 				}
 				level++;
 			}
@@ -366,10 +402,10 @@ public class StateListMTBDD implements StateList
 			}
 			values.addValue(varList.getName(i), o);
 		}
-		
+
 		// derefs
 		JDD.Deref(first);
-		
+
 		return values;
 	}
 
@@ -386,7 +422,7 @@ public class StateListMTBDD implements StateList
 		for (int i = 0; i < n; i++) {
 			int valInt = -1;
 			try {
-				valInt = varList.encodeToInt(i, state.varValues[i]); 
+				valInt = varList.encodeToInt(i, state.varValues[i]);
 			} catch (PrismLangException e) {
 				// Problem looking up variable - bail out 
 				return -1;
@@ -399,25 +435,25 @@ public class StateListMTBDD implements StateList
 					return -1;
 				} else if (ptr.getIndex() > vars.getVarIndex(level)) {
 					// ptr = ptr;
-				} else if ((valInt & (1 << (n2-1-j))) == 0) {
+				} else if ((valInt & (1 << (n2 - 1 - j))) == 0) {
 					ptr = ptr.getElse();
 				} else {
-					ptr.getThen();					
+					ptr.getThen();
 				}
 				level++;
 				// Traverse ODD (to get index)
-				if ((valInt & (1 << (n2-1-j))) == 0) {
+				if ((valInt & (1 << (n2 - 1 - j))) == 0) {
 					o = o.getElse();
 				} else {
 					index += o.getEOff();
-					o = o.getThen();	
+					o = o.getThen();
 				}
-				
+
 			}
 		}
 		return index;
 	}
-	
+
 	@Override
 	public void clear()
 	{

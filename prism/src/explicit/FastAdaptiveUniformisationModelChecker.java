@@ -57,7 +57,7 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 	private LabelList labelListModel;
 	// Labels from the property file
 	private LabelList labelListProp;
-	
+
 	/**
 	 * Constructor.
 	 */

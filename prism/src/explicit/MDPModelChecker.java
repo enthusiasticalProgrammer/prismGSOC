@@ -64,7 +64,7 @@ public class MDPModelChecker extends ProbModelChecker
 	{
 		super(parent);
 	}
-	
+
 	// Model checking functions
 
 	@Override
@@ -85,18 +85,13 @@ public class MDPModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of MDP and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.BUCHI,
-				AcceptanceType.RABIN,
-				AcceptanceType.GENERALIZED_RABIN,
-				AcceptanceType.REACH
-		};
-		product = mcLtl.constructProductMDP(this, (MDP)model, expr, statesOfInterest, allowedAcceptance);
-		
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.BUCHI, AcceptanceType.RABIN, AcceptanceType.GENERALIZED_RABIN, AcceptanceType.REACH };
+		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
+
 		// Output product, if required
 		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+			mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+			product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
 		}
 		if (getExportProductStates()) {
 			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
@@ -110,12 +105,12 @@ public class MDPModelChecker extends ProbModelChecker
 			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
 			out.close();
 		}
-		
+
 		// Find accepting states + compute reachability probabilities
 		BitSet acc;
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
 		} else {
 			mainLog.println("\nFinding accepting MECs...");
 			acc = mcLtl.findAcceptingECStates(product.getProductModel(), product.getAcceptance());
@@ -123,7 +118,8 @@ public class MDPModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability probabilities...");
 		mcProduct = new MDPModelChecker(this);
 		mcProduct.inheritSettings(this);
-		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((MDP)product.getProductModel(), acc, false).soln, product.getProductModel());
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((MDP) product.getProductModel(), acc, false).soln,
+				product.getProductModel());
 
 		// Subtract from 1 if we're model checking a negated formula for regular Pmin
 		if (minMax.isMin()) {
@@ -133,12 +129,12 @@ public class MDPModelChecker extends ProbModelChecker
 
 		// Output vector over product, if required
 		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				probsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+			probsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Mapping probabilities in the original model
 		probs = product.projectToOriginalModel(probsProduct);
 		probsProduct.clear();
@@ -161,19 +157,16 @@ public class MDPModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of MDP and automaton
-		AcceptanceType[] allowedAcceptance = {
-				AcceptanceType.RABIN,
-				AcceptanceType.REACH
-		};
-		product = mcLtl.constructProductMDP(this, (MDP)model, expr, statesOfInterest, allowedAcceptance);
-		
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
+
 		// Adapt reward info to product model
 		productRewards = ((MDPRewards) modelRewards).liftFromModel(product);
-		
+
 		// Output product, if required
 		if (getExportProductTrans()) {
-				mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
-				product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
+			mainLog.println("\nExporting product transition matrix to file \"" + getExportProductTransFilename() + "\"...");
+			product.getProductModel().exportToPrismExplicitTra(getExportProductTransFilename());
 		}
 		if (getExportProductStates()) {
 			mainLog.println("\nExporting product state space to file \"" + getExportProductStatesFilename() + "\"...");
@@ -187,13 +180,13 @@ public class MDPModelChecker extends ProbModelChecker
 			product.getProductModel().exportStates(Prism.EXPORT_PLAIN, newVarList, out);
 			out.close();
 		}
-		
+
 		// Find accepting states + compute reachability rewards
 		BitSet acc;
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			// For a DFA, just collect the accept states
 			mainLog.println("\nSkipping end component detection since DRA is a DFA...");
-			acc = ((AcceptanceReach)product.getAcceptance()).getGoalStates();
+			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
 		} else {
 			// Usually, we have to detect end components in the product
 			mainLog.println("\nFinding accepting end components...");
@@ -202,23 +195,24 @@ public class MDPModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability rewards...");
 		mcProduct = new MDPModelChecker(this);
 		mcProduct.inheritSettings(this);
-		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc, minMax.isMin()).soln, product.getProductModel());
-		
+		rewardsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachRewards(product.getProductModel(), productRewards, acc, minMax.isMin()).soln,
+				product.getProductModel());
+
 		// Output vector over product, if required
 		if (getExportProductVector()) {
-				mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
-				PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
-				rewardsProduct.print(out, false, false, false, false);
-				out.close();
+			mainLog.println("\nExporting product solution vector matrix to file \"" + getExportProductVectorFilename() + "\"...");
+			PrismFileLog out = new PrismFileLog(getExportProductVectorFilename());
+			rewardsProduct.print(out, false, false, false, false);
+			out.close();
 		}
-		
+
 		// Mapping rewards in the original model
 		rewards = product.projectToOriginalModel(rewardsProduct);
 		rewardsProduct.clear();
-		
+
 		return rewards;
 	}
-	
+
 	// Numerical computation functions
 
 	/**
@@ -1259,8 +1253,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values).  
 	 * Also, 'known' values cannot be passed for some solution methods, e.g. policy iteration.  
 	 */
-	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min, double init[], BitSet known)
-			throws PrismException
+	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet inf;
@@ -1271,7 +1264,8 @@ public class MDPModelChecker extends ProbModelChecker
 		MDPSolnMethod mdpSolnMethod = this.mdpSolnMethod;
 
 		// Switch to a supported method, if necessary
-		if (!(mdpSolnMethod == MDPSolnMethod.VALUE_ITERATION || mdpSolnMethod == MDPSolnMethod.GAUSS_SEIDEL || mdpSolnMethod == MDPSolnMethod.POLICY_ITERATION)) {
+		if (!(mdpSolnMethod == MDPSolnMethod.VALUE_ITERATION || mdpSolnMethod == MDPSolnMethod.GAUSS_SEIDEL
+				|| mdpSolnMethod == MDPSolnMethod.POLICY_ITERATION)) {
 			mdpSolnMethod = MDPSolnMethod.GAUSS_SEIDEL;
 			mainLog.printWarning("Switching to MDP solution method \"" + mdpSolnMethod.fullName() + "\"");
 		}
@@ -1282,7 +1276,7 @@ public class MDPModelChecker extends ProbModelChecker
 				throw new PrismException("Policy iteration methods cannot be passed 'known' values for some states");
 			}
 		}
-		
+
 		// Start expected reachability
 		timer = System.currentTimeMillis();
 		mainLog.println("\nStarting expected reachability (" + (min ? "min" : "max") + ")...");
@@ -1324,13 +1318,13 @@ public class MDPModelChecker extends ProbModelChecker
 				strat[i] = target.get(i) ? -2 : -1;
 			}
 		}
-		
+
 		// Precomputation (not optional)
 		timerProb1 = System.currentTimeMillis();
 		inf = prob1(mdp, null, target, !min, strat);
 		inf.flip(0, n);
 		timerProb1 = System.currentTimeMillis() - timerProb1;
-		
+
 		// Print results of precomputation
 		numTarget = target.cardinality();
 		numInf = inf.cardinality();
@@ -1412,8 +1406,8 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known, int strat[])
-			throws PrismException
+	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known,
+			int strat[]) throws PrismException
 	{
 		ModelCheckerResult res;
 		BitSet unknown;
@@ -1635,7 +1629,7 @@ public class MDPModelChecker extends ProbModelChecker
 			for (i = 0; i < n; i++)
 				strat[i] = 0;
 		}
-			
+
 		// Start iterations
 		iters = totalIters = 0;
 		done = false;

@@ -168,7 +168,7 @@ public class ExpressionFunc extends Expression
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Object evaluate(EvaluateContext ec) throws PrismLangException
 	{
@@ -465,9 +465,9 @@ public class ExpressionFunc extends Expression
 
 		return e;
 	}
-	
+
 	// Standard methods
-	
+
 	@Override
 	public String toString()
 	{

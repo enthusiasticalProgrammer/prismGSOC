@@ -40,7 +40,7 @@ public class DeclarationBool extends DeclarationType
 		// (But we re-use the existing "type" field for this purpose)
 		setType(TypeBool.getInstance());
 	}
-	
+
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
@@ -53,12 +53,12 @@ public class DeclarationBool extends DeclarationType
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		return start != null ? start : Expression.False();
 	}*/
 
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */

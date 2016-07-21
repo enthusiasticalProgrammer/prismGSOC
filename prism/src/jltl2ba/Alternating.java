@@ -33,7 +33,8 @@ import java.io.PrintStream;
 import jltl2ba.SimpleLTL;
 import prism.PrismException;
 
-public class Alternating {
+public class Alternating
+{
 	public int astate_count;
 	public int atrans_count;
 	private Vector<SimpleLTL> done;
@@ -41,34 +42,39 @@ public class Alternating {
 	public MyBitSet final_set;
 	public APSet sym_table;
 
-	public static class ATrans {
+	public static class ATrans
+	{
 		public MyBitSet to; // nodes
 		public MyBitSet pos; // syms
 		public MyBitSet neg; // syms
 		public ATrans nxt;
 
-		public ATrans() {
+		public ATrans()
+		{
 			to = new MyBitSet();
 			pos = new MyBitSet();
 			neg = new MyBitSet();
 			nxt = null;
 		}
 
-		public ATrans(MyBitSet _to, MyBitSet _pos, MyBitSet _neg) {
+		public ATrans(MyBitSet _to, MyBitSet _pos, MyBitSet _neg)
+		{
 			to = (MyBitSet) _to.clone();
 			pos = (MyBitSet) _pos.clone();
 			neg = (MyBitSet) _neg.clone();
 			nxt = null;
 		}
 
-		public ATrans clone() {
+		public ATrans clone()
+		{
 			ATrans rv = new ATrans(to, pos, neg);
 			rv.nxt = nxt;
 			return rv;
 		}
 	}
-	
-	public static ATrans do_merge_atrans(ATrans first, ATrans second) {
+
+	public static ATrans do_merge_atrans(ATrans first, ATrans second)
+	{
 		if (first == null || second == null)
 			return null;
 
@@ -84,19 +90,22 @@ public class Alternating {
 		return rv;
 	}
 
-	public static class AProd {
+	public static class AProd
+	{
 		public int astate;
 		public ATrans prod;
 		public ATrans trans;
 		public AProd nxt;
 		public AProd prv;
 
-		public AProd() {
+		public AProd()
+		{
 			;
 		}
 	}
 
-	public Alternating(SimpleLTL formula, APSet apset) throws PrismException {
+	public Alternating(SimpleLTL formula, APSet apset) throws PrismException
+	{
 		astate_count = 0;
 		atrans_count = 0;
 		final_set = new MyBitSet();
@@ -120,7 +129,8 @@ public class Alternating {
 	}
 
 	/* computes the transitions to boolean nodes -> next & init */
-	private ATrans _boolean(SimpleLTL p) {
+	private ATrans _boolean(SimpleLTL p)
+	{
 		ATrans t1, t2, lft, rgt, result = null;
 
 		switch (p.kind) {
@@ -164,12 +174,14 @@ public class Alternating {
 		return result;
 	}
 
-	private int getSymID(String ap) {
+	private int getSymID(String ap)
+	{
 		return sym_table.addAP(ap);
 	}
 
 	/* builds an alternating automaton for p */
-	private ATrans buildAlternating(SimpleLTL p) {
+	private ATrans buildAlternating(SimpleLTL p)
+	{
 		ATrans t1, t2, t = null;
 
 		if (done.contains(p))
@@ -265,15 +277,14 @@ public class Alternating {
 		return t;
 	}
 
-	private ATrans simplifyATrans(ATrans trans) {
+	private ATrans simplifyATrans(ATrans trans)
+	{
 		ATrans t, father = null;
 		ATrans _trans = trans;
 		for (t = _trans; t != null;) {
 			ATrans t1;
 			for (t1 = _trans; t1 != null; t1 = t1.nxt) {
-				if ((t1 != t) && t.to.containsAll(t1.to)
-						&& t.pos.containsAll(t1.pos)
-						&& t.neg.containsAll(t1.neg))
+				if ((t1 != t) && t.to.containsAll(t1.to) && t.pos.containsAll(t1.pos) && t.neg.containsAll(t1.neg))
 					break;
 			}
 			if (t1 != null) {
@@ -295,7 +306,8 @@ public class Alternating {
 	}
 
 	/* simplifies the alternating automaton */
-	private void simplifyAStates() {
+	private void simplifyAStates()
+	{
 		ATrans t;
 		int i;
 		MyBitSet acc = new MyBitSet(); /* no state is accessible initially */
@@ -317,7 +329,8 @@ public class Alternating {
 	}
 
 	/* dumps the alternating automaton */
-	public void print(PrintStream out) {
+	public void print(PrintStream out)
+	{
 		int i;
 		ATrans t;
 

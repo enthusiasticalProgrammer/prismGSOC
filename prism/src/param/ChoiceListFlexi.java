@@ -68,7 +68,7 @@ public class ChoiceListFlexi //implements Choice
 		moduleOrActionIndex = ch.moduleOrActionIndex;
 		updates = new ArrayList<List<Update>>(ch.updates.size());
 		for (List<Update> list : ch.updates) {
-			List<Update> listNew = new ArrayList<Update>(list.size()); 
+			List<Update> listNew = new ArrayList<Update>(list.size());
 			updates.add(listNew);
 			for (Update up : list) {
 				listNew.add(up);
@@ -139,7 +139,7 @@ public class ChoiceListFlexi //implements Choice
 				for (Update u : ch.updates.get(i)) {
 					list.add(u);
 				}
-				add((Expression)Expression.Times(pi, getProbability(j)).simplify(), list);
+				add((Expression) Expression.Times(pi, getProbability(j)).simplify(), list);
 			}
 		}
 		// Modify elements of current choice to get (0,j) elements of product
@@ -148,7 +148,7 @@ public class ChoiceListFlexi //implements Choice
 			for (Update u : ch.updates.get(0)) {
 				updates.get(j).add(u);
 			}
-			probability.set(j, (Expression)Expression.Times(pi, getProbability(j)).simplify());
+			probability.set(j, (Expression) Expression.Times(pi, getProbability(j)).simplify());
 		}
 	}
 
@@ -255,7 +255,7 @@ public class ChoiceListFlexi //implements Choice
 		// Currently nothing to do here:
 		// Checks for bad probabilities/rates done earlier.
 	}
-	
+
 	public void checkForErrors(State currentState, VarList varList) throws PrismException
 	{
 		int i, n;
@@ -265,7 +265,7 @@ public class ChoiceListFlexi //implements Choice
 				up.checkUpdate(currentState, varList);
 		}
 	}
-	
+
 	public String toString()
 	{
 		int i, n;

@@ -24,7 +24,6 @@
 //	
 //==============================================================================
 
-
 package explicit;
 
 import java.util.ArrayList;
@@ -162,7 +161,8 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
 		for (int t : successors.get(s)) {
-			if (!set.get(t)) return false;
+			if (!set.get(t))
+				return false;
 		}
 		return true;
 	}
@@ -171,7 +171,8 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
 		for (int t : successors.get(s)) {
-			if (set.get(t)) return true;
+			if (set.get(t))
+				return true;
 		}
 		return false;
 	}
@@ -203,8 +204,9 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
-		for (Iterator<Integer> it = getSuccessorsIterator(s1); it.hasNext(); ) {
-			if (it.next() == s2) return true;
+		for (Iterator<Integer> it = getSuccessorsIterator(s1); it.hasNext();) {
+			if (it.next() == s2)
+				return true;
 		}
 		return false;
 	}
@@ -224,7 +226,7 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	@Override
 	protected void exportTransitionsToDotFile(int s, PrismLog out)
 	{
-		for (Iterator<Integer> it = getSuccessorsIterator(s); it.hasNext(); ) {
+		for (Iterator<Integer> it = getSuccessorsIterator(s); it.hasNext();) {
 			Integer successor = it.next();
 			out.println(s + " -> " + successor + ";");
 		}

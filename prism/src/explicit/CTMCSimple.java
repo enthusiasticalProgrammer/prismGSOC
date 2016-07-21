@@ -72,7 +72,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 	{
 		super(ctmc);
 	}
-	
+
 	/**
 	 * Construct a CTMC from an existing one and a state index permutation,
 	 * i.e. in which state index i becomes index permut[i].
@@ -85,7 +85,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 	}
 
 	// Accessors (for ModelSimple, overrides DTMCSimple)
-	
+
 	@Override
 	public ModelType getModelType()
 	{
@@ -93,13 +93,13 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 	}
 
 	// Accessors (for CTMC)
-	
+
 	@Override
 	public double getExitRate(int i)
 	{
 		return trans.get(i).sum();
 	}
-	
+
 	@Override
 	public double getMaxExitRate()
 	{
@@ -112,7 +112,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		}
 		return max;
 	}
-	
+
 	@Override
 	public double getMaxExitRate(BitSet subset)
 	{
@@ -125,19 +125,19 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		}
 		return max;
 	}
-	
+
 	@Override
 	public double getDefaultUniformisationRate()
 	{
-		return 1.02 * getMaxExitRate(); 
+		return 1.02 * getMaxExitRate();
 	}
-	
+
 	@Override
 	public double getDefaultUniformisationRate(BitSet nonAbs)
 	{
-		return 1.02 * getMaxExitRate(nonAbs); 
+		return 1.02 * getMaxExitRate(nonAbs);
 	}
-	
+
 	@Override
 	public DTMC buildImplicitEmbeddedDTMC()
 	{
@@ -148,7 +148,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		}
 		return dtmc;
 	}
-	
+
 	@Override
 	public DTMC getImplicitEmbeddedDTMC()
 	{
@@ -158,7 +158,6 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 		return cachedEmbeddedDTMC;
 	}
 
-	
 	@Override
 	public DTMCSimple buildEmbeddedDTMC()
 	{
@@ -200,7 +199,7 @@ public class CTMCSimple extends DTMCSimple implements CTMC
 	{
 		return new DTMCUniformisedSimple(this, q);
 	}
-	
+
 	@Override
 	public DTMCSimple buildUniformisedDTMC(double q)
 	{

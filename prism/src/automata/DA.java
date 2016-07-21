@@ -92,7 +92,8 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 		this.acceptance = acceptance;
 	}
 
-	public Acceptance getAcceptance() {
+	public Acceptance getAcceptance()
+	{
 		return acceptance;
 	}
 
@@ -129,7 +130,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Add an edge
 	 */
@@ -223,12 +224,13 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 		}
 		out.println("}");
 	}
-	
+
 	/**
 	 * Print the DRA in ltl2dstar v2 format to the output stream.
 	 * @param out the output stream 
 	 */
-	public static void printLtl2dstar(DA<BitSet, AcceptanceRabin> dra, PrintStream out) throws PrismException {
+	public static void printLtl2dstar(DA<BitSet, AcceptanceRabin> dra, PrintStream out) throws PrismException
+	{
 		AcceptanceRabin acceptance = dra.getAcceptance();
 
 		if (dra.getStartState() < 0) {
@@ -256,13 +258,13 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			out.print("Acc-Sig:");
 			for (int pair = 0; pair < acceptance.size(); pair++) {
 				if (acceptance.get(pair).getL().get(i_state)) {
-					out.print(" -"+pair);
+					out.print(" -" + pair);
 				} else if (acceptance.get(pair).getK().get(i_state)) {
-					out.print(" +"+pair);
+					out.print(" +" + pair);
 				}
 			}
 			out.println();
-			
+
 			APElementIterator it = new APElementIterator(dra.apList.size());
 			while (it.hasNext()) {
 				APElement edge = it.next();
@@ -275,31 +277,32 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 * Print the DA in HOA format to the output stream.
 	 * @param out the output stream
 	 */
-	public void printHOA(PrintStream out) throws PrismException {
+	public void printHOA(PrintStream out) throws PrismException
+	{
 		out.println("HOA: v1");
-		out.println("States: "+size());
-		
+		out.println("States: " + size());
+
 		// AP
-		out.print("AP: "+apList.size());
+		out.print("AP: " + apList.size());
 		for (String ap : apList) {
 			// TODO(JK): Proper quoting
-			out.print(" \""+ap+"\"");
+			out.print(" \"" + ap + "\"");
 		}
 		out.println();
 
-		out.println("Start: "+start);
+		out.println("Start: " + start);
 		acceptance.outputHOAHeader(out);
 		out.println("properties: trans-labels explicit-labels state-acc no-univ-branch deterministic");
 		out.println("--BODY--");
 		for (int i = 0; i < size(); i++) {
-			out.print("State: "+i+" ");  // id
+			out.print("State: " + i + " "); // id
 			out.println(acceptance.getSignatureForStateHOA(i));
 
 			for (Edge edge : edges.get(i)) {
 				Symbol label = edge.label;
 				if (!(label instanceof BitSet))
-					throw new PrismNotSupportedException("Can not print automaton with "+label.getClass()+" labels");
-				String labelString = "["+APElement.toStringHOA((BitSet)label, apList.size())+"]";
+					throw new PrismNotSupportedException("Can not print automaton with " + label.getClass() + " labels");
+				String labelString = "[" + APElement.toStringHOA((BitSet) label, apList.size()) + "]";
 				out.print(labelString);
 				out.print(" ");
 				out.println(edge.dest);
@@ -372,7 +375,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 
 	public String getAutomataType()
 	{
-		return "D"+acceptance.getType().getNameAbbreviated()+"A";
+		return "D" + acceptance.getType().getNameAbbreviated() + "A";
 	}
 
 	/**
@@ -401,26 +404,28 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 * If there is an error, throws a {@code PrismException} detailing the problem.
 	 * @param expectedNumberOfAPs the expected number of atomic propositions
 	 */
-	public void checkForCanonicalAPs(int expectedNumberOfAPs) throws PrismException {
+	public void checkForCanonicalAPs(int expectedNumberOfAPs) throws PrismException
+	{
 		BitSet seen = new BitSet();
 		for (String ap : apList) {
-			if (!ap.substring(0,1).equals("L")) {
-				throw new PrismException("In deterministic automaton, unexpected atomic proposition "+ap+", expected L0, L1, ...");
+			if (!ap.substring(0, 1).equals("L")) {
+				throw new PrismException("In deterministic automaton, unexpected atomic proposition " + ap + ", expected L0, L1, ...");
 			}
 			try {
 				int index = Integer.parseInt(ap.substring(1));
 				if (seen.get(index)) {
-					throw new PrismException("In deterministic automaton, duplicate atomic proposition "+ap);
+					throw new PrismException("In deterministic automaton, duplicate atomic proposition " + ap);
 				}
 				if (index < 0) {
-					throw new PrismException("In deterministic automaton, unexpected atomic proposition "+ap+", expected L0, L1, ...");
+					throw new PrismException("In deterministic automaton, unexpected atomic proposition " + ap + ", expected L0, L1, ...");
 				}
 				if (index >= expectedNumberOfAPs) {
-					throw new PrismException("In deterministic automaton, unexpected atomic proposition "+ap+", expected highest index to be "+(expectedNumberOfAPs-1));
+					throw new PrismException(
+							"In deterministic automaton, unexpected atomic proposition " + ap + ", expected highest index to be " + (expectedNumberOfAPs - 1));
 				}
 				seen.set(index);
 			} catch (NumberFormatException e) {
-				throw new PrismException("In deterministic automaton, unexpected atomic proposition "+ap+", expected L0, L1, ...");
+				throw new PrismException("In deterministic automaton, unexpected atomic proposition " + ap + ", expected L0, L1, ...");
 			}
 		}
 		// We are fine with an empty apList or an apList that lacks some of the expected Li.

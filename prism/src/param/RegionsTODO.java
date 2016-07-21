@@ -33,22 +33,27 @@ import java.util.PriorityQueue;
 /**
  * @author Ernst Moritz Hahn <emhahn@cs.ox.ac.uk> (University of Oxford)
  */
-final class RegionsTODO {
-	class RegionsByVolumeComparator implements Comparator<Region> {
+final class RegionsTODO
+{
+	class RegionsByVolumeComparator implements Comparator<Region>
+	{
 
 		@Override
-		public int compare(Region reg1, Region reg2) {
+		public int compare(Region reg1, Region reg2)
+		{
 			return reg1.volume().compareTo(reg2.volume()) * -1;
 		}
 	}
 
 	private PriorityQueue<Region> regions;
 
-	public RegionsTODO() {
+	public RegionsTODO()
+	{
 		regions = new PriorityQueue<Region>(11, new RegionsByVolumeComparator());
 	}
-	
-	int size() {
+
+	int size()
+	{
 		return regions.size();
 	}
 
@@ -61,7 +66,7 @@ final class RegionsTODO {
 	{
 		regions.add(e);
 	}
-	
+
 	void addAll(List<Region> newRegions)
 	{
 		regions.addAll(newRegions);

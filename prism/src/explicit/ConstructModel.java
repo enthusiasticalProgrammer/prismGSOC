@@ -66,7 +66,7 @@ public class ConstructModel extends PrismComponent
 	/** Should actions be attached to distributions (and used to distinguish them)? */
 	protected boolean distinguishActions = true;
 	/** Should labels be processed and attached to the model? */
-	protected boolean attachLabels = true; 
+	protected boolean attachLabels = true;
 
 	// Details of built model:
 
@@ -168,7 +168,7 @@ public class ConstructModel extends PrismComponent
 
 		// Get model info
 		modelType = modelGen.getModelType();
-		
+
 		// Display a warning if there are unbounded vars
 		VarList varList = modelGen.createVarList();
 		if (modelGen.containsUnboundedVariables())
@@ -359,14 +359,14 @@ public class ConstructModel extends PrismComponent
 
 		if (!justReach && attachLabels)
 			attachLabels(modelGen, model);
-		
+
 		return model;
 	}
 
 	private void attachLabels(ModelGenerator modelGen, ModelExplicit model) throws PrismException
 	{
 		// Get state info
-		List <State> statesList = model.getStatesList();
+		List<State> statesList = model.getStatesList();
 		int numStates = statesList.size();
 		// Create storage for labels
 		int numLabels = modelGen.getNumLabels();

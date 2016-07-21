@@ -49,7 +49,7 @@ import prism.PrismUtils;
 public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 {
 	// Accessors (for Model)
-	
+
 	@Override
 	public ModelType getModelType()
 	{
@@ -66,7 +66,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 		sorted = new TreeMap<Integer, Pair<Double, Object>>();
 		for (i = 0; i < numStates; i++) {
 			// Extract transitions and sort by destination state index (to match PRISM-exported files)
-			Iterator<Map.Entry<Integer,Pair<Double, Object>>> iter = getTransitionsAndActionsIterator(i);
+			Iterator<Map.Entry<Integer, Pair<Double, Object>>> iter = getTransitionsAndActionsIterator(i);
 			while (iter.hasNext()) {
 				Map.Entry<Integer, Pair<Double, Object>> e = iter.next();
 				sorted.put(e.getKey(), e.getValue());
@@ -75,7 +75,7 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 			for (Map.Entry<Integer, Pair<Double, Object>> e : sorted.entrySet()) {
 				// Note use of PrismUtils.formatDouble to match PRISM-exported files
 				out.print(i + " " + e.getKey() + " " + PrismUtils.formatDouble(e.getValue().first));
-				Object action = e.getValue().second; 
+				Object action = e.getValue().second;
 				if (action != null && !"".equals(action))
 					out.print(" " + action);
 				out.print("\n");
@@ -135,9 +135,9 @@ public abstract class DTMCExplicit extends ModelExplicit implements DTMC
 			throw new PrismException("Could not export " + getModelType() + " to file \"" + filename + "\"" + e);
 		}
 	}
-	
+
 	// Accessors (for DTMC)
-	
+
 	@Override
 	public Iterator<Entry<Integer, Pair<Double, Object>>> getTransitionsAndActionsIterator(int s)
 	{

@@ -46,16 +46,15 @@ import jdd.JDDVars;
  * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceGenRabin
-       extends ArrayList<AcceptanceGenRabin.GenRabinPair>
-       implements AcceptanceOmega
+public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPair> implements AcceptanceOmega
 {
 
 	/**
 	 * A pair in a Generalized Rabin acceptance condition, i.e., with
 	 *  (F G !"L") & (G F "K_1") & ... & (G F "K_n").
 	 **/
-	public static class GenRabinPair {
+	public static class GenRabinPair
+	{
 		/** State set L (should be visited only finitely often) */
 		private BitSet L;
 
@@ -63,7 +62,8 @@ public class AcceptanceGenRabin
 		private ArrayList<BitSet> K_list;
 
 		/** Constructor with L and K_j state sets */
-		public GenRabinPair(BitSet L, ArrayList<BitSet> K_list) {
+		public GenRabinPair(BitSet L, ArrayList<BitSet> K_list)
+		{
 			this.L = L;
 			this.K_list = K_list;
 		}
@@ -79,7 +79,7 @@ public class AcceptanceGenRabin
 		{
 			return K_list.size();
 		}
-		
+
 		/** Get the state set K_j */
 		public BitSet getK(int j)
 		{
@@ -133,7 +133,7 @@ public class AcceptanceGenRabin
 			ArrayList<BitSet> newK_list = new ArrayList<BitSet>();
 			for (BitSet K_j : K_list)
 				newK_list.add((BitSet) K_j.clone());
-			return new GenRabinPair((BitSet)L.clone(), newK_list);
+			return new GenRabinPair((BitSet) L.clone(), newK_list);
 		}
 
 		public AcceptanceGeneric toAcceptanceGeneric()
@@ -153,10 +153,11 @@ public class AcceptanceGenRabin
 			}
 			return new AcceptanceGeneric(AcceptanceGeneric.ElementType.AND, genericL, genericKs);
 		}
-	
+
 		/** Returns a textual representation of this Generalized Rabin pair. */
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			String s = "(" + L;
 			for (BitSet K_j : K_list)
 				s += "," + K_j;
@@ -208,7 +209,8 @@ public class AcceptanceGenRabin
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter) {
+	public void lift(LiftBitSet lifter)
+	{
 		for (GenRabinPair pair : this) {
 			pair.L = lifter.lift(pair.L);
 			int n = pair.K_list.size();
@@ -267,9 +269,9 @@ public class AcceptanceGenRabin
 	{
 		String result = "";
 
-		for (int pairIndex=0; pairIndex<size(); pairIndex++) {
+		for (int pairIndex = 0; pairIndex < size(); pairIndex++) {
 			GenRabinPair pair = get(pairIndex);
-			result += pair.getSignatureForState(stateIndex,  pairIndex);
+			result += pair.getSignatureForState(stateIndex, pairIndex);
 		}
 
 		return result;
@@ -286,7 +288,7 @@ public class AcceptanceGenRabin
 				result += (result.isEmpty() ? "" : " ") + set_index;
 			}
 			set_index++;
-			for (int i=0; i < pair.getNumK(); i++) {
+			for (int i = 0; i < pair.getNumK(); i++) {
 				if (pair.getK(i).get(stateIndex)) {
 					result += (result.isEmpty() ? "" : " ") + set_index;
 				}
@@ -295,7 +297,7 @@ public class AcceptanceGenRabin
 		}
 
 		if (!result.isEmpty())
-			result = "{"+result+"}";
+			result = "{" + result + "}";
 
 		return result;
 	}
@@ -325,13 +327,15 @@ public class AcceptanceGenRabin
 
 	@Override
 	@Deprecated
-	public String getTypeAbbreviated() {
+	public String getTypeAbbreviated()
+	{
 		return getType().getNameAbbreviated();
 	}
 
 	@Override
 	@Deprecated
-	public String getTypeName() {
+	public String getTypeName()
+	{
 		return getType().getName();
 	}
 
@@ -339,10 +343,10 @@ public class AcceptanceGenRabin
 	public void outputHOAHeader(PrintStream out)
 	{
 		int sets = 0;
-		out.print("acc-name: generalized-Rabin "+size());
+		out.print("acc-name: generalized-Rabin " + size());
 		for (GenRabinPair pair : this) {
-			sets++;  // the Fin
-			out.print(" "+pair.getNumK());
+			sets++; // the Fin
+			out.print(" " + pair.getNumK());
 			sets += pair.getNumK();
 		}
 		out.println();
@@ -354,11 +358,12 @@ public class AcceptanceGenRabin
 
 		int set_index = 0;
 		for (GenRabinPair pair : this) {
-			if (set_index > 0) out.print(" | ");
+			if (set_index > 0)
+				out.print(" | ");
 			out.print("( Fin(" + set_index + ")");
 			set_index++;
 			for (int i = 0; i < pair.getNumK(); i++) {
-				out.print(" & Inf(" + set_index +")");
+				out.print(" & Inf(" + set_index + ")");
 				set_index++;
 			}
 			out.print(")");

@@ -51,7 +51,7 @@ public class AcceptanceBuchiDD implements AcceptanceOmegaDD
 	{
 		this.acceptingStates = acceptingStates;
 	}
-	
+
 	/**
 	 * Constructor, from a BitSet-based AcceptanceBuchi.
 	 *

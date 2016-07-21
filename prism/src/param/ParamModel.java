@@ -115,7 +115,7 @@ final class ParamModel extends ModelExplicit
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
@@ -212,7 +212,7 @@ final class ParamModel extends ModelExplicit
 	{
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void exportToPrismLanguage(String filename) throws PrismException
 	{
@@ -235,7 +235,7 @@ final class ParamModel extends ModelExplicit
 	}
 
 	// Other
-	
+
 	public int getNumChoices(int state)
 	{
 		return stateEnd(state) - stateBegin(state);

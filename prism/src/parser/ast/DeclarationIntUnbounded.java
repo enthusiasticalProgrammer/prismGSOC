@@ -47,20 +47,20 @@ public class DeclarationIntUnbounded extends DeclarationType
 	{
 		return Expression.Int(0);
 	}
-	
+
 	/* TODO:
 	@Override
 	public Expression getStart(ModulesFile parent)
 	{
 		if (parent != null && parent.getInitialStates() != null)
 			return null;
-
+	
 		return start != null ? start : low;
 	}
 	*/
-	
+
 	// Methods required for ASTElement:
-	
+
 	/**
 	 * Visitor method.
 	 */

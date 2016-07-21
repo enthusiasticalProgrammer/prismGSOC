@@ -81,7 +81,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 	{
 		throw new PrismNotSupportedException("Not supported");
 	}
-	
+
 	// Accessors (for Model)
 
 	public ModelType getModelType()
@@ -123,12 +123,12 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 	{
 		return ctmc.getStatesList();
 	}
-	
+
 	public Values getConstantValues()
 	{
 		return ctmc.getConstantValues();
 	}
-	
+
 	public int getNumTransitions()
 	{
 		return ctmc.getNumTransitions() + numExtraTransitions;
@@ -139,7 +139,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		// TODO
 		throw new Error("Not yet supported");
 	}
-	
+
 	public boolean isSuccessor(int s1, int s2)
 	{
 		// TODO
@@ -205,7 +205,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		throw new RuntimeException("Not implemented yet");
 	}
 
-	public Iterator<Entry<Integer,Double>> getTransitionsIterator(int s)
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s)
 	{
 		// TODO
 		throw new RuntimeException("Not implemented yet");
@@ -243,7 +243,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		}
 		// Diagonal entry
 		if (sum < q) {
-			d += (1 - sum/q) * vect[s];
+			d += (1 - sum / q) * vect[s];
 		}
 
 		return d;
@@ -285,7 +285,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		int i, j;
 		double prob, sum;
 		Distribution distr;
-		
+
 		// Initialise result to 0
 		for (j = 0; j < numStates; j++) {
 			result[j] = 0;

@@ -108,7 +108,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		private int references;
 		/** true if and only if state probability above relevance threshold */
 		private boolean alive;
-		
+
 		/**
 		 * Constructs a new state property object.
 		 */
@@ -123,7 +123,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			references = 0;
 			alive = true;
 		}
-		
+
 		/**
 		 * Set current state probability.
 		 * 
@@ -269,7 +269,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 				return succRates.length;
 			}
 		}
-		
+
 		/**
 		 * Gets successor rates.
 		 * 
@@ -392,7 +392,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			return sumRates;
 		}
 	}
-	
+
 	/**
 	 * Enum to store type of analysis to perform.
 	 */
@@ -417,7 +417,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	private int numIntervals;
 	/** iterations after which switch to sparse matrix if no new/dropped states */
 	private int arrayThreshold;
-	
+
 	/** reward structure to use for analysis */
 	private RewardStruct rewStruct = null;
 	/** result value of analysis */
@@ -425,7 +425,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	/** model constants */
 	private Values constantValues = null;
 	/** maps from state (assignment of variable values) to property object */
-	private LinkedHashMap<State,StateProp> states;
+	private LinkedHashMap<State, StateProp> states;
 	/** states for which successor rates are to be computed */
 	private ArrayList<State> addDistr;
 	/** states which are to be deleted */
@@ -459,14 +459,14 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	private double totalProbLoss;
 	/** probability mass intentionally set to zero */
 	private double totalProbSetZero;
-	
+
 	/**
 	 * Constructor.
 	 */
 	public FastAdaptiveUniformisation(PrismComponent parent, ModelGenerator modelGen) throws PrismException
 	{
 		super(parent);
-		
+
 		this.modelGen = modelGen;
 		maxNumStates = 0;
 
@@ -521,7 +521,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	{
 		this.target = target;
 	}
-	
+
 	/**
 	 * Returns maximal number of states used during analysis.
 	 * 
@@ -559,7 +559,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	{
 		this.sink = sink;
 		if (states != null) {
-			for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+			for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 				State state = statePair.getKey();
 				StateProp prop = statePair.getValue();
 				modelGen.exploreState(state);
@@ -604,8 +604,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	 * @param initDistFile File containing initial distribution
 	 * @param currentModel 
 	 */
-	public StateValues doTransient(double t, File initDistFile, Model model)
-			throws PrismException
+	public StateValues doTransient(double t, File initDistFile, Model model) throws PrismException
 	{
 		StateValues initDist = null;
 		if (initDistFile != null) {
@@ -626,7 +625,8 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	 * @return number of states in file
 	 * @throws PrismException thrown in case of I/O errors
 	 */
-	private int countNumStates(File file) throws PrismException {
+	private int countNumStates(File file) throws PrismException
+	{
 		BufferedReader in;
 		String s;
 		int lineNum = 0, count = 0;
@@ -668,9 +668,9 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	{
 		if (!modelGen.hasSingleInitialState())
 			throw new PrismException("Fast adaptive uniformisation does not yet support models with multiple initial states");
-		
+
 		mainLog.println("\nComputing probabilities (fast adaptive uniformisation)...");
-		
+
 		if (initDist == null) {
 			initDist = new StateValues();
 			initDist.type = TypeDouble.getInstance();
@@ -680,11 +680,11 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			initDist.valuesD[0] = 1.0;
 			initDist.statesList.add(modelGen.getInitialState());
 		}
-		
+
 		/* prepare fast adaptive uniformisation */
 		addDistr = new ArrayList<State>();
 		deleteStates = new ArrayList<State>();
-		states = new LinkedHashMap<State,StateProp>(initSize);
+		states = new LinkedHashMap<State, StateProp>(initSize);
 		value = 0.0;
 		initStates = new HashSet<State>();
 		ListIterator<State> it = initDist.statesList.listIterator();
@@ -699,7 +699,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			State initState = it.next();
 			computeStateRatesAndRewards(initState);
 			states.get(initState).setProb(values[stateNr]);
-			maxRate = Math.max(maxRate, states.get(initState).sumRates() * 1.02);			
+			maxRate = Math.max(maxRate, states.get(initState).sumRates() * 1.02);
 		}
 
 		/* run fast adaptive uniformisation */
@@ -709,7 +709,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		ArrayList<State> statesList = new ArrayList<State>(states.size());
 		double[] probsArr = new double[states.size()];
 		int probsArrEntry = 0;
-		for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+		for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 			statesList.add(statePair.getKey());
 			probsArr[probsArrEntry] = statePair.getValue().getProb();
 			probsArrEntry++;
@@ -718,11 +718,11 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		probs.type = TypeDouble.getInstance();
 		probs.size = probsArr.length;
 		probs.valuesD = probsArr;
-		probs.statesList = statesList;		
+		probs.statesList = statesList;
 
 		mainLog.println("\nTotal probability lost is : " + getTotalDiscreteLoss());
 		mainLog.println("Maximal number of states stored during analysis : " + getMaxNumStates());
-		
+
 		return probs;
 	}
 
@@ -739,7 +739,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		if (addDistr == null) {
 			addDistr = new ArrayList<State>();
 			deleteStates = new ArrayList<State>();
-			states = new LinkedHashMap<State,StateProp>(initSize);
+			states = new LinkedHashMap<State, StateProp>(initSize);
 			value = 0.0;
 			prepareInitialDistribution();
 		}
@@ -773,7 +773,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 				value += prop.getProb() * prop.getReward();
 			}
 		} else {
-			for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+			for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 				State state = statePair.getKey();
 				StateProp prop = statePair.getValue();
 				modelGen.exploreState(state);
@@ -805,13 +805,13 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		itersUnchanged = 0;
 		keepSumProb = false;
 		while (birthProbSum < (1 - epsilon)) {
-			if (birthProbSum >= epsilon/2) {
+			if (birthProbSum >= epsilon / 2) {
 				keepSumProb = true;
 			}
 			if ((itersUnchanged == arrayThreshold)) {
 				iters = arrayIterate(iters);
 			} else {
-			    long birthProcTimer = System.currentTimeMillis();
+				long birthProcTimer = System.currentTimeMillis();
 				double prob = birthProc.calculateNextProb(maxRate);
 				birthProcTimer = System.currentTimeMillis() - birthProcTimer;
 				birthProbSum += prob;
@@ -819,7 +819,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 				for (StateProp prop : states.values()) {
 					prop.addToSum(prob);
 				}
-				
+
 				mvMult(maxRate);
 				updateStates();
 				iters++;
@@ -855,7 +855,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			numTransitions += prop.getNumSuccs() + 1;
 		}
 		int stateNr = 0;
-		HashMap<StateProp,Integer> stateToNumber = new HashMap<StateProp,Integer>(numStates);
+		HashMap<StateProp, Integer> stateToNumber = new HashMap<StateProp, Integer>(numStates);
 		StateProp[] numberToState = new StateProp[numStates];
 		for (StateProp prop : states.values()) {
 			if (prop.isAlive()) {
@@ -950,13 +950,13 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 				value += probs[stateNr] * mixed * rewards[stateNr];
 				sum[stateNr] += prob * probs[stateNr];
 				nextProbs[stateNr] = 0.0;
-				for (int succNr = rows[stateNr]; succNr < rows[stateNr+1]; succNr++) {
+				for (int succNr = rows[stateNr]; succNr < rows[stateNr + 1]; succNr++) {
 					nextProbs[stateNr] += inProbs[succNr] * probs[cols[succNr]];
 				}
 				if ((stateNr < numAlive) != (nextProbs[stateNr] > delta)) {
 					canArray = false;
 				} else if (stateNr >= numAlive) {
-				    nextProbs[stateNr] = 0.0;
+					nextProbs[stateNr] = 0.0;
 				}
 			}
 			double[] swap = probs;
@@ -965,7 +965,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 
 			iters++;
 		}
-		
+
 		/* map back, update states and return current iteration */
 		for (stateNr = 0; stateNr < numberToState.length; stateNr++) {
 			StateProp prop = numberToState[stateNr];
@@ -1020,7 +1020,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	{
 		maxRate = 0.0;
 		addDistr.clear();
-		for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+		for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 			State state = statePair.getKey();
 			StateProp prop = statePair.getValue();
 			if (prop.getProb() > delta) {
@@ -1053,7 +1053,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	private void removeDeletedStates()
 	{
 		boolean unchanged = true;
-		for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+		for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 			State state = statePair.getKey();
 			StateProp prop = statePair.getValue();
 			if (prop.canRemove()) {
@@ -1073,15 +1073,15 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		}
 		deleteStates.clear();
 	}
-    
+
 	/**
 	 * Prepares initial distribution for the case of a single initial state.
 	 * 
 	 * @throws PrismException
 	 */
-    private void prepareInitialDistribution() throws PrismException
-    {
-    	initStates = new HashSet<State>();
+	private void prepareInitialDistribution() throws PrismException
+	{
+		initStates = new HashSet<State>();
 		State initState = modelGen.getInitialState();
 		initStates.add(initState);
 		addToModel(initState);
@@ -1090,11 +1090,11 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 		maxRate = states.get(initState).sumRates() * 1.02;
 	}
 
-    /**
-     * Computes total sum of lost probabilities.
-     * 
-     * @return total probability still in model
-     */
+	/**
+	 * Computes total sum of lost probabilities.
+	 * 
+	 * @return total probability still in model
+	 */
 	public void computeTotalDiscreteLoss()
 	{
 		double totalProb = 0;
@@ -1102,7 +1102,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			totalProb += prop.getSum();
 		}
 		totalProb += totalProbSetZero;
-		
+
 		totalProbLoss = 1.0 - totalProb;
 	}
 
@@ -1120,8 +1120,9 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	 * Sets the probability of sink states to zero.
 	 * @throws PrismException 
 	 */
-	public void clearSinkStates() throws PrismException {
-		for (Map.Entry<State,StateProp> statePair : states.entrySet()) {
+	public void clearSinkStates() throws PrismException
+	{
+		for (Map.Entry<State, StateProp> statePair : states.entrySet()) {
 			State state = statePair.getKey();
 			StateProp prop = statePair.getValue();
 			modelGen.exploreState(state);
@@ -1135,7 +1136,7 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds @a state to model.
 	 * Computes reward for this states, creates entry in map of states,
@@ -1217,9 +1218,9 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 			if (null != succStates) {
 				double sumRates = 0.0;
 				for (int succ = 0; succ < succStates.length; succ++) {
-				    double rate = succRates[succ];
-				    sumRates += rate;
-				    succStates[succ].addToNextProb((rate / maxRate) * stateProb);
+					double rate = succRates[succ];
+					sumRates += rate;
+					succStates[succ].addToNextProb((rate / maxRate) * stateProb);
 				}
 				prop.addToNextProb(((maxRate - sumRates) / maxRate) * prop.getProb());
 			}
@@ -1236,10 +1237,9 @@ public final class FastAdaptiveUniformisation extends PrismComponent
 	 */
 	private boolean isRewardAnalysis()
 	{
-		return (analysisType == AnalysisType.REW_INST)
-			|| (analysisType == AnalysisType.REW_CUMUL);
+		return (analysisType == AnalysisType.REW_INST) || (analysisType == AnalysisType.REW_CUMUL);
 	}
-	
+
 	/**
 	 * Computes the reward for a given state.
 	 * In case a cumulative reward analysis is to be performed, transition

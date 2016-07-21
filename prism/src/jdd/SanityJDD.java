@@ -140,7 +140,7 @@ public class SanityJDD
 				JDD.Deref(combined);
 		}
 	}
-	
+
 	/**
 	 * Perform sanity check:
 	 * Ensure that node is a state set over the given state variables.

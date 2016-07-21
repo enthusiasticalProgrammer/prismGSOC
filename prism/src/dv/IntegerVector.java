@@ -39,17 +39,15 @@ public class IntegerVector
 	// Load JNI stuff from shared library
 	//------------------------------------------------------------------------------
 
-	static
-	{
+	static {
 		try {
 			System.loadLibrary("dv");
-		}
-		catch (UnsatisfiedLinkError e) {
+		} catch (UnsatisfiedLinkError e) {
 			System.out.println(e);
 			System.exit(1);
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------
 	// Instance variables/methods
 	//------------------------------------------------------------------------------
@@ -62,9 +60,9 @@ public class IntegerVector
 	 * Size of vector
 	 */
 	private int n;
-	
+
 	// Constructors
-	
+
 	/**
 	 * Create a new IntegerVector of size {@code size} with all entries set to 0.
 	 * @throws PrismException if there is insufficient memory to create the array.
@@ -72,12 +70,13 @@ public class IntegerVector
 	public IntegerVector(int size) throws PrismException
 	{
 		v = IV_CreateZeroVector(size);
-		if (v == 0) throw new PrismException("Out of memory");
+		if (v == 0)
+			throw new PrismException("Out of memory");
 		n = size;
 	}
-	
+
 	private native long IV_CreateZeroVector(int n);
-	
+
 	/**
 	 * Create a new IntegerVector from a pointer {@code vect} to an existing native integer array of size {@code size}.
 	 */
@@ -86,20 +85,20 @@ public class IntegerVector
 		v = vector;
 		n = size;
 	}
-	
+
 	/**
 	 * Create a new IntegerVector from an existing MTBDD representation of an array.
 	 */
 	public IntegerVector(JDDNode dd, JDDVars vars, ODDNode odd)
 	{
 		v = IV_ConvertMTBDD(dd.ptr(), vars.array(), vars.n(), odd.ptr());
-		n = (int)(odd.getEOff() + odd.getTOff());
+		n = (int) (odd.getEOff() + odd.getTOff());
 	}
-	
+
 	private native long IV_ConvertMTBDD(long dd, long vars, int num_vars, long odd);
-	
+
 	// Accessors
-	
+
 	/**
 	 * Get the pointer to the native vector (C/C++ pointer cast to a long).
 	 */
@@ -125,9 +124,9 @@ public class IntegerVector
 	}
 
 	private native int IV_GetElement(long v, int n, int i);
-	
+
 	// Mutators
-	
+
 	/**
 	 * Set element {@code i} of the vector to value {@code j}.
 	 */
@@ -137,7 +136,7 @@ public class IntegerVector
 	}
 
 	private native void IV_SetElement(long v, int n, int i, int j);
-	
+
 	/**
 	 * Set all elements of the vector to the same value {@code j}.
 	 */
@@ -147,24 +146,24 @@ public class IntegerVector
 	}
 
 	private native void IV_SetAllElements(long v, int n, int j);
-	
+
 	/**
 	 * Clear storage of the vector.
 	 */
-	public void clear() 
+	public void clear()
 	{
 		IV_Clear(v);
 	}
 
 	private native void IV_Clear(long v);
-	
+
 	/**
 	 * Print the (all elements, including non-zeros) to a log.
 	 */
 	public void print(PrismLog log)
 	{
 		int i, j;
-		
+
 		for (i = 0; i < n; i++) {
 			j = IV_GetElement(v, n, i);
 			log.print(j + " ");

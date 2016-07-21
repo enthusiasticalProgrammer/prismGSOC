@@ -44,7 +44,7 @@ public class ParserUtils
 		splitOnBinaryOp(expr, ExpressionBinaryOp.AND, list);
 		return list;
 	}
-	
+
 	/**
 	 * Split a disjunction into a list of its component expressions, removing any parentheses.
 	 * Note: this is purely syntactic, e.g. both "true" and "false" just result in a singleton list.  
@@ -56,7 +56,7 @@ public class ParserUtils
 		splitOnBinaryOp(expr, ExpressionBinaryOp.OR, list);
 		return list;
 	}
-	
+
 	/**
 	 * Split an expression into a list of its component expressions, based on a binary operator.
 	 * Also remove any parentheses.
@@ -68,21 +68,21 @@ public class ParserUtils
 	{
 		// Recursive case 1: brackets
 		if (Expression.isParenth(expr)) {
-			splitOnBinaryOp(((ExpressionUnaryOp)expr).getOperand(), op, list);				
+			splitOnBinaryOp(((ExpressionUnaryOp) expr).getOperand(), op, list);
 			return;
 		}
 		// Recursive case 2: binary operator
 		if (expr instanceof ExpressionBinaryOp) {
-			if (((ExpressionBinaryOp)expr).getOperator() == op) {
-				splitOnBinaryOp(((ExpressionBinaryOp)expr).getOperand1(), op, list);				
-				splitOnBinaryOp(((ExpressionBinaryOp)expr).getOperand2(), op, list);				
+			if (((ExpressionBinaryOp) expr).getOperator() == op) {
+				splitOnBinaryOp(((ExpressionBinaryOp) expr).getOperand1(), op, list);
+				splitOnBinaryOp(((ExpressionBinaryOp) expr).getOperand2(), op, list);
 				return;
 			}
 		}
 		// Base case: anything else
 		list.add(expr);
 	}
-	
+
 	/**
 	 * Find the minimum value of an integer valued-expression
 	 * with respect to a variable list and some values for constants.
@@ -92,15 +92,15 @@ public class ParserUtils
 		List<String> vars;
 		List<Values> allValues;
 		int i, min;
-		
+
 		// For constant expressions, this is easy
 		if (expr.isConstant())
 			return expr.evaluateInt(constantValues);
-		
+
 		// Get all variables appearing in the expression and all values of them
 		vars = expr.getAllVars();
 		allValues = varList.getAllValues(vars);
-		
+
 		// Compute min over all values
 		min = Integer.MAX_VALUE;
 		for (Values varValues : allValues) {
@@ -108,10 +108,10 @@ public class ParserUtils
 			if (i < min)
 				min = i;
 		}
-		
+
 		return min;
 	}
-	
+
 	/**
 	 * Find the maximum value of an integer valued-expression
 	 * with respect to a variable list and some values for constants.
@@ -121,15 +121,15 @@ public class ParserUtils
 		List<String> vars;
 		List<Values> allValues;
 		int i, max;
-		
+
 		// For constant expressions, this is easy
 		if (expr.isConstant())
 			return expr.evaluateInt(constantValues);
-		
+
 		// Get all variables appearing in the expression and all values of them
 		vars = expr.getAllVars();
 		allValues = varList.getAllValues(vars);
-		
+
 		// Compute max over all values
 		max = Integer.MIN_VALUE;
 		for (Values varValues : allValues) {
@@ -137,10 +137,10 @@ public class ParserUtils
 			if (i > max)
 				max = i;
 		}
-		
+
 		return max;
 	}
-	
+
 	/**
 	 * Find all possible values of an integer valued-expression
 	 * with respect to a variable list and some values for constants.
@@ -150,24 +150,24 @@ public class ParserUtils
 		List<String> vars;
 		List<Values> allValues;
 		HashSet<Integer> res;
-		
+
 		// For constant expressions, this is easy
 		if (expr.isConstant()) {
 			res = new HashSet<Integer>();
 			res.add(expr.evaluateInt(constantValues));
 			return res;
 		}
-		
+
 		// Get all variables appearing in the expression and all values of them
 		vars = expr.getAllVars();
 		allValues = varList.getAllValues(vars);
-		
+
 		// Compute set of all values
 		res = new HashSet<Integer>();
 		for (Values varValues : allValues) {
 			res.add(expr.evaluateInt(constantValues, varValues));
 		}
-		
+
 		return res;
 	}
 }

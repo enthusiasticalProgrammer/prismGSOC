@@ -38,30 +38,30 @@ public interface CTMC extends DTMC
 	 * i.e. sum_j R(i,j)
 	 */
 	public double getExitRate(int i);
-	
+
 	/**
 	 * Compute the maximum exit rate.
 	 * i.e. max_i { sum_j R(i,j) }
 	 */
 	public double getMaxExitRate();
-	
+
 	/**
 	 * Compute the maximum exit rate over states in {@code subset}.
 	 * i.e. max_{i in subset} { sum_j R(i,j) }
 	 */
 	public double getMaxExitRate(BitSet subset);
-	
+
 	/**
 	 * Compute the default rate used to uniformise this CTMC. 
 	 */
 	public double getDefaultUniformisationRate();
-	
+
 	/**
 	 * Compute the default rate used to uniformise this CTMC,
 	 * assuming that all states *not* in {@code nonAbs} have been made absorbing.
 	 */
 	public double getDefaultUniformisationRate(BitSet nonAbs);
-	
+
 	/**
 	 * Build the embedded DTMC for this CTMC, in implicit form
 	 * (i.e. where the details are computed on the fly from this one).

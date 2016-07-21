@@ -33,14 +33,15 @@ import acceptance.AcceptanceStreett;
 import acceptance.AcceptanceType;
 import automata.DA;
 
-public class LTL2Rabin {
+public class LTL2Rabin
+{
 
 	@SuppressWarnings("unchecked")
-	public static automata.DA<BitSet,AcceptanceRabin> ltl2rabin(SimpleLTL ltlFormula) throws PrismException
+	public static automata.DA<BitSet, AcceptanceRabin> ltl2rabin(SimpleLTL ltlFormula) throws PrismException
 	{
 		DA<BitSet, ? extends AcceptanceOmega> result;
 		result = ltl2da(ltlFormula, AcceptanceType.RABIN);
-		return (DA<BitSet, AcceptanceRabin>)result;
+		return (DA<BitSet, AcceptanceRabin>) result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,15 +49,15 @@ public class LTL2Rabin {
 	{
 		DA<BitSet, ? extends AcceptanceOmega> result;
 		result = ltl2da(ltlFormula, AcceptanceType.STREETT);
-		return (DA<BitSet, AcceptanceStreett>)result;
+		return (DA<BitSet, AcceptanceStreett>) result;
 	}
-	
+
 	public static automata.DA<BitSet, ? extends AcceptanceOmega> ltl2da(SimpleLTL ltlFormula, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		SimpleLTL ltl = ltlFormula.simplify();
 
-		boolean allowRabin=AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN);
-		boolean allowStreett=AcceptanceType.contains(allowedAcceptance, AcceptanceType.STREETT);
+		boolean allowRabin = AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN);
+		boolean allowStreett = AcceptanceType.contains(allowedAcceptance, AcceptanceType.STREETT);
 
 		if (allowRabin && allowStreett) {
 			// currently, disable opportunistic generation of either Rabin or Streett automaton
@@ -66,15 +67,16 @@ public class LTL2Rabin {
 		return ltl2da(ltl, ltl.getAPs(), allowRabin, allowStreett).createPrismDA();
 	}
 
-	private static DRA ltl2da(SimpleLTL ltl, APSet apset, boolean allowRabin, boolean allowStreett) throws PrismException {
+	private static DRA ltl2da(SimpleLTL ltl, APSet apset, boolean allowRabin, boolean allowStreett) throws PrismException
+	{
 		DRA dra = null;
 		Options_LTL2DRA opt_ltl2rabin = new Options_LTL2DRA();
-		
+
 		// boolean flag_dra2nba=false;
-		boolean flag_sched_limits=false;
+		boolean flag_sched_limits = false;
 		// boolean flag_print_ltl_nba=false;
-		boolean flag_stat_nba=false;
-		double alpha=10.0;
+		boolean flag_stat_nba = false;
+		double alpha = 10.0;
 
 		opt_ltl2rabin.allow_union = true;
 		opt_ltl2rabin.recursive_union = true;
@@ -117,7 +119,7 @@ public class LTL2Rabin {
 			StutterSensitivenessInformation::enablePrintInfo();
 		}
 		*/
-		
+
 		LTL2DRA ltl2dra = new LTL2DRA(opt_ltl2rabin.opt_safra);
 		Scheduler sched = new Scheduler(ltl2dra, flag_sched_limits, alpha);
 		sched.flagStatNBA(flag_stat_nba);
@@ -130,7 +132,7 @@ public class LTL2Rabin {
 		if (!dra.isCompact()) {
 			dra.makeCompact();
 		}
-		
+
 		return dra;
 	}
 }

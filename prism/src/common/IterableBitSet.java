@@ -68,11 +68,13 @@ public class IterableBitSet implements Iterable<Integer>
 	}
 
 	/** Implementation of the iterator over the set bits */
-	private class SetBitsIterator implements Iterator<Integer> {
+	private class SetBitsIterator implements Iterator<Integer>
+	{
 		private int index = set.nextSetBit(0);
 
 		@Override
-		public boolean hasNext() {
+		public boolean hasNext()
+		{
 			if (maxIndex != null && index > maxIndex) {
 				// limit to 0 ... maxIndex
 				return false;
@@ -81,7 +83,8 @@ public class IterableBitSet implements Iterable<Integer>
 		}
 
 		@Override
-		public Integer next() {
+		public Integer next()
+		{
 			if (hasNext()) {
 				Integer next = index;
 				index = set.nextSetBit(index + 1);
@@ -91,17 +94,20 @@ public class IterableBitSet implements Iterable<Integer>
 		}
 
 		@Override
-		public void remove() {
+		public void remove()
+		{
 			throw new UnsupportedOperationException();
 		}
 	}
 
 	/** Implementation of the iterator over the cleared bits, requires that {@code maxIndex != null} */
-	private class ClearBitsIterator implements Iterator<Integer> {
+	private class ClearBitsIterator implements Iterator<Integer>
+	{
 		private int index = set.nextClearBit(0);
 
 		@Override
-		public boolean hasNext() {
+		public boolean hasNext()
+		{
 			if (index > maxIndex) {
 				// limit to 0 ... maxIndex
 				return false;
@@ -110,7 +116,8 @@ public class IterableBitSet implements Iterable<Integer>
 		}
 
 		@Override
-		public Integer next() {
+		public Integer next()
+		{
 			if (hasNext()) {
 				Integer next = index;
 				index = set.nextClearBit(index + 1);
@@ -120,13 +127,15 @@ public class IterableBitSet implements Iterable<Integer>
 		}
 
 		@Override
-		public void remove() {
+		public void remove()
+		{
 			throw new UnsupportedOperationException();
 		}
 	}
 
 	@Override
-	public Iterator<Integer> iterator() {
+	public Iterator<Integer> iterator()
+	{
 		if (clearBits == false) {
 			return new SetBitsIterator();
 		} else {
@@ -177,7 +186,8 @@ public class IterableBitSet implements Iterable<Integer>
 		}
 
 		test.clear();
-		for (@SuppressWarnings("unused") Integer index : getSetBits(test)) {
+		for (@SuppressWarnings("unused")
+		Integer index : getSetBits(test)) {
 			throw new RuntimeException("BitSet should be empty!");
 		}
 	}

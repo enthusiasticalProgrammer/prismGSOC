@@ -53,13 +53,13 @@ public class StateRewardsConstant extends StateRewards
 	}
 
 	// Converters
-	
+
 	@Override
 	public StateRewards liftFromModel(Product<? extends Model> product)
 	{
 		return deepCopy();
 	}
-	
+
 	// Other
 
 	@Override

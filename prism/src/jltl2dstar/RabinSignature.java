@@ -25,19 +25,21 @@ import jltl2ba.MyBitSet;
 /** A class storing the acceptance signature for a state
  * (for every acceptance pair one color).
  */
-public class RabinSignature implements Comparable<RabinSignature> {
+public class RabinSignature implements Comparable<RabinSignature>
+{
 
 	/** The L part */
-    private MyBitSet _L;
-    /** The U part */
-    private MyBitSet _U;    
-    /** The number of acceptance pairs */
-    private int _size;
-    
+	private MyBitSet _L;
+	/** The U part */
+	private MyBitSet _U;
+	/** The number of acceptance pairs */
+	private int _size;
+
 	/** Constructor 
 	 * @param size the number of acceptance pairs 
 	 */
-	public RabinSignature(int size) {
+	public RabinSignature(int size)
+	{
 		_size = size;
 		_L = new MyBitSet(size);
 		_U = new MyBitSet(size);
@@ -46,7 +48,8 @@ public class RabinSignature implements Comparable<RabinSignature> {
 	/** Constructor
 	 * @param other another RabinSignature
 	 */
-	public RabinSignature(RabinSignature other) {
+	public RabinSignature(RabinSignature other)
+	{
 		_L = (MyBitSet) other._L.clone();
 		_U = (MyBitSet) other._U.clone();
 		_size = other._size;
@@ -57,39 +60,51 @@ public class RabinSignature implements Comparable<RabinSignature> {
 	 * @param U the U part of the acceptance signature.
 	 * @param size the number of acceptance pairs
 	 */
-	public RabinSignature(MyBitSet L, MyBitSet U, int size) { 
-	  _L = L;
-	  _U = U;
-	  _size = size;
+	public RabinSignature(MyBitSet L, MyBitSet U, int size)
+	{
+		_L = L;
+		_U = U;
+		_size = size;
 	}
-	    
+
 	/** Constructor for getting the acceptance signature for a Tree.
 	 * @param tree the Tree, get acceptance signature from 
 	 *    tree.generateAcceptance(*this).
 	 */
-	public <Tree extends SafraTree> RabinSignature(Tree tree) {
+	public <Tree extends SafraTree> RabinSignature(Tree tree)
+	{
 		this(0);
 		tree.generateAcceptance(this);
 	}
 
 	/** Clear the acceptance signature */
-	public void clear() {
+	public void clear()
+	{
 		_L.clear();
 		_U.clear();
 	}
 
 	/** Get the L part of this acceptance signature */
-	public MyBitSet getL() {return _L;}    
+	public MyBitSet getL()
+	{
+		return _L;
+	}
+
 	/** Get the U part of this acceptance signature */
-	public MyBitSet getU() {return _U;}
+	public MyBitSet getU()
+	{
+		return _U;
+	}
 
 	/** Set index to value in the L part of this acceptance signature. */
-	public void setL(int index, boolean value) {
+	public void setL(int index, boolean value)
+	{
 		_L.set(index, value);
 	}
 
 	/** Set index to value. in the U part of this acceptance signature. */
-	public void setU(int index, boolean value) {
+	public void setU(int index, boolean value)
+	{
 		_U.set(index, value);
 	}
 
@@ -97,7 +112,8 @@ public class RabinSignature implements Comparable<RabinSignature> {
 	 * @param i The pair index
 	 * @param c the RabinColor
 	 */
-	public void setColor(int i, RabinAcceptance.RabinColor c) {
+	public void setColor(int i, RabinAcceptance.RabinColor c)
+	{
 		switch (c) {
 		case RABIN_RED:
 			_U.set(i, true);
@@ -117,14 +133,16 @@ public class RabinSignature implements Comparable<RabinSignature> {
 	}
 
 	/** Get the RabinColor for a pair i */
-	public RabinAcceptance.RabinColor getColor(int i) {
+	public RabinAcceptance.RabinColor getColor(int i)
+	{
 		return _U.get(i) ? RabinAcceptance.RabinColor.RABIN_RED : (_L.get(i) ? RabinAcceptance.RabinColor.RABIN_GREEN : RabinAcceptance.RabinColor.RABIN_WHITE);
 	}
 
 	/** Get string representation of this signature. */
-	public String toString() {
+	public String toString()
+	{
 		String a;
-		a="{";
+		a = "{";
 		for (int i = 0; i < size(); i++) {
 			switch (getColor(i)) {
 			case RABIN_RED:
@@ -138,41 +156,55 @@ public class RabinSignature implements Comparable<RabinSignature> {
 			}
 		}
 		a += "}";
-	      
+
 		return a;
 	}
 
-	    /** Compare to other signature for equality. */
-	public boolean equals(RabinSignature other) {
-		return (_L.equals(other.getL()) &&  _U.equals(other.getU()));
+	/** Compare to other signature for equality. */
+	public boolean equals(RabinSignature other)
+	{
+		return (_L.equals(other.getL()) && _U.equals(other.getU()));
 	}
-	
-	public boolean equals(Object other)	{
+
+	public boolean equals(Object other)
+	{
 		return ((other instanceof RabinSignature) && this.equals((RabinSignature) other));
 	}
 
 	/** Compare to other signature */
-	public int compareTo(RabinSignature other) {
+	public int compareTo(RabinSignature other)
+	{
 		int i = _L.compareTo(other.getL());
 		if (i != 0)
 			return i;
-		else 
+		else
 			return _U.compareTo(other.getU());
 	}
-	
+
 	/** Get the number of acceptance pairs */
-	public int getSize() {return _size;}
+	public int getSize()
+	{
+		return _size;
+	}
+
 	/** Get the number of acceptance pairs */
-	public int size() {return _size;}
+	public int size()
+	{
+		return _size;
+	}
 
 	/** Set the number of acceptance pairs */
-	public void setSize(int size) {_size=size;}
+	public void setSize(int size)
+	{
+		_size = size;
+	}
 
 	/** Merge this acceptance signature with other signature,
 	 *  for each tuple element calculate the maximum of the
 	 *  colors according to the order 
 	 * RABIN_WHITE < RABIN_GREEN < RABIN_RED */
-	public void maxMerge(RabinSignature other) {
+	public void maxMerge(RabinSignature other)
+	{
 		for (int i = 0; i < _size; i++) {
 			if (getColor(i).compareTo(other.getColor(i)) < 0) {
 				setColor(i, other.getColor(i));

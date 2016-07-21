@@ -24,15 +24,16 @@ package jltl2dstar;
  * Options for Safra's algorithm
  */
 
-public class Options_Safra implements Cloneable {
+public class Options_Safra implements Cloneable
+{
 	/** Optimize accepting true loops */
-	public boolean opt_accloop; 
+	public boolean opt_accloop;
 	/** Optimize all successor accepting */
-	public boolean opt_accsucc; 
+	public boolean opt_accsucc;
 	/** Renaming optimization (templates) */
-	public boolean opt_rename;  
+	public boolean opt_rename;
 	/** Try to reorder Safra trees */
-	public boolean opt_reorder; 
+	public boolean opt_reorder;
 	/** Use stuttering */
 	public boolean stutter;
 	/** Check for stutter insensitive */
@@ -47,27 +48,28 @@ public class Options_Safra implements Cloneable {
 	public boolean union_trueloop;
 
 	/** Constructor */
-	public Options_Safra() {
+	public Options_Safra()
+	{
 		opt_none();
 
-		dba_check=false;
+		dba_check = false;
 		//    tree_verbose=false;
-		stat=false;
-		union_trueloop=true;
+		stat = false;
+		union_trueloop = true;
 
-		stutter=false;
-		partial_stutter_check=false;
-		stutter_closure=false;
+		stutter = false;
+		partial_stutter_check = false;
+		stutter_closure = false;
 	}
-	
+
 	public Options_Safra clone()
 	{
 		Options_Safra rv = new Options_Safra();
-		
-		rv.opt_accloop = opt_accloop; 
-		rv.opt_accsucc = opt_accsucc; 
-		rv.opt_rename = opt_rename;  
-		rv.opt_reorder = opt_reorder; 
+
+		rv.opt_accloop = opt_accloop;
+		rv.opt_accsucc = opt_accsucc;
+		rv.opt_rename = opt_rename;
+		rv.opt_reorder = opt_reorder;
 		rv.stutter = stutter;
 		rv.partial_stutter_check = partial_stutter_check;
 		rv.stutter_closure = stutter_closure;
@@ -78,20 +80,14 @@ public class Options_Safra implements Cloneable {
 	}
 
 	/** Enable all opt_ options */
-	public void opt_all() {
-		opt_accloop
-		=opt_accsucc
-		=opt_rename
-		=opt_reorder
-		=true;
+	public void opt_all()
+	{
+		opt_accloop = opt_accsucc = opt_rename = opt_reorder = true;
 	}
 
 	/** Disable all opt_ options */
-	public void opt_none() {
-		opt_accloop
-		=opt_accsucc
-		=opt_rename
-		=opt_reorder
-		=false;
+	public void opt_none()
+	{
+		opt_accloop = opt_accsucc = opt_rename = opt_reorder = false;
 	}
 }

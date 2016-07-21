@@ -27,7 +27,8 @@ import prism.PrismException;
  * This approach merges the acceptance signatures of the two states in the union tuple, the union is provided by
  * the semantics of the Rabin acceptance condition (There <i>exists</i> an acceptance pair ....)
  */
-public class UnionAcceptanceCalculator {
+public class UnionAcceptanceCalculator
+{
 
 	/** The acceptance condition of the first automaton. */
 	private RabinAcceptance _acc_1;
@@ -42,9 +43,10 @@ public class UnionAcceptanceCalculator {
 	 * @param acc_1 The RabinAcceptance condition from automaton 1
 	 * @param acc_2 The RabinAcceptance condition from automaton 2
 	 */
-	public UnionAcceptanceCalculator(RabinAcceptance acc_1,	RabinAcceptance acc_2) throws PrismException {
+	public UnionAcceptanceCalculator(RabinAcceptance acc_1, RabinAcceptance acc_2) throws PrismException
+	{
 		_acc_1 = acc_1;
-		_acc_2  = acc_2;
+		_acc_2 = acc_2;
 		_acc_size_1 = _acc_1.size();
 		_acc_size_2 = _acc_2.size();
 	}
@@ -54,10 +56,10 @@ public class UnionAcceptanceCalculator {
 	 * acceptance pairs, this function allocates k1+k2 acceptance pairs in the result automaton.
 	 * @param acceptance_result The acceptance condition in the result automaton.
 	 */
-	public void prepareAcceptance(RabinAcceptance acceptance_result) {
-		acceptance_result.newAcceptancePairs(_acc_size_1+_acc_size_2);
+	public void prepareAcceptance(RabinAcceptance acceptance_result)
+	{
+		acceptance_result.newAcceptancePairs(_acc_size_1 + _acc_size_2);
 	}
-
 
 	/**
 	 * Calculate the acceptance signature for the union of two states.
@@ -65,7 +67,8 @@ public class UnionAcceptanceCalculator {
 	 * @param da_state_2 index of the state in the second automaton
 	 * @return A Rabin acceptance signature
 	 */
-	RabinSignature calculateAcceptance(int da_state_1, int da_state_2) {
+	RabinSignature calculateAcceptance(int da_state_1, int da_state_2)
+	{
 		RabinSignature signature = new RabinSignature(_acc_size_1 + _acc_size_2);
 
 		for (int i = 0; i < _acc_size_1; i++) {
@@ -77,7 +80,7 @@ public class UnionAcceptanceCalculator {
 			}
 		}
 
-		for (int j=0; j < _acc_size_2; j++) {
+		for (int j = 0; j < _acc_size_2; j++) {
 			if (_acc_2.isStateInAcceptance_L(j, da_state_2)) {
 				signature.setL(j + _acc_size_1, true);
 			}

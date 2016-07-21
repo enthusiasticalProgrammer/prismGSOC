@@ -5,8 +5,7 @@ import prism.PrismLangException;
 /**
  * Class to represent a relational operator (or similar) found in a P/R/S operator.
  */
-public enum RelOp
-{
+public enum RelOp {
 	GT(">") {
 		@Override
 		public boolean isLowerBound()

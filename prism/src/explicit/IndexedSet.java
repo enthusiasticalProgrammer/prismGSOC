@@ -47,7 +47,7 @@ public class IndexedSet<T> implements StateStorage<T>
 		indexOfLastAdd = -1;
 		set = sorted ? new TreeMap<T, Integer>() : new HashMap<T, Integer>();
 	}
-	
+
 	public IndexedSet(Comparator<T> comparator)
 	{
 		indexOfLastAdd = -1;
@@ -59,7 +59,7 @@ public class IndexedSet<T> implements StateStorage<T>
 	{
 		set.clear();
 	}
-	
+
 	@Override
 	public boolean add(T state)
 	{
@@ -77,7 +77,7 @@ public class IndexedSet<T> implements StateStorage<T>
 	@Override
 	public boolean contains(T state)
 	{
-			return set.get(state) != null;
+		return set.get(state) != null;
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class IndexedSet<T> implements StateStorage<T>
 	{
 		return set.entrySet();
 	}
-	
+
 	/**
 	 * Create an ArrayList of the states, ordered by index.
 	 */
@@ -131,13 +131,13 @@ public class IndexedSet<T> implements StateStorage<T>
 		int i, n;
 
 		n = set.size();
-		for (i = 0; i < n ; i++)
+		for (i = 0; i < n; i++)
 			list.add(null);
 		for (Map.Entry<T, Integer> e : set.entrySet()) {
 			list.set(e.getValue(), e.getKey());
 		}
 	}
-	
+
 	/**
 	 * Create an ArrayList of the states, ordered by permuted index.
 	 * Index in new list is permut[old_index].
@@ -163,13 +163,13 @@ public class IndexedSet<T> implements StateStorage<T>
 		int i, n;
 
 		n = set.size();
-		for (i = 0; i < n ; i++)
+		for (i = 0; i < n; i++)
 			list.add(null);
 		for (Map.Entry<T, Integer> e : set.entrySet()) {
 			list.set(permut[e.getValue()], e.getKey());
 		}
 	}
-	
+
 	/**
 	 * Build sort permutation. Assuming this was built as a sorted set,
 	 * this returns a permutation (integer array) mapping current indices
@@ -180,17 +180,17 @@ public class IndexedSet<T> implements StateStorage<T>
 	{
 		int i, n;
 		int perm[];
-		
+
 		n = set.size();
 		perm = new int[n];
 		i = 0;
 		for (Map.Entry<T, Integer> e : set.entrySet()) {
 			perm[e.getValue()] = i++;
 		}
-		
+
 		return perm;
 	}
-	
+
 	@Override
 	public String toString()
 	{

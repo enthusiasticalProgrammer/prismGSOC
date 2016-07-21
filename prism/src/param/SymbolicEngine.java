@@ -114,24 +114,24 @@ public class SymbolicEngine
 		Expression p = ups.getProbability(i);
 		return (p == null) ? Expression.Double(1.0) : p;
 	}
-	
+
 	static boolean hasMoreThanOneVariable(Expression exp)
 	{
 		int varNum = 0;
 		try {
 			varNum = exp.getAllVars().size();
 			//System.out.println("varNum = " + varNum);
-		} catch(PrismLangException e) {
-			
+		} catch (PrismLangException e) {
+
 		}
-		
-		if (varNum >1) {
+
+		if (varNum > 1) {
 			return true;
 		} else {
-			return false;	   
+			return false;
 		}
 	}
-	
+
 	public TransitionList calculateTransitions(State state) throws PrismException
 	{
 		List<ChoiceListFlexi> chs;
@@ -218,14 +218,14 @@ public class SymbolicEngine
 				transitionList.add(ch);
 			}
 		}
-		
+
 		// Check validity of the computed transitions
 		// (not needed currently)
 		//transitionList.checkValid(modelType);
-		
+
 		// Check for errors (e.g. overflows) in the computed transitions
 		//transitionList.checkForErrors(state, varList);
-		
+
 		//System.out.println(transitionList);
 		return transitionList;
 	}
