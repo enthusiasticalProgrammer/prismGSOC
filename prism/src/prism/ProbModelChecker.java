@@ -125,6 +125,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	// Check expression (recursive)
 
+	@Override
 	public StateValues checkExpression(Expression expr) throws PrismException
 	{
 		StateValues res;

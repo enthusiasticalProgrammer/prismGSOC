@@ -391,6 +391,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Get the number of reward structures in the model.
 	 */
+	@Override
 	public int getNumRewardStructs()
 	{
 		return rewardStructs.size();
@@ -401,6 +402,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	 * (indexed from 0, not from 1 like at the user (property language) level).
 	 * Returns null if index is out of range.
 	 */
+	@Override
 	public RewardStruct getRewardStruct(int i)
 	{
 		return (i < rewardStructs.size()) ? rewardStructs.get(i) : null;
@@ -419,6 +421,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	 * (indexed from 0, not from 1 like at the user (property language) level).
 	 * Returns -1 if name does not exist.
 	 */
+	@Override
 	public int getRewardStructIndex(String name)
 	{
 		int i, n;
@@ -519,6 +522,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Get the total number of variables (global and local).
 	 */
+	@Override
 	public int getNumVars()
 	{
 		return varNames.size();
@@ -528,6 +532,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	 * Look up the index of a variable in the model by name.
 	 * Returns -1 if there is no such variable. 
 	 */
+	@Override
 	public int getVarIndex(String name)
 	{
 		return varNames.indexOf(name);
@@ -544,6 +549,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Get the name of the ith variable.
 	 */
+	@Override
 	public String getVarName(int i)
 	{
 		return varNames.get(i);
@@ -557,11 +563,13 @@ public class ModulesFile extends ASTElement implements ModelInfo
 		return varTypes.get(i);
 	}
 
+	@Override
 	public Vector<String> getVarNames()
 	{
 		return varNames;
 	}
 
+	@Override
 	public Vector<Type> getVarTypes()
 	{
 		return varTypes;
@@ -1003,6 +1011,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	 * Undefined constants can be subsequently redefined to different values with the same method.
 	 * The current constant values (if set) are available via {@link #getConstantValues()}.
 	 */
+	@Override
 	public void setSomeUndefinedConstants(Values someValues) throws PrismLangException
 	{
 		undefinedConstantValues = someValues == null ? null : new Values(someValues);
@@ -1033,6 +1042,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	 * undefined constants set previously via the method {@link #setUndefinedConstants(Values)}.
 	 * Until they are set for the first time, this method returns null.  
 	 */
+	@Override
 	public Values getConstantValues()
 	{
 		return constantValues;
@@ -1176,6 +1186,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -1184,6 +1195,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "", tmp;
@@ -1241,6 +1253,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public ASTElement deepCopy()
 	{

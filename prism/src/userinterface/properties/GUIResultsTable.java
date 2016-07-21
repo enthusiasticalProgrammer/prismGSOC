@@ -76,6 +76,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 	{
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog();
@@ -114,6 +115,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 
 		closeButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				closeDialog();
@@ -126,6 +128,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 		this.getContentPane().add(tmpPanel);
 	}
 
+	@Override
 	public void show()
 	{
 		noOpen++;
@@ -133,6 +136,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 		super.show();
 	}
 
+	@Override
 	public void dispose()
 	{
 		noOpen--;
@@ -160,21 +164,25 @@ public class GUIResultsTable extends javax.swing.JDialog
 			//prop = new ArrayList();
 		}
 
+		@Override
 		public String getColumnName(int j)
 		{
 			return headings[j];
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return numCols;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return numRows;
 		}
 
+		@Override
 		public Object getValueAt(int i, int j)
 		{
 			String[] line = (String[]) cells.get(i);

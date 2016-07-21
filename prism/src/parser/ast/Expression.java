@@ -81,6 +81,7 @@ public abstract class Expression extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public abstract Expression deepCopy();
 
 	// Utility methods:
@@ -817,6 +818,7 @@ public abstract class Expression extends ASTElement
 			// check for time bounds, don't recurse into P/R/SS subformulas
 			expr.accept(new ExpressionTraverseNonNested()
 			{
+				@Override
 				public void visitPre(ExpressionTemporal e) throws PrismLangException
 				{
 					if (e.hasBounds())
@@ -837,6 +839,7 @@ public abstract class Expression extends ASTElement
 		try {
 			ASTTraverse astt = new ASTTraverse()
 			{
+				@Override
 				public void visitPost(ExpressionFunc e) throws PrismLangException
 				{
 					if (e.getNameCode() == ExpressionFunc.MULTI)
@@ -926,6 +929,7 @@ public abstract class Expression extends ASTElement
 		try {
 			ASTTraverse astt = new ASTTraverse()
 			{
+				@Override
 				public void visitPost(ExpressionTemporal e) throws PrismLangException
 				{
 					if (e.getOperator() == ExpressionTemporal.P_X)

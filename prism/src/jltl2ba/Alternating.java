@@ -65,6 +65,7 @@ public class Alternating
 			nxt = null;
 		}
 
+		@Override
 		public ATrans clone()
 		{
 			ATrans rv = new ATrans(to, pos, neg);

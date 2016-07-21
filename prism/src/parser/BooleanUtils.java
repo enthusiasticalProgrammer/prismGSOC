@@ -118,6 +118,7 @@ public class BooleanUtils
 		try {
 			exprMod = (Expression) expr.accept(new ASTTraverseModify()
 			{
+				@Override
 				public Object visit(ExpressionUnaryOp e) throws PrismLangException
 				{
 					// Remove parentheses: (a)
@@ -129,6 +130,7 @@ public class BooleanUtils
 					return super.visit(e);
 				}
 
+				@Override
 				public Object visit(ExpressionBinaryOp e) throws PrismLangException
 				{
 					// Remove implication: a => b

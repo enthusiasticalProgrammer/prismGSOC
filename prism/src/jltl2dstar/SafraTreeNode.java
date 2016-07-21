@@ -214,6 +214,7 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 		return true;
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		if (other instanceof SafraTreeNode) {
@@ -483,6 +484,7 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 		}
 	}
 
+	@Override
 	public Iterator<SafraTreeNode> iterator()
 	{
 		return new SafraTreeNodeIterator(this);
@@ -498,6 +500,7 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 			_current = node.getOldestChild();
 		}
 
+		@Override
 		public SafraTreeNode next()
 		{
 			SafraTreeNode tmp = _current;
@@ -505,11 +508,13 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 			return tmp;
 		}
 
+		@Override
 		public boolean hasNext()
 		{
 			return (_current != null);
 		}
 
+		@Override
 		public void remove()
 		{
 			throw new UnsupportedOperationException();
@@ -567,6 +572,7 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 		}
 	}*/
 
+	@Override
 	public int hashCode()
 	{
 		int hash = 1;

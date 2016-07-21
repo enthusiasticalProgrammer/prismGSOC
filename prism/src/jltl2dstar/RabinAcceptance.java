@@ -365,6 +365,7 @@ public class RabinAcceptance implements Iterable<Integer>
 		}
 	}
 
+	@Override
 	public Iterator<Integer> iterator()
 	{
 		return new AcceptancePairIterator(_acceptance_L);
@@ -381,11 +382,13 @@ public class RabinAcceptance implements Iterable<Integer>
 			index = 0;
 		}
 
+		@Override
 		public boolean hasNext()
 		{
 			return (index < _acceptance_vector.size());
 		}
 
+		@Override
 		public Integer next() throws NoSuchElementException
 		{
 			if (hasNext()) {
@@ -403,6 +406,7 @@ public class RabinAcceptance implements Iterable<Integer>
 				index++;
 		}
 
+		@Override
 		public void remove() throws UnsupportedOperationException
 		{
 			throw new UnsupportedOperationException();

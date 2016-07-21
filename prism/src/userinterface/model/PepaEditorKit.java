@@ -80,16 +80,19 @@ class PepaEditorKit extends DefaultEditorKit
 		preferences = prefs;
 	}
 
+	@Override
 	public String getContentType()
 	{
 		return "text/pepa";
 	}
 
+	@Override
 	public Document createDefaultDocument()
 	{
 		return new PlainDocument();
 	}
 
+	@Override
 	public final ViewFactory getViewFactory()
 	{
 		return getStylePreferences();
@@ -113,6 +116,7 @@ class PepaContext extends StyleContext implements ViewFactory
 		this.handler = handler;
 	}
 
+	@Override
 	public View create(Element elem)
 	{
 		return new PepaView(elem, handler);
@@ -135,6 +139,7 @@ class PepaView extends PlainView
 		pattern = Pattern.compile("%.*");
 	}
 
+	@Override
 	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = findStartOfLine(p0, getDocument());
@@ -179,6 +184,7 @@ class PepaView extends PlainView
 		return x;
 	}
 
+	@Override
 	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 	{
 		int stLine = findStartOfLine(p0, getDocument());

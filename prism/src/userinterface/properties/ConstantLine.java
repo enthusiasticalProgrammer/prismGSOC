@@ -223,6 +223,7 @@ public class ConstantLine extends javax.swing.JPanel
 		stepValueField.setText((str != null) ? str : STEP_DEFAULT);
 	}
 
+	@Override
 	public String getName()
 	{
 		return nameLabel.getText();
@@ -365,6 +366,7 @@ public class ConstantLine extends javax.swing.JPanel
 		choiceButtonGroup.add(singleValueCombo);
 		singleValueCombo.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				singleValueComboActionPerformed(evt);
@@ -381,6 +383,7 @@ public class ConstantLine extends javax.swing.JPanel
 		choiceButtonGroup.add(rangeCombo);
 		rangeCombo.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				rangeComboActionPerformed(evt);
@@ -421,16 +424,19 @@ public class ConstantLine extends javax.swing.JPanel
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 1, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

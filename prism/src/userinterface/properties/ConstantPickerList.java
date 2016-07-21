@@ -64,26 +64,31 @@ public class ConstantPickerList extends JPanel implements Scrollable
 		nextPanel = np;
 	}
 
+	@Override
 	public Dimension getPreferredScrollableViewportSize()
 	{
 		return getPreferredSize();
 	}
 
+	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
 	{
 		return 20;
 	}
 
+	@Override
 	public boolean getScrollableTracksViewportHeight()
 	{
 		return false;
 	}
 
+	@Override
 	public boolean getScrollableTracksViewportWidth()
 	{
 		return true;
 	}
 
+	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
 	{
 		return 40;

@@ -68,6 +68,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// Override-able "Constructor"
 
+	@Override
 	public ProbModelChecker createNewModelChecker(Prism prism, Model m, PropertiesFile pf) throws PrismException
 	{
 		return new StochModelChecker(prism, m, pf);
@@ -79,6 +80,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// bounded until
 
+	@Override
 	protected StateValues checkProbBoundedUntil(ExpressionTemporal expr) throws PrismException
 	{
 		double lTime, uTime; // time bounds
@@ -229,6 +231,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// cumulative reward
 
+	@Override
 	protected StateValues checkRewardCumul(ExpressionTemporal expr, JDDNode stateRewards, JDDNode transRewards) throws PrismException
 	{
 		double time; // time
@@ -259,6 +262,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// inst reward
 
+	@Override
 	protected StateValues checkRewardInst(ExpressionTemporal expr, JDDNode stateRewards, JDDNode transRewards) throws PrismException
 	{
 		double time; // time
@@ -390,6 +394,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// compute probabilities for next
 
+	@Override
 	protected StateValues computeNextProbs(JDDNode tr, JDDNode b)
 	{
 		JDDNode diags, emb;
@@ -487,6 +492,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// compute probabilities for until (general case)
 
+	@Override
 	protected StateValues computeUntilProbs(JDDNode tr, JDDNode tr01, JDDNode b1, JDDNode b2) throws PrismException
 	{
 		JDDNode diags, emb;
@@ -549,6 +555,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// compute total rewards
 
+	@Override
 	protected StateValues computeTotalRewards(JDDNode tr, JDDNode tr01, JDDNode sr, JDDNode trr) throws PrismException
 	{
 		JDDNode diags, emb, srNew;
@@ -582,6 +589,7 @@ public class StochModelChecker extends ProbModelChecker
 
 	// compute rewards for reach reward
 
+	@Override
 	protected StateValues computeReachRewards(JDDNode tr, JDDNode tr01, JDDNode sr, JDDNode trr, JDDNode b) throws PrismException
 	{
 		JDDNode diags, emb, srNew;

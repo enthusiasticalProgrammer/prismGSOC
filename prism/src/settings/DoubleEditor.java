@@ -52,6 +52,7 @@ public class DoubleEditor implements SettingEditor, CaretListener, FocusListener
 		field.addFocusListener(this);
 	}
 
+	@Override
 	public Object getEditorValue() throws SettingException
 	{
 		if (field.getText().equals(""))
@@ -64,6 +65,7 @@ public class DoubleEditor implements SettingEditor, CaretListener, FocusListener
 		}
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 		field.setMargin(new Insets(0, 2, 4, 2));
@@ -126,19 +128,23 @@ public class DoubleEditor implements SettingEditor, CaretListener, FocusListener
 		return field;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void caretUpdate(CaretEvent e)
 	{
 		field.getCaret().setVisible(true);
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		if (!valueGot && lastTable != null) {

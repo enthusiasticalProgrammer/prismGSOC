@@ -57,6 +57,7 @@ public class LoadPRISMModelThread extends Thread
 		ex = null;
 	}
 
+	@Override
 	public void run()
 	{
 		if (edit instanceof GUITextModelEditor) {
@@ -71,6 +72,7 @@ public class LoadPRISMModelThread extends Thread
 			//notify interface of start of computation and start the read into textEdit
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					try {
@@ -88,6 +90,7 @@ public class LoadPRISMModelThread extends Thread
 			if (ex != null) {
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						plug.stopProgress();
@@ -102,6 +105,7 @@ public class LoadPRISMModelThread extends Thread
 			//If we get here, the load has been successful, notify the interface and tell the handler.
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.stopProgress();

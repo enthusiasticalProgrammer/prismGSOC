@@ -37,6 +37,7 @@ public abstract class StateRewards implements MCRewards, MDPRewards, STPGRewards
 	/**
 	 * Get the state reward for state {@code s}.
 	 */
+	@Override
 	public abstract double getStateReward(int s);
 
 	@Override

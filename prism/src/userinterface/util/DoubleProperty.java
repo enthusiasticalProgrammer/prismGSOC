@@ -59,11 +59,13 @@ public class DoubleProperty extends SingleProperty
 		return ((Double) getProperty()).doubleValue();
 	}
 
+	@Override
 	public void setProperty(Object property) throws PropertyException
 	{
 		setProperty(property, true);
 	}
 
+	@Override
 	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
 	{
 		if (property instanceof Double)

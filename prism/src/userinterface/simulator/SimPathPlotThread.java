@@ -54,6 +54,7 @@ public class SimPathPlotThread extends GUIComputationThread
 		this.graphModel = graphModel;
 	}
 
+	@Override
 	public void run()
 	{
 		try {

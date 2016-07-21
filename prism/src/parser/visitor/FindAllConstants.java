@@ -41,6 +41,7 @@ public class FindAllConstants extends ASTTraverseModify
 		this.constantList = constantList;
 	}
 
+	@Override
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;

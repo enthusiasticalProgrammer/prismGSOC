@@ -53,6 +53,7 @@ public class TypeArray extends Type
 		this.subType = subType;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof TypeArray) {
@@ -63,6 +64,7 @@ public class TypeArray extends Type
 		return false;
 	}
 
+	@Override
 	public String getTypeString()
 	{
 		return "array of " + subType.getTypeString();

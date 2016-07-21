@@ -90,6 +90,7 @@ public interface StateValues extends StateVector
 	public void maxMTBDD(JDDNode vec2);
 
 	/** Clear the stored information. */
+	@Override
 	void clear();
 
 	/** Get the number of non-zero values in this vector. */
@@ -144,6 +145,7 @@ public interface StateValues extends StateVector
 	StateValues sumOverDDVars(JDDVars sumVars, Model newModel) throws PrismException;
 
 	/** Returns an Object with the value of the i-th entry in this vector. */
+	@Override
 	Object getValue(int i);
 
 	/**

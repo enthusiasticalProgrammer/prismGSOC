@@ -71,6 +71,7 @@ class GUIConstant
 		return parseError == null;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "const " + type.getTypeString() + " " + name + getValueString() + ";";

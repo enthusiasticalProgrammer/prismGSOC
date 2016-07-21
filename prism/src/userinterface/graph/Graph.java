@@ -199,6 +199,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 				updateInterval);
 	}
 
+	@Override
 	public int compareTo(Object o)
 	{
 		if (o instanceof SettingOwner) {
@@ -213,11 +214,13 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			return 0;
 	}
 
+	@Override
 	public int getNumSettings()
 	{
 		return 5;
 	}
 
+	@Override
 	public Setting getSetting(int index)
 	{
 		switch (index) {
@@ -236,16 +239,19 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		}
 	}
 
+	@Override
 	public String getSettingOwnerClassName()
 	{
 		return "Model";
 	}
 
+	@Override
 	public int getSettingOwnerID()
 	{
 		return prism.PropertyConstants.MODEL;
 	}
 
+	@Override
 	public String getSettingOwnerName()
 	{
 		return graphTitle.getStringValue();
@@ -257,6 +263,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		legendFont.setEnabled(legendVisible.getBooleanValue());
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		if (o == xAxisSettings) {
@@ -277,6 +284,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		}
 	}
 
+	@Override
 	public void notifySettingChanged(Setting setting)
 	{
 		updateGraph();
@@ -345,11 +353,13 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 		doEnables();
 	}
 
+	@Override
 	public void setDisplay(SettingDisplay display)
 	{
 		this.display = display;
 	}
 
+	@Override
 	public SettingDisplay getDisplay()
 	{
 		return display;
@@ -807,6 +817,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	/**
 	 * TODO: Document this!
 	 */
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
 	{
 		InputSource inputSource = null;
@@ -1498,6 +1509,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 			}
 		}
 
+		@Override
 		public void run()
 		{
 			processGraphCache(graphCache);

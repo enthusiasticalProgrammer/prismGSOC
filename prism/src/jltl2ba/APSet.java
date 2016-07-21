@@ -122,6 +122,7 @@ public class APSet implements Iterable<String>
 		return this.vector.equals(other.vector);
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		return ((other instanceof APSet) && this.equals((APSet) other));
@@ -141,6 +142,7 @@ public class APSet implements Iterable<String>
 	}
 
 	/** Returns an iterator over the atomic propositions in this set */
+	@Override
 	public Iterator<String> iterator()
 	{
 		return vector.iterator();

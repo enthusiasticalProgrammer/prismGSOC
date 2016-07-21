@@ -106,6 +106,7 @@ public class LabelList extends ASTElement
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -114,6 +115,7 @@ public class LabelList extends ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
@@ -131,6 +133,7 @@ public class LabelList extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		int i, n;

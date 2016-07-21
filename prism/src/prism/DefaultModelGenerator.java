@@ -98,6 +98,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 		throw new PrismException("Label number \"" + i + "\" not defined");
 	}
 
+	@Override
 	public int getLabelIndex(String label)
 	{
 		return -1;
@@ -123,6 +124,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 
 	// Methods for ModelGenerator interface
 
+	@Override
 	public boolean hasSingleInitialState() throws PrismException
 	{
 		// Default to the case of a single initial state

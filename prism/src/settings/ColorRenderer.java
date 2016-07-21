@@ -60,6 +60,7 @@ public class ColorRenderer implements SettingRenderer
 		panel.add(blank2, BorderLayout.WEST);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Setting owner, Object value, boolean isSelected, boolean hasFocus, boolean isEnabled, int row,
 			int column)
 	{

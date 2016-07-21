@@ -47,16 +47,19 @@ public class DoubleSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return Double.class;
@@ -67,6 +70,7 @@ public class DoubleSetting extends Setting
 		return ((Double) getValue()).doubleValue();
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		try {
@@ -76,6 +80,7 @@ public class DoubleSetting extends Setting
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		return "" + getDoubleValue();

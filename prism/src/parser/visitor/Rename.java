@@ -41,6 +41,7 @@ public class Rename extends ASTTraverseModify
 		this.rm = rm;
 	}
 
+	@Override
 	public void visitPost(ModulesFile e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -48,6 +49,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("ModulesFile should never be renamed");
 	}
 
+	@Override
 	public void visitPost(PropertiesFile e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -55,6 +57,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("PropertiesFile should never be renamed");
 	}
 
+	@Override
 	public void visitPost(Declaration e) throws PrismLangException
 	{
 		// Get new name for variable
@@ -67,12 +70,14 @@ public class Rename extends ASTTraverseModify
 		}
 	}
 
+	@Override
 	public void visitPost(Module e) throws PrismLangException
 	{
 		// New name for module is specied in RenamedModule
 		e.setName(rm.getName());
 	}
 
+	@Override
 	public void visitPost(Command e) throws PrismLangException
 	{
 		// Rename synchronising action of command
@@ -81,6 +86,7 @@ public class Rename extends ASTTraverseModify
 			e.setSynch(s);
 	}
 
+	@Override
 	public void visitPost(Update e) throws PrismLangException
 	{
 		int i, n;
@@ -94,6 +100,7 @@ public class Rename extends ASTTraverseModify
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionTemporal e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -101,6 +108,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("Temporal operators should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionFunc e) throws PrismLangException
 	{
 		// Rename function name (if necessary)
@@ -109,6 +117,7 @@ public class Rename extends ASTTraverseModify
 			e.setName(s);
 	}
 
+	@Override
 	public void visitPost(ExpressionIdent e) throws PrismLangException
 	{
 		// Rename identifier (if necessary)
@@ -117,6 +126,7 @@ public class Rename extends ASTTraverseModify
 			e.setName(s);
 	}
 
+	@Override
 	public void visitPost(ExpressionProb e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -124,6 +134,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("P operator should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -131,6 +142,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("R operator should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -138,6 +150,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("S operator should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionExists e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -145,6 +158,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("E operator should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionForAll e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied
@@ -152,6 +166,7 @@ public class Rename extends ASTTraverseModify
 		throw new PrismLangException("A operator should never be renamed");
 	}
 
+	@Override
 	public void visitPost(ExpressionStrategy e) throws PrismLangException
 	{
 		// This renaming is only designed to be applied

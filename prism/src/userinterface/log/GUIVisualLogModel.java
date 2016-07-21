@@ -241,69 +241,83 @@ public class GUIVisualLogModel extends PrismLog
 
 	// Methods required by PrismLog abstract class
 
+	@Override
 	public boolean ready()
 	{
 		return true;
 	}
 
+	@Override
 	public long getFilePointer()
 	{
 		return -1;
 	}
 
+	@Override
 	public void flush()
 	{
 	}
 
+	@Override
 	public void close()
 	{
 	}
 
+	@Override
 	public void print(long l)
 	{
 		print(NORMAL, "" + l);
 	}
 
+	@Override
 	public void print(int i)
 	{
 		print(NORMAL, "" + i);
 	}
 
+	@Override
 	public void print(boolean b)
 	{
 		print(NORMAL, "" + b);
 	}
 
+	@Override
 	public void print(char c)
 	{
 		print(NORMAL, "" + c);
 	}
 
+	@Override
 	public void print(float f)
 	{
 		print(NORMAL, "" + f);
 	}
 
+	@Override
 	public void print(double d)
 	{
 		print(NORMAL, "" + d);
 	}
 
+	@Override
 	public void print(Object obj)
 	{
 		print(NORMAL, "" + obj);
 	}
 
+	@Override
 	public void print(String s)
 	{
 		print(NORMAL, s);
 	}
 
+	@Override
 	public void print(double d[])
 	{
 		print(NORMAL, "" + d);
 	}
 
+	@Override
 	public void println()
 	{
 		println(NORMAL, "");
@@ -331,6 +345,7 @@ public class GUIVisualLogModel extends PrismLog
 		/** Overridden superclass run() method for thread of execution to add nodes to the
 		 * tree.
 		 */
+		@Override
 		public void run()
 		{
 			theModel.insertNodeInto(node, parentOfNode, parentOfNode.getChildCount());

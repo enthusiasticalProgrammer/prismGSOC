@@ -206,6 +206,7 @@ public class SingleProperty extends Observable
 		notifyObservers(null);
 	}
 
+	@Override
 	public String toString()
 	{
 		return property.toString();

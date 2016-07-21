@@ -71,21 +71,25 @@ public class ChoiceSingleton implements Choice
 
 	// Get methods
 
+	@Override
 	public int getModuleOrActionIndex()
 	{
 		return 0; // TODO
 	}
 
+	@Override
 	public String getModuleOrAction()
 	{
 		return null; // TODO
 	}
 
+	@Override
 	public int size()
 	{
 		return 1;
 	}
 
+	@Override
 	public int getIndexByProbabilitySum(double x)
 	{
 		return 0;
@@ -96,6 +100,7 @@ public class ChoiceSingleton implements Choice
 		return action;
 	}
 
+	@Override
 	public String getUpdateString(int i, State currentState)
 	{
 		String s = "(";
@@ -105,6 +110,7 @@ public class ChoiceSingleton implements Choice
 		return s;
 	}
 
+	@Override
 	public String getUpdateStringFull(int i)
 	{
 		return null;
@@ -124,6 +130,7 @@ public class ChoiceSingleton implements Choice
 			up.update(oldState, newState);
 	}
 
+	@Override
 	public State computeTarget(int i, State oldState) throws PrismLangException
 	{
 		if (i == 0)
@@ -132,6 +139,7 @@ public class ChoiceSingleton implements Choice
 			throw new PrismLangException("Choice does not have an element " + i);
 	}
 
+	@Override
 	public void computeTarget(int i, State oldState, State newState) throws PrismLangException
 	{
 		if (i == 0)
@@ -145,11 +153,13 @@ public class ChoiceSingleton implements Choice
 		return probability;
 	}
 
+	@Override
 	public double getProbability(int i)
 	{
 		return (i == 0) ? probability : -1;
 	}
 
+	@Override
 	public double getProbabilitySum()
 	{
 		return probability;

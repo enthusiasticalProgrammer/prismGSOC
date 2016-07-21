@@ -49,6 +49,7 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 		this.labelList = labelList;
 	}
 
+	@Override
 	public Object visit(ExpressionLabel e) throws PrismLangException
 	{
 		int i;
@@ -84,6 +85,7 @@ public class ExpandPropRefsAndLabels extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionProp e) throws PrismLangException
 	{
 		Property prop;

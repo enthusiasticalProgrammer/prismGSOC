@@ -68,51 +68,61 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 
 	// Accessors (for Model)
 
+	@Override
 	public ModelType getModelType()
 	{
 		return ModelType.DTMC;
 	}
 
+	@Override
 	public int getNumStates()
 	{
 		return mdp.getNumStates();
 	}
 
+	@Override
 	public int getNumInitialStates()
 	{
 		return mdp.getNumInitialStates();
 	}
 
+	@Override
 	public Iterable<Integer> getInitialStates()
 	{
 		return mdp.getInitialStates();
 	}
 
+	@Override
 	public int getFirstInitialState()
 	{
 		return mdp.getFirstInitialState();
 	}
 
+	@Override
 	public boolean isInitialState(int i)
 	{
 		return mdp.isInitialState(i);
 	}
 
+	@Override
 	public boolean isDeadlockState(int i)
 	{
 		return mdp.isDeadlockState(i);
 	}
 
+	@Override
 	public List<State> getStatesList()
 	{
 		return mdp.getStatesList();
 	}
 
+	@Override
 	public Values getConstantValues()
 	{
 		return mdp.getConstantValues();
 	}
 
+	@Override
 	public int getNumTransitions()
 	{
 		int numTransitions = 0;
@@ -122,21 +132,25 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 		return numTransitions;
 	}
 
+	@Override
 	public Iterator<Integer> getSuccessorsIterator(final int s)
 	{
 		return mdp.getSuccessorsIterator(s, strat.getChoiceIndex(s));
 	}
 
+	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
 		throw new RuntimeException("Not implemented yet");
 	}
 
+	@Override
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
 		return mdp.allSuccessorsInSet(s, strat.getChoiceIndex(s), set);
 	}
 
+	@Override
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
 		return mdp.someSuccessorsInSet(s, strat.getChoiceIndex(s), set);
@@ -148,16 +162,19 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 		return 1;
 	}
 
+	@Override
 	public void findDeadlocks(boolean fix) throws PrismException
 	{
 		// No deadlocks by definition
 	}
 
+	@Override
 	public void checkForDeadlocks() throws PrismException
 	{
 		// No deadlocks by definition
 	}
 
+	@Override
 	public void checkForDeadlocks(BitSet except) throws PrismException
 	{
 		// No deadlocks by definition
@@ -177,11 +194,13 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 
 	// Accessors (for DTMC)
 
+	@Override
 	public int getNumTransitions(int s)
 	{
 		return strat.isChoiceDefined(s) ? mdp.getNumTransitions(s, strat.getChoiceIndex(s)) : 0;
 	}
 
+	@Override
 	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s)
 	{
 		if (strat.isChoiceDefined(s)) {
@@ -211,6 +230,7 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 		}
 	}
 
+	@Override
 	public void prob0step(BitSet subset, BitSet u, BitSet result)
 	{
 		for (int i : new IterableStateSet(subset, numStates)) {
@@ -218,6 +238,7 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 		}
 	}
 
+	@Override
 	public void prob1step(BitSet subset, BitSet u, BitSet v, BitSet result)
 	{
 		for (int i : new IterableStateSet(subset, numStates)) {

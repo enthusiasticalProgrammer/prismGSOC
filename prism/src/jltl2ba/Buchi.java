@@ -114,6 +114,7 @@ public class Buchi
 			to = null;
 		}
 
+		@Override
 		public BTrans clone()
 		{
 			BTrans rv = new BTrans(pos, neg);
@@ -706,6 +707,7 @@ public class Buchi
 			fin = fin_;
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			return (o instanceof LTL2BAState) && this.equals((LTL2BAState) o);
@@ -716,6 +718,7 @@ public class Buchi
 			return (index == s.index) && (fin == s.fin);
 		}
 
+		@Override
 		public int hashCode()
 		{
 			return index * 31 + fin;

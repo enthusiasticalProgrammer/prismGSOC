@@ -224,12 +224,14 @@ public class PTAParallel
 			this.i2 = i2;
 		}
 
+		@Override
 		public int hashCode()
 		{
 			// Simple hash code
 			return i1;
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			IndexPair ip;
@@ -243,6 +245,7 @@ public class PTAParallel
 			return i1 == ip.i1 && i2 == ip.i2;
 		}
 
+		@Override
 		public String toString()
 		{
 			return i1 + "," + i2;

@@ -65,11 +65,13 @@ public class ModelCheckThread extends GUIComputationThread
 		this.guiProps = guiProps;
 	}
 
+	@Override
 	public void run()
 	{
 		// Notify user interface of the start of computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.startProgress();
@@ -124,6 +126,7 @@ public class ModelCheckThread extends GUIComputationThread
 		// Notify user interface of the end of computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				parent.stopProgress();
@@ -155,6 +158,7 @@ public class ModelCheckThread extends GUIComputationThread
 			images[7] = GUIPrism.getIconFromImage("smallClockAnim8.png");
 		}
 
+		@Override
 		public void run()
 		{
 			try {

@@ -75,6 +75,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 	}
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -471,6 +472,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	//REQUIRED TO IMPLEMENT KEYLISTENER
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 		if (e.getModifiers() == KeyEvent.CTRL_MASK) {
@@ -491,10 +493,12 @@ public class GUIPropertiesList extends JList implements KeyListener
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}
@@ -511,11 +515,13 @@ public class GUIPropertiesList extends JList implements KeyListener
 			setOpaque(true);
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return toolTip;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
@@ -554,16 +560,19 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

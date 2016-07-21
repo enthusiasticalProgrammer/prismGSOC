@@ -192,6 +192,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	/**
 	 * Model check an expression, process and return the result.
 	 */
+	@Override
 	public Result check(Expression expr) throws PrismException
 	{
 		long timer = 0;
@@ -236,6 +237,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 	/**
 	 * Model check an expression and return a vector result values over all states.
 	 */
+	@Override
 	public StateValues checkExpression(Expression expr) throws PrismException
 	{
 		StateValues res;
@@ -309,6 +311,7 @@ public class StateModelChecker extends PrismComponent implements ModelChecker
 
 	// Check expression, convert to symbolic form (if not already), return BDD
 
+	@Override
 	public JDDNode checkExpressionDD(Expression expr) throws PrismException
 	{
 		return checkExpression(expr).convertToStateValuesMTBDD().getJDDNode();

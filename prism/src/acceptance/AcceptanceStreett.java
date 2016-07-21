@@ -146,6 +146,7 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	}
 
 	/** Make a copy of the acceptance condition. */
+	@Override
 	public AcceptanceStreett clone()
 	{
 		AcceptanceStreett result = new AcceptanceStreett();
@@ -262,6 +263,7 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	/**
 	 * Get the acceptance signature for state stateIndex.
 	 **/
+	@Override
 	public String getSignatureForState(int stateIndex)
 	{
 		String result = "";

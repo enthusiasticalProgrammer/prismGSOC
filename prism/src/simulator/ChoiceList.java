@@ -104,11 +104,13 @@ public class ChoiceList implements Choice
 
 	// Get methods
 
+	@Override
 	public int getModuleOrActionIndex()
 	{
 		return 0; // TODO
 	}
 
+	@Override
 	public String getModuleOrAction()
 	{
 		return null; // TODO
@@ -119,11 +121,13 @@ public class ChoiceList implements Choice
 		return action;
 	}
 
+	@Override
 	public int size()
 	{
 		return probability.size();
 	}
 
+	@Override
 	public String getUpdateString(int i, State currentState) throws PrismLangException
 	{
 		String s = "(";
@@ -133,6 +137,7 @@ public class ChoiceList implements Choice
 		return s;
 	}
 
+	@Override
 	public String getUpdateStringFull(int i)
 	{
 		return null;
@@ -148,6 +153,7 @@ public class ChoiceList implements Choice
 		computeTarget(0, oldState, newState);
 	}
 
+	@Override
 	public State computeTarget(int i, State oldState) throws PrismLangException
 	{
 		if (i < 0 || i >= size())
@@ -158,6 +164,7 @@ public class ChoiceList implements Choice
 		return newState;
 	}
 
+	@Override
 	public void computeTarget(int i, State oldState, State newState) throws PrismLangException
 	{
 		if (i < 0 || i >= size())
@@ -171,6 +178,7 @@ public class ChoiceList implements Choice
 		return getProbability(0);
 	}
 
+	@Override
 	public double getProbability(int i)
 	{
 		if (i < 0 || i >= size())
@@ -179,6 +187,7 @@ public class ChoiceList implements Choice
 		return probability.get(i);
 	}
 
+	@Override
 	public double getProbabilitySum()
 	{
 		double sum = 0.0;
@@ -200,6 +209,7 @@ public class ChoiceList implements Choice
 		return command.get(i);
 	}
 
+	@Override
 	public int getIndexByProbabilitySum(double x)
 	{
 		int i, n;
@@ -225,6 +235,7 @@ public class ChoiceList implements Choice
 		// TODO
 	}
 
+	@Override
 	public String toString()
 	{
 		int i, n;

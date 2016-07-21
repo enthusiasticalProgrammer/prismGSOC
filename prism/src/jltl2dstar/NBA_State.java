@@ -150,6 +150,7 @@ public class NBA_State implements Iterable<Map.Entry<APElement, MyBitSet>>
 		return _graph;
 	}
 
+	@Override
 	public Iterator<Map.Entry<APElement, MyBitSet>> iterator()
 	{
 		return _edge_manager.getEdgeContainer().entrySet().iterator();

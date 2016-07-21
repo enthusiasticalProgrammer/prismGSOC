@@ -113,6 +113,7 @@ public class STPGRewardsSimple extends MDPRewardsSimple implements STPGRewards
 	/**
 	 * Clear all rewards for state s.
 	 */
+	@Override
 	public void clearRewards(int s)
 	{
 		super.clearRewards(s);

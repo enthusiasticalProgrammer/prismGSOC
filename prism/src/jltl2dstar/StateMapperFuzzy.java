@@ -51,6 +51,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 	}
 
 	/** Clear the mapping. */
+	@Override
 	public void clear()
 	{
 		_map.clear();
@@ -62,6 +63,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 	 * @param result the query
 	 * @return the corresponding state or NULL otherwise
 	 */
+	@Override
 	public DA_State find(SafraTreeTemplate result)
 	{
 
@@ -84,6 +86,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 	 * @param key the key
 	 * @param state the state
 	 */
+	@Override
 	public void add(SafraTree key, DA_State state)
 	{
 
@@ -103,6 +106,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 	}
 
 	/** Get the number of trees */
+	@Override
 	public int size()
 	{
 		return _count;
@@ -121,6 +125,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 			_key = key;
 		}
 
+		@Override
 		public int hashCode()
 		{
 			return CandidateMatcher.hash(_key);
@@ -131,6 +136,7 @@ public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher
 			return CandidateMatcher.abstract_equal_to(_key, other._key);
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			return (o.getClass() == this.getClass()) && this.equals((AbstractedKeyType) o);

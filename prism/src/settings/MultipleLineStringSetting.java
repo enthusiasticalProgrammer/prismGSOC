@@ -47,16 +47,19 @@ public class MultipleLineStringSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return String.class;
@@ -67,11 +70,13 @@ public class MultipleLineStringSetting extends Setting
 		return getValue().toString();
 	}
 
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		return string;
 	}
 
+	@Override
 	public String toString()
 	{
 		return getStringValue();

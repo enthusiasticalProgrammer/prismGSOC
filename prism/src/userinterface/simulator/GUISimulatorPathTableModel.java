@@ -82,6 +82,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return parsedModel.getModelType().continuousTime();
 	}
 
+	@Override
 	public int getGroupCount()
 	{
 		if (!pathActive) {
@@ -129,6 +130,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		if (o == view) {
@@ -139,6 +141,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public String getGroupName(int groupIndex)
 	{
 		if (!pathActive) {
@@ -209,6 +212,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		}
 	}
 
+	@Override
 	public String getGroupToolTip(int groupIndex)
 	{
 		ArrayList<Variable> vars = view.getVisibleVariables();
@@ -273,6 +277,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return null;
 	}
 
+	@Override
 	public int getLastColumnOfGroup(int groupIndex)
 	{
 		int stepStart = 0;
@@ -375,6 +380,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	 * Returns the number of columns.
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
+	@Override
 	public int getColumnCount()
 	{
 		if (!pathActive) {
@@ -396,6 +402,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	 * Returns the number of rows.
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
+	@Override
 	public int getRowCount()
 	{
 		// Return current path size if there is an active path.
@@ -419,6 +426,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return false;
 	}
 
+	@Override
 	public String getColumnName(int columnIndex)
 	{
 		if (pathActive) {
@@ -451,6 +459,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return "Undefined Column";
 	}
 
+	@Override
 	public String getColumnToolTip(int columnIndex)
 	{
 		if (pathActive) {
@@ -491,6 +500,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 		return "Undefined Column";
 	}
 
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
 		if (pathActive) {

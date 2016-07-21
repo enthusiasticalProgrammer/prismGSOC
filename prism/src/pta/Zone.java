@@ -162,7 +162,9 @@ public abstract class Zone
 
 	// Standard Java methods
 
+	@Override
 	public abstract int hashCode();
 
+	@Override
 	public abstract boolean equals(Object o);
 }

@@ -39,6 +39,7 @@ public class GraphConstantHeader extends javax.swing.JPanel
 		setPreferredSize(new Dimension(1, getFontMetrics(getFont()).getHeight() + 4));
 	}
 
+	@Override
 	public void setEnabled(boolean b)
 	{
 		super.setEnabled(b);

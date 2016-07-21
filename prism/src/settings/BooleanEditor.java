@@ -55,6 +55,7 @@ public class BooleanEditor implements SettingEditor, ActionListener
 		renderer.addActionListener(this);
 	}
 
+	@Override
 	public Object getEditorValue()
 	{
 		if (modified) {
@@ -64,6 +65,7 @@ public class BooleanEditor implements SettingEditor, ActionListener
 			return NOT_CHANGED_VALUE;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 		if (isSelected) {
@@ -121,10 +123,12 @@ public class BooleanEditor implements SettingEditor, ActionListener
 		return panel;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		modified = true;

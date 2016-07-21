@@ -99,6 +99,7 @@ public class Filter extends ASTElement
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -107,6 +108,7 @@ public class Filter extends ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = "";
@@ -121,6 +123,7 @@ public class Filter extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		Filter ret = new Filter(expr.deepCopy());

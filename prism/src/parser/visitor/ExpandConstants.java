@@ -42,6 +42,7 @@ public class ExpandConstants extends ASTTraverseModify
 		this.constantList = constantList;
 	}
 
+	@Override
 	public Object visit(ExpressionConstant e) throws PrismLangException
 	{
 		int i;

@@ -200,6 +200,7 @@ public class IntegerBound
 	}
 
 	/** String representation */
+	@Override
 	public String toString()
 	{
 		if (hasLowerBound()) {

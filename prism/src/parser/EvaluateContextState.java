@@ -48,6 +48,7 @@ public class EvaluateContextState implements EvaluateContext
 		this.varValues = state.varValues;
 	}
 
+	@Override
 	public Object getConstantValue(String name)
 	{
 		if (constantValues == null)
@@ -58,6 +59,7 @@ public class EvaluateContextState implements EvaluateContext
 		return constantValues.getValue(i);
 	}
 
+	@Override
 	public Object getVarValue(String name, int index)
 	{
 		// Use index to look up value

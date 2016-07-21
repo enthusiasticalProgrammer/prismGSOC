@@ -55,6 +55,7 @@ public class GUIPropLabelList extends JTable
 	}
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -183,16 +184,19 @@ public class GUIPropLabelList extends JTable
 			return error;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return labels.size();
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 2;
 		}
 
+		@Override
 		public Object getValueAt(int row, int column)
 		{
 			GUILabel lab = getLabel(row);
@@ -206,6 +210,7 @@ public class GUIPropLabelList extends JTable
 			}
 		}
 
+		@Override
 		public String getColumnName(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -218,6 +223,7 @@ public class GUIPropLabelList extends JTable
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int column)
 		{
 			return true;
@@ -225,6 +231,7 @@ public class GUIPropLabelList extends JTable
 
 		/** Return string representing PRISM code for all labels in this table model */
 
+		@Override
 		public String toString()
 		{
 			String str = "";
@@ -303,6 +310,7 @@ public class GUIPropLabelList extends JTable
 
 		/** This is called directly by the GUI (when the table is edited) */
 
+		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			GUILabel gl = getLabel(rowIndex);
@@ -345,6 +353,7 @@ public class GUIPropLabelList extends JTable
 
 	class TheCellRenderer extends DefaultTableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

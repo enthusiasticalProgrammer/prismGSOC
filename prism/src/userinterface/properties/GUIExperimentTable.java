@@ -53,6 +53,7 @@ public class GUIExperimentTable extends JTable
 	}
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -124,6 +125,7 @@ public class GUIExperimentTable extends JTable
 			experiments = new ArrayList<GUIExperiment>();
 		}
 
+		@Override
 		public String getColumnName(int index)
 		{
 			switch (index) {
@@ -142,16 +144,19 @@ public class GUIExperimentTable extends JTable
 			}
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 5;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return experiments.size();
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			GUIExperiment ge = getExperiment(rowIndex);
@@ -232,6 +237,7 @@ public class GUIExperimentTable extends JTable
 			}
 		}
 
+		@Override
 		public Class getColumnClass(int i)
 		{
 			switch (i) {
@@ -250,6 +256,7 @@ public class GUIExperimentTable extends JTable
 
 	class ProgressBarRenderer implements TableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			if (value instanceof JProgressBar) {

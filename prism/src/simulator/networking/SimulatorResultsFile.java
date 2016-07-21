@@ -99,6 +99,7 @@ public class SimulatorResultsFile extends Observable
 		tellObservers();
 	}
 
+	@Override
 	public String toString()
 	{
 		String str = "";
@@ -138,6 +139,7 @@ public class SimulatorResultsFile extends Observable
 			result = Double.parseDouble(token3);
 		}
 
+		@Override
 		public String toString()
 		{
 			return index + "\t" + iterations + "\t" + result;

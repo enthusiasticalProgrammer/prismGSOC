@@ -131,6 +131,7 @@ public class GUITransientTime extends javax.swing.JDialog
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -142,6 +143,7 @@ public class GUITransientTime extends javax.swing.JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);

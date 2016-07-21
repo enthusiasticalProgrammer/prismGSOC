@@ -87,18 +87,21 @@ public class Modules2PTA extends PrismComponent
 		{
 			private Module inModule = null;
 
+			@Override
 			public void visitPre(Module e) throws PrismLangException
 			{
 				// Register the fact we are entering a module
 				inModule = e;
 			}
 
+			@Override
 			public void visitPost(Module e) throws PrismLangException
 			{
 				// Register the fact we are leaving a module
 				inModule = null;
 			}
 
+			@Override
 			public void visitPost(ExpressionVar e) throws PrismLangException
 			{
 				// For PTAs, references to variables in modules have to be local

@@ -678,6 +678,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		return mainLog;
 	}
 
+	@Override
 	public PrismSettings getSettings()
 	{
 		return settings;
@@ -975,6 +976,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Let PrismSettings object notify us things have changed
 	 */
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		if (cuddStarted) {

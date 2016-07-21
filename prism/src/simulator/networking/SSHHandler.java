@@ -146,6 +146,7 @@ public class SSHHandler
 	{
 		Thread t = new Thread()
 		{
+			@Override
 			public void run()
 			{
 				try {
@@ -184,6 +185,7 @@ public class SSHHandler
 			this.isPing = isPing;
 		}
 
+		@Override
 		public void run()
 		{
 			BufferedInputStream bis = new BufferedInputStream(is);
@@ -218,6 +220,7 @@ public class SSHHandler
 			threads = new Vector();
 		}
 
+		@Override
 		public void run()
 		{
 			try {
@@ -257,6 +260,7 @@ public class SSHHandler
 			threads.add(this);
 		}
 
+		@Override
 		public void run()
 		{
 

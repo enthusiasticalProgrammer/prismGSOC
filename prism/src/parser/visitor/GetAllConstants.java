@@ -43,6 +43,7 @@ public class GetAllConstants extends ASTTraverse
 		this.v = v;
 	}
 
+	@Override
 	public void visitPost(ExpressionConstant e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {

@@ -62,11 +62,13 @@ public class ComputeTransientThread extends GUIComputationThread
 		this.exportFile = f;
 	}
 
+	@Override
 	public void run()
 	{
 		// Notify the interface that we are starting computation
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				plug.startProgress();
@@ -82,6 +84,7 @@ public class ComputeTransientThread extends GUIComputationThread
 			error(e);
 			SwingUtilities.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					plug.notifyEventListeners(new GUIComputationEvent(GUIComputationEvent.COMPUTATION_ERROR, plug));
@@ -95,6 +98,7 @@ public class ComputeTransientThread extends GUIComputationThread
 		//If we get here, computation was successful
 		SwingUtilities.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				plug.setTaskBarText("Computing transient probabilities... done.");

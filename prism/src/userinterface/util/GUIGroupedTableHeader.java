@@ -62,6 +62,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 		final TableCellRenderer renderer = topHeader.getDefaultRenderer();
 		topHeader.setDefaultRenderer(new TableCellRenderer()
 		{
+			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 			{
 				Component component = renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -96,6 +97,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 		{
 			private TableColumn lastColumn;
 
+			@Override
 			public void mouseMoved(MouseEvent e)
 			{
 				bottomHeader.setToolTipText(null);
@@ -118,6 +120,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 		{
 			private TableColumn lastColumn;
 
+			@Override
 			public void mouseMoved(MouseEvent e)
 			{
 				topHeader.setToolTipText(null);
@@ -211,6 +214,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 	/** 
 	 * Overwritten to catch events of child components.
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		this.dispatchEvent(new MouseEvent(this, e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY() + ((Component) e.getSource()).getBounds().y,
@@ -220,6 +224,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 	/** 
 	 * Overwritten to catch events of child components.
 	 */
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 		this.dispatchEvent(new MouseEvent(this, e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY() + ((Component) e.getSource()).getBounds().y,
@@ -229,6 +234,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 	/** 
 	 * Overwritten to catch events of child components.
 	 */
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		this.dispatchEvent(new MouseEvent(this, e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY() + ((Component) e.getSource()).getBounds().y,
@@ -238,6 +244,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 	/** 
 	 * Overwritten to catch events of child components.
 	 */
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		this.dispatchEvent(new MouseEvent(this, e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY() + ((Component) e.getSource()).getBounds().y,
@@ -247,6 +254,7 @@ public class GUIGroupedTableHeader extends JTableHeader implements TableColumnMo
 	/** 
 	 * Overwritten to catch events of child components.
 	 */
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		this.dispatchEvent(new MouseEvent(this, e.getID(), e.getWhen(), e.getModifiers(), e.getX(), e.getY() + ((Component) e.getSource()).getBounds().y,

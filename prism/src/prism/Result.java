@@ -163,6 +163,7 @@ public class Result
 	/**
 	 * Get the string representation of the actual result value.
 	 */
+	@Override
 	public String toString()
 	{
 		return result == null ? "null" : result.toString();

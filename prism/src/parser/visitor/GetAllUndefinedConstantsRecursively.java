@@ -54,6 +54,7 @@ public class GetAllUndefinedConstantsRecursively extends ASTTraverse
 		this.propertiesFile = propertiesFile;
 	}
 
+	@Override
 	public void visitPost(ExpressionConstant e) throws PrismLangException
 	{
 		// Look up this constant in the constant list
@@ -74,6 +75,7 @@ public class GetAllUndefinedConstantsRecursively extends ASTTraverse
 		}
 	}
 
+	@Override
 	public void visitPost(ExpressionLabel e) throws PrismLangException
 	{
 		// Ignore special cases of labels (no constants there)
@@ -91,6 +93,7 @@ public class GetAllUndefinedConstantsRecursively extends ASTTraverse
 		expr.accept(this);
 	}
 
+	@Override
 	public void visitPost(ExpressionProp e) throws PrismLangException
 	{
 		// Look up this property in the properties files, if possible

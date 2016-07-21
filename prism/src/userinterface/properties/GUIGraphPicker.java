@@ -376,6 +376,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -410,6 +411,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		selectAxisConstantCombo.setPreferredSize(new java.awt.Dimension(100, 24));
 		selectAxisConstantCombo.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectAxisConstantComboActionPerformed(evt);
@@ -467,6 +469,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		buttonGroup1.add(newGraphRadio);
 		newGraphRadio.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				newGraphRadioActionPerformed(evt);
@@ -483,6 +486,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		buttonGroup1.add(existingGraphRadio);
 		existingGraphRadio.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				existingGraphRadioActionPerformed(evt);
@@ -533,6 +537,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		lineOkayButton.setText("Okay");
 		lineOkayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				lineOkayButtonActionPerformed(evt);
@@ -544,6 +549,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 		lineCancelButton.setText("Cancel");
 		lineCancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				lineCancelButtonActionPerformed(evt);

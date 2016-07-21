@@ -139,6 +139,7 @@ public class RabinSignature implements Comparable<RabinSignature>
 	}
 
 	/** Get string representation of this signature. */
+	@Override
 	public String toString()
 	{
 		String a;
@@ -166,12 +167,14 @@ public class RabinSignature implements Comparable<RabinSignature>
 		return (_L.equals(other.getL()) && _U.equals(other.getU()));
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		return ((other instanceof RabinSignature) && this.equals((RabinSignature) other));
 	}
 
 	/** Compare to other signature */
+	@Override
 	public int compareTo(RabinSignature other)
 	{
 		int i = _L.compareTo(other.getL());

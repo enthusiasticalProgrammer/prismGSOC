@@ -33,6 +33,7 @@ public abstract class StringConstraint implements SettingConstraint
 	{
 	}
 
+	@Override
 	public void checkValue(Object value) throws SettingException
 	{
 		checkValueString(value.toString());

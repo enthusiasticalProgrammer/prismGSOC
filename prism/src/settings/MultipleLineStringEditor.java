@@ -58,6 +58,7 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 		area.addFocusListener(this);
 	}
 
+	@Override
 	public Object getEditorValue()
 	{
 		if (multiDifferent && area.getText().equals("")) {
@@ -70,6 +71,7 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 		}
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Setting owner, Object value, boolean isSelected, int row, int column)
 	{
 
@@ -140,10 +142,12 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 		return area;
 	}
 
+	@Override
 	public void stopEditing()
 	{
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 
@@ -193,14 +197,17 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void caretUpdate(CaretEvent e)
 	{
 		if (lastTable == null)
@@ -212,10 +219,12 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 			lastTable.setRowHeight(tableRow, heightWanted);
 	}
 
+	@Override
 	public void focusGained(FocusEvent e)
 	{
 	}
 
+	@Override
 	public void focusLost(FocusEvent e)
 	{
 		if (!valueGot && lastTable != null) {

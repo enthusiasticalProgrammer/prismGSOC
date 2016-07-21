@@ -169,6 +169,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		jScrollPane1.getViewport().setBackground(Color.white);
 		theTable = new JTable()
 		{
+			@Override
 			public void editingStopped(ChangeEvent e)
 			{
 				// Take in the new value
@@ -194,6 +195,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			//just saying tableScroll.setColumnHeader(null); does not work as it should
 			//Unfortunately, it overrides a deprecated API, so let's hope they
 			//sort it out by Java 5.0, nice one Sun...
+			@Override
 			protected void configureEnclosingScrollPane()
 			{
 				Container p = getParent();
@@ -283,6 +285,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	}//GEN-END:initComponents
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -290,6 +293,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			theTable.setRowHeight(getFontMetrics(font).getHeight() + 4);
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		//System.out.println("list VALUE CHANGED");
@@ -324,6 +328,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		//        }
 	}
 
+	@Override
 	public void tableChanged(TableModelEvent e)
 	{
 		Setting selected = theModel.getSelectedProperty(theTable.getSelectedRow());
@@ -388,11 +393,13 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	//        return count;
 	//    }
 
+	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
 		theModel.setCurrentGroup(theCombo.getSelectedIndex());
 	}
 
+	@Override
 	public void redisplaySetting(Setting setting)
 	{
 		Setting selected = theModel.getSelectedProperty(theTable.getSelectedRow());
@@ -423,6 +430,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		/**
 		 *  In this case value will be instanceof Setting
 		 */
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 
@@ -463,6 +471,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	{
 		private SettingEditor currentEditor;
 
+		@Override
 		public Object getCellEditorValue()
 		{
 			try {
@@ -472,12 +481,14 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			}
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			fireEditingStopped();
 			return shouldRemove;
 		}
 
+		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 		{
 
@@ -680,6 +691,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			return groupNames.size();
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			if (groupNames.size() == 0)
@@ -688,11 +700,13 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			return firstInGroup.getNumSettings();
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 2;
 		}
 
+		@Override
 		public String getColumnName(int column)
 		{
 			if (column == 0)
@@ -701,6 +715,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				return "Value";
 		}
 
+		@Override
 		public Object getValueAt(int row, int column)
 		{
 			if (column == 0) {
@@ -726,6 +741,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int column)
 		{
 			if (column == 0) {
@@ -744,6 +760,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		}
 
+		@Override
 		public void setValueAt(Object obj, int row, int column)
 		{
 			try {

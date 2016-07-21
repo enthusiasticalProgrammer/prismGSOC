@@ -124,6 +124,7 @@ public class ForLoop extends ASTElement
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);
@@ -132,6 +133,7 @@ public class ForLoop extends ASTElement
 	/**
 	 * Convert to string.
 	 */
+	@Override
 	public String toString()
 	{
 		String s = lhs + "=" + from;
@@ -144,6 +146,7 @@ public class ForLoop extends ASTElement
 	/**
 	 * Perform a deep copy.
 	 */
+	@Override
 	public ASTElement deepCopy()
 	{
 		ForLoop ret = new ForLoop();

@@ -148,6 +148,7 @@ public class Transition
 			throw new PrismException("Non-1 probability (" + prob + ") for PTA transition \"" + this + "\"");
 	}
 
+	@Override
 	public String toString()
 	{
 		boolean first;

@@ -137,6 +137,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		return groupNames.size();
 	}
 
+	@Override
 	public int getRowCount()
 	{
 		if (groupNames.size() == 0)
@@ -145,11 +146,13 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		return firstInGroup.getNumProperties();
 	}
 
+	@Override
 	public int getColumnCount()
 	{
 		return 2;
 	}
 
+	@Override
 	public String getColumnName(int column)
 	{
 		if (column == 0)
@@ -158,6 +161,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 			return "Value";
 	}
 
+	@Override
 	public Object getValueAt(int row, int column)
 	{
 		if (column == 0) {
@@ -182,6 +186,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		}
 	}
 
+	@Override
 	public boolean isCellEditable(int row, int column)
 	{
 		if (column == 0) {
@@ -200,6 +205,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 
 	}
 
+	@Override
 	public void setValueAt(Object obj, int row, int column)
 	{
 		try {
@@ -282,6 +288,7 @@ public class PropertyTableModel extends AbstractTableModel implements Observer
 		return comboModel;
 	}
 
+	@Override
 	public void update(Observable o, Object arg)
 	{
 		fireTableDataChanged();

@@ -63,6 +63,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 		initComponents();
 		this.valuePicker.setRenderer(new DefaultListCellRenderer()
 		{
+			@Override
 			public Component getListCellRendererComponent(JList list, Object obj, int i, boolean selection, boolean hasFocus)
 			{
 				if (obj instanceof Double) {
@@ -132,6 +133,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 		}
 	}
 
+	@Override
 	public void setEnabled(boolean b)
 	{
 		//System.out.println("setEnabloed called on a GraphConstantPickerList");
@@ -154,6 +156,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 
 	//ACCESS METHODS
 
+	@Override
 	public String getName()
 	{
 		return nameLabel.getText();
@@ -237,6 +240,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 		valuePicker.setBackground(new java.awt.Color(255, 255, 255));
 		valuePicker.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				valuePickerActionPerformed(evt);
@@ -271,16 +275,19 @@ public class GraphConstantLine extends javax.swing.JPanel
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 1, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

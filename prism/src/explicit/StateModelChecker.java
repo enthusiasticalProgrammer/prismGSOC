@@ -1189,56 +1189,67 @@ public class StateModelChecker extends PrismComponent
 			this.propBSs = propBSs;
 		}
 
+		@Override
 		public Object visit(ExpressionITE e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionBinaryOp e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionUnaryOp e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionFunc e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionIdent e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionLiteral e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionConstant e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionFormula e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionVar e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionLabel e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);
 		}
 
+		@Override
 		public Object visit(ExpressionProp e) throws PrismLangException
 		{
 			// Look up property and recurse
@@ -1250,6 +1261,7 @@ public class StateModelChecker extends PrismComponent
 			}
 		}
 
+		@Override
 		public Object visit(ExpressionFilter e) throws PrismLangException
 		{
 			return (e.getType() instanceof TypeBool && e.isProposition()) ? replaceWithLabel(e) : super.visit(e);

@@ -77,6 +77,7 @@ public class LTSNBAProduct extends Product<Model>
 			return automatonState;
 		}
 
+		@Override
 		public String toString()
 		{
 			return "(" + getModelState() + "," + getAutomatonState() + ")";

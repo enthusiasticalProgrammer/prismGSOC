@@ -97,6 +97,7 @@ public class SeriesEditorDialog extends JDialog
 
 		AbstractAction cut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				editors.get(tabbedPane.getSelectedIndex()).cut();
@@ -110,6 +111,7 @@ public class SeriesEditorDialog extends JDialog
 
 		AbstractAction copy = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				editors.get(tabbedPane.getSelectedIndex()).copy();
@@ -123,6 +125,7 @@ public class SeriesEditorDialog extends JDialog
 
 		AbstractAction paste = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				editors.get(tabbedPane.getSelectedIndex()).paste();
@@ -136,6 +139,7 @@ public class SeriesEditorDialog extends JDialog
 
 		AbstractAction delete = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				editors.get(tabbedPane.getSelectedIndex()).delete();
@@ -196,6 +200,7 @@ public class SeriesEditorDialog extends JDialog
 		setMinimumSize(new java.awt.Dimension(550, 350));
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -212,6 +217,7 @@ public class SeriesEditorDialog extends JDialog
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -223,6 +229,7 @@ public class SeriesEditorDialog extends JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -307,6 +314,7 @@ public class SeriesEditorDialog extends JDialog
 
 			this.xySeries.addChangeListener(new SeriesChangeListener()
 			{
+				@Override
 				public void seriesChanged(SeriesChangeEvent event)
 				{
 					SeriesEditor.this.tableModel.fireTableStructureChanged();
@@ -315,21 +323,25 @@ public class SeriesEditorDialog extends JDialog
 
 			this.tableModel = new AbstractTableModel()
 			{
+				@Override
 				public int getColumnCount()
 				{
 					return 2;
 				}
 
+				@Override
 				public int getRowCount()
 				{
 					return SeriesEditor.this.xySeries.getItemCount() + bufferSize;
 				}
 
+				@Override
 				public boolean isCellEditable(int rowIndex, int columnIndex)
 				{
 					return true;
 				}
 
+				@Override
 				public Object getValueAt(int rowIndex, int columnIndex)
 				{
 					if (rowIndex >= SeriesEditor.this.xySeries.getItemCount()) {
@@ -348,6 +360,7 @@ public class SeriesEditorDialog extends JDialog
 						return dataItem.getY();
 				}
 
+				@Override
 				public String getColumnName(int column)
 				{
 					if (column == 0)
@@ -357,6 +370,7 @@ public class SeriesEditorDialog extends JDialog
 
 				}
 
+				@Override
 				public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 				{
 					Double value = Double.NaN;
@@ -617,6 +631,7 @@ public class SeriesEditorDialog extends JDialog
 			this.xySeries = xySeries;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			System.out.println(e);

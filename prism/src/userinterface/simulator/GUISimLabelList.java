@@ -127,6 +127,7 @@ public class GUISimLabelList extends JList
 			this.index = index;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name;
@@ -237,11 +238,13 @@ public class GUISimLabelList extends JList
 			text = "Unknown";
 		}
 
+		@Override
 		public String getToolTipText()
 		{
 			return text;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
@@ -274,16 +277,19 @@ public class GUISimLabelList extends JList
 
 	class BottomBorder implements javax.swing.border.Border
 	{
+		@Override
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(0, 0, 0, 0);
 		}
 
+		@Override
 		public boolean isBorderOpaque()
 		{
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
 		{
 			g.setColor(Color.lightGray);

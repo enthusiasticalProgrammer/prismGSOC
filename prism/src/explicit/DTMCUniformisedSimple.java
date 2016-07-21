@@ -84,74 +84,88 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 
 	// Accessors (for Model)
 
+	@Override
 	public ModelType getModelType()
 	{
 		return ModelType.DTMC;
 	}
 
+	@Override
 	public int getNumStates()
 	{
 		return ctmc.getNumStates();
 	}
 
+	@Override
 	public int getNumInitialStates()
 	{
 		return ctmc.getNumInitialStates();
 	}
 
+	@Override
 	public Iterable<Integer> getInitialStates()
 	{
 		return ctmc.getInitialStates();
 	}
 
+	@Override
 	public int getFirstInitialState()
 	{
 		return ctmc.getFirstInitialState();
 	}
 
+	@Override
 	public boolean isInitialState(int i)
 	{
 		return ctmc.isInitialState(i);
 	}
 
+	@Override
 	public boolean isDeadlockState(int i)
 	{
 		return ctmc.isDeadlockState(i);
 	}
 
+	@Override
 	public List<State> getStatesList()
 	{
 		return ctmc.getStatesList();
 	}
 
+	@Override
 	public Values getConstantValues()
 	{
 		return ctmc.getConstantValues();
 	}
 
+	@Override
 	public int getNumTransitions()
 	{
 		return ctmc.getNumTransitions() + numExtraTransitions;
 	}
 
+	@Override
 	public Iterator<Integer> getSuccessorsIterator(final int s)
 	{
 		// TODO
 		throw new Error("Not yet supported");
 	}
 
+	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
 		// TODO
 		throw new Error("Not yet supported");
 	}
 
+	@Override
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
 		// TODO
 		throw new Error("Not yet supported");
 	}
 
+	@Override
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
 		// TODO
@@ -164,16 +178,19 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		return 1;
 	}
 
+	@Override
 	public void findDeadlocks(boolean fix) throws PrismException
 	{
 		// No deadlocks by definition
 	}
 
+	@Override
 	public void checkForDeadlocks() throws PrismException
 	{
 		// No deadlocks by definition
 	}
 
+	@Override
 	public void checkForDeadlocks(BitSet except) throws PrismException
 	{
 		// No deadlocks by definition
@@ -199,24 +216,28 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 
 	// Accessors (for DTMC)
 
+	@Override
 	public int getNumTransitions(int s)
 	{
 		// TODO
 		throw new RuntimeException("Not implemented yet");
 	}
 
+	@Override
 	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s)
 	{
 		// TODO
 		throw new RuntimeException("Not implemented yet");
 	}
 
+	@Override
 	public void prob0step(BitSet subset, BitSet u, BitSet result)
 	{
 		// TODO
 		throw new Error("Not yet supported");
 	}
 
+	@Override
 	public void prob1step(BitSet subset, BitSet u, BitSet v, BitSet result)
 	{
 		// TODO
@@ -273,6 +294,7 @@ public class DTMCUniformisedSimple extends DTMCExplicit
 		return d;
 	}
 
+	@Override
 	public double mvMultRewSingle(int s, double vect[], MCRewards mcRewards)
 	{
 		// TODO

@@ -65,26 +65,31 @@ public class GraphConstantPickerList extends JPanel implements Scrollable
 		getConstantLine(index).setEnabled(false);
 	}
 
+	@Override
 	public Dimension getPreferredScrollableViewportSize()
 	{
 		return getPreferredSize();
 	}
 
+	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
 	{
 		return 20;
 	}
 
+	@Override
 	public boolean getScrollableTracksViewportHeight()
 	{
 		return false;
 	}
 
+	@Override
 	public boolean getScrollableTracksViewportWidth()
 	{
 		return true;
 	}
 
+	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
 	{
 		return 40;

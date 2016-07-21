@@ -365,6 +365,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return The number of minor tick marks to display.
 	 */
+	@Override
 	public int getMinorTickCount()
 	{
 		return this.minorTickCount;
@@ -375,6 +376,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @param count  the count.
 	 */
+	@Override
 	public void setMinorTickCount(int count)
 	{
 		if (count <= 0) {
@@ -420,6 +422,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return A value along the axis scale.
 	 */
+	@Override
 	public double java2DToValue(double java2DValue, Rectangle2D area, RectangleEdge edge)
 	{
 
@@ -456,6 +459,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return The Java2D coordinate corresponding to <code>value</code>.
 	 */
+	@Override
 	public double valueToJava2D(double value, Rectangle2D area, RectangleEdge edge)
 	{
 
@@ -484,6 +488,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * Configures the axis.  This method is typically called when an axis
 	 * is assigned to a new plot.
 	 */
+	@Override
 	public void configure()
 	{
 		if (isAutoRange()) {
@@ -495,6 +500,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * Adjusts the axis range to match the data range that the axis is
 	 * required to display.
 	 */
+	@Override
 	protected void autoAdjustRange()
 	{
 		Plot plot = getPlot();
@@ -551,6 +557,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return The axis state (never <code>null</code>).
 	 */
+	@Override
 	public AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge, PlotRenderingInfo plotState)
 	{
 
@@ -581,6 +588,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * @return A list of ticks.
 	 *
 	 */
+	@Override
 	public List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge)
 	{
 

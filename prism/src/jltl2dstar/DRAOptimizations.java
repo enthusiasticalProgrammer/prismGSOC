@@ -231,6 +231,7 @@ public class DRAOptimizations
 		 * equivalence relation to determine
 		 * equality.
 		 */
+		@Override
 		public int compare(Integer state_x, Integer state_y)
 		{
 			int cx = _coloring.state2color(state_x);
@@ -330,6 +331,7 @@ public class DRAOptimizations
 		 * Compares (less-than) two DRAState indizes based on their
 		 * acceptance signature.
 		 */
+		@Override
 		public int compare(Integer x, Integer y)
 		{
 			AcceptanceSignature px = _container.get(x);

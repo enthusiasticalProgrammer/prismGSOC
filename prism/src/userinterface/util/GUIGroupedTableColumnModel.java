@@ -103,22 +103,27 @@ public class GUIGroupedTableColumnModel extends DefaultTableColumnModel implemen
 		}
 	}
 
+	@Override
 	public void columnAdded(TableColumnModelEvent e)
 	{
 	}
 
+	@Override
 	public void columnMarginChanged(ChangeEvent e)
 	{
 	}
 
+	@Override
 	public void columnMoved(TableColumnModelEvent e)
 	{
 	}
 
+	@Override
 	public void columnRemoved(TableColumnModelEvent e)
 	{
 	}
 
+	@Override
 	public void columnSelectionChanged(ListSelectionEvent e)
 	{
 	}

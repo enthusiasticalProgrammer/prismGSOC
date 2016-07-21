@@ -78,11 +78,13 @@ public class APMonom2APElements implements Iterator<APElement>
 		_end_marker = true;
 	}
 
+	@Override
 	public boolean hasNext()
 	{
 		return !_end_marker;
 	}
 
+	@Override
 	public APElement next() throws NoSuchElementException
 	{
 		if (hasNext()) {
@@ -93,6 +95,7 @@ public class APMonom2APElements implements Iterator<APElement>
 			throw new NoSuchElementException();
 	}
 
+	@Override
 	public void remove() throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

@@ -255,6 +255,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -271,6 +272,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -282,6 +284,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -320,6 +323,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		selectAllVisibleVariablesButton.setText("Select All");
 		selectAllVisibleVariablesButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectAllVisibleVariablesButtonActionPerformed(evt);
@@ -345,6 +349,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		makeVariableVisibleButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				makeVariableVisibleButtonActionPerformed(evt);
@@ -361,6 +366,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		makeVariableHiddenButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				makeVariableHiddenButtonActionPerformed(evt);
@@ -396,6 +402,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		selectAllHiddenVariablesButton.setText("Select All");
 		selectAllHiddenVariablesButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectAllHiddenVariablesButtonActionPerformed(evt);
@@ -438,6 +445,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		selectAllVisibleRewardsButton.setText("Select All");
 		selectAllVisibleRewardsButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectAllVisibleRewardsButtonActionPerformed(evt);
@@ -463,6 +471,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		makeRewardVisibleButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				makeRewardVisibleButtonActionPerformed(evt);
@@ -479,6 +488,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 
 		makeRewardHiddenButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				makeRewardHiddenButtonActionPerformed(evt);
@@ -514,6 +524,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		selectAllHiddenRewardsButton.setText("Select All");
 		selectAllHiddenRewardsButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				selectAllHiddenRewardsButtonActionPerformed(evt);
@@ -705,15 +716,18 @@ public class GUIViewDialog extends JDialog implements KeyListener
 		dispose();
 	}//GEN-LAST:event_closeDialog
 
+	@Override
 	public void keyPressed(KeyEvent e)
 	{
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e)
 	{
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e)
 	{
 
@@ -774,6 +788,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 			this.isCumulative = isCumulative;
 		}
 
+		@Override
 		public String toString()
 		{
 			String res = rewardStructure.toString();
@@ -811,6 +826,7 @@ public class GUIViewDialog extends JDialog implements KeyListener
 			this.rewardStructure = rewardStructure;
 		}
 
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (obj instanceof RewardListItem) {

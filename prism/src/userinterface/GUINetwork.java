@@ -40,54 +40,65 @@ public class GUINetwork extends GUIPlugin
 
 	//PLUGIN INTERFACE METHODS
 
+	@Override
 	public boolean displaysTab()
 	{
 		return false;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return null;
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return options;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
 
+	@Override
 	public boolean processGUIEvent(userinterface.util.GUIEvent e)
 	{
 		return false;
 	}
 
+	@Override
 	public void takeCLArgs(String[] args)
 	{
 	}
 
+	@Override
 	public void notifySettings(prism.PrismSettings settings)
 	{
 	}

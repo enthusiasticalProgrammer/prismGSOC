@@ -144,6 +144,7 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	}
 
 	/** Make a copy of the acceptance condition. */
+	@Override
 	public AcceptanceRabin clone()
 	{
 		AcceptanceRabin result = new AcceptanceRabin();
@@ -158,6 +159,7 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	 * given by bscc_states is accepting for this Rabin condition,
 	 * i.e., there is a pair that accepts for bscc_states.
 	 */
+	@Override
 	public boolean isBSCCAccepting(BitSet bscc_states)
 	{
 		for (RabinPair pair : this) {
@@ -261,6 +263,7 @@ public class AcceptanceRabin extends ArrayList<AcceptanceRabin.RabinPair> implem
 	/**
 	 * Get the acceptance signature for state stateIndex.
 	 **/
+	@Override
 	public String getSignatureForState(int stateIndex)
 	{
 		String result = "";

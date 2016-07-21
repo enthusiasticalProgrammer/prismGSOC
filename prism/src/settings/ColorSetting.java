@@ -50,16 +50,19 @@ public class ColorSetting extends Setting
 		super(name, value, comment, owner, editableWhenMultiple, constraint);
 	}
 
+	@Override
 	public SettingEditor getSettingEditor()
 	{
 		return editor;
 	}
 
+	@Override
 	public SettingRenderer getSettingRenderer()
 	{
 		return renderer;
 	}
 
+	@Override
 	public Class getValueClass()
 	{
 		return Color.class;
@@ -73,6 +76,7 @@ public class ColorSetting extends Setting
 	/**
 	 *	Parses strings of the form: "r,g,b" e.g. "255,0,255"
 	 */
+	@Override
 	public Object parseStringValue(String string) throws SettingException
 	{
 		try {
@@ -89,6 +93,7 @@ public class ColorSetting extends Setting
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		Color c = getColorValue();

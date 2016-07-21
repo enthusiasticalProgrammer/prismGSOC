@@ -79,6 +79,7 @@ public class GUIPrismSplash extends Frame
 			setVisible(true);
 		}
 
+		@Override
 		public void paint(Graphics graphics)
 		{
 			if (fImage != null) {

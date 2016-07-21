@@ -51,12 +51,14 @@ public class PresentationMetalTheme extends DefaultMetalTheme
 	}
 
 	/** Overrides the superclass's getMenuTextFont method by returning a larger font. */
+	@Override
 	public FontUIResource getMenuTextFont()
 	{
 		return f;
 	}
 
 	/** Overrides the superclass's getControlTextFont() method to return a larger font. */
+	@Override
 	public FontUIResource getControlTextFont()
 	{
 		return f;

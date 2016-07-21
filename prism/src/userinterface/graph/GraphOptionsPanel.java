@@ -93,6 +93,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		seriesList.setCellRenderer(new ListCellRenderer()
 		{
 
+			@Override
 			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 			{
 				JLabel label = new JLabel((value == null) ? "undefined" : value.toString());
@@ -193,6 +194,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 		tabbedPanel.addChangeListener(new javax.swing.event.ChangeListener()
 		{
+			@Override
 			public void stateChanged(javax.swing.event.ChangeEvent evt)
 			{
 				tabbedPanelStateChanged(evt);
@@ -298,6 +300,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		addSeries.setIcon(GUIPrism.getIconFromImage("smallAdd.png"));
 		addSeries.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				addSeriesActionPerformed(evt);
@@ -313,6 +316,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		removeSeries.setIcon(GUIPrism.getIconFromImage("smallRemove.png"));
 		removeSeries.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				removeSeriesActionPerformed(evt);
@@ -328,6 +332,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		moveUp.setIcon(GUIPrism.getIconFromImage("smallArrowUp.png"));
 		moveUp.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				moveUpActionPerformed(evt);
@@ -343,6 +348,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		moveDown.setIcon(GUIPrism.getIconFromImage("smallArrowDown.png"));
 		moveDown.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				moveDownActionPerformed(evt);
@@ -356,6 +362,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		viewData.setIcon(GUIPrism.getIconFromImage("smallEditData.png"));
 		viewData.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				viewDataActionPerformed(evt);
@@ -535,6 +542,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		viewData.setEnabled(seriesList.getSelectedIndices().length >= 1);
 	}
 
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		stopEditors();

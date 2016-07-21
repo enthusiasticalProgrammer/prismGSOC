@@ -38,16 +38,19 @@ public class StochModel extends ProbModel
 {
 	// accessor methods
 
+	@Override
 	public ModelType getModelType()
 	{
 		return ModelType.CTMC;
 	}
 
+	@Override
 	public String getTransName()
 	{
 		return "Rate matrix";
 	}
 
+	@Override
 	public String getTransSymbol()
 	{
 		return "R";

@@ -197,6 +197,7 @@ public class SafraTree implements NBA2DAState
 		return _nodes.equals(other._nodes);
 	}
 
+	@Override
 	public boolean equals(Object other)
 	{
 		if (other instanceof SafraTree)
@@ -316,6 +317,7 @@ public class SafraTree implements NBA2DAState
 	// }
 
 	/** Returns a string representation in HTML of the SafraTree */
+	@Override
 	public String toHTML()
 	{
 		if (getRootNode() == null) {
@@ -340,6 +342,7 @@ public class SafraTree implements NBA2DAState
 	// 		}
 	// }
 
+	@Override
 	public int hashCode()
 	{
 		if (getRootNode() != null)
@@ -351,6 +354,7 @@ public class SafraTree implements NBA2DAState
 	/**
 	 * Generate the appropriate acceptance signature for Rabin Acceptance for this tree  
 	 */
+	@Override
 	public void generateAcceptance(AcceptanceForState acceptance)
 	{
 		for (int i = 0; i < getNodeMax(); i++) {

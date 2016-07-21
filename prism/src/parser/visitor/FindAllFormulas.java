@@ -41,6 +41,7 @@ public class FindAllFormulas extends ASTTraverseModify
 		this.formulaList = formulaList;
 	}
 
+	@Override
 	public Object visit(ExpressionIdent e) throws PrismLangException
 	{
 		int i;

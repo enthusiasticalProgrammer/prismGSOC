@@ -74,27 +74,32 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 		add(scroller, BorderLayout.CENTER);
 	}
 
+	@Override
 	public void changedUpdate(DocumentEvent e)
 	{
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e)
 	{
 		if (handler != null)
 			handler.hasModified(true);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e)
 	{
 		if (handler != null)
 			handler.hasModified(true);
 	}
 
+	@Override
 	public String getParseText()
 	{
 		return editor.getText();
 	}
 
+	@Override
 	public void newModel()
 	{
 		editor.setText("");
@@ -115,6 +120,7 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 
 	/** Performs an undo operation on the text in the model editor.
 	 */
+	@Override
 	public void undo()
 	{
 		try {
@@ -127,6 +133,7 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 
 	/** Performs a redo operation on the text in the model editor.
 	 */
+	@Override
 	public void redo()
 	{
 		try {
@@ -136,26 +143,31 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 		}
 	}
 
+	@Override
 	public void copy()
 	{
 		editor.copy();
 	}
 
+	@Override
 	public void cut()
 	{
 		editor.cut();
 	}
 
+	@Override
 	public void paste()
 	{
 		editor.paste();
 	}
 
+	@Override
 	public void delete()
 	{
 
 	}
 
+	@Override
 	public void selectAll()
 	{
 		editor.selectAll();
@@ -200,16 +212,19 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			preferences = prefs;
 		}
 
+		@Override
 		public String getContentType()
 		{
 			return "text/pepa";
 		}
 
+		@Override
 		public Document createDefaultDocument()
 		{
 			return new PlainDocument();
 		}
 
+		@Override
 		public final ViewFactory getViewFactory()
 		{
 			return getStylePreferences();
@@ -228,6 +243,7 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			super();
 		}
 
+		@Override
 		public View create(Element elem)
 		{
 			return new PepaView(elem);
@@ -250,11 +266,13 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			pattern = Pattern.compile("%.*");
 		}
 
+		@Override
 		public void paint(Graphics g, Shape a)
 		{
 			super.paint(g, a);
 		}
 
+		@Override
 		protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());
@@ -299,6 +317,7 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			return x;
 		}
 
+		@Override
 		protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
 		{
 			int stLine = findStartOfLine(p0, getDocument());

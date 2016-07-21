@@ -62,6 +62,7 @@ public class FontColorProperty extends SingleProperty
 
 		edit.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				editValue = FontChooser.getFont(GUIPrism.getGUI(), getFontColorPair().f, getFontColorPair().c, getFontColorPair().f, getFontColorPair().c);
@@ -85,6 +86,7 @@ public class FontColorProperty extends SingleProperty
 		return (FontColorPair) getProperty();
 	}
 
+	@Override
 	public void setProperty(Object property) throws PropertyException
 	{
 		if (property instanceof FontColorPair)
@@ -95,6 +97,7 @@ public class FontColorProperty extends SingleProperty
 
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
@@ -108,6 +111,7 @@ public class FontColorProperty extends SingleProperty
 	JPanel pan = new JPanel();
 	JLabel renderer = new JLabel();
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		if (editDocked)
@@ -145,6 +149,7 @@ public class FontColorProperty extends SingleProperty
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellRendererComponentMulti(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column,
 			boolean allTheSame)
 	{
@@ -190,6 +195,7 @@ public class FontColorProperty extends SingleProperty
 	boolean editDocked = false;
 
 	//THIS WILL NEED TO OVERRIDE THE EDITOR
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
 		editValue = getFontColorPair();

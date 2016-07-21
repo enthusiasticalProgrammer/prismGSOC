@@ -43,6 +43,7 @@ public class GetAllPropRefs extends ASTTraverse
 		this.v = v;
 	}
 
+	@Override
 	public void visitPost(ExpressionProp e) throws PrismLangException
 	{
 		if (!v.contains(e.getName())) {

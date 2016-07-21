@@ -53,6 +53,7 @@ public class GUIPropConstantList extends JTable
 	}
 
 	/** Override set font to update row heights at same time */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -194,16 +195,19 @@ public class GUIPropConstantList extends JTable
 			return error;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return constants.size();
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 3;
 		}
 
+		@Override
 		public Object getValueAt(int row, int column)
 		{
 			GUIConstant con = getConstant(row);
@@ -219,6 +223,7 @@ public class GUIPropConstantList extends JTable
 			}
 		}
 
+		@Override
 		public String getColumnName(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -233,6 +238,7 @@ public class GUIPropConstantList extends JTable
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int column)
 		{
 			return true;
@@ -240,6 +246,7 @@ public class GUIPropConstantList extends JTable
 
 		/** Return string representing PRISM code for all constants in this table model */
 
+		@Override
 		public String toString()
 		{
 			String str = "";
@@ -318,6 +325,7 @@ public class GUIPropConstantList extends JTable
 
 		/** This is called directly by the GUI (when the table is edited) */
 
+		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			GUIConstant gc = getConstant(rowIndex);
@@ -375,6 +383,7 @@ public class GUIPropConstantList extends JTable
 
 	class TheCellRenderer extends DefaultTableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

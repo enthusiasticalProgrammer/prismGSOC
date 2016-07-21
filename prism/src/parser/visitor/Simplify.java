@@ -35,6 +35,7 @@ import prism.PrismLangException;
  */
 public class Simplify extends ASTTraverseModify
 {
+	@Override
 	public Object visit(ExpressionBinaryOp e) throws PrismLangException
 	{
 		// Apply recursively
@@ -151,6 +152,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionUnaryOp e) throws PrismLangException
 	{
 		// Apply recursively
@@ -166,6 +168,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionITE e) throws PrismLangException
 	{
 		// Apply recursively
@@ -186,6 +189,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionFunc e) throws PrismLangException
 	{
 		int i, n;
@@ -211,6 +215,7 @@ public class Simplify extends ASTTraverseModify
 		return e;
 	}
 
+	@Override
 	public Object visit(ExpressionFormula e) throws PrismLangException
 	{
 		// If formula has an attached definition, just replace it with that

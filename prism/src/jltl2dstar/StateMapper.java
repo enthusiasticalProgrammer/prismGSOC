@@ -43,6 +43,7 @@ public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S ext
 	}
 
 	/** Clear the mapping */
+	@Override
 	public void clear()
 	{
 		_map.clear();
@@ -54,6 +55,7 @@ public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S ext
 	 * @param state the state
 	 */
 	// public StateType add(KeyType key, StateType state) {
+	@Override
 	public void add(K key, S state)
 	{
 		// System.out.println("Adding hash " + key.hashCode());
@@ -80,6 +82,7 @@ public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S ext
 	 * @param result
 	 * @return the state (or the NULL pointer if not found)
 	 */
+	@Override
 	public S find(R result)
 	{
 		return find(result.getState());
@@ -88,6 +91,7 @@ public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S ext
 	/** Get number of mappings.
 	 * @return the number of mappings
 	 */
+	@Override
 	public int size()
 	{
 		return _count;

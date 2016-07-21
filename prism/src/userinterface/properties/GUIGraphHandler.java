@@ -109,6 +109,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		graphOptions = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GraphOptions graphOptions = options.get(theTabs.getSelectedIndex());
@@ -123,6 +124,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomIn = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -137,6 +139,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomOut = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -151,6 +154,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		zoomDefault = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph mgm = models.get(theTabs.getSelectedIndex());
@@ -165,6 +169,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		importXML = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (plug.showOpenFileDialog(graFilter) != JFileChooser.APPROVE_OPTION)
@@ -184,6 +189,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportXML = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (plug.showSaveFileDialog(graFilter) != JFileChooser.APPROVE_OPTION)
@@ -203,6 +209,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImageJPG = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.JPEG);
@@ -217,6 +224,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImagePNG = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.PNG);
@@ -231,6 +239,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportImageEPS = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUIImageExportDialog imageDialog = new GUIImageExportDialog(plug.getGUI(), getModel(theTabs.getSelectedIndex()), GUIImageExportDialog.EPS);
@@ -245,6 +254,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		exportMatlab = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (plug.showSaveFileDialog(matlabFilter) != JFileChooser.APPROVE_OPTION)
@@ -265,6 +275,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		printGraph = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph graph = models.get(theTabs.getSelectedIndex());
@@ -286,6 +297,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 		deleteGraph = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Graph graph = models.get(theTabs.getSelectedIndex());
@@ -479,6 +491,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 	}
 
 	// User right clicked on a tab
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -486,6 +499,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		// Zoom out on double click
@@ -496,6 +510,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger()) {
@@ -554,6 +569,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -562,10 +578,12 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 	// don't implement these for tabs
 	//public void mouseClicked(MouseEvent e) { }
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}

@@ -240,6 +240,7 @@ public abstract class GUIPlugin extends JPanel implements GUIEventListener, Pris
 	 * in which case it should returns true.
 	 * @param e A GUIEvent from elsewhere in the userinterface.
 	 */
+	@Override
 	public abstract boolean processGUIEvent(GUIEvent e);
 
 	/** Loads an XML tree stored in 'c'.

@@ -38,11 +38,13 @@ public class TypePathInt extends Type
 	{
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypePathInt);
 	}
 
+	@Override
 	public String getTypeString()
 	{
 		return "path-int";

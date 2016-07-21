@@ -137,6 +137,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog(evt);
@@ -185,6 +186,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		okayButton.setText("Okay");
 		okayButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				okayButtonActionPerformed(evt);
@@ -196,6 +198,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				cancelButtonActionPerformed(evt);
@@ -365,16 +368,19 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 			return (Constant) constants.get(i);
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return 3;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			return constants.size();
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 
@@ -391,6 +397,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 			}
 		}
 
+		@Override
 		public String getColumnName(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -405,6 +412,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 			}
 		}
 
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2)
@@ -413,6 +421,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 				return false;
 		}
 
+		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 		{
 			if (columnIndex == 2) {
@@ -423,6 +432,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 			}
 		}
 
+		@Override
 		public String toString()
 		{
 			String str = "";
@@ -450,6 +460,7 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 			this.value = value;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name + "=" + value.toString();

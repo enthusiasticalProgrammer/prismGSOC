@@ -112,6 +112,7 @@ public class ChoiceProperty extends SingleProperty
 		setProperty(properties.get(i), true);
 	}
 
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
@@ -126,6 +127,7 @@ public class ChoiceProperty extends SingleProperty
 	 *  If not, if this ChoiceProperty is not a fixed size, the new 
 	 *  choice is added.  Any problems cause a PropertyException
 	 */
+	@Override
 	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
 	{
 		if (properties == null)
@@ -184,12 +186,14 @@ public class ChoiceProperty extends SingleProperty
 	JPanel pan = new JPanel();
 
 	//THIS WILL NEED TO OVERRIDE THE EDITOR
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
 		pan.setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
 		return pan;
 	}
 
+	@Override
 	public Component getTableCellEditorComponentMulti(JTable table, Object value, boolean isSelected, int row, int column, boolean allTheSame)
 	{
 		if (allTheSame) {

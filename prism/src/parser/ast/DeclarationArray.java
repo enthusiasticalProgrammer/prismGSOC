@@ -85,6 +85,7 @@ public class DeclarationArray extends DeclarationType
 	/**
 	 * Return the default start value for a variable of this type.
 	 */
+	@Override
 	public Expression getDefaultStart()
 	{
 		// TODO: what should be the default?
@@ -107,6 +108,7 @@ public class DeclarationArray extends DeclarationType
 	/**
 	 * Visitor method.
 	 */
+	@Override
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
 		return v.visit(this);

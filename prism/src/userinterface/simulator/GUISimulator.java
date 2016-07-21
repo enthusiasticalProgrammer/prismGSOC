@@ -159,6 +159,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		pathTable.addComponentListener(new ComponentAdapter()
 		{
+			@Override
 			public void componentResized(ComponentEvent e)
 			{
 				sortOutColumnSizes();
@@ -177,6 +178,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		currentUpdatesTable.setModel(updateTableModel);
 		currentUpdatesTable.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() == 2 && currentUpdatesTable.isEnabled()) {
@@ -191,6 +193,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		currentUpdatesTable.addKeyListener(new KeyAdapter()
 		{
+			@Override
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER && currentUpdatesTable.isEnabled()) {
@@ -217,6 +220,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		stateLabelList.addListSelectionListener(new ListSelectionListener()
 		{
+			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
 				pathTable.repaint();
@@ -902,41 +906,49 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	//METHODS TO IMPLEMENT THE GUIPLUGIN INTERFACE
 
+	@Override
 	public boolean displaysTab()
 	{
 		return true;
 	}
 
+	@Override
 	public javax.swing.JMenu getMenu()
 	{
 		return simulatorMenu;
 	}
 
+	@Override
 	public OptionsPanel getOptions()
 	{
 		return null;
 	}
 
+	@Override
 	public String getTabText()
 	{
 		return "Simulator";
 	}
 
+	@Override
 	public javax.swing.JToolBar getToolBar()
 	{
 		return null;
 	}
 
+	@Override
 	public String getXMLIDTag()
 	{
 		return "";
 	}
 
+	@Override
 	public Object getXMLSaveTree()
 	{
 		return null;
 	}
 
+	@Override
 	public void loadXML(Object c)
 	{
 	}
@@ -981,6 +993,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		return false;
 	}
 
+	@Override
 	public void takeCLArgs(String[] args)
 	{
 	}
@@ -1121,6 +1134,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		newPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		newPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				newPathButtonActionPerformed(evt);
@@ -1136,6 +1150,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		resetPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		resetPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				resetPathButtonActionPerformed(evt);
@@ -1151,6 +1166,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		exportPathButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		exportPathButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				exportPathButtonActionPerformed(evt);
@@ -1167,6 +1183,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		configureViewButton.setPreferredSize(new java.awt.Dimension(119, 28));
 		configureViewButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				configureViewButtonActionPerformed(evt);
@@ -1331,6 +1348,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		randomExplorationButton.setPreferredSize(new java.awt.Dimension(160, 23));
 		randomExplorationButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				randomExplorationButtonActionPerformed(evt);
@@ -1355,6 +1373,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		inputExploreField.setPreferredSize(new java.awt.Dimension(60, 19));
 		inputExploreField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				inputExploreFieldActionPerformed(evt);
@@ -1389,6 +1408,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		backtrackButton.setPreferredSize(new java.awt.Dimension(160, 23));
 		backtrackButton.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				backtrackButtonActionPerformed(evt);
@@ -1412,6 +1432,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		inputBacktrackField.setPreferredSize(new java.awt.Dimension(60, 19));
 		inputBacktrackField.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				inputBacktrackFieldActionPerformed(evt);
@@ -1498,6 +1519,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	}// </editor-fold>//GEN-END:initComponents
 
 	/** Override set font to set pass on to path table and header (which may not be visible yet) */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -1597,6 +1619,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		newPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUISimulator.this.tabToFront();
@@ -1612,6 +1635,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathFromState = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				GUISimulator.this.tabToFront();
@@ -1626,6 +1650,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathPlot = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newPathPlot(false);
@@ -1639,6 +1664,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		newPathPlotFromState = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_newPathPlot(true);
@@ -1651,6 +1677,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		resetPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_restartPath();
@@ -1665,6 +1692,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		exportPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_exportPath();
@@ -1678,6 +1706,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		plotPath = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_plotPath();
@@ -1690,6 +1719,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		randomExploration = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				randomExplorationButtonActionPerformed(e);
@@ -1703,6 +1733,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		backtrack = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				backtrackButtonActionPerformed(e);
@@ -1716,6 +1747,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		backtrackToHere = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_backTrack(pathTable.getSelectedRow());
@@ -1728,6 +1760,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		removeToHere = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 
@@ -1745,6 +1778,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 		configureView = new AbstractAction()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				a_configureView();
@@ -1929,23 +1963,28 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		doEnables();
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		doPopupDetection(e);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		doPopupDetection(e);
@@ -2062,6 +2101,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	/**
 	 * Respond to selections of rows in the path table: update transition list.
 	 */
+	@Override
 	public void valueChanged(ListSelectionEvent e)
 	{
 		try {
@@ -2206,11 +2246,13 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			oldStep = -1;
 		}
 
+		@Override
 		public int getColumnCount()
 		{
 			return pathActive ? 3 : 0;
 		}
 
+		@Override
 		public int getRowCount()
 		{
 			try {
@@ -2220,6 +2262,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			}
 		}
 
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex)
 		{
 			if (pathActive) {
@@ -2241,6 +2284,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			return "";
 		}
 
+		@Override
 		public String getColumnName(int column)
 		{
 			if (pathActive) {
@@ -2324,6 +2368,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		}
 	}
 
+	@Override
 	public void notifySettings(PrismSettings settings)
 	{
 		displayStyleFast = settings.getInteger(PrismSettings.SIMULATOR_RENDER_ALL_VALUES) == 0;

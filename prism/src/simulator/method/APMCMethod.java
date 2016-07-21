@@ -86,6 +86,7 @@ public abstract class APMCMethod extends SimulationMethod
 		missingParameterComputed = false;
 	}
 
+	@Override
 	public abstract void computeMissingParameterBeforeSim() throws PrismException;
 
 	@Override
@@ -125,8 +126,10 @@ public abstract class APMCMethod extends SimulationMethod
 		// Nothing to do (always computed before simulation)
 	}
 
+	@Override
 	public abstract Object getMissingParameter() throws PrismException;
 
+	@Override
 	public abstract String getParametersString();
 
 	@Override

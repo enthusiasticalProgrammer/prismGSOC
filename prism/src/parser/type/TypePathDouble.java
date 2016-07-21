@@ -38,11 +38,13 @@ public class TypePathDouble extends Type
 	{
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		return (o instanceof TypePathDouble);
 	}
 
+	@Override
 	public String getTypeString()
 	{
 		return "path-double";

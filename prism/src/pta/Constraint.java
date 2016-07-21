@@ -56,11 +56,13 @@ public class Constraint
 		this(c.x, c.y, c.db);
 	}
 
+	@Override
 	public int hashCode()
 	{
 		return (((db * 7) + x) * 7) + y;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o == null || !(o instanceof Constraint))

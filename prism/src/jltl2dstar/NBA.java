@@ -435,6 +435,7 @@ public class NBA implements Iterable<NBA_State>
 		setStartState(this.get(state));
 	}
 
+	@Override
 	public Iterator<NBA_State> iterator()
 	{
 		return _index.iterator();

@@ -114,6 +114,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
 				closeDialog();
@@ -125,6 +126,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		jButton1.setText("Okay");
 		jButton1.addActionListener(new java.awt.event.ActionListener()
 		{
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				jButton1ActionPerformed(evt);
@@ -306,6 +308,7 @@ public class GUIPropertyResultDialog extends javax.swing.JDialog
 		super.setVisible(true);
 	}
 
+	@Override
 	public void dispose()
 	{
 		noOpen--;

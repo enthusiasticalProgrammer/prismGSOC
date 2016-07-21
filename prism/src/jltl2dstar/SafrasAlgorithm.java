@@ -203,6 +203,7 @@ public class SafrasAlgorithm
 	{
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			if (node.getChildCount() <= 1) {
@@ -250,6 +251,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			if (node.getChildCount() == 0) {
@@ -296,6 +298,7 @@ public class SafrasAlgorithm
 			_tree_template = tree_template;
 		}
 
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			if (_final_states.intersects(node.getLabeling())) {
@@ -345,6 +348,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 
@@ -385,6 +389,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			MyBitSet old_labeling = node.getLabeling();
@@ -411,6 +416,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			if (node.getLabeling().isEmpty()) {
@@ -443,6 +449,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			int id = node.getID();
@@ -490,6 +497,7 @@ public class SafrasAlgorithm
 		}
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			if (node.getChildCount() <= 1) {
@@ -549,6 +557,7 @@ public class SafrasAlgorithm
 	{
 
 		/** Node visitor */
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			node.setFinalFlag(false);
@@ -569,6 +578,7 @@ public class SafrasAlgorithm
 			_bitset = bitset;
 		}
 
+		@Override
 		public void visit(SafraTree tree, SafraTreeNode node)
 		{
 			node.getLabeling().andNot(_bitset);

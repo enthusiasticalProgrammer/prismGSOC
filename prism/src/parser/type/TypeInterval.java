@@ -53,6 +53,7 @@ public class TypeInterval extends Type
 		this.subType = subType;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof TypeInterval) {
@@ -63,6 +64,7 @@ public class TypeInterval extends Type
 		return false;
 	}
 
+	@Override
 	public String getTypeString()
 	{
 		return "interval of " + subType.getTypeString();

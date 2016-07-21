@@ -48,34 +48,40 @@ public class ComputeProbNesting extends ASTTraverse
 		return maxNesting;
 	}
 
+	@Override
 	public void visitPre(ExpressionProb e) throws PrismLangException
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
 
+	@Override
 	public void visitPost(ExpressionProb e) throws PrismLangException
 	{
 		currentNesting--;
 	}
 
+	@Override
 	public void visitPre(ExpressionReward e) throws PrismLangException
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
 
+	@Override
 	public void visitPost(ExpressionReward e) throws PrismLangException
 	{
 		currentNesting--;
 	}
 
+	@Override
 	public void visitPre(ExpressionSS e) throws PrismLangException
 	{
 		currentNesting++;
 		maxNesting = Math.max(maxNesting, currentNesting);
 	}
 
+	@Override
 	public void visitPost(ExpressionSS e) throws PrismLangException
 	{
 		currentNesting--;

@@ -259,6 +259,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Print summary of current settings.
 	 */
+	@Override
 	public void printSettings()
 	{
 		super.printSettings();
@@ -280,6 +281,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Set verbosity level, i.e. amount of output produced.
 	 */
+	@Override
 	public void setVerbosity(int verbosity)
 	{
 		this.verbosity = verbosity;
@@ -393,6 +395,7 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	// Get methods for flags/settings
 
+	@Override
 	public int getVerbosity()
 	{
 		return verbosity;
