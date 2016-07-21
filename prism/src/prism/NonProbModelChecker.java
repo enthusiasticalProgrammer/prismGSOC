@@ -51,7 +51,7 @@ public class NonProbModelChecker extends StateModelChecker
 
 	// Constructor
 
-	public NonProbModelChecker(Prism prism, Model m, PropertiesFile pf) throws PrismException
+	public NonProbModelChecker(Prism prism, Model m, PropertiesFile pf)
 	{
 		// Initialise
 		super(prism, m, pf);

@@ -45,7 +45,7 @@ public class DoubleRangeConstraint implements SettingConstraint
 	}
 
 	@Override
-	public void checkValue(Object value) throws SettingException
+	public void checkValue(Object value)
 	{
 
 	}

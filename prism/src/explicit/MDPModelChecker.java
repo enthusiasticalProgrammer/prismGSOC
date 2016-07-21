@@ -223,7 +223,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max probabilities (true=min, false=max)
 	 */
-	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min) throws PrismException
+	public ModelCheckerResult computeNextProbs(MDP mdp, BitSet target, boolean min)
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -1055,7 +1055,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max probabilities (true=min, false=max)
 	 * @param lastSoln Vector of values from which to recompute in one iteration 
 	 */
-	public List<Integer> probReachStrategy(MDP mdp, int state, BitSet target, boolean min, double lastSoln[]) throws PrismException
+	public List<Integer> probReachStrategy(MDP mdp, int state, BitSet target, boolean min, double lastSoln[])
 	{
 		double val = mdp.mvMultMinMaxSingle(state, lastSoln, min, null);
 		return mdp.mvMultMinMaxSingleChoices(state, lastSoln, min, val);
@@ -1069,7 +1069,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param k Bound
 	 * @param min Min or max probabilities (true=min, false=max)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(MDP mdp, BitSet target, int k, boolean min) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(MDP mdp, BitSet target, int k, boolean min)
 	{
 		return computeBoundedReachProbs(mdp, null, target, k, min, null, null);
 	}
@@ -1084,7 +1084,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param k Bound
 	 * @param min Min or max probabilities (true=min, false=max)
 	 */
-	public ModelCheckerResult computeBoundedUntilProbs(MDP mdp, BitSet remain, BitSet target, int k, boolean min) throws PrismException
+	public ModelCheckerResult computeBoundedUntilProbs(MDP mdp, BitSet remain, BitSet target, int k, boolean min)
 	{
 		return computeBoundedReachProbs(mdp, remain, target, k, min, null, null);
 	}
@@ -1102,7 +1102,6 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param results Optional array of size k+1 to store (init state) results for each step (null if unused)
 	 */
 	public ModelCheckerResult computeBoundedReachProbs(MDP mdp, BitSet remain, BitSet target, int k, boolean min, double init[], double results[])
-			throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet unknown;
@@ -1184,7 +1183,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max rewards (true=min, false=max)
 	 */
-	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPRewards mdpRewards, int k, boolean min) throws PrismException
+	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPRewards mdpRewards, int k, boolean min)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -1684,7 +1683,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max rewards (true=min, false=max)
 	 * @param lastSoln Vector of values from which to recompute in one iteration 
 	 */
-	public List<Integer> expReachStrategy(MDP mdp, MDPRewards mdpRewards, int state, BitSet target, boolean min, double lastSoln[]) throws PrismException
+	public List<Integer> expReachStrategy(MDP mdp, MDPRewards mdpRewards, int state, BitSet target, boolean min, double lastSoln[])
 	{
 		double val = mdp.mvMultRewMinMaxSingle(state, lastSoln, mdpRewards, min, null);
 		return mdp.mvMultRewMinMaxSingleChoices(state, lastSoln, mdpRewards, min, val);

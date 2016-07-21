@@ -165,19 +165,19 @@ public class DTMCFromMDPMemorylessAdversary extends DTMCExplicit
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		// No deadlocks by definition
 	}
 
 	@Override
-	public void checkForDeadlocks() throws PrismException
+	public void checkForDeadlocks()
 	{
 		// No deadlocks by definition
 	}
 
 	@Override
-	public void checkForDeadlocks(BitSet except) throws PrismException
+	public void checkForDeadlocks(BitSet except)
 	{
 		// No deadlocks by definition
 	}

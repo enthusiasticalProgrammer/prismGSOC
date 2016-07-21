@@ -309,7 +309,7 @@ public class GUINetworkOptions extends OptionsPanel
 
 	}
 
-	public boolean valid() throws GUIException
+	public boolean valid()
 	{
 		return true;
 	}

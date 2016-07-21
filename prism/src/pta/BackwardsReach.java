@@ -36,7 +36,7 @@ public class BackwardsReach extends PrismComponent
 	/**
 	 * Create a new MDPModelChecker, inherit basic state from parent (unless null).
 	 */
-	public BackwardsReach(PrismComponent parent) throws PrismException
+	public BackwardsReach(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -76,7 +76,7 @@ public class BackwardsReach extends PrismComponent
 	/**
 	 * Build a backwards reachability graph, from a PTA object.
 	 */
-	public BackwardsReachabilityGraph buildBackwardsGraph(PTA pta, BitSet targetLocs) throws PrismException
+	public BackwardsReachabilityGraph buildBackwardsGraph(PTA pta, BitSet targetLocs)
 	{
 		LocZone lz;
 		LinkedList<LocZone> explore; // (Waiting)

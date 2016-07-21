@@ -112,6 +112,9 @@ public class SingleProperty extends Observable
 		setProperty(property, true);
 	}
 
+	/**
+	 * @throws PropertyException because a subclass throws its 
+	 */
 	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
 	{
 		//System.out.println("Setting property "+property.toString());

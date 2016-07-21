@@ -51,7 +51,7 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 	}
 
 	@Override
-	public Object getEditorValue() throws SettingException
+	public Object getEditorValue()
 	{
 		if (modified) {
 			modified = false;

@@ -238,7 +238,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 	}
 
 	@Override
-	public String getLabelName(int i) throws PrismException
+	public String getLabelName(int i)
 	{
 		return labelList.getLabelName(i);
 	}
@@ -796,7 +796,7 @@ public class ModulesFile extends ASTElement implements ModelInfo
 
 	// get all synch names
 
-	private void getSynchNames() throws PrismLangException
+	private void getSynchNames()
 	{
 		Vector<String> v;
 		String s;

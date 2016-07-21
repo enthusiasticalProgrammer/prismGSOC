@@ -159,11 +159,7 @@ public class BackwardsReachabilityGraph
 			mdp.addInitialState(is);
 		}
 		// fix sink
-		try {
-			mdp.findDeadlocks(true);
-		} catch (PrismException e) {
-			// Never happens for MDPSimple
-		}
+		mdp.findDeadlocks(true);
 		//log.println(mdp);
 		return mdp;
 	}
@@ -201,11 +197,7 @@ public class BackwardsReachabilityGraph
 			mdp.addInitialState(is);
 		}
 		// fix sink
-		try {
-			mdp.findDeadlocks(true);
-		} catch (PrismException e) {
-			// Never happens for MDPSimple
-		}
+		mdp.findDeadlocks(true);
 		//log.println(mdp);
 		return mdp;
 	}

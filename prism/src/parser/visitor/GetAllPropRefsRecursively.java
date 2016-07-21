@@ -50,7 +50,7 @@ public class GetAllPropRefsRecursively extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionProp e) throws PrismLangException
+	public void visitPost(ExpressionProp e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());
@@ -58,7 +58,7 @@ public class GetAllPropRefsRecursively extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionLabel e) throws PrismLangException
+	public void visitPost(ExpressionLabel e)
 	{
 		String name;
 		Property prop = null;

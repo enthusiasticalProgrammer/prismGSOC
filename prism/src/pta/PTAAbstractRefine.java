@@ -56,7 +56,7 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 	/**
 	 * Default constructor.
 	 */
-	public PTAAbstractRefine(PrismComponent parent) throws PrismException
+	public PTAAbstractRefine(PrismComponent parent)
 	{
 		super(parent);
 		// Just do basic config for QuantAbstractRefine

@@ -91,7 +91,7 @@ public class ExpressionLiteral extends Expression
 	}
 
 	@Override
-	public Object evaluate(EvaluateContext ec) throws PrismLangException
+	public Object evaluate(EvaluateContext ec)
 	{
 		return value;
 	}

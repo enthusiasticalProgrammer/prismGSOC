@@ -169,7 +169,7 @@ public class Transition
 		return s;
 	}
 
-	public void writeToDesFile(Writer out) throws PrismException, IOException
+	public void writeToDesFile(Writer out) throws IOException
 	{
 		out.write("\t[\n");
 		for (Edge e : edges) {

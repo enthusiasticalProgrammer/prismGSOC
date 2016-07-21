@@ -206,7 +206,7 @@ public class DigitalClocks
 				invar = (Expression) invar.accept(new ASTTraverseModify()
 				{
 					@Override
-					public Object visit(ExpressionVar e) throws PrismLangException
+					public Object visit(ExpressionVar e)
 					{
 						if (e.getType() instanceof TypeClock) {
 							return Expression.Plus(e, Expression.Int(1));
@@ -275,7 +275,7 @@ public class DigitalClocks
 
 			// Variable accesses
 			@Override
-			public Object visit(ExpressionVar e) throws PrismLangException
+			public Object visit(ExpressionVar e)
 			{
 				if (e.getType() instanceof TypeClock) {
 					e.setType(TypeInt.getInstance());
@@ -378,7 +378,7 @@ public class DigitalClocks
 	/**
 	 * Look for a strict clock constraint. If found return the offending element. Else, return null.
 	 */
-	public ASTElement findAStrictClockConstraint(ASTElement ast) throws PrismLangException
+	public ASTElement findAStrictClockConstraint(ASTElement ast)
 	{
 		try {
 			ASTTraverse astt = new ASTTraverse()
@@ -406,7 +406,7 @@ public class DigitalClocks
 	/**
 	 * Look for a diagonal clock constraint. If found return the offending element. Else, return null.
 	 */
-	public ASTElement findADiagonalClockConstraint(ASTElement ast) throws PrismLangException
+	public ASTElement findADiagonalClockConstraint(ASTElement ast)
 	{
 		try {
 			ASTTraverse astt = new ASTTraverse()
@@ -510,14 +510,14 @@ public class DigitalClocks
 		}
 
 		@Override
-		public void visitPost(ModulesFile e) throws PrismLangException
+		public void visitPost(ModulesFile e)
 		{
 			// When have traversed the model, compute GCDs and scale factor
 			scaleFactor = computeGCD(allClockVals);
 		}
 
 		@Override
-		public void visitPre(Module e) throws PrismLangException
+		public void visitPre(Module e)
 		{
 			// Create new array to store clocks for this module
 			currentClockList = new ArrayList<>();
@@ -525,7 +525,7 @@ public class DigitalClocks
 		}
 
 		@Override
-		public void visitPost(Declaration e) throws PrismLangException
+		public void visitPost(Declaration e)
 		{
 			// Detect clock variable and store info
 			if (e.getDeclType() instanceof DeclarationClock) {

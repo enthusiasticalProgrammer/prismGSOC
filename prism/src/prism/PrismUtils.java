@@ -359,7 +359,7 @@ public class PrismUtils
 	/**
 	 * Convert a number of bytes to a string representing the amount of memory (e.g. 125k, 50m, 4g).
 	 */
-	public static String convertBytesToMemoryString(long bytes) throws PrismException
+	public static String convertBytesToMemoryString(long bytes)
 	{
 		String units[] = { "b", "k", "m", "g" };
 		for (int i = 3; i > 0; i--) {

@@ -412,7 +412,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 		t.start();
 	}
 
-	public void stopNetworking() throws PrismException
+	public void stopNetworking()
 	{
 		for (int i = 0; i < getNumHosts(); i++) {
 			getHost(i).stopStint();
@@ -619,7 +619,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 
 	@Override
-	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		InputSource inputSource = null;
 

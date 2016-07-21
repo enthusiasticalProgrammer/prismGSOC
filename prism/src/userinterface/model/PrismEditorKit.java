@@ -143,7 +143,7 @@ class PrismView extends PlainView
 	}
 
 	@Override
-	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+	protected int drawUnselectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());
 		int enLine = p1;// findEndOfLine(p1-1, getDocument());
@@ -195,7 +195,7 @@ class PrismView extends PlainView
 	}
 
 	@Override
-	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1) throws BadLocationException
+	protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
 	{
 		int stLine = p0;// findStartOfLine(p0, getDocument());
 		int enLine = p1;// findEndOfLine(p1-1, getDocument());

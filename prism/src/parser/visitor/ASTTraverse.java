@@ -34,7 +34,7 @@ import prism.PrismLangException;
 // (a) overriding defaultVisitPre or defaultVisitPost
 // (b) overiding visit for leaf (or other selected) nodes
 // See also ASTTraverseModify.
-
+@SuppressWarnings("unused")
 public class ASTTraverse implements ASTVisitor
 {
 	public void defaultVisitPre(ASTElement e) throws PrismLangException

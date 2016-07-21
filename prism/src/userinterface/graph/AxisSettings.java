@@ -925,7 +925,7 @@ public class AxisSettings extends Observable implements SettingOwner
 		}
 	}
 
-	public void save(Element axis) throws SettingException
+	public void save(Element axis)
 	{
 		axis.setAttribute("heading", getHeading());
 

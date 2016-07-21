@@ -57,13 +57,13 @@ public class TypeCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(Property e) throws PrismLangException
+	public void visitPost(Property e)
 	{
 		e.setType(e.getExpression().getType());
 	}
 
 	@Override
-	public void visitPost(FormulaList e) throws PrismLangException
+	public void visitPost(FormulaList e)
 	{
 		// Formulas are defined at the text level and are type checked after
 		// substitutions have been applied
@@ -454,13 +454,13 @@ public class TypeCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionLiteral e) throws PrismLangException
+	public void visitPost(ExpressionLiteral e)
 	{
 		// Type already known
 	}
 
 	@Override
-	public void visitPost(ExpressionConstant e) throws PrismLangException
+	public void visitPost(ExpressionConstant e)
 	{
 		// Type already known
 	}
@@ -477,7 +477,7 @@ public class TypeCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionVar e) throws PrismLangException
+	public void visitPost(ExpressionVar e)
 	{
 		// Type already known
 	}
@@ -573,19 +573,19 @@ public class TypeCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionExists e) throws PrismLangException
+	public void visitPost(ExpressionExists e)
 	{
 		e.setType(TypeBool.getInstance());
 	}
 
 	@Override
-	public void visitPost(ExpressionForAll e) throws PrismLangException
+	public void visitPost(ExpressionForAll e)
 	{
 		e.setType(TypeBool.getInstance());
 	}
 
 	@Override
-	public void visitPost(ExpressionStrategy e) throws PrismLangException
+	public void visitPost(ExpressionStrategy e)
 	{
 		// Get types of operands
 		int n = e.getNumOperands();
@@ -604,7 +604,7 @@ public class TypeCheck extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionLabel e) throws PrismLangException
+	public void visitPost(ExpressionLabel e)
 	{
 		e.setType(TypeBool.getInstance());
 	}

@@ -170,7 +170,7 @@ public class ReachabilityGraph
 	 * Build an MDP from this forwards reachability graph.
 	 * The set of initial states should also be specified.
 	 */
-	public MDP buildMDP(List<Integer> initialStates) throws PrismException
+	public MDP buildMDP(List<Integer> initialStates)
 	{
 		Distribution distr;
 		int numStates, src, count, dest;

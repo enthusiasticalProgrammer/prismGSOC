@@ -157,7 +157,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Create a new ProbModelChecker, inherit basic state from parent (unless null).
 	 */
-	public ProbModelChecker(PrismComponent parent) throws PrismException
+	public ProbModelChecker(PrismComponent parent) throws PrismNotSupportedException
 	{
 		super(parent);
 

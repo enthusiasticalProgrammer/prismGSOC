@@ -54,7 +54,7 @@ public class ECComputerDefault extends ECComputer
 	/**
 	 * Build (M)EC computer for a given model.
 	 */
-	public ECComputerDefault(PrismComponent parent, NondetModel model) throws PrismException
+	public ECComputerDefault(PrismComponent parent, NondetModel model)
 	{
 		super(parent);
 		this.model = model;
@@ -63,19 +63,19 @@ public class ECComputerDefault extends ECComputer
 	// Methods for ECComputer interface
 
 	@Override
-	public void computeMECStates() throws PrismException
+	public void computeMECStates()
 	{
 		mecs = findEndComponents(null, null);
 	}
 
 	@Override
-	public void computeMECStates(BitSet restrict) throws PrismException
+	public void computeMECStates(BitSet restrict)
 	{
 		mecs = findEndComponents(restrict, null);
 	}
 
 	@Override
-	public void computeMECStates(BitSet restrict, BitSet accept) throws PrismException
+	public void computeMECStates(BitSet restrict, BitSet accept)
 	{
 		mecs = findEndComponents(restrict, accept);
 	}
@@ -98,7 +98,7 @@ public class ECComputerDefault extends ECComputer
 	 * @param accept BitSet for the set of accepting states
 	 * @return a list of BitSets representing the MECs
 	 */
-	private List<BitSet> findEndComponents(BitSet restrict, BitSet accept) throws PrismException
+	private List<BitSet> findEndComponents(BitSet restrict, BitSet accept)
 	{
 		// If restrict is null, look within set of all reachable states
 		if (restrict == null) {
@@ -193,7 +193,7 @@ public class ECComputerDefault extends ECComputer
 		return new SubNondetModel(model, states, actions, initialStates);
 	}
 
-	private List<BitSet> computeSCCs(NondetModel model) throws PrismException
+	private List<BitSet> computeSCCs(NondetModel model)
 	{
 		SCCComputer sccc = SCCComputer.createSCCComputer(this, model);
 		sccc.computeSCCs();

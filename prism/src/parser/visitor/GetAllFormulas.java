@@ -44,7 +44,7 @@ public class GetAllFormulas extends ASTTraverse
 	}
 
 	@Override
-	public void visitPost(ExpressionFormula e) throws PrismLangException
+	public void visitPost(ExpressionFormula e)
 	{
 		if (!v.contains(e.getName())) {
 			v.addElement(e.getName());

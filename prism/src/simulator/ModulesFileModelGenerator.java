@@ -161,7 +161,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public String getLabelName(int i) throws PrismException
+	public String getLabelName(int i)
 	{
 		return labelList.getLabelName(i);
 	}
@@ -197,7 +197,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public boolean hasSingleInitialState() throws PrismException
+	public boolean hasSingleInitialState()
 	{
 		return modulesFile.getInitialStates() == null;
 	}
@@ -237,7 +237,7 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
-	public void exploreState(State exploreState) throws PrismException
+	public void exploreState(State exploreState)
 	{
 		this.exploreState = exploreState;
 		transitionListBuilt = false;

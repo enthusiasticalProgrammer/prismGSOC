@@ -116,7 +116,7 @@ public class Edge
 	/**
 	 * Perform some basic syntactic checks.
 	 */
-	public void check() throws PrismException
+	public void check()
 	{
 	}
 
@@ -138,7 +138,7 @@ public class Edge
 		return s;
 	}
 
-	public void writeToDesFile(Writer out, String actionPrefix, Iterable<Constraint> guard) throws PrismException, IOException
+	public void writeToDesFile(Writer out, String actionPrefix, Iterable<Constraint> guard) throws IOException
 	{
 		boolean first;
 		PTA pta = parent.getParent();

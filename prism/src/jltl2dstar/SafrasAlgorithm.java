@@ -73,7 +73,7 @@ public class SafrasAlgorithm
 	// typedef SafraTreeTemplate_ptr result_t;
 	// typedef SafraTree_ptr state_t;
 
-	public SafraTreeTemplate delta(SafraTree tree, APElement elem) throws PrismException
+	public SafraTreeTemplate delta(SafraTree tree, APElement elem)
 	{
 		return process(tree, elem);
 	}

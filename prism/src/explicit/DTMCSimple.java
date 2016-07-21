@@ -241,7 +241,7 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		for (int i = 0; i < numStates; i++) {
 			if (trans.get(i).isEmpty()) {

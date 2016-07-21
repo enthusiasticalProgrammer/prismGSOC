@@ -583,7 +583,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	}
 
 	/** Backtrack to a certain time. */
-	public void a_backTrack(double time) throws PrismException
+	public void a_backTrack(double time)
 	{
 		try {
 			setComputing(true);
@@ -751,16 +751,12 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	public void a_plotPath()
 	{
-		try {
-			setComputing(true);
-			guiProp.tabToFront();
-			Graph graphModel = new Graph();
-			guiProp.getGraphHandler().addGraph(graphModel);
-			engine.plotPath(graphModel);
-			setComputing(false);
-		} catch (PrismException e) {
-			error(e.getMessage());
-		}
+		setComputing(true);
+		guiProp.tabToFront();
+		Graph graphModel = new Graph();
+		guiProp.getGraphHandler().addGraph(graphModel);
+		engine.plotPath(graphModel);
+		setComputing(false);
 	}
 
 	public void a_newPathPlot(boolean chooseInitialState)
@@ -2087,7 +2083,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	 * Setter for property displayStyle.
 	 * @param b New value of property displayStyle.
 	 */
-	public void setDisplayPathLoops(boolean b) throws PrismException
+	public void setDisplayPathLoops(boolean b)
 	{
 		displayPathLoops = b;
 		//getPrism().getSettings().set(PrismSettings.SIMULATOR_????, new Boolean(b));

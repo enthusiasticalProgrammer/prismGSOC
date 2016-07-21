@@ -502,7 +502,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 
 	// Set methods for miscellaneous options
 
-	public void setExportPrism(boolean b) throws PrismException
+	public void setExportPrism(boolean b)
 	{
 		exportPrism = b;
 	}
@@ -510,12 +510,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Set file to export parsed PRISM file to (null = stdout).
 	 */
-	public void setExportPrismFile(File f) throws PrismException
+	public void setExportPrismFile(File f)
 	{
 		exportPrismFile = f;
 	}
 
-	public void setExportPrismConst(boolean b) throws PrismException
+	public void setExportPrismConst(boolean b)
 	{
 		exportPrismConst = b;
 	}
@@ -523,12 +523,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Set file to export parsed PRISM file, with constants expanded, to (null = stdout).
 	 */
-	public void setExportPrismConstFile(File f) throws PrismException
+	public void setExportPrismConstFile(File f)
 	{
 		exportPrismConstFile = f;
 	}
 
-	public void setExportDigital(boolean b) throws PrismException
+	public void setExportDigital(boolean b)
 	{
 		exportDigital = b;
 	}
@@ -536,47 +536,47 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Set file to export digital clocks translation PRISM file to (null = stdout).
 	 */
-	public void setExportDigitalFile(File f) throws PrismException
+	public void setExportDigitalFile(File f)
 	{
 		exportDigitalFile = f;
 	}
 
-	public void setExportTarget(boolean b) throws PrismException
+	public void setExportTarget(boolean b)
 	{
 		exportTarget = b;
 	}
 
-	public void setExportTargetFilename(String s) throws PrismException
+	public void setExportTargetFilename(String s)
 	{
 		exportTargetFilename = s;
 	}
 
-	public void setExportProductTrans(boolean b) throws PrismException
+	public void setExportProductTrans(boolean b)
 	{
 		exportProductTrans = b;
 	}
 
-	public void setExportProductTransFilename(String s) throws PrismException
+	public void setExportProductTransFilename(String s)
 	{
 		exportProductTransFilename = s;
 	}
 
-	public void setExportProductStates(boolean b) throws PrismException
+	public void setExportProductStates(boolean b)
 	{
 		exportProductStates = b;
 	}
 
-	public void setExportProductStatesFilename(String s) throws PrismException
+	public void setExportProductStatesFilename(String s)
 	{
 		exportProductStatesFilename = s;
 	}
 
-	public void setExportProductVector(boolean b) throws PrismException
+	public void setExportProductVector(boolean b)
 	{
 		exportProductVector = b;
 	}
 
-	public void setExportProductVectorFilename(String s) throws PrismException
+	public void setExportProductVectorFilename(String s)
 	{
 		exportProductVectorFilename = s;
 	}
@@ -605,12 +605,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		this.doBisim = doBisim;
 	}
 
-	public void setDoReach(boolean b) throws PrismException
+	public void setDoReach(boolean b)
 	{
 		doReach = b;
 	}
 
-	public void setBSCCComp(boolean b) throws PrismException
+	public void setBSCCComp(boolean b)
 	{
 		bsccComp = b;
 	}
@@ -620,12 +620,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		this.checkZeroLoops = checkZeroLoops;
 	}
 
-	public void setConstruction(int i) throws PrismException
+	public void setConstruction(int i)
 	{
 		construction = i;
 	}
 
-	public void setOrdering(int i) throws PrismException
+	public void setOrdering(int i)
 	{
 		ordering = i;
 	}
@@ -1048,7 +1048,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Get an SCCComputer object.
 	 * Type (i.e. algorithm) depends on SCCMethod PRISM option.
 	 */
-	public SCCComputer getSCCComputer(Model model) throws PrismException
+	public SCCComputer getSCCComputer(Model model)
 	{
 		return SCCComputer.createSCCComputer(this, model);
 	}
@@ -1057,7 +1057,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Get an SCCComputer object.
 	 * Type (i.e. algorithm) depends on SCCMethod PRISM option.
 	 */
-	public SCCComputer getSCCComputer(JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars) throws PrismException
+	public SCCComputer getSCCComputer(JDDNode reach, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars)
 	{
 		return SCCComputer.createSCCComputer(this, reach, trans01, allDDRowVars, allDDColVars);
 	}
@@ -1065,7 +1065,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Get an SCCComputer object for the explicit engine.
 	 */
-	public explicit.SCCComputer getExplicitSCCComputer(explicit.Model model) throws PrismException
+	public explicit.SCCComputer getExplicitSCCComputer(explicit.Model model)
 	{
 		return explicit.SCCComputer.createSCCComputer(this, model);
 	}
@@ -1090,7 +1090,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Get an ECComputer object for the explicit engine.
 	 */
-	public explicit.ECComputer getExplicitECComputer(explicit.NondetModel model) throws PrismException
+	public explicit.ECComputer getExplicitECComputer(explicit.NondetModel model)
 	{
 		return explicit.ECComputer.createECComputer(this, model);
 	}
@@ -1682,9 +1682,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				exportPRISMModel(exportPrismFile);
 			}
 			// In case of error, just print a warning
-			catch (FileNotFoundException e) {
-				mainLog.printWarning("PRISM code export failed: Couldn't open file \"" + exportPrismFile + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				mainLog.printWarning("PRISM code export failed: " + e.getMessage());
 			}
 		}
@@ -1748,9 +1746,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				exportPRISMModelWithExpandedConstants(exportPrismConstFile);
 			}
 			// In case of error, just print a warning
-			catch (FileNotFoundException e) {
-				mainLog.printWarning("PRISM code export failed: Couldn't open file \"" + exportPrismConstFile + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				mainLog.printWarning("PRISM code export failed: " + e.getMessage());
 			}
 		}
@@ -2126,7 +2122,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Export the currently loaded and parsed PRISM model to a file.
 	 * @param file File to export to
 	 */
-	public void exportPRISMModel(File file) throws FileNotFoundException, PrismException
+	public void exportPRISMModel(File file) throws PrismException
 	{
 		mainLog.print("\nExporting parsed PRISM file ");
 		mainLog.println(getDestinationStringForFile(file));
@@ -2142,7 +2138,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * after expanding all constants to their actual, defined values.
 	 * @param file File to export to
 	 */
-	public void exportPRISMModelWithExpandedConstants(File file) throws FileNotFoundException, PrismException
+	public void exportPRISMModelWithExpandedConstants(File file) throws PrismException
 	{
 		mainLog.print("\nExporting parsed PRISM file (with constant expansion) ");
 		mainLog.println(getDestinationStringForFile(file));
@@ -2161,7 +2157,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Export the currently loaded model's transition matrix to a Spy file.
 	 * @param file File to export to
 	 */
-	public void exportToSpyFile(File file) throws FileNotFoundException, PrismException
+	public void exportToSpyFile(File file) throws PrismException
 	{
 		int depth;
 		JDDNode tmp;
@@ -2195,7 +2191,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Export the MTBDD for the currently loaded model's transition matrix to a Dot file.
 	 * @param file File to export to
 	 */
-	public void exportToDotFile(File file) throws FileNotFoundException, PrismException
+	public void exportToDotFile(File file) throws PrismException
 	{
 		if (getExplicit())
 			throw new PrismNotSupportedException("Export to Dot file not yet supported by explicit engine");
@@ -2385,7 +2381,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportBSCCsToFile(int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportBSCCsToFile(int exportType, File file) throws PrismException
 	{
 		int i, n;
 		long l; // timer
@@ -2481,7 +2477,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportMECsToFile(int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportMECsToFile(int exportType, File file) throws PrismException
 	{
 		int i, n;
 		long l; // timer
@@ -2571,7 +2567,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportSCCsToFile(int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportSCCsToFile(int exportType, File file) throws PrismException
 	{
 		int i, n;
 		long l; // timer
@@ -2717,7 +2713,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportStatesToFile(int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportStatesToFile(int exportType, File file) throws PrismException
 	{
 		PrismLog tmpLog;
 
@@ -2871,9 +2867,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 						exportPRISMModel(exportDigitalFile);
 					}
 					// In case of error, just print a warning
-					catch (FileNotFoundException e) {
-						mainLog.printWarning("PRISM code export failed: Couldn't open file \"" + exportDigitalFile + "\" for output");
-					} catch (PrismException e) {
+					catch (PrismException e) {
 						mainLog.printWarning("PRISM code export failed: " + e.getMessage());
 					}
 				}
@@ -3150,7 +3144,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param exportType The type of output
 	 * @param file File to output the path to (stdout if null)
 	 */
-	public void exportStrategy(Strategy strat, StrategyExportType exportType, File file) throws FileNotFoundException, PrismException
+	public void exportStrategy(Strategy strat, StrategyExportType exportType, File file) throws PrismException
 	{
 		PrismLog tmpLog;
 
@@ -3548,7 +3542,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			tmpLog.close();
 	}
 
-	public void explicitBuildTest() throws PrismException
+	public void explicitBuildTest()
 	{
 		/* old code...
 		String tmpFile = "";
@@ -3756,7 +3750,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param model The model
 	 * @param file File to export to
 	 */
-	public void exportToSpyFile(Model model, File file) throws FileNotFoundException, PrismException
+	public void exportToSpyFile(Model model, File file) throws PrismException
 	{
 		loadBuiltModel(model);
 		exportToSpyFile(file);
@@ -3768,7 +3762,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param model The model
 	 * @param file File to export to
 	 */
-	public void exportToDotFile(Model model, File file) throws FileNotFoundException, PrismException
+	public void exportToDotFile(Model model, File file) throws PrismException
 	{
 		loadBuiltModel(model);
 		exportToDotFile(file);
@@ -3861,7 +3855,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * </ul>
 	 * @param file File to export to (if null, print to the log instead)
 	 */
-	public void exportBSCCsToFile(Model model, int exportType, File file) throws FileNotFoundException, PrismException
+	public void exportBSCCsToFile(Model model, int exportType, File file) throws PrismException
 	{
 		loadBuiltModel(model);
 		exportBSCCsToFile(exportType, file);

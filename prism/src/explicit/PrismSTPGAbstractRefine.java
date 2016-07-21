@@ -63,7 +63,7 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 	/**
 	 * Default constructor.
 	 */
-	public PrismSTPGAbstractRefine(PrismComponent parent) throws PrismException
+	public PrismSTPGAbstractRefine(PrismComponent parent)
 	{
 		super(parent);
 	}

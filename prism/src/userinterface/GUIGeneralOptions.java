@@ -142,12 +142,12 @@ public class GUIGeneralOptions extends OptionsPanel
 
 	}
 
-	public boolean valid() throws GUIException
+	public boolean valid()
 	{
 		return true;
 	}
 
-	public Element saveXMLElement(Document doc) throws DOMException
+	public Element saveXMLElement(Document doc)
 	{
 		return doc.createElement("dummy");
 	}

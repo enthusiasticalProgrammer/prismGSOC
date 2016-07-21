@@ -53,7 +53,7 @@ public class NonProbModelChecker extends StateModelChecker
 	/**
 	 * Create a new NonProbModelChecker, inherit basic state from parent (unless null).
 	 */
-	public NonProbModelChecker(PrismComponent parent) throws PrismException
+	public NonProbModelChecker(PrismComponent parent)
 	{
 		super(parent);
 	}
@@ -178,8 +178,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states for target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ X "target" ]
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it.
 	 */
-	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		BitSet result = new BitSet();
 
@@ -221,8 +222,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states in target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying A[ X "target" ]
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
-	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		BitSet result = new BitSet();
 
@@ -261,8 +263,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param A the BitSet of states for "a"
 	 * @param B the BitSet of states for "b"
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" U "b" ]
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
-	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		PredecessorRelation pre = model.getPredecessorRelation(this, true);
 		return pre.calculatePreStar(A, B, B);
@@ -379,8 +382,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param A the BitSet for the states in "a"
 	 * @param A the BitSet for the states in "a"
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" R "b" ]
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
-	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismException
+	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
 		PredecessorRelation pre = model.getPredecessorRelation(this, true);
 

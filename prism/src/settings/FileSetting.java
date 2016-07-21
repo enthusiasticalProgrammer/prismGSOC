@@ -143,7 +143,7 @@ public class FileSetting extends Setting
 	}
 
 	@Override
-	public Object parseStringValue(String string) throws SettingException
+	public Object parseStringValue(String string)
 	{
 		return new File(string);
 	}

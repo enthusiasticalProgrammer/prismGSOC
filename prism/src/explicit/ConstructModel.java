@@ -73,7 +73,7 @@ public class ConstructModel extends PrismComponent
 	/** Reachable states */
 	protected List<State> statesList;
 
-	public ConstructModel(PrismComponent parent) throws PrismException
+	public ConstructModel(PrismComponent parent)
 	{
 		super(parent);
 	}

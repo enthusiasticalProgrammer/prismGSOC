@@ -128,7 +128,7 @@ public class ChoiceList implements Choice
 	}
 
 	@Override
-	public String getUpdateString(int i, State currentState) throws PrismLangException
+	public String getUpdateString(int i, State currentState)
 	{
 		String s = "(";
 		for (Update up : updates.get(i))
@@ -224,13 +224,13 @@ public class ChoiceList implements Choice
 	}
 
 	@Override
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		// TODO
 	}
 
 	@Override
-	public void checkForErrors(State currentState, VarList varList) throws PrismException
+	public void checkForErrors(State currentState, VarList varList)
 	{
 		// TODO
 	}

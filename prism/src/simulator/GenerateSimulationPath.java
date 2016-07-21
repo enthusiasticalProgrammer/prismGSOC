@@ -150,7 +150,6 @@ public class GenerateSimulationPath
 	 * @param details Information about the path to be generated
 	 */
 	public void generateAndPlotSimulationPathInThread(ModulesFile modulesFile, State initialState, String details, long maxPathLength, Graph graphModel)
-			throws PrismException
 	{
 		new GenerateAndPlotThread(modulesFile, initialState, details, maxPathLength, graphModel).start();
 	}
@@ -365,7 +364,7 @@ public class GenerateSimulationPath
 	/**
 	 * Create a PathDisplayer object for graph plotting
 	 */
-	private PathDisplayer generateDisplayerForPlotting(Graph graphModel) throws PrismException
+	private PathDisplayer generateDisplayerForPlotting(Graph graphModel)
 	{
 		PathToGraph displayer;
 

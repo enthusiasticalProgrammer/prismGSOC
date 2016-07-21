@@ -212,7 +212,7 @@ public class ConvertForJltl2ba
 	}
 
 	/** Convert ExpressionLabel to a SimpleLTL formula */
-	private SimpleLTL convertLabel(ExpressionLabel e) throws PrismLangException
+	private SimpleLTL convertLabel(ExpressionLabel e)
 	{
 		return new SimpleLTL(e.getName());
 	}

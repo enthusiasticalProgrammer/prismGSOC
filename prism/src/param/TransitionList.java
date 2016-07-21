@@ -296,7 +296,7 @@ public class TransitionList
 	 * Check the validity of the available transitions for a given model type.
 	 * Throw a PrismException if an error is found.
 	 */
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		for (ChoiceListFlexi ch : choices) {
 			ch.checkValid(modelType);

@@ -486,7 +486,7 @@ public class MDPSimple extends MDPExplicit implements NondetModelSimple
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix) throws PrismException
+	public void findDeadlocks(boolean fix)
 	{
 		for (int i = 0; i < numStates; i++) {
 			// Note that no distributions is a deadlock, not an empty distribution

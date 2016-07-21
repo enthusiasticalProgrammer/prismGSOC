@@ -599,7 +599,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param model The model
 	 * @param acceptance The acceptance condition
 	 */
-	public BitSet findAcceptingBSCCs(Model model, AcceptanceOmega acceptance) throws PrismException
+	public BitSet findAcceptingBSCCs(Model model, AcceptanceOmega acceptance)
 	{
 		// Compute bottom strongly connected components (BSCCs)
 		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, model);

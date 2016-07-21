@@ -42,7 +42,7 @@ public class FindAllFormulas extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionIdent e) throws PrismLangException
+	public Object visit(ExpressionIdent e)
 	{
 		int i;
 		// See if identifier corresponds to a formula

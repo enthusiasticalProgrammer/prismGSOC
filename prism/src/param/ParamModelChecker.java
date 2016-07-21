@@ -934,7 +934,7 @@ final public class ParamModelChecker extends PrismComponent
 		return probs;
 	}
 
-	private RegionValues checkProbUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min, BitSet needStates) throws PrismException
+	private RegionValues checkProbUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min, BitSet needStates)
 	{
 		return valueComputer.computeUnbounded(b1, b2, min, null);
 	}

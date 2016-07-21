@@ -104,7 +104,7 @@ public class Alternating
 		}
 	}
 
-	public Alternating(SimpleLTL formula, APSet apset) throws PrismException
+	public Alternating(SimpleLTL formula, APSet apset)
 	{
 		astate_count = 0;
 		atrans_count = 0;

@@ -120,7 +120,7 @@ public class DRA extends DA
 	 * This function may delete acceptance pairs,
 	 * which can invalidate iterators.
 	 */
-	public void optimizeAcceptanceCondition() throws PrismException
+	public void optimizeAcceptanceCondition()
 	{
 
 		for (Iterator<Integer> it = this.acceptance().iterator(); it.hasNext();) {
@@ -184,7 +184,7 @@ public class DRA extends DA
 	 * Convert the state and transition structure of this jltl2dstar deterministic automaton
 	 * to the PRISM data structures.
 	 */
-	private void createPrismDA(automata.DA<BitSet, ?> da) throws PrismException
+	private void createPrismDA(automata.DA<BitSet, ?> da)
 	{
 		int i, k, numLabels, numStates, src, dest;
 		List<String> apList;

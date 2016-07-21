@@ -176,13 +176,13 @@ public class ChoiceSingleton implements Choice
 	}
 
 	@Override
-	public void checkValid(ModelType modelType) throws PrismException
+	public void checkValid(ModelType modelType)
 	{
 		// TODO
 	}
 
 	@Override
-	public void checkForErrors(State currentState, VarList varList) throws PrismException
+	public void checkForErrors(State currentState, VarList varList)
 	{
 		// TODO
 	}

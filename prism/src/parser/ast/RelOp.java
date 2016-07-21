@@ -20,7 +20,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return LEQ;
 		}
@@ -33,7 +33,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return LT;
 		}
@@ -46,7 +46,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return MAX;
 		}
@@ -65,7 +65,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return GEQ;
 		}
@@ -78,7 +78,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return GT;
 		}
@@ -91,7 +91,7 @@ public enum RelOp {
 		}
 
 		@Override
-		public RelOp negate() throws PrismLangException
+		public RelOp negate()
 		{
 			return MIN;
 		}

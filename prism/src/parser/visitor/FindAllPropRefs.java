@@ -44,7 +44,7 @@ public class FindAllPropRefs extends ASTTraverseModify
 	}
 
 	@Override
-	public Object visit(ExpressionLabel e) throws PrismLangException
+	public Object visit(ExpressionLabel e)
 	{
 		String name;
 		Property prop = null;

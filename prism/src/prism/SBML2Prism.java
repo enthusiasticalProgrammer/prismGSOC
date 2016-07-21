@@ -133,7 +133,7 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 	 * (if validation is enabled, put the DTD file "sbml.dtd" in PRISM's "dtds" directory)
 	 */
 	@Override
-	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		InputSource inputSource = null;
 

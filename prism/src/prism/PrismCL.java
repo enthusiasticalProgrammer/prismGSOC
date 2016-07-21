@@ -422,9 +422,7 @@ public class PrismCL implements PrismModelListener
 										exportStratFilename.equals("stdout") ? null : new File(exportStratFilename));
 							}
 							// in case of error, report it and proceed
-							catch (FileNotFoundException e) {
-								error("Couldn't open file \"" + exportStratFilename + "\" for output");
-							} catch (PrismException e) {
+							catch (PrismException e) {
 								error(e.getMessage());
 							}
 						}
@@ -729,9 +727,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportStatesToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportStatesFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -742,9 +738,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportToSpyFile(new File(exportSpyFilename));
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportSpyFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -755,9 +749,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportToDotFile(new File(exportDotFilename));
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportDotFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -832,9 +824,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportSCCsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportSCCsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -846,9 +836,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportBSCCsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportBSCCsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -860,9 +848,7 @@ public class PrismCL implements PrismModelListener
 				prism.exportMECsToFile(exportType, f);
 			}
 			// in case of error, report it and proceed
-			catch (FileNotFoundException e) {
-				error("Couldn't open file \"" + exportMECsFilename + "\" for output");
-			} catch (PrismException e) {
+			catch (PrismException e) {
 				error(e.getMessage());
 			}
 		}
@@ -2022,11 +2008,7 @@ public class PrismCL implements PrismModelListener
 
 		// default to alternative ordering for MTBDD engine
 		if (prism.getEngine() == Prism.MTBDD && !orderingOverride) {
-			try {
-				prism.setOrdering(2);
-			} catch (PrismException e) {
-				// Can't go wrong
-			}
+			prism.setOrdering(2);
 		}
 
 		// explicit overrides explicit build

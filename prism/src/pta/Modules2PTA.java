@@ -54,7 +54,7 @@ public class Modules2PTA extends PrismComponent
 	/**
 	 * Constructor.
 	 */
-	public Modules2PTA(PrismComponent parent, ModulesFile modulesFile) throws PrismException
+	public Modules2PTA(PrismComponent parent, ModulesFile modulesFile)
 	{
 		super(parent);
 		sumRoundOff = settings.getDouble(PrismSettings.PRISM_SUM_ROUND_OFF);
@@ -88,14 +88,14 @@ public class Modules2PTA extends PrismComponent
 			private Module inModule = null;
 
 			@Override
-			public void visitPre(Module e) throws PrismLangException
+			public void visitPre(Module e)
 			{
 				// Register the fact we are entering a module
 				inModule = e;
 			}
 
 			@Override
-			public void visitPost(Module e) throws PrismLangException
+			public void visitPost(Module e)
 			{
 				// Register the fact we are leaving a module
 				inModule = null;

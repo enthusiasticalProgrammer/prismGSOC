@@ -60,7 +60,7 @@ public class MultiObjModelChecker extends PrismComponent
 	/**
 	 * Create a new MultiObjModelChecker, inherit basic state from parent (unless null).
 	 */
-	public MultiObjModelChecker(PrismComponent parent, Prism prism) throws PrismException
+	public MultiObjModelChecker(PrismComponent parent, Prism prism)
 	{
 		super(parent);
 		this.prism = prism;

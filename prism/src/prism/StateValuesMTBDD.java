@@ -677,7 +677,7 @@ public class StateValuesMTBDD implements StateValues
 	}
 
 	@Override
-	public void printFiltered(PrismLog log, JDDNode filter) throws PrismException
+	public void printFiltered(PrismLog log, JDDNode filter)
 	{
 		int i;
 		JDDNode tmp;
@@ -721,7 +721,7 @@ public class StateValuesMTBDD implements StateValues
 	 * Make a (deep) copy of this vector
 	 */
 	@Override
-	public StateValuesMTBDD deepCopy() throws PrismException
+	public StateValuesMTBDD deepCopy()
 	{
 		JDD.Ref(values);
 		return new StateValuesMTBDD(values, model);

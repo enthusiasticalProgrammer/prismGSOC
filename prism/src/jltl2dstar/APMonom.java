@@ -67,7 +67,7 @@ public class APMonom
 	 * @param index index of AP
 	 * @return <b>true</b> if AP is set
 	 */
-	public boolean isSet(int index) throws PrismException
+	public boolean isSet(int index)
 	{
 		if (!isNormal()) {
 			// TRUE / FALSE -> the bit is not set

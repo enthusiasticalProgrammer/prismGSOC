@@ -73,7 +73,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param min1 Min or max probabilities for player 1 (true=min, false=max)
 	 * @param min2 Min or max probabilities for player 2 (true=min, false=max)
 	 */
-	public ModelCheckerResult computeNextProbs(STPG stpg, BitSet target, boolean min1, boolean min2) throws PrismException
+	public ModelCheckerResult computeNextProbs(STPG stpg, BitSet target, boolean min1, boolean min2)
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -598,7 +598,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param min2 Min or max probabilities for player 2 (true=min, false=max)
 	 * @param lastSoln Vector of probabilities from which to recompute in one iteration 
 	 */
-	public List<Integer> probReachStrategy(STPG stpg, int state, BitSet target, boolean min1, boolean min2, double lastSoln[]) throws PrismException
+	public List<Integer> probReachStrategy(STPG stpg, int state, BitSet target, boolean min1, boolean min2, double lastSoln[])
 	{
 		double val = stpg.mvMultMinMaxSingle(state, lastSoln, min1, min2);
 		return stpg.mvMultMinMaxSingleChoices(state, lastSoln, min1, min2, val);
@@ -613,7 +613,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param min1 Min or max probabilities for player 1 (true=min, false=max)
 	 * @param min2 Min or max probabilities for player 2 (true=min, false=max)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(STPG stpg, BitSet target, int k, boolean min1, boolean min2) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(STPG stpg, BitSet target, int k, boolean min1, boolean min2)
 	{
 		return computeBoundedReachProbs(stpg, null, target, k, min1, min2, null, null);
 	}
@@ -629,7 +629,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param min1 Min or max probabilities for player 1 (true=min, false=max)
 	 * @param min2 Min or max probabilities for player 2 (true=min, false=max)
 	 */
-	public ModelCheckerResult computeBoundedUntilProbs(STPG stpg, BitSet remain, BitSet target, int k, boolean min1, boolean min2) throws PrismException
+	public ModelCheckerResult computeBoundedUntilProbs(STPG stpg, BitSet remain, BitSet target, int k, boolean min1, boolean min2)
 	{
 		return computeBoundedReachProbs(stpg, remain, target, k, min1, min2, null, null);
 	}
@@ -648,7 +648,7 @@ public class STPGModelChecker extends ProbModelChecker
 	 * @param results Optional array of size k+1 to store (init state) results for each step (null if unused)
 	 */
 	public ModelCheckerResult computeBoundedReachProbs(STPG stpg, BitSet remain, BitSet target, int k, boolean min1, boolean min2, double init[],
-			double results[]) throws PrismException
+			double results[])
 	{
 		// TODO: implement until
 
