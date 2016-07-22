@@ -504,38 +504,6 @@ public class PTAAbstractRefine extends QuantAbstractRefine
 		}
 	}
 
-	// TODO: why does this not work?
-	private Zone valid2new(LocZone lz, Transition tr, int[] dests)
-	{
-		int count;
-		Zone z, z2;
-
-		z = new DBMList(DBM.createTrue(pta));
-		// Conjunction over edges in transition
-		count = 0;
-		for (Edge edge : tr.getEdges()) {
-			// Get (copy of) edge target
-			z2 = graph.states.get(dests[count]).zone.deepCopy();
-			// Backwards reset of clocks for edge
-			for (Map.Entry<Integer, Integer> e : edge.getResets()) {
-				z2.backReset(e.getKey(), e.getValue());
-			}
-			// Intersect
-			z.intersect(z2);
-			count++;
-		}
-		// Intersect with transition guard 
-		for (Constraint c : tr.getGuardConstraints()) {
-			z.addConstraint(c);
-		}
-		// Time pre
-		z.down();
-		// Intersect with symbolic state zone
-		z.intersect(lz.zone);
-
-		return z;
-	}
-
 	private boolean isTarget(LocZone lz)
 	{
 		return targetLocs.get(lz.loc) && (targetConstraint == null || lz.zone.isSatisfied(targetConstraint));
