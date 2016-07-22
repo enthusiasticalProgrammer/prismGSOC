@@ -23,7 +23,7 @@ package jltl2dstar;
 /**
  * Provides CandidateMatcher for SafraTrees
  */
-public class SafraTreeCandidateMatcher
+class SafraTreeCandidateMatcher
 {
 
 	public static boolean isMatch(SafraTreeTemplate temp, SafraTree tree)

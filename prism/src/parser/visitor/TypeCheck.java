@@ -34,7 +34,7 @@ import prism.PrismLangException;
  * Check for type-correctness and compute type.
  * Optionally pass in a PropertiesFile in order to find types of referenced properties.
  */
-public class TypeCheck extends ASTTraverse
+public final class TypeCheck extends ASTTraverse
 {
 	private PropertiesFile propertiesFile = null;
 

@@ -25,7 +25,7 @@ import prism.PrismException;
 /** Accessor for the acceptance signature for a state 
  *  (part of AcceptanceCondition interface)
  */
-public class AcceptanceForState
+class AcceptanceForState
 {
 
 	/** Reference to the underlying RabinAcceptance */

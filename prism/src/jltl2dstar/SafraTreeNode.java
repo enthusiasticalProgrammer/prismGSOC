@@ -41,7 +41,7 @@ import jltl2ba.MyBitSet;
  * - a youngestChild (NULL if node has no children<br>
  * - a label (BitSet) for the powerset 
  */
-public class SafraTreeNode implements Iterable<SafraTreeNode>
+class SafraTreeNode implements Iterable<SafraTreeNode>
 {
 
 	/** The node name */
@@ -490,7 +490,7 @@ public class SafraTreeNode implements Iterable<SafraTreeNode>
 		return new SafraTreeNodeIterator(this);
 	}
 
-	public static class SafraTreeNodeIterator implements Iterator<SafraTreeNode>
+	static class SafraTreeNodeIterator implements Iterator<SafraTreeNode>
 	{
 
 		private SafraTreeNode _current;

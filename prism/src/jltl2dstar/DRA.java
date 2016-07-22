@@ -41,7 +41,7 @@ import prism.PrismException;
  * The DRA can be considered as a Streett automaton, if
  * a flag is set.
  */
-public class DRA extends DA
+class DRA extends DA
 {
 
 	/** Marker, is this DRA considered as a Streett automaton? */
@@ -51,7 +51,7 @@ public class DRA extends DA
 	 * Constructor.
 	 * @param ap_set the underlying APSet
 	 */
-	public DRA(APSet ap_set)
+	DRA(APSet ap_set)
 	{
 		super(ap_set);
 		_isStreett = false;
@@ -72,13 +72,13 @@ public class DRA extends DA
 	}
 
 	/** Is this DRA considered as a Streett automaton? */
-	public boolean isStreett()
+	boolean isStreett()
 	{
 		return _isStreett;
 	}
 
 	/** Consider this DRA as a Streett automaton. */
-	public void considerAsStreett(boolean flag)
+	void considerAsStreett(boolean flag)
 	{
 		_isStreett = flag;
 	}
@@ -87,7 +87,7 @@ public class DRA extends DA
 	 * Print the DRA/DSA in v2 format to the output stream.
 	 * This function can compact the automaton, which may invalidate iterators!
 	 */
-	public void print(PrintStream out) throws PrismException
+	void print(PrintStream out) throws PrismException
 	{
 		if (!this.isCompact()) {
 			this.makeCompact();
@@ -100,7 +100,7 @@ public class DRA extends DA
 	 * Print the DRA/DSA in dot format to the output stream.
 	 * This function can compact the automaton, which may invalidate iterators!
 	 */
-	public void printDot(PrintStream out) throws PrismException
+	void printDot(PrintStream out) throws PrismException
 	{
 		if (!this.isCompact()) {
 			this.makeCompact();
@@ -120,7 +120,7 @@ public class DRA extends DA
 	 * This function may delete acceptance pairs,
 	 * which can invalidate iterators.
 	 */
-	public void optimizeAcceptanceCondition()
+	void optimizeAcceptanceCondition()
 	{
 
 		for (Iterator<Integer> it = this.acceptance().iterator(); it.hasNext();) {
@@ -142,7 +142,7 @@ public class DRA extends DA
 		}
 	}
 
-	public DRA calculateUnion(DRA other, boolean trueloop_check, boolean detailed_states) throws PrismException
+	DRA calculateUnion(DRA other, boolean trueloop_check, boolean detailed_states) throws PrismException
 	{
 		if (this.isStreett() || other.isStreett()) {
 			throw new PrismException("Can not calculate union for Streett automata");
@@ -154,7 +154,7 @@ public class DRA extends DA
 	/**
 	 * Convert this jltl2dstar deterministic automaton to PRISM data structures.
 	 */
-	public automata.DA<BitSet, ? extends AcceptanceOmega> createPrismDA() throws PrismException
+	automata.DA<BitSet, ? extends AcceptanceOmega> createPrismDA() throws PrismException
 	{
 		int numStates = size();
 		if (!isStreett()) {

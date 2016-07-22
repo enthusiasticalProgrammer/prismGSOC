@@ -39,7 +39,7 @@ import parser.type.*;
  * Class for state-indexed vectors of (integer or double) values,
  * represented by a vector of doubles.
  */
-public class StateValuesDV implements StateValues
+public final class StateValuesDV implements StateValues
 {
 	/** Double vector storing values */
 	DoubleVector values;

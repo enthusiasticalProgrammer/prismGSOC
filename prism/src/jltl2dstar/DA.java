@@ -29,7 +29,7 @@ import jltl2ba.APSet;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 
-public class DA
+class DA
 {
 
 	/**

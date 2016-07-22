@@ -38,7 +38,7 @@ import prism.PrismException;
 //typename StateMapper_t=StateMapper<typename Algorithm_t::result_t,
 //typename Algorithm_t::state_t,
 //typename DA_t::state_type> >
-public class UnionNBA2DRA
+class UnionNBA2DRA
 {
 
 	/** Save detailed information on the Safra trees in the states? */

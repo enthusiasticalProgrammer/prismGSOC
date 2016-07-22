@@ -24,7 +24,7 @@ package jltl2dstar;
  * Options for Safra's algorithm
  */
 
-public class Options_Safra implements Cloneable
+class Options_Safra implements Cloneable
 {
 	/** Optimize accepting true loops */
 	public boolean opt_accloop;

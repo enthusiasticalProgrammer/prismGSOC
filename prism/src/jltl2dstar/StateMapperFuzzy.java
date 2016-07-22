@@ -31,7 +31,7 @@ import java.util.Vector;
  * A mapping from KeyType to StateType, with ResultType as an alternative key type, which can be fuzzily matched
  * using CandidateMatcher.
  */
-public class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher> implements StateMapperInterface<SafraTreeTemplate, SafraTree, DA_State>
+class StateMapperFuzzy<CandidateMatcher extends SafraTreeCandidateMatcher> implements StateMapperInterface<SafraTreeTemplate, SafraTree, DA_State>
 {
 	private class ListValue
 	{

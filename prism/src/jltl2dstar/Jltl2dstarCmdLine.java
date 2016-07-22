@@ -39,7 +39,7 @@ import jltl2ba.SimpleLTL;
 /**
  * Command-line interface to the jltl2dstar LTL->DRA translator.
  */
-public class Jltl2dstarCmdLine
+class Jltl2dstarCmdLine
 {
 
 	public int run(String formula, PrintStream output) throws Exception

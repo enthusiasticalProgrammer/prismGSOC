@@ -20,7 +20,7 @@
 
 package jltl2dstar;
 
-public interface StateMapperInterface<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State>
+interface StateMapperInterface<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State>
 {
 
 	/** Clear the mapping */

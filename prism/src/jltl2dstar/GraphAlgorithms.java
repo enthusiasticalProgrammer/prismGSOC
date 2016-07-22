@@ -44,7 +44,7 @@ public class GraphAlgorithms
 		scc_dfs.calculate(disjoint);
 	}
 
-	public static class SCC_DFS
+	static class SCC_DFS
 	{
 
 		public static class SCC_DFS_Data

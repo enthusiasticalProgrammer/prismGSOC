@@ -32,7 +32,7 @@ import prism.PrismLangException;
 /**
  * Rename (according to RenamedModule definition), return result.
  */
-public class Rename extends ASTTraverseModify
+public final class Rename extends ASTTraverseModify
 {
 	private RenamedModule rm;
 

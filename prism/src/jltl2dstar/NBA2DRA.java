@@ -26,7 +26,7 @@ import prism.PrismException;
 /**
  * Convert an NBA to a DRA using Safra's algorithm
  */
-public class NBA2DRA
+class NBA2DRA
 {
 
 	/** The options */
@@ -66,7 +66,7 @@ public class NBA2DRA
 	 *        (has to have same APSet as the nba)
 	 * @param limit a limit for the number of states (0 disables the limit).
 	 */
-	public DRA convert(NBA nba, int limit) throws PrismException
+	DRA convert(NBA nba, int limit) throws PrismException
 	{
 
 		if (nba.size() == 0 || nba.getStartState() == null) {

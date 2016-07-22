@@ -25,7 +25,7 @@ import jltl2ba.SimpleLTL;
 import jltl2ba.SimpleLTL.LTLType;
 import prism.PrismException;
 
-public class LTL2DRA
+class LTL2DRA
 {
 
 	private Options_Safra _safra_opt;

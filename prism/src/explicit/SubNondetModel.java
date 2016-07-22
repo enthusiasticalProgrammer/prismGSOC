@@ -50,7 +50,7 @@ import strat.MDStrategy;
  * used to translate between state ids for model and sub-model. Created sub-model will have new 
  * state numbering from 0 to number of states in the sub model.
  */
-public class SubNondetModel implements NondetModel
+public final class SubNondetModel implements NondetModel
 {
 
 	private NondetModel model = null;

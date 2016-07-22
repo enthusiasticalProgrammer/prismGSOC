@@ -31,7 +31,7 @@ import jltl2ba.MyBitSet;
  * one containing the names of nodes that may be renamed and on
  * containing the names that are not allowed in the tree.
  */
-public class SafraTreeTemplate implements NBA2DAResult<SafraTree>
+class SafraTreeTemplate implements NBA2DAResult<SafraTree>
 {
 
 	private SafraTree _safraTree;

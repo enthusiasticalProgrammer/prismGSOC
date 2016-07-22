@@ -36,7 +36,7 @@ import jdd.JDDVars;
 /**
  * Dummy class implementing StateValues to return miscellaneous (single valued) results, typically of type "void".
  */
-public class StateValuesVoid implements StateValues
+public final class StateValuesVoid implements StateValues
 {
 	/** The stored object */
 	private Object value = null;

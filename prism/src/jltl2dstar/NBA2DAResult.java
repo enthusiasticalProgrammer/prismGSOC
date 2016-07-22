@@ -20,7 +20,7 @@
 
 package jltl2dstar;
 
-public interface NBA2DAResult<S extends NBA2DAState>
+interface NBA2DAResult<S extends NBA2DAState>
 {
 	public S getState();
 }
