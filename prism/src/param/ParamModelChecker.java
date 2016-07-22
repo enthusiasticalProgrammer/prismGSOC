@@ -604,7 +604,6 @@ final public class ParamModelChecker extends PrismComponent
 	{
 		Expression pb; // Probability bound (expression)
 		BigRational p = null; // Probability bound (actual value)
-		ModelType modelType = model.getModelType();
 		RelOp relOp;
 		boolean min = false;
 
