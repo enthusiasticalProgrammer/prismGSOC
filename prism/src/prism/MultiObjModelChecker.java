@@ -540,9 +540,6 @@ public class MultiObjModelChecker extends PrismComponent
 	{
 		JDDNode yes, no, maybe, bottomec = null;
 		Object value;
-		//JDDNode maybe_r = null; // maybe states for the reward formula
-		//JDDNode trr = null; // transition rewards
-		//int op1 = relOps.get(0).intValue(); // the operator of the first objective query
 
 		// Get number of targets
 		int numTargets = targets.size();
@@ -870,11 +867,6 @@ public class MultiObjModelChecker extends PrismComponent
 				}
 			}
 
-			//The following is thrown because in this case the i-th dimension is
-			//zero and we might have problems when getting an separating hyperplane.
-			/*if (result[0] == 0)
-				throw new PrismException("The probabilistic objective number " + i + " is degenerate since the optimal value is also the least optimal value." );
-			*/
 			targetPoint = new Point(result);
 			mainLog.println("Computed point: " + targetPoint);
 			pointsForInitialTile.add(targetPoint);
@@ -1224,9 +1216,6 @@ public class MultiObjModelChecker extends PrismComponent
 						}
 						if (prism.getVerbose())
 							mainLog.println("Target lowered to " + targetPoint);
-
-						//if (prism.getExportMultiGraphs())
-						//	MultiObjUtils.printGraphFileDebug(targetPoint, computedPoints, computedDirections, prism.getExportMultiGraphsDir(), output++);
 					}
 				} else {
 					decided = true;

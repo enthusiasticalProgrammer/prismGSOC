@@ -254,15 +254,4 @@ class DRA extends DA
 		}
 		return accNew;
 	}
-
-	//	public DRA calculateUnionStuttered(DRA other,
-	//			StutterSensitivenessInformation stutter_information,
-	//			boolean trueloop_check,
-	//			boolean detailed_states) {
-	//		if (this.isStreett() ||	other.isStreett()) {
-	//			throw new PrismException("Can not calculate union for Streett automata");
-	//		}
-	//
-	//		return DAUnionAlgorithm<DRA>.calculateUnionStuttered(this, other, stutter_information, trueloop_check, detailed_states);
-	//	}
 }

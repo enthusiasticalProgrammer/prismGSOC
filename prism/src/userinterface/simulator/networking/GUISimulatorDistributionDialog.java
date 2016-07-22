@@ -846,8 +846,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				g.setColor(Color.black);
 				g.setFont(new Font(fname, Font.PLAIN, fsize));
 			} catch (BadLocationException ex) {
-				//System.out.println("ex = "+ex);
-				//ex.printStackTrace();
 			}
 			return x;
 		}

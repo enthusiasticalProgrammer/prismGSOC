@@ -1353,5 +1353,4 @@ public class SimpleLTL
 
 		return id;
 	}
-
 }

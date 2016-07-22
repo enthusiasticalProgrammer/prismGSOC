@@ -328,7 +328,6 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 				g.setColor(Color.green);
 				Document doc = getDocument();
 
-				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 				String fname = handler.getPepaEditorFontFast().getName();
