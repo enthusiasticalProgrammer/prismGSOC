@@ -261,6 +261,10 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		return stateLabelList;
 	}
 
+	/**
+	 * This method is in the master branch currently unused. If this also holds
+	 *    for the other branches, we can remove it. 
+	 */
 	public String getTotalRewardLabelString()
 	{
 		int i, n;
