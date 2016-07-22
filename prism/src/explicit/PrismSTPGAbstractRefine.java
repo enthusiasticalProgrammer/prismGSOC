@@ -389,16 +389,6 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 		case CTMC:
 			CTMCModelChecker mcCtmc = new CTMCModelChecker(null);
 			mcCtmc.inheritSettings(mcOptions);
-			switch (propertyType) {
-			/*case PROB_REACH:
-				res = mcDtmc.probReach((DTMC) modelConcrete, targetConcrete);
-				break;
-			case PROB_REACH_BOUNDED:
-				res = mcDtmc.probReachBounded((DTMC) modelConcrete, targetConcrete, reachBound);
-				break;
-			case EXP_REACH:
-				break;*/
-			}
 			break;
 		case MDP:
 			MDPModelChecker mcMdp = new MDPModelChecker(null);

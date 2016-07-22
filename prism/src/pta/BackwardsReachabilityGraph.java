@@ -219,10 +219,7 @@ public class BackwardsReachabilityGraph
 					}
 				}
 			}
-			//if (rest > 0)
-			//	distr.add(mdp.getNumStates() - 1, rest);
 			mdp.addChoice(src, distr);
-			//log.println();
 		} else {
 			List<Integer> list3 = list2.get(i);
 			if (list3.size() == 0) {

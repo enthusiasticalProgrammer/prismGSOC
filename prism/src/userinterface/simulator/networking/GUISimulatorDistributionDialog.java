@@ -903,8 +903,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				g.setColor(Color.black);
 				g.setFont(new Font(fname, Font.PLAIN, fsize));
 			} catch (BadLocationException ex) {
-				//System.out.println("ex = "+ex);
-				//ex.printStackTrace();
 			}
 			return x;
 		}
@@ -924,9 +922,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				}
 			}
 
-			//System.out.println("styles.length = "+styles.length);
-			//System.out.println("ret.length = "+length);
-			//System.out.println("offset = "+offset);
 			userinterface.model.Style[] ret = new userinterface.model.Style[length];
 			for (int i = 0; i < ret.length; i++) {
 				ret[i] = styles[i + offset];

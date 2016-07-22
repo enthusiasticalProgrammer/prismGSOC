@@ -308,26 +308,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			commentLabel.setText("");
 			commentText.setText("");
 		}
-
-		//                for(int i = 0; i < theModel.getRowCount(); i++)
-		//                {
-		//                    ////System.out.println("Row "+i);
-		//                    String value = theModel.getValueAt(i, 1).toString();
-		//                    int lines = 1;
-		//
-		//                    if(theModel.getValueAt(i, 1) instanceof FontColorProperty)
-		//                    {
-		//                int height = ((FontColorProperty)theModel.getValueAt(i,1)).getFontColorPair().f.getSize();
-		//                height = Math.max(height, (lineWidth-2));
-		//                theTable.setRowHeight(i, (height*lines)+4);
-		//            }
-		//            else if(theModel.getValueAt(i, 1) instanceof SingleProperty)
-		//            {
-		//                //lines = getNumLines(value);
-		//                //int heightWanted =
-		//                //theTable.setRowHeight(i, (lineWidth*lines)+2);
-		//            }
-		//        }
 	}
 
 	@Override
@@ -342,58 +322,9 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			commentLabel.setText("");
 			commentText.setText("");
 		}
-		//System.out.println("TABLE CHANGED");
-		//       CellEditor ce = theTable.getCellEditor();
-		//        if(ce != null) ce.cancelCellEditing();
-		//        theCombo.setModel(theModel.getComboModel());
-		//        for(int i = 0; i < theModel.getRowCount(); i++)
-		//        {
-		//            ////System.out.println("Row "+i);
-		//            String value = theModel.getValueAt(i, 1).toString();
-		//            int lines = 1;
-		//
-		//            if(theModel.getValueAt(i, 1) instanceof FontColorProperty)
-		//            {
-		//                int height = ((FontColorProperty)theModel.getValueAt(i,1)).getFontColorPair().f.getSize();
-		//
-		//                height = Math.max(height, (lineWidth-2));
-		//                theTable.setRowHeight(i, (height*lines)+4);
-		//            }
-		//            else if(theModel.getValueAt(i, 1) instanceof SingleProperty)
-		//            {
-		//                //lines = getNumLines(value);
-		//                //theTable.setRowHeight(i, (lineWidth*lines)+2);
-		//                //int heightWanted = (int)area.getPreferredSize().getHeight();
-		//                  ///  if(heightWanted != theTable.getRowHeight(row));
-		//                   // theTable.setRowHeight(row, heightWanted);
-		//            }
-		//            else if(theModel.getValueAt(i, 1) instanceof MultipleProperty)
-		//            {
-		//                lines = getNumLines(value);
-		//                theTable.setRowHeight(i, (lineWidth*lines)+2);
-		//            }
-		//
-		//
-		//
-		//        }
-		//        doChoiceBox();
-		//theTable.s
-		//System.out.println("getting the combomodel");
 		theCombo.setModel(theModel.getComboModel());
 		doChoiceBox();
 	}
-
-	//    public static int getNumLines(String str)
-	//    {
-	//        int count = 1;
-	//        for(int i = 0; i < str.length(); i++)
-	//        {
-	//            char curr = str.charAt(i);
-	//            if(curr=='\n') count++;
-	//        }
-	//        ////System.out.println("count = "+count);
-	//        return count;
-	//    }
 
 	@Override
 	public void itemStateChanged(ItemEvent e)
@@ -578,11 +509,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			while (it.hasNext()) {
 
 				SettingOwner po = (SettingOwner) it.next();
-				//            for(int i = 0; i < po.getNumProperties(); i++)
-				//            {
-				//                po.getProperty(i).addObserver(this);
-				//                po.getProperty(i).setOwningModel(this);
-				//            }
 				if (last == null) {
 					//this is the first group
 					currGroupCount++;
@@ -627,7 +553,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		public void refreshGroupNames()
 		{
-			//System.out.println("refreshing group names");
 			Iterator it = owners.iterator();
 			SettingOwner last = null;
 			int currGroupCount = 0;
@@ -649,7 +574,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				} else if (po.getSettingOwnerID() == last.getSettingOwnerID()) {
 					//this is for the second or after in the sequence
 					currGroupCount++;
-					//tempName = ""+currGroupCount+" "+po.getClassDescriptor()+"s";
 					if (!po.getSettingOwnerClassName().endsWith("s"))
 						tempName = po.getSettingOwnerClassName() + "s";
 					if (!po.getSettingOwnerName().equals(""))
@@ -659,8 +583,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					tempName += " " + ownerList + "";
 					ownerList = "";
 					groupNames.add(tempName);
-					//System.out.println("adding: "+tempName);
-					//groupSizes.add(new Integer(currGroupCount));
 					currGroupCount = 0;
 					currGroupCount++;
 					ownerList += "\'" + po.getSettingOwnerName() + "\'";
@@ -769,8 +691,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				//Simple if the selected owner group has only 1 member
 				if (column == 1) {
 					if (getCurrentGroupSize() == 1) {
-						//System.out.println("setting called obj class is "+obj.getClass().toString());
-						//System.out.println("value = "+obj.toString());
 						SettingOwner firstInGroup = getOwner(getCurrentGroupStart());
 						if (!obj.equals(SettingEditor.NOT_CHANGED_VALUE))
 							firstInGroup.getSetting(row).editValue(obj);
@@ -857,7 +777,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		System.out.print("(");
 		for (int i = 0; i < a.size(); i++)
 			System.out.print(a.get(i) + " ");
-		//System.out.println(")");
+		System.out.println(")");
 	}
 
 }

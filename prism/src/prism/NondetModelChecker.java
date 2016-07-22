@@ -1030,12 +1030,6 @@ public class NondetModelChecker extends NonProbModelChecker
 			throw e;
 		}
 
-		// print out some info about num states
-		// mainLog.print("\nb1 = " + JDD.GetNumMintermsString(b1,
-		// allDDRowVars.n()));
-		// mainLog.print(" states, b2 = " + JDD.GetNumMintermsString(b2,
-		// allDDRowVars.n()) + " states\n");
-
 		try {
 			probs = checkProbUntil(b1, b2, qual, min);
 		} catch (PrismException e) {

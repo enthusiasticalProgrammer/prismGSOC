@@ -383,9 +383,6 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 				contain = match.find();
 			}
 
-			//System.out.println("styles.length = "+styles.length);
-			//System.out.println("ret.length = "+length);
-			//System.out.println("offset = "+offset);
 			userinterface.model.Style[] ret = new userinterface.model.Style[length];
 			for (int i = 0; i < ret.length; i++) {
 				ret[i] = styles[i + offset];

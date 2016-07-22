@@ -1787,18 +1787,6 @@ public class PrismCL implements PrismModelListener
 				throw new PrismException("You must import the transition matrix when using -importmodel (use option \"tra\" or \"all\")");
 			}
 		}
-		// No options supported currently
-		/*// Process options
-		String options[] = optionsString.split(",");
-		for (String opt : options) {
-			// Ignore ""
-			if (opt.equals("")) {
-			}
-			// Unknown option
-			else {
-				throw new PrismException("Unknown option \"" + opt + "\" for -importmodel switch");
-			}
-		}*/
 	}
 
 	/**
@@ -1884,18 +1872,8 @@ public class PrismCL implements PrismModelListener
 				exportType = Prism.EXPORT_MRMC;
 			} else if (opt.equals("rows")) {
 				exportType = Prism.EXPORT_ROWS;
-			} /*else if (opt.startsWith("type=")) {
-				String exportTypeString = opt.substring(5);
-				if (exportTypeString.equals("matlab")) {
-					exportType = Prism.EXPORT_MATLAB;
-				} else if (exportTypeString.equals("mrmc")) {
-					exportType = Prism.EXPORT_MRMC;
-				} else if (exportTypeString.equals("rows")) {
-					exportType = Prism.EXPORT_ROWS;
-				} else {
-					throw new PrismException("Unknown type \"" + opt + "\" for -exportmodel switch");
-				}
-				}*/
+			}
+
 			// Unordered/ordered
 			else if (opt.equals("unordered")) {
 				exportordered = false;

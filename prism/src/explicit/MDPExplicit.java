@@ -250,15 +250,6 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 			maxDiff = diff > maxDiff ? diff : maxDiff;
 			vect[s] = d;
 		}
-		// Use this code instead for backwards Gauss-Seidel
-		/*for (s = numStates - 1; s >= 0; s--) {
-			if (subset.get(s)) {
-				d = mvMultJacMinMaxSingle(s, vect, min, strat);
-				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-				maxDiff = diff > maxDiff ? diff : maxDiff;
-				vect[s] = d;
-			}
-		}*/
 		return maxDiff;
 	}
 
@@ -280,15 +271,6 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 			maxDiff = diff > maxDiff ? diff : maxDiff;
 			vect[s] = d;
 		}
-		// Use this code instead for backwards Gauss-Seidel
-		/*for (s = numStates - 1; s >= 0; s--) {
-			if (subset.get(s)) {
-				d = mvMultRewJacMinMaxSingle(s, vect, mdpRewards, min);
-				diff = absolute ? (Math.abs(d - vect[s])) : (Math.abs(d - vect[s]) / d);
-				maxDiff = diff > maxDiff ? diff : maxDiff;
-				vect[s] = d;
-			}
-		}*/
 		return maxDiff;
 	}
 

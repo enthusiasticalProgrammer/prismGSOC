@@ -228,6 +228,7 @@ public class SimpleLTL
 		case UNTIL:
 		case RELEASE:
 			right = right.simplified();
+			//$FALL-THROUGH$
 		case NOT:
 		case NEXT:
 		case FINALLY:

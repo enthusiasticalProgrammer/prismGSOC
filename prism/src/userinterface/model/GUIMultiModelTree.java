@@ -3549,21 +3549,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		{
 			return this;
 		}
-
-		/*
-		                //make sure the JTree gives the editor enough space
-		                public void setBounds(Rectangle r)
-		                {
-		                                r.width = Math.max(minWidth, r.width);
-		                                super.setBounds(r);
-		                }
-		 
-		                public void setBounds(int x, int y, int w, int h)
-		                {
-		                                w = Math.max(minWidth, w);
-		                                super.setBounds(x,y,w,h);
-		                }*/
-
 	}
 
 	//Node Renderer
@@ -3571,7 +3556,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	{
 		ImageIcon VAR = GUIPrism.getIconFromImage("smallVariable.png");
 		ImageIcon MOD = GUIPrism.getIconFromImage("smallModule.png");
-		//ImageIcon EXP = GUIPrism.getIconFromImage("smallExpression.png");
 		ImageIcon VAL = GUIPrism.getIconFromImage("smallValue.png");
 		ImageIcon GOOD = GUIPrism.getIconFromImage("smallTick.png");
 		ImageIcon BAD = GUIPrism.getIconFromImage("smallCross.png");
@@ -3609,11 +3593,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			} else if (node instanceof ModuleNode) {
 				setIcon(MOD);
 			} else if (node instanceof ValueNode) {
-				//if(node instanceof ExpressionNode)
-				//{
-				//setIcon(EXP);
-				//}
-				//else
 				{
 					setIcon(VAL);
 				}
@@ -3694,131 +3673,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 	}
 
-	/*
-	class ModelTreeCellEditor_n implements TreeCellEditor
-	{
-	        ModelTypeEditor modelTypeEditor;
-	        ExpressionEditor expressionEditor;
-	        ModuleEditor moduleEditor;
-	        DeclarationEditor declarationEditor;
-	 
-	        CellEditor currentEditor;
-	 
-	        DefaultTreeCellEditor ttt;
-	 
-	        String[] types = new String[]
-	        {"Non-deterministic", "Probabilistic", "Stochastic"};
-	 
-	        PrismNodeRenderer renderer;
-	 
-	        public ModelTreeCellEditor_n(PrismNodeRenderer renderer)
-	        {
-	                this.renderer = renderer;
-	                modelTypeEditor = new ModelTypeEditor(types);
-	                expressionEditor = new ExpressionEditor();
-	                moduleEditor = new ModuleEditor();
-	                declarationEditor = new DeclarationEditor();
-	                currentEditor = declarationEditor;
-	        }
-	 
-	 
-	 
-	        public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
-	        {
-	                String tag = "";
-	                if(value instanceof ExpressionNode)
-	                {
-	                        currentEditor = expressionEditor;
-	//				((JTextField)expressionEditor.getComponent()).setText(((ExpressionNode)value).getValue().toString());
-	                }
-	                else if(value instanceof ModelTypeNode)
-	                {
-	                        currentEditor = modelTypeEditor;
-	                        modelTypeEditor.setSelectedType(((ModelTypeNode)value).getValue());
-	                        tag = "Type: ";
-	                }
-	                else if(value instanceof ModuleNode)
-	                {
-	                        currentEditor = moduleEditor;
-	                        moduleEditor.setText(((ModuleNode)value).getName());
-	                }
-	                else if(value instanceof DeclarationNode)
-	                {
-	                        currentEditor = declarationEditor;
-	                        declarationEditor.setText(((DeclarationNode)value).getName());
-	                }
-	                DefaultTreeCellRenderer c = (DefaultTreeCellRenderer)renderer.getTreeCellRendererComponent(tree, value, isSelected, expanded, leaf, row, true);
-	                JPanel p = new JPanel();
-	                p.setBackground(Color.white);
-	                p.setLayout(new BorderLayout());
-	                JLabel l = new JLabel(tag,c.getIcon(), JLabel.HORIZONTAL);
-	                l.setBackground(Color.white);
-	                l.setForeground(Color.blue);
-	                l.setFont(tree.getFont());
-	                p.add(l, BorderLayout.WEST);
-	                if(currentEditor instanceof ExpressionEditor)
-	                {
-	                        p.add(((ExpressionEditor)currentEditor).getComponent(), BorderLayout.CENTER);
-	                }
-	                else
-	                {
-	                        p.add((Component)currentEditor, BorderLayout.CENTER);
-	                }
-	                return p;//(Component)currentEditor;
-	        }
-	 
-	        public Object getCellEditorValue()
-	        {
-	                return currentEditor.getCellEditorValue();
-	 
-	        }
-	 
-	        public boolean isCellEditable(EventObject event)
-	        {
-	                return true;
-	                //return currentEditor.isCellEditable(event);
-	        }
-	 
-	        public boolean shouldSelectCell(EventObject event)
-	        {
-	                return currentEditor.shouldSelectCell(event);
-	        }
-	 
-	        public boolean stopCellEditing()
-	        {
-	                return currentEditor.stopCellEditing();
-	        }
-	 
-	        public void cancelCellEditing()
-	        {
-	                currentEditor.cancelCellEditing();
-	        }
-	 
-	        public void addCellEditorListener(CellEditorListener l)
-	        {
-	 
-	                modelTypeEditor.addCellEditorListener(l);
-	                expressionEditor.addCellEditorListener(l);
-	 
-	                moduleEditor.addCellEditorListener(l);
-	 
-	                declarationEditor.addCellEditorListener(l);
-	        }
-	 
-	        public void removeCellEditorListener(CellEditorListener l)
-	        {
-	                modelTypeEditor.removeCellEditorListener(l);
-	                expressionEditor.removeCellEditorListener(l);
-	 
-	                moduleEditor.removeCellEditorListener(l);
-	 
-	                declarationEditor.removeCellEditorListener(l);
-	        }
-	 
-	}
-	 
-	 */
-
 	class IconThread extends Thread
 	{
 		int index;
@@ -3857,6 +3711,11 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		}
 	}
 
+	/**
+	 * Currently unused in the master-branch, can we delete it?
+	 * Besides, it just removes '\n'-chars from a string, which can be
+	 *  done by a simple API-call to String::replace.
+	 */
 	private static String removeCarriages(String line)
 	{
 		String lineBuffer = "";

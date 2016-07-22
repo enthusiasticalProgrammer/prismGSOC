@@ -428,20 +428,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 	}
 
 	public void caretUpdate(CaretEvent e)
-	{/*
-		   if(e.getSource() == fontBox)
-		   {
-		       String str = fontBox.getText();
-		       for(int i = 0; i < fontList.getModel().getSize(); i++)
-		       {
-		           String listStr = (String)fontList.getModel().getElementAt(i);
-		           if(listStr.startsWith(str))
-		           {
-		               fontList.setSelectedIndex(i);
-		               break;
-		           }
-		       }
-		   }*/
+	{
 	}
 
 	@Override

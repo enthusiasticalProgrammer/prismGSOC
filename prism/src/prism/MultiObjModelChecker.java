@@ -968,13 +968,6 @@ public class MultiObjModelChecker extends PrismComponent
 						rewSparseMatrices, direction.getCoords(), rewardStepBounds);
 			}
 
-			/*	//Minimizing operators are negated, and for Pareto we need to maximize.
-				for (int i = 0; i < dimProb; i++) {
-					if (opsAndBounds.getOperator(i) == Operator.P_MIN) {
-						result[i] = -(1-result[i]);
-					}
-				} */
-
 			numberOfPoints++;
 
 			//collect the numbers obtained from methods executed above.

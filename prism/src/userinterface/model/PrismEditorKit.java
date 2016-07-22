@@ -153,20 +153,11 @@ class PrismView extends PlainView
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 
-		// x+= getLeftInset();
-		// System.out.println("p0 = "+p0+", p1 = "+p1+", st = "+stLine+",
-		// enLine = "+enLine+".");
 		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
-			// Segment segment = getLineBuffer();
 
-			// System.out.println(doc.getText(p0, p1-p0));
-			// String s = doc.getText(p0, p1-p0);
 			String s = doc.getText(stLine, enLine - stLine);
-			// System.out.println("------");
-			// System.out.println("highlighting unselected string = \n"+s);
-			// System.out.println("------");
 
 			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			int currStart = 0;
@@ -205,21 +196,11 @@ class PrismView extends PlainView
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 
-		// x+= getLeftInset();
-		// System.out.println("p0 = "+p0+", p1 = "+p1+", st = "+stLine+",
-		// enLine = "+enLine+".");
 		try {
 			g.setColor(Color.green);
 			Document doc = getDocument();
-			// Segment segment = getLineBuffer();
-
-			// String s = doc.getText(p0, p1-p0);
-			// System.out.println(doc.getText(p0, p1-p0));
 
 			String s = doc.getText(stLine, enLine - stLine);
-			// System.out.println("------");
-			// System.out.println("highlighting selected string = \n"+s);
-			// System.out.println("------");
 			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
 			int currStart = 0;
 			int currEnd = 0;
@@ -252,7 +233,6 @@ class PrismView extends PlainView
 		int i, n;
 		if (!s.endsWith("\n"))
 			s += "\n";
-		// s = s.substring(0, s.length()-1);
 
 		try {
 			typeArray = PrismSyntaxHighlighter.lineForPrismGUI(s);

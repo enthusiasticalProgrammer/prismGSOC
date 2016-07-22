@@ -88,7 +88,6 @@ public class TableResizer extends MouseInputAdapter
 		if (this.isMouseOverColMargin(p)) {
 			this.active = true;
 			this.startX = p.x;
-			//this.startWidth = table.getWidth();
 			startWidth = this.table.getColumnModel().getColumn(col).getWidth();
 			this.colSelectionAllowed = this.table.getColumnSelectionAllowed();
 			this.table.setColumnSelectionAllowed(false);

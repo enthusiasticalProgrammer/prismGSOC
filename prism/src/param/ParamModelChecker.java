@@ -595,251 +595,6 @@ final public class ParamModelChecker extends PrismComponent
 		System.out.println("\n" + opt.optimise());
 
 		return null;
-
-		/*
-		// Remember whether filter is for the initial state and, if so, whether there's just one
-		filterInit = (filter instanceof ExpressionLabel && ((ExpressionLabel) filter).isInitLabel());
-		filterInitSingle = filterInit & model.getNumInitialStates() == 1;
-		// Print out number of states satisfying filter
-		if (!filterInit)
-			mainLog.println("\nStates satisfying filter " + filter + ": " + bsFilter.cardinality());
-		
-		// Compute result according to filter type
-		op = expr.getOperatorType();
-		switch (op) {
-		case PRINT:
-			// Format of print-out depends on type
-			if (expr.getType() instanceof TypeBool) {
-				// NB: 'usual' case for filter(print,...) on Booleans is to use no filter
-				mainLog.print("\nSatisfying states");
-				mainLog.println(filterTrue ? ":" : " that are also in filter " + filter + ":");
-				vals.printFiltered(mainLog, bsFilter);
-			} else {
-				mainLog.println("\nResults (non-zero only) for filter " + filter + ":");
-				vals.printFiltered(mainLog, bsFilter);
-			}
-			// Result vector is unchanged; for ARGMIN, don't store a single value (in resObj)
-			// Also, don't bother with explanation string
-			resVals = vals;
-			// Set vals to null to stop it being cleared below
-			vals = null;
-			break;
-		case MIN:
-			// Compute min
-			// Store as object/vector
-			resObj = vals.minOverBitSet(bsFilter);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Minimum value over " + filterStatesString;
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			// Also find states that (are close to) selected value for display to log
-			// TODO: un-hard-code precision once RegionValues knows hoe precise it is
-			bsMatch = vals.getBitSetFromCloseValue(resObj, 1e-5, false);
-			bsMatch.and(bsFilter);
-			break;
-		case MAX:
-			// Compute max
-			// Store as object/vector
-			resObj = vals.maxOverBitSet(bsFilter);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Maximum value over " + filterStatesString;
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			// Also find states that (are close to) selected value for display to log
-			// TODO: un-hard-code precision once RegionValues knows hoe precise it is
-			bsMatch = vals.getBitSetFromCloseValue(resObj, 1e-5, false);
-			bsMatch.and(bsFilter);
-			break;
-		case ARGMIN:
-			// Compute/display min
-			resObj = vals.minOverBitSet(bsFilter);
-			mainLog.print("\nMinimum value over " + filterStatesString + ": " + resObj);
-			// Find states that (are close to) selected value
-			// TODO: un-hard-code precision once RegionValues knows hoe precise it is
-			bsMatch = vals.getBitSetFromCloseValue(resObj, 1e-5, false);
-			bsMatch.and(bsFilter);
-			// Store states in vector; for ARGMIN, don't store a single value (in resObj)
-			// Also, don't bother with explanation string
-			resVals = RegionValues.createFromBitSet(bsMatch, model);
-			// Print out number of matching states, but not the actual states
-			mainLog.println("\nNumber of states with minimum value: " + bsMatch.cardinality());
-			bsMatch = null;
-			break;
-		case ARGMAX:
-			// Compute/display max
-			resObj = vals.maxOverBitSet(bsFilter);
-			mainLog.print("\nMaximum value over " + filterStatesString + ": " + resObj);
-			// Find states that (are close to) selected value
-			bsMatch = vals.getBitSetFromCloseValue(resObj, precision, false);
-			bsMatch.and(bsFilter);
-			// Store states in vector; for ARGMAX, don't store a single value (in resObj)
-			// Also, don't bother with explanation string
-			resVals = RegionValues.createFromBitSet(bsMatch, model);
-			// Print out number of matching states, but not the actual states
-			mainLog.println("\nNumber of states with maximum value: " + bsMatch.cardinality());
-			bsMatch = null;
-			break;
-		case COUNT:
-			// Compute count
-			int count = vals.countOverBitSet(bsFilter);
-			// Store as object/vector
-			resObj = new Integer(count);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = filterTrue ? "Count of satisfying states" : "Count of satisfying states also in filter";
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			break;
-		case SUM:
-			// Compute sum
-			// Store as object/vector
-			resObj = vals.sumOverBitSet(bsFilter);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Sum over " + filterStatesString;
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			break;
-		case AVG:
-			// Compute average
-			// Store as object/vector
-			resObj = vals.averageOverBitSet(bsFilter);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Average over " + filterStatesString;
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			break;
-		case FIRST:
-			// Find first value
-			resObj = vals.firstFromBitSet(bsFilter);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Value in ";
-			if (filterInit) {
-				resultExpl += filterInitSingle ? "the initial state" : "first initial state";
-			} else {
-				resultExpl += filterTrue ? "the first state" : "first state satisfying filter";
-			}
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			break;
-		case RANGE:
-			// Find range of values
-			resObj = new prism.Interval(vals.minOverBitSet(bsFilter), vals.maxOverBitSet(bsFilter));
-			// Leave result vector unchanged: for a range, result is only available from Result object
-			resVals = vals;
-			// Set vals to null to stop it being cleared below
-			vals = null;
-			// Create explanation of result and print some details to log
-			resultExpl = "Range of values over ";
-			resultExpl += filterInit ? "initial states" : filterStatesString;
-			mainLog.println("\n" + resultExpl + ": " + resObj);
-			break;
-		case FORALL:
-			// Get access to BitSet for this
-			if(paras == null) {
-				bs = vals.getBitSet();
-				// Print some info to log
-				mainLog.print("\nNumber of states satisfying " + expr.getOperand() + ": ");
-				mainLog.print(bs.cardinality());
-				mainLog.println(bs.cardinality() == model.getNumStates() ? " (all in model)" : "");
-				// Check "for all" over filter
-				b = vals.forallOverBitSet(bsFilter);
-				// Store as object/vector
-				resObj = new Boolean(b);
-				resVals = new RegionValues(expr.getType(), resObj, model); 
-				// Create explanation of result and print some details to log
-				resultExpl = "Property " + (b ? "" : "not ") + "satisfied in ";
-				mainLog.print("\nProperty satisfied in " + vals.countOverBitSet(bsFilter));
-				if (filterInit) {
-					if (filterInitSingle) {
-						resultExpl += "the initial state";
-					} else {
-						resultExpl += "all initial states";
-					}
-					mainLog.println(" of " + model.getNumInitialStates() + " initial states.");
-				} else {
-					if (filterTrue) {
-						resultExpl += "all states";
-						mainLog.println(" of all " + model.getNumStates() + " states.");
-					} else {
-						resultExpl += "all filter states";
-						mainLog.println(" of " + bsFilter.cardinality() + " filter states.");
-					}
-				}
-			}
-			break;
-		case EXISTS:
-			// Get access to BitSet for this
-			bs = vals.getBitSet();
-			// Check "there exists" over filter
-			b = vals.existsOverBitSet(bsFilter);
-			// Store as object/vector
-			resObj = new Boolean(b);
-			resVals = new RegionValues(expr.getType(), resObj, model); 
-			// Create explanation of result and print some details to log
-			resultExpl = "Property satisfied in ";
-			if (filterTrue) {
-				resultExpl += b ? "at least one state" : "no states";
-			} else {
-				resultExpl += b ? "at least one filter state" : "no filter states";
-			}
-			mainLog.println("\n" + resultExpl);
-			break;
-		case STATE:
-			if(paras == null) {
-				// Check filter satisfied by exactly one state
-				if (bsFilter.cardinality() != 1) {
-					String s = "Filter should be satisfied in exactly 1 state";
-					s += " (but \"" + filter + "\" is true in " + bsFilter.cardinality() + " states)";
-					throw new PrismException(s);
-				}
-				// Find first (only) value
-				// Store as object/vector
-				resObj = vals.firstFromBitSet(bsFilter);
-				resVals = new RegionValues(expr.getType(), resObj, model); 
-				// Create explanation of result and print some details to log
-				resultExpl = "Value in ";
-				if (filterInit) {
-					resultExpl += "the initial state";
-				} else {
-					resultExpl += "the filter state";
-				}
-				mainLog.println("\n" + resultExpl + ": " + resObj);
-			}
-			break;
-		default:
-			throw new PrismException("Unrecognised filter type \"" + expr.getOperatorName() + "\"");
-		}
-		
-		// For some operators, print out some matching states
-		if (bsMatch != null) {
-			states = RegionValues.createFromBitSet(bsMatch, model);
-			mainLog.print("\nThere are " + bsMatch.cardinality() + " states with ");
-			mainLog.print(expr.getType() instanceof TypeDouble ? "(approximately) " : "" + "this value");
-			boolean verbose = verbosity > 0; // TODO
-			if (!verbose && bsMatch.cardinality() > 10) {
-				mainLog.print(".\nThe first 10 states are displayed below. To view them all, enable verbose mode or use a print filter.\n");
-				states.print(mainLog, 10);
-			} else {
-				mainLog.print(":\n");
-				states.print(mainLog);
-			}
-			
-		}
-		
-		// Store result
-		result.setResult(resObj);
-		// Set result explanation (if none or disabled, clear)
-		if (expr.getExplanationEnabled() && resultExpl != null) {
-			result.setExplanation(resultExpl.toLowerCase());
-		} else {
-			result.setExplanation(null);
-		}
-		
-		// Clear up
-		if (vals != null)
-			vals.clear();
-		
-		return resVals;
-		*/
 	}
 
 	/**
@@ -849,8 +604,6 @@ final public class ParamModelChecker extends PrismComponent
 	{
 		Expression pb; // Probability bound (expression)
 		BigRational p = null; // Probability bound (actual value)
-		//String relOp; // Relational operator
-		//boolean min = false; // For nondeterministic models, are we finding min (true) or max (false) probs
 		ModelType modelType = model.getModelType();
 		RelOp relOp;
 		boolean min = false;
@@ -942,7 +695,6 @@ final public class ParamModelChecker extends PrismComponent
 	private RegionValues checkProbBoundedUntil(ParamModel model, RegionValues b1, RegionValues b2, boolean min) throws PrismException
 	{
 		ModelType modelType = model.getModelType();
-		//RegionValues probs;
 		switch (modelType) {
 		case CTMC:
 			throw new PrismNotSupportedException("Bounded until operator not supported by parametric engine");
@@ -1098,9 +850,6 @@ final public class ParamModelChecker extends PrismComponent
 	{
 		Expression pb; // Probability bound (expression)
 		BigRational p = null; // Probability bound (actual value)
-		//String relOp; // Relational operator
-		//boolean min = false; // For nondeterministic models, are we finding min (true) or max (false) probs
-		ModelType modelType = model.getModelType();
 		RelOp relOp;
 		boolean min = false;
 

@@ -184,10 +184,6 @@ public class SCCComputerSCCFind extends SCCComputer
 		// Sanity check, partitioning of the state space should prevent this
 		assert !sccs.contains(nodes);
 
-		/* if (prism.getVerbose()) {
-			mainLog.println("Found SCC:");
-			JDD.PrintVector(nodes, rows);
-		} */
 		sccs.addElement(nodes);
 		JDD.Ref(nodes);
 		allSCCs = JDD.Or(allSCCs, nodes);
@@ -207,9 +203,10 @@ public class SCCComputerSCCFind extends SCCComputer
 		}
 	}
 
-	// Compute a forward set and skeleton of node
-	// Derefs: nothing
-	// Refs: SkelForwardResult contents
+	/**Compute a forward set and skeleton of node
+	 * Derefs: nothing
+	 * Refs: SkelForwardResult contents
+	 */
 	private SkelForwardResult skelForward(JDDNode nodes, JDDNode edges, JDDNode node)
 	{
 
@@ -260,11 +257,6 @@ public class SCCComputerSCCFind extends SCCComputer
 			JDD.Deref(spineSetNode);
 			return;
 		}
-
-		/* if (prism.getVerbose()) {
-			mainLog.println("SCC-Find pass on nodes: ");
-			JDD.PrintVector(nodes, rows);
-		} */
 
 		if (spineSetPath.equals(JDD.ZERO)) {
 			JDD.Deref(spineSetNode);
