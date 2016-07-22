@@ -357,22 +357,20 @@ public class MultiObjModelChecker extends PrismComponent
 			DA<BitSet, AcceptanceRabin> dra[], JDDVars draDDRowVars[], JDDVars draDDColVars[], List<JDDNode> targetDDs, List<JDDNode> multitargetDDs,
 			List<Integer> multitargetIDs) throws PrismException
 	{
-		int i, j;
-		long l;
 
 		// Compute all maximal end components
 		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<>(numTargets);
 		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<>(numTargets);
 		JDDNode acceptanceVector_H = JDD.Constant(0);
 		JDDNode acceptanceVector_L = JDD.Constant(0);
-		for (i = 0; i < numTargets; i++) {
+		for (int i = 0; i < numTargets; i++) {
 			if (!reachExpr[i]) {
 				ArrayList<JDDNode> statesH = new ArrayList<>();
 				ArrayList<JDDNode> statesL = new ArrayList<>();
 				for (int k = 0; k < dra[i].getAcceptance().size(); k++) {
 					JDDNode tmpH = JDD.Constant(0);
 					JDDNode tmpL = JDD.Constant(0);
-					for (j = 0; j < dra[i].size(); j++) {
+					for (int j = 0; j < dra[i].size(); j++) {
 						if (!dra[i].getAcceptance().get(k).getL().get(j)) {
 							tmpH = JDD.SetVectorElement(tmpH, draDDRowVars[i], j, 1.0);
 						}
@@ -411,7 +409,7 @@ public class MultiObjModelChecker extends PrismComponent
 		JDD.Ref(acceptanceVector_H);
 		JDD.Ref(modelProduct.getTrans01());
 		JDDNode candidateStates = JDD.Apply(JDD.TIMES, modelProduct.getTrans01(), acceptanceVector_H);
-		for (i = 0; i < numTargets; i++)
+		for (int i = 0; i < numTargets; i++)
 			if (!reachExpr[i]) {
 				acceptanceVector_H = JDD.PermuteVariables(acceptanceVector_H, draDDRowVars[i], draDDColVars[i]);
 			}
@@ -423,10 +421,10 @@ public class MultiObjModelChecker extends PrismComponent
 		JDD.Deref(candidateStates);
 		JDD.Deref(acceptanceVector_L);
 
-		for (i = 0; i < numTargets; i++) {
+		for (int i = 0; i < numTargets; i++) {
 			if (!reachExpr[i]) {
 				//mainLog.println("\nFinding accepting end components for " + targetName[i] + "...");
-				l = System.currentTimeMillis();
+				long l = System.currentTimeMillis();
 				// increase ref count for checking conflict formulas
 				if (conflictformulae > 1) {
 					List<JDDNode> tmpLH = allstatesH.get(i);
@@ -465,7 +463,7 @@ public class MultiObjModelChecker extends PrismComponent
 			List<List<JDDNode>> tmpallstatesH = new ArrayList<>(conflictformulae);
 			List<List<JDDNode>> tmpallstatesL = new ArrayList<>(conflictformulae);
 			int count = 0;
-			for (i = 0; i < numTargets; i++)
+			for (int i = 0; i < numTargets; i++)
 				if (!reachExpr[i]) {
 					tmpdra[count] = dra[i];
 					tmpdraDDRowVars[count] = draDDRowVars[i];
@@ -483,7 +481,7 @@ public class MultiObjModelChecker extends PrismComponent
 					multitargetDDs, tmpmultitargetIDs);
 			// again. double check when reachExpr is set
 			count = 0;
-			for (i = 0; i < numTargets; i++)
+			for (int i = 0; i < numTargets; i++)
 				if (!reachExpr[i]) {
 					targetDDs.remove(count);
 					targetDDs.add(count, tmptargetDDs.get(count));
@@ -492,11 +490,11 @@ public class MultiObjModelChecker extends PrismComponent
 
 			// deal with reachability targets
 			//multitargetIDs = new ArrayList<Integer>(tmpmultitargetIDs.size());
-			for (i = 0; i < tmpmultitargetIDs.size(); i++) {
+			for (int i = 0; i < tmpmultitargetIDs.size(); i++) {
 				multitargetIDs.add(changeToInteger(tmpmultitargetIDs.get(i)));
 			}
 
-			for (i = 0; i < numTargets; i++)
+			for (int i = 0; i < numTargets; i++)
 				if (!reachExpr[i]) {
 					List<JDDNode> tmpLH = allstatesH.get(i);
 					for (JDDNode n : tmpLH)
@@ -542,21 +540,20 @@ public class MultiObjModelChecker extends PrismComponent
 	{
 		JDDNode yes, no, maybe, bottomec = null;
 		Object value;
-		int i, j, numTargets;
 		//JDDNode maybe_r = null; // maybe states for the reward formula
 		//JDDNode trr = null; // transition rewards
 		//int op1 = relOps.get(0).intValue(); // the operator of the first objective query
 
 		// Get number of targets
-		numTargets = targets.size();
+		int numTargets = targets.size();
 
 		JDDNode labels[] = new JDDNode[numTargets];
 		// Build temporary DDs for combined targets
-		for (i = 0; i < numTargets; i++) {
+		for (int i = 0; i < numTargets; i++) {
 			JDD.Ref(targets.get(i));
 			JDDNode tmp = targets.get(i);
 			if (combinations != null) {
-				for (j = 0; j < combinations.size(); j++) {
+				for (int j = 0; j < combinations.size(); j++) {
 					if ((combinationIDs.get(j) & (1 << i)) > 0) {
 						JDD.Ref(combinations.get(j));
 						tmp = JDD.Or(tmp, combinations.get(j));
@@ -572,7 +569,7 @@ public class MultiObjModelChecker extends PrismComponent
 			String labelNames[] = new String[numTargets + 1];
 			labels2[0] = model.getStart();
 			labelNames[0] = "init";
-			for (i = 0; i < numTargets; i++) {
+			for (int i = 0; i < numTargets; i++) {
 				labels2[i + 1] = labels[i];
 				labelNames[i + 1] = "target" + i;
 			}
@@ -587,12 +584,12 @@ public class MultiObjModelChecker extends PrismComponent
 		// yes - union of targets (just to compute no)
 		yes = JDD.Constant(0);
 		//n = targets.size();
-		for (i = 0; i < numTargets; i++) {
+		for (int i = 0; i < numTargets; i++) {
 			JDD.Ref(targets.get(i));
 			yes = JDD.Or(yes, targets.get(i));
 		}
 		if (combinations != null)
-			for (i = 0; i < combinations.size(); i++) {
+			for (int i = 0; i < combinations.size(); i++) {
 				JDD.Ref(combinations.get(i));
 				yes = JDD.Or(yes, combinations.get(i));
 			}
@@ -626,7 +623,7 @@ public class MultiObjModelChecker extends PrismComponent
 		JDD.Ref(no);
 		maybe = JDD.And(model.getReach(), JDD.Not(JDD.Or(yes, no)));
 
-		for (i = 0; i < transRewards.size(); i++) {
+		for (int i = 0; i < transRewards.size(); i++) {
 			JDDNode tmp = transRewards.remove(i);
 			JDD.Ref(no);
 			tmp = JDD.Apply(JDD.TIMES, tmp, JDD.Not(no));
@@ -713,7 +710,7 @@ public class MultiObjModelChecker extends PrismComponent
 			JDD.Deref(maybe);
 			for (int k = 0; k < labels.length; k++)
 				JDD.Deref(labels[k]);
-			for (i = 0; i < transRewards.size(); i++) {
+			for (int i = 0; i < transRewards.size(); i++) {
 				JDD.Deref(transRewards.get(i));
 			}
 		}
