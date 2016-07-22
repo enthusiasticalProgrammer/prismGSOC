@@ -49,8 +49,6 @@ public class Buchi
 	private BState bremoved;
 	private BScc scc_stack;
 	private int accept;
-	private int bstate_count;
-	private int btrans_count;
 	private int rank;
 
 	// the highest id used for a BState.id
@@ -151,8 +149,6 @@ public class Buchi
 		Generalized.GTrans t;
 		BTrans t1;
 		accept = g._final.size();
-		bstate_count = 0;
-		btrans_count = 0;
 
 		bstack = new BState();
 		bstack.nxt = bstack;
@@ -322,7 +318,6 @@ public class Buchi
 
 	private void makeBTrans(BState s)
 	{ /* creates all the transitions from a state */
-		int state_trans = 0;
 		Generalized.GTrans t;
 		BTrans t1;
 		BState s1;
@@ -342,7 +337,6 @@ public class Buchi
 						if (free == s.trans)
 							s.trans = t1;
 						free = null;
-						state_trans--;
 					} else if ((t1.to == to) && t.pos.containsAll(t1.pos) && t.neg.containsAll(t1.neg)) /* t is redundant */
 						break;
 					else
@@ -356,7 +350,6 @@ public class Buchi
 					trans.neg = (MyBitSet) t.neg.clone();
 					trans.nxt = s.trans.nxt;
 					s.trans.nxt = trans;
-					state_trans++;
 				}
 			}
 
@@ -391,8 +384,6 @@ public class Buchi
 		s.prv = bstates;
 		s.nxt.prv = s;
 		bstates.nxt = s;
-		btrans_count += state_trans;
-		bstate_count++;
 	}
 
 	private void retargetAllBTrans()

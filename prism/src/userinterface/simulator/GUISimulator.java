@@ -1052,7 +1052,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	{
 		java.awt.GridBagConstraints gridBagConstraints;
 
-		buttonGroup1 = new javax.swing.ButtonGroup();
 		innerButtonPanel = new javax.swing.JPanel();
 		newPathButton = new javax.swing.JButton();
 		resetPathButton = new javax.swing.JButton();
@@ -2126,7 +2125,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private javax.swing.JPanel bottomLabels;
 	private javax.swing.JPanel bottomPanel;
 	private javax.swing.JPanel bottomValues;
-	private javax.swing.ButtonGroup buttonGroup1;
 	javax.swing.JButton configureViewButton;
 	javax.swing.JTable currentUpdatesTable;
 	private javax.swing.JLabel definedConstants;
@@ -2185,7 +2183,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 
 	public void sortOutColumnSizes()
 	{
-		int prevWidth = pathTable.getWidth();
 
 		TableColumnModel cm = pathTable.getColumnModel();
 

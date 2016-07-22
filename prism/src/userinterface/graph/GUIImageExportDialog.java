@@ -35,11 +35,7 @@ import userinterface.*;
 
 public class GUIImageExportDialog extends JDialog implements DocumentListener
 {
-	//ATTRIBUTES    
-	private Action okAction;
-	private Action cancelAction;
-
-	private GUIPrism gui;
+	//ATTRIBUTES
 
 	private int exportWidth;
 	private int exportHeight;

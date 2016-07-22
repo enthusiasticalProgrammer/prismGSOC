@@ -32,7 +32,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
@@ -44,7 +43,6 @@ import javax.swing.table.AbstractTableModel;
 import parser.Values;
 import prism.PrismException;
 import prism.UndefinedConstants;
-import userinterface.GUIConstantsPicker.Constant;
 
 public class GUIConstantsPicker extends javax.swing.JDialog
 {
@@ -60,9 +58,6 @@ public class GUIConstantsPicker extends javax.swing.JDialog
 	private DefineConstantTable modelTableModel;
 
 	private boolean areModel, areProp;
-
-	private Action okAction;
-	private Action cancelAction;
 
 	private javax.swing.JButton okayButton;
 

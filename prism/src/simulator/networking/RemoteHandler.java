@@ -64,7 +64,6 @@ public class RemoteHandler
 			System.out.println("started");
 			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "ERR" + args[1], proc);
 			StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream(), "OUT" + args[1]);
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 			errorGobbler.start();
 
@@ -99,7 +98,6 @@ public class RemoteHandler
 			//System.out.println(proc.toString());
 
 			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "<ERROR: " + args[1], proc);
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 			errorGobbler.start();
 

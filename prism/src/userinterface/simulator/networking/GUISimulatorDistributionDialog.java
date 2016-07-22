@@ -51,19 +51,15 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 {
 	private SimulatorNetworkHandler network;
 	private File netFile;
-	private SimulatorEngine simulator;
 
 	//The job to be done
 	private boolean isExperiment;
-	private GUIMultiProperties properties;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
 	private List<GUIProperty> props;
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
-	private Thread experimentThread;
-	private Expression experimentFormula;
 	private boolean cancelled = false;
 
 	private List propertyValues = null;
@@ -77,8 +73,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	{
 		super(parent, modal);
 		setTitle("PRISM Distributed Simulator");
-
-		this.simulator = simulator;
 
 		initComponents();
 		setLocationRelativeTo(getParent()); // centre
@@ -101,10 +95,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		this.isExperiment = true;
 		this.modulesFile = modulesFile;
 		this.propertiesFile = properties;
-		this.experimentFormula = propertyToCheck;
 		this.expr = expr;
 		this.info = info;
-		this.experimentThread = exprThread;
 		this.undefinedConstants = undefinedConstants;
 		//setup the interface
 		PrismSettings settings = GUIPrism.getGUI().getPrism().getSettings();
@@ -154,7 +146,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList props, SimulationInformation info)
 	{
 		this.isExperiment = false;
-		this.properties = properties;
 		this.modulesFile = modulesFile;
 		this.propertiesFile = propertiesFile;
 		this.props = props;
@@ -168,12 +159,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//write a summary for the summary box
 		StringBuffer summary = new StringBuffer("");
 		summary.append("Verifying " + props.size() + ((props.size() == 1) ? (" property:\n") : (" properties:\n")));
-		String constantsStr = "";
 		for (int i = 0; i < props.size(); i++) {
 			if (props.get(i) instanceof GUIProperty) {
 				GUIProperty form = (GUIProperty) props.get(i);
 				summary.append("\t" + form.getProperty().toString() + "\n");
-				constantsStr = form.getConstantsString();
 			} else {
 				summary.append("form" + props.get(i).getClass().toString());
 			}
@@ -817,14 +806,9 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	class PepaView extends PlainView
 	{
 
-		private Matcher match;
-		private Pattern pattern;
-
 		public PepaView(Element elem)
 		{
 			super(elem);
-
-			pattern = Pattern.compile("%.*");
 		}
 
 		@Override
@@ -842,14 +826,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), Math.max(0, (p1 - p0 - 1)));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = summaryText.getFont().getName();
 				int fsize = summaryText.getFont().getSize();
 
@@ -882,14 +862,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), Math.max(0, (p1 - p0 - 1)));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = summaryText.getFont().getName();
 				int fsize = summaryText.getFont().getSize();
 

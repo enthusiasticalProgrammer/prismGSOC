@@ -40,14 +40,10 @@ import prism.*;
  */
 public class DigitalClocks
 {
-	// Prism object
-	private Prism prism;
 	// Log
 	private PrismLog mainLog;
 	// Model to be converted
 	private ModulesFile modulesFile;
-	// Properties to be converted
-	private PropertiesFile propertiesFile;
 	// Constants from model
 	private Values constantValues;
 	// Variable list for model
@@ -73,7 +69,6 @@ public class DigitalClocks
 	 */
 	public DigitalClocks(Prism prism)
 	{
-		this.prism = prism;
 		mainLog = prism.getMainLog();
 		mf = null;
 		pf = null;
@@ -108,7 +103,6 @@ public class DigitalClocks
 
 		// Store model/properties files
 		this.modulesFile = modulesFile;
-		this.propertiesFile = propertiesFile;
 		constantValues = modulesFile.getConstantValues();
 		// TODO: need property constants too?
 		varList = modulesFile.createVarList();

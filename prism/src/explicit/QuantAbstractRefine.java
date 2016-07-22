@@ -670,7 +670,6 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	protected void modelCheckAbstractionProbReach(boolean min) throws PrismException
 	{
 		ModelCheckerResult res = null;
-		int i, n;
 
 		// Compute lower bounds
 		switch (abstractionType) {

@@ -55,7 +55,6 @@ import dv.DoubleVector;
 public class MultiObjModelChecker extends PrismComponent
 {
 	protected Prism prism;
-	protected boolean verbose;
 
 	/**
 	 * Create a new MultiObjModelChecker, inherit basic state from parent (unless null).
@@ -64,7 +63,6 @@ public class MultiObjModelChecker extends PrismComponent
 	{
 		super(parent);
 		this.prism = prism;
-		this.verbose = settings.getBoolean(PrismSettings.PRISM_VERBOSE);
 	}
 
 	//TODO: dra's element is changed here, not neat.
@@ -926,7 +924,7 @@ public class MultiObjModelChecker extends PrismComponent
 			mainLog.println("Computed point: " + targetPoint);
 			pointsForInitialTile.add(targetPoint);
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("Upper bound is " + Arrays.toString(result));
 			}
 		}
@@ -934,7 +932,7 @@ public class MultiObjModelChecker extends PrismComponent
 		// Reinstate temporarily-disabled adversary generation setting
 		PrismNative.setExportAdv(exportAdvSetting);
 
-		if (verbose)
+		if (prism.getVerbose())
 			mainLog.println("Points for the initial tile: " + pointsForInitialTile);
 
 		Tile initialTile = new Tile(pointsForInitialTile);
@@ -942,7 +940,7 @@ public class MultiObjModelChecker extends PrismComponent
 
 		Point direction = tileList.getCandidateHyperplane();
 
-		if (verbose) {
+		if (prism.getVerbose()) {
 			mainLog.println("The initial direction is " + direction);
 		}
 
@@ -973,7 +971,7 @@ public class MultiObjModelChecker extends PrismComponent
 			//collect the numbers obtained from methods executed above.
 			Point newPoint = new Point(result);
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("\n" + numberOfPoints + ": New point is " + newPoint + ".");
 				mainLog.println("TileList:" + tileList);
 			}
@@ -986,7 +984,7 @@ public class MultiObjModelChecker extends PrismComponent
 			//compute new direction
 			direction = tileList.getCandidateHyperplane();
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("New direction is " + direction);
 				//mainLog.println("TileList: " + tileList);
 
@@ -1015,7 +1013,7 @@ public class MultiObjModelChecker extends PrismComponent
 				mainLog.println("Exported Pareto curve. To see it, run\n etc/scripts/prism-pareto.py " + paretoFile);
 			}
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.print("Computed " + tileList.getNumberOfDifferentPoints() + " points altogether: ");
 				mainLog.println(tileList.getPoints().toString());
 			}
@@ -1126,7 +1124,7 @@ public class MultiObjModelChecker extends PrismComponent
 			targetPoint.setCoord(i + dimProb, t);
 		}
 		if (maximizingReward) {
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("Getting an upper bound on maximizing objective");
 			}
 
@@ -1146,14 +1144,14 @@ public class MultiObjModelChecker extends PrismComponent
 
 			targetPoint.setCoord(dimProb, result[0]);
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("Upper bound is " + result[0]);
 			}
 		}
 
 		Point direction = MultiObjUtils.getWeights(targetPoint, computedPoints);
 
-		if (verbose) {
+		if (prism.getVerbose()) {
 			mainLog.println("The initial target point is " + targetPoint);
 			mainLog.println("The initial direction is " + direction);
 		}
@@ -1184,7 +1182,7 @@ public class MultiObjModelChecker extends PrismComponent
 			//collect the numbers obtained from methods executed above.
 			Point newPoint = new Point(result);
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("New point is " + newPoint + ".");
 			}
 
@@ -1213,7 +1211,7 @@ public class MultiObjModelChecker extends PrismComponent
 						//target can't be lowered
 						decided = true;
 						targetPoint.setCoord(maximizingCoord, Double.NaN);
-						if (verbose)
+						if (prism.getVerbose())
 							mainLog.println("Decided, target is " + targetPoint);
 						break;
 					} else {
@@ -1227,7 +1225,7 @@ public class MultiObjModelChecker extends PrismComponent
 							isAchievable = false;
 							break;
 						}
-						if (verbose)
+						if (prism.getVerbose())
 							mainLog.println("Target lowered to " + targetPoint);
 
 						//if (prism.getExportMultiGraphs())
@@ -1243,7 +1241,7 @@ public class MultiObjModelChecker extends PrismComponent
 			//compute new direction
 			direction = MultiObjUtils.getWeights(targetPoint, computedPoints);
 
-			if (verbose) {
+			if (prism.getVerbose()) {
 				mainLog.println("New direction is " + direction);
 			}
 

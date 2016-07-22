@@ -398,7 +398,6 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	{
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
-		ArrayList<TreeNode> fss = new ArrayList<>();
 		for (int i = 0; i < selectedPaths.length; i++) {
 
 			if (selectedPaths[i].getLastPathComponent() instanceof SSHHost) {

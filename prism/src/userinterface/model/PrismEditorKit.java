@@ -160,9 +160,6 @@ class PrismView extends PlainView
 			String s = doc.getText(stLine, enLine - stLine);
 
 			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
-			int currStart = 0;
-			int currEnd = 0;
-			Color last = null;
 			String fname = handler.getPrismEditorFontFast().getName();
 			int fsize = handler.getPrismEditorFontFast().getSize();
 
@@ -201,10 +198,8 @@ class PrismView extends PlainView
 			Document doc = getDocument();
 
 			String s = doc.getText(stLine, enLine - stLine);
+
 			Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
-			int currStart = 0;
-			int currEnd = 0;
-			Color last = null;
 			String fname = handler.getPrismEditorFontFast().getName();
 			int fsize = handler.getPrismEditorFontFast().getSize();
 

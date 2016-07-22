@@ -41,8 +41,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	private Component parent;
 	private SettingTableModel theModel;
 
-	private int lineWidth;
-
 	private boolean shouldRemove;
 
 	/** Creates new form PropertyTable */
@@ -55,7 +53,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		theModel.setJTable(theTable);
 		theModel.addTableModelListener(this);
-		lineWidth = theTable.getRowHeight();
 		theTable.setModel(theModel);
 		theTable.setRowSelectionAllowed(false);
 		theTable.setColumnSelectionAllowed(false);
@@ -434,7 +431,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				return currentEditor.getTableCellEditorComponent(table, setting, setting.getValue(), isSelected, row, column);
 
 			} else if (value instanceof ArrayList) {
-				boolean enabled = true;
 				List<?> settings = (ArrayList<?>) value;
 				List<Object> values = new ArrayList<>();
 				Setting first = null;
@@ -443,8 +439,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 						Setting setting = (Setting) settings.get(i);
 						if (i == 0)
 							first = setting;
-						if (!setting.isEnabled())
-							enabled = false;
 						values.add(setting.getValue());
 					}
 				}
@@ -556,7 +550,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		{
 			Iterator<Graph> it = owners.iterator();
 			SettingOwner last = null;
-			int currGroupCount = 0;
 			String tempName = "";
 			groupNames = new ArrayList<>();
 			int index = 0;
@@ -567,14 +560,11 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				SettingOwner po = it.next();
 				if (last == null) {
 					//this is the first group
-					currGroupCount++;
 					if (!po.getSettingOwnerName().equals(""))
 						ownerList += "\'" + po.getSettingOwnerName() + "\'";
 					tempName = po.getSettingOwnerClassName();
 					//groupStarts.add(new Integer(0));
 				} else if (po.getSettingOwnerID() == last.getSettingOwnerID()) {
-					//this is for the second or after in the sequence
-					currGroupCount++;
 					if (!po.getSettingOwnerClassName().endsWith("s"))
 						tempName = po.getSettingOwnerClassName() + "s";
 					if (!po.getSettingOwnerName().equals(""))
@@ -584,8 +574,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					tempName += " " + ownerList + "";
 					ownerList = "";
 					groupNames.add(tempName);
-					currGroupCount = 0;
-					currGroupCount++;
 					ownerList += "\'" + po.getSettingOwnerName() + "\'";
 					if (!po.getSettingOwnerName().equals(""))
 						tempName = po.getSettingOwnerClassName() + " \'" + po.getSettingOwnerName() + "\'";

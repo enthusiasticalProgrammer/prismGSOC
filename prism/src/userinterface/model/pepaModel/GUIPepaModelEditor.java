@@ -286,14 +286,10 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = handler.getPepaEditorFontFast().getName();
 				int fsize = handler.getPepaEditorFontFast().getSize();
 
@@ -331,14 +327,10 @@ public class GUIPepaModelEditor extends GUIModelEditor implements DocumentListen
 			try {
 				g.setColor(Color.green);
 				Document doc = getDocument();
-				Segment segment = getLineBuffer();
 
 				//String s = doc.getText(p0, p1-p0);
 				String s = doc.getText(stLine, enLine - stLine);
 				userinterface.model.Style[] styles = highlight(s, (p0 - stLine), (p1 - p0));
-				int currStart = 0;
-				int currEnd = 0;
-				Color last = null;
 				String fname = handler.getPepaEditorFontFast().getName();
 				int fsize = handler.getPepaEditorFontFast().getSize();
 

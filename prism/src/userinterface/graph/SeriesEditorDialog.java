@@ -47,10 +47,7 @@ import org.jfree.data.general.*;
 
 public class SeriesEditorDialog extends JDialog
 {
-	//ATTRIBUTES    
-	private Action okAction;
-	private Action cancelAction;
-	private GUIPrism gui;
+	//ATTRIBUTES
 	private java.util.List<SeriesEditor> editors;
 
 	private boolean cancelled;

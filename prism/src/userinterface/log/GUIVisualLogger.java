@@ -39,8 +39,6 @@ public class GUIVisualLogger extends javax.swing.JPanel
 	//Attributes
 
 	//NON-GUI
-	private int thing = 0;
-	private Thread adder;
 	private GUIVisualLogModel theModel;
 
 	//GUI COMPONENTS

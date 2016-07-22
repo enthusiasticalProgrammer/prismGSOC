@@ -62,8 +62,6 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 
 	private Vector<FileSystem> fileSystems;
 
-	private File networkFile;
-
 	/** Creates a new instance of SimulatorNetworkHandler */
 	public SimulatorNetworkHandler()
 	{
@@ -545,7 +543,6 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 			for (int i = 0; i < fsNodes.getLength(); i++) {
 				Element fsNode = (Element) fsNodes.item(i);
 				String fsName = fsNode.getAttribute("name");
-				String fsExecDir = fsNode.getAttribute("executeDir");
 				String fsBinaryDir = fsNode.getAttribute("binaryDir");
 				String fsResultsDir = fsNode.getAttribute("resultsDir");
 				addFileSystem(fsName, fsBinaryDir, fsResultsDir);

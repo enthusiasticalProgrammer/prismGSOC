@@ -130,7 +130,7 @@ public class BackwardsReachabilityGraph
 			for (List<List<Integer>> list2 : list) {
 				tr++;
 				Distribution distr = new Distribution();
-				double prob, rest = 0;
+				double prob;
 				int j = -1;
 				for (List<Integer> dests : list2) {
 					j++;
@@ -145,8 +145,6 @@ public class BackwardsReachabilityGraph
 						}
 					} else if (dests.size() == 1) {
 						distr.add(dests.get(0), prob);
-					} else {
-						rest += prob;
 					}
 				}
 				//if (rest > 0)
@@ -207,15 +205,13 @@ public class BackwardsReachabilityGraph
 		if (i == dests.length) {
 			//log.print(src + "/" + tr);
 			Distribution distr = new Distribution();
-			double prob, rest = 0;
+			double prob;
 			if (dests.length > 0) {
 				for (int j = 0; j < dests.length; j++) {
 					prob = pta.getTransitions(states.get(src).loc).get(tr).getEdges().get(j).getProbability();
 					if (list2.get(j).size() > 0) {
 						//log.print(" " + prob + ":" + dests[j]);
 						distr.add(dests[j], prob);
-					} else {
-						rest += prob;
 					}
 				}
 			}

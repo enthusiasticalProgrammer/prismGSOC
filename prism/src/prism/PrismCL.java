@@ -94,8 +94,6 @@ public class PrismCL implements PrismModelListener
 	private boolean param = false;
 	private ModelType typeOverride = null;
 	private boolean orderingOverride = false;
-	private boolean explicitbuild = false;
-	private boolean explicitbuildtest = false;
 	private boolean nobuild = false;
 	private boolean test = false;
 	private boolean testExitsOnFail = true;
@@ -1654,15 +1652,6 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("zerorewardcheck")) {
 					prism.setCheckZeroLoops(true);
 				}
-				// explicit-state model construction
-				else if (sw.equals("explicitbuild")) {
-					explicitbuild = true;
-				}
-				// (hidden) option for testing of prototypical explicit-state model construction
-				else if (sw.equals("explicitbuildtest")) {
-					explicitbuildtest = true;
-				}
-
 				// MISCELLANEOUS UNDOCUMENTED/UNUSED OPTIONS:
 
 				// specify main log (hidden option)
@@ -1745,9 +1734,7 @@ public class PrismCL implements PrismModelListener
 	private void processImportModelSwitch(String filesOptionsString) throws PrismException
 	{
 		// Split into files/options (on :)
-		String halves[] = splitFilesAndOptions(filesOptionsString);
-		String filesString = halves[0];
-		String optionsString = halves[1];
+		String filesString = splitFilesAndOptions(filesOptionsString)[0];
 		// Split files into basename/extensions
 		int i = filesString.lastIndexOf('.');
 		if (i == -1)
@@ -1987,11 +1974,6 @@ public class PrismCL implements PrismModelListener
 		// default to alternative ordering for MTBDD engine
 		if (prism.getEngine() == Prism.MTBDD && !orderingOverride) {
 			prism.setOrdering(2);
-		}
-
-		// explicit overrides explicit build
-		if (prism.getExplicit()) {
-			explicitbuild = false;
 		}
 
 		// check not trying to do gauss-seidel with mtbdd engine

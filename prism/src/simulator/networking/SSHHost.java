@@ -70,8 +70,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 	private int noDoneThisStint; //progress
 
 	//Feedback information
-	private boolean doFeedback = false;
-	private boolean doFeedbackResults = false;
 	private String feedbackName = "";
 	private String feedbackResults = "";
 	private String controlName = "";
@@ -263,7 +261,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		//System.out.println("executable = "+executable.toString());
 
 		setState(SENDING_FILES);
-		int result = 0;
 		try {
 			String[] parameters = { "-p", "bin/" + SimulatorNetworkHandler.EXECUTABLE, //to-do proper classpath
 					getUserName() + "@" + getHostName() + ":" + owner.getInputDir() };
@@ -295,8 +292,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 		setState(RUNNING);
 		if (doFeedback || resultsFeedback) {
-			this.doFeedback = doFeedback;
-			this.doFeedbackResults = resultsFeedback;
 
 			feedbackName = "feedbackFile" + System.currentTimeMillis() + ".txt";
 			if (resultsFeedback)
@@ -588,8 +583,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 							BufferedReader reader = new BufferedReader(new FileReader(localFeedback));
 							int done = Integer.parseInt(reader.readLine());
-							int total = Integer.parseInt(reader.readLine());
-							int finished = Integer.parseInt(reader.readLine());
 
 							noDoneThisStint = done;
 							owner.notifyChange(instance);

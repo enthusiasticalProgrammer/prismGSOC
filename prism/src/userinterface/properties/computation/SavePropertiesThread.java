@@ -39,7 +39,6 @@ public class SavePropertiesThread extends Thread
 	private GUIPropConstantList consList;
 	private GUIPropLabelList labList;
 	private File f;
-	private Exception saveError;
 
 	/** Creates a new instance of SavePropertiesThread */
 	public SavePropertiesThread(GUIMultiProperties parent, GUIPropertiesList propList, GUIPropConstantList consList, GUIPropLabelList labList, File f)

@@ -171,7 +171,6 @@ public class PrismXYSeries extends XYSeries
 	{
 
 		XYDataItem item = new XYDataItem(x, y);
-		XYDataItem result = null;
 
 		/** If this is a valid update. */
 		if (checkValidity(item)) {
@@ -180,17 +179,17 @@ public class PrismXYSeries extends XYSeries
 
 			/* If in discarded items, then remove and return this. */
 			if (indexD >= 0) {
-				result = discardedItems.remove(indexD);
+				discardedItems.remove(indexD);
 			}
 
 			/* If in main items, then remove and return this. (Should not be both in discarded and main items) */
 			if (indexS >= 0) {
-				result = super.remove(indexS);
+				super.remove(indexS);
 			}
 
 			this.add(item, true);
 
-			return null;
+			return item;
 		}
 		/* This is not a valid data item! */
 		else {

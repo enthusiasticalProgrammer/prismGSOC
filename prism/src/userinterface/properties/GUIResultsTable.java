@@ -38,13 +38,11 @@ public class GUIResultsTable extends javax.swing.JDialog
 {
 	private static int noOpen = 0;
 
-	private GUIMultiProperties guiProps;
 	private GUIExperiment exp;
 
 	private JPanel topPanel;
 	private JButton closeButton;
 
-	private JScrollPane scroller;
 	private JTable table;
 	private ResultsTableModel tableModel;
 
@@ -52,7 +50,6 @@ public class GUIResultsTable extends javax.swing.JDialog
 	public GUIResultsTable(GUIPrism parent, GUIMultiProperties guiProps, GUIExperiment exp)
 	{
 		super(parent, "Experiment Results", false);
-		this.guiProps = guiProps;
 		this.exp = exp;
 
 		//setup table
