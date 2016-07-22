@@ -136,19 +136,19 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public void checkForDeadlocks(BitSet except)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(PrismLog out)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected void exportTransitionsToDotFile(int i, PrismLog out)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
