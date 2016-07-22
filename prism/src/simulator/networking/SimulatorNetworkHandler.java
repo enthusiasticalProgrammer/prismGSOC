@@ -686,7 +686,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	{
 
 		@Override
-		public Class getColumnClass(int columnIndex)
+		public Class<?> getColumnClass(int columnIndex)
 		{
 			if (columnIndex == 3)
 				return JProgressBar.class;
