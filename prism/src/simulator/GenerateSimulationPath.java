@@ -344,6 +344,7 @@ public class GenerateSimulationPath
 		if (file != null) {
 			log = new PrismFileLog(file.getPath());
 			if (!log.ready()) {
+				log.close();
 				throw new PrismException("Could not open file \"" + file + "\" for output");
 			}
 		} else {

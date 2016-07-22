@@ -242,12 +242,12 @@ public class PTAModelCheckerCL
 	private void processPTAFiles() throws PrismException
 	{
 		String s;
-
+		BufferedReader in = null;
 		ArrayList<String> ptaFilesNew = new ArrayList<>();
 		for (String ptaFile : ptaFiles) {
 			if (ptaFile.endsWith(".deslist")) {
 				try {
-					BufferedReader in = new BufferedReader(new FileReader(new File(ptaFile)));
+					in = new BufferedReader(new FileReader(new File(ptaFile)));
 					while ((s = in.readLine()) != null) {
 						s = s.trim();
 						if (s.equals(""))
@@ -267,6 +267,12 @@ public class PTAModelCheckerCL
 					}
 				} catch (IOException e) {
 					throw new PrismException("Could not read from file \"" + ptaFile + "\"");
+				} finally {
+					try {
+						in.close();
+					} catch (IOException e) {
+						throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
+					}
 				}
 			} else {
 				ptaFilesNew.add(ptaFile);

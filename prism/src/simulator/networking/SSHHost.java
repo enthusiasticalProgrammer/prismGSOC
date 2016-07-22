@@ -579,9 +579,10 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						// do the scp call
 						SSHHandler.scp(getUserName(), getHostName(), parameters);
 
+						BufferedReader reader = null;
 						try {
 
-							BufferedReader reader = new BufferedReader(new FileReader(localFeedback));
+							reader = new BufferedReader(new FileReader(localFeedback));
 							int done = Integer.parseInt(reader.readLine());
 
 							noDoneThisStint = done;
@@ -592,6 +593,12 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 							//System.out.println("ioexception");
 						} catch (NumberFormatException ee) {
 							//System.out.println("numberformatexception");
+						} finally {
+							try {
+								reader.close();
+							} catch (IOException e) {
+								throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
+							}
 						}
 
 					}

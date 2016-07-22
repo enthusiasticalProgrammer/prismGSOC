@@ -135,7 +135,7 @@ public class ExplicitFiles2MTBDD
 
 	private void readStatesFromFile() throws PrismException
 	{
-		BufferedReader in;
+		BufferedReader in = null;
 		String s, ss[];
 		int i, j, lineNum = 0;
 
@@ -179,7 +179,15 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("File I/O error reading from \"" + statesFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of states file \"" + statesFile + "\"");
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
+
 	}
 
 	// build model
@@ -319,7 +327,7 @@ public class ExplicitFiles2MTBDD
 
 	private void computeMaxChoicesFromFile() throws PrismException
 	{
-		BufferedReader in;
+		BufferedReader in = null;
 		String s, ss[];
 		int j, lineNum = 0;
 
@@ -354,7 +362,15 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
+
 	}
 
 	// allocate DD vars for system
@@ -526,7 +542,7 @@ public class ExplicitFiles2MTBDD
 
 	private void buildTrans() throws PrismException
 	{
-		BufferedReader in;
+		BufferedReader in = null;
 		String s, ss[], a;
 		int i, j, r, c, k = 0, lineNum = 0;
 		double d;
@@ -658,7 +674,15 @@ public class ExplicitFiles2MTBDD
 			throw new PrismException("Error detected at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected " + e.getMessage() + "at line " + lineNum + " of transition matrix file \"" + transFile + "\"");
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException io) {
+				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
+			}
 		}
+
 	}
 
 	// calculate dd for initial state

@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1361,6 +1362,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
+		} finally {
+			try {
+				strModel.close();
+			} catch (IOException e) {
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 
 		modulesFile.tidyUp();
@@ -1547,6 +1554,12 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			}
 		} catch (InterruptedException ie) {
 			throw new PrismLangException("Concurrency error in parser");
+		} finally {
+			try {
+				strProperties.close();
+			} catch (IOException e) {
+				throw new PrismLangException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
 
 		if (tidy)

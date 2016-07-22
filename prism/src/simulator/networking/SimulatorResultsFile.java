@@ -49,8 +49,9 @@ public class SimulatorResultsFile extends Observable
 
 	public synchronized void mergeResultsFile(File resultFile) throws PrismException
 	{
+		BufferedReader buff = null;
 		try {
-			BufferedReader buff = new BufferedReader(new FileReader(resultFile));
+			buff = new BufferedReader(new FileReader(resultFile));
 
 			int counter = 0;
 			while (buff.ready()) {
@@ -63,7 +64,14 @@ public class SimulatorResultsFile extends Observable
 			}
 		} catch (Exception e) {
 			throw new PrismException(e.getMessage());
+		} finally {
+			try {
+				buff.close();
+			} catch (IOException e) {
+				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
+			}
 		}
+
 	}
 
 	public double getResult(int index)
