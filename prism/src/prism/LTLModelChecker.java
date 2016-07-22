@@ -687,7 +687,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param model The model
 	 * @return A referenced BDD for the union of all states in accepting BSCCs
 	 */
-	public JDDNode findAcceptingBSCCs(AcceptanceOmegaDD acceptance, ProbModel model) throws PrismException
+	protected JDDNode findAcceptingBSCCs(AcceptanceOmegaDD acceptance, ProbModel model) throws PrismException
 	{
 		JDDNode allAcceptingStates;
 		List<JDDNode> vectBSCCs;
