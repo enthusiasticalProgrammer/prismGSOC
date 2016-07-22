@@ -42,7 +42,6 @@ import java.util.TreeMap;
 
 import common.IterableStateSet;
 
-import parser.State;
 import prism.PrismException;
 import prism.PrismUtils;
 import explicit.rewards.MCRewards;

@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Find all references to properties (by name), replace the ExpressionLabels with ExpressionProp objects.

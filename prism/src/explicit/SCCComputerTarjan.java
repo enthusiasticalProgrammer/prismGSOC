@@ -34,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import prism.PrismComponent;
-import prism.PrismException;
 
 /**
  * Tarjan's SCC algorithm operating on a Model object.

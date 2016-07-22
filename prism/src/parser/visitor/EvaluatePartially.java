@@ -28,7 +28,6 @@ package parser.visitor;
 
 import parser.*;
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Evaluate partially: replace some constants and variables with actual values. 

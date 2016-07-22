@@ -3,7 +3,6 @@ package automata;
 import java.util.BitSet;
 
 import prism.PrismComponent;
-import prism.PrismException;
 import explicit.SCCComputer;
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceRabin;

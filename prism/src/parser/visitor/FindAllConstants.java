@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Find all idents which are constants, replace with ExpressionConstant, return result.

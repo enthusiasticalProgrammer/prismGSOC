@@ -31,7 +31,6 @@ import java.util.Vector;
 import java.io.PrintStream;
 
 import jltl2ba.SimpleLTL;
-import prism.PrismException;
 
 public class Alternating
 {

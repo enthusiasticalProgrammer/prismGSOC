@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import prism.*;
-import parser.type.*;
 import userinterface.*;
 
 public class GUIExperimentPicker extends javax.swing.JDialog

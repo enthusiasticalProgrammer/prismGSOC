@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import prism.PrismException;
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.MDPSimple;

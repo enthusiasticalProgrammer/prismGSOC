@@ -27,7 +27,6 @@
 package simulator.sampler;
 
 import simulator.*;
-import prism.PrismException;
 import prism.PrismLangException;
 
 /**

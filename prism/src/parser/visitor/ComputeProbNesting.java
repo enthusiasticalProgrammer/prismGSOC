@@ -27,7 +27,6 @@
 package parser.visitor;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Compute (maximum) number of nested probabilistic operators (P, S, R).

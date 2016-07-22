@@ -36,6 +36,8 @@ import java.util.List;
 
 import javax.swing.table.*;
 
+import userinterface.graph.Graph;
+
 public class SettingTable extends JPanel implements ListSelectionListener, TableModelListener, ItemListener, SettingDisplay
 {
 	private Component parent;
@@ -56,7 +58,6 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		theTable.setModel(theModel);
 		theTable.setRowSelectionAllowed(false);
 		theTable.setColumnSelectionAllowed(false);
-		//theTable.setCellSelectionEnabled(true);
 		theTable.getSelectionModel().addListSelectionListener(this);
 		theTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		theCombo.setModel(theModel.getComboModel());

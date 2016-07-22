@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
 
-import prism.PrismException;
-
 public class Edge
 {
 	// Parent transition;

@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import strat.MDStrategy;
 import explicit.LTS;

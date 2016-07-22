@@ -35,7 +35,6 @@ import java.util.Observer;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
-import java.util.regex.*;
 import java.awt.*;
 
 import userinterface.*;

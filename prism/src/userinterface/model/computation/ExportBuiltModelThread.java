@@ -31,7 +31,6 @@ import java.io.*;
 import javax.swing.*;
 
 import parser.ast.PropertiesFile;
-import prism.*;
 import userinterface.*;
 import userinterface.model.*;
 import userinterface.util.*;

@@ -31,7 +31,6 @@ import java.util.BitSet;
 import java.util.List;
 
 import prism.PrismComponent;
-import prism.PrismException;
 
 /**
  * Abstract class for (explicit) classes that compute (B)SCCs,

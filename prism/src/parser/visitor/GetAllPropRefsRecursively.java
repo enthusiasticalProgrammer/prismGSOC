@@ -33,7 +33,6 @@ import parser.ast.ExpressionLabel;
 import parser.ast.ExpressionProp;
 import parser.ast.PropertiesFile;
 import parser.ast.Property;
-import prism.PrismLangException;
 
 /**
  * Get all references to properties (by name) (i.e. ExpressionProp objects) recursively, store names in set.

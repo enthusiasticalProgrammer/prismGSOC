@@ -31,7 +31,6 @@ import java.util.*;
 import parser.*;
 import parser.ast.*;
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLangException;
 
 public class ChoiceList implements Choice

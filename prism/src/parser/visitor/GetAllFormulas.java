@@ -29,7 +29,6 @@ package parser.visitor;
 import java.util.Vector;
 
 import parser.ast.*;
-import prism.PrismLangException;
 
 /**
  * Get all formulas (i.e. ExpressionFormula objects), store names in set.

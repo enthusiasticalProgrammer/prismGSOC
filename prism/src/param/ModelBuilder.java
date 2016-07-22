@@ -42,7 +42,6 @@ import parser.visitor.ASTTraverseModify;
 import prism.ModelType;
 import prism.PrismComponent;
 import prism.PrismException;
-import prism.PrismLangException;
 import prism.PrismSettings;
 import prism.PrismNotSupportedException;
 import explicit.IndexedSet;

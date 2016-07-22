@@ -28,7 +28,6 @@
 package strat;
 
 import prism.PrismLog;
-import explicit.MDP;
 import explicit.Model;
 
 /**

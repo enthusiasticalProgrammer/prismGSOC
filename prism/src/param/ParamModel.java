@@ -34,7 +34,6 @@ import java.util.TreeSet;
 
 import parser.Values;
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import explicit.ModelExplicit;
 

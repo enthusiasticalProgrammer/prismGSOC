@@ -31,7 +31,6 @@ import java.util.*;
 import parser.*;
 import parser.visitor.*;
 import prism.ModelInfo;
-import prism.PrismException;
 import prism.PrismLangException;
 import prism.ModelType;
 import prism.PrismUtils;

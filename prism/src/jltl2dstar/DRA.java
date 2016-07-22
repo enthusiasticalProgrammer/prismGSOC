@@ -21,8 +21,6 @@
 
 package jltl2dstar;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.*;
 
