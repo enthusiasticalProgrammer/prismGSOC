@@ -167,7 +167,7 @@ public class LTLModelChecker extends PrismComponent
 	 * @param mc a ModelChecker, used for checking maximal state formulas
 	 * @param model the model
 	 * @param expr a path expression, i.e. the LTL formula
-	 * @param labelBS empty vector to be filled with JDDNodes for subformulas 
+	 * @param labelDDs empty vector to be filled with JDDNodes for subformulas 
 	 * @param allowedAcceptance the allowed acceptance types
 	 * @return the DA
 	 */
@@ -211,7 +211,7 @@ public class LTLModelChecker extends PrismComponent
 	 * Construct the product of a DA and a DTMC/CTMC.
 	 * @param da The DA
 	 * @param model The DTMC/CTMC
-	 * @param labelDDs BDDs giving the set of states for each AP in the DRA
+	 * @param labelDDs BDDs giving the set of states for each AP in the DA
 	 */
 	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
 	{
@@ -997,7 +997,7 @@ public class LTLModelChecker extends PrismComponent
 
 		allAcceptingStates = JDD.Constant(0);
 
-		// for each acceptance pair (H_i, L_i) in the DRA, build H'_i = S x H_i
+		// for each acceptance pair (H_i, L_i) in the DA, build H'_i = S x H_i
 		// and compute the maximal ECs in H'_i
 		for (i = 0; i < dra.getAcceptance().size(); i++) {
 			// build the acceptance vectors H_i and L_i
