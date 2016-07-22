@@ -150,7 +150,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 		super(parent);
 		// Create dummy model checker to store options
 		try {
-			mcOptions = new ProbModelChecker(null);
+			mcOptions = new MDPModelChecker(null);
 		} catch (PrismException e) {
 			// Won't happen
 		}
