@@ -144,7 +144,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	public abstract State getInitialState() throws PrismException;
 
 	@Override
-	public abstract void exploreState(State exploreState) throws PrismException;
+	public abstract void exploreState(State exploreState);
 
 	@Override
 	public abstract State getExploreState();

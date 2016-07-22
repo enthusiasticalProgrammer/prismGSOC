@@ -232,9 +232,9 @@ public class GUIExperiment
 					try {
 						definedMFConstants = undefinedConstants.getMFConstantValues();
 						prism.setPRISMModelConstants(definedMFConstants);
-					} catch (Exception e) {
+					} catch (PrismException e) {
 						// in case of error, report it (in log only), store as result, and go on to the next model
-						errorLog(e);
+						errorLog(e.getMessage());
 						setMultipleErrors(definedMFConstants, null, e);
 						undefinedConstants.iterateModel();
 						continue;
@@ -324,9 +324,9 @@ public class GUIExperiment
 									res = prism.modelCheckSimulator(propertiesFile, propertyToCheck.getExpression(), definedPFConstants, initialState,
 											info.getMaxPathLength(), info.createSimulationMethod());
 								}
-							} catch (Exception e) {
+							} catch (PrismException e) {
 								// in case of error, report it (in log only), store exception as the result and proceed
-								errorLog(e);
+								errorLog(e.getMessage());
 								res = new Result(e);
 							}
 							// store result of model checking

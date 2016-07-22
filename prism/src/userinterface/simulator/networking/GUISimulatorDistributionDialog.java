@@ -640,7 +640,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("ewrewoioewrrew" + e.getMessage());//TODO show dialog
+				System.out.println("The following exception occurred: " + e.getMessage());//TODO show dialog
 			}
 		} else {
 			try {
