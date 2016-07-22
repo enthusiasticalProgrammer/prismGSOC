@@ -567,7 +567,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 				}
 				//
 				else {
-					HashSet<Integer> rebuildStates = new HashSet<>();
+					Set<Integer> rebuildStates = new HashSet<>();
 					timer = System.currentTimeMillis();
 					numNewStates = refineState(i, null, rebuildStates);
 					timer = System.currentTimeMillis() - timer;
@@ -868,7 +868,7 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	 */
 	protected boolean chooseStatesToRefine() throws PrismException
 	{
-		ArrayList<Integer> refinableStates;
+		List<Integer> refinableStates;
 		double maxDiff, bound;
 		int i, numStates;
 
