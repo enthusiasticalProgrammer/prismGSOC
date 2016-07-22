@@ -261,7 +261,7 @@ public class GUIPathPlotDialog extends JDialog
 			}
 			{
 				comboBoxSimulate = new JComboBox();
-				comboBoxSimulate.setModel(new DefaultComboBoxModel(SimulateChoice.values()));
+				comboBoxSimulate.setModel(new DefaultComboBoxModel<>(SimulateChoice.values()));
 				GridBagConstraints gbc_comboBoxSimulate = new GridBagConstraints();
 				gbc_comboBoxSimulate.anchor = GridBagConstraints.WEST;
 				gbc_comboBoxSimulate.insets = new Insets(0, 0, 5, 5);
@@ -298,7 +298,7 @@ public class GUIPathPlotDialog extends JDialog
 						comboBoxShowActionPerformed(e);
 					}
 				});
-				comboBoxShow.setModel(new DefaultComboBoxModel(ShowChoice.values()));
+				comboBoxShow.setModel(new DefaultComboBoxModel<>(ShowChoice.values()));
 				GridBagConstraints gbc_comboBoxShow = new GridBagConstraints();
 				gbc_comboBoxShow.anchor = GridBagConstraints.WEST;
 				gbc_comboBoxShow.insets = new Insets(0, 0, 5, 5);

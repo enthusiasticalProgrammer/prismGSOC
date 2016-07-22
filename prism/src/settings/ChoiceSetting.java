@@ -81,7 +81,7 @@ public class ChoiceSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<String> getValueClass()
 	{
 		return String.class;
 	}

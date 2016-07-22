@@ -59,7 +59,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 	private javax.swing.JButton cancelButton;
 	private javax.swing.JTextField heightInputField;
 	private javax.swing.JLabel heightInputLabel;
-	private javax.swing.JComboBox imageTypeInputField;
+	private javax.swing.JComboBox<String> imageTypeInputField;
 	private javax.swing.JLabel imageTypeInputLabel;
 	private javax.swing.JPanel innerTopPanel;
 	private javax.swing.JButton okayButton;
@@ -126,7 +126,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		heightInputLabel = new javax.swing.JLabel();
 		heightInputField = new javax.swing.JTextField();
 		imageTypeInputLabel = new javax.swing.JLabel();
-		imageTypeInputField = new javax.swing.JComboBox();
+		imageTypeInputField = new javax.swing.JComboBox<>();
 		alphaInputLabel = new javax.swing.JLabel();
 		alphaInputField = new javax.swing.JCheckBox();
 
@@ -201,7 +201,7 @@ public class GUIImageExportDialog extends JDialog implements DocumentListener
 		imageTypeInputLabel.setText("Image format:");
 		innerTopPanel.add(imageTypeInputLabel);
 
-		imageTypeInputField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "JPEG", "PNG", "EPS" }));
+		imageTypeInputField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JPEG", "PNG", "EPS" }));
 		imageTypeInputField.addActionListener(new java.awt.event.ActionListener()
 		{
 			@Override

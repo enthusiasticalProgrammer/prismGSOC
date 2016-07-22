@@ -567,7 +567,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 			state = new AxisState(cursor);
 			// even though the axis is not visible, we need ticks for the 
 			// gridlines...
-			List ticks = refreshTicks(g2, state, dataArea, edge);
+			List<NumberTick> ticks = refreshTicks(g2, state, dataArea, edge);
 			state.setTicks(ticks);
 			return state;
 		}
@@ -589,10 +589,10 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 *
 	 */
 	@Override
-	public List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge)
+	public List<NumberTick> refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge)
 	{
 
-		List result = new java.util.ArrayList();
+		List<NumberTick> result = new java.util.ArrayList<>();
 		if (RectangleEdge.isTopOrBottom(edge)) {
 			result = refreshTicksHorizontal(g2, dataArea, edge);
 		} else if (RectangleEdge.isLeftOrRight(edge)) {
@@ -611,10 +611,10 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return A list of ticks.
 	 */
-	protected List refreshTicksHorizontal(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge)
+	protected List<NumberTick> refreshTicksHorizontal(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge)
 	{
 		Range range = getRange();
-		List ticks = new ArrayList();
+		List<NumberTick> ticks = new ArrayList<>();
 		double start = Math.floor(calculateLog(getLowerBound()));
 		double end = Math.ceil(calculateLog(getUpperBound()));
 		double current = start;
@@ -646,10 +646,10 @@ public class PrismLogarithmicAxis extends ValueAxis
 	 * 
 	 * @return A list of ticks.
 	 */
-	protected List refreshTicksVertical(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge)
+	protected List<NumberTick> refreshTicksVertical(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge)
 	{
 		Range range = getRange();
-		List ticks = new ArrayList();
+		List<NumberTick> ticks = new ArrayList<>();
 		double start = Math.floor(calculateLog(getLowerBound()));
 		double end = Math.ceil(calculateLog(getUpperBound()));
 		double current = start;

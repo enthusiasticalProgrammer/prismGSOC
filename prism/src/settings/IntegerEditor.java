@@ -30,7 +30,8 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IntegerEditor implements SettingEditor, CaretListener, FocusListener
 {
@@ -88,7 +89,7 @@ public class IntegerEditor implements SettingEditor, CaretListener, FocusListene
 
 			field.setFont(font);
 		} else if (value instanceof ArrayList) {
-			ArrayList values = (ArrayList) value;
+			List<?> values = (List<?>) value;
 			if (values.size() > 0) {
 				//if we have multiple properties selected.
 				Integer last = null;

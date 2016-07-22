@@ -27,7 +27,11 @@
 package userinterface.simulator.networking;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
@@ -54,7 +58,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private GUIMultiProperties properties;
 	private ModulesFile modulesFile;
 	private PropertiesFile propertiesFile;
-	private ArrayList props;
+	private List<GUIProperty> props;
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
@@ -62,7 +66,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private Expression experimentFormula;
 	private boolean cancelled = false;
 
-	private ArrayList propertyValues = null;
+	private List propertyValues = null;
 
 	//GUI for GUIProperties
 	private JTable propertyTable;
@@ -622,9 +626,9 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//do the work.
 		if (!isExperiment) {
 			try {
-				ArrayList propFormulae = new ArrayList();
+				List<Expression> propFormulae = new ArrayList();
 				for (int i = 0; i < props.size(); i++) {
-					GUIProperty guiProp = (GUIProperty) props.get(i);
+					GUIProperty guiProp = props.get(i);
 					propFormulae.add(guiProp.getProperty());
 				}
 				System.out.println("doing 1");
@@ -987,7 +991,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			super();
 			data = new String[props.size()][4];
 			for (int i = 0; i < props.size(); i++) {
-				data[i][0] = ((GUIProperty) props.get(i)).getPropString();
+				data[i][0] = props.get(i).getPropString();
 				data[i][1] = "";
 				data[i][2] = "";
 				data[i][3] = "";

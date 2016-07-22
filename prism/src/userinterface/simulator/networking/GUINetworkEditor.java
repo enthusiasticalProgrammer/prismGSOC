@@ -738,7 +738,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		List<Object> owners = new ArrayList();
+		List<Object> owners = new ArrayList<>();
 		TreePath[] nodes = networkTree.getSelectionPaths();
 		if (nodes == null)
 			return;

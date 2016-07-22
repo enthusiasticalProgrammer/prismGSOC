@@ -60,7 +60,7 @@ public class SingleLineStringSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<String> getValueClass()
 	{
 		return String.class;
 	}

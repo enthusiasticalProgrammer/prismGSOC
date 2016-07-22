@@ -229,7 +229,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		commentText = new javax.swing.JTextArea();
 		commentLabel = new javax.swing.JLabel();
 		topPanel = new javax.swing.JPanel();
-		theCombo = new javax.swing.JComboBox();
+		theCombo = new javax.swing.JComboBox<>();
 
 		setLayout(new java.awt.BorderLayout());
 
@@ -352,7 +352,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	javax.swing.JLabel commentLabel;
 	javax.swing.JTextArea commentText;
 	private javax.swing.JScrollPane jScrollPane1;
-	javax.swing.JComboBox theCombo;
+	javax.swing.JComboBox<String> theCombo;
 	javax.swing.JTable theTable;
 	javax.swing.JPanel topPanel;
 	// End of variables declaration//GEN-END:variables
@@ -376,8 +376,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 						row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
-				ArrayList values = new ArrayList();
+				List<?> settings = (ArrayList<?>) value;
+				ArrayList<Object> values = new ArrayList<>();
 				boolean enabled = true;
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
@@ -434,9 +434,9 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				return currentEditor.getTableCellEditorComponent(table, setting, setting.getValue(), isSelected, row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
-				ArrayList values = new ArrayList();
 				boolean enabled = true;
+				List<?> settings = (ArrayList<?>) value;
+				List<Object> values = new ArrayList<>();
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
 					if (settings.get(i) instanceof Setting) {
@@ -463,15 +463,15 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	class SettingTableModel extends AbstractTableModel
 	{
 		//All of the data
-		private List owners;
+		private List<Graph> owners;
 
 		//Current sorted data
-		private ArrayList groupNames;
-		private ArrayList groupStarts;
-		private ArrayList groupSizes;
+		private List<String> groupNames;
+		private List<Integer> groupStarts;
+		private List<Integer> groupSizes;
 		private int currentGroup;
 
-		private DefaultComboBoxModel comboModel;
+		private DefaultComboBoxModel<String> comboModel;
 
 		private JTable theTable;
 
@@ -479,11 +479,11 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		{
 			super();
 			this.theTable = null;
-			groupNames = new ArrayList();
-			groupStarts = new ArrayList();
-			groupSizes = new ArrayList();
-			owners = new ArrayList();
-			comboModel = new DefaultComboBoxModel();
+			groupNames = new ArrayList<>();
+			groupStarts = new ArrayList<>();
+			groupSizes = new ArrayList<>();
+			owners = new ArrayList<>();
+			comboModel = new DefaultComboBoxModel<>();
 		}
 
 		public void setJTable(JTable tab)
@@ -491,24 +491,24 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			this.theTable = tab;
 		}
 
-		public void setOwners(List owners)
+		public void setOwners(List<Graph> owners)
 		{
 			this.owners = owners;
 			Collections.sort(owners);
 
-			Iterator it = owners.iterator();
+			Iterator<Graph> it = owners.iterator();
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
-			groupNames = new ArrayList();
-			groupStarts = new ArrayList();
-			groupSizes = new ArrayList();
+			groupNames = new ArrayList<>();
+			groupStarts = new ArrayList<>();
+			groupSizes = new ArrayList<>();
 			int index = 0;
 
 			String ownerList = "";
 			while (it.hasNext()) {
 
-				SettingOwner po = (SettingOwner) it.next();
+				SettingOwner po = it.next();
 				if (last == null) {
 					//this is the first group
 					currGroupCount++;
@@ -547,23 +547,24 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			}
 			if (currentGroup > owners.size() - 1)
 				currentGroup = 0;
-			comboModel = new DefaultComboBoxModel(groupNames.toArray());
+			String[] stringArray = new String[groupNames.size()];
+			comboModel = new DefaultComboBoxModel<>(groupNames.toArray(stringArray));
 			fireTableDataChanged();
 		}
 
 		public void refreshGroupNames()
 		{
-			Iterator it = owners.iterator();
+			Iterator<Graph> it = owners.iterator();
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
-			groupNames = new ArrayList();
+			groupNames = new ArrayList<>();
 			int index = 0;
 
 			String ownerList = "";
 			while (it.hasNext()) {
 
-				SettingOwner po = (SettingOwner) it.next();
+				SettingOwner po = it.next();
 				if (last == null) {
 					//this is the first group
 					currGroupCount++;
@@ -600,14 +601,15 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				//groupSizes.add(new Integer(currGroupCount));
 			}
 			//if(currentGroup > owners.size()-1) currentGroup = 0;
-			comboModel = new DefaultComboBoxModel(groupNames.toArray());
+			String[] stringArray = new String[groupNames.size()];
+			comboModel = new DefaultComboBoxModel<>(groupNames.toArray(stringArray));
 
 			fireTableDataChanged();
 		}
 
 		public String getGroupName(int i)
 		{
-			return (String) groupNames.get(i);
+			return groupNames.get(i);
 		}
 
 		public int getNumGroupNames()
@@ -620,7 +622,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		{
 			if (groupNames.size() == 0)
 				return 0;
-			SettingOwner firstInGroup = (SettingOwner) owners.get(((Integer) groupStarts.get(currentGroup)).intValue());
+			SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 			return firstInGroup.getNumSettings();
 		}
 
@@ -643,7 +645,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		public Object getValueAt(int row, int column)
 		{
 			if (column == 0) {
-				SettingOwner firstInGroup = (SettingOwner) owners.get(((Integer) groupStarts.get(currentGroup)).intValue());
+				SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 				//System.out.println("firstInGroup = "+firstInGroup);
 				return firstInGroup.getSetting(row).getName();
 			} else {
@@ -653,7 +655,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					SettingOwner firstInGroup = getOwner(getCurrentGroupStart());
 					return firstInGroup.getSetting(row);
 				} else {
-					ArrayList currProps = new ArrayList();
+					ArrayList<Setting> currProps = new ArrayList<>();
 					for (int i = getCurrentGroupStart(); i < getCurrentGroupStart() + getCurrentGroupSize(); i++) {
 						SettingOwner prop = getOwner(i);
 						currProps.add(prop.getSetting(row));
@@ -728,22 +730,22 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		protected int getCurrentGroupSize()
 		{
-			return ((Integer) groupSizes.get(currentGroup)).intValue();
+			return groupSizes.get(currentGroup).intValue();
 		}
 
 		protected int getCurrentGroupStart()
 		{
-			return ((Integer) groupStarts.get(currentGroup)).intValue();
+			return groupStarts.get(currentGroup).intValue();
 		}
 
 		protected String getCurrentGroupName()
 		{
-			return (String) groupNames.get(currentGroup);
+			return groupNames.get(currentGroup);
 		}
 
 		protected SettingOwner getOwner(int i)
 		{
-			return (SettingOwner) owners.get(i);
+			return owners.get(i);
 		}
 
 		public int getNumGroups()
@@ -765,14 +767,14 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		 * @return Value of property comboModel.
 		 *
 		 */
-		public javax.swing.DefaultComboBoxModel getComboModel()
+		public javax.swing.DefaultComboBoxModel<String> getComboModel()
 		{
 			return comboModel;
 		}
 
 	}
 
-	public static void printArray(ArrayList a)
+	public static void printArray(ArrayList<?> a)
 	{
 		System.out.print("(");
 		for (int i = 0; i < a.size(); i++)

@@ -60,7 +60,7 @@ public class BooleanSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<Boolean> getValueClass()
 	{
 		return Boolean.class;
 	}

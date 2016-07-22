@@ -63,7 +63,7 @@ public class ColorSetting extends Setting
 	}
 
 	@Override
-	public Class getValueClass()
+	public Class<Color> getValueClass()
 	{
 		return Color.class;
 	}

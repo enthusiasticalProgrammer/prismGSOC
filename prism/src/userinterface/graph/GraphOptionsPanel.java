@@ -40,7 +40,8 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 {
 	private SettingTable graphPropertiesTable, axisPropertiesTable, displayPropertiesTable, seriesPropertiesTable;
 
-	private JList seriesList, axesList;
+	private JList<String> axesList;
+	private JList<SeriesSettings> seriesList;
 
 	private Graph theModel;
 	private AxisSettings xAxisSettings;
@@ -57,8 +58,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		this.parent = parent;
 		this.theModel = theModel;
 
-		/* TODO: Use generic container. */
-		ArrayList own = new ArrayList();
+		List<Graph> own = new ArrayList<>();
 		own.add(theModel);
 
 		graphPropertiesTable = new SettingTable(parent);
@@ -70,25 +70,25 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		displaySettings = theModel.getDisplaySettings();
 
 		String[] axes = { "x-Axis", "y-Axis" };
-		axesList = new JList(axes);
+		axesList = new JList<>(axes);
 		axesList.setSelectedIndex(0);
 
 		axesList.addListSelectionListener(this);
 
-		own = new ArrayList();
-		own.add(xAxisSettings);
+		List<AxisSettings> own2 = new ArrayList<>();
+		own2.add(xAxisSettings);
 		axisPropertiesTable = new SettingTable(parent);
-		axisPropertiesTable.setOwners(own);
+		axisPropertiesTable.setOwners(own2);
 		xAxisSettings.setDisplay(axisPropertiesTable);
 		yAxisSettings.setDisplay(axisPropertiesTable);
 
-		own = new ArrayList();
-		own.add(displaySettings);
+		List<DisplaySettings> own3 = new ArrayList<>();
+		own3.add(displaySettings);
 		displayPropertiesTable = new SettingTable(parent);
-		displayPropertiesTable.setOwners(own);
+		displayPropertiesTable.setOwners(own3);
 		displaySettings.setDisplay(displayPropertiesTable);
 
-		seriesList = new JList(theModel.getGraphSeriesList());
+		seriesList = new JList<>(theModel.getGraphSeriesList());
 		seriesList.addListSelectionListener(this);
 		seriesList.setCellRenderer(new ListCellRenderer()
 		{
@@ -419,7 +419,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			java.util.List<Graph.SeriesKey> selected = new ArrayList<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				selected.add(((SeriesSettings) theModel.getGraphSeriesList().getElementAt(sel[i])).getSeriesKey());
+				selected.add(theModel.getGraphSeriesList().getElementAt(sel[i]).getSeriesKey());
 			}
 
 			SeriesEditorDialog.makeSeriesEditor(plugin, parent, theModel, selected);
@@ -451,7 +451,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toMove.add(series.getSeriesKey());
 			}
 
@@ -477,7 +477,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toMove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toMove.add(series.getSeriesKey());
 			}
 
@@ -503,7 +503,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			Vector<Graph.SeriesKey> toRemove = new Vector<>();
 
 			for (int i = 0; i < sel.length; i++) {
-				SeriesSettings series = (SeriesSettings) listModel.getElementAt(sel[i]);
+				SeriesSettings series = listModel.getElementAt(sel[i]);
 				toRemove.add(series.getSeriesKey());
 			}
 
@@ -551,7 +551,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		if (e.getSource() == axesList) {
 			int[] sel = axesList.getSelectedIndices();
 
-			ArrayList own = new ArrayList();
+			List<AxisSettings> own = new ArrayList<>();
 
 			for (int i = 0; i < sel.length; i++) {
 				if (sel[i] == 0)
@@ -564,7 +564,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			synchronized (theModel.getSeriesLock()) {
 				int[] sel = seriesList.getSelectedIndices();
 
-				ArrayList own = new ArrayList();
+				List<Object> own = new ArrayList<>();
 				//seriesPropertiesTable.setOwners(own);
 
 				for (int i = 0; i < sel.length; i++) {

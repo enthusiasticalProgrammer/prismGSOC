@@ -96,7 +96,7 @@ public class GUIVisualLogModel extends PrismLog
 	private String buffer;
 
 	//Stack for storing the ancestor nodes of the current indentation point
-	private Stack theStack;
+	private Stack<MutableTreeNode> theStack;
 
 	//current indentation point
 	private int currentIndent;
@@ -112,7 +112,7 @@ public class GUIVisualLogModel extends PrismLog
 		root = new DefaultMutableTreeNode("Root");
 		theModel = new DefaultTreeModel(root);
 		currentIndent = 0;
-		theStack = new Stack();
+		theStack = new Stack<>();
 		theStack.push(root);
 		buffer = "";
 		current = null;

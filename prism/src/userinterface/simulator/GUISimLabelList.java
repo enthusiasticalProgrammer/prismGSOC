@@ -39,7 +39,7 @@ import simulator.*;
 /**
  * List of labels in the simulator GUI.
  */
-public class GUISimLabelList extends JList
+public class GUISimLabelList extends JList<Object>
 {
 	// Default serial ID
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class GUISimLabelList extends JList
 	private GUISimulator sim;
 	private SimulatorEngine engine;
 	// The list of labels
-	private DefaultListModel listModel;
+	private DefaultListModel<Object> listModel;
 
 	/**
 	 * Create a new instance of GUISimLabelList
@@ -58,7 +58,7 @@ public class GUISimLabelList extends JList
 	{
 		this.sim = sim;
 		this.engine = sim.getPrism().getSimulator();
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		setModel(listModel);
 		setCellRenderer(new SimLabelRenderer());
 	}
