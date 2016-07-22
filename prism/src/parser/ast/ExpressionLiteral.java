@@ -34,7 +34,7 @@ import parser.type.*;
 
 public class ExpressionLiteral extends Expression
 {
-	Object value; // Value
+	final Object value; // Value
 	String string; // Optionally, keep original string to preserve user formatting
 
 	// Constructor
@@ -52,12 +52,6 @@ public class ExpressionLiteral extends Expression
 	}
 
 	// Set Methods
-
-	public void setValue(Object value)
-	{
-		this.value = value;
-		this.string = "" + value;
-	}
 
 	public void setString(String string)
 	{

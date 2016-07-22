@@ -46,8 +46,8 @@ import prism.PrismNotSupportedException;
  */
 public abstract class Product<M extends Model> implements ModelTransformation<M, M>
 {
-	protected M originalModel = null;
-	protected M productModel = null;
+	protected final M originalModel;
+	protected final M productModel;
 
 	/**
 	 * For the given productState index, return the corresponding
@@ -60,15 +60,6 @@ public abstract class Product<M extends Model> implements ModelTransformation<M,
 	 * state index in the automaton.
 	 */
 	public abstract int getAutomatonState(int productState);
-
-	/**
-	 * Constructor.
-	 * @param originalModel the original model
-	 */
-	public Product(M originalModel)
-	{
-		this.originalModel = originalModel;
-	}
 
 	/**
 	 * Constructor.
