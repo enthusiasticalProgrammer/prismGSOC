@@ -261,6 +261,9 @@ public class StateListMTBDD implements StateList
 				break;
 			case STRINGS:
 				break;
+			default:
+				throw new AssertionError();
+
 			}
 			j = varList.getNumVars();
 			varsString = "";

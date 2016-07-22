@@ -347,6 +347,7 @@ public class ConstructModel extends PrismComponent
 			case SMG:
 			case PTA:
 			case LTS:
+			default:
 				throw new PrismNotSupportedException("Model construction not supported for " + modelType + "s");
 			}
 			model.setStatesList(statesList);

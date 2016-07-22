@@ -58,7 +58,7 @@ import explicit.rewards.STPGRewards;
 /**
  * Super class for explicit-state probabilistic model checkers.
  */
-public abstract class ProbModelChecker extends NonProbModelChecker
+public class ProbModelChecker extends NonProbModelChecker
 {
 	// Flags/settings
 	// (NB: defaults do not necessarily coincide with PRISM)

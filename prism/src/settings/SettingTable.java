@@ -457,7 +457,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	class SettingTableModel extends AbstractTableModel
 	{
 		//All of the data
-		private List<Graph> owners;
+		private List<SettingOwner> owners;
 
 		//Current sorted data
 		private List<String> groupNames;
@@ -485,12 +485,12 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			this.theTable = tab;
 		}
 
-		public void setOwners(List<Graph> owners)
+		public void setOwners(List<SettingOwner> owners)
 		{
 			this.owners = owners;
 			Collections.sort(owners);
 
-			Iterator<Graph> it = owners.iterator();
+			Iterator<SettingOwner> it = owners.iterator();
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
@@ -548,7 +548,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		public void refreshGroupNames()
 		{
-			Iterator<Graph> it = owners.iterator();
+			Iterator<SettingOwner> it = owners.iterator();
 			SettingOwner last = null;
 			String tempName = "";
 			groupNames = new ArrayList<>();

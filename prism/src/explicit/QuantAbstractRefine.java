@@ -1054,11 +1054,8 @@ public abstract class QuantAbstractRefine extends PrismComponent
 				lbStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, true, min, lbLastSoln);
 				ubStrat = ((STPGModelChecker) mc).probReachStrategy((STPG) abstraction, refineState, target, false, min, ubLastSoln);
 				break;
-			}
-			if (lbStrat == null || ubStrat == null) {
-				String s = "Cannot generate strategy information for";
-				s += " model type " + abstractionType + " and property type " + propertyType;
-				throw new PrismException(s);
+			default:
+				throw new AssertionError("Cannot generate strategy information for" + " model type " + abstractionType + " and property type " + propertyType);
 			}
 
 			if (sanityChecks && (lbStrat.isEmpty() || ubStrat.isEmpty()))

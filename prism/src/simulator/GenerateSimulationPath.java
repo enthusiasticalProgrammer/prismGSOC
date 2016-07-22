@@ -397,6 +397,8 @@ public class GenerateSimulationPath
 		case SIM_PATH_TIME:
 			mainLog.println("\nGenerating random path with time limit " + simPathTime + "...");
 			break;
+		default:
+			break;
 		}
 		if (displayer instanceof PathToText && file == null)
 			mainLog.println();
@@ -426,6 +428,8 @@ public class GenerateSimulationPath
 			case SIM_PATH_TIME:
 				if (path.getTotalTime() >= simPathTime || i >= maxPathLength || engine.queryIsDeadlock())
 					done = true;
+				break;
+			default:
 				break;
 			}
 			// Stop if a loop was found (and loop checking was not disabled)
@@ -465,10 +469,8 @@ public class GenerateSimulationPath
 		boolean done;
 
 		// Print details
-		switch (simPathType) {
-		case SIM_PATH_DEADLOCK:
+		if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 			mainLog.println("\nGenerating random path(s) until deadlock state...");
-			break;
 		}
 
 		// Create path
@@ -484,11 +486,9 @@ public class GenerateSimulationPath
 				engine.automaticTransition();
 				i++;
 				// Check for termination (depending on type)
-				switch (simPathType) {
-				case SIM_PATH_DEADLOCK:
+				if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 					if (engine.queryIsDeadlock() || i >= maxPathLength)
 						done = true;
-					break;
 				}
 				// Stop if a loop was found (and loop checking was not disabled)
 				if (simLoopCheck && engine.isPathLooping())
