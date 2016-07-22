@@ -1884,7 +1884,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			}
 
 			// See which states in the initial distribution have non-zero prob
-			start = initDist.getBDDFromInterval(">", 0);
+			start = initDist.getBDDFromInterval(RelOp.GT, 0);
 			// Determine whether initial states are all in a single BSCC 
 			allInOneBSCC = -1;
 			for (int b = 0; b < numBSCCs; b++) {
