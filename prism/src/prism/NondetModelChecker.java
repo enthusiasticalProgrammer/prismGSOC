@@ -544,7 +544,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Removing actions with non-zero reward from the product for maximum cases
-		if (hasMaxReward /*& hasLTLconstraint*/) {
+		if (hasMaxReward) {
 			mcMo.removeNonZeroMecsForMax(modelProduct, mcLtl, transRewardsList, opsAndBounds, numObjectives, dra, draDDRowVars, draDDColVars);
 		}
 
