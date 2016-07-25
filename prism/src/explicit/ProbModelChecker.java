@@ -1117,7 +1117,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// To be overridden by subclasses
-		throw new PrismException("Computation not implemented yet");
+		throw new PrismNotSupportedException("Computation not implemented yet");
 	}
 
 	/**
