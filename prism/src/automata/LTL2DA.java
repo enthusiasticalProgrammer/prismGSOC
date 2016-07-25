@@ -47,6 +47,7 @@ import jhoafparser.consumer.HOAIntermediateStoreAndManipulate;
 import jhoafparser.parser.HOAFParser;
 import jhoafparser.parser.generated.ParseException;
 import jhoafparser.transformations.ToStateAcceptance;
+import jltl2ba.APSet;
 import jltl2ba.SimpleLTL;
 import jltl2dstar.LTL2Rabin;
 import parser.Values;
@@ -329,9 +330,10 @@ public class LTL2DA extends PrismComponent
 	/** Check the atomic propositions of the (externally generated) automaton */
 	private static void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
-		Collection<String> ltlAPs = ltl.getAPs();
+		APSet ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {
-			if (!ltlAPs.contains(ap)) {
+
+			if (!ltlAPs.asList().contains(ap)) {
 				throw new PrismException("Generated automaton has extra atomic proposition \"" + ap + "\"");
 			}
 		}
