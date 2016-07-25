@@ -1220,7 +1220,6 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			throw new PrismException("Multi-objective model checking can only compute values from a single state");
 
 		MultiLongRun<? extends NondetModel> mlr = createMultiLongRun(model, expr);
-		//MultiLongRun mlr = new MultiLongRun((MDP) model, constraints, objectives, method);
 		StateValues sv = null;
 
 		mlr.createMultiLongRunLP();
