@@ -369,14 +369,6 @@ public class StateModelChecker extends PrismComponent
 	}
 
 	/**
-	 * Method sets the strategy to be used by the model checker
-	 */
-	public void setStrategy(Strategy strategy)
-	{
-		this.strategy = strategy;
-	}
-
-	/**
 	 * Whether or not a strategy should be generated during model checking.
 	 */
 	public boolean getGenStrat()
