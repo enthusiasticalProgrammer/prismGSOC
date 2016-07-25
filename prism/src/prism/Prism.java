@@ -2787,7 +2787,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			fauMC = new FastAdaptiveUniformisationModelChecker(this, currentModulesFile, propertiesFile);
 			return fauMC.check(prop.getExpression());
 		}
-		// Auto-switch engine if required
+		// Auto-switch engine if required TODO implement functionality of explicit engine into symbolic engine and vice versa
 		else if (currentModelType == ModelType.MDP && Expression.containsMultiObjectiveRequiringExplicitEngine(prop.getExpression())) {
 			if (settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_LP
 					&& settings.getChoice(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD) != Prism.MDP_MULTI_GUROBI) {
