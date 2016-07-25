@@ -34,7 +34,7 @@ import prism.PrismException;
  * You have to provide at least the final states of the NBA, the other
  * values have to be set, if the corresponding option is set.
  */
-public class SafrasAlgorithm
+class SafrasAlgorithm
 {
 
 	private Options_Safra _options;
@@ -66,7 +66,7 @@ public class SafrasAlgorithm
 
 		_NODES = 2 * nba.getStateCount();
 		stv_reorder = null;
-		_next = new Vector<MyBitSet>();
+		_next = new Vector<>();
 		_next.setSize(nba.getStateCount());
 	}
 
@@ -189,7 +189,7 @@ public class SafrasAlgorithm
 	}
 
 	/** Visitors */
-	public interface SafraTreeVisitor
+	interface SafraTreeVisitor
 	{
 		public void visit(SafraTree tree, SafraTreeNode node);
 	}
@@ -199,7 +199,7 @@ public class SafrasAlgorithm
 	 * children so that all children have
 	 * disjoint labels
 	 */
-	public class STVCheckChildrenHorizontal implements SafraTreeVisitor
+	class STVCheckChildrenHorizontal implements SafraTreeVisitor
 	{
 
 		/** Node visitor */
@@ -240,7 +240,7 @@ public class SafrasAlgorithm
 	 * removed and the final flag is set on
 	 * the tree node.
 	 */
-	public class STVCheckChildrenVertical implements SafraTreeVisitor
+	class STVCheckChildrenVertical implements SafraTreeVisitor
 	{
 
 		private SafraTreeTemplate _tree_template;
@@ -280,7 +280,7 @@ public class SafrasAlgorithm
 	 * the label of the node and the set of final states in the
 	 * NBA intersect.
 	 */
-	public class STVCheckFinalSet implements SafraTreeVisitor
+	class STVCheckFinalSet implements SafraTreeVisitor
 	{
 
 		private MyBitSet _final_states;
@@ -321,7 +321,7 @@ public class SafrasAlgorithm
 	 * are accepting. If this is the case, all
 	 * children are removed, and the final flag is set.
 	 */
-	public class STVCheckForFinalSucc implements SafraTreeVisitor
+	class STVCheckForFinalSucc implements SafraTreeVisitor
 	{
 		private boolean _success;
 		private MyBitSet _nba_states_with_all_succ_final;
@@ -373,7 +373,7 @@ public class SafrasAlgorithm
 	 * Safra tree visitor that performs the powerset construction
 	 * on the label of the Safra tree node.
 	 */
-	public class STVPowerset implements SafraTreeVisitor
+	class STVPowerset implements SafraTreeVisitor
 	{
 
 		private NBA _nba;
@@ -405,7 +405,7 @@ public class SafrasAlgorithm
 	 * A Safra tree visitor that removes tree nodes
 	 * with empty labels.
 	 */
-	public class STVRemoveEmpty implements SafraTreeVisitor
+	class STVRemoveEmpty implements SafraTreeVisitor
 	{
 
 		private SafraTreeTemplate _tree_template;
@@ -438,7 +438,7 @@ public class SafrasAlgorithm
 	 * A Safra tree visitor that removes all 
 	 * children of the node.
 	 */
-	public class STVRemoveSubtree implements SafraTreeVisitor
+	class STVRemoveSubtree implements SafraTreeVisitor
 	{
 
 		private SafraTreeTemplate _tree_template;
@@ -473,7 +473,7 @@ public class SafrasAlgorithm
 	 * their is no state that is reachable by 
 	 * states in both labels.
 	 */
-	public class STVReorderChildren implements SafraTreeVisitor
+	class STVReorderChildren implements SafraTreeVisitor
 	{
 
 		private Vector<MyBitSet> _nba_reachability;
@@ -553,7 +553,7 @@ public class SafrasAlgorithm
 	/**
 	 * Safra tree visitor that resets the final flag on the Safra tree node.
 	 */
-	public class STVResetFinalFlag implements SafraTreeVisitor
+	class STVResetFinalFlag implements SafraTreeVisitor
 	{
 
 		/** Node visitor */
@@ -568,7 +568,7 @@ public class SafrasAlgorithm
 	 * A Safra tree visitor that subtracts (minus operator) a BitSet from
 	 * the label of the tree node.
 	 */
-	public class STVSubstractLabeling implements SafraTreeVisitor
+	class STVSubstractLabeling implements SafraTreeVisitor
 	{
 
 		private MyBitSet _bitset;

@@ -160,10 +160,10 @@ public class DebugJDD
 	 * LinkedHashMap to ensure that iterating over the map returns the
 	 * DebugJDDNodes in a consistent order, sorted by ID.
 	 */
-	protected static LinkedHashMap<Long, DebugJDDNode> nodes = new LinkedHashMap<Long, DebugJDDNode>();
+	protected static LinkedHashMap<Long, DebugJDDNode> nodes = new LinkedHashMap<>();
 
 	/** A map from DdNode pointers to the current sum of the nodeRefs of all JDDNodes for that pointer */
-	protected static HashMap<Long, Integer> javaRefs = new HashMap<Long, Integer>();
+	protected static HashMap<Long, Integer> javaRefs = new HashMap<>();
 
 	/** An optional set of DebugJDDNode IDs that will be traced */
 	protected static HashSet<Long> traceIDs = null;
@@ -178,7 +178,7 @@ public class DebugJDD
 	public static void enableTracingForID(long id)
 	{
 		if (traceIDs == null) {
-			traceIDs = new HashSet<Long>();
+			traceIDs = new HashSet<>();
 		}
 		traceIDs.add(id);
 		System.out.println("DebugJDD: Enable tracing for " + id);
@@ -251,8 +251,8 @@ public class DebugJDD
 		System.out.flush();
 		for (Entry<Long, Integer> extRef : externalRefCounts.entrySet()) {
 			long ptr = extRef.getKey();
-			List<DebugJDDNode> matchingNodes = new ArrayList<DebugJDDNode>();
-			List<DebugJDDNode> posRewNodes = new ArrayList<DebugJDDNode>();
+			List<DebugJDDNode> matchingNodes = new ArrayList<>();
+			List<DebugJDDNode> posRewNodes = new ArrayList<>();
 			for (DebugJDDNode node : nodes.values()) {
 				if (node.ptr() == ptr) {
 					// node matches
@@ -298,7 +298,7 @@ public class DebugJDD
 	/** Get a map, mapping DdNode pointers to the external reference counts expected by CUDD */
 	public static Map<Long, Integer> getExternalRefCounts()
 	{
-		Map<Long, Integer> result = new TreeMap<Long, Integer>();
+		Map<Long, Integer> result = new TreeMap<>();
 		// Array consists of (pointer, count) pairs
 		long[] externalRefCounts = DebugJDD_GetExternalRefCounts();
 		int i = 0;

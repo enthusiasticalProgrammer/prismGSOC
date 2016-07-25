@@ -91,7 +91,7 @@ public class SingleLineStringEditor implements SettingEditor, CaretListener, Foc
 
 			field.setFont(font);
 		} else if (value instanceof ArrayList) {
-			ArrayList values = (ArrayList) value;
+			ArrayList<?> values = (ArrayList<?>) value;
 			if (values.size() > 0) {
 				//if we have multiple properties selected.
 				String last = null;

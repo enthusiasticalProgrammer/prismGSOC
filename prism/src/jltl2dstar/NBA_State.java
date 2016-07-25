@@ -165,7 +165,7 @@ public class NBA_State implements Iterable<Map.Entry<APElement, MyBitSet>>
 	}
 
 	/** The EdgeManager for the NBA_State */
-	public static class EdgeManager
+	static class EdgeManager
 	{
 
 		/** The state owning this EdgeManager */
@@ -183,7 +183,7 @@ public class NBA_State implements Iterable<Map.Entry<APElement, MyBitSet>>
 		{
 			_apset_size = apset.size();
 			_state = state;
-			_container = new HashMap<APElement, MyBitSet>();
+			_container = new HashMap<>();
 		}
 
 		/** Get the target states */

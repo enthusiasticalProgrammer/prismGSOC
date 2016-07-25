@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import prism.Operator;
@@ -37,16 +35,15 @@ import strat.Strategy;
  */
 public abstract class MultiLongRun<M extends NondetModel>
 {
-	protected @NonNull Collection<@NonNull BitSet> mecs;
-	private final @NonNull List<@NonNull MDPConstraint> constraints;
-	private final @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints;
-	final @NonNull Collection<@NonNull MDPObjective> objectives;
-	final @NonNull protected M model;
+	protected Collection<BitSet> mecs;
+	private final List<MDPConstraint> constraints;
+	private final Collection<MDPExpectationConstraint> expConstraints;
+	final Collection<MDPObjective> objectives;
+	final protected M model;
 
 	/**
 	 * The instance providing access to the LP solver.
 	 */
-	@NonNull
 	final SolverProxyInterface solver;
 
 	/**
@@ -57,22 +54,22 @@ public abstract class MultiLongRun<M extends NondetModel>
 	/**
 	 * method for LP solving to be used TODO drop it
 	 */
-	private final @NonNull String method;
+	private final String method;
 
 	/**
 	 * xOffset[i] is the solver's variable (column) for the first action of state i, i.e. for x_{i,0}
 	 */
-	private int @NonNull [] xOffsetArr;
+	private int[] xOffsetArr;
 
 	/**
 	 * yOffset[i] is the solver's variable (column) for the first action of state i, i.e. for y_{i,0}
 	 */
-	private int @NonNull [] yOffsetArr;
+	private int[] yOffsetArr;
 
 	/**
 	 * zIndex[i] is the z variable for the state i (i.e. y_i in LICS11 terminology). 
 	 */
-	private int @NonNull [] zIndex;
+	private int[] zIndex;
 
 	/**
 	 * The default constructor.
@@ -86,8 +83,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * 		because currently these are the only classes for which currently multi-objectives are used. 
 	 * @throws PrismException 
 	 */
-	protected MultiLongRun(final Collection<@NonNull MDPConstraint> constraints, final Collection<@NonNull MDPObjective> objectives,
-			final Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull final String method, @NonNull final M m) throws PrismException
+	protected MultiLongRun(final Collection<MDPConstraint> constraints, final Collection<MDPObjective> objectives,
+			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
@@ -108,7 +105,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * Creates a new solver instance, based on the argument {@see #method}.
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
-	private @NonNull SolverProxyInterface initialiseSolver() throws PrismException
+	private SolverProxyInterface initialiseSolver() throws PrismException
 	{
 		SolverProxyInterface result = null;
 		try { //below Class.forName throws exception if the required jar is not present
@@ -150,7 +147,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * computes the set of end components and stores it in {@see #mecs}
 	 * @throws PrismException
 	 */
-	private @NonNull List<@NonNull BitSet> computeMECs() throws PrismException
+	private List<BitSet> computeMECs() throws PrismException
 	{
 		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
 		ecc.computeMECStates();
@@ -269,7 +266,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setZSumToOne() throws PrismException
 	{
 		//NOTE: there is an error in the LICS11 paper, we need to sum over MEC states only.
-		Map<Integer, Double> row = new HashMap<Integer, Double>();
+		Map<Integer, Double> row = new HashMap<>();
 
 		for (BitSet b : this.mecs) {
 			for (int i = 0; i < b.length(); i++) {
@@ -294,7 +291,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private Map<Integer, Double> getRowForReward(MDPItem constraint)
 	{
-		Map<Integer, Double> row = new HashMap<Integer, Double>();
+		Map<Integer, Double> row = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state)) {
 				for (int action = 0; action < model.getNumChoices(state); action++) {
@@ -349,7 +346,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setEqnForMECLink(BitSet maxEndComponent) throws PrismException
 	{
 		for (int n = 0; n < 1 << getN(); n++) {
-			Map<Integer, Double> row = new HashMap<Integer, Double>();
+			Map<Integer, Double> row = new HashMap<>();
 
 			for (int state = maxEndComponent.nextSetBit(0); state >= 0; state = maxEndComponent.nextSetBit(state + 1)) {
 
@@ -411,7 +408,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setXConstraints() throws PrismException
 	{
-		Map<Integer, Map<Integer, Double>> map = new HashMap<Integer, Map<Integer, Double>>();
+		Map<Integer, Map<Integer, Double>> map = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (isMECState(state))
 				map.put(state, new HashMap<Integer, Double>());
@@ -474,9 +471,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setYConstraints() throws PrismException
 	{
-		Map<Integer, Double>[] map = (Map<Integer, Double>[]) new HashMap[model.getNumStates()];
+		Map<Integer, Double>[] map = new HashMap[model.getNumStates()];
 		for (int state = 0; state < model.getNumStates(); state++) {
-			map[state] = new HashMap<Integer, Double>();
+			map[state] = new HashMap<>();
 		}
 
 		int initialState = model.getFirstInitialState();
@@ -563,7 +560,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 		for (int i = 0; i < getN(); i++) {
 			MDPConstraint constraint = this.getConstraintNonTrivialProbabilityConstraints().get(i);
-			Map<Integer, Double> map = new HashMap<Integer, Double>();
+			Map<Integer, Double> map = new HashMap<>();
 
 			for (int n = 0; n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
@@ -598,7 +595,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	private void addSingleCommitmentToSatisfaction(BitSet maxEndComponent, int n, int i) throws PrismException
 	{
-		Map<Integer, Double> map = new HashMap<Integer, Double>();
+		Map<Integer, Double> map = new HashMap<>();
 		for (int state = 0; state < model.getNumStates(); state++) {
 			if (maxEndComponent.get(state)) {
 				for (int act = 0; act < model.getNumChoices(state); act++) {
@@ -668,7 +665,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		if (weights.getDimension() != 2) {
 			throw new UnsupportedOperationException("MultiLongRun can only create 2D pareto curve.");
 		}
-		Map<Integer, Double> weightedMap = new HashMap<Integer, Double>();
+		Map<Integer, Double> weightedMap = new HashMap<>();
 		//Reward bounds
 		int numCount = 0;
 		ArrayList<MDPObjective> numIndices = new ArrayList<>();

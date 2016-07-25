@@ -219,7 +219,7 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 		}
 
 		// Process list of species
-		speciesList = new ArrayList<Species>();
+		speciesList = new ArrayList<>();
 		e_list = (Element) e_model.getElementsByTagName("listOfSpecies").item(0);
 		nodes = e_list.getElementsByTagName("species");
 		n = nodes.getLength();
@@ -243,7 +243,7 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 		}
 
 		// Process list of parameters (if present)
-		parameterList = new ArrayList<Parameter>();
+		parameterList = new ArrayList<>();
 		// Look at direct children only (there might be listOfParameters nodes lower in the tree)
 		nodes = e_model.getChildNodes();
 		n = nodes.getLength();
@@ -267,7 +267,7 @@ public class SBML2Prism extends Reactions2Prism implements EntityResolver
 		}
 
 		// Process list of reactions
-		reactionList = new ArrayList<Reaction>();
+		reactionList = new ArrayList<>();
 		e_list = (Element) e_model.getElementsByTagName("listOfReactions").item(0);
 		nodes = e_list.getElementsByTagName("reaction");
 		n = nodes.getLength();

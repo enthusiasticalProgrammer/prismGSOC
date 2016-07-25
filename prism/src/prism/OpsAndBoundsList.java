@@ -72,18 +72,18 @@ public class OpsAndBoundsList
 	public OpsAndBoundsList(int numObjectives)
 	{
 		probNegated = new BitSet();
-		opInfos = new ArrayList<OpRelOpBound>(numObjectives);
-		relOps = new ArrayList<Operator>(numObjectives);
-		bounds = new ArrayList<Double>(numObjectives);
-		stepBounds = new ArrayList<Integer>(numObjectives);
-		relOpsProb = new ArrayList<Operator>();
-		boundsProb = new ArrayList<Double>();
-		stepBoundsProb = new ArrayList<Integer>(numObjectives);
-		relOpsReward = new ArrayList<Operator>();
-		boundsReward = new ArrayList<Double>();
-		stepBoundsReward = new ArrayList<Integer>(numObjectives);
-		origPositionsReward = new ArrayList<Integer>(numObjectives);
-		origPositionsProb = new ArrayList<Integer>(numObjectives);
+		opInfos = new ArrayList<>(numObjectives);
+		relOps = new ArrayList<>(numObjectives);
+		bounds = new ArrayList<>(numObjectives);
+		stepBounds = new ArrayList<>(numObjectives);
+		relOpsProb = new ArrayList<>();
+		boundsProb = new ArrayList<>();
+		stepBoundsProb = new ArrayList<>(numObjectives);
+		relOpsReward = new ArrayList<>();
+		boundsReward = new ArrayList<>();
+		stepBoundsReward = new ArrayList<>(numObjectives);
+		origPositionsReward = new ArrayList<>(numObjectives);
+		origPositionsProb = new ArrayList<>(numObjectives);
 	}
 
 	/**

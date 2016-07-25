@@ -44,7 +44,7 @@ public class StateRewardsSimple extends StateRewards
 	 */
 	public StateRewardsSimple()
 	{
-		stateRewards = new ArrayList<Double>();
+		stateRewards = new ArrayList<>();
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class StateRewardsSimple extends StateRewards
 			stateRewards = null;
 		} else {
 			int n = rews.stateRewards.size();
-			stateRewards = new ArrayList<Double>(n);
+			stateRewards = new ArrayList<>(n);
 			for (int i = 0; i < n; i++) {
 				stateRewards.add(rews.stateRewards.get(i));
 			}

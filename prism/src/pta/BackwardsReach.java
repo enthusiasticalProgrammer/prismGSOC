@@ -94,9 +94,9 @@ public class BackwardsReach extends PrismComponent
 
 		// Initialise data structures
 		graph = new BackwardsReachabilityGraph();
-		found = new IndexedSet<LocZone>();
-		explore = new LinkedList<LocZone>();
-		graph.states = states = new ArrayList<LocZone>();
+		found = new IndexedSet<>();
+		explore = new LinkedList<>();
+		graph.states = states = new ArrayList<>();
 
 		// Add target states
 		count = 0;

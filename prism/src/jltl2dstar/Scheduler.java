@@ -35,7 +35,7 @@ import prism.PrismException;
  * in multiple ways and combines the basic building blocks to choose the most
  * efficient.
  */
-public class Scheduler
+class Scheduler
 {
 
 	/** The LTL2DRA wrapper for Safra's algorithm and the external LTL->NBA translator */
@@ -51,7 +51,7 @@ public class Scheduler
 	private boolean _stat_NBA;
 
 	/** Base class for the building blocks for the scheduler */
-	public abstract static class Tree
+	abstract static class Tree
 	{
 		protected SimpleLTL _ltl;
 		protected Options_LTL2DRA _options;
@@ -75,7 +75,7 @@ public class Scheduler
 			_apset = apset;
 			_options = options;
 			_sched = sched;
-			children = new Vector<Tree>();
+			children = new Vector<>();
 		}
 
 		/** Print the tree on output stream (default level: 0) */
@@ -196,7 +196,7 @@ public class Scheduler
 	}
 
 	/** The root building block for the calculation of DRA/DSA */
-	public static class Tree_Start extends Tree
+	static class Tree_Start extends Tree
 	{
 		/**
 		 * Constructor 
@@ -285,7 +285,7 @@ public class Scheduler
 
 	/** A building block for the calculation of a Rabin automaton 
 	 * (via Safra, Scheck or Union) */
-	public static class Tree_Rabin extends Tree
+	static class Tree_Rabin extends Tree
 	{
 
 		private Tree_Safra _tree_normal;
@@ -370,7 +370,7 @@ public class Scheduler
 	}
 
 	/** Building block for the translation from LTL to DRA using Safra's algorithm */
-	public static class Tree_Safra extends Tree
+	static class Tree_Safra extends Tree
 	{
 
 		private NBA _nba;
@@ -460,7 +460,7 @@ public class Scheduler
 	}
 
 	/** Generate DRA by using the union construction on two DRAs */
-	public static class Tree_Union extends Tree
+	static class Tree_Union extends Tree
 	{
 
 		/**

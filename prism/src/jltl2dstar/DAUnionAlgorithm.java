@@ -34,7 +34,7 @@ import prism.PrismException;
  * @param DA_t the Deterministic Automaton class.
  */
 
-public class DAUnionAlgorithm
+class DAUnionAlgorithm
 {
 
 	/** The first DA */
@@ -57,7 +57,7 @@ public class DAUnionAlgorithm
 	 * @param da_2 the second DA
 	 * @param trueloop_check Check for trueloops?
 	 * @param detailed_states Generate detailed descriptions of the states? */
-	public DAUnionAlgorithm(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException
+	DAUnionAlgorithm(DRA da_1, DRA da_2, boolean trueloop_check, boolean detailed_states) throws PrismException
 	{
 		_da_1 = da_1;
 		_da_2 = da_2;

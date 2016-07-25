@@ -103,6 +103,6 @@ public class GraphConstantPickerList extends JPanel implements Scrollable
 
 	public GraphConstantLine getConstantLine(int i)
 	{
-		return (GraphConstantLine) rows.get(i);
+		return rows.get(i);
 	}
 }

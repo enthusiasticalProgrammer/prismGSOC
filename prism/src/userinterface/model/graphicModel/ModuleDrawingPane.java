@@ -347,7 +347,6 @@ public class ModuleDrawingPane extends JPanel
 		if (theModel.isShowGrid()) {
 			//Draw Grid
 			double gridWidth = theModel.getGridWidth();
-			float[] dashPattern2 = { 1, 2 };
 			//g2.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0F, dashPattern2, 0));
 			g2.setColor(gridColor);
 			/*if(clipBounds.width < getWidth())
@@ -411,7 +410,7 @@ public class ModuleDrawingPane extends JPanel
 					double max = fromX;
 					double may = fromY;
 					for (int i = 0; i < theModel.getTempProbTo().size(); i++) {
-						State to = (State) (theModel.getTempProbTo().get(i));
+						State to = (theModel.getTempProbTo().get(i));
 						mix = Math.min(to.getX() + 15, mix);
 						max = Math.max(to.getX() + 15, max);
 						miy = Math.min(to.getY() + 15, miy);
@@ -441,12 +440,12 @@ public class ModuleDrawingPane extends JPanel
 				g2.draw(new Line2D.Double(fromX, fromY, probDecX, probDecY));
 
 				for (int i = 0; i < theModel.getTempProbTo().size(); i++) {
-					State toState = (State) (theModel.getTempProbTo().get(i));
+					State toState = (theModel.getTempProbTo().get(i));
 
 					int counter = 0;
 					////System.out.println("i =   "+i);
 					for (int j = 0; j < theModel.getTempProbTo().size(); j++) {
-						State otherState = (State) (theModel.getTempProbTo().get(j));
+						State otherState = (theModel.getTempProbTo().get(j));
 						if (otherState == toState) {
 							counter++;
 
@@ -490,8 +489,6 @@ public class ModuleDrawingPane extends JPanel
 			if (theModel.getTempProbFrom() != null) //if we have a from state
 			{
 				g2.setColor(Color.gray);
-				double fromX = theModel.getTempProbFrom().getX() + 3;
-				double fromY = theModel.getTempProbFrom().getY() + 3;
 				double probDecX = theModel.getTempProbFrom().getX() + 3;
 				double probDecY = theModel.getTempProbFrom().getY() + 3;
 				//if(!theModel.isTempProbNailDown()) //if there is no nail down
@@ -534,12 +531,12 @@ public class ModuleDrawingPane extends JPanel
 				g2.draw(new Line2D.Double(fromX, fromY, probDecX, probDecY));*/
 
 				for (int i = 0; i < theModel.getTempProbTo().size(); i++) {
-					State toState = (State) (theModel.getTempProbTo().get(i));
+					State toState = (theModel.getTempProbTo().get(i));
 
 					int counter = 0;
 					////System.out.println("i =   "+i);
 					for (int j = 0; j < theModel.getTempProbTo().size(); j++) {
-						State otherState = (State) (theModel.getTempProbTo().get(j));
+						State otherState = (theModel.getTempProbTo().get(j));
 						if (otherState == toState) {
 							counter++;
 						}

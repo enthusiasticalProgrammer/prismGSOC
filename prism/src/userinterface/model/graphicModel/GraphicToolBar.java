@@ -41,7 +41,6 @@ public class GraphicToolBar extends JToolBar
 
 	private boolean isDocked;
 	private GUIGraphicModelEditor gme;
-	private GraphicModuleContainer mmo;
 
 	//Must keep track of the internal state of the toolbar in case we need
 	//synchronisation

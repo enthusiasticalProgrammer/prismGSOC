@@ -45,18 +45,18 @@ public class SCCComputerTarjan extends SCCComputer
 	/* Number of nodes (model states) */
 	private int numNodes;
 	/* Computed list of SCCs */
-	private List<BitSet> sccs = new ArrayList<BitSet>();
+	private List<BitSet> sccs = new ArrayList<>();
 	/* States not in non-trivial SCCs */
 	private BitSet notInSCCs;
 	/* Computed list of BSCCs */
-	private List<BitSet> bsccs = new ArrayList<BitSet>();
+	private List<BitSet> bsccs = new ArrayList<>();
 	/* States not in any BSCC */
 	private BitSet notInBSCCs;
 
 	/* Next index to give to a node */
 	private int index = 0;
 	/* Stack of nodes */
-	private List<Integer> stack = new LinkedList<Integer>();
+	private List<Integer> stack = new LinkedList<>();
 	/* List of nodes in the graph. Invariant: {@code nodeList.get(i).id == i} */
 	private ArrayList<Node> nodeList;
 	/* Nodes currently on the stack. */
@@ -70,7 +70,7 @@ public class SCCComputerTarjan extends SCCComputer
 		super(parent);
 		this.model = model;
 		this.numNodes = model.getNumStates();
-		this.nodeList = new ArrayList<Node>(numNodes);
+		this.nodeList = new ArrayList<>(numNodes);
 		for (int i = 0; i < numNodes; i++) {
 			nodeList.add(new Node(i));
 		}

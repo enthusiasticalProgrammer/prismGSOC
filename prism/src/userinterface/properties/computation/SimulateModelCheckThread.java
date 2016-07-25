@@ -97,8 +97,8 @@ public class SimulateModelCheckThread extends GUIComputationThread
 		if (allAtOnce) {
 			Result results[] = null;
 			Exception resultError = null;
-			ArrayList<Expression> properties = new ArrayList<Expression>();
-			ArrayList<IconThread> clkThreads = new ArrayList<IconThread>();
+			ArrayList<Expression> properties = new ArrayList<>();
+			ArrayList<IconThread> clkThreads = new ArrayList<>();
 			for (int i = 0; i < guiProps.size(); i++) {
 				GUIProperty gp = guiProps.get(i);
 				properties.add(gp.getProperty());
@@ -126,7 +126,7 @@ public class SimulateModelCheckThread extends GUIComputationThread
 			}
 			//after collecting the results stop all of the clock icons
 			for (int i = 0; i < clkThreads.size(); i++) {
-				IconThread ict = (IconThread) clkThreads.get(i);
+				IconThread ict = clkThreads.get(i);
 				ict.interrupt();
 				while (!ict.canContinue) {
 					try {

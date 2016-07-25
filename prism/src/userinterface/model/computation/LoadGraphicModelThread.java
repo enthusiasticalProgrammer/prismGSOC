@@ -64,7 +64,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 		graphicEdit = new GUIGraphicModelEditor(handler, handler.getTree(), handler.getPropModel());
 		graphicEdit.newModel();
 		graphicEdit.setBusy(true);
-		
+
 		List<Constant> theConstants = new ArrayList<>();
 		List<Variable> theDeclarations = new ArrayList<>();
 		String theModelName = "", theModelType = "", sysInfo = "";
@@ -309,7 +309,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 						double assignY = 0;
 						double probX = 0;
 						double probY = 0;
-						ArrayList<Element> nailElements = new ArrayList<Element>();
+						ArrayList<Element> nailElements = new ArrayList<>();
 						NodeList tranChildren = modChild.getChildNodes();
 						//Here we get label information and collect nailElements
 						for (int k = 0; k < tranChildren.getLength(); k++) {
@@ -345,9 +345,9 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 							}
 						}
 						//we should have an ArrayList of Elements containinginformation about nails in nailElements
-						ArrayList<Nail> nails = new ArrayList<Nail>();
-						ArrayList<Integer> froms = new ArrayList<Integer>();
-						ArrayList<Integer> tos = new ArrayList<Integer>();
+						ArrayList<Nail> nails = new ArrayList<>();
+						ArrayList<Integer> froms = new ArrayList<>();
+						ArrayList<Integer> tos = new ArrayList<>();
 						for (int k = 0; k < nailElements.size(); k++) {
 							Element nail = nailElements.get(k);
 							int nFrom = 0;
@@ -380,11 +380,11 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 							if (aFrom != -1)
 								aNail.setFrom(nails.get(aFrom));
 							else
-								aNail.setFrom((userinterface.model.graphicModel.State) theModel.getState(from));
+								aNail.setFrom(theModel.getState(from));
 							if (aTo != -1)
 								aNail.setTo(nails.get(aTo));
 							else
-								aNail.setTo((userinterface.model.graphicModel.State) theModel.getState(to));
+								aNail.setTo(theModel.getState(to));
 						}
 						int tranInd = 0;
 						if (nails.size() > 0) {
@@ -416,7 +416,7 @@ public class LoadGraphicModelThread extends Thread implements EntityResolver
 						double guardY = 0;
 						double syncX = 0;
 						double syncY = 0;
-						ArrayList<Branch> branches = new ArrayList<Branch>();
+						ArrayList<Branch> branches = new ArrayList<>();
 						Element position = (Element) modChild.getChildNodes().item(0);
 						nodeX = Double.parseDouble(position.getAttribute("x"));
 						nodeY = Double.parseDouble(position.getAttribute("y"));

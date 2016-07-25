@@ -46,7 +46,7 @@ public class CexPathStates implements PathFullInfo
 	public CexPathStates(prism.Model model)
 	{
 		this.model = model;
-		states = new ArrayList<State>();
+		states = new ArrayList<>();
 	}
 
 	/**

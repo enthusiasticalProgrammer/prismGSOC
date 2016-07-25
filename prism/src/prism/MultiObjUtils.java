@@ -267,7 +267,7 @@ public class MultiObjUtils
 	 */
 	protected static java.util.Map<Point, Point> fillDirections(List<Point> computedPoints, List<Point> directions, boolean horiz)
 	{
-		HashMap<Point, Point> map = new HashMap<Point, Point>();
+		HashMap<Point, Point> map = new HashMap<>();
 		for (int i = 0; i < computedPoints.size(); i++) {
 			Point p = computedPoints.get(i);
 			Point dir = directions.get(i);
@@ -306,7 +306,7 @@ public class MultiObjUtils
 	protected static List<Point> removeDuplicities(List<Point> list)
 	{
 		//TODO implement faster alg if we can be bothered.
-		ArrayList<Point> ret = new ArrayList<Point>();
+		ArrayList<Point> ret = new ArrayList<>();
 		if (list.size() == 0)
 			return ret;
 
@@ -349,7 +349,7 @@ public class MultiObjUtils
 
 		//System.out.println("LP: " + sortedLP);
 
-		ArrayList<Point> ret = new ArrayList<Point>();
+		ArrayList<Point> ret = new ArrayList<>();
 		for (int i = 0; i < sortedLP.size() - 1; i++) {
 			Point p1 = sortedLP.get(i);
 			Point p2 = sortedLP.get(i + 1);

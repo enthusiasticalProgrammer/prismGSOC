@@ -30,8 +30,10 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -48,7 +50,7 @@ import jdd.JDDVars;
  *  Fin(states)  <=> F G !states
  *  Fin(!states) <=> F G states
  */
-public class AcceptanceGeneric implements AcceptanceOmega
+public class AcceptanceGeneric implements AcceptanceOmegaState
 {
 
 	/** The types of elements in the AST */
@@ -174,7 +176,7 @@ public class AcceptanceGeneric implements AcceptanceOmega
 		switch (getKind()) {
 		case AND:
 		case OR: {
-			List<AcceptanceGeneric> result = new ArrayList<AcceptanceGeneric>();
+			List<AcceptanceGeneric> result = new ArrayList<>();
 			result.addAll(left.getLeafNodes());
 			result.addAll(right.getLeafNodes());
 			return result;
@@ -237,20 +239,6 @@ public class AcceptanceGeneric implements AcceptanceOmega
 	}
 
 	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
-	}
-
-	@Override
 	public AcceptanceGeneric clone()
 	{
 		switch (kind) {
@@ -297,7 +285,7 @@ public class AcceptanceGeneric implements AcceptanceOmega
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC)) {
 			return this.complementToGeneric();
@@ -306,7 +294,7 @@ public class AcceptanceGeneric implements AcceptanceOmega
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		switch (kind) {
 		case TRUE:
@@ -316,7 +304,7 @@ public class AcceptanceGeneric implements AcceptanceOmega
 		case INF_NOT:
 		case FIN:
 		case FIN_NOT:
-			states = lifter.lift(states);
+			states = liftBitSet(lifter, states);
 			return;
 		case AND:
 		case OR:

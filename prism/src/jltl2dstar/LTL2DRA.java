@@ -20,12 +20,9 @@
 
 package jltl2dstar;
 
-import jltl2ba.APSet;
-import jltl2ba.SimpleLTL;
-import jltl2ba.SimpleLTL.LTLType;
 import prism.PrismException;
 
-public class LTL2DRA
+class LTL2DRA
 {
 
 	private Options_Safra _safra_opt;
@@ -33,72 +30,6 @@ public class LTL2DRA
 	public LTL2DRA(Options_Safra safra_opt)
 	{
 		_safra_opt = safra_opt;
-	}
-
-	/**
-	 * Convert an LTL formula to a DRA.
-	 * @param ltl the LTL formula
-	 * @param options which operators are allowed
-	 * @return a shared_ptr to the DRA
-	 */
-	private DRA LTLtoDRA_rec(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException
-	{
-		SimpleLTL ltl_pnf = ((SimpleLTL) ltl.clone()).simplify();
-
-		if (options.allow_union && ltl_pnf.kind == LTLType.OR) {
-			SimpleLTL ltl_left = ltl_pnf.left;
-			SimpleLTL ltl_right = ltl_pnf.right;
-
-			Options_LTL2DRA rec_opt = options.clone();
-			rec_opt.recursion();
-
-			DRA dra_left = LTLtoDRA_rec(ltl_left, apset, rec_opt);
-			DRA dra_right = LTLtoDRA_rec(ltl_right, apset, rec_opt);
-
-			return dra_left.calculateUnion(dra_right, options.opt_safra.union_trueloop, options.detailed_states);
-		}
-
-		/*  if (options.safety) {
-		LTLSafetyAutomata lsa;
-		
-		DRA_ptr safety_dra(lsa.ltl2dra<DRA_t>(ltl,
-						  options.scheck_path));
-		
-		if (safety_dra.get()!=0) {
-		  return safety_dra;
-		}
-		}
-		 */
-		NBA nba = ltl_pnf.toNBA(apset);
-
-		if (nba == null) {
-			throw new PrismException("Couldn't create NBA from LTL formula");
-		}
-
-		NBA2DRA nba2dra = new NBA2DRA(options.opt_safra, false);
-
-		DRA dra = nba2dra.convert(nba, 0);
-
-		if (options.optimizeAcceptance) {
-			dra.optimizeAcceptanceCondition();
-		}
-
-		if (options.bisim) {
-			DRAOptimizations dra_optimizer = new DRAOptimizations();
-			dra = dra_optimizer.optimizeBisimulation(dra, false, false, false);
-		}
-
-		return dra;
-
-	}
-
-	/* public DRA LTLtoDRA(SimpleLTL ltl, Options_LTL2DRA options) throws PrismException {
-		return LTLtoDRA_rec(ltl, ltl.getAPs(), options);
-	} */
-
-	public DRA LTLtoDRA(SimpleLTL ltl, APSet apset, Options_LTL2DRA options) throws PrismException
-	{
-		return LTLtoDRA_rec(ltl, apset, options);
 	}
 
 	/**

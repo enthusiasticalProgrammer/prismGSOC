@@ -236,7 +236,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		jLabel7 = new javax.swing.JLabel();
 		jPanel11 = new javax.swing.JPanel();
 		jPanel12 = new javax.swing.JPanel();
-		selectSimulationMethod = new javax.swing.JComboBox<String>(); // new
+		selectSimulationMethod = new javax.swing.JComboBox<>(); // new
 		automaticCalculateCombo = new javax.swing.JComboBox();
 		jPanel13 = new javax.swing.JPanel();
 		widthField = new javax.swing.JTextField();
@@ -399,14 +399,14 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		jPanel8.add(jPanel12, gridBagConstraints);
 
 		// Populate simulation method choices
-		Vector<String> methods = new Vector<String>();
+		Vector<String> methods = new Vector<>();
 		methods.add("CI");
 		methods.add("ACI");
 		if (!atLeastOneRwd)
 			methods.add("APMC");
 		if (!atLeastOneQuant)
 			methods.add("SPRT");
-		selectSimulationMethod.setModel(new javax.swing.DefaultComboBoxModel<String>(methods));
+		selectSimulationMethod.setModel(new javax.swing.DefaultComboBoxModel<>(methods));
 
 		selectSimulationMethod.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -880,7 +880,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	public static SimulationInformation defineSimulationWithDialog(GUIPrism parent, Expression expr, ModulesFile modulesFile, String titleExtra)
 			throws PrismException
 	{
-		List<Expression> exprs = new ArrayList<Expression>(1);
+		List<Expression> exprs = new ArrayList<>(1);
 		exprs.add(expr);
 		return new GUISimulationPicker(parent, exprs, modulesFile, titleExtra).defineValues();
 	}
@@ -1050,7 +1050,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 
 		public DefineValuesTable()
 		{
-			values = new ArrayList<Value>();
+			values = new ArrayList<>();
 		}
 
 		public void addValue(Value v)

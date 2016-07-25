@@ -153,7 +153,7 @@ public class GUIPrism extends JFrame
 		log = new userinterface.log.GUILog(g);
 		nw = new userinterface.GUINetwork(g);
 		// Add to list
-		ArrayList<GUIPlugin> plugs = new ArrayList<GUIPlugin>();
+		ArrayList<GUIPlugin> plugs = new ArrayList<>();
 		plugs.add(fileMenu);
 		plugs.add(clipboardPlugin);
 		plugs.add(model);
@@ -283,7 +283,7 @@ public class GUIPrism extends JFrame
 		//Setup pluggable screens in here
 		plugs = getPluginArray(this);
 		for (int i = 0; i < plugs.size(); i++) {
-			GUIPlugin plug = (GUIPlugin) plugs.get(i);
+			GUIPlugin plug = plugs.get(i);
 			if (plug.displaysTab()) {
 				theTabs.addTab(plug.getTabText(), plug);
 				theTabs.setEnabledAt(theTabs.getComponentCount() - 1, plug.isEnabled());
@@ -298,7 +298,7 @@ public class GUIPrism extends JFrame
 				options.addPanel(plug.getOptions());
 			}
 			if (plug instanceof userinterface.log.GUILog) {
-				logPlug = (userinterface.log.GUILog) plug;
+				logPlug = plug;
 			}
 			prism.getSettings().addSettingsListener(plug);
 		}
@@ -407,7 +407,7 @@ public class GUIPrism extends JFrame
 	{
 		// just before we get started, pass any command-line args to all plugins
 		// we first remove the -javamaxmem argument, if present
-		List<String> argsCopy = new ArrayList<String>();
+		List<String> argsCopy = new ArrayList<>();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equals("-javamaxmem")) {
 				i++;
@@ -416,7 +416,7 @@ public class GUIPrism extends JFrame
 			}
 		}
 		for (int i = 0; i < plugs.size(); i++) {
-			GUIPlugin plug = (GUIPlugin) plugs.get(i);
+			GUIPlugin plug = plugs.get(i);
 			plug.takeCLArgs(argsCopy.toArray(new String[0]));
 		}
 	}

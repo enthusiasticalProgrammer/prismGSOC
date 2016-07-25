@@ -62,7 +62,7 @@ public class MathML2Prism
 				// return string for first non-text element
 				allChildren = node.getChildNodes();
 				n = allChildren.getLength();
-				children = new ArrayList<Node>();
+				children = new ArrayList<>();
 				for (i = 0; i < n; i++) {
 					if (allChildren.item(i).getNodeType() != Node.TEXT_NODE)
 						children.add(allChildren.item(i));
@@ -94,7 +94,7 @@ public class MathML2Prism
 				// Get list of non-text nodes
 				allChildren = node.getChildNodes();
 				n = allChildren.getLength();
-				children = new ArrayList<Node>();
+				children = new ArrayList<>();
 				for (i = 0; i < n; i++) {
 					if (allChildren.item(i).getNodeType() != Node.TEXT_NODE)
 						children.add(allChildren.item(i));
@@ -104,7 +104,7 @@ public class MathML2Prism
 					throw new PrismException("Empty apply node in MathML expression");
 				// Find operator and translate children
 				apply = children.get(0).getNodeName();
-				translatedChildren = new ArrayList<String>();
+				translatedChildren = new ArrayList<>();
 				n = children.size() - 1;
 				for (i = 0; i < n; i++) {
 					translatedChildren.add(convert(children.get(i + 1), renameFrom, renameTo));

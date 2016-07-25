@@ -43,7 +43,7 @@ import strat.MDStrategy;
  */
 public class LTSExplicit extends ModelExplicit implements LTS
 {
-	protected ArrayList<ArrayList<Integer>> successors = new ArrayList<ArrayList<Integer>>();
+	protected ArrayList<ArrayList<Integer>> successors = new ArrayList<>();
 	protected int numTransitions = 0;
 	protected int maxNumChoices = 0;
 
@@ -151,7 +151,7 @@ public class LTSExplicit extends ModelExplicit implements LTS
 	public Iterator<Integer> getSuccessorsIterator(int s)
 	{
 		// make successors unique
-		LinkedHashSet<Integer> succ = new LinkedHashSet<Integer>();
+		LinkedHashSet<Integer> succ = new LinkedHashSet<>();
 		succ.addAll(successors.get(s));
 		return succ.iterator();
 	}

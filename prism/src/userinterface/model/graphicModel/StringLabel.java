@@ -148,7 +148,7 @@ public class StringLabel extends SingleProperty
 	 */
 	public boolean intersects(Rectangle2D rect)
 	{
-		intersects = new ArrayList<Rectangle2D.Double>();
+		intersects = new ArrayList<>();
 		if (!getString().equals("")) {
 			double parX;
 			double parY;

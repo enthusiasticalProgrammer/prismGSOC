@@ -74,7 +74,7 @@ public class NBA implements Iterable<NBA_State>
 		_state_count = 0;
 		_start_state = null;
 		_apset = apset;
-		_index = new Vector<NBA_State>();
+		_index = new Vector<>();
 		_final_states = new MyBitSet();
 	}
 

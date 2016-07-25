@@ -27,8 +27,8 @@
 
 package acceptance;
 
-import common.IterableBitSet;
 import acceptance.AcceptanceGeneric.ElementType;
+import common.IterableBitSet;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -154,20 +154,6 @@ public class AcceptanceGenericDD implements AcceptanceOmegaDD
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.GENERIC;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 
 	@Override

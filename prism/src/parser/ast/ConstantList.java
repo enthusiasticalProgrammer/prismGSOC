@@ -54,10 +54,10 @@ public class ConstantList extends ASTElement
 	public ConstantList()
 	{
 		// initialise
-		names = new Vector<String>();
-		constants = new Vector<Expression>();
-		types = new Vector<Type>();
-		nameIdents = new Vector<ExpressionIdent>();
+		names = new Vector<>();
+		constants = new Vector<>();
+		types = new Vector<>();
+		nameIdents = new Vector<>();
 	}
 
 	// Set methods
@@ -168,7 +168,7 @@ public class ConstantList extends ASTElement
 		Expression e;
 		Vector<String> v;
 
-		v = new Vector<String>();
+		v = new Vector<>();
 		n = constants.size();
 		for (i = 0; i < n; i++) {
 			e = getConstant(i);

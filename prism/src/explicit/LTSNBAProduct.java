@@ -33,8 +33,6 @@ import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import prism.PrismLog;
 import common.IterableBitSet;
 import common.IterableStateSet;
@@ -119,7 +117,7 @@ public class LTSNBAProduct extends Product<Model>
 	private BitSet acceptingStates;
 
 	/** Constructor for storing the product */
-	private LTSNBAProduct(@NonNull LTS productModel, @NonNull Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
+	private LTSNBAProduct(LTS productModel, Model originalModel, ArrayList<ProductState> productStates, BitSet acceptingStates)
 	{
 		super(productModel, originalModel);
 		this.productStates = productStates;
@@ -163,9 +161,9 @@ public class LTSNBAProduct extends Product<Model>
 	public static LTSNBAProduct doProduct(Model model, NBA nba, BitSet statesOfInterest, Vector<BitSet> labelBS)
 	{
 		// map state index in product automaton -> ProductState
-		ArrayList<ProductState> productIdToProductState = new ArrayList<ProductState>();
+		ArrayList<ProductState> productIdToProductState = new ArrayList<>();
 		// map ProductState -> state index in product automaton
-		HashMap<ProductState, Integer> productStateToProductId = new HashMap<ProductState, Integer>();
+		HashMap<ProductState, Integer> productStateToProductId = new HashMap<>();
 
 		// storage for the product model
 		LTSExplicit productModel = new LTSExplicit();
@@ -173,7 +171,7 @@ public class LTSNBAProduct extends Product<Model>
 		BitSet acceptingStates = new BitSet();
 
 		// the stack of product ids that potentially have to be expanded
-		Stack<Integer> todo = new Stack<Integer>();
+		Stack<Integer> todo = new Stack<>();
 
 		// product state ids that have already been expanded
 		BitSet expanded = new BitSet();

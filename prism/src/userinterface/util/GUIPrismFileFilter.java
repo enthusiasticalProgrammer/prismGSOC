@@ -39,13 +39,13 @@ public class GUIPrismFileFilter extends FileFilter
 	public GUIPrismFileFilter()
 	{
 		name = "";
-		exts = new Vector<String>();
+		exts = new Vector<>();
 	}
 
 	public GUIPrismFileFilter(String s)
 	{
 		name = s;
-		exts = new Vector<String>();
+		exts = new Vector<>();
 	}
 
 	public void setName(String s)

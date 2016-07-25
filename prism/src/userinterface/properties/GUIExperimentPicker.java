@@ -63,7 +63,7 @@ public class GUIExperimentPicker extends javax.swing.JDialog
 	private GUIPrism gui;
 
 	static {
-		remember = new ArrayList<Rememberance>();
+		remember = new ArrayList<>();
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

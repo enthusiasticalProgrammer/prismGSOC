@@ -53,8 +53,8 @@ public class VarList
 	 */
 	public VarList()
 	{
-		vars = new ArrayList<Var>();
-		nameMap = new HashMap<String, Integer>();
+		vars = new ArrayList<>();
+		nameMap = new HashMap<>();
 		totalNumBits = 0;
 	}
 
@@ -116,7 +116,7 @@ public class VarList
 		// Recompute name map
 		int j, n;
 		n = getNumVars();
-		nameMap = new HashMap<String, Integer>(n);
+		nameMap = new HashMap<>(n);
 		for (j = 0; j < n; j++) {
 			nameMap.put(getName(j), j);
 		}
@@ -385,7 +385,7 @@ public class VarList
 		Vector<Values> allValues;
 		Values vals, valsNew;
 
-		allValues = new Vector<Values>();
+		allValues = new Vector<>();
 		allValues.add(new Values());
 		for (String var : vars) {
 			i = getIndex(var);
@@ -428,7 +428,7 @@ public class VarList
 		State state, stateNew;
 
 		int numVars = getNumVars();
-		allStates = new ArrayList<State>();
+		allStates = new ArrayList<>();
 		allStates.add(new State(numVars));
 		for (int i = 0; i < numVars; i++) {
 			if (getType(i) instanceof TypeBool) {
@@ -495,8 +495,8 @@ public class VarList
 		int i, n;
 		n = getNumVars();
 		VarList rv = new VarList();
-		rv.vars = new ArrayList<Var>(n);
-		rv.nameMap = new HashMap<String, Integer>(n);
+		rv.vars = new ArrayList<>(n);
+		rv.nameMap = new HashMap<>(n);
 		for (i = 0; i < n; i++) {
 			rv.vars.add(new Var(vars.get(i)));
 			rv.nameMap.put(getName(i), i);

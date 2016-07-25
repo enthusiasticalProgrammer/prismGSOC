@@ -14,7 +14,7 @@ import parser.visitor.*;
 import prism.ModelType;
 import prism.PrismLangException;
 
-@SuppressWarnings({ "unused", "static-access", "serial" })
+@SuppressWarnings({ "all" })
 public class PrismParser implements PrismParserConstants
 {
 	// The model associated with the properties file being parsed

@@ -49,7 +49,7 @@ public class CexPathAsBDDs implements PathFullInfo
 	public CexPathAsBDDs(prism.Model model)
 	{
 		this.model = model;
-		states = new ArrayList<JDDNode>();
+		states = new ArrayList<>();
 	}
 
 	/**

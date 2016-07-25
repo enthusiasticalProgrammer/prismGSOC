@@ -28,9 +28,9 @@
 package acceptance;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import common.IterableBitSet;
-
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -56,52 +56,52 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 	public static class GenRabinPairDD
 	{
 		/** State set L (should be visited only finitely often) */
-		private JDDNode L;
+		private final JDDNode finite;
 
 		/** State sets K_j (should all be visited infinitely often) */
-		private ArrayList<JDDNode> K_list;
+		private final List<JDDNode> infinite;
 
 		/**
 		 * Constructor with L and K_j state sets.
 		 * Becomes owner of the references of L and K_j's.
 		 */
-		public GenRabinPairDD(JDDNode L, ArrayList<JDDNode> K_list)
+		public GenRabinPairDD(JDDNode L, List<JDDNode> K_list)
 		{
-			this.L = L;
-			this.K_list = K_list;
+			this.finite = L;
+			this.infinite = K_list;
 		}
 
 		/** Clear resources of the state sets */
 		public void clear()
 		{
-			if (L != null)
-				JDD.Deref(L);
-			for (JDDNode K_j : K_list)
+			if (finite != null)
+				JDD.Deref(finite);
+			for (JDDNode K_j : infinite)
 				JDD.Deref(K_j);
 		}
 
-		/** Get a referenced copy of the state set L.
+		/** Get a referenced copy of the state set finite.
 		 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
 		 */
-		public JDDNode getL()
+		public JDDNode getFinite()
 		{
-			JDD.Ref(L);
-			return L;
+			JDD.Ref(finite);
+			return finite;
 		}
 
-		/** Get the number of K_j sets */
-		public int getNumK()
+		/** Get the number of infinite sets */
+		public int getNumInfinite()
 		{
-			return K_list.size();
+			return infinite.size();
 		}
 
-		/** Get a referenced copy of the state set K_j.
+		/** Get a referenced copy of the state set infinite.
 		 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
 		 */
-		public JDDNode getK(int j)
+		public JDDNode getInfinite(int j)
 		{
-			JDD.Ref(K_list.get(j));
-			return K_list.get(j);
+			JDD.Ref(infinite.get(j));
+			return infinite.get(j);
 		}
 
 		/** Returns true if the bottom strongly connected component
@@ -110,30 +110,16 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		 */
 		public boolean isBSCCAccepting(JDDNode bscc_states)
 		{
-			if (JDD.AreIntersecting(L, bscc_states)) {
-				// there is some state in bscc_states that is
-				// forbidden by L
-				return false;
-			}
-
-			for (JDDNode K_j : K_list) {
-				if (!JDD.AreIntersecting(K_j, bscc_states)) {
-					// there is some state in bscc_states that is
-					// contained in K_j -> infinitely often visits to K_j
-					return false;
-				}
-			}
-
-			return true;
+			return (!JDD.AreIntersecting(bscc_states, finite)) && infinite.stream().allMatch(inf -> JDD.AreIntersecting(inf, bscc_states));
 		}
 
 		/** Returns a textual representation of this Rabin pair. */
 		@Override
 		public String toString()
 		{
-			String s = "(" + L;
-			for (JDDNode K_j : K_list)
-				s += "," + K_j;
+			String s = "(" + finite;
+			for (JDDNode inf : infinite)
+				s += "," + inf;
 			s += ")";
 			return s;
 		}
@@ -154,7 +140,7 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 				newL = JDD.SetVectorElement(newL, ddRowVars, i, 1.0);
 			}
 
-			ArrayList<JDDNode> newK_list = new ArrayList<JDDNode>();
+			ArrayList<JDDNode> newK_list = new ArrayList<>();
 			int n = pair.getNumK();
 			for (int j = 0; j < n; j++) {
 				JDDNode newK_j = JDD.Constant(0);
@@ -169,6 +155,14 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		}
 	}
 
+	/**
+	 * This constructor should be only used by subclasses that know how to fill themselves up with acceptance pairs 
+	 */
+	protected AcceptanceGenRabinDD()
+	{
+		super();
+	}
+
 	@Override
 	public boolean isBSCCAccepting(JDDNode bscc_states)
 	{
@@ -180,12 +174,11 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		return false;
 	}
 
+
 	@Override
 	public void clear()
 	{
-		for (GenRabinPairDD pair : this) {
-			pair.clear();
-		}
+		this.forEach(p -> p.clear());
 		super.clear();
 	}
 
@@ -210,19 +203,5 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.GENERALIZED_RABIN;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 }

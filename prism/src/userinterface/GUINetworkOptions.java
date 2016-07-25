@@ -26,9 +26,6 @@
 
 package userinterface;
 
-import java.util.*;
-import org.w3c.dom.*;
-
 public class GUINetworkOptions extends OptionsPanel
 {
 
@@ -59,7 +56,7 @@ public class GUINetworkOptions extends OptionsPanel
 		jLabel1 = new javax.swing.JLabel();
 		jPanel6 = new javax.swing.JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
-		networkList = new javax.swing.JList();
+		networkList = new javax.swing.JList<>();
 		newButton = new javax.swing.JButton();
 		importButton = new javax.swing.JButton();
 		editButton = new javax.swing.JButton();
@@ -291,40 +288,8 @@ public class GUINetworkOptions extends OptionsPanel
 
 	}
 
-	public void defaultGUI()
-	{
-
-	}
-
 	@Override
 	public void synchronizeGUI()
-	{
-
-	}
-
-	public boolean valid()
-	{
-		return true;
-	}
-
-	public void loadXMLElement(Document doc, Element element)
-	{
-
-	}
-
-	public Element saveXMLElement(Document doc) throws DOMException
-	{
-
-		//Element e = doc.createElement("network")
-
-		return null;
-	}
-
-	public void loadProperties(Properties properties)
-	{
-	}
-
-	public void saveProperties(Properties properties)
 	{
 
 	}
@@ -346,7 +311,7 @@ public class GUINetworkOptions extends OptionsPanel
 	private javax.swing.JPanel jPanel8;
 	private javax.swing.JPanel jPanel9;
 	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JList networkList;
+	private javax.swing.JList<?> networkList;
 	private javax.swing.JButton newButton;
 	private javax.swing.JButton pasteButton;
 	// End of variables declaration//GEN-END:variables

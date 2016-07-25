@@ -21,10 +21,10 @@
 package jltl2dstar;
 
 /** A state representing a union state from two DA. */
-public class UnionState implements Comparable<UnionState>, NBA2DAState
+class UnionState implements Comparable<UnionState>, NBA2DAState
 {
 
-	public static class Result implements NBA2DAResult<UnionState>
+	static class Result implements NBA2DAResult<UnionState>
 	{
 		private UnionState state;
 

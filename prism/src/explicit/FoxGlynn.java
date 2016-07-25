@@ -79,7 +79,7 @@ public final class FoxGlynn
 			double lastval; //(probability that exactly k events occur)/expcoef
 			double accum; //(probability that 0 to k events occur)/expcoef
 			double desval = (1 - (accuracy / 2.0)) / expcoef; //value that we want to accumulate in accum before we stop
-			java.util.Vector<Double> w = new java.util.Vector<Double>(); //stores weights computed so far.
+			java.util.Vector<Double> w = new java.util.Vector<>(); //stores weights computed so far.
 
 			//k=0 is simple
 			lastval = 1;
@@ -196,9 +196,6 @@ public final class FoxGlynn
 
 	public static void test()
 	{
-		double[] weights;
-		double totalWeight = 0.0;
-		int left, right;
 
 		FoxGlynn w = null;
 		try {
@@ -208,10 +205,10 @@ public final class FoxGlynn
 		} catch (PrismException e) {
 			// ...
 		}
-		weights = w.getWeights();
-		left = w.getLeftTruncationPoint();
-		right = w.getRightTruncationPoint();
-		totalWeight = w.getTotalWeight();
+		w.getWeights();
+		w.getLeftTruncationPoint();
+		w.getRightTruncationPoint();
+		w.getTotalWeight();
 		w = null;
 	}
 

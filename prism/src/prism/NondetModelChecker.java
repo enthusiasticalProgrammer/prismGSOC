@@ -29,8 +29,6 @@
 
 package prism;
 
-import hybrid.PrismHybrid;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -39,6 +37,17 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Vector;
 
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaDD;
+import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceReachDD;
+import acceptance.AcceptanceType;
+import automata.DA;
+import automata.LTL2DA;
+import dv.DoubleVector;
+import dv.IntegerVector;
+import explicit.MinMax;
+import hybrid.PrismHybrid;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -62,16 +71,6 @@ import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
 import sparse.PrismSparse;
 import strat.MDStrategyIV;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceOmegaDD;
-import acceptance.AcceptanceRabin;
-import acceptance.AcceptanceReachDD;
-import acceptance.AcceptanceType;
-import automata.DA;
-import automata.LTL2DA;
-import dv.DoubleVector;
-import dv.IntegerVector;
-import explicit.MinMax;
 
 /*
  * Model checker for MDPs
@@ -369,7 +368,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		// Boolean
 		if (exprSub.getType() instanceof TypeBool) {
 			// Copy expression because we will modify it
-			exprSub = (ExpressionStrategy) exprSub.deepCopy();
+			exprSub = exprSub.deepCopy();
 			// We will solve an existential query, so negate if universal
 			if (forAll) {
 				exprSub = Expression.Not(exprSub);
@@ -430,7 +429,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	protected StateValues checkExpressionMultiObjective(ExpressionFunc expr) throws PrismException
 	{
 		// Extract objective list from 'multi' function
-		List<Expression> exprs = new ArrayList<Expression>();
+		List<Expression> exprs = new ArrayList<>();
 		int n = expr.getNumOperands();
 		for (int i = 0; i < n; i++) {
 			exprs.add(expr.getOperand(i));
@@ -482,8 +481,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		// Check format and extract bounds/etc.
 		int numObjectives = exprs.size();
 		OpsAndBoundsList opsAndBounds = new OpsAndBoundsList();
-		List<JDDNode> transRewardsList = new ArrayList<JDDNode>();
-		List<Expression> pathFormulas = new ArrayList<Expression>(numObjectives);
+		List<JDDNode> transRewardsList = new ArrayList<>();
+		List<Expression> pathFormulas = new ArrayList<>(numObjectives);
 		for (int i = 0; i < numObjectives; i++) {
 			extractInfoFromMultiObjectiveOperand((ExpressionQuant) exprs.get(i), opsAndBounds, transRewardsList, pathFormulas, i);
 		}
@@ -539,7 +538,7 @@ public class NondetModelChecker extends NonProbModelChecker
 		outputProductMulti(modelProduct);
 
 		// Construct rewards for product model
-		List<JDDNode> transRewardsListProduct = new ArrayList<JDDNode>();
+		List<JDDNode> transRewardsListProduct = new ArrayList<>();
 		for (JDDNode transRewards : transRewardsList) {
 			JDD.Ref(transRewards);
 			JDD.Ref(modelProduct.getTrans01());
@@ -557,14 +556,14 @@ public class NondetModelChecker extends NonProbModelChecker
 		boolean transchanged = mcMo.removeNonZeroRewardTrans(modelProduct, transRewardsList, opsAndBounds);
 
 		// Compute all maximal end components
-		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<ArrayList<JDDNode>>(numObjectives);
-		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<ArrayList<JDDNode>>(numObjectives);
+		ArrayList<ArrayList<JDDNode>> allstatesH = new ArrayList<>(numObjectives);
+		ArrayList<ArrayList<JDDNode>> allstatesL = new ArrayList<>(numObjectives);
 		JDDNode acceptanceVector_H = JDD.Constant(0);
 		JDDNode acceptanceVector_L = JDD.Constant(0);
 		for (int i = 0; i < numObjectives; i++) {
 			if (opsAndBounds.isProbabilityObjective(i)) {
-				ArrayList<JDDNode> statesH = new ArrayList<JDDNode>();
-				ArrayList<JDDNode> statesL = new ArrayList<JDDNode>();
+				ArrayList<JDDNode> statesH = new ArrayList<>();
+				ArrayList<JDDNode> statesL = new ArrayList<>();
 				for (int k = 0; k < dra[i].getAcceptance().size(); k++) {
 					JDDNode tmpH = JDD.Constant(0);
 					JDDNode tmpL = JDD.Constant(0);
@@ -596,7 +595,7 @@ public class NondetModelChecker extends NonProbModelChecker
 				draDDColVars, opsAndBounds, numObjectives);
 
 		// Create array to store BDDs for targets (i.e. accepting EC states); probability objectives only 
-		List<JDDNode> targetDDs = new ArrayList<JDDNode>(numObjectives);
+		List<JDDNode> targetDDs = new ArrayList<>(numObjectives);
 		for (int i = 0; i < numObjectives; i++) {
 			if (opsAndBounds.isProbabilityObjective(i)) {
 				mainLog.println("\nFinding accepting end components for " + pathFormulas.get(i).toString() + "...");
@@ -616,8 +615,8 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		// check if there are conflicts in objectives
 		if (conflictformulae > 1) {
-			multitargetDDs = new ArrayList<JDDNode>();
-			multitargetIDs = new ArrayList<Integer>();
+			multitargetDDs = new ArrayList<>();
+			multitargetIDs = new ArrayList<>();
 			mcMo.checkConflictsInObjectives(modelProduct, mcLtl, conflictformulae, numObjectives, opsAndBounds, dra, draDDRowVars, draDDColVars, targetDDs,
 					allstatesH, allstatesL, multitargetDDs, multitargetIDs);
 		}
@@ -808,7 +807,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	protected void addDummyFormula(NondetModel modelProduct, LTLModelChecker mcLtl, List<JDDNode> targetDDs, OpsAndBoundsList opsAndBounds)
 			throws PrismException
 	{
-		List<JDDNode> tmpecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach());
+		List<JDDNode> tmpecs = mcLtl.findMECStates(modelProduct, modelProduct.getReach(), null);
 		JDDNode acceptingStates = JDD.Constant(0);
 		for (JDDNode set : tmpecs)
 			acceptingStates = JDD.Or(acceptingStates, set);
@@ -1141,7 +1140,7 @@ public class NondetModelChecker extends NonProbModelChecker
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct = null, probs = null;
-		Vector<JDDNode> labelDDs = new Vector<JDDNode>();
+		Vector<JDDNode> labelDDs = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		NondetModel modelProduct;
 		NondetModelChecker mcProduct;
@@ -1196,7 +1195,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		}
 
 		// Find accepting states + compute reachability probabilities
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
+				labelDDs, modelProduct);
 		JDDNode acc;
 		if (acceptance instanceof AcceptanceReachDD) {
 			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
@@ -1401,14 +1401,14 @@ public class NondetModelChecker extends NonProbModelChecker
 		mcLtl = new LTLModelChecker(prism);
 
 		// Model check maximal state formulas
-		labelDDs = new Vector<JDDNode>();
+		labelDDs = new Vector<>();
 		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelDDs);
 
 		// Convert LTL formula to deterministic automaton (DA)
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
-		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED };
 		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
 		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
@@ -1457,7 +1457,8 @@ public class NondetModelChecker extends NonProbModelChecker
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
 
 		// Find accepting states + compute reachability rewards
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
+				labelDDs, modelProduct);
 		JDDNode acc = null;
 		if (acceptance instanceof AcceptanceReachDD) {
 			// For a DFA, just collect the accept states

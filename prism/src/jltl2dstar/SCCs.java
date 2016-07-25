@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import jltl2ba.MyBitSet;
 
-public class SCCs
+class SCCs
 {
 
 	/**
@@ -42,11 +42,11 @@ public class SCCs
 	/** Constructor */
 	public SCCs()
 	{
-		_sccs = new Vector<MyBitSet>();
-		_state_to_scc = new Vector<Integer>();
-		_dag = new Vector<MyBitSet>();
-		_topological_order = new Vector<Integer>();
-		_reachability = new Vector<MyBitSet>();
+		_sccs = new Vector<>();
+		_state_to_scc = new Vector<>();
+		_dag = new Vector<>();
+		_topological_order = new Vector<>();
+		_reachability = new Vector<>();
 		_graph_is_disjoint = false;
 	}
 
@@ -109,7 +109,7 @@ public class SCCs
 	 */
 	public Vector<MyBitSet> getReachabilityForAllStates()
 	{
-		Vector<MyBitSet> v = new Vector<MyBitSet>();
+		Vector<MyBitSet> v = new Vector<>();
 		v.setSize(_state_to_scc.size());
 
 		for (int i = 0; i < _state_to_scc.size(); ++i) {

@@ -87,7 +87,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 		TreeMap<Integer, Double> sorted;
 		// Output transitions to .tra file
 		out.print(numStates + " " + getNumChoices() + " " + getNumTransitions() + "\n");
-		sorted = new TreeMap<Integer, Double>();
+		sorted = new TreeMap<>();
 		for (i = 0; i < numStates; i++) {
 			numChoices = getNumChoices(i);
 			for (j = 0; j < numChoices; j++) {
@@ -176,7 +176,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 			out = new FileWriter(filename);
 			out.write(getModelType().keyword() + "\n");
 			out.write("module M\nx : [0.." + (numStates - 1) + "];\n");
-			sorted = new TreeMap<Integer, Double>();
+			sorted = new TreeMap<>();
 			for (i = 0; i < numStates; i++) {
 				numChoices = getNumChoices(i);
 				for (j = 0; j < numChoices; j++) {
@@ -215,7 +215,7 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	@Override
 	public boolean areAllChoiceActionsUnique()
 	{
-		HashSet<Object> sActions = new HashSet<Object>();
+		HashSet<Object> sActions = new HashSet<>();
 		for (int s = 0; s < numStates; s++) {
 			int n = getNumChoices(s);
 			if (n > 1) {

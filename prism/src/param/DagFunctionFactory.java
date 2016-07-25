@@ -186,8 +186,8 @@ class DagFunctionFactory extends FunctionFactory
 		}
 		randomPosition = new Point(randomPosArr);
 
-		polynomials = new HashMap<DagOperator, DagOperator>();
-		functions = new HashMap<DagFunction, DagFunction>();
+		polynomials = new HashMap<>();
+		functions = new HashMap<>();
 		zeroOp = new Number(BigInteger.ZERO);
 		polynomials.put(zeroOp, zeroOp);
 		oneOp = new Number(BigInteger.ONE);

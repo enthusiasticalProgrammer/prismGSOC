@@ -20,7 +20,7 @@
 
 package jltl2dstar;
 
-public interface NBA2DAState
+interface NBA2DAState
 {
 	public void generateAcceptance(AcceptanceForState acceptance);
 

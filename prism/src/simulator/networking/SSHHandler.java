@@ -218,7 +218,7 @@ public class SSHHandler
 			this.userName = userName;
 			this.hostName = hostName;
 			this.owner = owner;
-			threads = new Vector<PingThread>();
+			threads = new Vector<>();
 		}
 
 		@Override

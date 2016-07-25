@@ -7,6 +7,7 @@ import java.util.*;
 import pta.*;
 import prism.PrismLangException;
 
+@SuppressWarnings("all")
 public class PTAParser implements PTAParserConstants
 {
 	//-----------------------------------------------------------------------------------

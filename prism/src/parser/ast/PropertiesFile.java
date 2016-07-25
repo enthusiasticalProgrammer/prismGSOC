@@ -64,8 +64,8 @@ public class PropertiesFile extends ASTElement
 		labelList = new LabelList();
 		combinedLabelList = new LabelList();
 		constantList = new ConstantList();
-		properties = new Vector<Property>();
-		allIdentsUsed = new Vector<String>();
+		properties = new Vector<>();
+		allIdentsUsed = new Vector<>();
 		constantValues = null;
 	}
 
@@ -292,7 +292,6 @@ public class PropertiesFile extends ASTElement
 
 		// Find all instances of variables (i.e. locate idents which are variables).
 		findAllVars(modelInfo.getVarNames(), modelInfo.getVarTypes());
-		findAllVars(modulesFile.getVarNames(), modulesFile.getVarTypes());
 
 		// Find all instances of property refs
 		findAllPropRefs(null, this);
@@ -301,9 +300,6 @@ public class PropertiesFile extends ASTElement
 
 		// Various semantic checks 
 		doSemanticChecks();
-
-		// Various semantic checks 
-		semanticCheck(modulesFile, this);
 		// Type checking
 		typeCheck(this);
 
@@ -352,7 +348,7 @@ public class PropertiesFile extends ASTElement
 		}
 		// go thru labels
 		n = labelList.size();
-		labelIdents = new Vector<String>();
+		labelIdents = new Vector<>();
 		for (i = 0; i < n; i++) {
 			s = labelList.getLabelName(i);
 			// see if ident has been used already for a label in model file
@@ -408,7 +404,7 @@ public class PropertiesFile extends ASTElement
 		mfLabels = modulesFile.getLabelList();
 		// Go thru properties
 		n = properties.size();
-		propNames = new Vector<String>();
+		propNames = new Vector<>();
 		for (i = 0; i < n; i++) {
 			s = properties.get(i).getName();
 			if (s == null)
@@ -488,7 +484,7 @@ public class PropertiesFile extends ASTElement
 		int i, n;
 		Expression expr;
 		Vector<String> consts, tmp;
-		consts = new Vector<String>();
+		consts = new Vector<>();
 		n = labelList.size();
 		for (i = 0; i < n; i++) {
 			expr = labelList.getLabel(i);
@@ -520,7 +516,7 @@ public class PropertiesFile extends ASTElement
 	public Vector<String> getUndefinedConstantsUsedInProperties(List<Property> props)
 	{
 		Vector<String> consts, tmp;
-		consts = new Vector<String>();
+		consts = new Vector<>();
 		for (Property prop : props) {
 			tmp = prop.getExpression().getAllUndefinedConstantsRecursively(constantList, combinedLabelList, this);
 			for (String s : tmp) {
@@ -643,7 +639,7 @@ public class PropertiesFile extends ASTElement
 		ret.setConstantList((ConstantList) constantList.deepCopy());
 		n = getNumProperties();
 		for (i = 0; i < n; i++) {
-			ret.addProperty((Property) getPropertyObject(i).deepCopy());
+			ret.addProperty(getPropertyObject(i).deepCopy());
 		}
 		// Copy other (generated) info
 		ret.allIdentsUsed = (allIdentsUsed == null) ? null : (Vector<String>) allIdentsUsed.clone();

@@ -33,7 +33,7 @@ public class TypeArray extends Type
 	private static Map<Type, TypeArray> singletons;
 
 	static {
-		singletons = new HashMap<Type, TypeArray>();
+		singletons = new HashMap<>();
 	}
 
 	private Type subType;

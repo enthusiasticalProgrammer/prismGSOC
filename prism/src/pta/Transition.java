@@ -55,8 +55,8 @@ public class Transition
 		this.parent = parent;
 		this.src = src;
 		this.action = action;
-		guard = new LinkedHashSet<Constraint>();
-		edges = new ArrayList<Edge>();
+		guard = new LinkedHashSet<>();
+		edges = new ArrayList<>();
 	}
 
 	/**

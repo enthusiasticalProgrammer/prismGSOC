@@ -58,9 +58,9 @@ public final class SubNondetModel implements NondetModel
 	private Map<Integer, BitSet> actions = null;
 	private BitSet initialStates = null;
 	private List<State> statesList = null;
-	private Map<Integer, Integer> stateLookupTable = new HashMap<Integer, Integer>();
-	private Map<Integer, Map<Integer, Integer>> actionLookupTable = new HashMap<Integer, Map<Integer, Integer>>();
-	private Map<Integer, Integer> inverseStateLookupTable = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> stateLookupTable = new HashMap<>();
+	private Map<Integer, Map<Integer, Integer>> actionLookupTable = new HashMap<>();
+	private Map<Integer, Integer> inverseStateLookupTable = new HashMap<>();
 
 	/**
 	 * (Optionally) the stored predecessor relation. Becomes inaccurate after the model is changed!
@@ -103,7 +103,7 @@ public final class SubNondetModel implements NondetModel
 	@Override
 	public Iterable<Integer> getInitialStates()
 	{
-		List<Integer> is = new ArrayList<Integer>();
+		List<Integer> is = new ArrayList<>();
 		for (int i = initialStates.nextSetBit(0); i >= 0; i = initialStates.nextSetBit(i + 1)) {
 			is.add(translateState(i));
 		}
@@ -165,7 +165,7 @@ public final class SubNondetModel implements NondetModel
 
 	private List<State> generateSubStateList(BitSet states)
 	{
-		List<State> statesList = new ArrayList<State>();
+		List<State> statesList = new ArrayList<>();
 		for (int i : new IterableStateSet(states, model.getNumStates())) {
 			statesList.add(model.getStatesList().get(i));
 		}
@@ -208,7 +208,7 @@ public final class SubNondetModel implements NondetModel
 	public Iterator<Integer> getSuccessorsIterator(int s)
 	{
 		s = translateState(s);
-		HashSet<Integer> succs = new HashSet<Integer>();
+		HashSet<Integer> succs = new HashSet<>();
 		for (int i : new IterableStateSet(actions.get(s), model.getNumChoices(s))) {
 			Iterator<Integer> it = model.getSuccessorsIterator(s, i);
 			while (it.hasNext()) {
@@ -402,7 +402,7 @@ public final class SubNondetModel implements NondetModel
 	{
 		int sOriginal = translateState(s);
 		int iOriginal = translateAction(s, i);
-		List<Integer> succ = new ArrayList<Integer>();
+		List<Integer> succ = new ArrayList<>();
 		Iterator<Integer> it = model.getSuccessorsIterator(sOriginal, iOriginal);
 		while (it.hasNext()) {
 			int j = it.next();
@@ -471,7 +471,7 @@ public final class SubNondetModel implements NondetModel
 		for (int i : new IterableStateSet(states, model.getNumStates())) {
 			inverseStateLookupTable.put(i, stateLookupTable.size());
 			stateLookupTable.put(stateLookupTable.size(), i);
-			Map<Integer, Integer> r = new HashMap<Integer, Integer>();
+			Map<Integer, Integer> r = new HashMap<>();
 			for (int j : new IterableStateSet(actions.get(i), model.getNumChoices(i))) {
 				r.put(r.size(), j);
 			}

@@ -188,7 +188,7 @@ public class GUIPropConstantList extends JTable
 
 		public GUIConstant getConstant(int i)
 		{
-			return (GUIConstant) constants.get(i);
+			return constants.get(i);
 		}
 
 		public Exception getError()
@@ -332,7 +332,7 @@ public class GUIPropConstantList extends JTable
 			GUIConstant gc = getConstant(rowIndex);
 			switch (columnIndex) {
 			case 0: {
-				if (!gc.name.equals((String) aValue)) {
+				if (!gc.name.equals(aValue)) {
 					gc.name = (String) aValue;
 					gc.parse();
 					validateConstants();
@@ -356,7 +356,7 @@ public class GUIPropConstantList extends JTable
 				break;
 			}
 			case 2: {
-				if (!gc.constant.equals((String) aValue)) {
+				if (!gc.constant.equals(aValue)) {
 					gc.constant = (String) aValue;
 					gc.parse();
 					validateConstants();

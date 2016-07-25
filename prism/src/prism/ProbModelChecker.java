@@ -26,8 +26,6 @@
 
 package prism;
 
-import hybrid.PrismHybrid;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -41,6 +39,8 @@ import acceptance.AcceptanceReachDD;
 import acceptance.AcceptanceType;
 import automata.DA;
 import automata.LTL2DA;
+import dv.DoubleVector;
+import hybrid.PrismHybrid;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -58,7 +58,6 @@ import parser.type.TypeBool;
 import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
 import sparse.PrismSparse;
-import dv.DoubleVector;
 
 /*
  * Model checker for DTMCs.
@@ -277,9 +276,6 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	protected StateValues checkExpressionSteadyState(ExpressionSS expr) throws PrismException
 	{
-		Expression pb; // probability bound (expression)
-		double p = 0; // probability bound (actual value)
-		String relOp; // relational operator
 
 		// BSCC stuff
 		List<JDDNode> bsccs = null;
@@ -319,7 +315,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Unless we've been told to skip it
 			else {
 				mainLog.println("\nSkipping BSCC computation...");
-				bsccs = new Vector<JDDNode>();
+				bsccs = new Vector<>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
 				notInBSCCs = JDD.Constant(0);
@@ -513,7 +509,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct = null, probs = null;
-		Vector<JDDNode> labelDDs = new Vector<JDDNode>();
+		Vector<JDDNode> labelDDs = new Vector<>();
 		DA<BitSet, ? extends AcceptanceOmega> da;
 		ProbModel modelProduct;
 		ProbModelChecker mcProduct;
@@ -521,7 +517,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDDVars daDDRowVars, daDDColVars;
 		int i;
 
-		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERIC };
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERIC,
+				AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED };
 		mcLtl = new LTLModelChecker(prism);
 		da = mcLtl.constructDAForLTLFormula(this, model, expr, labelDDs, allowedAcceptance);
 
@@ -550,7 +547,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 
 		// Find accepting states + compute reachability probabilities
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
+				labelDDs, modelProduct);
 		JDDNode acc;
 		if (acceptance instanceof AcceptanceReachDD) {
 			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
@@ -896,14 +894,14 @@ public class ProbModelChecker extends NonProbModelChecker
 		mcLtl = new LTLModelChecker(prism);
 
 		// Model check maximal state formulas
-		labelDDs = new Vector<JDDNode>();
+		labelDDs = new Vector<>();
 		ltl = mcLtl.checkMaximalStateFormulas(this, model, expr.deepCopy(), labelDDs);
 
 		// Convert LTL formula to deterministic automaton (DA)
 		mainLog.println("\nBuilding deterministic automaton (for " + ltl + ")...");
 		l = System.currentTimeMillis();
 		LTL2DA ltl2da = new LTL2DA(prism);
-		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED };
 		da = ltl2da.convertLTLFormulaToDA(ltl, constantValues, allowedAcceptance);
 		mainLog.println(da.getAutomataType() + " has " + da.size() + " states, " + da.getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
@@ -953,7 +951,8 @@ public class ProbModelChecker extends NonProbModelChecker
 		JDDNode transRewardsProduct = JDD.Apply(JDD.TIMES, transRewards, modelProduct.getTrans01());
 
 		// Find accepting states + compute reachability rewards
-		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars);
+		AcceptanceOmegaDD acceptance = da.getAcceptance().toAcceptanceDD(daDDRowVars, daDDColVars, modelProduct.allDDRowVars, modelProduct.allDDColVars, da,
+				labelDDs, modelProduct);
 		JDDNode acc = null;
 		if (acceptance instanceof AcceptanceReachDD) {
 			mainLog.println("\nSkipping BSCC computation since acceptance is defined via goal states...");
@@ -1026,7 +1025,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		// unless we've been told to skip it
 		else {
 			mainLog.println("\nSkipping BSCC computation...");
-			vectBSCCs = new Vector<JDDNode>();
+			vectBSCCs = new Vector<>();
 			JDD.Ref(reach);
 			vectBSCCs.add(reach);
 			notInBSCCs = JDD.Constant(0);
@@ -1884,7 +1883,7 @@ public class ProbModelChecker extends NonProbModelChecker
 			// Unless we've been told to skip it
 			else {
 				mainLog.println("\nSkipping BSCC computation...");
-				bsccs = new Vector<JDDNode>();
+				bsccs = new Vector<>();
 				JDD.Ref(reach);
 				bsccs.add(reach);
 				notInBSCCs = JDD.Constant(0);

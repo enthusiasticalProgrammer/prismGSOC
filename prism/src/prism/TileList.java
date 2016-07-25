@@ -119,10 +119,10 @@ public class TileList
 	}
 
 	static {
-		storedFormulasX = new ArrayList<Expression>();
-		storedFormulasY = new ArrayList<Expression>();
-		storedFormulas = new ArrayList<Expression>();
-		storedTileLists = new ArrayList<TileList>();
+		storedFormulasX = new ArrayList<>();
+		storedFormulasY = new ArrayList<>();
+		storedFormulas = new ArrayList<>();
+		storedTileLists = new ArrayList<>();
 	}
 
 	protected int currentProjectionIndex = 0;
@@ -149,7 +149,7 @@ public class TileList
 	{
 		this.dim = initialTile.cornerPoints.get(0).getDimension();
 		this.initialTile = initialTile;
-		this.list = new ArrayList<Tile>();
+		this.list = new ArrayList<>();
 		this.list.add(initialTile);
 		this.opsAndBoundsList = opsAndBounds;
 		this.tolerance = tolerance;
@@ -242,7 +242,7 @@ public class TileList
 	 */
 	public List<Point> getPoints()
 	{
-		ArrayList<Point> a = new ArrayList<Point>();
+		ArrayList<Point> a = new ArrayList<>();
 		for (Tile t : this.list) {
 			for (Point p : t.cornerPoints)
 				if (!a.contains(p))
@@ -334,14 +334,14 @@ public class TileList
 	{
 		//System.out.println("really processing point " + point);
 
-		ArrayList<Tile> affectedTiles = new ArrayList<Tile>();
+		ArrayList<Tile> affectedTiles = new ArrayList<>();
 		for (Tile t : this.list) {
 			boolean affected = t.processNewPoint(point, true, this.currentProjectionIndex);
 			if (affected)
 				affectedTiles.add(t);
 		}
 
-		ArrayList<Point> allPoints = new ArrayList<Point>();
+		ArrayList<Point> allPoints = new ArrayList<>();
 		for (Tile t : affectedTiles) {
 			allPoints.addAll(t.cornerPoints);
 		}

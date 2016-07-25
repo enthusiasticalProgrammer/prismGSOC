@@ -142,7 +142,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	public Iterator<Integer> getSuccessorsIterator(final int s)
 	{
 		if (exitRates[s] == 0) {
-			List<Integer> list = new ArrayList<Integer>(1);
+			List<Integer> list = new ArrayList<>(1);
 			list.add(s);
 			return list.iterator();
 		} else {
@@ -251,7 +251,7 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 	{
 		if (exitRates[s] == 0) {
 			// return prob-1 self-loop
-			Map<Integer, Double> m = new TreeMap<Integer, Double>();
+			Map<Integer, Double> m = new TreeMap<>();
 			m.put(s, 1.0);
 			return m.entrySet().iterator();
 		} else {
@@ -336,8 +336,8 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 		// Exit rate > 0
 		else {
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			d /= er;
@@ -366,8 +366,8 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			// = (sum_{j!=s} (R(s,j)/E(s))*vect[j]) / (1-(P(s,s)/E(s)))
 			// = (sum_{j!=s} R(s,j)*vect[j]) / (E(s)-P(s,s))
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				// Non-diagonal entries only
 				if (k != s) {
 					d += prob * vect[k];
@@ -398,8 +398,8 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 		// Exit rate > 0
 		else {
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				d += prob * vect[k];
 			}
 			d /= er;
@@ -429,8 +429,8 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			// = (E(s)*rew(s) + sum_{j!=s} R(s,j)*vect[j]) / (E(s)-P(s,s))
 			d = er * mcRewards.getStateReward(s);
 			for (Map.Entry<Integer, Double> e : distr) {
-				k = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				k = e.getKey();
+				prob = e.getValue();
 				// Non-diagonal entries only
 				if (k != s) {
 					d += prob * vect[k];
@@ -466,8 +466,8 @@ public class DTMCEmbeddedSimple extends DTMCExplicit
 			// Exit rate > 0
 			else {
 				for (Map.Entry<Integer, Double> e : distr) {
-					j = (Integer) e.getKey();
-					prob = (Double) e.getValue();
+					j = e.getKey();
+					prob = e.getValue();
 					result[j] += (prob / er) * vect[i];
 				}
 			}

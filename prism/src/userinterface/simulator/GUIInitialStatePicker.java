@@ -343,7 +343,7 @@ public class GUIInitialStatePicker extends javax.swing.JDialog implements KeyLis
 
 		public DefineValuesTable()
 		{
-			values = new ArrayList<Value>();
+			values = new ArrayList<>();
 		}
 
 		public void addValue(Value v)

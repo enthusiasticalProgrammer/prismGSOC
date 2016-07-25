@@ -13,14 +13,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-import prism.PrismLog;
 import explicit.DTMC;
 import explicit.DTMCProductMLRStrategyAndMDP;
 import explicit.Distribution;
 import explicit.MDPSparse;
 import explicit.Model;
+import prism.PrismLog;
 
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
@@ -166,7 +164,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public @NonNull Model buildProduct(Model model)
+	public Model buildProduct(Model model)
 	{
 		if (model == null) {
 			throw new NullPointerException();
@@ -174,7 +172,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		return buildProductFromMDPExplicit((MDPSparse) model);
 	}
 
-	public @NonNull DTMC buildProductFromMDPExplicit(@NonNull MDPSparse model)
+	public DTMC buildProductFromMDPExplicit(MDPSparse model)
 	{
 		return new DTMCProductMLRStrategyAndMDP(model, this);
 	}
@@ -232,7 +230,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			if (mem < -1 || mem >= recurrentChoices.length) {
 				throw new IllegalArgumentException("only values from -1 to " + recurrentChoices.length + " are allowed");
 			}
-			this.strategy = (int) mem;
+			this.strategy = mem;
 		} else {
 			throw new IllegalArgumentException("Integer is required as argument, current type: " + memory.getClass());
 		}
@@ -285,7 +283,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public @NonNull String toString()
+	public String toString()
 	{
 		String result = "";
 		result += "transientChoices\n";

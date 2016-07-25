@@ -34,7 +34,7 @@ import prism.PrismException;
 /**
  * Provides optimizations on complete DRAs, notably quotienting using bisimulation.
  */
-public class DRAOptimizations
+class DRAOptimizations
 {
 
 	/** type of a color */
@@ -43,7 +43,7 @@ public class DRAOptimizations
 	// typedef std::vector<unsigned int> state_vector;
 
 	/** Helper class, storing a coloring of the states */
-	public static class Coloring
+	static class Coloring
 	{
 
 		/** The number of colors */
@@ -75,11 +75,11 @@ public class DRAOptimizations
 		{
 			_nr_of_colors = 0;
 			_detailed = detailed;
-			_coloring = new Vector<Integer>(dra.size());
+			_coloring = new Vector<>(dra.size());
 			_coloring.setSize(dra.size());
-			_color2state = new Vector<Integer>();
+			_color2state = new Vector<>();
 			if (_detailed) {
-				_color2states = new Vector<MyBitSet>();
+				_color2states = new Vector<>();
 			} else {
 				_color2states = null;
 			}
@@ -94,12 +94,12 @@ public class DRAOptimizations
 		{
 			_nr_of_colors = 0;
 			_detailed = detailed;
-			_coloring = new Vector<Integer>(size);
+			_coloring = new Vector<>(size);
 			_coloring.setSize(size);
-			_color2state = new Vector<Integer>();
+			_color2state = new Vector<>();
 
 			if (_detailed) {
-				_color2states = new Vector<MyBitSet>();
+				_color2states = new Vector<>();
 			} else {
 				_color2states = null;
 			}
@@ -210,7 +210,7 @@ public class DRAOptimizations
 	 * the states themself and the colors of the
 	 * to-states of the edges.
 	 */
-	public static class ColoredStateComparator implements Comparator<Integer>
+	static class ColoredStateComparator implements Comparator<Integer>
 	{
 
 		/** The coloring */
@@ -266,7 +266,7 @@ public class DRAOptimizations
 
 	/** Type of an acceptance signature */
 	// public typedef std::pair<BitSet*, BitSet*> acceptance_signature_t;
-	public static class AcceptanceSignature
+	static class AcceptanceSignature
 	{
 		public MyBitSet l;
 		public MyBitSet u;
@@ -280,7 +280,7 @@ public class DRAOptimizations
 	 * A container that stores (caches) the acceptance signatures of
 	 * all the states in a DRA.
 	 */
-	public static class AcceptanceSignatureContainer
+	static class AcceptanceSignatureContainer
 	{
 
 		/** Storage for the acceptance signatures */
@@ -292,7 +292,7 @@ public class DRAOptimizations
 		 */
 		public AcceptanceSignatureContainer(DRA dra)
 		{
-			_acceptancesig_vector = new Vector<AcceptanceSignature>(dra.size());
+			_acceptancesig_vector = new Vector<>(dra.size());
 
 			for (int i = 0; i < dra.size(); i++) {
 				_acceptancesig_vector.add(new AcceptanceSignature());
@@ -315,7 +315,7 @@ public class DRAOptimizations
 	 * Functor that compares two DRA states based on their
 	 * acceptance signature.
 	 */
-	public static class AcceptanceSignatureComparator implements Comparator<Integer>
+	static class AcceptanceSignatureComparator implements Comparator<Integer>
 	{
 		/** The acceptance signature container */
 		private AcceptanceSignatureContainer _container;
@@ -358,7 +358,7 @@ public class DRAOptimizations
 		if (!dra.isCompact())
 			dra.makeCompact();
 
-		Vector<Integer> states = new Vector<Integer>(dra.size());
+		Vector<Integer> states = new Vector<>(dra.size());
 		states.setSize(dra.size());
 
 		for (int i = 0; i < dra.size(); i++) {
@@ -411,9 +411,9 @@ public class DRAOptimizations
 	 */
 	private <T extends Comparator<Integer>> Coloring generateColoring(Vector<Integer> states, Coloring coloring, T comp)
 	{
-		Integer[] statearray = (Integer[]) states.toArray(new Integer[0]);
+		Integer[] statearray = states.toArray(new Integer[0]);
 		Arrays.sort(statearray, comp);
-		Vector<Integer> sortedstates = new Vector<Integer>(Arrays.asList(statearray));
+		Vector<Integer> sortedstates = new Vector<>(Arrays.asList(statearray));
 
 		Coloring result = new Coloring(coloring.size(), coloring.getFlagDetailed());
 

@@ -29,6 +29,8 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -45,7 +47,7 @@ import jdd.JDDVars;
  * The Streett condition is accepting if all pairs are accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> implements AcceptanceOmega
+public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> implements AcceptanceOmegaState
 {
 
 	/**
@@ -173,11 +175,11 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		for (StreettPair pair : this) {
-			pair.R = lifter.lift(pair.R);
-			pair.G = lifter.lift(pair.G);
+			pair.R = liftBitSet(lifter, pair.R);
+			pair.G = liftBitSet(lifter, pair.G);
 		}
 	}
 
@@ -206,7 +208,7 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN)) {
 			return complementToRabin();
@@ -228,10 +230,10 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	{
 		AcceptanceStreett result = new AcceptanceStreett();
 		for (StreettPair pair : this) {
-			result.add((StreettPair) pair.clone());
+			result.add(pair.clone());
 		}
 		for (StreettPair pair : other) {
-			result.add((StreettPair) pair.clone());
+			result.add(pair.clone());
 		}
 		return result;
 	}
@@ -317,20 +319,6 @@ public class AcceptanceStreett extends ArrayList<AcceptanceStreett.StreettPair> 
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.STREETT;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 
 	@Override

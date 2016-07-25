@@ -33,10 +33,10 @@ public class TestDTMCProductMLRStrategyAndMDP
 	public void testInitialStateHasCorrectSuccessors()
 	{
 		Iterator<Integer> s = dtmc.getSuccessorsIterator(0);
-		Set<Integer> successors = new HashSet<Integer>();
+		Set<Integer> successors = new HashSet<>();
 		s.forEachRemaining(i -> successors.add(i));
 
-		Set<Integer> correctSuccessors = new HashSet<Integer>();
+		Set<Integer> correctSuccessors = new HashSet<>();
 		correctSuccessors.add(13);
 		correctSuccessors.add(14);
 		correctSuccessors.add(7);

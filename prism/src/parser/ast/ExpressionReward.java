@@ -36,15 +36,9 @@ import prism.PrismLangException;
 
 public class ExpressionReward extends ExpressionQuant
 {
-	//both are de facto Expressions, but the mechanically generated PrismParser temporarily
-	//assigns them a String, also both are equivalent, but again the mechanically generated
-	//PrismParser uses them both
-	private Object rewardStructIndex = null;
-	private Object rewardStructIndexDiv = null;
+	protected Object rewardStructIndex = null;
+	protected Object rewardStructIndexDiv = null;
 	Expression reward = null;
-	Expression expression = null;
-	// Note: this "old-style" filter is just for display purposes
-	// The parser creates an (invisible) new-style filter around this expression
 
 	// Constructors
 
@@ -59,9 +53,17 @@ public class ExpressionReward extends ExpressionQuant
 		rewardStructIndex = o;
 	}
 
-	public void setReward(Expression p)
+	public void setRewardStructIndexDiv(Object o)
 	{
-		setBound(p);
+		rewardStructIndexDiv = o;
+	}
+
+	/**
+	 * Set the reward bound. Equivalent to {@code setBound(r)}.
+	 */
+	public void setReward(Expression r)
+	{
+		setBound(r);
 	}
 
 	@Override
@@ -81,6 +83,31 @@ public class ExpressionReward extends ExpressionQuant
 	public Object getRewardStructIndex()
 	{
 		return rewardStructIndex;
+	}
+
+	public Object getRewardStructIndexDiv()
+	{
+		return rewardStructIndexDiv;
+	}
+
+	/**
+	 * Get the reward bound. Equivalent to {@code getBound()}.
+	 */
+	public Expression getReward()
+	{
+		return getBound();
+	}
+
+	@Override
+	public Expression getExpression()
+	{
+		return expression;
+	}
+
+	@Override
+	public Filter getFilter()
+	{
+		return filter;
 	}
 
 	// Other methods
@@ -159,28 +186,6 @@ public class ExpressionReward extends ExpressionQuant
 
 	// Methods required for Expression:
 
-	public Expression getReward()
-	{
-		return getBound();
-	}
-
-	@Override
-	public Expression getExpression()
-	{
-		return expression;
-	}
-
-	@Override
-	public Filter getFilter()
-	{
-		return filter;
-	}
-
-	// Methods required for Expression:
-
-	/**
-	 * Is this expression constant?
-	 */
 	@Override
 	public boolean isConstant()
 	{
@@ -325,17 +330,6 @@ public class ExpressionReward extends ExpressionQuant
 		} else if (!rewardStructIndexDiv.equals(other.rewardStructIndexDiv))
 			return false;
 		return true;
-	}
-
-	public Object getRewardStructIndexDiv()
-	{
-		return rewardStructIndexDiv;
-	}
-
-	public void setRewardStructIndexDiv(Object rewardStructIndexDiv2)
-	{
-		rewardStructIndexDiv = rewardStructIndexDiv2;
-
 	}
 }
 

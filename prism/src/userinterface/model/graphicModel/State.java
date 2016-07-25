@@ -95,7 +95,7 @@ public class State implements PropertyOwner
 		invarient = new StringLabel("", this, "Invarient:");
 		invarient.setOffsetX(5);
 		invarient.setOffsetY(40);*/
-		associatedTransitions = new ArrayList<Transition>();
+		associatedTransitions = new ArrayList<>();
 
 		descriptor = "0";
 

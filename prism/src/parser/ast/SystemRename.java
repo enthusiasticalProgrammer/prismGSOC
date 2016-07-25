@@ -43,15 +43,15 @@ public class SystemRename extends SystemDefn
 
 	public SystemRename()
 	{
-		from = new Vector<String>();
-		to = new Vector<String>();
+		from = new Vector<>();
+		to = new Vector<>();
 	}
 
 	public SystemRename(SystemDefn s)
 	{
 		operand = s;
-		from = new Vector<String>();
-		to = new Vector<String>();
+		from = new Vector<>();
+		to = new Vector<>();
 	}
 
 	// Set methods
@@ -103,7 +103,7 @@ public class SystemRename extends SystemDefn
 		if (i == -1) {
 			return s;
 		} else {
-			return (String) to.elementAt(i);
+			return to.elementAt(i);
 		}
 	}
 

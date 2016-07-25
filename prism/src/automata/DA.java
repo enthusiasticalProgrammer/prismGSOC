@@ -32,16 +32,24 @@ package automata;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import acceptance.AcceptanceGenRabinTransition;
+import acceptance.AcceptanceOmega;
+import acceptance.AcceptanceOmegaTransition;
+import acceptance.AcceptanceRabin;
 import jltl2ba.APElement;
 import jltl2ba.APElementIterator;
 import prism.PrismException;
 import prism.PrismLog;
 import prism.PrismNotSupportedException;
 import prism.PrismPrintStreamLog;
-import acceptance.AcceptanceOmega;
-import acceptance.AcceptanceRabin;
 
 /**
  * Class to store a deterministic automata of some acceptance type Acceptance.
@@ -55,33 +63,52 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	private int size;
 	/** Start state (index) */
 	private int start;
-	/** Edges of DRA */
+	/** Edges of DA */
 	private List<List<Edge>> edges;
 	/** The acceptance condition (as BitSets) */
 	private Acceptance acceptance;
 
-	/** Local class to represent DRA edge */
-	class Edge
+	/** Public class to represent DA edge */
+	public class Edge
 	{
-		private Symbol label;
-		private int dest;
+		public Symbol label;
+		public int dest;
 
 		public Edge(Symbol label, int dest)
 		{
 			this.label = label;
 			this.dest = dest;
 		}
+
+		@Override
+		public boolean equals(Object other)
+		{
+			if (other == null) {
+				return false;
+			} else if (!(other instanceof DA.Edge)) {
+				return false;
+			} else {
+				Edge that = (DA<Symbol, Acceptance>.Edge) other;
+				return this.label.equals(that.label) && this.dest == that.dest;
+			}
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(this.label, this.dest);
+		}
 	}
 
 	/**
-	 * Construct a DRA of fixed size (i.e. fixed number of states).
+	 * Construct a DA of fixed size (i.e. fixed number of states).
 	 */
 	public DA(int size)
 	{
 		apList = null;
 		this.size = size;
 		this.start = -1;
-		edges = new ArrayList<List<Edge>>(size);
+		edges = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			edges.add(new ArrayList<Edge>());
 		}
@@ -136,6 +163,9 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 */
 	public void addEdge(int src, Symbol label, int dest)
 	{
+		if (label == null) {
+			throw new NullPointerException();
+		}
 		edges.get(src).add(new Edge(label, dest));
 	}
 
@@ -226,7 +256,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Print the DRA in ltl2dstar v2 format to the output stream.
+	 * Print the DA in ltl2dstar v2 format to the output stream.
 	 * @param out the output stream 
 	 */
 	public static void printLtl2dstar(DA<BitSet, AcceptanceRabin> dra, PrintStream out) throws PrismException
@@ -305,29 +335,15 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 				String labelString = "[" + APElement.toStringHOA((BitSet) label, apList.size()) + "]";
 				out.print(labelString);
 				out.print(" ");
-				out.println(edge.dest);
+				out.print(edge.dest);
+				if (acceptance instanceof AcceptanceOmegaTransition) {
+					out.println(((AcceptanceOmegaTransition) acceptance).getSignatureForEdgeHOA(i, (BitSet) edge.label));
+				} else {
+					out.println("");
+				}
 			}
 		}
 		out.println("--END--");
-	}
-
-	/**
-	 * Print automaton to a PrismLog in a specified format ("dot" or "txt").
-	 */
-	public void print(PrismLog out, String type)
-	{
-		switch (type) {
-		case "txt":
-			out.println(toString());
-			break;
-		case "dot":
-			printDot(out);
-			break;
-		// Default to txt
-		default:
-			out.println(toString());
-			break;
-		}
 	}
 
 	/**
@@ -429,5 +445,71 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			}
 		}
 		// We are fine with an empty apList or an apList that lacks some of the expected Li.
+	}
+
+	public Set<Edge> getAllEdgesFrom(int i)
+	{
+		return new HashSet<>(edges.get(i));
+	}
+
+	/**
+	 * This method completes the DA by adding a trapState and adjusting the acceptance.
+	 * This method is currently only used for an automaton obtained by Rabinizer; therefore,
+	 *  it currently supports only AcceptanceGenRabinTransition as acceptance (and Bitset as Symbol).
+	 */
+	public void complete()
+	{
+		Collection<Integer> uncompleteStates = statesWhichAreNotComplete();
+		if (uncompleteStates.isEmpty()) {
+			return; //We are already complete
+		}
+
+		//Add trapstate
+		this.size++;
+		int trapState = this.size - 1;
+		this.edges.add(new ArrayList<>());
+		uncompleteStates.add(trapState);
+
+		Collection<BitSet> allSymbols = getAllPossibleSymbols();
+		for (int state : uncompleteStates) {
+			for (BitSet bs : allSymbols) {
+				if (!hasEdge(state, (Symbol) bs)) {
+					this.addEdge(state, (Symbol) bs, trapState);
+				}
+			}
+		}
+
+		if (this.acceptance instanceof AcceptanceGenRabinTransition) {
+			((AcceptanceGenRabinTransition) this.acceptance).makeTrapState(trapState, this);
+		} else {
+			throw new UnsupportedOperationException("Making the DA complete is currently" + " only supported for AcceptanceGenRabinTransition as acceptance"
+					+ " and not for " + this.acceptance.getClass());
+		}
+	}
+
+	/**
+	 * This method returns a list of states, which are not complete,
+	 *         such that the state has not 2^{APList.size()} many outgoing edges. 
+	 */
+	private Collection<Integer> statesWhichAreNotComplete()
+	{
+		return IntStream.range(0, size).filter(state -> edges.get(state).size() < 1 << apList.size()).mapToObj(i -> i).collect(Collectors.toSet());
+	}
+
+	/**
+	 * @return Set of all possible symbols (aka BitSets), marking an edge.
+	 *                Beware that this set has 2^{apList.size()} many elments. 
+	 */
+	public Collection<BitSet> getAllPossibleSymbols()
+	{
+		Set<BitSet> result = new HashSet<>();
+		for (int i = 0; i < 1 << apList.size(); i++) {
+			BitSet bs = new BitSet(apList.size());
+			for (int offset = 0; offset < apList.size(); offset++) {
+				bs.set(offset, (i & (1 << offset)) != 0);
+			}
+			result.add(bs);
+		}
+		return result;
 	}
 }

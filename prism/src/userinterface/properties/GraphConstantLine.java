@@ -189,7 +189,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 		jPanel2 = new javax.swing.JPanel();
 		typeLabel = new javax.swing.JLabel();
 		jPanel3 = new javax.swing.JPanel();
-		valuePicker = new javax.swing.JComboBox<Object>();
+		valuePicker = new javax.swing.JComboBox<>();
 
 		boolSingleValueCombo.setBackground(new java.awt.Color(255, 255, 255));
 		boolSingleValueCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "true", "false" }));

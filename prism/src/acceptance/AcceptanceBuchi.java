@@ -28,10 +28,12 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
+import jdd.JDDVars;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
-import jdd.JDDVars;
 
 /**
  * A Büchi acceptance condition (based on BitSet state sets).
@@ -39,7 +41,7 @@ import jdd.JDDVars;
  * (sometimes also called final states) and is accepting if
  *  "infinitely often an accepting state is visited"
  */
-public class AcceptanceBuchi implements AcceptanceOmega
+public class AcceptanceBuchi implements AcceptanceOmegaState
 {
 	/** The set of goal states */
 	private BitSet acceptingStates = new BitSet();
@@ -142,7 +144,7 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN)) {
 			return complementToRabin(numStates);
@@ -155,9 +157,9 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
-		acceptingStates = lifter.lift(acceptingStates);
+		acceptingStates = liftBitSet(lifter, acceptingStates);
 	}
 
 	@Override
@@ -205,20 +207,6 @@ public class AcceptanceBuchi implements AcceptanceOmega
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.BUCHI;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 
 	@Override

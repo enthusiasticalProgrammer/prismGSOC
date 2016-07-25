@@ -182,7 +182,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		if (cont == CONTINUE) {
 			networkHandler.newNetwork("New Profile");
 			treeModel.nodeStructureChanged(networkHandler);
-			settingTable.setOwners(new ArrayList<Object>());
+			settingTable.setOwners(new ArrayList<>());
 			modified = false;
 		}
 	}
@@ -278,8 +278,8 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 	public void a_copy()
 	{
-		clipboardHosts = new ArrayList<SSHHost>();
-		clipboardFSs = new ArrayList<FileSystem>();
+		clipboardHosts = new ArrayList<>();
+		clipboardFSs = new ArrayList<>();
 
 		TreePath[] selectedPaths = networkTree.getSelectionModel().getSelectionPaths();
 
@@ -351,7 +351,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 			}
 		}
 		for (int i = 0; i < fss.size(); i++) {
-			treeModel.nodeStructureChanged((FileSystem) fss.get(i));
+			treeModel.nodeStructureChanged(fss.get(i));
 		}
 
 		ArrayList<Integer> indices = new ArrayList<>();
@@ -385,7 +385,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 
 		//treeModel.nodeStructureChanged(networkHandler);
 
-		settingTable.setOwners(new ArrayList<Object>());
+		settingTable.setOwners(new ArrayList<>());
 		modified = true;
 	}
 
@@ -741,7 +741,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		ArrayList<Object> owners = new ArrayList<Object>();
+		ArrayList<Object> owners = new ArrayList<>();
 		TreePath[] nodes = networkTree.getSelectionPaths();
 		if (nodes == null)
 			return;

@@ -26,7 +26,7 @@ import prism.PrismException;
 /**
  * Convert an NBA to a DRA using Safra's algorithm
  */
-public class NBA2DRA
+class NBA2DRA
 {
 
 	/** The options */
@@ -66,7 +66,7 @@ public class NBA2DRA
 	 *        (has to have same APSet as the nba)
 	 * @param limit a limit for the number of states (0 disables the limit).
 	 */
-	public DRA convert(NBA nba, int limit) throws PrismException
+	DRA convert(NBA nba, int limit) throws PrismException
 	{
 
 		if (nba.size() == 0 || nba.getStartState() == null) {
@@ -160,7 +160,7 @@ public class NBA2DRA
 	 * @param dra_result the result DRA
 	 * @param limit limit for the size of the DRA
 	 */
-	public DRA convert_safra(NBA nba, int limit) throws PrismException
+	DRA convert_safra(NBA nba, int limit) throws PrismException
 	{
 
 		SafrasAlgorithm safras_algo = new SafrasAlgorithm(nba, _options);
@@ -174,7 +174,7 @@ public class NBA2DRA
 			return dra_result;
 		} else {
 			SafraNBA2DRA nba2da_fuzzy = new SafraNBA2DRA(_detailed_states);
-			nba2da_fuzzy.convert(safras_algo, dra_result, limit, new StateMapperFuzzy<SafraTreeCandidateMatcher>());
+			nba2da_fuzzy.convert(safras_algo, dra_result, limit, new StateMapperFuzzy<>());
 			return dra_result;
 		}
 	}

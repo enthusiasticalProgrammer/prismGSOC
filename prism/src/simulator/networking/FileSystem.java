@@ -167,7 +167,7 @@ public class FileSystem implements SettingOwner, TreeNode
 
 	public SSHHost getHost(int index)
 	{
-		return (SSHHost) hosts.get(index);
+		return hosts.get(index);
 	}
 
 	public int getNumHosts()
@@ -229,7 +229,7 @@ public class FileSystem implements SettingOwner, TreeNode
 	@Override
 	public TreeNode getChildAt(int childIndex)
 	{
-		return (TreeNode) hosts.get(childIndex);
+		return hosts.get(childIndex);
 	}
 
 	@Override

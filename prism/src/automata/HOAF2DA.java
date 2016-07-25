@@ -273,7 +273,7 @@ public class HOAF2DA implements HOAConsumer
 
 		if (apList == null) {
 			// no call to setAPs
-			apList = new ArrayList<String>(0);
+			apList = new ArrayList<>(0);
 		}
 		da.setAPList(apList);
 		implicitEdgeHelper = new ImplicitEdgeHelper(apList.size());
@@ -299,7 +299,7 @@ public class HOAF2DA implements HOAConsumer
 			}
 		}
 
-		acceptanceSets = new ArrayList<BitSet>();
+		acceptanceSets = new ArrayList<>();
 		return prepareAcceptanceGeneric(accExpr);
 	}
 
@@ -360,7 +360,7 @@ public class HOAF2DA implements HOAConsumer
 			throw new HOAConsumerException("Invalid acc-name: Buchi header");
 		}
 
-		acceptanceSets = new ArrayList<BitSet>(1);
+		acceptanceSets = new ArrayList<>(1);
 		BitSet acceptingStates = new BitSet();
 		AcceptanceBuchi acceptanceBuchi = new AcceptanceBuchi(acceptingStates);
 		acceptanceSets.add(acceptingStates); // Inf(0)
@@ -379,7 +379,7 @@ public class HOAF2DA implements HOAConsumer
 
 		int numberOfPairs = (Integer) extraInfo.get(0);
 		AcceptanceRabin acceptanceRabin = new AcceptanceRabin();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		acceptanceSets = new ArrayList<>(numberOfPairs * 2);
 		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet L = new BitSet();
 			BitSet K = new BitSet();
@@ -404,7 +404,7 @@ public class HOAF2DA implements HOAConsumer
 
 		int numberOfPairs = (Integer) extraInfo.get(0);
 		AcceptanceStreett acceptanceStreett = new AcceptanceStreett();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		acceptanceSets = new ArrayList<>(numberOfPairs * 2);
 		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet R = new BitSet();
 			BitSet G = new BitSet();
@@ -440,11 +440,11 @@ public class HOAF2DA implements HOAConsumer
 		}
 
 		AcceptanceGenRabin acceptanceGenRabin = new AcceptanceGenRabin();
-		acceptanceSets = new ArrayList<BitSet>(numberOfPairs * 2);
+		acceptanceSets = new ArrayList<>(numberOfPairs * 2);
 		for (int i = 0; i < numberOfPairs; i++) {
 			BitSet L = new BitSet();
 			acceptanceSets.add(L); // Fin(L) = F G !L
-			ArrayList<BitSet> K_list = new ArrayList<BitSet>();
+			ArrayList<BitSet> K_list = new ArrayList<>();
 			for (int j = 0; j < numberOfKs[i]; j++) {
 				BitSet K_j = new BitSet();
 				K_list.add(K_j);
@@ -518,7 +518,7 @@ public class HOAF2DA implements HOAConsumer
 	 */
 	private List<APMonom> labelExpressionToAPMonom(BooleanExpression<AtomLabel> expr) throws HOAConsumerException
 	{
-		List<APMonom> result = new ArrayList<APMonom>();
+		List<APMonom> result = new ArrayList<>();
 
 		switch (expr.getType()) {
 		case EXP_AND:
@@ -534,6 +534,7 @@ public class HOAF2DA implements HOAConsumer
 			return result;
 		case EXP_FALSE:
 			result.add(new APMonom(false));
+			return result;
 		case EXP_OR:
 			result.addAll(labelExpressionToAPMonom(expr.getLeft()));
 			result.addAll(labelExpressionToAPMonom(expr.getRight()));

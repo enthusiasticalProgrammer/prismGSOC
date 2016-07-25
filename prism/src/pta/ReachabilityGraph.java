@@ -52,7 +52,7 @@ public class ReachabilityGraph
 	{
 		this.pta = pta;
 		states = null;
-		trans = new ArrayList<ArrayList<SymbolicTransition>>();
+		trans = new ArrayList<>();
 	}
 
 	public void addState()
@@ -64,7 +64,7 @@ public class ReachabilityGraph
 	{
 		ArrayList<SymbolicTransition> listOld, listNew;
 		listOld = trans.get(i);
-		listNew = new ArrayList<SymbolicTransition>(listOld.size());
+		listNew = new ArrayList<>(listOld.size());
 		for (SymbolicTransition g : listOld)
 			listNew.add(new SymbolicTransition(g));
 		trans.add(listNew);

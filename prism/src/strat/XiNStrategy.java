@@ -2,8 +2,6 @@ package strat;
 
 import java.math.BigInteger;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.Model;
@@ -109,7 +107,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public @NonNull Model buildProduct(Model model)
+	public Model buildProduct(Model model)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -214,7 +212,7 @@ public class XiNStrategy implements Strategy
 	 */
 	private double xprime(int state)
 	{
-		return ((double) mdp.getNumChoices(state)) / getM();
+		return (mdp.getNumChoices(state)) / getM();
 	}
 
 	private double sumOfPerturbedFrequencies(int state)

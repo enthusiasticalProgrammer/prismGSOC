@@ -1,7 +1,5 @@
 package explicit;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import explicit.rewards.MDPReward;
 import prism.Operator;
 
@@ -13,7 +11,7 @@ public class MDPExpectationConstraint extends MDPItem
 
 	final double bound;
 
-	MDPExpectationConstraint(@NonNull MDPReward reward, Operator operator, double bound)
+	MDPExpectationConstraint(MDPReward reward, Operator operator, double bound)
 	{
 		super(reward, operator);
 		this.bound = bound;

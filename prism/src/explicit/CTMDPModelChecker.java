@@ -30,8 +30,6 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.ast.ExpressionTemporal;
 import prism.PrismComponent;
 import prism.PrismException;
@@ -56,7 +54,7 @@ public class CTMDPModelChecker extends MDPModelChecker
 	// Model checking functions
 
 	@Override
-	protected StateValues checkProbBoundedUntil(@NonNull Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		double uTime;
 		BitSet b1, b2;

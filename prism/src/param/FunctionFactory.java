@@ -64,7 +64,7 @@ abstract class FunctionFactory
 		this.parameterNames = parameterNames;
 		this.lowerBounds = lowerBounds;
 		this.upperBounds = upperBounds;
-		this.varnameToInt = new HashMap<String, Integer>();
+		this.varnameToInt = new HashMap<>();
 		for (int var = 0; var < parameterNames.length; var++) {
 			varnameToInt.put(parameterNames[var], var);
 		}

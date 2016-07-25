@@ -157,7 +157,7 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 	public File getResultsFile(int i)
 	{
-		return (File) resultFiles.get(i);
+		return resultFiles.get(i);
 	}
 
 	public String getHostName()

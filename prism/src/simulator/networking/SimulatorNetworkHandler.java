@@ -65,7 +65,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	/** Creates a new instance of SimulatorNetworkHandler */
 	public SimulatorNetworkHandler()
 	{
-		fileSystems = new Vector<FileSystem>();
+		fileSystems = new Vector<>();
 
 		this.networkName = new SingleLineStringSetting("network name", "default",
 				"A name for this network profile.  Each network profile is a collection of network clusters.  Each cluster has the characteristic that it has the same filesystem.",

@@ -120,7 +120,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		String[] sizes = { "8", "9", "10", "11", "12", "14", "16", "18", "20" };
 
 		DefaultComboBoxModel<String> fontModel = new DefaultComboBoxModel<>(allFonts);
-	    DefaultComboBoxModel<Object> styleModel = new DefaultComboBoxModel<>(styles);
+		DefaultComboBoxModel<Object> styleModel = new DefaultComboBoxModel<>(styles);
 		DefaultComboBoxModel<String> sizeModel = new DefaultComboBoxModel<>(sizes);
 
 		fontList.setModel(fontModel);

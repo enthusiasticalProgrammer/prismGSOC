@@ -34,7 +34,6 @@ import common.IterableStateSet;
 
 import explicit.rewards.*;
 import prism.PrismException;
-import prism.PrismUtils;
 
 /**
  * Simple explicit-state representation of a DTMC.
@@ -102,7 +101,7 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	public void initialise(int numStates)
 	{
 		super.initialise(numStates);
-		transitionList = new ArrayList<Distribution>(numStates);
+		transitionList = new ArrayList<>(numStates);
 		for (int state = 0; state < numStates; state++) {
 			transitionList.add(new Distribution());
 		}
@@ -192,9 +191,6 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	public void setProbability(int sourceState, int targetState, double probability)
 	{
 		Distribution distr = transitionList.get(sourceState);
-		if (probability + distr.sumAllBut(targetState) > 1.0 + PrismUtils.epsilonDouble) {
-			throw new IllegalArgumentException("Probability of outgoing transition sums up to more than one.");
-		}
 		distr.set(targetState, probability);
 		if (probability != 0.0 && distr.get(targetState) == 0.0) {
 			numberOfTransitions++;
@@ -206,9 +202,6 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	 */
 	public void addToProbability(int sourceState, int targetState, double prob)
 	{
-		if (transitionList.get(sourceState).sum() + prob > 1.0 + PrismUtils.epsilonDouble) {
-			throw new IllegalArgumentException("Probability of outgoing transition sums up to more than one.");
-		}
 		if (!transitionList.get(sourceState).add(targetState, prob)) {
 			if (prob != 0.0)
 				numberOfTransitions++;
@@ -312,8 +305,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		distr = transitionList.get(s);
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 
@@ -331,8 +324,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		diag = 1.0;
 		d = 0.0;
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			if (k != s) {
 				d += prob * vect[k];
 			} else {
@@ -355,8 +348,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		distr = transitionList.get(s);
 		d = mcRewards.getStateReward(s);
 		for (Map.Entry<Integer, Double> e : distr) {
-			k = (Integer) e.getKey();
-			prob = (Double) e.getValue();
+			k = e.getKey();
+			prob = e.getValue();
 			d += prob * vect[k];
 		}
 
@@ -378,8 +371,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 		for (i = 0; i < numStates; i++) {
 			distr = transitionList.get(i);
 			for (Map.Entry<Integer, Double> e : distr) {
-				j = (Integer) e.getKey();
-				prob = (Double) e.getValue();
+				j = e.getKey();
+				prob = e.getValue();
 				result[j] += prob * vect[i];
 			}
 		}

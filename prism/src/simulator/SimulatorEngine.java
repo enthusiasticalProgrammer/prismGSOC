@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -142,7 +140,7 @@ public class SimulatorEngine extends PrismComponent
 	protected Updater updater;
 
 	// strategy information
-	private @NonNull Map<State, Integer> stateIds;
+	private Map<State, Integer> stateIds;
 
 	// TODO: remove this (not in trunk any more)
 	private Prism prism;
@@ -717,9 +715,9 @@ public class SimulatorEngine extends PrismComponent
 		strategy = null;
 
 		// Create storage for labels/properties
-		labels = new ArrayList<Expression>();
-		properties = new ArrayList<Expression>();
-		propertySamplers = new ArrayList<Sampler>();
+		labels = new ArrayList<>();
+		properties = new ArrayList<>();
+		propertySamplers = new ArrayList<>();
 	}
 
 	/**
@@ -1033,7 +1031,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public Path getPath()
 	{
-		return (Path) path;
+		return path;
 	}
 
 	/**
@@ -1233,7 +1231,7 @@ public class SimulatorEngine extends PrismComponent
 		Object res[];
 
 		// Just do this via the 'multiple properties' method
-		exprs = new ArrayList<Expression>();
+		exprs = new ArrayList<>();
 		exprs.add(expr);
 		res = modelCheckMultipleProperties(modulesFile, propertiesFile, exprs, initialState, maxPathLength, simMethod);
 

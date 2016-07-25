@@ -49,8 +49,8 @@ public class Updates extends ASTElement
 	 */
 	public Updates()
 	{
-		probs = new ArrayList<Expression>();
-		updates = new ArrayList<Update>();
+		probs = new ArrayList<>();
+		updates = new ArrayList<>();
 		parent = null;
 	}
 

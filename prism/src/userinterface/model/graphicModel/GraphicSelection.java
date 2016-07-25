@@ -176,7 +176,7 @@ public class GraphicSelection implements ClipboardOwner, Transferable, Serializa
 			this.id = id;
 			this.x = st.getX();
 			this.y = st.getY();
-			this.comment = (String) st.getComment() + "";
+			this.comment = st.getComment() + "";
 			this.commentX = st.getCommentLabel().getOffsetX();
 			this.commentY = st.getCommentLabel().getOffsetY();
 			this.initial = st.isInitial();

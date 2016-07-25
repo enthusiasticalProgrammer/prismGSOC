@@ -32,8 +32,6 @@ import explicit.Model;
 import prism.PrismException;
 import prism.PrismLog;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 /**
  * Interface for classes to store strategies (for MDPs, games, etc.),
  * not to confuse with the homonymous Gang-of-Four pattern
@@ -103,7 +101,7 @@ public interface Strategy
 	 * @throws PrismException
 	 * 
 	 */
-	public @NonNull Model buildProduct(Model model) throws PrismException;
+	public Model buildProduct(Model model) throws PrismException;
 
 	/**
 	 * Get textual description of the strategy

@@ -28,27 +28,26 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Vector;
 
-import prism.PrismException;
+import automata.DA;
+import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.ProbModel;
 
 /**
  * Generic interface for an omega-regular acceptance condition (BitSet-based).
  */
 public interface AcceptanceOmega extends Cloneable
 {
-	/** Returns true if the bottom strongly connected component (BSSC)
+	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
+	 *  This method does not test, if bscc_states is an SCC or not!
 	 **/
 	public boolean isBSCCAccepting(BitSet bscc_states);
-
-	/** Get the acceptance signature for state {@code stateIndex}.
-	 **/
-	public String getSignatureForState(int stateIndex);
-
-	/** Get the acceptance signature for state {@code stateIndex} (HOA format).
-	 */
-	public String getSignatureForStateHOA(int stateIndex);
 
 	/**
 	 * Get a string describing the acceptance condition's size,
@@ -59,56 +58,47 @@ public interface AcceptanceOmega extends Cloneable
 	/** Returns the AcceptanceType of this acceptance condition */
 	public AcceptanceType getType();
 
-	/** Returns the type of this acceptance condition as a String,
-	 * i.e., "R" for Rabin.
-	 * <br>
-	 * Deprecated, use {@code getType().getNameAbbreviated()}
-	 */
-	@Deprecated
-	public String getTypeAbbreviated();
-
-	/** Returns a full name for this acceptance condition
-	 * <br>
-	 * Deprecated, use {@code getType()} in String context or {@code getType().getName()}
-	 */
-	@Deprecated
-	public String getTypeName();
-
 	/** Print the appropriate Acceptance (and potentially acc-name) header */
 	public void outputHOAHeader(PrintStream out);
 
 	/** Make a copy of the acceptance condition. */
 	public AcceptanceOmega clone();
 
-	/**
-	 * Complement the acceptance condition if possible.
-	 * @param numStates the number of states in the underlying model / automaton (needed for complementing BitSets)
-	 * @param allowedAcceptance the allowed acceptance types that may be used for complementing
+	/** 
+	 * Get the acceptance signature for state {@code stateIndex}
 	 */
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException;
+	public String getSignatureForState(int stateIndex);
 
-	/** Abstract functor for use with the lift function. */
-	public static abstract class LiftBitSet
+	/** 
+	 * Get the acceptance signature for state {@code stateIndex} in HOA format.
+	 */
+	public String getSignatureForStateHOA(int stateIndex);
+
+	/**
+	 * The lifter basically maps an automaton-state to its corresponding states in the Product construction.
+	 * This function should lift the numbers of the BitSets according to the lifter.
+	 **/
+	public void lift(Map<Integer, Collection<Integer>> lifter);
+
+	default BitSet liftBitSet(Map<Integer, Collection<Integer>> lifter, BitSet bs)
 	{
-		public abstract BitSet lift(BitSet states);
+		BitSet result = new BitSet();
+		bs.stream().forEach(bit -> {
+			lifter.getOrDefault(bit, Collections.emptySet()).stream().forEach(result::set);
+		});
+		return result;
 	}
 
 	/**
-	 * Lift the state sets in the acceptance condition.
-	 * For each state set {@code states} in the condition,
-	 * {@code lifter.lift(states)} is called and the state set is
-	 * replaced by the result.
-	 **/
-	public void lift(LiftBitSet lifter);
-
-	/**
 	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
-	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * @param daRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * @param daColVars JDDVars of the col variables from the model checker
+	 * @param allddRowVars JDDVars of the row of the product
+	 * @param allddColVars JDDVars of the col of the product
+	 * @param da DA to which this acceptance corresponds
+	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
+	 * @param product The product of the DA and the Model
 	 */
-	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
-
-	/**
-	 * Convert this acceptance condition to an AcceptanceGeneric condition.
-	 */
-	public AcceptanceGeneric toAcceptanceGeneric();
+	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
+			Vector<JDDNode> labelAPs, ProbModel product);
 }

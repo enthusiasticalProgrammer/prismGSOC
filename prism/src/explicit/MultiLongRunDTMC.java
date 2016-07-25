@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import prism.PrismException;
 import strat.MDStrategyArray;
 import strat.Strategy;
@@ -16,11 +14,10 @@ import strat.Strategy;
  */
 class MultiLongRunDTMC extends MultiLongRun<ArtificialNondetModelFromModel>
 {
-	private final @NonNull DTMCProductMLRStrategyAndMDP dtmc;
+	private final DTMCProductMLRStrategyAndMDP dtmc;
 
-	public MultiLongRunDTMC(@NonNull DTMCProductMLRStrategyAndMDP dtmc, @NonNull Collection<@NonNull MDPConstraint> constraints,
-			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method) throws PrismException
+	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		super(constraints, objectives, expConstraints, method, new ArtificialNondetModelFromModel(dtmc));
 		this.dtmc = dtmc;

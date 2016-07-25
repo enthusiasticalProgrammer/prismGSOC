@@ -28,6 +28,8 @@ package acceptance;
 
 import java.io.PrintStream;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -39,7 +41,7 @@ import jdd.JDDVars;
  * has to be "upward-closed", i.e., once a goal state has been reached,
  * all successor states are goal states as well.
  */
-public class AcceptanceReach implements AcceptanceOmega
+public class AcceptanceReach implements AcceptanceOmegaState
 {
 	/** The set of goal states */
 	private BitSet goalStates = new BitSet();
@@ -123,7 +125,7 @@ public class AcceptanceReach implements AcceptanceOmega
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.RABIN)) {
 			return complementToRabin(numStates);
@@ -136,9 +138,9 @@ public class AcceptanceReach implements AcceptanceOmega
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
-		goalStates = lifter.lift(goalStates);
+		goalStates = liftBitSet(lifter, goalStates);
 	}
 
 	@Override
@@ -186,20 +188,6 @@ public class AcceptanceReach implements AcceptanceOmega
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.REACH;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import jltl2ba.APSet;
 import prism.PrismException;
 import prism.PrismNotSupportedException;
 
-public class DA
+class DA
 {
 
 	/**
@@ -78,7 +78,7 @@ public class DA
 		_start_state = null;
 		_is_compact = true;
 		_comment = "";
-		_index = new Vector<DA_State>();
+		_index = new Vector<>();
 		_acceptance = new RabinAcceptance();
 	}
 
@@ -220,7 +220,7 @@ public class DA
 			int i, j;
 			boolean moved = false;
 
-			Vector<Integer> mapping = new Vector<Integer>(_index.size());
+			Vector<Integer> mapping = new Vector<>(_index.size());
 			for (i = 0, j = 0; i < _index.size(); i++) {
 				if (_index.get(i) != null) {
 					mapping.set(i, new Integer(j));

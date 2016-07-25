@@ -47,7 +47,7 @@ public class ConstantPickerList extends JPanel implements Scrollable
 		nextPanel = new JPanel();
 		nextPanel.setLayout(new BorderLayout());
 		add(nextPanel, BorderLayout.CENTER);
-		rows = new ArrayList<ConstantLine>();
+		rows = new ArrayList<>();
 	}
 
 	public void addConstant(ConstantLine pl)

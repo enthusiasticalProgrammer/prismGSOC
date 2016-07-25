@@ -79,7 +79,7 @@ public class GUIGroupedTable extends JTable
 
 			// Add a group every iteration
 			while (group < groupedDataModel.getGroupCount() && element < groupedDataModel.getColumnCount()) {
-				ArrayList<TableColumn> groupElements = new ArrayList<TableColumn>();
+				ArrayList<TableColumn> groupElements = new ArrayList<>();
 
 				// Add an element every iteration
 				while (groupedDataModel.getLastColumnOfGroup(group) >= element) {

@@ -393,8 +393,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 						row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
-				ArrayList<Object> values = new ArrayList<Object>();
+				ArrayList<?> settings = (ArrayList<?>) value;
+				ArrayList<Object> values = new ArrayList<>();
 				boolean enabled = true;
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
@@ -451,8 +451,8 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 				return currentEditor.getTableCellEditorComponent(table, setting, setting.getValue(), isSelected, row, column);
 
 			} else if (value instanceof ArrayList) {
-				ArrayList settings = (ArrayList) value;
-				ArrayList<Object> values = new ArrayList<Object>();
+				ArrayList<?> settings = (ArrayList<?>) value;
+				ArrayList<Object> values = new ArrayList<>();
 				Setting first = null;
 				for (int i = 0; i < settings.size(); i++) {
 					if (settings.get(i) instanceof Setting) {
@@ -506,15 +506,15 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
-			groupNames = new ArrayList<String>();
-			groupStarts = new ArrayList<Integer>();
-			groupSizes = new ArrayList<Integer>();
+			groupNames = new ArrayList<>();
+			groupStarts = new ArrayList<>();
+			groupSizes = new ArrayList<>();
 			int index = 0;
 
 			String ownerList = "";
 			while (it.hasNext()) {
 
-				SettingOwner po = (SettingOwner) it.next();
+				SettingOwner po = it.next();
 				//            for(int i = 0; i < po.getNumProperties(); i++)
 				//            {
 				//                po.getProperty(i).addObserver(this);
@@ -558,7 +558,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			}
 			if (currentGroup > owners.size() - 1)
 				currentGroup = 0;
-			
+
 			String[] stringArray = new String[groupNames.size()];
 			comboModel = new DefaultComboBoxModel<>(groupNames.toArray(stringArray));
 			fireTableDataChanged();
@@ -569,7 +569,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			Iterator it = owners.iterator();
 			SettingOwner last = null;
 			String tempName = "";
-			groupNames = new ArrayList<String>();
+			groupNames = new ArrayList<>();
 
 			String ownerList = "";
 			while (it.hasNext()) {
@@ -630,7 +630,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		{
 			if (groupNames.size() == 0)
 				return 0;
-			SettingOwner firstInGroup = (SettingOwner) owners.get(groupStarts.get(currentGroup).intValue());
+			SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 			return firstInGroup.getNumSettings();
 		}
 
@@ -653,7 +653,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		public Object getValueAt(int row, int column)
 		{
 			if (column == 0) {
-				SettingOwner firstInGroup = (SettingOwner) owners.get(groupStarts.get(currentGroup).intValue());
+				SettingOwner firstInGroup = owners.get(groupStarts.get(currentGroup).intValue());
 				//System.out.println("firstInGroup = "+firstInGroup);
 				return firstInGroup.getSetting(row).getName();
 			} else {
@@ -663,7 +663,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 					SettingOwner firstInGroup = getOwner(getCurrentGroupStart());
 					return firstInGroup.getSetting(row);
 				} else {
-					ArrayList<Setting> currProps = new ArrayList<Setting>();
+					ArrayList<Setting> currProps = new ArrayList<>();
 					for (int i = getCurrentGroupStart(); i < getCurrentGroupStart() + getCurrentGroupSize(); i++) {
 						SettingOwner prop = getOwner(i);
 						currProps.add(prop.getSetting(row));
@@ -755,7 +755,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		protected SettingOwner getOwner(int i)
 		{
-			return (SettingOwner) owners.get(i);
+			return owners.get(i);
 		}
 
 		public int getNumGroups()
@@ -783,13 +783,4 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 		}
 
 	}
-
-	public static void printArray(ArrayList a)
-	{
-		System.out.print("(");
-		for (int i = 0; i < a.size(); i++)
-			System.out.print(a.get(i) + " ");
-		//System.out.println(")");
-	}
-
 }

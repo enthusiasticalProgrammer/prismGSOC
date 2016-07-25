@@ -500,7 +500,6 @@ public class ProbModel implements Model
 	/**
 	 * Reset transition matrix DD
 	 */
-
 	@Override
 	public void resetTrans(JDDNode trans)
 	{
@@ -512,7 +511,6 @@ public class ProbModel implements Model
 	/**
 	 * Reset transition rewards DDs
 	 */
-
 	@Override
 	public void resetTransRewards(int i, JDDNode transRewards)
 	{
@@ -550,7 +548,6 @@ public class ProbModel implements Model
 	/**
 	 * Set reachable states BDD (and compute number of states and ODD)
 	 */
-
 	@Override
 	public void setReach(JDDNode reach)
 	{

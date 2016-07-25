@@ -229,7 +229,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllFormulas() throws PrismLangException
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllFormulas visitor = new GetAllFormulas(v);
 		accept(visitor);
 		return v;
@@ -259,7 +259,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllConstants()
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllConstants visitor = new GetAllConstants(v);
 		try {
 			accept(visitor);
@@ -280,7 +280,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllUndefinedConstantsRecursively(ConstantList constantList, LabelList labelList, PropertiesFile propertiesFile)
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllUndefinedConstantsRecursively visitor = new GetAllUndefinedConstantsRecursively(v, constantList, labelList, propertiesFile);
 		try {
 			accept(visitor);
@@ -323,7 +323,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllVars() throws PrismLangException
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllVars visitor = new GetAllVars(v);
 		accept(visitor);
 		return v;
@@ -344,7 +344,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllLabels() throws PrismLangException
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllLabels visitor = new GetAllLabels(v);
 		accept(visitor);
 		return v;
@@ -375,7 +375,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllPropRefs() throws PrismLangException
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllPropRefs visitor = new GetAllPropRefs(v);
 		accept(visitor);
 		return v;
@@ -386,7 +386,7 @@ public abstract class ASTElement
 	 */
 	public Vector<String> getAllPropRefsRecursively(PropertiesFile propertiesFile) throws PrismLangException
 	{
-		Vector<String> v = new Vector<String>();
+		Vector<String> v = new Vector<>();
 		GetAllPropRefsRecursively visitor = new GetAllPropRefsRecursively(v, propertiesFile);
 		accept(visitor);
 		return v;
@@ -438,14 +438,6 @@ public abstract class ASTElement
 	public void semanticCheck() throws PrismLangException
 	{
 		semanticCheck(null, null);
-	}
-
-	/**
-	 * Perform any required semantic checks.
-	 */
-	public void semanticCheck(ModulesFile modulesFile) throws PrismLangException
-	{
-		semanticCheck(modulesFile, null);
 	}
 
 	/**

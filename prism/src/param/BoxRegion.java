@@ -426,7 +426,7 @@ final class BoxRegion extends Region
 			}
 		}
 
-		ArrayList<Region> result = new ArrayList<Region>();
+		ArrayList<Region> result = new ArrayList<>();
 		BoxRegion region1 = new BoxRegion(this);
 		BoxRegion region2 = new BoxRegion(this);
 		BigRational mid = (lower[longestSide].add(upper[longestSide])).divide(2);
@@ -445,7 +445,7 @@ final class BoxRegion extends Region
 	 */
 	private ArrayList<Region> splitAll()
 	{
-		ArrayList<Region> result = new ArrayList<Region>();
+		ArrayList<Region> result = new ArrayList<>();
 		final int numParts = 2;
 		final int numNewRegions = (int) Math.pow(numParts, lower.length);
 		BigRational[] newLower = new BigRational[lower.length];
@@ -480,7 +480,7 @@ final class BoxRegion extends Region
 	@Override
 	ArrayList<Point> specialPoints()
 	{
-		ArrayList<Point> result = new ArrayList<Point>();
+		ArrayList<Point> result = new ArrayList<>();
 		int numEdges = (int) Math.pow(2, lower.length);
 		for (int edgeNr = 0; edgeNr < numEdges; edgeNr++) {
 			int regionRest = edgeNr;

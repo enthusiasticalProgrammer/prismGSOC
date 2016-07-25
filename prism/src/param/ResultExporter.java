@@ -144,7 +144,7 @@ final class ResultExporter
 		}
 
 		// compute point grid
-		ArrayList<Point> points = new ArrayList<Point>();
+		ArrayList<Point> points = new ArrayList<>();
 		int numTotalPoints = (int) Math.pow(pointsPerDim, numVariables);
 		for (int pointNr = 0; pointNr < numTotalPoints; pointNr++) {
 			int pointRest = pointNr;
@@ -159,7 +159,7 @@ final class ResultExporter
 		}
 
 		// compute values of points contained in a region
-		HashMap<Point, BigRational> pointValues = new HashMap<Point, BigRational>();
+		HashMap<Point, BigRational> pointValues = new HashMap<>();
 		for (Point point : points) {
 			for (Entry<Region, StateValues> entry : values) {
 				Region region = entry.getKey();
@@ -172,7 +172,7 @@ final class ResultExporter
 		}
 
 		// interpolate values of points not in a region
-		HashSet<Function> allFunctions = new HashSet<Function>();
+		HashSet<Function> allFunctions = new HashSet<>();
 		for (Entry<Region, StateValues> entry : values) {
 			allFunctions.add(entry.getValue().getInitStateValueAsFunction());
 		}
@@ -216,7 +216,7 @@ final class ResultExporter
 		}
 
 		// combine points and their values in result list and sort
-		ArrayList<Point> result = new ArrayList<Point>();
+		ArrayList<Point> result = new ArrayList<>();
 		for (Point point : points) {
 			BigRational[] entry = new BigRational[numVariables + 1];
 			for (int var = 0; var < numVariables; var++) {

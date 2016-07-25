@@ -29,8 +29,6 @@ package explicit;
 import java.util.BitSet;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import prism.PrismComponent;
 import prism.PrismException;
 
@@ -87,5 +85,5 @@ public abstract class ECComputer extends PrismComponent
 	/**
 	 * Get the list of states for computed MECs.
 	 */
-	public abstract @NonNull List<@NonNull BitSet> getMECStates();
+	public abstract List<BitSet> getMECStates();
 }

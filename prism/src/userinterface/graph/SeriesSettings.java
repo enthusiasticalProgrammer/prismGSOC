@@ -149,7 +149,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 				/* Set series colour. */
 				if (renderer.lookupSeriesPaint(seriesIndex) instanceof Color) {
 					try {
-						seriesColour.setValue((Color) renderer.getSeriesPaint(seriesIndex));
+						seriesColour.setValue(renderer.getSeriesPaint(seriesIndex));
 					} catch (SettingException e) {
 					}
 				}

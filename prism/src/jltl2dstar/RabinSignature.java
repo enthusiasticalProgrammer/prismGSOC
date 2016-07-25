@@ -25,7 +25,7 @@ import jltl2ba.MyBitSet;
 /** A class storing the acceptance signature for a state
  * (for every acceptance pair one color).
  */
-public class RabinSignature implements Comparable<RabinSignature>
+class RabinSignature implements Comparable<RabinSignature>
 {
 
 	/** The L part */

@@ -28,7 +28,7 @@ import java.io.PrintStream;
 import jltl2ba.MyBitSet;
 import prism.PrismException;
 
-public class RabinAcceptance implements Iterable<Integer>
+class RabinAcceptance implements Iterable<Integer>
 {
 
 	/**
@@ -56,8 +56,8 @@ public class RabinAcceptance implements Iterable<Integer>
 	public RabinAcceptance()
 	{
 		_is_compact = true;
-		_acceptance_L = new Vector<MyBitSet>();
-		_acceptance_U = new Vector<MyBitSet>();
+		_acceptance_L = new Vector<>();
+		_acceptance_U = new Vector<>();
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class RabinAcceptance implements Iterable<Integer>
 		return new AcceptancePairIterator(_acceptance_L);
 	}
 
-	public static class AcceptancePairIterator implements Iterator<Integer>
+	static class AcceptancePairIterator implements Iterator<Integer>
 	{
 		private Vector<MyBitSet> _acceptance_vector;
 		private int index;

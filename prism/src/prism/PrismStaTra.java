@@ -55,7 +55,7 @@ public class PrismStaTra
 		int lineNum = 0;
 
 		// create arrays for explicit state storage
-		states = new ArrayList<String>();
+		states = new ArrayList<>();
 		try {
 			// open file for reading
 			in = new BufferedReader(new FileReader(statesFile));

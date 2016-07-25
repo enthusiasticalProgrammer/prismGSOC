@@ -42,7 +42,7 @@ public class APSet implements Iterable<String>
 	 */
 	public APSet()
 	{
-		vector = new Vector<String>();
+		vector = new Vector<>();
 	}
 
 	/**

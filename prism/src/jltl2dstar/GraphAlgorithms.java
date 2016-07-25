@@ -31,7 +31,7 @@ import jltl2ba.MyBitSet;
  * of Strongly Connected Components (SCCs).
  */
 
-public class GraphAlgorithms
+class GraphAlgorithms
 {
 
 	/** 
@@ -44,10 +44,10 @@ public class GraphAlgorithms
 		scc_dfs.calculate(disjoint);
 	}
 
-	public static class SCC_DFS
+	static class SCC_DFS
 	{
 
-		public static class SCC_DFS_Data
+		static class SCC_DFS_Data
 		{
 			/** A class for saving DFS state information */
 			public int dfs_nr;
@@ -78,8 +78,8 @@ public class GraphAlgorithms
 		{
 			_graph = graph;
 			_result = result;
-			_stack = new Stack<Integer>();
-			_dfs_data = new Vector<SCC_DFS_Data>();
+			_stack = new Stack<>();
+			_dfs_data = new Vector<>();
 		}
 
 		/** Calculate the SCCs*/

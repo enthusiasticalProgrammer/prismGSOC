@@ -179,7 +179,7 @@ public class Tile
 		boolean isClose = (pointWeight - thisTileWeight) < tolerance;
 
 		//System.out.println("SPLITTING");
-		ArrayList<Tile> tiles = new ArrayList<Tile>();
+		ArrayList<Tile> tiles = new ArrayList<>();
 		for (int i = 0; i < this.cornerPoints.size(); i++) {
 			ArrayList<Point> newPoints = (ArrayList<Point>) this.cornerPoints.clone();
 			newPoints.set(i, point);

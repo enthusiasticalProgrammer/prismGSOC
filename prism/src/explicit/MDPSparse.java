@@ -105,7 +105,7 @@ public class MDPSparse extends MDPExplicit
 		maxNumDistrs = mdp.getMaxNumChoices();
 		// Copy transition function
 		if (sort) {
-			sorted = new TreeMap<Integer, Double>();
+			sorted = new TreeMap<>();
 		}
 		nonZeros = new double[numTransitions];
 		cols = new int[numTransitions];
@@ -127,15 +127,15 @@ public class MDPSparse extends MDPExplicit
 					if (sort) {
 						sorted.put(e.getKey(), e.getValue());
 					} else {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 				}
 				if (sort) {
 					for (Map.Entry<Integer, Double> e : sorted.entrySet()) {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 					sorted.clear();
@@ -175,7 +175,7 @@ public class MDPSparse extends MDPExplicit
 		}
 		// Copy transition function
 		if (sort) {
-			sorted = new TreeMap<Integer, Double>();
+			sorted = new TreeMap<>();
 		}
 		nonZeros = new double[numTransitions];
 		cols = new int[numTransitions];
@@ -197,15 +197,15 @@ public class MDPSparse extends MDPExplicit
 					if (sort) {
 						sorted.put(permut[e.getKey()], e.getValue());
 					} else {
-						cols[k] = (Integer) permut[e.getKey()];
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = permut[e.getKey()];
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 				}
 				if (sort) {
 					for (Map.Entry<Integer, Double> e : sorted.entrySet()) {
-						cols[k] = (Integer) e.getKey();
-						nonZeros[k] = (Double) e.getValue();
+						cols[k] = e.getKey();
+						nonZeros[k] = e.getValue();
 						k++;
 					}
 					sorted.clear();
@@ -234,7 +234,7 @@ public class MDPSparse extends MDPExplicit
 		for (int dl : mdp.getDeadlockStates()) {
 			addDeadlockState(dl);
 		}
-		statesList = new ArrayList<State>();
+		statesList = new ArrayList<>();
 		for (int s : states) {
 			statesList.add(mdp.getStatesList().get(s));
 		}
@@ -392,7 +392,7 @@ public class MDPSparse extends MDPExplicit
 		// So not necessarily the fastest method to access successors
 		int start = choiceStarts[rowStarts[s]];
 		int end = choiceStarts[rowStarts[s + 1]];
-		HashSet<Integer> succs = new HashSet<Integer>();
+		HashSet<Integer> succs = new HashSet<>();
 		for (int i = start; i < end; i++) {
 			succs.add(cols[i]);
 		}
@@ -542,7 +542,7 @@ public class MDPSparse extends MDPExplicit
 	{
 		int start = choiceStarts[rowStarts[s] + i];
 		int end = choiceStarts[rowStarts[s] + i + 1];
-		List<Integer> succs = new ArrayList<Integer>();
+		List<Integer> succs = new ArrayList<>();
 		for (int j = start; j < end; j++) {
 			succs.add(cols[j]);
 		}
@@ -833,7 +833,7 @@ public class MDPSparse extends MDPExplicit
 		List<Integer> res;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation
 		l1 = rowStarts[s];
 		h1 = rowStarts[s + 1];
@@ -1066,7 +1066,7 @@ public class MDPSparse extends MDPExplicit
 		List<Integer> res;
 
 		// Create data structures to store strategy
-		res = new ArrayList<Integer>();
+		res = new ArrayList<>();
 		// One row of matrix-vector operation
 		l1 = rowStarts[s];
 		h1 = rowStarts[s + 1];

@@ -6,9 +6,6 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import explicit.Distribution;
 import explicit.Model;
 import prism.PrismLog;
@@ -72,7 +69,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public @NonNull Model buildProduct(@Nullable Model model)
+	public Model buildProduct(Model model)
 	{
 		throw new UnsupportedOperationException("not yet implemented");
 	}

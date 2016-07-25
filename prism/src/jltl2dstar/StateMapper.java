@@ -27,7 +27,7 @@ import java.util.HashMap;
  */
 
 /** A mapper from KeyType to StateType, ResultType can be used as an alternative key type. */
-public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State> implements StateMapperInterface<R, K, S>
+class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S extends DA_State> implements StateMapperInterface<R, K, S>
 {
 
 	/** The hash map from StateType to MappedStateType */
@@ -39,7 +39,7 @@ public class StateMapper<R extends NBA2DAResult<K>, K extends NBA2DAState, S ext
 	public StateMapper()
 	{
 		_count = 0;
-		_map = new HashMap<K, S>();
+		_map = new HashMap<>();
 	}
 
 	/** Clear the mapping */

@@ -29,7 +29,7 @@ import jltl2ba.APElement;
  * For a description of the template parameters, see class DA.
  */
 
-public class DA_State
+class DA_State
 {
 
 	/** The automaton of which this state is a part. */
@@ -50,7 +50,7 @@ public class DA_State
 	public DA_State(DA graph)
 	{
 		_graph = graph;
-		_edges = new HashMap<APElement, DA_State>();
+		_edges = new HashMap<>();
 		_description = "";
 	}
 

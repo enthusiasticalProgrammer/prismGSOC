@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 import prism.PrismException;
 import strat.MultiLongRunStrategy;
 import strat.XiNStrategy;
@@ -18,8 +15,8 @@ import strat.XiNStrategy;
 class MultiLongRunMDP extends MultiLongRun<MDP>
 {
 
-	public MultiLongRunMDP(@NonNull MDP mdp, @NonNull Collection<@NonNull MDPConstraint> constraints, @NonNull Collection<@NonNull MDPObjective> objectives,
-			@NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints, @NonNull String method) throws PrismException
+	public MultiLongRunMDP(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		super(constraints, objectives, expConstraints, method, mdp);
 	}
@@ -31,7 +28,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 	}
 
 	@Override
-	public @Nullable MultiLongRunStrategy getStrategy()
+	public MultiLongRunStrategy getStrategy()
 	{
 		double[] lpResult;
 		lpResult = solver.getVariableValues(); //computeStrategy actually just added some constraints, which were already there

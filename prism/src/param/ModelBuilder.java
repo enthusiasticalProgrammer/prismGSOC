@@ -264,7 +264,7 @@ public final class ModelBuilder extends PrismComponent
 		int numTotalChoices = 0;
 		int numTotalSuccessors = 0;
 
-		LinkedList<State> explore = new LinkedList<State>();
+		LinkedList<State> explore = new LinkedList<>();
 
 		State state = modulesFile.getDefaultInitialState();
 		states.add(state);
@@ -335,7 +335,7 @@ public final class ModelBuilder extends PrismComponent
 
 		boolean isNonDet = modelType == ModelType.MDP;
 		boolean isContinuous = modelType == ModelType.CTMC;
-		StateStorage<State> states = new IndexedSet<State>(true);
+		StateStorage<State> states = new IndexedSet<>(true);
 		reserveMemoryAndExploreStates(modulesFile, model, modelType, engine, states);
 		int[] permut = states.buildSortingPermutation();
 		List<State> statesList = states.toPermutedArrayList(permut);

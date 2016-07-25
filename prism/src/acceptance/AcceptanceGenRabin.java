@@ -30,6 +30,8 @@ package acceptance;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Map;
 
 import prism.PrismException;
 import prism.PrismNotSupportedException;
@@ -46,7 +48,7 @@ import jdd.JDDVars;
  * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
  */
 @SuppressWarnings("serial")
-public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPair> implements AcceptanceOmega
+public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPair> implements AcceptanceOmegaState
 {
 
 	/**
@@ -130,7 +132,7 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 		@Override
 		public GenRabinPair clone()
 		{
-			ArrayList<BitSet> newK_list = new ArrayList<BitSet>();
+			ArrayList<BitSet> newK_list = new ArrayList<>();
 			for (BitSet K_j : K_list)
 				newK_list.add((BitSet) K_j.clone());
 			return new GenRabinPair((BitSet) L.clone(), newK_list);
@@ -202,7 +204,7 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	}
 
 	@Override
-	public AcceptanceOmega complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
+	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException
 	{
 		if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.GENERIC)) {
 			return complementToGeneric();
@@ -211,14 +213,15 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	}
 
 	@Override
-	public void lift(LiftBitSet lifter)
+	public void lift(Map<Integer, Collection<Integer>> lifter)
 	{
 		for (GenRabinPair pair : this) {
-			pair.L = lifter.lift(pair.L);
+			pair.L = liftBitSet(lifter, pair.L);
 			int n = pair.K_list.size();
 			for (int j = 0; j < n; j++)
-				pair.K_list.set(j, lifter.lift(pair.K_list.get(j)));
+				pair.K_list.set(j, liftBitSet(lifter, pair.K_list.get(j)));
 		}
+
 	}
 
 	/**
@@ -232,10 +235,10 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	{
 		AcceptanceGenRabin result = new AcceptanceGenRabin();
 		for (GenRabinPair pair : this) {
-			result.add((GenRabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		for (GenRabinPair pair : other) {
-			result.add((GenRabinPair) pair.clone());
+			result.add(pair.clone());
 		}
 		return result;
 	}
@@ -326,20 +329,6 @@ public class AcceptanceGenRabin extends ArrayList<AcceptanceGenRabin.GenRabinPai
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.GENERALIZED_RABIN;
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
 	}
 
 	@Override

@@ -32,8 +32,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import common.IterableBitSet;
 
 import parser.ast.Expression;
@@ -952,9 +950,8 @@ public class STPGModelChecker extends ProbModelChecker
 	}
 
 	@Override
-	protected MultiLongRun<?> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
-			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method)
+	protected MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method)
 	{
 		throw new UnsupportedOperationException("STPG does not support multi-long-run properties.");
 	}

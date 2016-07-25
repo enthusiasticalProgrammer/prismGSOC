@@ -33,8 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import parser.VarList;
 import parser.ast.Declaration;
 import parser.ast.DeclarationIntUnbounded;
@@ -73,8 +71,7 @@ public class MDPModelChecker extends ProbModelChecker
 	// Model checking functions
 
 	@Override
-	protected StateValues checkProbPathFormulaLTL(@NonNull Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkProbPathFormulaLTL(Model model, Expression expr, boolean qual, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		StateValues probsProduct, probs;
@@ -91,7 +88,8 @@ public class MDPModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of MDP and automaton
-		AcceptanceType[] allowedAcceptance = { AcceptanceType.BUCHI, AcceptanceType.RABIN, AcceptanceType.GENERALIZED_RABIN, AcceptanceType.REACH };
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.BUCHI, AcceptanceType.RABIN, AcceptanceType.GENERALIZED_RABIN,
+				AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED, AcceptanceType.REACH };
 		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
 
 		// Output product, if required
@@ -124,8 +122,7 @@ public class MDPModelChecker extends ProbModelChecker
 		mainLog.println("\nComputing reachability probabilities...");
 		mcProduct = new MDPModelChecker(this);
 		mcProduct.inheritSettings(this);
-		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs((MDP) product.getProductModel(), acc, false).soln,
-				product.getProductModel());
+		probsProduct = StateValues.createFromDoubleArray(mcProduct.computeReachProbs(product.getProductModel(), acc, false).soln, product.getProductModel());
 
 		// Subtract from 1 if we're model checking a negated formula for regular Pmin
 		if (minMax.isMin()) {
@@ -152,8 +149,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * Compute rewards for a co-safe LTL reward operator.
 	 */
 	@Override
-	protected StateValues checkRewardCoSafeLTL(@NonNull Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest)
-			throws PrismException
+	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
 		MDPReward productRewards;
@@ -165,7 +161,7 @@ public class MDPModelChecker extends ProbModelChecker
 		mcLtl = new LTLModelChecker(this);
 
 		// Build product of MDP and automaton
-		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH };
+		AcceptanceType[] allowedAcceptance = { AcceptanceType.RABIN, AcceptanceType.REACH, AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED };
 		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
 
 		// Adapt reward info to product model
@@ -1755,9 +1751,8 @@ public class MDPModelChecker extends ProbModelChecker
 	 * The input model should be an MDP. 
 	 */
 	@Override
-	protected MultiLongRun<MDP> getMultiLongRunMDP(@NonNull Model model, @NonNull Collection<@NonNull MDPConstraint> constraints,
-			@NonNull Collection<@NonNull MDPObjective> objectives, @NonNull Collection<@NonNull MDPExpectationConstraint> expConstraints,
-			@NonNull String method) throws PrismException
+	protected MultiLongRun<MDP> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		return new MultiLongRunMDP((MDP) model, constraints, objectives, expConstraints, method);
 	}
