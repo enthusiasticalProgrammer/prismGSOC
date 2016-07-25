@@ -35,6 +35,8 @@ import java.util.Vector;
 
 import acceptance.AcceptanceBuchiDD;
 import acceptance.AcceptanceGenRabinDD;
+import acceptance.AcceptanceGenRabinTransitionDD;
+import acceptance.AcceptanceGenRabinTransitionDD.GenRabinPairTransitionDD;
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaDD;
 import acceptance.AcceptanceRabin;
@@ -737,9 +739,7 @@ public class LTLModelChecker extends PrismComponent
 					fairness);
 		default:
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append("Computing the accepting EC states for ");
-			stringBuilder.append(acceptance.getTypeName());
-			stringBuilder.append(" acceptance is not yet implemented (symbolic engine)");
+			stringBuilder.append("Computing the accepting EC states for the type ");
 			stringBuilder.append(acceptance.getType());
 			stringBuilder.append("is not yet implemented (symbolic engine)");
 			throw new PrismNotSupportedException(stringBuilder.toString());
