@@ -34,7 +34,6 @@ import common.IterableStateSet;
 
 import explicit.rewards.*;
 import prism.PrismException;
-import prism.PrismUtils;
 
 /**
  * Simple explicit-state representation of a DTMC.
@@ -192,9 +191,6 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	public void setProbability(int sourceState, int targetState, double probability)
 	{
 		Distribution distr = transitionList.get(sourceState);
-		if (probability + distr.sumAllBut(targetState) > 1.0 + PrismUtils.epsilonDouble) {
-			throw new IllegalArgumentException("Probability of outgoing transition sums up to more than one.");
-		}
 		distr.set(targetState, probability);
 		if (probability != 0.0 && distr.get(targetState) == 0.0) {
 			numberOfTransitions++;
@@ -206,9 +202,6 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	 */
 	public void addToProbability(int sourceState, int targetState, double prob)
 	{
-		if (transitionList.get(sourceState).sum() + prob > 1.0 + PrismUtils.epsilonDouble) {
-			throw new IllegalArgumentException("Probability of outgoing transition sums up to more than one.");
-		}
 		if (!transitionList.get(sourceState).add(targetState, prob)) {
 			if (prob != 0.0)
 				numberOfTransitions++;
