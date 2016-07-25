@@ -89,7 +89,13 @@ public class MultiObjModelChecker extends PrismComponent
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for Rabin translation: " + l / 1000.0 + " seconds.");
 
-		ifRequiredPrintDRA(i, dra);
+		if (settings.getExportPropAut()) {
+			String exportPropAutFilename = PrismUtils.addCounterSuffixToFilename(settings.getExportPropAutFilename(), i + 1);
+			mainLog.println("Exporting DRA to file \"" + exportPropAutFilename + "\"...");
+			PrintStream out = PrismUtils.newPrintStream(exportPropAutFilename);
+			dra[i].print(out, settings.getExportPropAutType());
+			out.close();
+		}
 
 		// Build product of MDP and automaton
 		mainLog.println("\nConstructing MDP-DRA product...");
@@ -102,17 +108,6 @@ public class MultiObjModelChecker extends PrismComponent
 			JDD.Deref(labelDDs.get(j));
 		}
 		return modelNew;
-	}
-
-	private void ifRequiredPrintDRA(int i, DA<BitSet, AcceptanceRabin>[] dra) throws PrismException
-	{
-		if (settings.getExportPropAut()) {
-			String exportPropAutFilename = PrismUtils.addCounterSuffixToFilename(settings.getExportPropAutFilename(), i + 1);
-			mainLog.println("Exporting DRA to file \"" + exportPropAutFilename + "\"...");
-			PrintStream out = PrismUtils.newPrintStream(exportPropAutFilename);
-			dra[i].print(out, settings.getExportPropAutType());
-			out.close();
-		}
 	}
 
 	/**
