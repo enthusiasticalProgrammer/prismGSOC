@@ -7,6 +7,7 @@ import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.PrismException;
+import prism.ProbModel;
 
 public interface AcceptanceOmegaState extends AcceptanceOmega
 {

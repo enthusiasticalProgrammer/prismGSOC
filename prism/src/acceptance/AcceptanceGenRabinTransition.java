@@ -41,6 +41,7 @@ import java.util.stream.IntStream;
 import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.ProbModel;
 
 /**
  * A Generalized Rabin acceptance condition (based on BitSet state sets)
@@ -86,10 +87,10 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		/** Edge set Finite (should be visited only finitely often) 
 		 * The offset of the list is equal to the number of the source state 
 		 */
-		BitSet Finite;
+		public BitSet Finite;
 
 		/** Edge sets Infinite (should all be visited infinitely often) */
-		final List<BitSet> Infinite;
+		public final List<BitSet> Infinite;
 
 		/** Constructor with L and K_j state sets */
 		public GenRabinPair(BitSet Finite, List<BitSet> Infinite)
@@ -260,7 +261,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		return IntStream.range(0, label.size()).map(i -> label.get(i) ? 1 << i : 0).sum();
 	}
 
-	int computeStartStateOfEdge(int edge)
+	public int computeStartStateOfEdge(int edge)
 	{
 		return edge / (1 << amountOfAPs);
 	}
@@ -349,9 +350,9 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	@Override
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs)
+			Vector<JDDNode> labelAPs, ProbModel product)
 	{
-		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, daColVars, allddRowVars, allddColVars, da, labelAPs);
+		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, daColVars, allddRowVars, allddColVars, da, labelAPs, product);
 	}
 
 	@Override
