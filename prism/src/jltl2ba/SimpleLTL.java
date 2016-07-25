@@ -148,8 +148,10 @@ public class SimpleLTL
 			return false;
 	}
 
-	public Collection<String> getAPs()
+	public APSet getAPs()
 	{
+		APSet rv;
+
 		switch (kind) {
 		case NOT:
 		case NEXT:
@@ -162,20 +164,23 @@ public class SimpleLTL
 		case IMPLIES:
 		case UNTIL:
 		case RELEASE:
-			Collection<String> result = left.getAPs();
-			result.addAll(right.getAPs());
-			return result;
+			rv = left.getAPs();
+			for (String s : right.getAPs())
+				rv.addAP(s);
+			break;
 		// terminals
 		case FALSE:
 		case TRUE:
-			return new HashSet<>();
+			return new APSet();
 		case AP:
-			Collection<String> result2 = new HashSet<>();
-			result2.add(ap);
-			return result2;
+			rv = new APSet();
+			rv.addAP(ap);
+			break;
 		default:
-			throw new AssertionError();
+			rv = new APSet();
+			break;
 		}
+		return rv;
 	}
 
 	@Override
