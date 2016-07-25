@@ -3226,57 +3226,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 
 	}
 
-	/*
-	class ExpressionEditor extends javax.swing.DefaultCellEditor
-	{
-	        Expression exp;
-	        int minWidth = 100;
-	 
-	        public ExpressionEditor()
-	        {
-	                super(new JTextField());
-	        }
-	 
-	        public Component getComponent()
-	        {
-	                return editorComponent;
-	        }
-	 
-	        public boolean stopCellEditing()
-	        {
-	                String str = ((JTextField)editorComponent).getText();
-	 
-	                try
-	                {
-	                        Expression s = handler.getGUIPlugin().getPrism().parseSingleExpressionString(str);
-	                        exp = s;
-	                }
-	                catch(Exception e)
-	                {
-	                        handler.getGUIPlugin().message("Error: Syntax Error");
-	                        super.fireEditingStopped();
-	                        return true;
-	                }
-	                super.fireEditingStopped();
-	                return true;
-	 
-	        }
-	 
-	        public void setBounds(Rectangle r)
-	        {
-	                r.width = Math.max(minWidth, r.width);
-	                getComponent().setBounds(r);
-	                tree.repaint();
-	        }
-	 
-	        public void setBounds(int x, int y, int w, int h)
-	        {
-	                w = Math.max(minWidth, w);
-	                getComponent().setBounds(x,y,w,h);
-	                tree.repaint();
-	        }
-	}*/
-
 	//Cell edit for ExpressionNode
 	class ExpressionEditor extends JTextField implements TreeCellEditor
 	{

@@ -902,24 +902,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			}
 		}
 
-		// How to plot a parametric result...
-		/*if (selected.length == 1) {
-			GUIProperty gp = propList.getProperty(selected[0]);
-			if (gp.getResult().getResult() instanceof RegionValues) {
-				Graph graph = new Graph("Param");
-				SeriesKey sk = graph.addSeries("param");
-				RegionValues vals = (RegionValues) gp.getResult().getResult();
-				param.Function f = vals.getResult(0).getInitStateValueAsFunction();
-				int n = 100;
-				for (int i = 0; i < n; i++) {
-					BigRational br = f.evaluate(new param.Point(new BigRational[] {new BigRational(i, n)}));
-					XYDataItem di = new XYDataItem(((double)i)/n, br.doubleValue());
-					graph.addPointToSeries(sk, di);
-				}
-				this.getGraphHandler().addGraph(graph);
-			}
-		}*/
-
 		// For a single property with a displayable counterexample, offer to do show it
 		if (selected.length == 1) {
 			GUIProperty gp = propList.getProperty(selected[0]);
