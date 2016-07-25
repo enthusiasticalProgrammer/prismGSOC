@@ -129,11 +129,8 @@ public class CTMCModelChecker extends DTMCModelChecker
 		return createDTMCModelChecker().checkExistsLTL(dtmcEmb, expr, statesOfInterest);
 	}
 
-	/**
-	 * Model check a time-bounded until operator; return vector of probabilities for all states.
-	 */
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;
@@ -189,11 +186,11 @@ public class CTMCModelChecker extends DTMCModelChecker
 				// check for special case of lTime == 0, this is actually an unbounded until
 				if (lTime == 0) {
 					// compute probs
-					res = computeUntilProbs((DTMC) model, b1, b2);
+					res = createDTMCModelChecker().computeUntilProbs((DTMC) model, b1, b2);
 					probs = StateValues.createFromDoubleArray(res.soln, model);
 				} else {
 					// compute unbounded until probs
-					tmpRes = computeUntilProbs((DTMC) model, b1, b2);
+					tmpRes = createDTMCModelChecker().computeUntilProbs((DTMC) model, b1, b2);
 					// compute bounded until probs
 					res = computeTransientBackwardsProbs((CTMC) model, b1, b1, lTime, tmpRes.soln);
 					probs = StateValues.createFromDoubleArray(res.soln, model);
