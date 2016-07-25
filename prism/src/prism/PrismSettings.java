@@ -1240,6 +1240,7 @@ public class PrismSettings implements Observer
 					break;
 				case "spot":
 					set(PRISM_LTL2DA_SYNTAX, "Spot");
+					break;
 				case "rabinizer":
 					set(PRISM_LTL2DA_SYNTAX, "Rabinizer");
 					break;
