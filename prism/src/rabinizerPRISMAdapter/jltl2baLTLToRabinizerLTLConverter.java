@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import jltl2ba.APSet;
 import jltl2ba.SimpleLTL;
 import ltl.BooleanConstant;
 import ltl.Conjunction;
@@ -56,7 +57,7 @@ public class jltl2baLTLToRabinizerLTLConverter
 
 	public static BiMap<String, Integer> getAliasesFromSimpleLTL(SimpleLTL ltl)
 	{
-		Collection<String> aps = ltl.getAPs();
+		APSet aps = ltl.getAPs();
 		BiMap<String, Integer> result = HashBiMap.create();
 		int i = 0;
 		for (String ap : aps)
