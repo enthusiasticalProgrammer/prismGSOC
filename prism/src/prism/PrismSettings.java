@@ -224,7 +224,7 @@ public class PrismSettings implements Observer
 			{ CHOICE_TYPE, PRISM_MDP_SOLN_METHOD, "MDP solution method", "4.0", "Value iteration",
 					"Value iteration,Gauss-Seidel,Policy iteration,Modified policy iteration,Linear programming",
 					"Which method to use when solving Markov decision processes." },
-			{ CHOICE_TYPE, PRISM_MDP_MULTI_SOLN_METHOD, "MDP multi-objective solution method", "4.0.3", "Linear programming",
+			{ CHOICE_TYPE, PRISM_MDP_MULTI_SOLN_METHOD, "MDP multi-objective solution method", "4.0.3", "Value iteration",
 					"Value iteration,Gauss-Seidel,Linear programming,Gurobi",
 					"Which method to use when solving multi-objective queries on Markov decision processes." },
 			{ CHOICE_TYPE, PRISM_TERM_CRIT, "Termination criteria", "2.1", "Relative", "Absolute,Relative",
