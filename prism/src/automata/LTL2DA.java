@@ -326,12 +326,11 @@ public class LTL2DA extends PrismComponent
 	}
 
 	/** Check the atomic propositions of the (externally generated) automaton */
-	private static void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
+	private void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
 		APSet ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {
-
-			if (!ltlAPs.asList().contains(ap)) {
+			if (!ltlAPs.hasAP(ap)) {
 				throw new PrismException("Generated automaton has extra atomic proposition \"" + ap + "\"");
 			}
 		}
