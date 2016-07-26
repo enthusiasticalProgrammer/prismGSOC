@@ -327,17 +327,6 @@ public class CTMCModelChecker extends ProbModelChecker
 	}
 
 	/**
-	 * @param dtmc The DTMC
-	 * @param target Target states
-	 */
-	@Override
-	public ModelCheckerResult computeNextProbs(DTMC dtmc, BitSet target)
-	{
-		mainLog.println("Building embedded DTMC...");
-		DTMC dtmcEmb = ((CTMC) dtmc).buildImplicitEmbeddedDTMC();
-		return super.computeNextProbs(dtmcEmb, target);
-	}
-
 	 * Compute reachability/until probabilities.
 	 * i.e. compute the probability of reaching a state in {@code target},
 	 * while remaining in those in @{code remain}.
