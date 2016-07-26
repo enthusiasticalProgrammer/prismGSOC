@@ -114,7 +114,6 @@ public class PrismCL implements PrismModelListener
 
 	// files/filenames
 	private String mainLogFilename = "stdout";
-	private String techLogFilename = "stdout";
 	private String settingsFilename = null;
 	private String modelFilename = null;
 	private String importStatesFilename = null;
@@ -1113,8 +1112,19 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("testall")) {
 					test = true;
 					testExitsOnFail = false;
-				} else if (sw.equals("dddebug")) {
+				}
+
+				// DD Debugging options
+				else if (sw.equals("dddebug")) {
 					jdd.DebugJDD.enable();
+				} else if (sw.equals("ddtraceall")) {
+					jdd.DebugJDD.traceAll = true;
+				} else if (sw.equals("ddtracefollowcopies")) {
+					jdd.DebugJDD.traceFollowCopies = true;
+				} else if (sw.equals("dddebugwarnfatal")) {
+					jdd.DebugJDD.warningsAreFatal = true;
+				} else if (sw.equals("dddebugwarnoff")) {
+					jdd.DebugJDD.warningsOff = true;
 				} else if (sw.equals("ddtrace")) {
 					if (i < args.length - 1) {
 						String idString = args[++i];
@@ -1623,7 +1633,6 @@ public class PrismCL implements PrismModelListener
 				else if (sw.equals("zerorewardcheck")) {
 					prism.setCheckZeroLoops(true);
 				}
-
 				// MISCELLANEOUS UNDOCUMENTED/UNUSED OPTIONS:
 
 				// specify main log (hidden option)
@@ -1641,19 +1650,6 @@ public class PrismCL implements PrismModelListener
 						errorAndExit("No file specified for -" + sw + " switch");
 					}
 				}
-				// specify mtbdd log (hidden option)
-				else if (sw.equals("techlog")) {
-					if (i < args.length - 1) {
-						techLogFilename = args[++i];
-						log = new PrismFileLog(techLogFilename);
-						if (!log.ready()) {
-							errorAndExit("Couldn't open log file \"" + techLogFilename + "\"");
-						}
-					} else {
-						errorAndExit("No file specified for -" + sw + " switch");
-					}
-				}
-
 				// mtbdd construction method (hidden option)
 				else if (sw.equals("c1")) {
 					prism.setConstruction(1);
@@ -1759,7 +1755,6 @@ public class PrismCL implements PrismModelListener
 				throw new PrismException("You must import the transition matrix when using -importmodel (use option \"tra\" or \"all\")");
 			}
 		}
-		// No options supported currently
 	}
 
 	/**
@@ -2361,6 +2356,15 @@ public class PrismCL implements PrismModelListener
 	{
 		prism.closeDown(true);
 		System.exit(0);
+	}
+
+	/**
+	 * Exit cleanly (with exit code i).
+	 */
+	private void exit(int i)
+	{
+		prism.closeDown(true);
+		System.exit(i);
 	}
 
 	// main method

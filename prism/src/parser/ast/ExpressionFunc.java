@@ -36,7 +36,6 @@ import parser.type.*;
 
 public class ExpressionFunc extends Expression
 {
-
 	// Built-in function name constants
 	public static final int MIN = 0;
 	public static final int MAX = 1;
@@ -46,7 +45,6 @@ public class ExpressionFunc extends Expression
 	public static final int MOD = 5;
 	public static final int LOG = 6;
 	public static final int MULTI = 7;
-
 	// Built-in function names
 	public static final String names[] = { "min", "max", "floor", "ceil", "pow", "mod", "log", "multi" };
 	// Min/max function arities
@@ -62,6 +60,11 @@ public class ExpressionFunc extends Expression
 	private boolean oldStyle = false;
 
 	// Constructors
+
+	public ExpressionFunc()
+	{
+		operands = new ArrayList<>();
+	}
 
 	public ExpressionFunc(String name)
 	{

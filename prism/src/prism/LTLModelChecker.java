@@ -214,13 +214,10 @@ public class LTLModelChecker extends PrismComponent
 	 * @param da The DA
 	 * @param model The DTMC/CTMC
 	 * @param labelDDs BDDs giving the set of states for each AP in the DA
-	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
-	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
 	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
-			JDDVars daDDColVarsCopy) throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
 	{
-		return constructProductMC(da, model, labelDDs, daDDRowVarsCopy, daDDColVarsCopy, true);
+		return constructProductMC(da, model, labelDDs, null, null, true);
 	}
 
 	/**
@@ -228,10 +225,13 @@ public class LTLModelChecker extends PrismComponent
 	 * @param da The DA
 	 * @param model The  DTMC/CTMC
 	 * @param labelDDs BDDs giving the set of states for each AP in the DA
+	 * @param daDDRowVarsCopy (Optionally) empty JDDVars object to obtain copy of DD row vars for DA
+	 * @param daDDColVarsCopy (Optionally) empty JDDVars object to obtain copy of DD col vars for DA
 	 */
-	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs) throws PrismException
+	public ProbModel constructProductMC(DA<BitSet, ? extends AcceptanceOmega> da, ProbModel model, Vector<JDDNode> labelDDs, JDDVars daDDRowVarsCopy,
+			JDDVars daDDColVarsCopy) throws PrismException
 	{
-		return constructProductMC(da, model, labelDDs, null, null, true);
+		return constructProductMC(da, model, labelDDs, daDDRowVarsCopy, daDDColVarsCopy, true);
 	}
 
 	/**
@@ -966,7 +966,7 @@ public class LTLModelChecker extends PrismComponent
 		for (int i = 0; i < acceptance.size(); i++) {
 
 			// Filter out L_i states from the model and find the MECs
-			JDDNode notL = JDD.Not(acceptance.get(i).getFinite());
+			JDDNode notL = JDD.Not(acceptance.get(i).getL());
 			JDD.Ref(model.getTrans01());
 			JDD.Ref(notL);
 			JDDNode candidateStates = JDD.Apply(JDD.TIMES, model.getTrans01(), notL);

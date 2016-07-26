@@ -30,12 +30,11 @@ package userinterface.properties;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import prism.*;
 import userinterface.*;
-import userinterface.properties.GUIExperimentPicker.Rememberance;
 
 public class GUIExperimentPicker extends javax.swing.JDialog
 {

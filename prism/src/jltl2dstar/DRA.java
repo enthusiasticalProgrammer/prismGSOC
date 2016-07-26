@@ -55,6 +55,11 @@ class DRA extends DA
 		_isStreett = false;
 	}
 
+	public static DRA newInstance(APSet ap_set)
+	{
+		return new DRA(ap_set);
+	}
+
 	private String typeID()
 	{
 		if (isStreett()) {

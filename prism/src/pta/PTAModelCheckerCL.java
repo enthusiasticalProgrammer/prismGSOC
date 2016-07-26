@@ -243,7 +243,6 @@ public class PTAModelCheckerCL
 	{
 		String s;
 		BufferedReader in = null;
-
 		ArrayList<String> ptaFilesNew = new ArrayList<>();
 		for (String ptaFile : ptaFiles) {
 			if (ptaFile.endsWith(".deslist")) {

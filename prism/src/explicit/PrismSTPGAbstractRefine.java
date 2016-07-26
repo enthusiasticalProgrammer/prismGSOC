@@ -404,7 +404,10 @@ public class PrismSTPGAbstractRefine extends QuantAbstractRefine
 				break;
 			}
 			break;
-		default:
+		}
+
+		// Unhandled cases
+		if (res == null) {
 			String s = "Cannot do exact model checking for";
 			s += " model type " + modelType + " and property type " + propertyType;
 			throw new PrismException(s);

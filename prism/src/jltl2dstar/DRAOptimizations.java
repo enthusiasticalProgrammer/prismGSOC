@@ -315,7 +315,7 @@ class DRAOptimizations
 	 * Functor that compares two DRA states based on their
 	 * acceptance signature.
 	 */
-	static class AcceptanceSignatureComparator implements Comparator<Integer>
+	public static class AcceptanceSignatureComparator implements Comparator<Integer>
 	{
 		/** The acceptance signature container */
 		private AcceptanceSignatureContainer _container;

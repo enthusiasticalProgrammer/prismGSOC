@@ -268,6 +268,13 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	}
 
 	@Override
+	public String getTransitionAction(int index) throws PrismException
+	{
+		int a = getTransitionList().getTransitionModuleOrActionIndex(index);
+		return a < 0 ? null : modulesFile.getSynch(a - 1);
+	}
+
+	@Override
 	public String getTransitionAction(int index, int offset) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
@@ -275,11 +282,11 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return a < 0 ? null : modulesFile.getSynch(a - 1);
 	}
 
-	//@Override
 	@Override
-	public String getTransitionAction(int index) throws PrismException
+	public String getChoiceAction(int index) throws PrismException
 	{
-		int a = getTransitionList().getTransitionModuleOrActionIndex(index);
+		TransitionList transitions = getTransitionList();
+		int a = transitions.getChoiceModuleOrActionIndex(index);
 		return a < 0 ? null : modulesFile.getSynch(a - 1);
 	}
 
@@ -290,7 +297,6 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return transitions.getChoice(index).getProbability(offset);
 	}
 
-	//@Override
 	public double getTransitionProbability(int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
@@ -301,6 +307,16 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 	public State computeTransitionTarget(int index, int offset) throws PrismException
 	{
 		return getTransitionList().getChoice(index).computeTarget(offset, exploreState);
+	}
+
+	public State computeTransitionTarget(int index) throws PrismException
+	{
+		return getTransitionList().computeTransitionTarget(index, exploreState);
+	}
+
+	public void calculateStateRewards(State state, double[] store) throws PrismLangException
+	{
+		updater.calculateStateRewards(state, store);
 	}
 
 	@Override

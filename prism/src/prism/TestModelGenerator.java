@@ -26,6 +26,8 @@
 
 package prism;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,10 +36,13 @@ import parser.VarList;
 import parser.ast.Declaration;
 import parser.ast.DeclarationInt;
 import parser.ast.Expression;
+import parser.ast.PropertiesFile;
 import parser.type.Type;
 import parser.type.TypeInt;
+import explicit.ConstructModel;
+import explicit.DTMCModelChecker;
 
-public final class TestModelGenerator extends DefaultModelGenerator
+public class TestModelGenerator extends DefaultModelGenerator
 {
 	protected State exploreState;
 	protected int x;
@@ -180,5 +185,41 @@ public final class TestModelGenerator extends DefaultModelGenerator
 			e.printStackTrace();
 		}
 		return varList;
+	}
+
+	public static void main(String args[])
+	{
+		try {
+			Prism prism = new Prism(new PrismPrintStreamLog(System.out));
+
+			int test = 2;
+
+			if (test == 1) {
+				// Direct usage of model constructor/checker 
+				TestModelGenerator modelGen = new TestModelGenerator(10);
+				ConstructModel constructModel = new ConstructModel(prism);
+				explicit.Model model = constructModel.constructModel(modelGen);
+				model.exportToDotFile(new PrismFileLog("test.dot"), null, true);
+				DTMCModelChecker mc = new DTMCModelChecker(prism);
+				PropertiesFile pf = prism.parsePropertiesString(modelGen, "P=? [F \"goal\"]");
+				Expression expr = pf.getProperty(0);
+				Result res = mc.check(model, expr);
+				System.out.println(res);
+			} else {
+				// Perform model construction/checking via Prism
+				TestModelGenerator modelGen2 = new TestModelGenerator(10);
+				prism.loadModelGenerator(modelGen2);
+				prism.exportTransToFile(true, Prism.EXPORT_DOT_STATES, new File("test2.dot"));
+				PropertiesFile pf = prism.parsePropertiesString(modelGen2, "P=? [F x=10]");
+				Expression expr = pf.getProperty(0);
+				Result res = prism.modelCheck(pf, expr);
+				System.out.println(res);
+			}
+
+		} catch (PrismException e) {
+			System.err.println("Error: " + e.getMessage());
+		} catch (FileNotFoundException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
 	}
 }

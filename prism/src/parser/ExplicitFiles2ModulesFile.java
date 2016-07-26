@@ -203,6 +203,7 @@ public class ExplicitFiles2ModulesFile
 				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
+
 		// create modules file
 		modulesFile = new ModulesFile();
 		m = new Module("M");

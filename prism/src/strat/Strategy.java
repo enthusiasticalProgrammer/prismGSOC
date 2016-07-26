@@ -33,8 +33,7 @@ import prism.PrismException;
 import prism.PrismLog;
 
 /**
- * Interface for classes to store strategies (for MDPs, games, etc.),
- * not to confuse with the homonymous Gang-of-Four pattern
+ * Interface for classes to store strategies (for MDPs, games, etc.)
  */
 public interface Strategy
 {
@@ -44,12 +43,32 @@ public interface Strategy
 	}
 
 	/**
+	 * Export the strategy to a PrismLog, displaying strategy choices as action names.
+	 */
+	public void exportActions(PrismLog out);
+
+	/**
+	 * Export the strategy to a PrismLog, displaying strategy choices as indices.
+	 */
+	public void exportIndices(PrismLog out);
+
+	/**
+	 * Export the model induced by this strategy to a PrismLog.
+	 */
+	public void exportInducedModel(PrismLog out);
+
+	/**
+	 * Export the strategy to a dot file (of the model showing the strategy).
+	 */
+	public void exportDotFile(PrismLog out);
+
+	/**
 	 * Initialises memory based on a state
 	 * 
 	 * @param state
 	 *            initial state
 	 */
-	public void init(int state);
+	public void initialise(int s);
 
 	/**
 	 * Updates memory
@@ -76,6 +95,11 @@ public interface Strategy
 	 *             current strategy's memory state.
 	 */
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException;
+
+	/**
+	 * Clear storage of the strategy.
+	 */
+	public void clear();
 
 	/**
 	 * Resets the strategy to uninitialised state
@@ -157,26 +181,4 @@ public interface Strategy
 	 * @return textual description of the current state of the strategy
 	 */
 	public String getStateDescription();
-
-	// NEW METHODS:
-
-	/**
-	 * Export the strategy to a PrismLog, displaying strategy choices as action names.
-	 */
-	public void exportActions(PrismLog out);
-
-	/**
-	 * Export the strategy to a PrismLog, displaying strategy choices as indices.
-	 */
-	public void exportIndices(PrismLog out);
-
-	/**
-	 * Export the model induced by this strategy to a PrismLog.
-	 */
-	public void exportInducedModel(PrismLog out);
-
-	/**
-	 * Export the strategy to a dot file (of the model showing the strategy).
-	 */
-	public void exportDotFile(PrismLog out);
 }

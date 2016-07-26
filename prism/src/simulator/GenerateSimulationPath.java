@@ -489,7 +489,6 @@ public class GenerateSimulationPath
 				if (simPathType == PathType.SIM_PATH_DEADLOCK) {
 					if (engine.queryIsDeadlock() || i >= maxPathLength)
 						done = true;
-					break;
 				}
 				// Stop if a loop was found (and loop checking was not disabled)
 				if (simLoopCheck && engine.isPathLooping())

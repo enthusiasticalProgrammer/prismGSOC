@@ -147,7 +147,7 @@ public class GUIGeneralOptions extends OptionsPanel
 		return true;
 	}
 
-	public Element saveXMLElement(Document doc) throws DOMException
+	public Element saveXMLElement(Document doc)
 	{
 		return doc.createElement("dummy");
 	}

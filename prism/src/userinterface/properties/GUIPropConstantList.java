@@ -27,7 +27,7 @@
 
 package userinterface.properties;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 import javax.swing.*;

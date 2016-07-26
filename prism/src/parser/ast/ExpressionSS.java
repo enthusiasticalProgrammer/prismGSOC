@@ -35,50 +35,27 @@ import prism.PrismLangException;
 
 public class ExpressionSS extends ExpressionQuant
 {
-
-	RelOp relOp = null;
-	Expression prob = null;
-	Expression expression = null;
-	// Note: this "old-style" filter is just for display purposes
-	// The parser creates an (invisible) new-style filter around this expression
-	Filter filter = null;
-
 	// Constructors
 
 	public ExpressionSS()
 	{
 	}
 
-	public ExpressionSS(Expression e, String r, Expression p)
+	public ExpressionSS(Expression expression, String relOpString, Expression p)
 	{
-		expression = e;
-		relOp = RelOp.parseSymbol(r);
-		prob = p;
+		setExpression(expression);
+		setRelOp(relOpString);
+		setBound(p);
 	}
 
 	// Set methods
 
-	@Override
-	public void setRelOp(RelOp r)
-	{
-		relOp = r;
-	}
-
+	/**
+	 * Set the probability bound. Equivalent to {@code setBound(p)}.
+	 */
 	public void setProb(Expression p)
 	{
-		prob = p;
-	}
-
-	@Override
-	public void setExpression(Expression e)
-	{
-		expression = e;
-	}
-
-	@Override
-	public void setFilter(Filter f)
-	{
-		filter = f;
+		setBound(p);
 	}
 
 	// Get methods
@@ -112,26 +89,6 @@ public class ExpressionSS extends ExpressionQuant
 	// Methods required for Expression:
 
 	@Override
-	public RelOp getRelOp()
-	{
-		return relOp;
-	}
-
-	@Override
-	public Expression getExpression()
-	{
-		return expression;
-	}
-
-	@Override
-	public Filter getFilter()
-	{
-		return filter;
-	}
-
-	// Methods required for Expression:
-
-	@Override
 	public boolean isConstant()
 	{
 		return false;
@@ -152,7 +109,7 @@ public class ExpressionSS extends ExpressionQuant
 	@Override
 	public String getResultName()
 	{
-		return (prob == null) ? "Probability" : "Result";
+		return (getBound() == null) ? "Probability" : "Result";
 	}
 
 	@Override

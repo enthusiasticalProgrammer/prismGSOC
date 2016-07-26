@@ -262,7 +262,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	private Values currentDefinedMFConstants = null;
 	// Built model storage - symbolic or explicit - at most one is non-null
 	private Model currentModel = null;
-	private explicit.Model currentModelExpl;
+	private explicit.Model currentModelExpl = null;
 	// Are we doing digital clocks translation for PTAs?
 	boolean digital = false;
 
@@ -1003,6 +1003,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				// Fail silently if memory string is invalid 
 			}
 		}
+		jdd.SanityJDD.enabled = settings.getBoolean(PrismSettings.PRISM_JDD_SANITY_CHECKS);
 	}
 
 	//------------------------------------------------------------------------------
@@ -1531,7 +1532,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param modelInfo Accompanying model info (null if not needed)
 	 * @param file File to read in
 	 */
-	public PropertiesFile parsePropertiesFile(ModulesFile modelInfo, File file) throws FileNotFoundException, PrismLangException
+	public PropertiesFile parsePropertiesFile(ModelInfo modelInfo, File file) throws FileNotFoundException, PrismLangException
 	{
 		return parsePropertiesFile(modelInfo, file, true);
 	}
@@ -1545,7 +1546,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param file File to read in
 	 * @param tidy Whether or not to do "tidy" (post-parse checks and processing)
 	 */
-	public PropertiesFile parsePropertiesFile(ModulesFile mf, File file, boolean tidy) throws FileNotFoundException, PrismLangException
+	public PropertiesFile parsePropertiesFile(ModelInfo modelInfo, File file, boolean tidy) throws FileNotFoundException, PrismLangException
 	{
 		FileInputStream strProperties;
 		PrismParser prismParser;
@@ -1554,20 +1555,13 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// open file
 		strProperties = new FileInputStream(file);
 
-		// if null modules file passed, create a blank one
-		if (mf == null) {
-			mf = new ModulesFile();
-			mf.setFormulaList(new FormulaList());
-			mf.setConstantList(new ConstantList());
-		}
-
 		try {
 			// obtain exclusive access to the prism parser
 			// (don't forget to release it afterwards)
 			prismParser = getPrismParser();
 			try {
 				// parse file
-				propertiesFile = prismParser.parsePropertiesFile(mf, strProperties);
+				propertiesFile = prismParser.parsePropertiesFile(modelInfo, strProperties);
 			} finally {
 				// release prism parser
 				releasePrismParser();
@@ -1594,17 +1588,10 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param modelInfo Accompanying model info (null if not needed)
 	 * @param s String to parse
 	 */
-	public PropertiesFile parsePropertiesString(ModulesFile mf, String s) throws PrismLangException
+	public PropertiesFile parsePropertiesString(ModelInfo modelInfo, String s) throws PrismLangException
 	{
 		PrismParser prismParser;
 		PropertiesFile propertiesFile = null;
-
-		// if null modules file passed, create a blank one
-		if (mf == null) {
-			mf = new ModulesFile();
-			mf.setFormulaList(new FormulaList());
-			mf.setConstantList(new ConstantList());
-		}
 
 		try {
 			// obtain exclusive access to the prism parser
@@ -1612,7 +1599,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			prismParser = getPrismParser();
 			try {
 				// parse string
-				propertiesFile = prismParser.parsePropertiesFile(mf, new ByteArrayInputStream(s.getBytes()));
+				propertiesFile = prismParser.parsePropertiesFile(modelInfo, new ByteArrayInputStream(s.getBytes()));
 			} finally {
 				// release prism parser
 				releasePrismParser();
@@ -1790,6 +1777,46 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				mainLog.printWarning("PRISM code export failed: " + e.getMessage());
 			}
 		}
+	}
+
+	/**
+	 * Load a (built) model, with an accompanying (parsed) PRISM model.
+	 * These will be stored and used for subsequent model checking etc.
+	 * Pass in nulls to clear storage of the current model.
+	 * @param modulesFile The PRISM model
+	 */
+	public void loadPRISMModelAndBuiltModel(ModulesFile modulesFile, Model model)
+	{
+		currentModelSource = ModelSource.PRISM_MODEL;
+		// Clear any existing built model(s)
+		clearBuiltModel();
+		// Store model info
+		currentModulesFile = modulesFile;
+		currentModel = model;
+		// Reset dependent info
+		currentModelType = currentModulesFile == null ? null : currentModulesFile.getModelType();
+		currentDefinedMFConstants = null;
+		currentModelExpl = null;
+	}
+
+	/**
+	 * Load a (built) model, without an accompanying (parsed) PRISM model.
+	 * The model will be stored and used for subsequent model checking etc.
+	 * Pass in null to clear storage of the current model.
+	 * @param model The built model
+	 */
+	public void loadBuiltModel(Model model)
+	{
+		currentModelSource = ModelSource.BUILT_MODEL;
+		// Clear any existing built model(s)
+		clearBuiltModel();
+		// Store model info
+		currentModulesFile = null;
+		currentModel = model;
+		// Reset dependent info
+		currentModelType = currentModel == null ? null : currentModel.getModelType();
+		currentDefinedMFConstants = null;
+		currentModelExpl = null;
 	}
 
 	/**
@@ -2801,17 +2828,18 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				setEngine(Prism.EXPLICIT);
 			}
 		}
-		// Compatibility check
-		if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
-			if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
-				throw new PrismException("Cannot generate strategies with the current engine "
-						+ "because some state of the model do not have unique action labels for each choice. "
-						+ "Either switch to the explicit engine or add more action labels to the model");
-		}
 
 		try {
 			// Build model, if necessary
 			buildModelIfRequired();
+
+			// Compatibility check
+			if (genStrat && currentModelType.nondeterministic() && !getExplicit()) {
+				if (!((NondetModel) currentModel).areAllChoiceActionsUnique())
+					throw new PrismException("Cannot generate strategies with the current engine "
+							+ "because some state of the model do not have unique action labels for each choice. "
+							+ "Either switch to the explicit engine or add more action labels to the model");
+			}
 
 			// Create new model checker object and do model checking
 			if (!getExplicit()) {
@@ -2878,8 +2906,9 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 				if (exportDigital) {
 					try {
 						exportPRISMModel(exportDigitalFile);
-					} catch (PrismException e) {
-						// In case of error, just print a warning
+					}
+					// In case of error, just print a warning
+					catch (PrismException e) {
 						mainLog.printWarning("PRISM code export failed: " + e.getMessage());
 					}
 				}
@@ -3544,6 +3573,41 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 			tmpLog.close();
 	}
 
+	public void explicitBuildTest()
+	{
+		/* old code...
+		String tmpFile = "";
+		try {
+			explicit.ConstructModel constructModel = new explicit.ConstructModel(getSimulator(), mainLog);
+			mainLog.println("\nConstructing model explicitly...");
+			explicit.Model modelExplicit = constructModel.constructModel(currentModulesFile);
+			tmpFile = File.createTempFile("explicitbuildtest", ".tra").getAbsolutePath();
+			tmpFile = "explicitbuildtest.tra";
+			mainLog.println("\nExporting (explicit) model to \"" + tmpFile + "1\"...");
+			modelExplicit.exportToPrismExplicitTra(tmpFile + "1");
+			mainLog.println("\nExporting (normal) model to \"" + tmpFile + "2\"...");
+			exportTransToFile(true, Prism.EXPORT_PLAIN, new File(tmpFile + "2"));
+			explicit.ModelSimple modelExplicit2 = null;
+			switch (currentModelType) {
+			case DTMC:
+				modelExplicit2 = new explicit.DTMCSimple();
+				break;
+			case CTMC:
+				modelExplicit2 = new explicit.CTMCSimple();
+				break;
+			case MDP:
+				modelExplicit2 = new explicit.MDPSimple();
+				break;
+			}
+			modelExplicit2.buildFromPrismExplicit(tmpFile + "2");
+			if (!modelExplicit.equals(modelExplicit2)) {
+				throw new PrismException("Explicit models differ");
+			}
+		} catch (IOException e) {
+			throw new PrismException("Could not create temporary file \"" + tmpFile + "\"");
+		}*/
+	}
+
 	/**
 	 * Clear the built model if needed (free/deallocate memory etc)
 	 */
@@ -3657,10 +3721,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 		// create new file log or use main log
 		PrismLog tmpLog;
 		if (file != null) {
-			tmpLog = new PrismFileLog(file.getPath(), append);
-			if (!tmpLog.ready()) {
-				throw new PrismException("Could not open file \"" + file + "\" for output");
-			}
+			tmpLog = PrismFileLog.create(file.getPath(), append);
 		} else {
 			tmpLog = mainLog;
 		}
@@ -3719,6 +3780,172 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 
 	/**
 	 * Old API:
+	 * Load a (built) model and export its transition matrix to a Spy file.
+	 * @param model The model
+	 * @param file File to export to
+	 */
+	public void exportToSpyFile(Model model, File file) throws PrismException
+	{
+		loadBuiltModel(model);
+		exportToSpyFile(file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export the MTBDD for its transition matrix to a Dot file.
+	 * @param model The model
+	 * @param file File to export to
+	 */
+	public void exportToDotFile(Model model, File file) throws PrismException
+	{
+		loadBuiltModel(model);
+		exportToDotFile(file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its transition matrix to a file
+	 * @param model The model
+	 * @param ordered Ensure that (source) states are in ascending order?
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * <li> {@link #EXPORT_DOT}
+	 * <li> {@link #EXPORT_MRMC}
+	 * <li> {@link #EXPORT_ROWS}
+	 * <li> {@link #EXPORT_DOT_STATES}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
+	{
+		exportTransToFile(model, ordered, exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its transition matrix to a file (or to the log)
+	 * @param model The model
+	 * @param ordered Ensure that (source) states are in ascending order?
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * <li> {@link #EXPORT_DOT}
+	 * <li> {@link #EXPORT_MRMC}
+	 * <li> {@link #EXPORT_ROWS}
+	 * <li> {@link #EXPORT_DOT_STATES}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportTransToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
+	{
+		loadBuiltModel(model);
+		exportTransToFile(ordered, exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its state rewards to a file
+	 * @param model The model
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * <li> {@link #EXPORT_MRMC}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportStateRewardsToFile(Model model, int exportType, File file) throws FileNotFoundException, PrismException
+	{
+		loadBuiltModel(model);
+		exportStateRewardsToFile(exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its transition rewards to a file
+	 * @param model The model
+	 * @param ordered Ensure that (source) states are in ascending order?
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * <li> {@link #EXPORT_MRMC}
+	 * <li> {@link #EXPORT_ROWS}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportTransRewardsToFile(Model model, boolean ordered, int exportType, File file) throws FileNotFoundException, PrismException
+	{
+		loadBuiltModel(model);
+		exportTransRewardsToFile(ordered, exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its bottom strongly connected components (BSCCs) to a file
+	 * @param model The model
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportBSCCsToFile(Model model, int exportType, File file) throws PrismException
+	{
+		loadBuiltModel(model);
+		exportBSCCsToFile(exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export the states satisfying labels from it and a properties file to a file
+	 * The PropertiesFile should correspond to the model. 
+	 * @param model The model
+	 * @param modulesFile The corresponding (parsed) PRISM model (for the labels)
+	 * @param propertiesFile The properties file (for further labels)
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportLabelsToFile(Model model, ModulesFile modulesFile, PropertiesFile propertiesFile, int exportType, File file)
+			throws FileNotFoundException, PrismException
+	{
+		loadPRISMModelAndBuiltModel(modulesFile, model);
+		exportLabelsToFile(propertiesFile, exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model and export its states to a file
+	 * @param model The model
+	 * @param exportType Type of export; one of: <ul>
+	 * <li> {@link #EXPORT_PLAIN} 
+	 * <li> {@link #EXPORT_MATLAB}
+	 * </ul>
+	 * @param file File to export to (if null, print to the log instead)
+	 */
+	public void exportStatesToFile(Model model, int exportType, File file) throws FileNotFoundException, PrismException
+	{
+		loadBuiltModel(model);
+		exportStateRewardsToFile(exportType, file);
+	}
+
+	/**
+	 * Old API:
+	 * Load a (built) model, perform model checking of a property on it and return result.
+	 * @param model The model to check
+	 * @param propertiesFile Parent property file of property (for labels/constants/...)
+	 * @param expr The property to check
+	 */
+	public Result modelCheck(Model model, PropertiesFile propertiesFile, Expression expr) throws PrismException, PrismLangException
+	{
+		loadBuiltModel(model);
+		return modelCheck(propertiesFile, expr);
+	}
+
+	/**
+	 * Old API:
 	 * Load a PRISM PTA model, perform model checking of a property on it and return result.
 	 * @param modulesFile The corresponding (parsed) PRISM model (for the labels)
 	 * @param propertiesFile Parent property file of property (for labels/constants/...)
@@ -3738,6 +3965,72 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	{
 		loadPRISMModel(modulesFile);
 		return modelCheckSimulator(propertiesFile, expr, null, initialState, maxPathLength, simMethod);
+	}
+
+	/**
+	 * Old API:
+	 */
+	public Result[] modelCheckSimulatorSimultaneously(ModulesFile modulesFile, PropertiesFile propertiesFile, List<Expression> exprs, State initialState,
+			long maxPathLength, SimulationMethod simMethod) throws PrismException
+	{
+		loadPRISMModel(modulesFile);
+		return modelCheckSimulatorSimultaneously(propertiesFile, exprs, null, initialState, maxPathLength, simMethod);
+	}
+
+	/**
+	 * Old API:
+	 */
+	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
+			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
+			throws PrismException, InterruptedException
+	{
+		loadPRISMModel(modulesFile);
+		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);
+	}
+
+	/**
+	 * Old API:
+	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
+	 * Output probability distribution to log. 
+	 */
+	public void doSteadyState(Model model) throws PrismException
+	{
+		doSteadyState(model, EXPORT_PLAIN, null);
+	}
+
+	/**
+	 * Old API:
+	 * Load (built) model and compute steady-state probabilities (DTMCs/CTMCs only).
+	 * Output probability distribution to a file (or, if file is null, to log). 
+	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
+	 */
+	public void doSteadyState(Model model, int exportType, File file) throws PrismException
+	{
+		loadBuiltModel(model);
+		doSteadyState(exportType, file, null);
+	}
+
+	/**
+	 * Old API:
+	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
+	 * Output probability distribution to log. 
+	 */
+	public void doTransient(Model model, double time) throws PrismException
+	{
+		doTransient(model, time, EXPORT_PLAIN, null, null);
+	}
+
+	/**
+	 * Old API:
+	 * Load (built) model and compute transient probabilities (DTMCs/CTMCs only).
+	 * Output probability distribution to a file (or, if file is null, to log). 
+	 * The exportType should be EXPORT_PLAIN or EXPORT_MATLAB.
+	 * Optionally (if non-null), read in the initial probability distribution from a file.
+	 */
+	public void doTransient(Model model, double time, int exportType, File file, File fileIn) throws PrismException
+	{
+		loadBuiltModel(model);
+		doTransient(time, exportType, file, fileIn);
 	}
 }
 

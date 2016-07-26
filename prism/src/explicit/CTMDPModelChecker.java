@@ -27,6 +27,7 @@
 package explicit;
 
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -37,11 +38,8 @@ import prism.PrismNotSupportedException;
 
 /**
  * Explicit-state model checker for continuous-time Markov decision processes (CTMDPs).
- * 
- * This uses various bits of functionality of MDPModelChecker, so we inherit from that.
- * (This way MDPModelChecker picks up any options set on this one.) 
  */
-public class CTMDPModelChecker extends MDPModelChecker
+public class CTMDPModelChecker extends ProbModelChecker
 {
 	/**
 	 * Create a new CTMDPModelChecker, inherit basic state from parent (unless null).
@@ -54,7 +52,7 @@ public class CTMDPModelChecker extends MDPModelChecker
 	// Model checking functions
 
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		double uTime;
 		BitSet b1, b2;
@@ -308,5 +306,12 @@ public class CTMDPModelChecker extends MDPModelChecker
 		} catch (PrismException e) {
 			System.out.println(e);
 		}
+	}
+
+	@Override
+	protected MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+			Collection<MDPExpectationConstraint> expConstraints, String method)
+	{
+		throw new UnsupportedOperationException();
 	}
 }

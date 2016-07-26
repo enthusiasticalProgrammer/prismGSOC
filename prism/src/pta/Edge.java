@@ -111,6 +111,13 @@ public class Edge
 		return resets.entrySet();
 	}
 
+	/**
+	 * Perform some basic syntactic checks.
+	 */
+	public void check()
+	{
+	}
+
 	@Override
 	public String toString()
 	{

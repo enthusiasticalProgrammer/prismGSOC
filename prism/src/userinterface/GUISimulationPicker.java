@@ -1173,6 +1173,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		private static final long serialVersionUID = 1L;
 		private TableCellRenderer tableCellRenderer = new TableCellRenderer()
 		{
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)

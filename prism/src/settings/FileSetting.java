@@ -102,8 +102,10 @@ public class FileSetting extends Setting
 		super.checkObjectWithConstraints(obj);
 		if (obj instanceof File) {
 			File f = (File) obj;
-			validFile = f.isFile();
-
+			if (f != null)
+				validFile = f.isFile();
+			else
+				validFile = false;
 		} else
 			validFile = false;
 	}

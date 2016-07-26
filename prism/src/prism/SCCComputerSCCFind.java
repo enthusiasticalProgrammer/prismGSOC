@@ -184,10 +184,6 @@ public class SCCComputerSCCFind extends SCCComputer
 		// Sanity check, partitioning of the state space should prevent this
 		assert !sccs.contains(nodes);
 
-		/* if (prism.getVerbose()) {
-			mainLog.println("Found SCC:");
-			JDD.PrintVector(nodes, rows);
-		} */
 		sccs.addElement(nodes);
 		JDD.Ref(nodes);
 		allSCCs = JDD.Or(allSCCs, nodes);

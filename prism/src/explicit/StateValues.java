@@ -42,7 +42,6 @@ import parser.type.Type;
 import parser.type.TypeBool;
 import parser.type.TypeDouble;
 import parser.type.TypeInt;
-import parser.type.TypeVoid;
 import prism.PrismException;
 import prism.PrismLangException;
 import prism.PrismLog;
@@ -62,7 +61,6 @@ public class StateValues implements StateVector
 	protected int[] valuesI;
 	protected double[] valuesD;
 	protected BitSet valuesB;
-	protected Object valuesO;
 
 	// Model info
 	protected List<State> statesList;
@@ -154,10 +152,7 @@ public class StateValues implements StateVector
 			} else {
 				valuesB = new BitSet();
 			}
-		} else if (type instanceof TypeVoid) {
-			valuesO = init;
 		} else {
-			(new PrismException("")).printStackTrace();
 			throw new PrismLangException("Cannot create a vector of type " + type);
 		}
 	}
@@ -1391,8 +1386,6 @@ public class StateValues implements StateVector
 			return valuesD[i];
 		} else if (type instanceof TypeBool) {
 			return valuesB.get(i);
-		} else if (type instanceof TypeVoid) {
-			return valuesO;
 		} else {
 			return null;
 		}

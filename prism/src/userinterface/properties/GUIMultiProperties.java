@@ -893,18 +893,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				// TODO Auto-generated catch block
 				error.printStackTrace();
 			}
-		} else {
-			// disabling strategy implementation
-			// showing error message
-			//			JOptionPane.showMessageDialog(this, "No strategy generated.");
-			//			return;
-			//			try {
-			//				getPrism().getSettings().set(
-			//						PrismSettings.PRISM_IMPLEMENT_STRATEGY, false);
-			//			} catch (PrismException error) {
-			//				// TODO Auto-generated catch block
-			//				error.printStackTrace();
-			//			}
 		}
 
 		consTable.correctEditors();
@@ -920,11 +908,8 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 
 		// set strategy generation flag
 		try {
-			//			getPrism().getSettings().set(PrismSettings.PRISM_GENERATE_STRATEGY,
-			//					generateStrategy.isSelected());
 			getPrism().getSettings().set(PrismSettings.PRISM_EXPORT_ADV, "MDP");
 		} catch (PrismException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -957,7 +942,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 			try {
 				getPrism().getSettings().set(PrismSettings.PRISM_GENERATE_STRATEGY, false);
 			} catch (PrismException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -1232,7 +1216,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		// show results dialog for reach one
 		for (i = 0; i < n; i++) {
 			exp = experiments.getExperiment(inds[i]);
-			new GUIResultsTable(this.getGUI(), exp).show();
+			new GUIResultsTable(this.getGUI(), this, exp).show();
 		}
 	}
 
@@ -1569,7 +1553,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 						// there is no property yet, open new property editor
 						a_newProperty();
 					}
-					a_editProperty();
 				}
 			}
 		}
@@ -2024,14 +2007,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		strategiesMenu.add(new JSeparator());
 		strategiesMenu.add(exportStratPlain);
 		strategiesMenu.add(exportStratProduct);
-
-		//		JMenu stratExportMenu = new JMenu("Export strategy");
-		//		stratExportMenu.setIcon(GUIPrism.getIconFromImage("smallExport.png"));
-		//		stratExportMenu.add(exportStratPlain);
-		//		stratExportMenu.add(exportStratProduct);
-		//		strategiesMenu.add(stratExportMenu);
-		//		JMenu stratExportMenu = new JMenu("Export strategy");
-		//		stratExportMenu.setIcon(GUIPrism.getIconFromImage("smallExport.png"));
 
 		// add to the main menu
 		propertiesPopup.add(strategiesMenu);

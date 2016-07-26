@@ -79,6 +79,9 @@ public class JDDNode
 
 	public double getValue()
 	{
+		if (DebugJDD.debugEnabled) {
+			return DebugJDD.nodeGetValue(this);
+		}
 		return DDN_GetValue(ptr);
 	}
 
@@ -95,12 +98,19 @@ public class JDDNode
 	 */
 	public JDDNode getThen()
 	{
-		assert !this.isConstant();
+		if (DebugJDD.debugEnabled) {
+			return DebugJDD.nodeGetThen(this);
+		}
 
-		// just return the node, even if DebugJDD is enabled
-		// DDN_GetThen will return NULL if the current node is a
-		// constant, raising an Exception in the JDDNode constructor
-		return new JDDNode(DDN_GetThen(ptr));
+		long thenPtr = DDN_GetThen(ptr);
+		if (thenPtr == 0) {
+			if (isConstant()) {
+				throw new RuntimeException("Trying to access the 'then' child of a constant MTBDD node");
+			} else {
+				throw new RuntimeException("getThen: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
+			}
+		}
+		return new JDDNode(thenPtr);
 	}
 
 	/**
@@ -116,12 +126,19 @@ public class JDDNode
 	 */
 	public JDDNode getElse()
 	{
-		assert !this.isConstant();
+		if (DebugJDD.debugEnabled) {
+			return DebugJDD.nodeGetElse(this);
+		}
 
-		// just return the node, even if DebugJDD is enabled
-		// DDN_GetElse will return NULL if the current node is a
-		// constant, raising an Exception in the JDDNode constructor
-		return new JDDNode(DDN_GetElse(ptr));
+		long elsePtr = DDN_GetElse(ptr);
+		if (elsePtr == 0) {
+			if (isConstant()) {
+				throw new RuntimeException("Trying to access the 'else' child of a constant MTBDD node");
+			} else {
+				throw new RuntimeException("getElse: CUDD returned NULL, but node is not a constant node. Out of memory or corrupted MTBDD?");
+			}
+		}
+		return new JDDNode(elsePtr);
 	}
 
 	@Override
@@ -156,14 +173,13 @@ public class JDDNode
 	 */
 	public JDDNode copy()
 	{
-		JDDNode result;
 		if (DebugJDD.debugEnabled) {
-			result = new DebugJDD.DebugJDDNode(ptr, false);
+			return DebugJDD.Copy(this);
 		} else {
-			result = new JDDNode(ptr());
+			JDDNode result = new JDDNode(ptr());
+			JDD.Ref(result);
+			return result;
 		}
-		JDD.Ref(result);
-		return result;
 	}
 }
 

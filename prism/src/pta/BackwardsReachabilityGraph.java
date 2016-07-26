@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import prism.PrismException;
 import explicit.Distribution;
 import explicit.MDP;
 import explicit.MDPSimple;
@@ -130,7 +129,7 @@ public class BackwardsReachabilityGraph
 			for (List<List<Integer>> list2 : list) {
 				tr++;
 				Distribution distr = new Distribution();
-				double prob = 0;
+				double prob;
 				int j = -1;
 				for (List<Integer> dests : list2) {
 					j++;

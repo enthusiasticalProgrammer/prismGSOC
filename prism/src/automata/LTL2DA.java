@@ -87,8 +87,6 @@ public class LTL2DA extends PrismComponent
 	 * in which atomic propositions are represented by ExpressionLabel objects.
 	 * @param ltl the formula
 	 * @param constants the values of constants, may be {@code null}
-	 * @param hasToBeComplete communicates, whether the resulting DA has to be complete.
-	 *                 This is only important for Rabinizer, where it is not complete by default.
 	 * @param allowedAcceptance the AcceptanceTypes that are allowed to be returned
 	 */
 	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDA(Expression ltl, Values constants, AcceptanceType... allowedAcceptance)
@@ -328,12 +326,11 @@ public class LTL2DA extends PrismComponent
 	}
 
 	/** Check the atomic propositions of the (externally generated) automaton */
-	private static void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
+	private void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
 		APSet ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {
-
-			if (!ltlAPs.asList().contains(ap)) {
+			if (!ltlAPs.hasAP(ap)) {
 				throw new PrismException("Generated automaton has extra atomic proposition \"" + ap + "\"");
 			}
 		}

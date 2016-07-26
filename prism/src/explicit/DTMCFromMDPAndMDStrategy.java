@@ -29,6 +29,7 @@ package explicit;
 import java.util.*;
 import java.util.Map.Entry;
 
+import common.IterableStateSet;
 import explicit.rewards.MCRewards;
 import parser.State;
 import parser.Values;
@@ -134,7 +135,7 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(final int s)
 	{
-		throw new RuntimeException("Not implemented yet");
+		return mdp.getSuccessorsIterator(s, strat.getChoiceIndex(s));
 	}
 
 	@Override
@@ -146,13 +147,13 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 	@Override
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
-		throw new RuntimeException("Not implemented yet");
+		return mdp.allSuccessorsInSet(s, strat.getChoiceIndex(s), set);
 	}
 
 	@Override
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
-		throw new RuntimeException("Not implemented yet");
+		return mdp.someSuccessorsInSet(s, strat.getChoiceIndex(s), set);
 	}
 
 	public int getNumChoices(int s)
@@ -232,15 +233,18 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 	@Override
 	public void prob0step(BitSet subset, BitSet u, BitSet result)
 	{
-		// TODO
-		throw new Error("Not yet supported");
+		for (int i : new IterableStateSet(subset, numStates)) {
+			result.set(i, mdp.someSuccessorsInSet(i, strat.getChoiceIndex(i), u));
+		}
 	}
 
 	@Override
 	public void prob1step(BitSet subset, BitSet u, BitSet v, BitSet result)
 	{
-		// TODO
-		throw new Error("Not yet supported");
+		for (int i : new IterableStateSet(subset, numStates)) {
+			int j = strat.getChoiceIndex(i);
+			result.set(i, mdp.someSuccessorsInSet(i, j, v) && mdp.allSuccessorsInSet(i, j, u));
+		}
 	}
 
 	@Override
@@ -258,8 +262,7 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 	@Override
 	public double mvMultRewSingle(int s, double vect[], MCRewards mcRewards)
 	{
-		throw new RuntimeException("Not implemented yet");
-		//return mdp.mvMultRewSingle(s, adv[s], vect);
+		return strat.isChoiceDefined(s) ? mdp.mvMultRewSingle(s, strat.getChoiceIndex(s), vect, mcRewards) : 0;
 	}
 
 	@Override

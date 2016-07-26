@@ -79,7 +79,9 @@ public class TileList
 	 */
 	public static void addStoredTileList(Expression formula, Expression formulaX, Expression formulaY, TileList tl)
 	{
-		storedFormulas.add(formula);
+		List<Expression> formulaList = new ArrayList<>();
+		formulaList.add(formula);
+		storedFormulas.add(formulaList);
 		storedFormulasX.add(formulaX);
 		storedFormulasY.add(formulaY);
 		storedTileLists.add(tl);
@@ -92,7 +94,7 @@ public class TileList
 	 */
 	protected static List<Expression> storedFormulasX;
 	protected static List<Expression> storedFormulasY;
-	protected static List<Expression> storedFormulas;
+	protected static List<List<Expression>> storedFormulas;
 
 	public static List<Expression> getStoredFormulasX()
 	{
@@ -104,7 +106,7 @@ public class TileList
 		return storedFormulasY;
 	}
 
-	public static List<Expression> getStoredFormulas()
+	public static List<List<Expression>> getStoredFormulas()
 	{
 		return storedFormulas;
 	}

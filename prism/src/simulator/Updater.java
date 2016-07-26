@@ -139,9 +139,8 @@ public class Updater extends PrismComponent
 	 * Determine the set of outgoing transitions from state 'state' and store in 'transitionList'.
 	 * @param state State from which to explore
 	 * @param transitionList TransitionList object in which to store result
-	 * @return 
 	 */
-	public TransitionList calculateTransitions(State state, TransitionList transitionList) throws PrismException
+	public void calculateTransitions(State state, TransitionList transitionList) throws PrismException
 	{
 		List<ChoiceListFlexi> chs;
 		int i, j, k, l, n, count;
@@ -249,7 +248,6 @@ public class Updater extends PrismComponent
 		//transitionList.checkForErrors(state, varList);
 
 		//System.out.println(transitionList);
-		return transitionList;
 	}
 
 	/**

@@ -102,7 +102,7 @@ public class TestMultiLongRunStrategy
 		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
 		for (int i = 0; i < 1000; i++) {//updateMemory is nondeterministic, therefore the loop
-			strat.init(0);
+			strat.initialise(0);
 			strat.updateMemory(0, 2); //action does not matter, important is that we are in state 1
 			Distribution d = strat.getNextMove(2);
 			assertEquals(1.0, d.sum(), PrismUtils.epsilonDouble);

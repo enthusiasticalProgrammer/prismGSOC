@@ -1,6 +1,6 @@
 package explicit;
 
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import prism.Operator;
 
 /**
@@ -10,14 +10,14 @@ class MDPConstraint extends MDPExpectationConstraint
 {
 	final double probability;
 
-	MDPConstraint(MDPReward reward, prism.Operator operator, double bound, double probability)
+	MDPConstraint(MDPRewards reward, prism.Operator operator, double bound, double probability)
 	{
 		super(reward, operator, bound);
 		checkForIllegalArguments(operator, probability);
 		this.probability = probability;
 	}
 
-	MDPConstraint(MDPReward reward, prism.Operator operator, double bound)
+	MDPConstraint(MDPRewards reward, prism.Operator operator, double bound)
 	{
 		this(reward, operator, bound, 5.0);
 	}

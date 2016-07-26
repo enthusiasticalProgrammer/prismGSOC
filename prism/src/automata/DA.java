@@ -163,9 +163,6 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 */
 	public void addEdge(int src, Symbol label, int dest)
 	{
-		if (label == null) {
-			throw new NullPointerException();
-		}
 		edges.get(src).add(new Edge(label, dest));
 	}
 
@@ -344,6 +341,25 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 			}
 		}
 		out.println("--END--");
+	}
+
+	/**
+	 * Print automaton to a PrismLog in a specified format ("dot" or "txt").
+	 */
+	public void print(PrismLog out, String type)
+	{
+		switch (type) {
+		case "txt":
+			out.println(toString());
+			break;
+		case "dot":
+			printDot(out);
+			break;
+		// Default to txt
+		default:
+			out.println(toString());
+			break;
+		}
 	}
 
 	/**

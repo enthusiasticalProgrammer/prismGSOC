@@ -29,7 +29,6 @@ package simulator.networking;
 import java.io.*;
 import java.util.*;
 import prism.PrismException;
-import simulator.networking.SSHHandler.PingThread;
 
 public class SSHHandler
 {

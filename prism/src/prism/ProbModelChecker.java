@@ -26,6 +26,8 @@
 
 package prism;
 
+import hybrid.PrismHybrid;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -39,8 +41,6 @@ import acceptance.AcceptanceReachDD;
 import acceptance.AcceptanceType;
 import automata.DA;
 import automata.LTL2DA;
-import dv.DoubleVector;
-import hybrid.PrismHybrid;
 import jdd.JDD;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -58,6 +58,7 @@ import parser.type.TypeBool;
 import parser.type.TypePathBool;
 import parser.type.TypePathDouble;
 import sparse.PrismSparse;
+import dv.DoubleVector;
 
 /*
  * Model checker for DTMCs.
@@ -276,7 +277,6 @@ public class ProbModelChecker extends NonProbModelChecker
 
 	protected StateValues checkExpressionSteadyState(ExpressionSS expr) throws PrismException
 	{
-
 		// BSCC stuff
 		List<JDDNode> bsccs = null;
 		JDDNode notInBSCCs = null;
@@ -485,10 +485,6 @@ public class ProbModelChecker extends NonProbModelChecker
 				} else {
 					probs = checkProbUntil(exprTemp, qual);
 				}
-			}
-			// Anything else - convert to until and recurse
-			else {
-				probs = checkProbPathFormulaSimple(exprTemp.convertToUntilForm(), qual);
 			}
 		}
 

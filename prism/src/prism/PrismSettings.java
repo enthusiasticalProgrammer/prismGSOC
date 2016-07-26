@@ -119,6 +119,8 @@ public class PrismSettings implements Observer
 	public static final String PRISM_LTL2DA_TOOL = "prism.ltl2daTool";
 	public static final String PRISM_LTL2DA_SYNTAX = "prism.ltl2daSyntax";
 
+	public static final String PRISM_JDD_SANITY_CHECKS = "prism.ddsanity";
+
 	public static final String PRISM_PARAM_ENABLED = "prism.param.enabled";
 	public static final String PRISM_PARAM_PRECISION = "prism.param.precision";
 	public static final String PRISM_PARAM_SPLIT = "prism.param.split";
@@ -297,14 +299,21 @@ public class PrismSettings implements Observer
 
 			// LTL2DA TOOLS
 			{ STRING_TYPE, PRISM_LTL2DA_TOOL, "Use external LTL->DA tool", "4.2.1", "", null,
-					"If non-empty, the path to the executable for the external LTL->DA tool." },
+					"If non-empty, the path to the executable for the external LTL->DA tool (or Rabinizer for \"rabinizer\")." },
 
 			{ CHOICE_TYPE, PRISM_LTL2DA_SYNTAX, "LTL syntax for external LTL->DA tool", "4.2.1", "LBT", "LBT,Spin,Spot,Rabinizer",
 					"The syntax for LTL formulas passed to the external LTL->DA tool." },
+
+			// DEBUG / SANITY CHECK OPTIONS:
+			{ BOOLEAN_TYPE, PRISM_JDD_SANITY_CHECKS, "Do BDD sanity checks", "4.3.1", new Boolean(false), "",
+					"Perform internal sanity checks during computations (can cause significant slow-down)." },
+
+			//STRATEGY OPTIONS:
 			{ BOOLEAN_TYPE, PRISM_GENERATE_STRATEGY, "Generate Strategy", "4.1", new Boolean(false), "",
 					"Generate an optimal strategy when model checking an MDP/game" },
 			{ BOOLEAN_TYPE, PRISM_IMPLEMENT_STRATEGY, "Implements Strategy", "4.1", new Boolean(false), "",
 					"Model checks the property with respect to strategy." },
+
 			// PARAMETRIC MODEL CHECKING
 			{ BOOLEAN_TYPE, PRISM_PARAM_ENABLED, "Do parametric model checking", "4.1", new Boolean(false), "", "Perform parametric model checking." },
 			{ STRING_TYPE, PRISM_PARAM_PRECISION, "Parametric model checking precision", "4.1", "5/100", "",
@@ -688,6 +697,21 @@ public class PrismSettings implements Observer
 								} catch (SettingException ee) {
 									System.err.println("Warning: PRISM setting \"" + key + "\" has invalid value \"" + value + "\"");
 								}
+							} else {
+								// Warning for unused options disabled for now
+								// (it's a pain when you have lots of branches with lots of new options)
+								if (false) {
+									// Make sure this is not an old PRISM setting and if not print a warning
+									boolean isOld = false;
+									for (int i = 0; i < oldPropertyNames.length; i++) {
+										if (oldPropertyNames[i].equals(key)) {
+											isOld = true;
+											break;
+										}
+									}
+									if (!isOld)
+										System.err.println("Warning: PRISM setting \"" + key + "\" is unknown.");
+								}
 							}
 						}
 					}
@@ -810,12 +834,6 @@ public class PrismSettings implements Observer
 		String sw = pair.first;
 		Map<String, String> options = pair.second;
 
-		// Remove "-"
-		sw = args[i].substring(1);
-		// Remove optional second "-" (i.e. we allow switches of the form --sw too)
-		if (sw.charAt(0) == '-')
-			sw = sw.substring(1);
-
 		// Note: the order of these switches should match the -help output (just to help keep track of things).
 
 		// ENGINES/METHODS:
@@ -844,8 +862,6 @@ public class PrismSettings implements Observer
 					set(PRISM_PTA_METHOD, "Stochastic games");
 				else if (s.equals("backwards") || s.equals("bw"))
 					set(PRISM_PTA_METHOD, "Backwards reachability");
-				else if (s.equals("bisim"))
-					set(PRISM_PTA_METHOD, "Bisimulation minimisation");
 				else
 					throw new PrismException("Unrecognised option for -" + sw + " switch (options are: digital, games)");
 			} else {
@@ -1172,14 +1188,7 @@ public class PrismSettings implements Observer
 		// CUDD settings
 		else if (sw.equals("cuddmaxmem")) {
 			if (i < args.length - 1) {
-				try {
-					j = Integer.parseInt(args[++i]);
-					if (j < 0)
-						throw new NumberFormatException();
-					set(PRISM_CUDD_MAX_MEM, j);
-				} catch (NumberFormatException e) {
-					throw new PrismException("Invalid value for -" + sw + " switch");
-				}
+				set(PRISM_CUDD_MAX_MEM, args[++i]);
 			} else {
 				throw new PrismException("No value specified for -" + sw + " switch");
 			}
@@ -1250,6 +1259,11 @@ public class PrismSettings implements Observer
 			} else {
 				throw new PrismException("The -" + sw + " switch requires one argument (options are: lbt, spin, spot, rabinizer)");
 			}
+		}
+
+		// DEBUGGING / SANITY CHECKS
+		else if (sw.equals("ddsanity")) {
+			set(PRISM_JDD_SANITY_CHECKS, true);
 		}
 
 		// PARAMETRIC MODEL CHECKING:
@@ -1572,6 +1586,7 @@ public class PrismSettings implements Observer
 		mainLog.println("-gsmax <n> (or sormax <n>) ..... Set memory limit (KB) for hybrid GS/SOR [default: 1024]");
 		mainLog.println("-cuddmaxmem <n> ................ Set max memory for CUDD package, e.g. 125k, 50m, 4g [default: 1g]");
 		mainLog.println("-cuddepsilon <x> ............... Set epsilon value for CUDD package [default: 1e-15]");
+		mainLog.println("-ddsanity ...................... Enable internal sanity checks (causes slow-down)");
 		mainLog.println();
 		mainLog.println("PARAMETRIC MODEL CHECKING OPTIONS:");
 		mainLog.println("-param <vals> .................. Do parametric model checking with parameters (and ranges) <vals>");

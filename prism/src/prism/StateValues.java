@@ -153,6 +153,13 @@ public interface StateValues extends StateVector
 	 * (interval specified as relational operator and bound)
 	 * <br>[ REFS: <i>result</i> ]
 	 */
+	JDDNode getBDDFromInterval(String relOpString, double bound);
+
+	/**
+	 * Generate BDD for states in the given interval
+	 * (interval specified as relational operator and bound)
+	 * <br>[ REFS: <i>result</i> ]
+	 */
 	JDDNode getBDDFromInterval(RelOp relOp, double bound);
 
 	/**

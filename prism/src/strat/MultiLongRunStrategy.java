@@ -121,7 +121,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	}
 
 	@Override
-	public void init(int state)
+	public void initialise(int state)
 	{
 		strategy = -1;
 		setRecurrency(state);
@@ -333,5 +333,11 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public Distribution getSwitchProbability(int i)
 	{
 		return switchProb[i];
+	}
+
+	@Override
+	public void clear()
+	{
+		//nothing to do
 	}
 }

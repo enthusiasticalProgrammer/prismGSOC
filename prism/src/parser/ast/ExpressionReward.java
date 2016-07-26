@@ -38,12 +38,18 @@ public class ExpressionReward extends ExpressionQuant
 {
 	protected Object rewardStructIndex = null;
 	protected Object rewardStructIndexDiv = null;
-	Expression reward = null;
 
 	// Constructors
 
 	public ExpressionReward()
 	{
+	}
+
+	public ExpressionReward(Expression expression, String relOpString, Expression r)
+	{
+		setExpression(expression);
+		setRelOp(relOpString);
+		setBound(r);
 	}
 
 	// Set methods
@@ -66,18 +72,6 @@ public class ExpressionReward extends ExpressionQuant
 		setBound(r);
 	}
 
-	@Override
-	public void setExpression(Expression e)
-	{
-		expression = e;
-	}
-
-	@Override
-	public void setFilter(Filter f)
-	{
-		filter = f;
-	}
-
 	// Get methods
 
 	public Object getRewardStructIndex()
@@ -96,18 +90,6 @@ public class ExpressionReward extends ExpressionQuant
 	public Expression getReward()
 	{
 		return getBound();
-	}
-
-	@Override
-	public Expression getExpression()
-	{
-		return expression;
-	}
-
-	@Override
-	public Filter getFilter()
-	{
-		return filter;
 	}
 
 	// Other methods
@@ -276,6 +258,7 @@ public class ExpressionReward extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
+
 		s += "R" + getModifierString();
 		if (rewardStructIndex != null) {
 			if (rewardStructIndex instanceof Expression)
@@ -296,6 +279,7 @@ public class ExpressionReward extends ExpressionQuant
 		if (getFilter() != null)
 			s += " " + getFilter();
 		s += " ]";
+
 		return s;
 	}
 

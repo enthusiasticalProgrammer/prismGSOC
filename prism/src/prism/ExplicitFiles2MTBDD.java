@@ -135,13 +135,12 @@ public class ExplicitFiles2MTBDD
 
 	private void readStatesFromFile() throws PrismException
 	{
-
+		BufferedReader in = null;
 		String s, ss[];
 		int i, j, lineNum = 0;
 
 		// create arrays for explicit state storage
 		statesArray = new int[numStates][];
-		BufferedReader in = null;
 		try {
 			// open file for reading
 			in = new BufferedReader(new FileReader(statesFile));
@@ -188,6 +187,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// build model
@@ -370,6 +370,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// allocate DD vars for system
@@ -446,10 +447,8 @@ public class ExplicitFiles2MTBDD
 		moduleDDColVars[0] = new JDDVars();
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
-			varDDRowVars[i].refAll();
-			varDDColVars[i].refAll();
-			moduleDDRowVars[0].addVars(varDDRowVars[i]);
-			moduleDDColVars[0].addVars(varDDColVars[i]);
+			moduleDDRowVars[0].copyVarsFrom(varDDRowVars[i]);
+			moduleDDColVars[0].copyVarsFrom(varDDColVars[i]);
 		}
 
 		// put refs for all vars in whole system together
@@ -465,10 +464,8 @@ public class ExplicitFiles2MTBDD
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
 			// add to list
-			varDDRowVars[i].refAll();
-			varDDColVars[i].refAll();
-			allDDRowVars.addVars(varDDRowVars[i]);
-			allDDColVars.addVars(varDDColVars[i]);
+			allDDRowVars.copyVarsFrom(varDDRowVars[i]);
+			allDDColVars.copyVarsFrom(varDDColVars[i]);
 		}
 		if (modelType == ModelType.MDP) {
 			for (i = 0; i < ddChoiceVars.length; i++) {
@@ -685,6 +682,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// calculate dd for initial state

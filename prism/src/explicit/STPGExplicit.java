@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import prism.ModelType;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import explicit.rewards.STPGRewards;
 
 /**
@@ -350,7 +350,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	{
 		int s;
 		boolean min = false;
-		MDPReward mdpRewards = rewards.buildMDPRewards();
+		MDPRewards mdpRewards = rewards.buildMDPRewards();
 		// Loop depends on subset/complement arguments
 		if (subset == null) {
 			for (s = 0; s < numStates; s++) {
@@ -373,7 +373,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	@Override
 	public double mvMultRewMinMaxSingle(int s, double vect[], STPGRewards rewards, boolean min1, boolean min2, int adv[])
 	{
-		MDPReward mdpRewards = rewards.buildMDPRewards();
+		MDPRewards mdpRewards = rewards.buildMDPRewards();
 		boolean min = (getPlayer(s) == 1) ? min1 : min2;
 		return mvMultRewMinMaxSingle(s, vect, mdpRewards, min, adv);
 	}
@@ -381,7 +381,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	@Override
 	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], STPGRewards rewards, boolean min1, boolean min2, double val)
 	{
-		MDPReward mdpRewards = rewards.buildMDPRewards();
+		MDPRewards mdpRewards = rewards.buildMDPRewards();
 		boolean min = (getPlayer(s) == 1) ? min1 : min2;
 		return mvMultRewMinMaxSingleChoices(s, vect, mdpRewards, min, val);
 	}
@@ -425,7 +425,7 @@ public class STPGExplicit extends MDPSimple implements STPG
 	 * @param disc
 	 * @return
 	 */
-	public double mvMultRewMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int adv[], double disc)
+	public double mvMultRewMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int adv[], double disc)
 	{
 		int j, k, advCh = -1;
 		double d, prob, minmax;

@@ -42,7 +42,7 @@ public class ChoiceProperty extends SingleProperty
 
 	//Editor
 	private DefaultComboBoxModel<String> listModel;
-	private JComboBox editor;
+	private JComboBox<String> editor;
 
 	/** Creates a new instance of DoubleProperty */
 	public ChoiceProperty(PropertyOwner owner, String name, String[] props, int startIndex)
@@ -61,7 +61,7 @@ public class ChoiceProperty extends SingleProperty
 		this.fixedSize = true;
 
 		listModel = new DefaultComboBoxModel<>(props);
-		editor = new JComboBox(listModel);
+		editor = new JComboBox<>(listModel);
 		editor.setEditable(false);
 		Font f = editor.getFont();
 		editor.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));

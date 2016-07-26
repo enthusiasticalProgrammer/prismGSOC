@@ -63,7 +63,7 @@ import prism.Tile;
 import prism.TileList;
 import explicit.rewards.ConstructRewards;
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.STPGRewards;
 
@@ -580,7 +580,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	 * @param model The model
 	 * @param expr The P operator expression
 	 * @param forAll Are we checking "for all strategies" (true) or "there exists a strategy" (false)? [irrelevant for numerical (=?) queries] 
-	 * @param coalition If relevant, info about which set of players this P operator refers to
+	 * @param coalition If relevant, info about which set of players this P operator refers to (null if irrelevant)
 	 * @param statesOfInterest the states of interest, see checkExpression()
 	 */
 	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
@@ -629,7 +629,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		}
 
 		if (useSimplePathAlgo) {
-			return checkProbPathFormulaSimple(model, expr, minMax);
+			return checkProbPathFormulaSimple(model, expr, minMax, statesOfInterest);
 		} else {
 			return checkProbPathFormulaLTL(model, expr, false, minMax, statesOfInterest);
 		}
@@ -638,7 +638,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a simple, non-LTL path operator.
 	 */
-	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbPathFormulaSimple(Model model, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		boolean negated = false;
 		StateValues probs = null;
@@ -657,14 +657,14 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 			// Next
 			if (exprTemp.getOperator() == ExpressionTemporal.P_X) {
-				probs = checkProbNext(model, exprTemp, minMax);
+				probs = checkProbNext(model, exprTemp, minMax, statesOfInterest);
 			}
 			// Until
 			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
 				if (exprTemp.hasBounds()) {
-					probs = checkProbBoundedUntil(model, exprTemp, minMax);
+					probs = checkProbBoundedUntil(model, exprTemp, minMax, statesOfInterest);
 				} else {
-					probs = checkProbUntil(model, exprTemp, minMax);
+					probs = checkProbUntil(model, exprTemp, minMax, statesOfInterest);
 				}
 			}
 		}
@@ -684,7 +684,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a next operator.
 	 */
-	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbNext(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Model check the operand for all states
 		BitSet target = checkExpression(model, expr.getOperand2(), null).getBitSet();
@@ -714,7 +714,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for a bounded until operator.
 	 */
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// This method just handles discrete time
 		// Continuous-time model checkers will override this method
@@ -818,7 +818,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	/**
 	 * Compute probabilities for an (unbounded) until operator.
 	 */
-	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Model check operands for all states
 		BitSet remain = checkExpression(model, expr.getOperand1(), null).getBitSet();
@@ -1021,7 +1021,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeCumulativeRewards((CTMC) model, (MCRewards) modelRewards, timeDouble);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPReward) modelRewards, timeInt, minMax.isMin());
+			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPRewards) modelRewards, timeInt, minMax.isMin());
 			break;
 		default:
 			throw new PrismNotSupportedException(
@@ -1098,7 +1098,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeReachRewards((CTMC) model, (MCRewards) modelRewards, target);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPReward) modelRewards, target, minMax.isMin());
+			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPRewards) modelRewards, target, minMax.isMin());
 			break;
 		case STPG:
 			res = ((STPGModelChecker) this).computeReachRewards((STPG) model, (STPGRewards) modelRewards, target, minMax.isMin1(), minMax.isMin2());
@@ -1131,6 +1131,12 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 		// Compute probabilities
 		StateValues probs = checkSteadyStateFormula(model, expr.getExpression(), minMax);
+
+		// Print out probabilities
+		if (getVerbosity() > 5) {
+			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
+			probs.print(mainLog);
+		}
 
 		// For =? properties, just return values
 		if (opInfo.isNumeric()) {
@@ -1364,7 +1370,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 			// Build rewards
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
-			MDPReward mdpReward;
+			MDPRewards mdpReward;
 			if (model instanceof DTMCProductMLRStrategyAndMDP) {
 				MDP mdp = ((DTMCProductMLRStrategyAndMDP) model).getMDP();
 				mdpReward = constructRewards.buildMDPRewardStructure(mdp, rewStruct, constantValues);

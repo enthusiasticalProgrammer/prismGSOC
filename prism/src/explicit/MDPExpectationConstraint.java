@@ -1,6 +1,6 @@
 package explicit;
 
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import prism.Operator;
 
 /**
@@ -11,7 +11,7 @@ public class MDPExpectationConstraint extends MDPItem
 
 	final double bound;
 
-	MDPExpectationConstraint(MDPReward reward, Operator operator, double bound)
+	MDPExpectationConstraint(MDPRewards reward, Operator operator, double bound)
 	{
 		super(reward, operator);
 		this.bound = bound;

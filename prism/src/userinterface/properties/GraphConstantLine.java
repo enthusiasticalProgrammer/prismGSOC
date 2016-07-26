@@ -52,7 +52,6 @@ public class GraphConstantLine extends javax.swing.JPanel
 
 	private DefinedConstant dc;
 	private GUIGraphPicker parent;
-	private Type type;
 
 	/** Creates new form ConstantLine */
 	public GraphConstantLine(DefinedConstant dc, GUIGraphPicker parent)
@@ -123,7 +122,6 @@ public class GraphConstantLine extends javax.swing.JPanel
 
 	public void setConstType(Type type)
 	{
-		this.type = type;
 		if (type instanceof TypeDouble) {
 			typeLabel.setText("double");
 		} else if (type instanceof TypeInt) {

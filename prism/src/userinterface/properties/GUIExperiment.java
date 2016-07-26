@@ -286,10 +286,9 @@ public class GUIExperiment
 							// update progress meter
 							// (all properties simulated simultaneously so can't get more accurate feedback at the moment anyway)
 							table.progressChanged();
-						} catch (PrismException e) {
+						} catch (Exception e) {
 							// in case of error, report it (in log only), store as result, and go on to the next model
-							errorLog(e.getMessage());
-
+							errorLog(e);
 							setMultipleErrors(definedMFConstants, null, e);
 							undefinedConstants.iterateModel();
 							continue;
@@ -395,7 +394,6 @@ public class GUIExperiment
 			try {
 				prism.getSettings().set(PrismSettings.PRISM_IMPLEMENT_STRATEGY, false);
 			} catch (PrismException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

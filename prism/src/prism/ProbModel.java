@@ -498,7 +498,11 @@ public class ProbModel implements Model
 	}
 
 	/**
-	 * Reset transition matrix DD
+	 * Reset transition matrix DD.
+	 * Note: Update reachable states and call {@code filterReachableStates}
+	 * afterwards to update related information (trans01, odd, etc).
+	 *
+	 * <br>[ STORES: trans, DEREFS: <i>old transition matrix DD</i> ]
 	 */
 	@Override
 	public void resetTrans(JDDNode trans)
@@ -509,7 +513,9 @@ public class ProbModel implements Model
 	}
 
 	/**
-	 * Reset transition rewards DDs
+	 * Reset transition rewards DD for reward with index i.
+	 *
+	 * <br>[ STORES: transRewards, DEREFS: <i>old trans reward DD</i> ]
 	 */
 	@Override
 	public void resetTransRewards(int i, JDDNode transRewards)
@@ -518,6 +524,19 @@ public class ProbModel implements Model
 			JDD.Deref(this.transRewards[i]);
 		}
 		this.transRewards[i] = transRewards;
+	}
+
+	/**
+	 * Reset state rewards DD for reward with index i.
+	 *
+	 * <br>[ STORES: stateRewards, DEREFS: <i>old state reward DD</i> ]
+	 */
+	public void resetStateRewards(int i, JDDNode stateRewards)
+	{
+		if (this.stateRewards[i] != null) {
+			JDD.Deref(this.stateRewards[i]);
+		}
+		this.stateRewards[i] = stateRewards;
 	}
 
 	// do reachability
@@ -541,7 +560,10 @@ public class ProbModel implements Model
 		// work out number of reachable states
 		numStates = Math.pow(2, allDDRowVars.n());
 
-		// build odd
+		// build odd, clear old one
+		if (odd != null) {
+			ODDUtils.ClearODD(odd);
+		}
 		odd = ODDUtils.BuildODD(reach, allDDRowVars);
 	}
 
@@ -558,7 +580,10 @@ public class ProbModel implements Model
 		// work out number of reachable states
 		numStates = JDD.GetNumMinterms(reach, allDDRowVars.n());
 
-		// build odd
+		// build odd, clear old one
+		if (odd != null) {
+			ODDUtils.ClearODD(odd);
+		}
 		odd = ODDUtils.BuildODD(reach, allDDRowVars);
 	}
 
@@ -978,6 +1003,12 @@ public class ProbModel implements Model
 			for (int i = 0; i < numSynchs + 1; i++) {
 				JDD.Deref(transPerAction[i]);
 			}
+		}
+
+		if (odd != null) {
+			// clear ODD
+			ODDUtils.ClearODD(odd);
+			odd = null;
 		}
 	}
 }

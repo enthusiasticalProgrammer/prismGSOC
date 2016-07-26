@@ -42,7 +42,6 @@ public class TableResizer extends MouseInputAdapter
 	private int row;
 	private static final int PIXELS = 5;
 	private Cursor lastCursor;
-	private static Cursor S_resizeCursor = Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
 	private static Cursor E_resizeCursor = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
 
 	public TableResizer(JTable table)
@@ -91,6 +90,7 @@ public class TableResizer extends MouseInputAdapter
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
+		Point p = e.getPoint();
 		if (!active)
 			return;
 		if (colSel) {

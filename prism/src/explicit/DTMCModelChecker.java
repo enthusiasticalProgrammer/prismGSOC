@@ -49,7 +49,6 @@ import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 
-import parser.ast.ExpressionTemporal;
 import parser.type.TypeDouble;
 
 /**
@@ -199,10 +198,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		return rewards;
 	}
 
-	/**
-	 * @throws PrismException is there, because it is needed in CTMCModelChecker
-	 */
-	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -250,10 +246,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	/**
-	 * @throws PrismException because CTMCModelChecker throws it while overriding the method 
-	 */
-	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -1674,6 +1667,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		ModelCheckerResult res;
 		try {
 			// Two examples of building and solving a DTMC
+
 			int version = 2;
 			if (version == 1) {
 

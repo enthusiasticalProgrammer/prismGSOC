@@ -34,7 +34,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public void init(int state)
+	public void initialise(int state)
 	{
 		// nothing needs to be done
 	}
@@ -148,5 +148,11 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		}
 		EpsilonApproximationXiNStrategy other = (EpsilonApproximationXiNStrategy) o;
 		return choices.equals(other.choices);
+	}
+
+	@Override
+	public void clear()
+	{
+		// nothing to do
 	}
 }

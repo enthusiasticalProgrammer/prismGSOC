@@ -37,13 +37,10 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -58,8 +55,8 @@ import userinterface.graph.GUIImageExportDialog;
 import userinterface.graph.Graph;
 import userinterface.graph.GraphException;
 import userinterface.graph.GraphOptions;
-import userinterface.util.GUIPrismFileFilter;
 
+@SuppressWarnings("serial")
 public class GUIGraphHandler extends JPanel implements MouseListener
 {
 	private boolean canDelete;
@@ -80,14 +77,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 
 	private JMenu zoomMenu, exportMenu, importMenu;
 
-	private FileFilter pngFilter, jpgFilter, epsFilter, graFilter;
-	private Action exportOpenDocumentChart, exportOpenDocumentSpreadsheet;
-	private Action exportCSV, exportGNUPlot;
-
-	private GUIPrismFileFilter imagesFilter[], xmlFilter[], matlabFilter[], OpenDocumentChartFilter[], OpenDocumentSpreadsheetFilter[], CSVFilter[],
-			GNUFilter[], DATFilter[];
-
-	private PrintRequestAttributeSet attributes;
+	private FileFilter pngFilter, jpgFilter, epsFilter, graFilter, matlabFilter;
 
 	public GUIGraphHandler(JFrame parent, GUIPlugin plug, boolean canDelete)
 	{
@@ -103,43 +93,7 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 		jpgFilter = new FileNameExtensionFilter("JPEG files (*.jpg, *.jpeg)", "jpg", "jpeg");
 		epsFilter = new FileNameExtensionFilter("Encapsulated PostScript files (*.eps)", "eps");
 		graFilter = new FileNameExtensionFilter("PRISM graph files (*.gra, *.xml)", "gra", "xml");
-		imagesFilter = new GUIPrismFileFilter[3];
-		imagesFilter[0] = new GUIPrismFileFilter("PNG files (*.png)");
-		imagesFilter[0].addExtension("png");
-		imagesFilter[1] = new GUIPrismFileFilter("JPEG files (*.jpg, *.jpeg)");
-		imagesFilter[1].addExtension("jpg");
-		imagesFilter[2] = new GUIPrismFileFilter("Encapsulated PostScript files (*.eps)");
-		imagesFilter[2].addExtension("eps");
-
-		xmlFilter = new GUIPrismFileFilter[1];
-		xmlFilter[0] = new GUIPrismFileFilter("PRISM graph files (*.gra)");
-		xmlFilter[0].addExtension("gra");
-
-		matlabFilter = new GUIPrismFileFilter[1];
-		matlabFilter[0] = new GUIPrismFileFilter("Matlab files (*.m)");
-		matlabFilter[0].addExtension("m");
-
-		OpenDocumentChartFilter = new GUIPrismFileFilter[1];
-		OpenDocumentChartFilter[0] = new GUIPrismFileFilter("OpenDocument Chart files (*.odc)");
-		OpenDocumentChartFilter[0].addExtension("odc");
-
-		OpenDocumentSpreadsheetFilter = new GUIPrismFileFilter[1];
-		OpenDocumentSpreadsheetFilter[0] = new GUIPrismFileFilter("OpenDocument Spreadsheet files (*.ods)");
-		OpenDocumentSpreadsheetFilter[0].addExtension("ods");
-
-		CSVFilter = new GUIPrismFileFilter[1];
-		CSVFilter[0] = new GUIPrismFileFilter("CSV files (*.csv)");
-		CSVFilter[0].addExtension("csv");
-
-		GNUFilter = new GUIPrismFileFilter[1];
-		GNUFilter[0] = new GUIPrismFileFilter("GNUPlot files (*.gnu)");
-		GNUFilter[0].addExtension("gnu");
-
-		DATFilter = new GUIPrismFileFilter[1];
-		DATFilter[0] = new GUIPrismFileFilter("GNUPlot data files (*.dat)");
-		DATFilter[0].addExtension("dat");
-
-		attributes = new HashPrintRequestAttributeSet();
+		matlabFilter = new FileNameExtensionFilter("Matlab files (*.m)", "m");
 
 		models = new ArrayList<>();
 		options = new ArrayList<>();
@@ -303,106 +257,21 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				/*	if (plug.showSaveFileDialog(OpenDocumentChartFilter, OpenDocumentChartFilter[0]) != JFileChooser.APPROVE_OPTION)
-				return;
-				GraphView mgv = (GraphView)views.get(
-				theTabs.getSelectedIndex()
-				);
+				if (plug.showSaveFileDialog(matlabFilter) != JFileChooser.APPROVE_OPTION)
+					return;
+				Graph mgm = models.get(theTabs.getSelectedIndex());
+
 				try {
-				mgv.doExportToOpenDocumentChart(plug.getChooserFile());
-				} catch(ChartException ex) {
-				plug.error("Could not export OpenDocument Chart file:\n" + ex.getMessage());
-				}*/
+					mgm.exportToMatlab(plug.getChooserFile());
+				} catch (IOException ex) {
+					plug.error("Could not export Matlab file:\n" + ex.getMessage());
+				}
 			}
 		};
 		exportMatlab.putValue(Action.NAME, "Matlab file (*.m)");
 		exportMatlab.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_M));
 		exportMatlab.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallFileMatlab.png"));
 		exportMatlab.putValue(Action.LONG_DESCRIPTION, "Export graph as a Matlab file.");
-
-		exportOpenDocumentChart = new AbstractAction()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				/*	if (plug.showSaveFileDialog(OpenDocumentChartFilter, OpenDocumentChartFilter[0]) != JFileChooser.APPROVE_OPTION)
-						return;
-					GraphView mgv = (GraphView)views.get(
-						theTabs.getSelectedIndex()
-					);
-					try {
-						mgv.doExportToOpenDocumentChart(plug.getChooserFile());
-					} catch(ChartException ex) {
-						plug.error("Could not export OpenDocument Chart file:\n" + ex.getMessage());
-					}*/
-			}
-		};
-		exportOpenDocumentChart.putValue(Action.NAME, "OpenDocument Chart");
-		exportOpenDocumentChart.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
-		exportOpenDocumentChart.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExport.png"));
-		exportOpenDocumentChart.putValue(Action.LONG_DESCRIPTION, "Export graph as a OpenDocument Chart file.");
-
-		exportOpenDocumentSpreadsheet = new AbstractAction()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				/*if (plug.showSaveFileDialog(OpenDocumentSpreadsheetFilter, OpenDocumentSpreadsheetFilter[0]) != JFileChooser.APPROVE_OPTION)
-					return;
-				GraphView mgv = (GraphView)views.get(
-					theTabs.getSelectedIndex()
-				);
-				try {
-					mgv.doExportToOpenDocumentSpreadsheet(plug.getChooserFile());
-				} catch(ChartException ex) {
-					plug.error("Could not export OpenDocument Spreadsheet file:\n" + ex.getMessage());
-				}*/
-			}
-		};
-		exportOpenDocumentSpreadsheet.putValue(Action.NAME, "OpenDocument Spreadsheet");
-		exportOpenDocumentSpreadsheet.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_S));
-		exportOpenDocumentSpreadsheet.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExport.png"));
-		exportOpenDocumentSpreadsheet.putValue(Action.LONG_DESCRIPTION, "Export graph as a OpenDocument Spreadsheet file.");
-
-		exportCSV = new AbstractAction()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				/*if (plug.showSaveFileDialog(CSVFilter, CSVFilter[0]) != JFileChooser.APPROVE_OPTION)
-					return;
-				GraphModel mgm = models.get(
-					theTabs.getSelectedIndex()
-				);
-				try {
-					mgm.exportToCSV(plug.getChooserFile());
-				} catch(ChartException ex) {
-					plug.error("Could not export CSV file:\n"+ex.getMessage());
-				}*/
-			}
-		};
-		exportCSV.putValue(Action.NAME, "CSV file");
-		exportCSV.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_C));
-		exportCSV.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExport.png"));
-		exportCSV.putValue(Action.LONG_DESCRIPTION, "Export graph as a CSV file.");
-
-		exportGNUPlot = new AbstractAction()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-
-				if (plug.showSaveFileDialog(GNUFilter[0]) != JFileChooser.APPROVE_OPTION)
-					return;
-
-				if (plug.showSaveFileDialog(DATFilter[0]) != JFileChooser.APPROVE_OPTION)
-					return;
-			}
-		};
-		exportGNUPlot.putValue(Action.NAME, "GNUPlot file");
-		exportGNUPlot.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_G));
-		exportGNUPlot.putValue(Action.SMALL_ICON, GUIPrism.getIconFromImage("smallExport.png"));
-		exportGNUPlot.putValue(Action.LONG_DESCRIPTION, "Export graph as GNUPlot files.");
 
 		printGraph = new AbstractAction()
 		{
@@ -522,34 +391,6 @@ public class GUIGraphHandler extends JPanel implements MouseListener
 				}
 			}
 		}
-	}
-
-	/* We can't keep using the same menu because Swing won't allow
-	 * two components on screen with the same reference. Since one
-	 * instance of GUIGraphHandler contains N graphs, it needs N
-	 * import/export menus.
-	 */
-	public JMenu getExportMenu()
-	{
-		JMenu menu = new JMenu("Import/Export..");
-		menu.setIcon(GUIPrism.getIconFromImage("Export.png"));
-		menu.setMnemonic('I');
-
-		menu.add(new JLabel("Import"));
-		menu.add(importXML);
-		menu.addSeparator();
-		menu.add(new JLabel("Export"));
-		menu.add(exportXML);
-		menu.add(exportImagePNG);
-		menu.add(exportImageEPS);
-		menu.add(exportImageJPG);
-		menu.add(exportMatlab);
-		menu.add(exportOpenDocumentChart);
-		menu.add(exportOpenDocumentSpreadsheet);
-		menu.add(exportCSV);
-		menu.add(exportGNUPlot);
-
-		return menu;
 	}
 
 	public Action getPrintGraph()
