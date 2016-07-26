@@ -199,10 +199,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		return rewards;
 	}
 
-	/**
-	 * @throws PrismException is there, because it is needed in CTMCModelChecker
-	 */
-	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeInstantaneousRewards(DTMC dtmc, MCRewards mcRewards, double t)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -250,10 +247,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	/**
-	 * @throws PrismException because CTMCModelChecker throws it while overriding the method 
-	 */
-	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeCumulativeRewards(DTMC dtmc, MCRewards mcRewards, double t)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
