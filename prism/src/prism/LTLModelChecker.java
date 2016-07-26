@@ -1323,34 +1323,6 @@ public class LTLModelChecker extends PrismComponent
 		return ecComputer.getMECStates();
 	}
 
-	/**
-	 * Find all maximal end components (ECs) contained within {@code states}
-	 * and whose states have no outgoing transitions.
-	 * @param states BDD of the set of containing states
-	 * @return a vector of (referenced) BDDs representing the ECs
-	 */
-	public List<JDDNode> findBottomEndComponents(NondetModel model, JDDNode states) throws PrismException
-	{
-		List<JDDNode> ecs = findMECStates(model, states);
-		List<JDDNode> becs = new Vector<>();
-		JDDNode out;
-
-		for (JDDNode scc : ecs) {
-			JDD.Ref(model.getTrans01());
-			JDD.Ref(scc);
-			out = JDD.And(model.getTrans01(), scc);
-			JDD.Ref(scc);
-			out = JDD.And(out, JDD.Not(JDD.PermuteVariables(scc, model.getAllDDRowVars(), model.getAllDDColVars())));
-			if (out.equals(JDD.ZERO)) {
-				becs.add(scc);
-			} else {
-				JDD.Deref(scc);
-			}
-			JDD.Deref(out);
-		}
-		return becs;
-	}
-
 	public JDDNode maxStableSetTrans1(NondetModel model, JDDNode b)
 	{
 
