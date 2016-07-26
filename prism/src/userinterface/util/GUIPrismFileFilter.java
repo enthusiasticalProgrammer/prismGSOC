@@ -31,6 +31,12 @@ import java.util.Vector;
 import java.io.File;
 import javax.swing.filechooser.*;
 
+/**
+ * This is not anymore in the master-branch, but apparently it is used by some strategy-related things by GUIMultiProperties,
+ * which I do not understand, therefore I leave it for the moment.
+ * TODO @Christopher: remove it
+ */
+@Deprecated
 public class GUIPrismFileFilter extends FileFilter
 {
 	private String name;
