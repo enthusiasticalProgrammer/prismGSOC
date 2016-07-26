@@ -435,19 +435,15 @@ public abstract class ASTElement
 		accept(visitor);
 	}
 
-	public void semanticCheck() throws PrismLangException
-	{
-		semanticCheck(null, null);
-	}
-
 	/**
-	 * Perform any required semantic checks. Optionally pass in parent ModulesFile
-	 * and PropertiesFile for some additional checks (or leave null);
+	 * Perform any required semantic checks. These are just simple checks on expressions, mostly.
+	 * For semantic checks on models and properties, specifically, see:
+	 * {@link parser.visitor.ModulesFileSemanticCheck} and {@link parser.visitor.PropertiesSemanticCheck}.
 	 * These checks are done *before* any undefined constants have been defined.
 	 */
-	public void semanticCheck(ModulesFile modulesFile, PropertiesFile propertiesFile) throws PrismLangException
+	public void semanticCheck() throws PrismLangException
 	{
-		SemanticCheck visitor = new SemanticCheck(modulesFile, propertiesFile);
+		SemanticCheck visitor = new SemanticCheck();
 		accept(visitor);
 	}
 
