@@ -526,6 +526,19 @@ public class ProbModel implements Model
 		this.transRewards[i] = transRewards;
 	}
 
+	/**
+	 * Reset state rewards DD for reward with index i.
+	 *
+	 * <br>[ STORES: stateRewards, DEREFS: <i>old state reward DD</i> ]
+	 */
+	public void resetStateRewards(int i, JDDNode stateRewards)
+	{
+		if (this.stateRewards[i] != null) {
+			JDD.Deref(this.stateRewards[i]);
+		}
+		this.stateRewards[i] = stateRewards;
+	}
+
 	// do reachability
 
 	@Override
@@ -547,7 +560,10 @@ public class ProbModel implements Model
 		// work out number of reachable states
 		numStates = Math.pow(2, allDDRowVars.n());
 
-		// build odd
+		// build odd, clear old one
+		if (odd != null) {
+			ODDUtils.ClearODD(odd);
+		}
 		odd = ODDUtils.BuildODD(reach, allDDRowVars);
 	}
 
@@ -564,7 +580,10 @@ public class ProbModel implements Model
 		// work out number of reachable states
 		numStates = JDD.GetNumMinterms(reach, allDDRowVars.n());
 
-		// build odd
+		// build odd, clear old one
+		if (odd != null) {
+			ODDUtils.ClearODD(odd);
+		}
 		odd = ODDUtils.BuildODD(reach, allDDRowVars);
 	}
 
@@ -984,6 +1003,12 @@ public class ProbModel implements Model
 			for (int i = 0; i < numSynchs + 1; i++) {
 				JDD.Deref(transPerAction[i]);
 			}
+		}
+
+		if (odd != null) {
+			// clear ODD
+			ODDUtils.ClearODD(odd);
+			odd = null;
 		}
 	}
 }

@@ -58,7 +58,7 @@ public class GUIOptionsDialog extends javax.swing.JDialog
 			table.setOwners(al);
 			panels.add(table);
 			theTabs.add(table);
-			theTabs.setTitleAt(panels.indexOf(table), PrismSettings.propertyOwnerNames[i]);
+			theTabs.setTitleAt(panels.indexOf(table), settings.propertyOwnerNames[i]);
 		}
 	}
 

@@ -1216,7 +1216,7 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 		// show results dialog for reach one
 		for (i = 0; i < n; i++) {
 			exp = experiments.getExperiment(inds[i]);
-			new GUIResultsTable(this.getGUI(), exp).show();
+			new GUIResultsTable(this.getGUI(), this, exp).show();
 		}
 	}
 
@@ -1553,7 +1553,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 						// there is no property yet, open new property editor
 						a_newProperty();
 					}
-					a_editProperty();
 				}
 			}
 		}

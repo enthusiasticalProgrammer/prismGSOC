@@ -375,7 +375,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
-				closeDialog();
+				closeDialog(evt);
 			}
 		});
 
@@ -662,7 +662,7 @@ public class GUIGraphPicker extends javax.swing.JDialog
 	}
 
 	/** Closes the dialog */
-	private void closeDialog()
+	private void closeDialog(java.awt.event.WindowEvent evt)
 	{
 		setVisible(false);
 		dispose();

@@ -78,7 +78,6 @@ import parser.type.TypeInt;
 import prism.ModelType;
 import prism.PrismException;
 import userinterface.GUIPrism;
-import userinterface.model.computation.LoadGraphicModelThread;
 
 public class GUIMultiModelTree extends JPanel implements MouseListener
 {
@@ -453,7 +452,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		handler.hasModified(true);
 	}
 
-	public void a_addLocalBoolean(ModuleNode m, LoadGraphicModelThread.BooleanVariable var) throws PrismException
+	public void a_addLocalBoolean(ModuleNode m, BooleanVariable var) throws PrismException
 	{
 		try {
 			Expression init;
@@ -493,7 +492,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		handler.hasModified(true);
 	}
 
-	public void a_addLocalInteger(ModuleNode m, LoadGraphicModelThread.IntegerVariable var) throws PrismException
+	public void a_addLocalInteger(ModuleNode m, IntegerVariable var) throws PrismException
 	{
 		try {
 			Expression init;
@@ -704,11 +703,10 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 						vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 						if (inTreeDec.getDeclType() instanceof DeclarationInt) {
 							DeclarationInt dt = (DeclarationInt) inTreeDec.getDeclType();
-							vNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
 							vNode.setMin(dt.getLow());
 							vNode.setMax(dt.getHigh());
-							theModel.nodesChanged(vNode, new int[] { 0, 1, 2 });
 						}
+						theModel.nodesChanged(vNode, new int[] { 0, 1, 2 });
 					} else if (dNode instanceof BoolNode) {
 						BoolNode bNode = (BoolNode) dNode;
 						bNode.setInitial(parsedModel.getSystemDefn() == null ? inTreeDec.getStartOrDefault() : null);
@@ -3500,7 +3498,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 		{
 			return this;
 		}
-
 	}
 
 	//Node Renderer
@@ -3508,7 +3505,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	{
 		ImageIcon VAR = GUIPrism.getIconFromImage("smallVariable.png");
 		ImageIcon MOD = GUIPrism.getIconFromImage("smallModule.png");
-		//ImageIcon EXP = GUIPrism.getIconFromImage("smallExpression.png");
 		ImageIcon VAL = GUIPrism.getIconFromImage("smallValue.png");
 		ImageIcon GOOD = GUIPrism.getIconFromImage("smallTick.png");
 		ImageIcon BAD = GUIPrism.getIconFromImage("smallCross.png");
@@ -3546,11 +3542,6 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			} else if (node instanceof ModuleNode) {
 				setIcon(MOD);
 			} else if (node instanceof ValueNode) {
-				//if(node instanceof ExpressionNode)
-				//{
-				//setIcon(EXP);
-				//}
-				//else
 				{
 					setIcon(VAL);
 				}
@@ -3666,6 +3657,65 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			} catch (InterruptedException e) {
 			}
 			canContinue = true;
+		}
+	}
+
+	/**
+	 * Currently unused in the master-branch, can we delete it?
+	 * Besides, it just removes '\n'-chars from a string, which can be
+	 *  done by a simple API-call to String::replace.
+	 */
+	private static String removeCarriages(String line)
+	{
+		String lineBuffer = "";
+		for (int i = 0; i < line.length(); i++) {
+			char c = line.charAt(i);
+			if (c != '\n')
+				lineBuffer += c;
+			else
+				lineBuffer += " ";
+		}
+		return lineBuffer;
+	}
+
+	public class Variable
+	{
+		public String name;
+	}
+
+	public class IntegerVariable extends Variable
+	{
+		public String min, max, init = "0";
+
+		public IntegerVariable(String name, String min, String max, String init)
+		{
+			super.name = name;
+			this.min = min;
+			this.max = max;
+			this.init = init;
+		}
+
+		public IntegerVariable(String name, String min, String max)
+		{
+			this.name = name;
+			this.min = min;
+			this.max = max;
+		}
+	}
+
+	public class BooleanVariable extends Variable
+	{
+		public String init = "false";
+
+		public BooleanVariable(String name, String init)
+		{
+			this.init = init;
+			this.name = name;
+		}
+
+		public BooleanVariable(String name)
+		{
+			this.name = name;
 		}
 	}
 

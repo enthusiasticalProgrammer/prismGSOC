@@ -1,5 +1,4 @@
 //==============================================================================
-
 //	
 //	Copyright (c) 2002-
 //	Authors:
@@ -28,13 +27,14 @@
 package userinterface.simulator.networking;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.table.*;
-import java.util.regex.*;
 import java.awt.*;
 
 import userinterface.*;
@@ -59,7 +59,6 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private SimulationInformation info;
 	private GUIExperiment expr;
 	private UndefinedConstants undefinedConstants;
-
 	private boolean cancelled = false;
 
 	private List propertyValues = null;
@@ -615,7 +614,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//do the work.
 		if (!isExperiment) {
 			try {
-				ArrayList<Expression> propFormulae = new ArrayList<>();
+				List<Expression> propFormulae = new ArrayList();
 				for (int i = 0; i < props.size(); i++) {
 					GUIProperty guiProp = props.get(i);
 					propFormulae.add(guiProp.getProperty());
@@ -881,14 +880,13 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 				g.setColor(Color.black);
 				g.setFont(new Font(fname, Font.PLAIN, fsize));
 			} catch (BadLocationException ex) {
-				//System.out.println("ex = "+ex);
-				//ex.printStackTrace();
 			}
 			return x;
 		}
 
 		private synchronized userinterface.model.Style[] highlight(String s, int offset, int length)
 		{
+			//System.out.println("s = *"+s+"*");
 			userinterface.model.Style[] styles = new userinterface.model.Style[s.length()];
 			for (int i = 0; i < styles.length; i++)
 				styles[i] = PLAIN_S;

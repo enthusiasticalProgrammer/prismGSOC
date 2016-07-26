@@ -47,6 +47,8 @@ public class ExplicitModel2MTBDD
 	// Explicit-state model
 	private explicit.Model modelExpl;
 
+	// model info
+
 	// type
 	private ModelType modelType; // model type (dtmc/mdp/ctmc.)
 	// vars info
@@ -159,10 +161,19 @@ public class ExplicitModel2MTBDD
 		// Calculate BDD for initial state
 		buildInit();
 
+		// Compute state rewards
+		computeStateRewards();
+
 		int numModules = 1; // just one module
 		String moduleNames[] = modulesFile.getModuleNames(); // whose name is stored here
 		Values constantValues = new Values(); // no constants
 
+		/*JDDNode stateRewardsArray[] = new JDDNode[1];
+		stateRewardsArray[0] = stateRewards;
+		JDDNode transRewardsArray[] = new JDDNode[1];
+		transRewardsArray[0] = transRewards;
+		String rewardStructNames[] = new String[1];
+		rewardStructNames[0] = "";*/
 		JDDNode stateRewardsArray[] = new JDDNode[0];
 		JDDNode transRewardsArray[] = new JDDNode[0];
 		String rewardStructNames[] = new String[0];
@@ -306,10 +317,8 @@ public class ExplicitModel2MTBDD
 		moduleDDColVars[0] = new JDDVars();
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
-			varDDRowVars[i].refAll();
-			varDDColVars[i].refAll();
-			moduleDDRowVars[0].addVars(varDDRowVars[i]);
-			moduleDDColVars[0].addVars(varDDColVars[i]);
+			moduleDDRowVars[0].copyVarsFrom(varDDRowVars[i]);
+			moduleDDColVars[0].copyVarsFrom(varDDColVars[i]);
 		}
 
 		// put refs for all vars in whole system together
@@ -325,10 +334,8 @@ public class ExplicitModel2MTBDD
 		// go thru all variables
 		for (i = 0; i < numVars; i++) {
 			// add to list
-			varDDRowVars[i].refAll();
-			varDDColVars[i].refAll();
-			allDDRowVars.addVars(varDDRowVars[i]);
-			allDDColVars.addVars(varDDColVars[i]);
+			allDDRowVars.copyVarsFrom(varDDRowVars[i]);
+			allDDColVars.copyVarsFrom(varDDColVars[i]);
 		}
 		if (modelType == ModelType.MDP) {
 			for (i = 0; i < ddChoiceVars.length; i++) {

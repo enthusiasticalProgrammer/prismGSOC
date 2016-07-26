@@ -113,7 +113,7 @@ public class SingleProperty extends Observable
 	}
 
 	/**
-	 * @throws PropertyException is used in the subclasses
+	 * @throws PropertyException because a subclass throws its 
 	 */
 	public void setProperty(Object property, boolean notifyObservers) throws PropertyException
 	{

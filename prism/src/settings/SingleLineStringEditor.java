@@ -30,7 +30,8 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingleLineStringEditor implements SettingEditor, CaretListener, FocusListener
 {
@@ -91,7 +92,7 @@ public class SingleLineStringEditor implements SettingEditor, CaretListener, Foc
 
 			field.setFont(font);
 		} else if (value instanceof ArrayList) {
-			ArrayList<?> values = (ArrayList<?>) value;
+			List<?> values = (ArrayList<?>) value;
 			if (values.size() > 0) {
 				//if we have multiple properties selected.
 				String last = null;

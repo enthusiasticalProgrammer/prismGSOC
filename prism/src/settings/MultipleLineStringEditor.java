@@ -31,8 +31,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleLineStringEditor implements SettingEditor, KeyListener, CaretListener, FocusListener
 {
@@ -100,7 +100,7 @@ public class MultipleLineStringEditor implements SettingEditor, KeyListener, Car
 			area.setFont(font);
 
 		} else if (value instanceof ArrayList) {
-			List<?> values = (ArrayList<?>) value;
+			List<?> values = (List<?>) value;
 			if (values.size() > 0) {
 				//if we have multiple properties selected.
 				String last = null;

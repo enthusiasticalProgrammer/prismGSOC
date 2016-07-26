@@ -59,7 +59,6 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		this.parent = parent;
 		this.theModel = theModel;
 
-		/* TODO: Use generic container. */
 		List<Graph> own = new ArrayList<>();
 		own.add(theModel);
 
@@ -305,7 +304,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				addSeriesActionPerformed();
+				addSeriesActionPerformed(evt);
 			}
 		});
 
@@ -519,7 +518,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 		seriesList.clearSelection();
 	}
 
-	private void addSeriesActionPerformed()
+	private void addSeriesActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		theModel.addSeries("New Series");
 	}

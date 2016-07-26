@@ -138,11 +138,13 @@ public class SimulatorEngine extends PrismComponent
 
 	// Updater object for model
 	protected Updater updater;
+	// Random number generator
+	private RandomNumberGenerator rng;
 
 	// strategy information
 	private Map<State, Integer> stateIds;
 
-	// TODO: remove this (not in trunk any more)
+	// I know it is removed from the trunk, but it is important to keep the strategy up to date
 	private Prism prism;
 
 	// ------------------------------------------------------------------------------
@@ -173,6 +175,7 @@ public class SimulatorEngine extends PrismComponent
 		tmpStateRewards = null;
 		tmpTransitionRewards = null;
 		updater = null;
+		rng = new RandomNumberGenerator();
 		strategy = null;
 	}
 
@@ -239,7 +242,7 @@ public class SimulatorEngine extends PrismComponent
 			if (modulesFile.getInitialStates() == null) {
 				currentState.copy(modulesFile.getDefaultInitialState());
 			} else {
-				throw new UnsupportedOperationException("Random choice of multiple initial states not yet supported");
+				throw new PrismException("Random choice of multiple initial states not yet supported");
 			}
 		}
 		updater.calculateStateRewards(currentState, tmpStateRewards);
@@ -248,7 +251,7 @@ public class SimulatorEngine extends PrismComponent
 		strategy = prism.getStrategy();
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
-			strategy.init(stateIds.get(currentState));
+			strategy.initialise(stateIds.get(currentState));
 			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
 		}
 
@@ -274,8 +277,7 @@ public class SimulatorEngine extends PrismComponent
 		int offset = transitions.getChoiceOffsetOfTransition(index);
 		if (modelType.continuousTime()) {
 			double r = transitions.getProbabilitySum();
-
-			executeTimedTransition(i, offset, (-Math.log(Math.random())) / r, index);
+			executeTimedTransition(i, offset, rng.randomExpDouble(r), index);
 		} else {
 			executeTransition(i, offset, index);
 		}
@@ -483,7 +485,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public void computeTransitionsForCurrentState() throws PrismException
 	{
-		this.transitionList = updater.calculateTransitions(path.getCurrentState(), transitionList);
+		updater.calculateTransitions(path.getCurrentState(), transitionList);
 		transitionListBuilt = true;
 		transitionListState = null;
 	}
@@ -867,7 +869,7 @@ public class SimulatorEngine extends PrismComponent
 	{
 		if (strategy != null) {
 			State state = getCurrentState();
-			strategy.init(stateIds.get(state));
+			strategy.initialise(stateIds.get(state));
 		}
 	}
 
@@ -1057,6 +1059,16 @@ public class SimulatorEngine extends PrismComponent
 	public double getTotalTimeForPath()
 	{
 		return path.getTotalTime();
+	}
+
+	/**
+	 * Get the total reward accumulated so far
+	 * (includes reward for previous transition but no state reward for current (final) state).
+	 * @param rsi Reward structure index
+	 */
+	public double getTotalCumulativeRewardForPath(int rsi)
+	{
+		return path.getTotalCumulativeReward(rsi);
 	}
 
 	/**

@@ -427,6 +427,10 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		new FontChooser(new javax.swing.JFrame()).setVisible(true);
 	}
 
+	public void caretUpdate(CaretEvent e)
+	{
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -466,13 +470,13 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			String str = sizeBox.getText();
 			boolean found = false;
 			for (int i = 0; i < sizeList.getModel().getSize(); i++) {
-				String listStr = ((String) sizeList.getModel().getElementAt(i)).toLowerCase();
+				String listStr = sizeList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.startsWith(str.toLowerCase())) {
 					found = true;
 					Object value = sizeList.getModel().getElementAt(i);
 					sizeList.setSelectedValue(value, true);
-					tempValue = (String) sizeList.getSelectedValue();
+					tempValue = sizeList.getSelectedValue();
 					if (tempValue != null) {
 						sizeBox.setText(tempValue);
 					} else
@@ -595,7 +599,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 
 			boolean found = false;
 			for (int i = 0; i < sizeList.getModel().getSize(); i++) {
-				String listStr = ((String) sizeList.getModel().getElementAt(i)).toLowerCase();
+				String listStr = sizeList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.equals(size.toLowerCase())) {
 					Object value = sizeList.getModel().getElementAt(i);
@@ -630,7 +634,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			} else
 				styleBox.setText("");
 		} else if (e.getSource() == sizeList) {
-			tempValue = (String) sizeList.getSelectedValue();
+			tempValue = sizeList.getSelectedValue();
 			if (tempValue != null) {
 				sizeBox.setText(tempValue);
 			} else
@@ -731,7 +735,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 	private javax.swing.JButton okayButton;
 	private javax.swing.JLabel previewLabel;
 	private javax.swing.JTextField sizeBox;
-	private javax.swing.JList sizeList;
+	private javax.swing.JList<String> sizeList;
 	private javax.swing.JTextField styleBox;
 	private javax.swing.JList<Object> styleList;
 	private javax.swing.JTabbedPane theTabs;

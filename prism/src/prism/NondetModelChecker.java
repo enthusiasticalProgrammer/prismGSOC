@@ -671,7 +671,7 @@ public class NondetModelChecker extends NonProbModelChecker
 					TileList.storedFormulasX.add(exprs.get(0));
 					TileList.storedFormulasY.add(exprs.get(1));
 
-					TileList.storedFormulas.addAll(exprs);
+					TileList.storedFormulas.add(exprs);
 					TileList.storedTileLists.add((TileList) value);
 				}
 			} //else, i.e. in 3D, the output was treated in the algorithm itself.
@@ -897,10 +897,6 @@ public class NondetModelChecker extends NonProbModelChecker
 					probs = checkProbUntil(exprTemp, qual, min);
 				}
 			}
-			// Anything else - convert to until and recurse
-			else {
-				probs = checkProbPathFormulaSimple(exprTemp.convertToUntilForm(), qual, min);
-			}
 		}
 
 		if (probs == null)
@@ -1036,7 +1032,6 @@ public class NondetModelChecker extends NonProbModelChecker
 			throw e;
 		}
 
-		// print out some info about num states
 		try {
 			probs = checkProbUntil(b1, b2, qual, min);
 		} catch (PrismException e) {
@@ -2137,6 +2132,32 @@ public class NondetModelChecker extends NonProbModelChecker
 
 		return rewards;
 	}
+
+	/**
+	 * Check whether state set represented by dd is "weak absorbing",
+	 * i.e. whether set is closed under all successors.
+	 * Note: does not deref dd.
+	 */
+	private boolean checkWeakAbsorbing(JDDNode dd, NondetModel model)
+	{
+		boolean result;
+
+		JDD.Ref(model.getTrans01());
+		JDD.Ref(dd);
+		JDDNode tmp = JDD.And(model.getTrans01(), dd);
+		tmp = JDD.SwapVariables(tmp, model.getAllDDRowVars(), model.getAllDDColVars());
+		tmp = JDD.ThereExists(tmp, model.getAllDDNondetVars());
+		tmp = JDD.ThereExists(tmp, model.getAllDDColVars());
+		JDD.Ref(model.getReach());
+		tmp = JDD.And(model.getReach(), tmp);
+		JDD.Ref(dd);
+		tmp = JDD.And(tmp, JDD.Not(dd));
+		result = tmp.equals(JDD.ZERO);
+		JDD.Deref(tmp);
+
+		return result;
+	}
+
 }
 
 // ------------------------------------------------------------------------------

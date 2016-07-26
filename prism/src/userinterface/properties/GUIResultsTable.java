@@ -32,7 +32,6 @@ import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 import java.util.List;
-
 import userinterface.*;
 
 public class GUIResultsTable extends javax.swing.JDialog
@@ -48,7 +47,7 @@ public class GUIResultsTable extends javax.swing.JDialog
 	private ResultsTableModel tableModel;
 
 	/** Creates a new instance of GUIResultsTable */
-	public GUIResultsTable(GUIPrism parent, GUIExperiment exp)
+	public GUIResultsTable(GUIPrism parent, GUIMultiProperties guiProps, GUIExperiment exp)
 	{
 		super(parent, "Experiment Results", false);
 		this.exp = exp;

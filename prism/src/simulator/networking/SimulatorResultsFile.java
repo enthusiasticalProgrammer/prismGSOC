@@ -71,6 +71,7 @@ public class SimulatorResultsFile extends Observable
 				throw new PrismException("Could not close input file. The following excption occurred: " + e.getMessage());
 			}
 		}
+
 	}
 
 	public double getResult(int index)

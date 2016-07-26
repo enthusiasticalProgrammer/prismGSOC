@@ -146,6 +146,13 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 		setState(READY_OKAY);
 	}
 
+	private synchronized void setNoDoneThisStint(int noDone)
+	{
+		this.noDoneThisStint = noDone;
+		progressBar.repaint();
+		owner.notifyChange(this);
+	}
+
 	public void setErroneousStintToZero()
 	{
 		this.noDoneThisStint = 0;
@@ -285,6 +292,8 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 
 		setState(RUNNING);
 		if (doFeedback || resultsFeedback) {
+
+			feedbackName = "feedbackFile" + System.currentTimeMillis() + ".txt";
 			if (resultsFeedback)
 				feedbackResults = "feedbackResultsFile" + System.currentTimeMillis() + ".txt";
 			feedbackThread = new StintFeedbackThread(doFeedback, resultsFeedback);
@@ -389,7 +398,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 				String[] parameters5 = { "-p", getUserName() + "@" + getHostName() + ":" + owner.getOutputDir() + "/" + testFile + ".txt", file.getPath() };
 				SSHHandler.scp(getUserName(), getHostName(), parameters5);
 
-				//Tidy up output directory again
 				//do ssh call
 				SSHHandler.ssh(getUserName(), getHostName(), "rm", parameters3);
 
@@ -573,10 +581,14 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 						try {
 
 							reader = new BufferedReader(new FileReader(localFeedback));
+							int done = Integer.parseInt(reader.readLine());
 
+							noDoneThisStint = done;
 							owner.notifyChange(instance);
 						} catch (FileNotFoundException ee) {
 							//System.out.println("filenotfoundexception");
+						} catch (IOException ee) {
+							//System.out.println("ioexception");
 						} catch (NumberFormatException ee) {
 							//System.out.println("numberformatexception");
 						} finally {

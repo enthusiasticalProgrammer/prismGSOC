@@ -100,12 +100,12 @@ public class RemoteHandler
 			ErrorGobbler errorGobbler = new ErrorGobbler(proc.getErrorStream(), "<ERROR: " + args[1], proc);
 
 			errorGobbler.start();
+
 			int exitVal = proc.waitFor();
 			errorGobbler.interrupt();
 			return exitVal;
 
 		} catch (IOException t) {
-			t.printStackTrace();
 			return -1;
 		}
 	}

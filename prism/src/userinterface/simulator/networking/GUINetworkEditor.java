@@ -36,6 +36,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -65,8 +66,6 @@ import simulator.networking.FileSystem;
 import simulator.networking.SSHHost;
 import simulator.networking.SimulatorNetworkHandler;
 import userinterface.GUIPrism;
-
-import userinterface.util.*;
 
 public class GUINetworkEditor extends JDialog implements TreeSelectionListener, MouseListener, Observer, FileSelector
 {
@@ -191,10 +190,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	{
 		int cont = doModificationCheck();
 		if (cont == CONTINUE) {
-
-			if (showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION || showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION)
-
-			{
+			if (showOpenFileDialog(netFilter) == JFileChooser.APPROVE_OPTION) {
 				File file = GUIPrism.getGUI().getChooser().getSelectedFile();
 				if (file == null) {
 					errorDialog("Error: No file selected");
@@ -741,7 +737,7 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
-		ArrayList<Object> owners = new ArrayList<>();
+		List<Object> owners = new ArrayList<>();
 		TreePath[] nodes = networkTree.getSelectionPaths();
 		if (nodes == null)
 			return;
@@ -888,17 +884,6 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		return choose.showOpenDialog(this);
 	}
 
-	public int showOpenFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
-	{
-		JFileChooser choose = GUIPrism.getGUI().getChooser();
-		choose.resetChoosableFileFilters();
-		for (int j = 0; j < ffs.length; j++)
-			choose.addChoosableFileFilter(ffs[j]);
-		choose.setFileFilter(ff);
-		choose.setSelectedFile(new File(""));
-		return choose.showOpenDialog(this);
-	}
-
 	/** A utility method to show a file saving dialog with the given file filter as a
 	 * default.
 	 * @param ffs The list of file filters to be used within the filechooser.
@@ -910,32 +895,6 @@ public class GUINetworkEditor extends JDialog implements TreeSelectionListener, 
 		JFileChooser choose = GUIPrism.getGUI().getChooser();
 		choose.resetChoosableFileFilters();
 		choose.addChoosableFileFilter(ff);
-		choose.setSelectedFile(new File(""));
-		int res = choose.showSaveDialog(this);
-		if (res != JFileChooser.APPROVE_OPTION)
-			return res;
-		File file = choose.getSelectedFile();
-		// check file is non-null
-		if (file == null) {
-			GUIPrism.getGUI().errorDialog("Error: No file selected");
-			return JFileChooser.CANCEL_OPTION;
-		}
-		// check for file overwrite
-		if (file.exists()) {
-			int selectionNo = JOptionPane.CANCEL_OPTION;
-			selectionNo = optionPane("File exists. Overwrite?", "Confirm Overwrite", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null);
-			if (selectionNo != JOptionPane.OK_OPTION)
-				return JFileChooser.CANCEL_OPTION;
-		}
-		return JFileChooser.APPROVE_OPTION;
-	}
-
-	public int showSaveFileDialog(GUIPrismFileFilter ffs[], GUIPrismFileFilter ff)
-	{
-		JFileChooser choose = GUIPrism.getGUI().getChooser();
-		choose.resetChoosableFileFilters();
-		for (int j = 0; j < ffs.length; j++)
-			choose.addChoosableFileFilter(ffs[j]);
 		choose.setFileFilter(ff);
 		choose.setSelectedFile(new File(""));
 		int res = choose.showSaveDialog(this);

@@ -29,7 +29,8 @@ package settings;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingleLineStringRenderer implements SettingRenderer
 {
@@ -67,7 +68,7 @@ public class SingleLineStringRenderer implements SettingRenderer
 
 			field.setFont(font);
 		} else if (value instanceof ArrayList) {
-			ArrayList<?> values = (ArrayList<?>) value;
+			List<?> values = (ArrayList<?>) value;
 			if (values.size() > 0) {
 				//if we have multiple properties selected.
 				String last = null;

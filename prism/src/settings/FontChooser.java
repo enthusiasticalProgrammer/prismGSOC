@@ -66,14 +66,9 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		shouldReturn = true;
 	}
 
-	public static FontColorPair getFont(Frame parent, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
+	public static FontColorPair getFont(Dialog parent, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
 	{
-		return getFontBackend(getFontChooser(parent), startFont, startColor, defaultFont, defaultColor);
-	}
-
-	@SuppressWarnings("deprecation")
-	private static FontColorPair getFontBackend(FontChooser choose, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
-	{
+		FontChooser choose = new FontChooser(parent);
 
 		choose.shouldReturn = true;
 		choose.defaultFont = defaultFont;
@@ -96,10 +91,29 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			return null;
 	}
 
-	private static FontChooser getFontChooser(Frame parent)
+	public static FontColorPair getFont(Frame parent, Font startFont, Color startColor, Font defaultFont, Color defaultColor)
 	{
 		FontChooser choose = new FontChooser(parent);
-		return choose;
+
+		choose.shouldReturn = true;
+		choose.defaultFont = defaultFont;
+		choose.defaultColor = defaultColor;
+		choose.lastColor = startColor;
+		choose.lastFont = startFont;
+		choose.colorChooser.setColor(choose.lastColor);
+		choose.setFont(choose.lastFont);
+		choose.updatePreview();
+
+		choose.show();
+
+		FontColorPair pair = new FontColorPair();
+		pair.f = choose.lastFont;
+		pair.c = choose.lastColor;
+
+		if (choose.shouldReturn)
+			return pair;
+		else
+			return null;
 	}
 
 	private void doListModels()
@@ -200,7 +214,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent evt)
 			{
-				closeDialog();
+				closeDialog(evt);
 			}
 		});
 
@@ -404,7 +418,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 	}//GEN-END:initComponents
 
 	/** Closes the dialog */
-	private void closeDialog()//GEN-FIRST:event_closeDialog
+	private void closeDialog(java.awt.event.WindowEvent evt)//GEN-FIRST:event_closeDialog
 	{
 		setVisible(false);
 		dispose();
@@ -418,8 +432,24 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 		new FontChooser(new javax.swing.JFrame()).show();
 	}
 
+	public void caretUpdate(CaretEvent e)
+	{/*
+		if(e.getSource() == fontBox)
+		{
+		    String str = fontBox.getText();
+		    for(int i = 0; i < fontList.getModel().getSize(); i++)
+		    {
+		        String listStr = (String)fontList.getModel().getElementAt(i);
+		        if(listStr.startsWith(str))
+		        {
+		            fontList.setSelectedIndex(i);
+		            break;
+		        }
+		    }
+		}*/
+	}
+
 	@Override
-	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == fontBox) {
@@ -428,7 +458,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 				String listStr = fontList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.startsWith(str.toLowerCase())) {
-					Object value = fontList.getModel().getElementAt(i);
+					String value = fontList.getModel().getElementAt(i);
 					fontList.setSelectedValue(value, true);
 					break;
 				}
@@ -444,7 +474,7 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 				String listStr = styleList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.startsWith(str.toLowerCase())) {
-					Object value = styleList.getModel().getElementAt(i);
+					String value = styleList.getModel().getElementAt(i);
 					styleList.setSelectedValue(value, true);
 					break;
 				}
@@ -590,9 +620,9 @@ public class FontChooser extends javax.swing.JDialog implements ListSelectionLis
 				String listStr = sizeList.getModel().getElementAt(i).toLowerCase();
 
 				if (listStr.equals(size.toLowerCase())) {
-					Object value = sizeList.getModel().getElementAt(i);
+					String value = sizeList.getModel().getElementAt(i);
 					sizeList.setSelectedValue(value, true);
-					sizeBox.setText((String) value);
+					sizeBox.setText(value);
 					found = true;
 					break;
 				}
