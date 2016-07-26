@@ -42,6 +42,8 @@ public class Generalized
 	private GState gremoved;
 	private GScc scc_stack;
 	private int gstate_id;
+	private int gstate_count;
+	private int gtrans_count;
 	private int rank;
 	private int scc_id;
 	private MyBitSet fin;
@@ -142,6 +144,8 @@ public class Generalized
 
 		init_size = 0;
 		gstate_id = 1;
+		gstate_count = 0;
+		gtrans_count = 0;
 
 		fin = new MyBitSet();
 		bad_scc = new MyBitSet();
@@ -444,6 +448,8 @@ public class Generalized
 		s.prv = gstates;
 		s.nxt.prv = s;
 		gstates.nxt = s;
+		gtrans_count += state_trans;
+		gstate_count++;
 	}
 
 	/* redirects transitions before removing a state from the automaton */

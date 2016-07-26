@@ -28,7 +28,7 @@ package jltl2dstar;
  * <code>void visit(SafraTree& tree, SafraTreeNode *node)</code>
  * of the SafraTreeVisitor on each node of the tree.
  */
-class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor>
+public class SafraTreeWalker<Visitor extends SafrasAlgorithm.SafraTreeVisitor>
 {
 
 	/** The Visitor */

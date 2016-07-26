@@ -31,7 +31,7 @@ import jltl2ba.MyBitSet;
  * of Strongly Connected Components (SCCs).
  */
 
-class GraphAlgorithms
+public class GraphAlgorithms
 {
 
 	/** 
@@ -47,7 +47,7 @@ class GraphAlgorithms
 	static class SCC_DFS
 	{
 
-		static class SCC_DFS_Data
+		public static class SCC_DFS_Data
 		{
 			/** A class for saving DFS state information */
 			public int dfs_nr;

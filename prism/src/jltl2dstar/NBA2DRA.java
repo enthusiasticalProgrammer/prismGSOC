@@ -160,7 +160,7 @@ class NBA2DRA
 	 * @param dra_result the result DRA
 	 * @param limit limit for the size of the DRA
 	 */
-	DRA convert_safra(NBA nba, int limit) throws PrismException
+	public DRA convert_safra(NBA nba, int limit) throws PrismException
 	{
 
 		SafrasAlgorithm safras_algo = new SafrasAlgorithm(nba, _options);

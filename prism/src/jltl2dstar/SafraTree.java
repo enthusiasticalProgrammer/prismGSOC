@@ -264,6 +264,7 @@ class SafraTree implements NBA2DAState
 
 		for (int i = 0; i < MAX_NODES; i++) {
 			if (_nodes.get(i) == null && other._nodes.get(i) == null) {
+
 			} else if (_nodes.get(i) == null) {
 				return true;
 			} else if (other._nodes.get(i) == null) {
@@ -271,7 +272,9 @@ class SafraTree implements NBA2DAState
 			} else {
 				if (_nodes.get(i).lessThan(other._nodes.get(i))) {
 					return true;
-				} else if (!_nodes.get(i).equals(other._nodes.get(i))) {
+				} else if (_nodes.get(i).equals(other._nodes.get(i))) {
+
+				} else {
 					return false;
 				}
 			}

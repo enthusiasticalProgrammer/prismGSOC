@@ -42,6 +42,9 @@ class RabinAcceptance implements Iterable<Integer>
 		RABIN_WHITE, RABIN_GREEN, RABIN_RED
 	}
 
+	/** The number of acceptance pairs */
+	private int _acceptance_count;
+
 	/** A vector of MyBitSet* representing the L part of the acceptance pairs. */
 	private Vector<MyBitSet> _acceptance_L;
 	/** A vector of MyBitSet* representing the U part of the acceptance pairs. */
@@ -195,6 +198,7 @@ class RabinAcceptance implements Iterable<Integer>
 	public void addState(int state_index)
 	{
 		// TODO: Assert that state_index > highest set bit
+
 	}
 
 	// ---- Rabin/Streett acceptance specific
@@ -211,6 +215,7 @@ class RabinAcceptance implements Iterable<Integer>
 		_acceptance_L.add(l);
 		_acceptance_U.add(u);
 
+		_acceptance_count++;
 		return _acceptance_L.size() - 1;
 	}
 
@@ -233,6 +238,10 @@ class RabinAcceptance implements Iterable<Integer>
 	 */
 	public void removeAcceptancePair(int pair_index)
 	{
+		if (_acceptance_L.get(pair_index) != null) {
+			_acceptance_count--;
+		}
+
 		_acceptance_L.set(pair_index, null);
 		_acceptance_U.set(pair_index, null);
 
