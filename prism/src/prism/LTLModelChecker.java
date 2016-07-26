@@ -966,7 +966,7 @@ public class LTLModelChecker extends PrismComponent
 		for (int i = 0; i < acceptance.size(); i++) {
 
 			// Filter out L_i states from the model and find the MECs
-			JDDNode notL = JDD.Not(acceptance.get(i).getFinite());
+			JDDNode notL = JDD.Not(acceptance.get(i).getL());
 			JDD.Ref(model.getTrans01());
 			JDD.Ref(notL);
 			JDDNode candidateStates = JDD.Apply(JDD.TIMES, model.getTrans01(), notL);

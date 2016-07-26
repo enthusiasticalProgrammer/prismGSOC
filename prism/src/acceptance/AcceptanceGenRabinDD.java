@@ -56,10 +56,10 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 	public static class GenRabinPairDD
 	{
 		/** State set L (should be visited only finitely often) */
-		private final JDDNode finite;
+		private final JDDNode L;
 
 		/** State sets K_j (should all be visited infinitely often) */
-		private final List<JDDNode> infinite;
+		private final List<JDDNode> K_list;
 
 		/**
 		 * Constructor with L and K_j state sets.
@@ -67,41 +67,41 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		 */
 		public GenRabinPairDD(JDDNode L, List<JDDNode> K_list)
 		{
-			this.finite = L;
-			this.infinite = K_list;
+			this.L = L;
+			this.K_list = K_list;
 		}
 
 		/** Clear resources of the state sets */
 		public void clear()
 		{
-			if (finite != null)
-				JDD.Deref(finite);
-			for (JDDNode K_j : infinite)
+			if (L != null)
+				JDD.Deref(L);
+			for (JDDNode K_j : K_list)
 				JDD.Deref(K_j);
 		}
 
 		/** Get a referenced copy of the state set finite.
 		 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
 		 */
-		public JDDNode getFinite()
+		public JDDNode getL()
 		{
-			JDD.Ref(finite);
-			return finite;
+			JDD.Ref(L);
+			return L;
 		}
 
-		/** Get the number of infinite sets */
-		public int getNumInfinite()
+		/** Get the number of K_j sets */
+		public int getNumK()
 		{
-			return infinite.size();
+			return K_list.size();
 		}
 
-		/** Get a referenced copy of the state set infinite.
+		/** Get a referenced copy of the state set K_j.
 		 * <br>[ REFS: <i>result</i>, DEREFS: <i>none</i> ]
 		 */
-		public JDDNode getInfinite(int j)
+		public JDDNode getK(int j)
 		{
-			JDD.Ref(infinite.get(j));
-			return infinite.get(j);
+			JDD.Ref(K_list.get(j));
+			return K_list.get(j);
 		}
 
 		/** Returns true if the bottom strongly connected component
@@ -110,16 +110,16 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		 */
 		public boolean isBSCCAccepting(JDDNode bscc_states)
 		{
-			return (!JDD.AreIntersecting(bscc_states, finite)) && infinite.stream().allMatch(inf -> JDD.AreIntersecting(inf, bscc_states));
+			return (!JDD.AreIntersecting(bscc_states, L)) && K_list.stream().allMatch(inf -> JDD.AreIntersecting(inf, bscc_states));
 		}
 
 		/** Returns a textual representation of this Rabin pair. */
 		@Override
 		public String toString()
 		{
-			String s = "(" + finite;
-			for (JDDNode inf : infinite)
-				s += "," + inf;
+			String s = "(" + L;
+			for (JDDNode K_j : K_list)
+				s += "," + K_j;
 			s += ")";
 			return s;
 		}
@@ -153,14 +153,6 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 			GenRabinPairDD newPair = new GenRabinPairDD(newL, newK_list);
 			this.add(newPair);
 		}
-	}
-
-	/**
-	 * This constructor should be only used by subclasses that know how to fill themselves up with acceptance pairs 
-	 */
-	protected AcceptanceGenRabinDD()
-	{
-		super();
 	}
 
 	@Override
