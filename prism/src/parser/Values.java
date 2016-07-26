@@ -42,7 +42,7 @@ import prism.PrismLangException;
  * Class to store a list of typed constant/variable values.
  * (Basically, just a mapping from String to Object)
  */
-public class Values //implements Comparable
+public class Values
 {
 	protected ArrayList<String> names;
 	protected ArrayList<Object> values;
@@ -386,41 +386,6 @@ public class Values //implements Comparable
 		}
 		return true;
 	}
-
-	// compare
-
-	// 	public int compareTo(Object o)
-	// 	{
-	// 		int i, j, n, c;
-	// 		Values v;
-	// 		String s;
-	// 		Object c1, c2;
-	// 		
-	// 		// trivial case: null arg
-	// 		if (o == null) throw new NullPointerException();
-	// 		// cast
-	// 		v = (Values)o;
-	// 		// check sizes are equal
-	// 		n = getNumValues();
-	// 		if (v.getNumValues() != n) throw new ClassCastException();
-	// 		// check each value
-	// 		for (i = 0; i < n; i++) {
-	// 			s = getName(i);
-	// 			j = v.getIndexOf(s);
-	// 			if (j == -1) throw new ClassCastException();
-	// 			c1 = getValue(i);
-	// 			c2 = v.getValue(j);
-	// 			if (c1 instanceof Double) c = ((Double)c1).compareTo(c2);
-	// 			else if (c1 instanceof Integer) c = ((Integer)c1).compareTo(c2);
-	// 			else {
-	// 				boolean b1 = ((Boolean)c1).booleanValue();
-	// 				boolean b2 = ((Boolean)c2).booleanValue();
-	// 				if (b1 == b2) c = 0; else if (b1 == false) c = -1; else c = 1;
-	// 			}
-	// 			if (c != 0) return c;
-	// 		}
-	// 		return 0;
-	// 	}
 
 	@Override
 	public Object clone()
