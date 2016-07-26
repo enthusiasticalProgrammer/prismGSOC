@@ -40,7 +40,7 @@ import prism.PrismException;
  */
 public class DTMCSimple extends DTMCExplicit implements ModelSimple
 {
-	// Transition matrix (distribution list) 
+	// Transition matrix (distribution list)
 	protected List<Distribution> trans;
 
 	// Other statistics
