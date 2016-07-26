@@ -36,7 +36,7 @@ import explicit.Product;
  * Simple explicit-state storage of rewards for an MDP.
  * Like the related class MDPSimple, this is not especially efficient, but mutable (in terms of size).
  */
-public class MDPRewardsSimple implements MDPReward
+public class MDPRewardsSimple implements MDPRewards
 {
 	/** Number of states */
 	protected int numStates;
@@ -190,7 +190,7 @@ public class MDPRewardsSimple implements MDPReward
 	// Converters
 
 	@Override
-	public MDPReward liftFromModel(Product<? extends Model> product)
+	public MDPRewards liftFromModel(Product<? extends Model> product)
 	{
 		Model modelProd = product.getProductModel();
 		int numStatesProd = modelProd.getNumStates();

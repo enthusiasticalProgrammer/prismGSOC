@@ -51,7 +51,7 @@ import acceptance.AcceptanceType;
 import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.MCRewardsFromMDPRewards;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import explicit.rewards.Rewards;
 
 /**
@@ -152,7 +152,7 @@ public class MDPModelChecker extends ProbModelChecker
 	protected StateValues checkRewardCoSafeLTL(Model model, Rewards modelRewards, Expression expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		LTLModelChecker mcLtl;
-		MDPReward productRewards;
+		MDPRewards productRewards;
 		StateValues rewardsProduct, rewards;
 		MDPModelChecker mcProduct;
 		LTLModelChecker.LTLProduct<MDP> product;
@@ -165,7 +165,7 @@ public class MDPModelChecker extends ProbModelChecker
 		product = mcLtl.constructProductMDP(this, (MDP) model, expr, statesOfInterest, allowedAcceptance);
 
 		// Adapt reward info to product model
-		productRewards = ((MDPReward) modelRewards).liftFromModel(product);
+		productRewards = ((MDPRewards) modelRewards).liftFromModel(product);
 
 		// Output product, if required
 		if (getExportProductTrans()) {
@@ -1191,7 +1191,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max rewards (true=min, false=max)
 	 */
-	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPReward mdpRewards, int k, boolean min)
+	public ModelCheckerResult computeCumulativeRewards(MDP mdp, MDPRewards mdpRewards, int k, boolean min)
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -1246,7 +1246,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param min Min or max rewards (true=min, false=max)
 	 */
-	public ModelCheckerResult computeReachRewards(MDP mdp, MDPReward mdpRewards, BitSet target, boolean min) throws PrismException
+	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min) throws PrismException
 	{
 		return computeReachRewards(mdp, mdpRewards, target, min, null, null);
 	}
@@ -1263,7 +1263,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values).  
 	 * Also, 'known' values cannot be passed for some solution methods, e.g. policy iteration.  
 	 */
-	public ModelCheckerResult computeReachRewards(MDP mdp, MDPReward mdpRewards, BitSet target, boolean min, double init[], BitSet known) throws PrismException
+	public ModelCheckerResult computeReachRewards(MDP mdp, MDPRewards mdpRewards, BitSet target, boolean min, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet inf;
@@ -1421,7 +1421,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known,
+	protected ModelCheckerResult computeReachRewardsValIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[], BitSet known,
 			int strat[]) throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1514,7 +1514,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsGaussSeidel(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, double init[],
+	protected ModelCheckerResult computeReachRewardsGaussSeidel(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, double init[],
 			BitSet known, int strat[]) throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1602,7 +1602,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max rewards (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	protected ModelCheckerResult computeReachRewardsPolIter(MDP mdp, MDPReward mdpRewards, BitSet target, BitSet inf, boolean min, int strat[])
+	protected ModelCheckerResult computeReachRewardsPolIter(MDP mdp, MDPRewards mdpRewards, BitSet target, BitSet inf, boolean min, int strat[])
 			throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1698,7 +1698,7 @@ public class MDPModelChecker extends ProbModelChecker
 	 * @param min Min or max rewards (true=min, false=max)
 	 * @param lastSoln Vector of values from which to recompute in one iteration 
 	 */
-	public List<Integer> expReachStrategy(MDP mdp, MDPReward mdpRewards, int state, BitSet target, boolean min, double lastSoln[])
+	public List<Integer> expReachStrategy(MDP mdp, MDPRewards mdpRewards, int state, BitSet target, boolean min, double lastSoln[])
 	{
 		double val = mdp.mvMultRewMinMaxSingle(state, lastSoln, mdpRewards, min, null);
 		return mdp.mvMultRewMinMaxSingleChoices(state, lastSoln, mdpRewards, min, val);

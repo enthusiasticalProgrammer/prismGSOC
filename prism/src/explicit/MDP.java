@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 
 /**
  * Interface for classes that provide (read) access to an explicit-state MDP.
@@ -199,7 +199,7 @@ public interface MDP extends NondetModel
 	 * @param complement If true, {@code subset} is taken to be its complement (ignored if {@code subset} is null)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	public void mvMultRewMinMax(double vect[], MDPReward mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[]);
+	public void mvMultRewMinMax(double vect[], MDPRewards mdpRewards, boolean min, double result[], BitSet subset, boolean complement, int strat[]);
 
 	/**
 	 * Do a single row of matrix-vector multiplication and sum of rewards followed by min/max.
@@ -211,7 +211,7 @@ public interface MDP extends NondetModel
 	 * @param min Min or max for (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	public double mvMultRewMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[]);
+	public double mvMultRewMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[]);
 
 	/**
 	 * Do a single row of matrix-vector multiplication and sum of rewards for a specific choice.
@@ -239,7 +239,7 @@ public interface MDP extends NondetModel
 	 * @return The maximum difference between old/new elements of {@code vect}
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	public double mvMultRewGSMinMax(double vect[], MDPReward mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[]);
+	public double mvMultRewGSMinMax(double vect[], MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int strat[]);
 
 	/**
 	 * Do a single row of Jacobi-style matrix-vector multiplication and sum of rewards followed by min/max.
@@ -251,7 +251,7 @@ public interface MDP extends NondetModel
 	 * @param min Min or max for (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
-	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[]);
+	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[]);
 
 	/**
 	 * Determine which choices result in min/max after a single row of matrix-vector multiplication and sum of rewards.
@@ -261,7 +261,7 @@ public interface MDP extends NondetModel
 	 * @param min Min or max (true=min, false=max)
 	 * @param val Min or max value to match
 	 */
-	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPReward mdpRewards, boolean min, double val);
+	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPRewards mdpRewards, boolean min, double val);
 
 	/**
 	 * Multiply the probability matrix induced by the MDP and {@code strat}

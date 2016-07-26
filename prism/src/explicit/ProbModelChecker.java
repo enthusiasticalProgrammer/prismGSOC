@@ -63,7 +63,7 @@ import prism.Tile;
 import prism.TileList;
 import explicit.rewards.ConstructRewards;
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import explicit.rewards.Rewards;
 import explicit.rewards.STPGRewards;
 
@@ -1021,7 +1021,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeCumulativeRewards((CTMC) model, (MCRewards) modelRewards, timeDouble);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPReward) modelRewards, timeInt, minMax.isMin());
+			res = ((MDPModelChecker) this).computeCumulativeRewards((MDP) model, (MDPRewards) modelRewards, timeInt, minMax.isMin());
 			break;
 		default:
 			throw new PrismNotSupportedException(
@@ -1098,7 +1098,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeReachRewards((CTMC) model, (MCRewards) modelRewards, target);
 			break;
 		case MDP:
-			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPReward) modelRewards, target, minMax.isMin());
+			res = ((MDPModelChecker) this).computeReachRewards((MDP) model, (MDPRewards) modelRewards, target, minMax.isMin());
 			break;
 		case STPG:
 			res = ((STPGModelChecker) this).computeReachRewards((STPG) model, (STPGRewards) modelRewards, target, minMax.isMin1(), minMax.isMin2());
@@ -1364,7 +1364,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 			// Build rewards
 			ConstructRewards constructRewards = new ConstructRewards(mainLog);
-			MDPReward mdpReward;
+			MDPRewards mdpReward;
 			if (model instanceof DTMCProductMLRStrategyAndMDP) {
 				MDP mdp = ((DTMCProductMLRStrategyAndMDP) model).getMDP();
 				mdpReward = constructRewards.buildMDPRewardStructure(mdp, rewStruct, constantValues);

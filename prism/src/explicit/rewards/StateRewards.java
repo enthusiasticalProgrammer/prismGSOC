@@ -32,7 +32,7 @@ import explicit.Product;
 /**
  * Explicit-state storage of just state rewards.
  */
-public abstract class StateRewards implements MCRewards, MDPReward, STPGRewards
+public abstract class StateRewards implements MCRewards, MDPRewards, STPGRewards
 {
 	/**
 	 * Get the state reward for state {@code s}.
@@ -53,7 +53,7 @@ public abstract class StateRewards implements MCRewards, MDPReward, STPGRewards
 	}
 
 	@Override
-	public MDPReward buildMDPRewards()
+	public MDPRewards buildMDPRewards()
 	{
 		return deepCopy();
 	}

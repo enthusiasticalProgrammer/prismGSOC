@@ -35,7 +35,7 @@ import explicit.Product;
  * See the {@link explicit.STPG} interface for details of the accompanying model,
  * in particular, for an explanation of nested transitions. 
  */
-public interface STPGRewards extends MDPReward
+public interface STPGRewards extends MDPRewards
 {
 	/**
 	 * Get the transition reward for the {@code i,j}th nested choice from state {@code s}.
@@ -45,7 +45,7 @@ public interface STPGRewards extends MDPReward
 	/**
 	 * Build an MDPRewards object containing all the same rewards except for the nested ones.
 	 */
-	public abstract MDPReward buildMDPRewards();
+	public abstract MDPRewards buildMDPRewards();
 
 	@Override
 	public STPGRewards liftFromModel(Product<? extends Model> product);

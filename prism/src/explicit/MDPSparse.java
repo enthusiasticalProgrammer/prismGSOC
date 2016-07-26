@@ -42,11 +42,10 @@ import java.util.TreeMap;
 
 import common.IterableStateSet;
 
-import parser.State;
 import prism.PrismException;
 import prism.PrismUtils;
 import explicit.rewards.MCRewards;
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 
 /**
  * Sparse matrix (non-mutable) explicit-state representation of an MDP.
@@ -946,7 +945,7 @@ public class MDPSparse extends MDPExplicit
 	}
 
 	@Override
-	public double mvMultRewMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[])
+	public double mvMultRewMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
 	{
 		int j, k, l1, h1, l2, h2, stratCh = -1;
 		double d, minmax;
@@ -1009,7 +1008,7 @@ public class MDPSparse extends MDPExplicit
 	}
 
 	@Override
-	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPReward mdpRewards, boolean min, int strat[])
+	public double mvMultRewJacMinMaxSingle(int s, double vect[], MDPRewards mdpRewards, boolean min, int strat[])
 	{
 		int j, k, l1, h1, l2, h2, stratCh = -1;
 		double diag, d, minmax;
@@ -1059,7 +1058,7 @@ public class MDPSparse extends MDPExplicit
 	}
 
 	@Override
-	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPReward mdpRewards, boolean min, double val)
+	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double vect[], MDPRewards mdpRewards, boolean min, double val)
 	{
 		int j, k, l1, h1, l2, h2;
 		double d;

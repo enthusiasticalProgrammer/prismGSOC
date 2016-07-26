@@ -1,6 +1,6 @@
 package explicit;
 
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 import prism.Operator;
 
 /**
@@ -9,7 +9,7 @@ import prism.Operator;
 class MDPObjective extends MDPItem
 {
 
-	MDPObjective(MDPReward reward, Operator operator)
+	MDPObjective(MDPRewards reward, Operator operator)
 	{
 		super(reward, operator);
 		assert (operator.equals(Operator.R_MAX) || operator.equals(Operator.R_MIN));

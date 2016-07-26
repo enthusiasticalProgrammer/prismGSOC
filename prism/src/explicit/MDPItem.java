@@ -1,6 +1,6 @@
 package explicit;
 
-import explicit.rewards.MDPReward;
+import explicit.rewards.MDPRewards;
 
 /**
  * This abstract class stores a multi-long-run satisfaction constraint for an MDP.
@@ -8,10 +8,10 @@ import explicit.rewards.MDPReward;
  */
 abstract class MDPItem
 {
-	final MDPReward reward; //use also min/max ....
+	final MDPRewards reward; //use also min/max ....
 	final prism.Operator operator;
 
-	MDPItem(MDPReward reward, prism.Operator operator)
+	MDPItem(MDPRewards reward, prism.Operator operator)
 	{
 		this.reward = reward;
 		this.operator = operator;

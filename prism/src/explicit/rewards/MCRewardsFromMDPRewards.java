@@ -37,14 +37,14 @@ import explicit.Product;
 public class MCRewardsFromMDPRewards implements MCRewards
 {
 	// MDP rewards
-	protected MDPReward mdpRewards;
+	protected MDPRewards mdpRewards;
 	// Strategy (array of choice indices; -1 denotes no choice)
 	protected int strat[];
 
 	/**
 	 * Constructor: create from MDP rewards and memoryless adversary.
 	 */
-	public MCRewardsFromMDPRewards(MDPReward mdpRewards, int strat[])
+	public MCRewardsFromMDPRewards(MDPRewards mdpRewards, int strat[])
 	{
 		this.mdpRewards = mdpRewards;
 		this.strat = strat;
