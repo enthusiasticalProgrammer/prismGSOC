@@ -50,7 +50,7 @@ import prism.PrismNotSupportedException;
  *  <li> direct translation into DRA for simple path formulas with temporal bounds</li>
  * </ol>
  */
-public final class LTL2RabinLibrary
+public class LTL2RabinLibrary
 {
 	private static ArrayList<String> labels;
 
