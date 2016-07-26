@@ -58,7 +58,6 @@ import explicit.rewards.Rewards;
  */
 public class MDPModelChecker extends ProbModelChecker
 {
-
 	/**
 	 * Create a new MDPModelChecker, inherit basic state from parent (unless null).
 	 */
@@ -464,15 +463,10 @@ public class MDPModelChecker extends ProbModelChecker
 		if (exportAdv) {
 			// Prune strategy
 			restrictStrategyToReachableStates(mdp, strat);
-			// Print strategy
-			mainLog.print("Strat:");
-			for (int i = 0; i < n; i++) {
-				mainLog.print(" " + i + ":" + strat[i]);
-			}
-			mainLog.println();
 			// Export
 			PrismLog out = new PrismFileLog(exportAdvFilename);
 			new DTMCFromMDPMemorylessAdversary(mdp, strat).exportToPrismExplicitTra(out);
+			out.close();
 		}
 
 		// Update time taken
@@ -1215,9 +1209,7 @@ public class MDPModelChecker extends ProbModelChecker
 		while (iters < k) {
 			iters++;
 			// Matrix-vector multiply and min/max ops
-			int strat[] = new int[n];
-			mdp.mvMultRewMinMax(soln, mdpRewards, min, soln2, null, false, strat);
-			mainLog.println(strat);
+			mdp.mvMultRewMinMax(soln, mdpRewards, min, soln2, null, false, null);
 			// Swap vectors for next iter
 			tmpsoln = soln;
 			soln = soln2;
@@ -1385,15 +1377,10 @@ public class MDPModelChecker extends ProbModelChecker
 		if (exportAdv) {
 			// Prune strategy
 			restrictStrategyToReachableStates(mdp, strat);
-			// Print strategy
-			mainLog.print("Strat:");
-			for (int i = 0; i < n; i++) {
-				mainLog.print(" " + i + ":" + strat[i]);
-			}
-			mainLog.println();
 			// Export
 			PrismLog out = new PrismFileLog(exportAdvFilename);
 			new DTMCFromMDPMemorylessAdversary(mdp, strat).exportToPrismExplicitTra(out);
+			out.close();
 		}
 
 		// Finished expected reachability
