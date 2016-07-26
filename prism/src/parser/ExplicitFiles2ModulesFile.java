@@ -196,7 +196,7 @@ public class ExplicitFiles2ModulesFile
 			throw new PrismException("Error detected at line " + lineNum + " of states file \"" + statesFile + "\"");
 		} catch (PrismException e) {
 			throw new PrismException("Error detected (" + e.getMessage() + ") at line " + lineNum + " of states file \"" + statesFile + "\"");
-		}finally {
+		} finally {
 			try {
 				in.close();
 			} catch (IOException e) {
