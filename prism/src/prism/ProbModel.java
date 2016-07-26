@@ -570,7 +570,6 @@ public class ProbModel implements Model
 	/**
 	 * Set reachable states BDD (and compute number of states and ODD)
 	 */
-
 	@Override
 	public void setReach(JDDNode reach)
 	{
