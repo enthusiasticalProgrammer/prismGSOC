@@ -327,6 +327,12 @@ public final class StateValuesDV implements StateValues
 	}
 
 	@Override
+	public JDDNode getBDDFromInterval(String relOpString, double bound)
+	{
+		return getBDDFromInterval(RelOp.parseSymbol(relOpString), bound);
+	}
+
+	@Override
 	public JDDNode getBDDFromInterval(RelOp relOp, double bound)
 	{
 		return values.getBDDFromInterval(relOp, bound, vars, odd);
