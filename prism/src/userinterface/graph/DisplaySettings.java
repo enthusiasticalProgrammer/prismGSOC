@@ -65,11 +65,6 @@ public class DisplaySettings extends Observable implements SettingOwner
 		antiAlias = new BooleanSetting("anti-aliasing", new Boolean(true), "Should the graph be rendered using anti-aliasing?", this, false);
 		Color defaultColor = Color.white;
 
-		//Color defaultColor =  UIManager.getColor("Panel.background");
-
-		//if (chart.getBackgroundPaint() instanceof Color)
-		//	defaultColor = ((Color)chart.getBackgroundPaint());
-
 		backgroundColor = new ColorSetting("background colour", defaultColor, "The background colour of the graph panel", this, false);
 
 		updateDisplay();
