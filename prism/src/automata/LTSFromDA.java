@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import prism.ModelType;
-import prism.PrismException;
 import prism.PrismLog;
 import strat.MDStrategy;
 import explicit.LTS;
@@ -95,13 +94,13 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public void findDeadlocks(boolean fix)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void buildFromPrismExplicit(String filename)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -136,25 +135,25 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public void checkForDeadlocks(BitSet except)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(PrismLog out)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected void exportTransitionsToDotFile(int i, PrismLog out)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportToPrismLanguage(String filename)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	// Methods to implement NondetModel
