@@ -87,8 +87,6 @@ public class LTL2DA extends PrismComponent
 	 * in which atomic propositions are represented by ExpressionLabel objects.
 	 * @param ltl the formula
 	 * @param constants the values of constants, may be {@code null}
-	 * @param hasToBeComplete communicates, whether the resulting DA has to be complete.
-	 *                 This is only important for Rabinizer, where it is not complete by default.
 	 * @param allowedAcceptance the AcceptanceTypes that are allowed to be returned
 	 */
 	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDA(Expression ltl, Values constants, AcceptanceType... allowedAcceptance)
