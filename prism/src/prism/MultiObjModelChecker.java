@@ -70,6 +70,7 @@ public class MultiObjModelChecker extends PrismComponent
 			DA<BitSet, AcceptanceRabin> dra[], Operator operator, Expression pathFormula, JDDVars draDDRowVars, JDDVars draDDColVars, JDDNode ddStateIndex)
 			throws PrismException
 	{
+
 		// TODO (JK): Adapt to support simple path formulas with bounds via DRA construction
 
 		// Model check maximal state formulas
@@ -88,7 +89,7 @@ public class MultiObjModelChecker extends PrismComponent
 		mainLog.print("DRA has " + dra[i].size() + " states, " + dra[i].getAcceptance().getSizeStatistics() + ".");
 		l = System.currentTimeMillis() - l;
 		mainLog.println("Time for Rabin translation: " + l / 1000.0 + " seconds.");
-
+		// If required, export DRA
 		if (settings.getExportPropAut()) {
 			String exportPropAutFilename = PrismUtils.addCounterSuffixToFilename(settings.getExportPropAutFilename(), i + 1);
 			mainLog.println("Exporting DRA to file \"" + exportPropAutFilename + "\"...");
@@ -513,10 +514,9 @@ public class MultiObjModelChecker extends PrismComponent
 	{
 		JDDNode yes, no, maybe, bottomec = null;
 		Object value;
-		int numTargets;
 
 		// Get number of targets
-		numTargets = targets.size();
+		int numTargets = targets.size();
 
 		JDDNode labels[] = new JDDNode[numTargets];
 		// Build temporary DDs for combined targets
@@ -705,6 +705,7 @@ public class MultiObjModelChecker extends PrismComponent
 	protected TileList generateParetoCurve(NondetModel modelProduct, JDDNode yes_ones, JDDNode maybe, final JDDNode st, JDDNode[] targets,
 			List<JDDNode> rewards, OpsAndBoundsList opsAndBounds) throws PrismException
 	{
+		//TODO this method does not work for more than 2 objectives
 		int numberOfPoints = 0;
 		int rewardStepBounds[] = new int[rewards.size()];
 		for (int i = 0; i < rewardStepBounds.length; i++)
