@@ -430,10 +430,6 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public Result check(Model model, Expression expr) throws PrismException
 	{
-
-		if (model == null) {
-			throw new NullPointerException();
-		}
 		ExpressionFilter exprFilter = null;
 		long timer = 0;
 		StateValues vals;
@@ -1462,8 +1458,6 @@ public class StateModelChecker extends PrismComponent
 	 */
 	public void exportLabels(Model model, List<String> labelNames, int exportType, PrismLog out) throws PrismException
 	{
-		if (model == null)
-			throw new NullPointerException();
 		List<BitSet> labels = new ArrayList<>();
 		for (String labelName : labelNames) {
 			StateValues sv = checkExpression(model, new ExpressionLabel(labelName), null);
