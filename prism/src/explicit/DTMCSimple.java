@@ -71,8 +71,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	{
 		this(dtmc.numStates);
 		copyFrom(dtmc);
-		for (int i = 0; i < numStates; i++) {
-			trans.set(i, new Distribution(dtmc.trans.get(i)));
+		for (int state = 0; state < numStates; state++) {
+			trans.set(state, new Distribution(dtmc.trans.get(state)));
 		}
 		numTransitions = dtmc.numTransitions;
 	}
@@ -88,8 +88,8 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	{
 		this(dtmc.numStates);
 		copyFrom(dtmc, permut);
-		for (int i = 0; i < numStates; i++) {
-			trans.set(permut[i], new Distribution(dtmc.trans.get(i), permut));
+		for (int state = 0; state < numStates; state++) {
+			trans.set(permut[state], new Distribution(dtmc.trans.get(state), permut));
 		}
 		numTransitions = dtmc.numTransitions;
 	}
@@ -101,20 +101,20 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	{
 		super.initialise(numStates);
 		trans = new ArrayList<>(numStates);
-		for (int i = 0; i < numStates; i++) {
+		for (int state = 0; state < numStates; state++) {
 			trans.add(new Distribution());
 		}
 	}
 
 	@Override
-	public void clearState(int i)
+	public void clearState(int state)
 	{
 		// Do nothing if state does not exist
-		if (i >= numStates || i < 0)
+		if (state >= numStates || state < 0)
 			return;
 		// Clear data structures and update stats
-		numTransitions -= trans.get(i).size();
-		trans.get(i).clear();
+		numTransitions -= trans.get(state).size();
+		trans.get(state).clear();
 	}
 
 	@Override
@@ -187,22 +187,22 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	/**
 	 * Set the probability for a transition. 
 	 */
-	public void setProbability(int i, int j, double prob)
+	public void setProbability(int sourceState, int targetState, double probability)
 	{
-		Distribution distr = trans.get(i);
-		if (distr.get(j) != 0.0)
+		Distribution distr = trans.get(sourceState);
+		if (distr.get(targetState) != 0.0)
 			numTransitions--;
-		if (prob != 0.0)
+		if (probability != 0.0)
 			numTransitions++;
-		distr.set(j, prob);
+		distr.set(targetState, probability);
 	}
 
 	/**
 	 * Add to the probability for a transition. 
 	 */
-	public void addToProbability(int i, int j, double prob)
+	public void addToProbability(int sourceState, int targetState, double prob)
 	{
-		if (!trans.get(i).add(j, prob)) {
+		if (!trans.get(sourceState).add(targetState, prob)) {
 			if (prob != 0.0)
 				numTransitions++;
 		}
@@ -217,37 +217,37 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	}
 
 	@Override
-	public Iterator<Integer> getSuccessorsIterator(final int s)
+	public Iterator<Integer> getSuccessorsIterator(final int state)
 	{
-		return trans.get(s).getSupport().iterator();
+		return trans.get(state).getSupport().iterator();
 	}
 
 	@Override
-	public boolean isSuccessor(int s1, int s2)
+	public boolean isSuccessor(int precessorState, int successorState)
 	{
-		return trans.get(s1).contains(s2);
+		return trans.get(precessorState).contains(successorState);
 	}
 
 	@Override
-	public boolean allSuccessorsInSet(int s, BitSet set)
+	public boolean allSuccessorsInSet(int precessorState, BitSet successorSet)
 	{
-		return (trans.get(s).isSubsetOf(set));
+		return (trans.get(precessorState).isSubsetOf(successorSet));
 	}
 
 	@Override
-	public boolean someSuccessorsInSet(int s, BitSet set)
+	public boolean someSuccessorsInSet(int precessorState, BitSet successorSet)
 	{
-		return (trans.get(s).containsOneOf(set));
+		return (trans.get(precessorState).containsOneOf(successorSet));
 	}
 
 	@Override
-	public void findDeadlocks(boolean fix)
+	public void findDeadlocks(boolean fixTheDeadlocks)
 	{
-		for (int i = 0; i < numStates; i++) {
-			if (trans.get(i).isEmpty()) {
-				addDeadlockState(i);
-				if (fix)
-					setProbability(i, i, 1.0);
+		for (int state = 0; state < numStates; state++) {
+			if (trans.get(state).isEmpty()) {
+				addDeadlockState(state);
+				if (fixTheDeadlocks)
+					setProbability(state, state, 1.0);
 			}
 		}
 	}
@@ -255,24 +255,24 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 	@Override
 	public void checkForDeadlocks(BitSet except) throws PrismException
 	{
-		for (int i = 0; i < numStates; i++) {
-			if (trans.get(i).isEmpty() && (except == null || !except.get(i)))
-				throw new PrismException("DTMC has a deadlock in state " + i);
+		for (int state = 0; state < numStates; state++) {
+			if (trans.get(state).isEmpty() && (except == null || !except.get(state)))
+				throw new PrismException("DTMC has a deadlock in state " + state);
 		}
 	}
 
 	// Accessors (for DTMC)
 
 	@Override
-	public int getNumTransitions(int s)
+	public int getNumTransitions(int state)
 	{
-		return trans.get(s).size();
+		return trans.get(state).size();
 	}
 
 	@Override
-	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int s)
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int state)
 	{
-		return trans.get(s).iterator();
+		return trans.get(state).iterator();
 	}
 
 	@Override
@@ -375,18 +375,17 @@ public class DTMCSimple extends DTMCExplicit implements ModelSimple
 				prob = e.getValue();
 				result[j] += prob * vect[i];
 			}
-
 		}
 	}
 
 	// Accessors (other)
 
 	/**
-	 * Get the transitions (a distribution) for state s.
+	 * Get the transitions (a distribution) for state.
 	 */
-	public Distribution getTransitions(int s)
+	public Distribution getTransitions(int state)
 	{
-		return trans.get(s);
+		return trans.get(state);
 	}
 
 	// Standard methods
