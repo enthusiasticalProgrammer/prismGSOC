@@ -204,7 +204,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	}
 
 	/**
-	 * @throws PrismException because a subclass throws it. 
+	 * @throws PrismException because a subclass throws it.
 	 */
 	@Override
 	public double getStateReward(int index, State state) throws PrismException

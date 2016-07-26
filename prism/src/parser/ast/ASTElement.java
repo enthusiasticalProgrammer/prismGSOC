@@ -438,7 +438,7 @@ public abstract class ASTElement
 	/**
 	 * Perform any required semantic checks. These are just simple checks on expressions, mostly.
 	 * For semantic checks on models and properties, specifically, see:
-	 * {@link parser.visitor.ModulesFileSemanticCheck} and {@link parser.visitor.PropertiesSemanticCheck}. 
+	 * {@link parser.visitor.ModulesFileSemanticCheck} and {@link parser.visitor.PropertiesSemanticCheck}.
 	 * These checks are done *before* any undefined constants have been defined.
 	 */
 	public void semanticCheck() throws PrismLangException
