@@ -592,7 +592,7 @@ public class PrismLogarithmicAxis extends ValueAxis
 	public List<NumberTick> refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge)
 	{
 
-		List<NumberTick> result = new java.util.ArrayList<>();
+		List<NumberTick> result = new ArrayList<>();
 		if (RectangleEdge.isTopOrBottom(edge)) {
 			result = refreshTicksHorizontal(g2, dataArea, edge);
 		} else if (RectangleEdge.isLeftOrRight(edge)) {
