@@ -319,15 +319,6 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		updater.calculateStateRewards(state, store);
 	}
 
-	public void getRandomInitialState(RandomNumberGenerator rng, State initialState) throws PrismException
-	{
-		if (modulesFile.getInitialStates() == null) {
-			initialState.copy(modulesFile.getDefaultInitialState());
-		} else {
-			throw new PrismException("Random choice of multiple initial states not yet supported");
-		}
-	}
-
 	@Override
 	public boolean isLabelTrue(int i) throws PrismException
 	{
