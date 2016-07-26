@@ -174,6 +174,12 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	public abstract Object getTransitionAction(int i, int offset) throws PrismException;
 
 	@Override
+	public Object getChoiceAction(int i) throws PrismException
+	{
+		return getTransitionAction(i, 0);
+	}
+
+	@Override
 	public abstract double getTransitionProbability(int i, int offset) throws PrismException;
 
 	@Override
@@ -198,7 +204,7 @@ public abstract class DefaultModelGenerator implements ModelGenerator
 	}
 
 	/**
-	 * @throws PrismException is used in subclasses 
+	 * @throws PrismException because a subclass throws it.
 	 */
 	@Override
 	public double getStateReward(int index, State state) throws PrismException

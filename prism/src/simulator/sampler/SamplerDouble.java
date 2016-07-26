@@ -36,7 +36,7 @@ import prism.PrismLangException;
  */
 public abstract class SamplerDouble extends Sampler
 {
-	// Value of current path
+	/** Value of current path */
 	protected double value;
 	// Stats over all paths
 	protected double valueSum;

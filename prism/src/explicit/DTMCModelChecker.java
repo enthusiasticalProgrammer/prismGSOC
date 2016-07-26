@@ -1668,6 +1668,7 @@ public class DTMCModelChecker extends ProbModelChecker
 		ModelCheckerResult res;
 		try {
 			// Two examples of building and solving a DTMC
+
 			int version = 2;
 			if (version == 1) {
 

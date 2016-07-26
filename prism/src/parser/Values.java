@@ -42,7 +42,7 @@ import prism.PrismLangException;
  * Class to store a list of typed constant/variable values.
  * (Basically, just a mapping from String to Object)
  */
-public class Values //implements Comparable
+public class Values
 {
 	protected ArrayList<String> names;
 	protected ArrayList<Object> values;

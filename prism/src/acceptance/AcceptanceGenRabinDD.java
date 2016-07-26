@@ -166,7 +166,6 @@ public class AcceptanceGenRabinDD extends ArrayList<AcceptanceGenRabinDD.GenRabi
 		return false;
 	}
 
-
 	@Override
 	public void clear()
 	{

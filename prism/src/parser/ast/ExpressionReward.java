@@ -276,6 +276,7 @@ public class ExpressionReward extends ExpressionQuant
 	public String toString()
 	{
 		String s = "";
+
 		s += "R" + getModifierString();
 		if (rewardStructIndex != null) {
 			if (rewardStructIndex instanceof Expression)
@@ -296,6 +297,7 @@ public class ExpressionReward extends ExpressionQuant
 		if (getFilter() != null)
 			s += " " + getFilter();
 		s += " ]";
+
 		return s;
 	}
 

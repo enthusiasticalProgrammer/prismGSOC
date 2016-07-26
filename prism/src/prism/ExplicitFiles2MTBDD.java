@@ -685,6 +685,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// calculate dd for initial state
