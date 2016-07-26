@@ -135,13 +135,12 @@ public class ExplicitFiles2MTBDD
 
 	private void readStatesFromFile() throws PrismException
 	{
-
+		BufferedReader in = null;
 		String s, ss[];
 		int i, j, lineNum = 0;
 
 		// create arrays for explicit state storage
 		statesArray = new int[numStates][];
-		BufferedReader in = null;
 		try {
 			// open file for reading
 			in = new BufferedReader(new FileReader(statesFile));
@@ -188,6 +187,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// build model
@@ -370,6 +370,7 @@ public class ExplicitFiles2MTBDD
 				throw new PrismException("An exception occurred while parsing the input file. The file could not be closed");
 			}
 		}
+
 	}
 
 	// allocate DD vars for system
