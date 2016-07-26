@@ -178,7 +178,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states for target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ X "target" ]
-	 * @throws PrismNotSupportedException because it is thrown in CTMCModelChecker
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it.
 	 */
 	public BitSet computeExistsNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
@@ -262,8 +262,8 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param model the model
 	 * @param A the BitSet of states for "a"
 	 * @param B the BitSet of states for "b"
-	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" U "b" ] 
-	 * @throws PrismNotSupportedException is thrown in subclasses
+	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" U "b" ]
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
 	public BitSet computeExistsUntil(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
@@ -382,7 +382,7 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param A the BitSet for the states in "a"
 	 * @param A the BitSet for the states in "a"
 	 * @return a boolean StateValues, with {@code true} for all states satisfying E[ "a" R "b" ]
-	 * @throws PrismNotSupportedException necessary, because the overriding methods use it 
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
 	public BitSet computeExistsRelease(Model model, BitSet A, BitSet B) throws PrismNotSupportedException
 	{
