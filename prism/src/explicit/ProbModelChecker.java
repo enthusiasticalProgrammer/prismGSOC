@@ -1132,6 +1132,12 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		// Compute probabilities
 		StateValues probs = checkSteadyStateFormula(model, expr.getExpression(), minMax);
 
+		// Print out probabilities
+		if (getVerbosity() > 5) {
+			mainLog.print("\nProbabilities (non-zero only) for all states:\n");
+			probs.print(mainLog);
+		}
+
 		// For =? properties, just return values
 		if (opInfo.isNumeric()) {
 			return probs;
