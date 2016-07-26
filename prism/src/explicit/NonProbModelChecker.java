@@ -222,9 +222,9 @@ public class NonProbModelChecker extends StateModelChecker
 	 * @param target the BitSet of states in target
 	 * @param statesOfInterest the states of interest ({@code null} = all states)
 	 * @return a boolean StateValues, with {@code true} for all states satisfying A[ X "target" ]
-	 * @throws PrismException because CTMCModelChecker throws it while overriding the method
+	 * @throws PrismNotSupportedException because CTMCModelChecker throws it
 	 */
-	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		BitSet result = new BitSet();
 

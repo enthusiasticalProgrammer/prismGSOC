@@ -129,7 +129,7 @@ public class CTMCModelChecker extends ProbModelChecker
 	}
 
 	@Override
-	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax) throws PrismException
+	protected StateValues checkProbBoundedUntil(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		double lTime, uTime; // time bounds
 		Expression exprTmp;
@@ -902,7 +902,7 @@ public class CTMCModelChecker extends ProbModelChecker
 	}
 
 	@Override
-	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismException
+	public BitSet computeForAllNext(Model model, BitSet target, BitSet statesOfInterest) throws PrismNotSupportedException
 	{
 		// Construct embedded DTMC and do CTL computation on that
 		mainLog.println("Building embedded DTMC...");
