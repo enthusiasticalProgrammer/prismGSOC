@@ -94,13 +94,13 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public void findDeadlocks(boolean fix)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void buildFromPrismExplicit(String filename)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public void exportToPrismLanguage(String filename)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	// Methods to implement NondetModel
@@ -220,12 +220,12 @@ public class LTSFromDA extends ModelExplicit implements LTS
 	@Override
 	public Model constructInducedModel(MDStrategy strat)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void exportToDotFileWithStrat(PrismLog out, BitSet mark, int[] strat)
 	{
-		throw new RuntimeException("Not implemented yet");
+		throw new UnsupportedOperationException();
 	}
 }
