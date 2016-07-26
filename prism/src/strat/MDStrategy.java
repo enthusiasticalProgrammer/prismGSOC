@@ -93,7 +93,7 @@ public abstract class MDStrategy implements Strategy
 	// Temp stubs
 
 	@Override
-	public void init(int state)
+	public void initialise(int state)
 	{
 		currentState = state;
 	}

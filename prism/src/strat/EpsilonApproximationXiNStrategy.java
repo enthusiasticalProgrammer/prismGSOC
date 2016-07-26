@@ -34,7 +34,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	}
 
 	@Override
-	public void init(int state)
+	public void initialise(int state)
 	{
 		// nothing needs to be done
 	}

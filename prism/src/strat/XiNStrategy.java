@@ -64,7 +64,7 @@ public class XiNStrategy implements Strategy
 	}
 
 	@Override
-	public void init(int state)
+	public void initialise(int state)
 	{
 		this.phase = BigInteger.ZERO;
 	}
@@ -230,7 +230,7 @@ public class XiNStrategy implements Strategy
 	@Override
 	public String getInfo()
 	{
-		throw new UnsupportedOperationException();//TODO: implement it
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
