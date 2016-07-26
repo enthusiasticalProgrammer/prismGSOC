@@ -817,7 +817,6 @@ public abstract class QuantAbstractRefine extends PrismComponent
 	protected void modelCheckAbstractionExpReach(boolean min) throws PrismException
 	{
 		ModelCheckerResult res = null;
-		int i, n;
 
 		// Pass settings to model checker
 		mc.termCrit = TermCrit.RELATIVE;
