@@ -350,6 +350,7 @@ public class LTL2DA extends PrismComponent
 			PrintStream out = (args.length < 2 || "-".equals(args[1])) ? System.out : new PrintStream(args[1]);
 			String format = (args.length < 3) ? "hoa" : args[2];
 			da.print(out, format);
+			out.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
