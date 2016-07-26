@@ -297,7 +297,6 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return transitions.getChoice(index).getProbability(offset);
 	}
 
-	//@Override
 	public double getTransitionProbability(int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
@@ -310,19 +309,16 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return getTransitionList().getChoice(index).computeTarget(offset, exploreState);
 	}
 
-	//@Override
 	public State computeTransitionTarget(int index) throws PrismException
 	{
 		return getTransitionList().computeTransitionTarget(index, exploreState);
 	}
 
-	//@Override
 	public void calculateStateRewards(State state, double[] store) throws PrismLangException
 	{
 		updater.calculateStateRewards(state, store);
 	}
 
-	//@Override
 	public void getRandomInitialState(RandomNumberGenerator rng, State initialState) throws PrismException
 	{
 		if (modulesFile.getInitialStates() == null) {
