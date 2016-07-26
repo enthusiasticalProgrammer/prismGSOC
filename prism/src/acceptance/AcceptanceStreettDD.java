@@ -240,18 +240,4 @@ public class AcceptanceStreettDD extends ArrayList<AcceptanceStreettDD.StreettPa
 	{
 		return AcceptanceType.STREETT;
 	}
-
-	@Override
-	@Deprecated
-	public String getTypeAbbreviated()
-	{
-		return getType().getNameAbbreviated();
-	}
-
-	@Override
-	@Deprecated
-	public String getTypeName()
-	{
-		return getType().getName();
-	}
 }

@@ -733,8 +733,11 @@ public class LTLModelChecker extends PrismComponent
 		case GENERALIZED_RABIN:
 			return findAcceptingECStatesForGeneralizedRabin((AcceptanceGenRabinDD) acceptance, model, daDDRowVars, daDDColVars, fairness);
 		default:
-			throw new PrismNotSupportedException(
-					"Computing the accepting EC states for " + acceptance.getTypeName() + " acceptance is not yet implemented (symbolic engine)");
+			 StringBuilder stringBuilder = new StringBuilder();
+			 stringBuilder.append("Computing the accepting EC states for the type ");
+			 stringBuilder.append(acceptance.getType());
+			 stringBuilder.append("is not yet implemented (symbolic engine)");
+			 throw new PrismNotSupportedException(stringBuilder.toString());
 		}
 	}
 

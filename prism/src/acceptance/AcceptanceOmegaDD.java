@@ -48,20 +48,10 @@ public interface AcceptanceOmegaDD
 	/** Returns the AcceptanceType of this acceptance condition */
 	public AcceptanceType getType();
 
-	/** Returns the type of this acceptance condition as a String,
-	 * i.e., "R" for Rabin
-	 */
-	@Deprecated
-	public String getTypeAbbreviated();
-
 	/**
 	 * Clear the resources used by this acceptance condition.
 	 * Call to ensure that the JDD based state sets actually get
 	 * dereferenced.
 	 */
 	void clear();
-
-	/** Returns a full name for this acceptance condition */
-	@Deprecated
-	public String getTypeName();
 }
