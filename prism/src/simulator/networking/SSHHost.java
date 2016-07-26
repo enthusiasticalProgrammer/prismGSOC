@@ -398,8 +398,6 @@ public class SSHHost extends Thread implements SettingOwner, TreeNode
 				String[] parameters5 = { "-p", getUserName() + "@" + getHostName() + ":" + owner.getOutputDir() + "/" + testFile + ".txt", file.getPath() };
 				SSHHandler.scp(getUserName(), getHostName(), parameters5);
 
-				//Tidy up output directory again
-				String[] parameters6 = { "-f", owner.getOutputDir() + "/" + testFile + ".txt" };
 				//do ssh call
 				SSHHandler.ssh(getUserName(), getHostName(), "rm", parameters3);
 
