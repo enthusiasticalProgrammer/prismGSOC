@@ -519,7 +519,7 @@ public class CTMCModelChecker extends ProbModelChecker
 		// Optimisation: If t = 0, this is easy.
 		if (t == 0) {
 			res = new ModelCheckerResult();
-			res.soln = new double[dtmc.getNumStates()];
+			res.soln = new double[ctmc.getNumStates()];
 			return res;
 		}
 
