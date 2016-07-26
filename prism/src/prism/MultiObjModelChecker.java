@@ -935,7 +935,8 @@ public class MultiObjModelChecker extends PrismComponent
 			}
 		}
 
-		mainLog.println("The value iteration(s) took some seconds altogether.");
+		timer = System.currentTimeMillis() - timer;
+		mainLog.println("The value iteration(s) took " + timer / 1000.0 + " seconds altogether.");
 		mainLog.println("Number of weight vectors used: " + numberOfPoints);
 
 		if (!decided)
