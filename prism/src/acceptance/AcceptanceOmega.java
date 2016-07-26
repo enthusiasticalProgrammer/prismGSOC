@@ -37,7 +37,7 @@ import jdd.JDDVars;
  */
 public interface AcceptanceOmega extends Cloneable
 {
-	/** Returns true if the bottom strongly connected component (BSSC)
+	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
 	 **/
 	public boolean isBSCCAccepting(BitSet bscc_states);
