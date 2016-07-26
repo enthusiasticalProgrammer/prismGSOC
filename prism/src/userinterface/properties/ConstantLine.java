@@ -285,7 +285,7 @@ public class ConstantLine extends javax.swing.JPanel
 		java.awt.GridBagConstraints gridBagConstraints;
 
 		choiceButtonGroup = new javax.swing.ButtonGroup();
-		boolSingleValueCombo = new javax.swing.JComboBox();
+		boolSingleValueCombo = new javax.swing.JComboBox<>();
 		sizerPanel = new javax.swing.JPanel();
 		nameLabel = new javax.swing.JLabel();
 		typeLabel = new javax.swing.JLabel();
@@ -409,7 +409,7 @@ public class ConstantLine extends javax.swing.JPanel
 	}//GEN-LAST:event_singleValueComboActionPerformed
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	javax.swing.JComboBox boolSingleValueCombo;
+	javax.swing.JComboBox<String> boolSingleValueCombo;
 	private javax.swing.ButtonGroup choiceButtonGroup;
 	javax.swing.JTextField endValueField;
 	javax.swing.JLabel nameLabel;
