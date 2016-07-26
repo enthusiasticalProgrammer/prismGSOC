@@ -290,7 +290,6 @@ public class ModulesFileModelGenerator extends DefaultModelGenerator
 		return transitions.getChoice(index).getProbability(offset);
 	}
 
-	//@Override
 	public double getTransitionProbability(int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();

@@ -445,34 +445,6 @@ public class GUIPrism extends JFrame
 	{
 		doExit = true;
 		notifyEventListeners(new GUIExitEvent(GUIExitEvent.REQUEST_EXIT));
-
-		// Don't bug user to save defaults on exit
-		/*if (prism.getSettings().isModified()) {
-		    
-		    String[] selection =
-		    {"Yes", "No", "Cancel"};
-		    int selectionNo = -1;
-		    
-		    selectionNo = JOptionPane.showOptionDialog(this, "Prism settings have been modified. Do you wish to save them?", "Save Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, selection, selection[0]);
-		    switch(selectionNo)
-		    {
-		        case 0: 
-		        {
-		            try
-		            {
-		                prism.getSettings().saveSettingsFile(); break;
-		            }
-		            catch(PrismException e)
-		            {
-		                errorDialog("Error: Could not save settings",e.getMessage());
-		            }
-		        }
-		        case 1: {break;}
-		        case 2: doExit = false;
-		        default: doExit = false;
-		    }
-		}*/
-
 		if (doExit)
 			System.exit(0);
 	}
