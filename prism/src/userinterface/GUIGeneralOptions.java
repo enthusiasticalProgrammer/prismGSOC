@@ -152,22 +152,6 @@ public class GUIGeneralOptions extends OptionsPanel
 		return doc.createElement("dummy");
 	}
 
-	public void loadXMLElement(Element element)
-	{
-	}
-
-	public void loadProperties(java.util.Properties properties)
-	{
-	}
-
-	public void loadXMLElement(Document doc, Element element)
-	{
-	}
-
-	public void saveProperties(java.util.Properties properties)
-	{
-	}
-
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	javax.swing.JSlider adjustSlider;
 	private javax.swing.JLabel jLabel1;
