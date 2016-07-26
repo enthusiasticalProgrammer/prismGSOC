@@ -55,12 +55,12 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	private int size;
 	/** Start state (index) */
 	private int start;
-	/** Edges of DRA */
+	/** Edges of DA */
 	private List<List<Edge>> edges;
 	/** The acceptance condition (as BitSets) */
 	private Acceptance acceptance;
 
-	/** Local class to represent DRA edge */
+	/** Local class to represent DA edge */
 	class Edge
 	{
 		private Symbol label;
@@ -74,7 +74,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Construct a DRA of fixed size (i.e. fixed number of states).
+	 * Construct a DA of fixed size (i.e. fixed number of states).
 	 */
 	public DA(int size)
 	{
@@ -226,7 +226,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Print the DRA in ltl2dstar v2 format to the output stream.
+	 * Print the DA in ltl2dstar v2 format to the output stream.
 	 * @param out the output stream 
 	 */
 	public static void printLtl2dstar(DA<BitSet, AcceptanceRabin> dra, PrintStream out) throws PrismException
