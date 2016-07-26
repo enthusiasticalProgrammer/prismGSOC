@@ -27,6 +27,7 @@
 package explicit;
 
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

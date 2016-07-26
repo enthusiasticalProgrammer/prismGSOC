@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import prism.PrismComponent;
-import prism.PrismException;
 
 /**
  * Explicit maximal end component computer for a nondeterministic model such as an MDP.

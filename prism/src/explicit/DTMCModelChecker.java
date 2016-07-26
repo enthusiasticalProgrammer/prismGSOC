@@ -49,7 +49,6 @@ import common.IterableBitSet;
 import explicit.rewards.MCRewards;
 import explicit.rewards.Rewards;
 
-import parser.ast.ExpressionTemporal;
 import parser.type.TypeDouble;
 
 /**
