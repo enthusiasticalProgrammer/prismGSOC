@@ -78,6 +78,11 @@ public interface Strategy
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException;
 
 	/**
+	 * Clear storage of the strategy.
+	 */
+	public void clear();
+
+	/**
 	 * Resets the strategy to uninitialised state
 	 */
 	public void reset();

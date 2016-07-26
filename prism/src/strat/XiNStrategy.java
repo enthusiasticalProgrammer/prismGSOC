@@ -238,4 +238,10 @@ public class XiNStrategy implements Strategy
 	{
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void clear()
+	{
+		//Nothing to do
+	}
 }

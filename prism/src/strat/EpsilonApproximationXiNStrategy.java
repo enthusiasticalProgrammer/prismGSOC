@@ -149,4 +149,10 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		EpsilonApproximationXiNStrategy other = (EpsilonApproximationXiNStrategy) o;
 		return choices.equals(other.choices);
 	}
+
+	@Override
+	public void clear()
+	{
+		// nothing to do
+	}
 }
