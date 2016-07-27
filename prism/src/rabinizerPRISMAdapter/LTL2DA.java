@@ -37,7 +37,6 @@ public class LTL2DA
 		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
 
 		Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
-		optimisations.remove(Optimisation.SLAVE_SUSPENSION);
 
 		Automaton<?, ?> automaton = rabinizer.exec.Main.computeAutomaton(inputFormula, CLIParser.AutomatonType.TGR, Simplifier.Strategy.AGGRESSIVELY,
 				ltl.equivalence.FactoryRegistry.Backend.BDD, optimisations, aliases);
