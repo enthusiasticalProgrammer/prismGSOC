@@ -136,6 +136,7 @@ public class LTL2DA extends PrismComponent
 					// default tool:
 					if (useRabinizer() && Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)) {
 						result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+						result.complete();
 					} else {
 					}
 					result = LTL2Rabin.ltl2da(ltl.convertForJltl2ba(), allowedAcceptance);
