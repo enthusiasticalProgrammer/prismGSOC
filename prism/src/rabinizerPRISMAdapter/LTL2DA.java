@@ -30,6 +30,9 @@ public class LTL2DA
 	 */
 	public static DA<BitSet, AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
+		rabinizer.exec.Main.verbose = false;
+		rabinizer.exec.Main.silent = true;
+
 		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
 		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
 
