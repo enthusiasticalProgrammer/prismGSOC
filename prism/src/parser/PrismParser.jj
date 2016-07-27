@@ -1177,8 +1177,10 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 				if (op != null) {
 					double bound = Double.parseDouble(number);
                 	exprTemp = new ExpressionFrequencyG(bound, op, isLimInf);
-		        }
-				exprTemp.setOperator(ExpressionTemporal.P_G);
+                	exprTemp.setOperator(ExpressionTemporal.P_FREQ);
+		        }else {
+					exprTemp.setOperator(ExpressionTemporal.P_G);
+				}
 		       
 		       })
 		( TimeBound(exprTemp) )?

@@ -216,6 +216,8 @@ public class NonProbModelChecker extends StateModelChecker
 				exprCopy.setOperand2(Expression.Not(exprCopy.getOperand2()));
 				res = checkExpressionExists(exprCopy);
 				res.subtractFromOne();
+			} else if(exprTemp.getOperator() == ExpressionTemporal.P_FREQ) {
+				throw new PrismNotSupportedException("Currently, fLTL\\GU-modelchecking is not supported in symbolic engine");
 			}
 			// Anything else - convert to until and recurse
 			else {

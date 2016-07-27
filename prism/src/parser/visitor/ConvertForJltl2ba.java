@@ -150,6 +150,7 @@ public class ConvertForJltl2ba
 				res = convert(until);
 			}
 			break;
+		case ExpressionTemporal.P_FREQ:
 		default:
 			throw new PrismLangException("Cannot convert expression to jltl2ba form", e);
 		}

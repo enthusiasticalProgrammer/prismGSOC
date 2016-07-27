@@ -181,6 +181,7 @@ public class FastAdaptiveUniformisationModelChecker extends PrismComponent
 		case ExpressionTemporal.P_G:
 			sink = Expression.False();
 			break;
+		case ExpressionTemporal.P_FREQ:
 		case ExpressionTemporal.P_W:
 		case ExpressionTemporal.P_R:
 		default:

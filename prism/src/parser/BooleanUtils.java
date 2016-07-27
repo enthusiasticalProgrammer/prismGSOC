@@ -232,9 +232,9 @@ public class BooleanUtils
 						bNeg = doConversionToPositiveNormalForm(Expression.Not(b), ltl);
 						// !(a R b)  ==  !a U !b
 						return new ExpressionTemporal(ExpressionTemporal.P_U, aNeg, bNeg);
+					case ExpressionTemporal.P_FREQ:
 					default:
-						// Don't change (shouldn't happen)
-						return expr;
+						throw new UnsupportedOperationException();
 					}
 				}
 			} else {

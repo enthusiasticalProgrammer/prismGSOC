@@ -36,6 +36,20 @@ public class ExpressionFrequencyG extends ExpressionTemporal
 		s = s + bound;
 		s = s + "} ";
 		return s + super.toString().substring(1);
+	}
 
+	@Override
+	public void setOperator(int op)
+	{
+		if (op == ExpressionTemporal.P_FREQ) {
+			super.setOperator(op);
+		} else {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	public int getOperator()
+	{
+		return ExpressionTemporal.P_FREQ;
 	}
 }
