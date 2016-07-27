@@ -838,9 +838,10 @@ public class LTLModelChecker extends PrismComponent
 
 			BitSet finite = pair.Finite;
 			BitSet notFinite = new BitSet();
-			for (int s = 0; s < numStates; s++) {
-				notFinite.set(s, !finite.get(s));
-			}
+			notFinite.set(0, numStates);
+			finite.stream().forEach(fin -> {
+				notFinite.set(acceptance.computeStartStateOfEdge(fin), false);
+			});
 
 			if (notFinite.cardinality() == 0)
 				continue;

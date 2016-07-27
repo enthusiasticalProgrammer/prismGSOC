@@ -169,10 +169,17 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			return newBs;
 		}
 
-		public void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+		private void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
 		{
-			Finite.stream().filter(fin -> usedEdges.get(computeStartStateOfEdge(fin)) == null || !computeBitSetOfEdge(fin).equals(usedEdges.get(fin)))
+			removeUnneccessaryProductEdgesForSet(usedEdges, Finite);
+			Infinite.forEach(inf -> removeUnneccessaryProductEdgesForSet(usedEdges, inf));
+			Finite.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin))))
 					.forEach(fin -> Finite.clear(fin));
+		}
+
+		private void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
+		{
+			set.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin)))).forEach(fin -> set.clear(fin));
 		}
 	}
 
@@ -276,7 +283,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 				result.set(index);
 			}
 			index++;
-			relevantSets = relevantSets >>> 1;
+			relevantSets = relevantSets >> 1;
 		}
 		return result;
 	}
