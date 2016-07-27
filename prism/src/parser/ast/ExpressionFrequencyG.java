@@ -24,4 +24,18 @@ public class ExpressionFrequencyG extends ExpressionTemporal
 		ExpressionFrequencyG freq = (ExpressionFrequencyG) o;
 		return super.equals(o) && this.bound == freq.bound && this.cmpOperator == freq.cmpOperator && this.isLimInf == freq.isLimInf;
 	}
+
+	@Override
+	public String toString()
+	{
+		String s = "G {";
+		s = s + (isLimInf ? "inf" : "sup");
+		s = s + " ";
+		s = s + cmpOperator.toString();
+		s = s + " ";
+		s = s + bound;
+		s = s + "} ";
+		return s + super.toString().substring(1);
+
+	}
 }
