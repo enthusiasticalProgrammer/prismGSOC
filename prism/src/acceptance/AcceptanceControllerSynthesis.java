@@ -4,11 +4,12 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
-import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
 import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
@@ -72,13 +73,25 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		@Override
 		public String toString()
 		{
-			throw new UnsupportedOperationException("Not yet implemented");
+			String s = super.toString();
+			s += "mdp:";
+			for (MDPCondition mdp : mdpCondition) {
+				s += " " + mdp.toString();
+			}
+			return s;
 		}
 
 		@Override
 		protected void lift(Map<Integer, Collection<Integer>> lifter)
 		{
-			throw new UnsupportedOperationException("Not yet implemented");
+			super.lift(lifter);
+			mdpCondition.stream().forEach(mdp -> {
+				BiMap<BitSet, Integer> newAccSet = HashBiMap.create();
+				for (Entry<BitSet, Integer> acc : mdp.acceptanceSet.entrySet()) {
+					newAccSet.put(transformSingleBitSet(acc.getKey(), lifter), acc.getValue());
+				}
+				mdp.acceptanceSet = newAccSet;
+			});
 		}
 	}
 
@@ -99,6 +112,12 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 			this.bound = bound;
 			this.cmpOperator = cmpOperator;
 			this.isLimInf = isLimInf;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "bound: " + bound + cmpOperator + isLimInf + " rewards: " + acceptanceSet;
 		}
 	}
 }
