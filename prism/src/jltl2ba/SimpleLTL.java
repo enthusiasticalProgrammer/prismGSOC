@@ -36,19 +36,23 @@ import java.util.Map;
 
 import jltl2dstar.APMonom;
 import jltl2dstar.NBA;
+import ltl.parser.Comparison;
 import prism.PrismException;
 
 public class SimpleLTL
 {
 
 	public enum LTLType {
-		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FINALLY
+		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FREQ_G, FINALLY
 	}
 
 	public SimpleLTL left;
 	public SimpleLTL right;
 	public LTLType kind;
 	public String ap;
+	public double bound;
+	public Comparison cmp;
+	public boolean isLimInf;
 
 	public SimpleLTL(boolean v)
 	{
@@ -82,6 +86,16 @@ public class SimpleLTL
 			//	throw new PrismException("Trying to build invalid SimpleLTL");
 		}
 	}
+
+	public static SimpleLTL buildFrequencyG(SimpleLTL lft, double bound, Comparison cmp, boolean isLimInf)
+	{
+		SimpleLTL result = new SimpleLTL(LTLType.FREQ_G, lft, null, null);
+		result.bound = bound;
+		result.cmp = cmp;
+		result.isLimInf = isLimInf;
+		return result;
+	}
+
 
 	public SimpleLTL(LTLType type, SimpleLTL lft, SimpleLTL rgt)
 	{
