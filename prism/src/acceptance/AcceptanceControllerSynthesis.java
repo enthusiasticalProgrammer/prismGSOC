@@ -22,7 +22,6 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	public AcceptanceControllerSynthesis(DA<BitSet, ?> da)
 	{
 		super(da);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
