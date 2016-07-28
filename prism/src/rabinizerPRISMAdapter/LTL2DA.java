@@ -28,7 +28,7 @@ public class LTL2DA
 	 *    @return A DA with Edges specified as BitSet and generalised Rabin acceptance,
 	 *    					which is transition-based.
 	 */
-	public static DA<BitSet, AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
+	public static DA<BitSet, ? extends AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
 		rabinizer.exec.Main.verbose = false;
 		rabinizer.exec.Main.silent = true;
@@ -43,7 +43,7 @@ public class LTL2DA
 		automaton.toHOA(new HOAConsumerPrint(System.out), aliases);
 
 		if (automaton instanceof ProductRabinizer) {
-			return RabinizerToDA.getDAFromRabinizer((ProductRabinizer) automaton, aliases);
+			return RabinizerToDA.getGenericDA((ProductRabinizer) automaton, aliases);
 		}
 		throw new RuntimeException(
 				"Unfortunately the resulting automaton obtained by Rabinizer had a wrong (or unknown) type. Therefore we cannot build a DA out of it. Something in the rabinizer-prism-interface does probably not work.");
