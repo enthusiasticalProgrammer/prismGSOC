@@ -48,8 +48,26 @@ public class ExpressionFrequencyG extends ExpressionTemporal
 		}
 	}
 
+	@Override
 	public int getOperator()
 	{
 		return ExpressionTemporal.P_FREQ;
+	}
+
+	@Override
+	public ExpressionFrequencyG deepCopy()
+	{
+		ExpressionFrequencyG expr = new ExpressionFrequencyG(this.bound, this.cmpOperator, this.isLimInf);
+		expr.setOperator(op);
+		if (operand1 != null)
+			expr.setOperand1(operand1.deepCopy());
+		if (operand2 != null)
+			expr.setOperand2(operand2.deepCopy());
+		expr.setLowerBound(lBound == null ? null : lBound.deepCopy(), lBoundStrict);
+		expr.setUpperBound(uBound == null ? null : uBound.deepCopy(), uBoundStrict);
+		expr.equals = equals;
+		expr.setType(type);
+		expr.setPosition(this);
+		return expr;
 	}
 }
