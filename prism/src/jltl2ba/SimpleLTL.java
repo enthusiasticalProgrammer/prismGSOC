@@ -36,6 +36,7 @@ import java.util.Map;
 
 import jltl2dstar.APMonom;
 import jltl2dstar.NBA;
+import ltl.FrequencyG;
 import ltl.parser.Comparison;
 import prism.PrismException;
 
@@ -142,6 +143,9 @@ public class SimpleLTL
 				case GLOBALLY:
 				case FINALLY:
 					return left.equals(other.left);
+				case FREQ_G:
+					System.out.println("me: " + this + " other: " + other);
+					return left.equals(other.left) && bound == other.bound && cmp.equals(other.cmp) && isLimInf == other.isLimInf;
 				case OR:
 				case AND:
 				case EQUIV:
@@ -168,6 +172,7 @@ public class SimpleLTL
 		case NOT:
 		case NEXT:
 		case GLOBALLY:
+		case FREQ_G:
 		case FINALLY:
 			rv = left.getAPs();
 			break;
@@ -195,6 +200,32 @@ public class SimpleLTL
 			break;
 		}
 		return rv;
+	}
+
+	public boolean containsFrequencyG()
+	{
+		switch (kind) {
+		case FREQ_G:
+			return true;
+		case NOT:
+		case NEXT:
+		case GLOBALLY:
+		case FINALLY:
+			return left.containsFrequencyG();
+		case OR:
+		case AND:
+		case EQUIV:
+		case IMPLIES:
+		case UNTIL:
+		case RELEASE:
+			return left.containsFrequencyG() || right.containsFrequencyG();
+		// terminals
+		case FALSE:
+		case TRUE:
+		case AP:
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -815,6 +846,9 @@ public class SimpleLTL
 			break;
 		case GLOBALLY:
 			rv = "G " + left.toString();
+			break;
+		case FREQ_G:
+			rv = "G {" + (isLimInf ? FrequencyG.Limes.INF : FrequencyG.Limes.SUP) + cmp + bound + " } " + left.toString();
 			break;
 		case NOT:
 			rv = "! " + left.toString();
