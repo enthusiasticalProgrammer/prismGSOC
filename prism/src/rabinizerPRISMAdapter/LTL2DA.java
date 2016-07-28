@@ -14,7 +14,7 @@ import ltl.Formula;
 import ltl.simplifier.Simplifier;
 import omega_automaton.Automaton;
 import rabinizer.automata.Optimisation;
-import rabinizer.automata.ProductRabinizer;
+import rabinizer.automata.Product;
 import rabinizer.exec.CLIParser;
 
 public class LTL2DA
@@ -35,15 +35,14 @@ public class LTL2DA
 
 		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
 		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
-
-		Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
-
-		Automaton<?, ?> automaton = rabinizer.exec.Main.computeAutomaton(inputFormula, CLIParser.AutomatonType.TGR, Simplifier.Strategy.AGGRESSIVELY,
+		Set<Optimisation> optimisations = ltlFormula.containsFrequencyG() ? EnumSet.of(Optimisation.COMPUTE_ACC_CONDITION) : EnumSet.allOf(Optimisation.class);
+		Automaton<?, ?> automaton = rabinizer.exec.Main.computeAutomaton(inputFormula,
+				ltlFormula.containsFrequencyG() ? CLIParser.AutomatonType.MDP : CLIParser.AutomatonType.TGR, Simplifier.Strategy.AGGRESSIVELY,
 				ltl.equivalence.FactoryRegistry.Backend.BDD, optimisations, aliases);
 		automaton.toHOA(new HOAConsumerPrint(System.out), aliases);
 
-		if (automaton instanceof ProductRabinizer) {
-			return RabinizerToDA.getGenericDA((ProductRabinizer) automaton, aliases);
+		if (automaton instanceof Product<?>) {
+			return RabinizerToDA.getGenericDA((Product<?>) automaton, aliases);
 		}
 		throw new RuntimeException(
 				"Unfortunately the resulting automaton obtained by Rabinizer had a wrong (or unknown) type. Therefore we cannot build a DA out of it. Something in the rabinizer-prism-interface does probably not work.");
