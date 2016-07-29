@@ -439,11 +439,14 @@ public abstract class MultiLongRun<M extends NondetModel>
 					while (it.hasNext()) {
 						Entry<Integer, Double> en = it.next();
 
-						if (!isMECState(en.getKey()))
-							continue;
-
 						Map<Integer, Double> row = map.get(en.getKey());
 						assert (row != null); //we created mec rows just aboved
+
+						if (!isMECState(en.getKey())) {
+							//This action is forbidden
+							row.remove(index);
+							break;
+						}
 
 						double val = 0;
 						if (row.containsKey(index))
