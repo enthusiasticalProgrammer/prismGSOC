@@ -57,10 +57,17 @@ public class MultiLongRunControllerSynthesis
 		return result;
 	}
 
+	/**
+	 * This method returns basically max(amount of lim-sup-conditions, 1).
+	 * It is necessary, that this method returns at least 1, because otherwise the LP
+	 * had no equation even though there are some lim-inf-conditions present. 
+	 */
 	private int necessaryNFromPaperForAcceptance(AcceptanceControllerSynthesis.AccControllerPair pair)
 	{
 		int size = (int) pair.mdpCondition.stream().filter(mdp -> !mdp.isLimInf).count();
-		//TODO handle cases where size ==0;
+		if (size == 0) {
+			return 1;
+		}
 		return size;
 	}
 
