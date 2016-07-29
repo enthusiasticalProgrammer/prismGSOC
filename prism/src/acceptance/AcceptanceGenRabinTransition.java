@@ -173,8 +173,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		{
 			removeUnneccessaryProductEdgesForSet(usedEdges, Finite);
 			Infinite.forEach(inf -> removeUnneccessaryProductEdgesForSet(usedEdges, inf));
-			Finite.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin))))
-					.forEach(fin -> Finite.clear(fin));
 		}
 
 		protected void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
