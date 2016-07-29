@@ -112,6 +112,10 @@ public abstract class Expression extends ASTElement
 		// Otherwise, must be a temporal operator.
 		else if (this instanceof ExpressionTemporal) {
 			ExpressionTemporal expr = (ExpressionTemporal) this;
+
+			if (expr instanceof ExpressionFrequencyG)
+				return false;
+
 			// And children, if present, must be state (not path) formulas
 			if (expr.getOperand1() != null && !(expr.getOperand1().getType() instanceof TypeBool)) {
 				return false;
@@ -742,6 +746,30 @@ public abstract class Expression extends ASTElement
 	}
 
 	/**
+	 * This method tests if an Expression contains a frequency-operator (frequency-G),
+	 * and it returns true, if this is the case. 
+	 */
+	public static boolean containsFrequencyLTL(Expression expr)
+	{
+		try {
+			ASTTraverse astt = new ASTTraverse()
+			{
+				@Override
+				public void visitPost(ExpressionTemporal e) throws PrismLangException
+				{
+					if (e instanceof ExpressionFrequencyG) {
+						throw new PrismLangException("expected");
+					}
+				}
+			};
+			expr.accept(astt);
+		} catch (PrismLangException expected) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Test if an expression contains a multi(...) property within 
 	 * TODO this is an irksome hack (what happens e.g. when expr.accept(astt) throws another PrismLangException?)
 	 *  		This is basically a rebuild of ProbModelChecker::createMultiLongRun (for the types)
@@ -888,7 +916,7 @@ public abstract class Expression extends ASTElement
 	/**
 	 * Converts an Expression that is a simple path formula to a canonical form:
 	 * Either a single non-negated next-step operator
-	 * or a single until-operator, optionally preceded by a single negation.
+	 * or a single until-operator or a frequency-G formula, optionally preceded by a single negation.
 	 * Parentheses are removed.
 	 * @param expr the simple path formula
 	 * @return the canonical expression
@@ -937,7 +965,11 @@ public abstract class Expression extends ASTElement
 				expr = exprTemp;
 			} else {
 				// other operators: convert
+				try {
 				expr = exprTemp.convertToUntilForm();
+				} catch (UnsupportedOperationException expected) {
+					//formula contains a frequency-G  => return it 'as is' 
+				}
 			}
 		} else {
 			throw new PrismLangException("Expression is not a simple path formula: Unsupported expression " + expr.toString());
