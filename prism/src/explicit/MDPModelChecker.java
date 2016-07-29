@@ -43,8 +43,10 @@ import prism.PrismDevNullLog;
 import prism.PrismException;
 import prism.PrismFileLog;
 import prism.PrismLog;
+import prism.PrismSettings;
 import prism.PrismUtils;
 import strat.MDStrategyArray;
+import acceptance.AcceptanceControllerSynthesis;
 import acceptance.AcceptanceReach;
 import acceptance.AcceptanceType;
 import common.IterableBitSet;
@@ -113,6 +115,11 @@ public class MDPModelChecker extends ProbModelChecker
 		if (product.getAcceptance() instanceof AcceptanceReach) {
 			mainLog.println("\nSkipping accepting MEC computation since acceptance is defined via goal states...");
 			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
+		} else if (product.getAcceptance() instanceof AcceptanceControllerSynthesis) {
+			mainLog.println("\nSkipping accepting MEC computation and find out acceptance by computing the goal states by controller acc synthesis");
+			MultiLongRunControllerSynthesis mlrcs = new MultiLongRunControllerSynthesis(product.getProductModel(),
+					(AcceptanceControllerSynthesis) product.getAcceptance(), settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD));
+			acc = mlrcs.computeStatesInAcceptingMECs();
 		} else {
 			mainLog.println("\nFinding accepting MECs...");
 			acc = mcLtl.findAcceptingECStates(product.getProductModel(), product.getAcceptance());
@@ -189,6 +196,12 @@ public class MDPModelChecker extends ProbModelChecker
 			// For a DFA, just collect the accept states
 			mainLog.println("\nSkipping end component detection since DRA is a DFA...");
 			acc = ((AcceptanceReach) product.getAcceptance()).getGoalStates();
+		} else if (product.getAcceptance() instanceof AcceptanceControllerSynthesis) {
+			mainLog.println("\nSkipping accepting MEC computation and find out acceptance by computing the goal states by controller acc synthesis");
+			MultiLongRunControllerSynthesis mlrcs = new MultiLongRunControllerSynthesis(product.getProductModel(),
+					(AcceptanceControllerSynthesis) product.getAcceptance(), settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD));
+			acc = mlrcs.computeStatesInAcceptingMECs();
+			System.out.println("it wooooooooooooooooooooooooooooooooorked");
 		} else {
 			// Usually, we have to detect end components in the product
 			mainLog.println("\nFinding accepting end components...");
