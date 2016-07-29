@@ -46,7 +46,7 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	public class AccControllerPair extends GenRabinPair
 	{
 
-		final List<MDPCondition> mdpCondition;
+		public final List<MDPCondition> mdpCondition;
 
 		public AccControllerPair(BitSet Finite, List<BitSet> Infinite, List<MDPCondition> mdpCondition)
 		{
