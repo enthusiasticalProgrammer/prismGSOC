@@ -119,4 +119,11 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 			return "bound: " + bound + cmpOperator + isLimInf + " rewards: " + acceptanceSet;
 		}
 	}
+
+	public BitSet transformToStateSet(BitSet set)
+	{
+		BitSet stateSet = new BitSet();
+		set.stream().forEach(index -> stateSet.set(computeStartStateOfEdge(index)));
+		return stateSet;
+	}
 }
