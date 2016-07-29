@@ -45,7 +45,7 @@ public class ExpressionTemporal extends Expression
 	public static final int R_F = 13; // Reachability (for R operator) // DEPRECATED: Use P_F
 	public static final int R_S = 14; // Steady-state (for R operator)
 	// Operator symbols
-	public static final String opSymbols[] = { "", "X", "U", "F", "G", "W", "R", "G^", "", "", "", "C", "I", "F", "S" };
+	public static final String opSymbols[] = { "", "X", "U", "F", "G", "W", "R", "G", "", "", "", "C", "I", "F", "S" };
 
 	// Operator
 	protected int op = 0;
@@ -390,6 +390,8 @@ public class ExpressionTemporal extends Expression
 			exprTemp.setUpperBound(uBound, uBoundStrict);
 			exprTemp.equals = equals;
 			return Expression.Not(exprTemp);
+		case P_FREQ:
+			throw new UnsupportedOperationException("not yet implemented");
 		}
 		throw new PrismLangException("Cannot convert " + getOperatorSymbol() + " to until form");
 	}
