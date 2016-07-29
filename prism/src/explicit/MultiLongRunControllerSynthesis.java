@@ -24,7 +24,7 @@ public class MultiLongRunControllerSynthesis
 	private final AcceptanceControllerSynthesis acceptance;
 
 	/**
-	 * method for LP solving to be used TODO drop it
+	 * method for LP solving to be used
 	 */
 	private final String method;
 
