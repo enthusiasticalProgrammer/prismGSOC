@@ -167,7 +167,7 @@ public class MultiLongRunControllerSynthesis
 
 				//outflow
 				for (int action = 0; action < model.getNumChoices(state); action++) {
-					row.put(xOffsetArr[i][state] + action, -1.0);
+					row.put(xOffsetArr[i][state] + action, row.getOrDefault(xOffsetArr[i][state] + action, 0.0) - 1.0);
 				}
 
 				//inflow
@@ -181,7 +181,7 @@ public class MultiLongRunControllerSynthesis
 								valueToAdd += entry.getValue();
 							}
 						}
-						row.put(xOffsetArr[i][preState] + action, valueToAdd);
+						row.put(xOffsetArr[i][preState] + action, row.getOrDefault(xOffsetArr[i][preState] + action, 0.0) + valueToAdd);
 					}
 				}
 
