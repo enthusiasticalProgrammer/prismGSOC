@@ -127,7 +127,7 @@ public class MultiLongRunControllerSynthesis
 				for (int action = 0; action < model.getNumChoices(state); action++) {
 					if (isForbidden(state, action, mec)) {
 						Map<Integer, Double> forbiddenRow = new HashMap<>();
-						forbiddenRow.put(xOffsetArr[i][state], 1.0);
+						forbiddenRow.put(xOffsetArr[i][state] + action, 1.0);
 						solver.addRowFromMap(forbiddenRow, 0.0, SolverProxyInterface.Comparator.EQ, "sum");
 					}
 					row.put(xOffsetArr[i][state] + action, 1.0);
