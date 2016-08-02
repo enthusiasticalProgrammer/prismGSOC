@@ -1056,6 +1056,7 @@ public class SimpleLTL
 			return;
 		case FINALLY:
 		case GLOBALLY:
+		case FREQ_G:
 		case NEXT:
 		case NOT:
 			left.renameAP(prefixFrom, prefixTo);
