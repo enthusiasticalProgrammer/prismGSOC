@@ -853,8 +853,8 @@ public class LTLModelChecker extends PrismComponent
 			// Check which MECs contain a state from each Infinite set
 			for (BitSet mec : mecs) {
 				boolean allj = true;
-				for (int j = 0; j < pair.Infinite.size(); j++) {
-					if (!mec.intersects(pair.Infinite.get(j))) {
+				for (BitSet inf : pair.Infinite) {
+					if (!inf.stream().map(acceptance::computeStartStateOfEdge).anyMatch(mec::get)) {
 						allj = false;
 						break;
 					}
