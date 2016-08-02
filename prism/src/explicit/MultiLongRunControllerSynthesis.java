@@ -46,12 +46,8 @@ public class MultiLongRunControllerSynthesis
 		int currentIndex = 0;
 		for (int acceptanceCondition = 0; acceptanceCondition < necessaryNFromPaperForAcceptance(pair); acceptanceCondition++) {
 			for (int state = 0; state < model.getNumStates(); state++) {
-				if (mec.get(state)) {
-					result[acceptanceCondition][state] = currentIndex;
-					currentIndex += model.getNumChoices(state);
-				} else {
-					result[acceptanceCondition][state] = -1;
-				}
+				result[acceptanceCondition][state] = currentIndex;
+				currentIndex += model.getNumChoices(state);
 			}
 		}
 		return result;
