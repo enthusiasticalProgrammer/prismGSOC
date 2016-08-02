@@ -274,11 +274,14 @@ public class MultiLongRunControllerSynthesis
 	{
 		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
 
-		ecc.computeMECStates(acc.Finite);
+		BitSet notFinite = new BitSet();
+		notFinite.set(0, model.getNumStates());
+		acc.Finite.stream().forEach(i -> notFinite.set(i, false));
+		ecc.computeMECStates(notFinite);
 		List<BitSet> initialList = ecc.getMECStates();
 		return acc.Infinite.stream().map(acceptance::transformToStateSet).map(set -> {
 			try {
-				ecc.computeMECStates(acc.Finite, set);
+				ecc.computeMECStates(notFinite, set);
 			} catch (Exception e) {
 				// streams do not like unhandled exception
 				System.out.println("the following exception occurred:");
