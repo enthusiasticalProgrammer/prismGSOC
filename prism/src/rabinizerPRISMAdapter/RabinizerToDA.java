@@ -104,7 +104,7 @@ public class RabinizerToDA
 			for (Entry<Integer, TranSet<Product<rabinizer.automata.FrequencySelfProductSlave.State>.ProductState>> entry : boundAndReward.relevantEntries()) {
 				rewards.put(transformSingleAcceptingSetFromRabinizerToPrism(entry.getValue(), stateIntMap, acceptance), entry.getKey());
 			}
-			result.add(((AcceptanceControllerSynthesis) acceptance).new MDPCondition(rewards, bound, cmpOperator, isLimInf));
+			result.add(new MDPCondition(rewards, bound, cmpOperator, isLimInf));
 		}
 		return result;
 	}

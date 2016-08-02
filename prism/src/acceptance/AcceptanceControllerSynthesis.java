@@ -113,7 +113,7 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	 * This class stores an acceptance set (as BitSet) and some info regarding the condition, i.e. lim inf/sup (in the long run)
 	 * of visiting these states has to be >/</<=/>= a bound (usually the bound is between 0 and 1. 
 	 */
-	public class MDPCondition
+	public static class MDPCondition
 	{
 		public BiMap<BitSet, Integer> acceptanceSet; //means each edge gets a certain Integer-reward (or zero)
 		public final double bound;
