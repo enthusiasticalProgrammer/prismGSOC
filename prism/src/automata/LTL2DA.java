@@ -36,12 +36,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaState;
 import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceReach;
 import acceptance.AcceptanceType;
 import jhoafparser.consumer.HOAIntermediateStoreAndManipulate;
 import jhoafparser.parser.HOAFParser;
