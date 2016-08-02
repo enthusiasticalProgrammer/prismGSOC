@@ -291,10 +291,4 @@ public class MultiLongRunControllerSynthesis
 			return list2;
 		});
 	}
-
-	public void createMultiLongRunLP()
-	{
-
-	}
-
 }
