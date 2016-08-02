@@ -5,6 +5,7 @@ import java.util.Set;
 
 import prism.PrismComponent;
 import explicit.SCCComputer;
+import acceptance.AcceptanceControllerSynthesis;
 import acceptance.AcceptanceGenRabinTransition;
 import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
 import acceptance.AcceptanceOmega;
@@ -46,7 +47,7 @@ public class DASimplifyAcceptance
 				DA.switchAcceptance(dra, reachAcceptance);
 				da = dra;
 			}
-		} else if (da.getAcceptance() instanceof AcceptanceGenRabinTransition) {
+		} else if (da.getAcceptance() instanceof AcceptanceGenRabinTransition && !(da.getAcceptance() instanceof AcceptanceControllerSynthesis)) {
 			DA<BitSet, AcceptanceGenRabinTransition> dtgra = (DA<BitSet, AcceptanceGenRabinTransition>) da;
 			// See if the DTGRA is actually a DFA
 			if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.REACH) && isDfaDtgra(dtgra)) {
