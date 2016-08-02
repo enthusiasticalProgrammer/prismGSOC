@@ -51,8 +51,6 @@ import parser.State;
 import parser.Values;
 import parser.ast.Expression;
 import parser.ast.ForLoop;
-import parser.ast.ConstantList;
-import parser.ast.FormulaList;
 import parser.ast.LabelList;
 import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
