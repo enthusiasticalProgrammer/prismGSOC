@@ -268,9 +268,12 @@ public class MultiLongRunControllerSynthesis
 		}
 	}
 
-	private List<BitSet> computeMecsForPair(GenRabinPair acc) throws RuntimeException
+	private List<BitSet> computeMecsForPair(GenRabinPair acc) throws PrismException
 	{
 		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
+
+		ecc.computeMECStates(acc.Finite);
+		List<BitSet> initialList = ecc.getMECStates();
 		return acc.Infinite.stream().map(acceptance::transformToStateSet).map(set -> {
 			try {
 				ecc.computeMECStates(acc.Finite, set);
@@ -281,10 +284,8 @@ public class MultiLongRunControllerSynthesis
 				throw new RuntimeException(e);
 			}
 			return ecc.getMECStates();
-		}).reduce(null, (list1, list2) -> {
-			if (list1 != null) {
-				list2.retainAll(list1);
-			}
+		}).reduce(initialList, (list1, list2) -> {
+			list2.retainAll(list1);
 			return list2;
 		});
 	}
