@@ -92,6 +92,21 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 				mdp.acceptanceSet = newAccSet;
 			});
 		}
+
+		@Override
+		protected void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+		{
+			super.removeUnneccessaryProductEdges(usedEdges);
+			for (MDPCondition mdp : mdpCondition) {
+				BiMap<BitSet, Integer> newAccSet = HashBiMap.create();
+				for (Entry<BitSet, Integer> acc : mdp.acceptanceSet.entrySet()) {
+					BitSet newBS = (BitSet) acc.getKey().clone();
+					removeUnneccessaryProductEdgesForSet(usedEdges, newBS);
+					newAccSet.put(newBS, acc.getValue());
+				}
+				mdp.acceptanceSet = newAccSet;
+			}
+		}
 	}
 
 	/**
