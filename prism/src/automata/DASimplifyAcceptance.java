@@ -104,12 +104,21 @@ public class DASimplifyAcceptance
 			return false;
 		}
 		System.out.println("no finite trans");
-		// Check if every transition from a goal state goes to another goal state
+		// Check if every transition from a goal state goes to another goal state, and whether it intersects with all Inf-transitions
 		for (int i = goalStates.nextSetBit(0); i >= 0; i = goalStates.nextSetBit(i + 1)) {
 			int m = dtgra.getNumEdges(i);
 			for (int j = 0; j < m; j++) {
-				if (!goalStates.get(dtgra.getEdgeDest(i, j)))
+				if (!goalStates.get(dtgra.getEdgeDest(i, j))) {
 					return false;
+				}
+				// check Inf-transition intersection
+				for (GenRabinPair pair : acceptance.accList) {
+					for (BitSet inf : pair.Infinite) {
+						if (!inf.get(acceptance.computeOffsetForEdge(i, dtgra.getEdgeLabel(i, j)))) {
+							return false;
+						}
+					}
+				}
 			}
 		}
 		return true;
