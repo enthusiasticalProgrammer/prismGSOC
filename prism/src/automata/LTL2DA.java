@@ -107,8 +107,13 @@ public class LTL2DA extends PrismComponent
 					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 					result.complete();
 					result.printHOA(System.out);
+				} else if (Expression.containsFrequencyLTL(ltl)) {
+					getLog().println("warning: despite your preference, we have to use Rabinizer, because LTL2DSTAR does not parse fLTL");
+					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+					result.complete();
 				} else {
 					result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
+					result.printHOA(System.out);
 				}
 
 				if (result != null) {
