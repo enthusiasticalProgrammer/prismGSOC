@@ -44,8 +44,7 @@ public enum AcceptanceType {
 	/**Generalized Rabin transition based*/
 	GENERALIZED_RABIN_TRANSITION_BASED("generalized-transition-Rabin", "GTR"),
 	/** Generic acceptance, i.e., a boolean formula over Inf and Fin as in HOA format */
-	CONTROLLER_SYNTHESIS_ACCEPTANCE("controller-synthesis", "CS"),
-	GENERIC("generic", ""); // abbreviation for generic is empty, results in DA
+	CONTROLLER_SYNTHESIS_ACCEPTANCE("controller-synthesis", "CS"), GENERIC("generic", ""); // abbreviation for generic is empty, results in DA
 
 	/** The long form name */
 	private final String typeName;

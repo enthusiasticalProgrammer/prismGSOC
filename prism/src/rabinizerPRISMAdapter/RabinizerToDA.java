@@ -88,7 +88,7 @@ public class RabinizerToDA
 	private static List<AcceptanceControllerSynthesis.MDPCondition> computeMDPConditions(GeneralisedRabinAcceptance<?> acceptance,
 			BiMap<?, Integer> stateIntMap, AcceptanceGenRabinTransition result, int index)
 	{
-			GeneralisedRabinWithMeanPayoffAcceptance accMDP = (GeneralisedRabinWithMeanPayoffAcceptance) acceptance;
+		GeneralisedRabinWithMeanPayoffAcceptance accMDP = (GeneralisedRabinWithMeanPayoffAcceptance) acceptance;
 		return transformMDPAccSetToPrism(accMDP.acceptanceMDP.get(index), stateIntMap, result);
 	}
 
