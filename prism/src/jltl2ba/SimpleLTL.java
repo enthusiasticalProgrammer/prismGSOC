@@ -97,7 +97,6 @@ public class SimpleLTL
 		return result;
 	}
 
-
 	public SimpleLTL(LTLType type, SimpleLTL lft, SimpleLTL rgt)
 	{
 		switch (type) {

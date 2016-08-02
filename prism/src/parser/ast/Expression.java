@@ -966,7 +966,7 @@ public abstract class Expression extends ASTElement
 			} else {
 				// other operators: convert
 				try {
-				expr = exprTemp.convertToUntilForm();
+					expr = exprTemp.convertToUntilForm();
 				} catch (UnsupportedOperationException expected) {
 					//formula contains a frequency-G  => return it 'as is' 
 				}
