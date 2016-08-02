@@ -219,6 +219,9 @@ public class MultiLongRunControllerSynthesis
 						comp = Comparator.LE;
 					}
 					try {
+						if (row.isEmpty()) { //apparently the LPSolverProxy cannot deal with empty rows
+							row.put(0, 0.0);
+						}
 						solver.addRowFromMap(row, signum * mdp.bound, comp, "sum");
 					} catch (PrismException e) {
 						// streams do not appreciate thrown exceptions
@@ -258,6 +261,9 @@ public class MultiLongRunControllerSynthesis
 					comp = Comparator.GE;
 				} else {
 					comp = Comparator.LE;
+				}
+				if (row.isEmpty()) { //apparently the LPSolverProxy cannot deal with empty rows
+					row.put(0, 0.0);
 				}
 				solver.addRowFromMap(row, signum * mdp.bound, comp, "sum");
 			}
