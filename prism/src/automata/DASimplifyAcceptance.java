@@ -1,14 +1,18 @@
 package automata;
 
 import java.util.BitSet;
+import java.util.Set;
 
 import prism.PrismComponent;
 import explicit.SCCComputer;
+import acceptance.AcceptanceGenRabinTransition;
+import acceptance.AcceptanceGenRabinTransition.GenRabinPair;
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceRabin;
 import acceptance.AcceptanceReach;
 import acceptance.AcceptanceType;
 import acceptance.AcceptanceRabin.RabinPair;
+import common.IterableBitSet;
 
 public class DASimplifyAcceptance
 {
@@ -20,7 +24,6 @@ public class DASimplifyAcceptance
 	 * @param da the DA to be simplified (may be destroyed)
 	 * @param allowedAcceptance the allowed acceptance types
 	 */
-	@SuppressWarnings("unchecked")
 	public static DA<BitSet, ? extends AcceptanceOmega> simplifyAcceptance(PrismComponent parent, DA<BitSet, ? extends AcceptanceOmega> da,
 			AcceptanceType... allowedAcceptance)
 	{
@@ -42,6 +45,15 @@ public class DASimplifyAcceptance
 				AcceptanceReach reachAcceptance = new AcceptanceReach(getDFAGoalStatesForRabin(dra.getAcceptance()));
 				DA.switchAcceptance(dra, reachAcceptance);
 				da = dra;
+			}
+		} else if (da.getAcceptance() instanceof AcceptanceGenRabinTransition) {
+			DA<BitSet, AcceptanceGenRabinTransition> dtgra = (DA<BitSet, AcceptanceGenRabinTransition>) da;
+			// See if the DTGRA is actually a DFA
+			if (AcceptanceType.contains(allowedAcceptance, AcceptanceType.REACH) && isDfaDtgra(dtgra)) {
+				// we can switch to AcceptanceReach
+				AcceptanceReach reachAcceptance = new AcceptanceReach(getDFAGoalStatesForGenRabinTransition(dtgra));
+				DA.switchAcceptance(da, reachAcceptance);
+				da = dtgra;
 			}
 		}
 		return da;
@@ -75,6 +87,35 @@ public class DASimplifyAcceptance
 	}
 
 	/**
+	 * Analogue to method above 
+	 */
+	private static boolean isDfaDtgra(DA<BitSet, AcceptanceGenRabinTransition> dtgra)
+	{
+		AcceptanceGenRabinTransition acceptance = dtgra.getAcceptance();
+		// Compute potential set of goal states as the union of all K_i sets
+		BitSet goalStates = getDFAGoalStatesForGenRabinTransition(dtgra);
+		if (goalStates.isEmpty()) {
+			return false;
+		}
+		// Make sure there are no Finite transitions in the goal states for any pair
+		if (!acceptance.accList.stream()
+				.allMatch(pair -> pair.Finite.stream().map(finEdge -> acceptance.computeStartStateOfEdge(finEdge)).allMatch(i -> !goalStates.get(i)))) {
+			System.out.println("returned false!!!!!!!!!!!!!!!!");
+			return false;
+		}
+		System.out.println("no finite trans");
+		// Check if every transition from a goal state goes to another goal state
+		for (int i = goalStates.nextSetBit(0); i >= 0; i = goalStates.nextSetBit(i + 1)) {
+			int m = dtgra.getNumEdges(i);
+			for (int j = 0; j < m; j++) {
+				if (!goalStates.get(dtgra.getEdgeDest(i, j)))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Get the union of the K_i states of a Rabin acceptance condition.
 	 */
 	public static BitSet getDFAGoalStatesForRabin(AcceptanceRabin acceptance)
@@ -84,6 +125,43 @@ public class DASimplifyAcceptance
 		int n = acceptance.size();
 		for (int i = 0; i < n; i++) {
 			goalStates.or(acceptance.get(i).getK());
+		}
+		return goalStates;
+	}
+
+	/**
+	 * analogue to method above 
+	 */
+	private static BitSet getDFAGoalStatesForGenRabinTransition(DA<BitSet, AcceptanceGenRabinTransition> da)
+	{
+		// Compute set of goal states as the union of all K_i sets
+		BitSet goalStates = new BitSet();
+		for (GenRabinPair pair : da.getAcceptance().accList) {
+			BitSet currentStates = new BitSet();
+			currentStates.set(0, da.size());
+			pair.Infinite.stream().forEach(inf -> {
+				BitSet currInf = new BitSet();
+				inf.stream().forEach(i -> currInf.set(da.getAcceptance().computeStartStateOfEdge(i)));
+				currentStates.and(currInf);
+			});
+			BitSet FiniteState = new BitSet();
+			pair.Finite.stream().forEach(i -> FiniteState.set(da.getAcceptance().computeStartStateOfEdge(i)));
+			currentStates.andNot(FiniteState);
+
+			goalStates.or(currentStates);
+		}
+
+		boolean goalsChanged = true;
+		while (goalsChanged) { // fixPoint iteration
+			goalsChanged = false;
+			for (int goal : IterableBitSet.getSetBits(goalStates)) {
+				Set<DA<BitSet, AcceptanceGenRabinTransition>.Edge> successors = da.getAllEdgesFrom(goal);
+				if (successors.stream().anyMatch(successor -> !goalStates.get(successor.dest))) {
+					goalStates.clear(goal);
+					goalsChanged = true;
+					break;
+				}
+			}
 		}
 		return goalStates;
 	}
