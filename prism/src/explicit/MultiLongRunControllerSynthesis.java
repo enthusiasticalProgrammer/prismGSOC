@@ -319,7 +319,7 @@ public class MultiLongRunControllerSynthesis
 				ecc.computeMECStates(notFinite, set);
 			} catch (Exception e) {
 				// streams do not like unhandled exception
-				System.out.println("the following exception occurred:");
+				System.err.println("the following exception occurred:");
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}

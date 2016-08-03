@@ -18,6 +18,7 @@ import explicit.MultiLongRunControllerSynthesis;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import ltl.parser.Comparison;
+import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
 public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
@@ -55,9 +56,9 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 
 	@Override
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs, ProbModel product)
+			Vector<JDDNode> labelAPs, ProbModel product) throws PrismNotSupportedException
 	{
-		throw new UnsupportedOperationException("This is not yet implemented (and the super-class-method would compute an uncorrect result");
+		throw new PrismNotSupportedException("AcceptanceControllerSynthesis is currently only supported for explicit engine");
 	}
 
 	@Override

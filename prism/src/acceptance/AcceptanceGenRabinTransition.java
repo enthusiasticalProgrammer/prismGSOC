@@ -39,8 +39,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import automata.DA;
+import explicit.Model;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
 /**
@@ -355,7 +357,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	@Override
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs, ProbModel product)
+			Vector<JDDNode> labelAPs, ProbModel product) throws PrismNotSupportedException
 	{
 		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, daColVars, allddRowVars, allddColVars, da, labelAPs, product);
 	}

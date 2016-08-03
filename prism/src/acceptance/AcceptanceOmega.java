@@ -36,6 +36,7 @@ import java.util.Vector;
 import automata.DA;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
 /**
@@ -99,7 +100,8 @@ public interface AcceptanceOmega extends Cloneable
 	 * @param da DA to which this acceptance corresponds
 	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
 	 * @param product The product of the DA and the Model
+	 * @throws PrismNotSupportedException is used, because AcceptanceControllerSynthesis is (currently) only possible for the explicit engine
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs, ProbModel product);
+			Vector<JDDNode> labelAPs, ProbModel product) throws PrismNotSupportedException;
 }
