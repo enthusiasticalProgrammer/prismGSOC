@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import explicit.rewards.MCRewards;
+import explicit.rewards.MDPRewards;
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -20,262 +23,259 @@ import strat.MDStrategy;
  * it est it supports the nondeterministic choices etc. in a way such that
  * there are choices, but only one.
  */
-public class ArtificialNondetModelFromModel implements NondetModel
+public class ArtificialNondetModelFromModel implements MDP
 {
-	private final Model model;
+	private final DTMC dtmc;
 
-	public ArtificialNondetModelFromModel(Model m)
+	public ArtificialNondetModelFromModel(DTMC dtmc)
 	{
-		if (m instanceof NondetModel) {
-			throw new IllegalArgumentException("You need not use this wrapper class, because you already have a nondeterministic model.");
-		}
-		model = m;
+		this.dtmc = dtmc;
 	}
 
 	@Override
 	public ModelType getModelType()
 	{
-		return model.getModelType();
+		return ModelType.MDP;
 	}
 
 	@Override
 	public int getNumStates()
 	{
-		return model.getNumStates();
+		return dtmc.getNumStates();
 	}
 
 	@Override
 	public int getNumInitialStates()
 	{
-		return model.getNumInitialStates();
+		return dtmc.getNumInitialStates();
 	}
 
 	@Override
 	public Iterable<Integer> getInitialStates()
 	{
-		return model.getInitialStates();
+		return dtmc.getInitialStates();
 	}
 
 	@Override
 	public int getFirstInitialState()
 	{
-		return model.getFirstInitialState();
+		return dtmc.getFirstInitialState();
 	}
 
 	@Override
 	public boolean isInitialState(int i)
 	{
-		return model.isInitialState(i);
+		return dtmc.isInitialState(i);
 	}
 
 	@Override
 	public int getNumDeadlockStates()
 	{
-		return model.getNumDeadlockStates();
+		return dtmc.getNumDeadlockStates();
 	}
 
 	@Override
 	public Iterable<Integer> getDeadlockStates()
 	{
-		return model.getDeadlockStates();
+		return dtmc.getDeadlockStates();
 	}
 
 	@Override
 	public StateValues getDeadlockStatesList()
 	{
-		return model.getDeadlockStatesList();
+		return dtmc.getDeadlockStatesList();
 	}
 
 	@Override
 	public int getFirstDeadlockState()
 	{
-		return model.getFirstDeadlockState();
+		return dtmc.getFirstDeadlockState();
 	}
 
 	@Override
 	public boolean isDeadlockState(int i)
 	{
-		return model.isDeadlockState(i);
+		return dtmc.isDeadlockState(i);
 	}
 
 	@Override
 	public List<State> getStatesList()
 	{
-		return model.getStatesList();
+		return dtmc.getStatesList();
 	}
 
 	@Override
 	public VarList getVarList()
 	{
-		return model.getVarList();
+		return dtmc.getVarList();
 	}
 
 	@Override
 	public Values getConstantValues()
 	{
-		return model.getConstantValues();
+		return dtmc.getConstantValues();
 	}
 
 	@Override
 	public BitSet getLabelStates(String name)
 	{
-		return model.getLabelStates(name);
+		return dtmc.getLabelStates(name);
 	}
 
 	@Override
 	public Set<String> getLabels()
 	{
-		return model.getLabels();
+		return dtmc.getLabels();
 	}
 
 	@Override
 	public boolean hasLabel(String name)
 	{
-		return model.hasLabel(name);
+		return dtmc.hasLabel(name);
 	}
 
 	@Override
 	public int getNumTransitions()
 	{
-		return model.getNumTransitions();
+		return dtmc.getNumTransitions();
 	}
 
 	@Override
 	public Iterator<Integer> getSuccessorsIterator(int s)
 	{
-		return model.getSuccessorsIterator(s);
+		return dtmc.getSuccessorsIterator(s);
 	}
 
 	@Override
 	public boolean isSuccessor(int s1, int s2)
 	{
-		return model.isSuccessor(s1, s2);
+		return dtmc.isSuccessor(s1, s2);
 	}
 
 	@Override
 	public boolean allSuccessorsInSet(int s, BitSet set)
 	{
-		return model.allSuccessorsInSet(s, set);
+		return dtmc.allSuccessorsInSet(s, set);
 	}
 
 	@Override
 	public boolean someSuccessorsInSet(int s, BitSet set)
 	{
-		return model.someSuccessorsInSet(s, set);
+		return dtmc.someSuccessorsInSet(s, set);
 	}
 
 	@Override
 	public void findDeadlocks(boolean fix) throws PrismException
 	{
-		model.findDeadlocks(fix);
+		dtmc.findDeadlocks(fix);
 	}
 
 	@Override
 	public void checkForDeadlocks() throws PrismException
 	{
-		model.checkForDeadlocks();
+		dtmc.checkForDeadlocks();
 	}
 
 	@Override
 	public void checkForDeadlocks(BitSet except) throws PrismException
 	{
-		model.checkForDeadlocks(except);
+		dtmc.checkForDeadlocks(except);
 	}
 
 	@Override
 	public void exportToPrismExplicit(String baseFilename) throws PrismException
 	{
-		model.exportToPrismExplicit(baseFilename);
+		dtmc.exportToPrismExplicit(baseFilename);
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(String filename) throws PrismException
 	{
-		model.exportToPrismExplicitTra(filename);
+		dtmc.exportToPrismExplicitTra(filename);
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(File file) throws PrismException
 	{
-		model.exportToPrismExplicitTra(file);
+		dtmc.exportToPrismExplicitTra(file);
 	}
 
 	@Override
 	public void exportToPrismExplicitTra(PrismLog log)
 	{
-		model.exportToPrismExplicitTra(log);
+		dtmc.exportToPrismExplicitTra(log);
 	}
 
 	@Override
 	public void exportToDotFile(String filename) throws PrismException
 	{
-		model.exportToDotFile(filename);
+		dtmc.exportToDotFile(filename);
 	}
 
 	@Override
 	public void exportToDotFile(String filename, BitSet mark) throws PrismException
 	{
-		model.exportToDotFile(filename, mark);
+		dtmc.exportToDotFile(filename, mark);
 	}
 
 	@Override
 	public void exportToDotFile(PrismLog out)
 	{
-		model.exportToDotFile(out);
+		dtmc.exportToDotFile(out);
 	}
 
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark)
 	{
-		model.exportToDotFile(out, mark);
+		dtmc.exportToDotFile(out, mark);
 	}
 
 	@Override
 	public void exportToDotFile(PrismLog out, BitSet mark, boolean showStates)
 	{
-		model.exportToDotFile(out, mark, showStates);
+		dtmc.exportToDotFile(out, mark, showStates);
 	}
 
 	@Override
 	public void exportToPrismLanguage(String filename) throws PrismException
 	{
-		model.exportToPrismLanguage(filename);
+		dtmc.exportToPrismLanguage(filename);
 	}
 
 	@Override
 	public void exportStates(int exportType, VarList varList, PrismLog log) throws PrismException
 	{
-		model.exportStates(exportType, varList, log);
+		dtmc.exportStates(exportType, varList, log);
 	}
 
 	@Override
 	public String infoString()
 	{
-		return model.infoString();
+		return dtmc.infoString();
 	}
 
 	@Override
 	public String infoStringTable()
 	{
-		return model.infoStringTable();
+		return dtmc.infoStringTable();
 	}
 
 	@Override
 	public boolean hasStoredPredecessorRelation()
 	{
-		return model.hasStoredPredecessorRelation();
+		return dtmc.hasStoredPredecessorRelation();
 	}
 
 	@Override
 	public PredecessorRelation getPredecessorRelation(PrismComponent parent, boolean storeIfNew)
 	{
-		return model.getPredecessorRelation(parent, storeIfNew);
+		return dtmc.getPredecessorRelation(parent, storeIfNew);
 	}
 
 	@Override
 	public void clearPredecessorRelation()
 	{
-		model.clearPredecessorRelation();
+		dtmc.clearPredecessorRelation();
 	}
 
 	@Override
@@ -311,7 +311,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public int getNumTransitions(int s, int i)
 	{
-		Iterator<Integer> successors = model.getSuccessorsIterator(s);
+		Iterator<Integer> successors = dtmc.getSuccessorsIterator(s);
 		int result = 0;
 		for (; successors.hasNext(); successors.next()) {
 			result++;
@@ -322,7 +322,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public boolean allSuccessorsInSet(int s, int i, BitSet set)
 	{
-		Iterator<Integer> successors = model.getSuccessorsIterator(s);
+		Iterator<Integer> successors = dtmc.getSuccessorsIterator(s);
 		while (successors.hasNext()) {
 			Integer succ = successors.next();
 			if (!set.get(succ)) {
@@ -335,7 +335,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	@Override
 	public boolean someSuccessorsInSet(int s, int i, BitSet set)
 	{
-		Iterator<Integer> successors = model.getSuccessorsIterator(s);
+		Iterator<Integer> successors = dtmc.getSuccessorsIterator(s);
 		while (successors.hasNext()) {
 			Integer succ = successors.next();
 			if (set.get(succ)) {
@@ -351,7 +351,7 @@ public class ArtificialNondetModelFromModel implements NondetModel
 		if (i != 0) {
 			throw new IllegalArgumentException();
 		}
-		return model.getSuccessorsIterator(s);
+		return dtmc.getSuccessorsIterator(s);
 	}
 
 	@Override
@@ -365,5 +365,130 @@ public class ArtificialNondetModelFromModel implements NondetModel
 	{
 		throw new UnsupportedOperationException();
 
+	}
+
+	//------------------------------MDP-methods---------------------------------------------
+
+	@Override
+	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int state, int action)
+	{
+		if (action != 0) {
+			throw new IllegalArgumentException();
+		}
+		return dtmc.getTransitionsIterator(state);
+	}
+
+	@Override
+	public void prob0step(BitSet subset, BitSet u, boolean forall, BitSet result)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void prob1Astep(BitSet subset, BitSet u, BitSet v, BitSet result)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void prob1Estep(BitSet subset, BitSet u, BitSet v, BitSet result, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void prob1step(BitSet subset, BitSet u, BitSet v, boolean forall, BitSet result)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public boolean prob1stepSingle(int s, int i, BitSet u, BitSet v)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void mvMultMinMax(double[] vect, boolean min, double[] result, BitSet subset, boolean complement, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultMinMaxSingle(int s, double[] vect, boolean min, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public List<Integer> mvMultMinMaxSingleChoices(int s, double[] vect, boolean min, double val)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultSingle(int s, int i, double[] vect)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultGSMinMax(double[] vect, boolean min, BitSet subset, boolean complement, boolean absolute, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultJacMinMaxSingle(int s, double[] vect, boolean min, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultJacSingle(int s, int i, double[] vect)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void mvMultRewMinMax(double[] vect, MDPRewards mdpRewards, boolean min, double[] result, BitSet subset, boolean complement, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultRewMinMaxSingle(int s, double[] vect, MDPRewards mdpRewards, boolean min, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultRewSingle(int s, int i, double[] vect, MCRewards mcRewards)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultRewGSMinMax(double[] vect, MDPRewards mdpRewards, boolean min, BitSet subset, boolean complement, boolean absolute, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public double mvMultRewJacMinMaxSingle(int s, double[] vect, MDPRewards mdpRewards, boolean min, int[] strat)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public List<Integer> mvMultRewMinMaxSingleChoices(int s, double[] vect, MDPRewards mdpRewards, boolean min, double val)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
+	}
+
+	@Override
+	public void mvMultRight(int[] states, int[] strat, double[] source, double[] dest)
+	{
+		throw new UnsupportedOperationException("Not yet implemented, because it is not needed in this context");
 	}
 }
