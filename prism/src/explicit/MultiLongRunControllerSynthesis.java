@@ -18,6 +18,10 @@ import prism.PrismException;
 import solvers.SolverProxyInterface;
 import solvers.SolverProxyInterface.Comparator;
 
+/**
+ * The functionality of this class is described in "Controller synthesis for MDPs and Frequency LTL\GU".
+ * We compute here all states, which are in any MEC regarding a generalized Rabin acceptance with MDP-conditions
+ */
 public class MultiLongRunControllerSynthesis
 {
 	private final MDP model;
@@ -29,7 +33,7 @@ public class MultiLongRunControllerSynthesis
 	private final String method;
 
 	/**
-	 * xOffset[i] is the solver's variable (column) for the first action of state s and MP-condition i, i.e. for x_{i,s,0}
+	 * xOffset[i][s] is the solver's variable (column) for the first action of state s and MP-condition i, i.e. for x_{i,s,0}
 	 */
 	private int[][] xOffsetArr;
 
@@ -68,8 +72,9 @@ public class MultiLongRunControllerSynthesis
 	}
 
 	/**
-	 * This method computes the set of all states, which are located in an accepting MEC
+	 * This method computes the set of all states, which are located in any accepting MEC
 	 * according to paper "Controller synthesis for MDPs and Frequency LTL(\GU)"
+	 * @result A BitSet containing each state, which is inside of any MEC
 	 * @throws PrismException might get thrown when something during ECCComputation fails
 	 */
 	public BitSet computeStatesInAcceptingMECs() throws PrismException
@@ -106,6 +111,15 @@ public class MultiLongRunControllerSynthesis
 		return result;
 	}
 
+	/**
+	 * This method feeds the solver with all equations from paper "Controller synthesis for MDPs and Frequency LTL\GU"
+	 * Furthermore it sets x_{i,a} to zero if we cannot use Action a if we want to stay in the MEC forever.
+	 * 
+	 *  @param mec The MEC, for which we set up the equation
+	 *  @param pair The generalised Rabin pair with MDP-condition for which we set up the equations
+	 *  @param solver The solver which we feed the equations
+	 *  @throws PrismException is thrown if something in the solver is wrong
+	 */
 	private void makeLpForMec(BitSet mec, AccControllerPair pair, SolverProxyInterface solver) throws PrismException
 	{
 		setSumXiToOne(mec, pair, solver);
@@ -117,6 +131,7 @@ public class MultiLongRunControllerSynthesis
 	/**
 	 * This corresponds to equation 8 from the controller-synthesis paper.
 	 * In addition it sets x_{i,a} to zero, if a is a forbidden action (in the sense that it gets out of the MEC)
+	 * 
 	 * @throws PrismException because the solver throws PrismExceptions on error.
 	 */
 	private void setSumXiToOne(BitSet mec, AccControllerPair pair, SolverProxyInterface solver) throws PrismException
@@ -138,7 +153,12 @@ public class MultiLongRunControllerSynthesis
 	}
 
 	/**
-	 * returns true, if the action from state may get out of mec, or if state is not in the mec in the first place. 
+	 * Checks if the action from state may get out of MEC, or if state is not in the MEC in the first place.
+	 * We say that the action is forbidden if this is the case.
+	 * 
+	 * @param state The state number from which the action takes place
+	 * @param action The action number
+	 * @param mec The MEC as BitSet
 	 */
 	private boolean isForbidden(int state, int action, BitSet mec)
 	{
@@ -157,7 +177,8 @@ public class MultiLongRunControllerSynthesis
 
 	/**
 	 * This corresponds to equation 9 from the controller synthesis paper 
-	 * @throws PrismException because the solver throws it on error
+	 * 
+	 * @throws PrismException because the solver throws it sometimes on error
 	 */
 	private void setKirchhofLawOfFlow(BitSet mec, AccControllerPair pair, SolverProxyInterface solver) throws PrismException
 	{
@@ -195,7 +216,7 @@ public class MultiLongRunControllerSynthesis
 	 * This sets the equation 10 of the controller synthesis paper.
 	 * These equations correspond to the lim-inf-conditions. 
 	 * Note that this method sometimes has to turn around the equation (because the LP-solver supports only GEQ/LEQ
-	 * and not GT/LT
+	 * and not GT/LT. It may throw a RuntimeException
 	 */
 	private void setInferiorLimits(BitSet mec, AccControllerPair pair, SolverProxyInterface solver)
 	{
@@ -237,7 +258,8 @@ public class MultiLongRunControllerSynthesis
 	 * These equations correspond to the lim-sup-conditions. 
 	 * Note that this method sometimes has to turn around the equation (because the LP-solver supports only GEQ/LEQ
 	 * and not GT/LT
-	 * @throws PrismException is thrown in the solver, if an error occurs
+	 * 
+	 * @throws PrismException is thrown in the solver, if an error occurs.
 	 */
 	private void setSuperiorLimits(BitSet mec, AccControllerPair pair, SolverProxyInterface solver) throws PrismException
 	{
@@ -270,6 +292,13 @@ public class MultiLongRunControllerSynthesis
 		}
 	}
 
+	/**
+	 * This method computes the MECs which satisfy the Fin- and Inf-conditions of a generalized Rabin-pair.
+	 * This is done a bit inefficiently by computing for each Inf-condition inf the MECs, which contain
+	 * some states of inf, and intersecting all these sets. If the ECC-Computation could handle multiple
+	 * Infinite-conditions at once, then we would need to only compute the ECCs only once and not once
+	 * for each Infinite-condition.
+	 */
 	private List<BitSet> computeMecsForPair(GenRabinPair acc) throws PrismException
 	{
 		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
