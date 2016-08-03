@@ -12,14 +12,14 @@ import strat.Strategy;
  * This class verifies multi-long-run properties for DTMCProductMLRStrategyAndMDP,
  * which is obtained by taking the product of an MDP and a strategy for multi-long-run properties 
  */
-class MultiLongRunDTMC extends MultiLongRun<ArtificialNondetModelFromModel>
+class MultiLongRunDTMC extends MultiLongRun<ArtificialMdpFromDtmc>
 {
 	private final DTMCProductMLRStrategyAndMDP dtmc;
 
 	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
 			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method, new ArtificialNondetModelFromModel(dtmc));
+		super(constraints, objectives, expConstraints, method, new ArtificialMdpFromDtmc(dtmc));
 		this.dtmc = dtmc;
 	}
 
@@ -51,7 +51,7 @@ class MultiLongRunDTMC extends MultiLongRun<ArtificialNondetModelFromModel>
 		int[] choices = new int[dtmc.getNumStates()];
 		for (int i = 0; i < choices.length; choices[i++] = -2)
 			;
-		return new MDStrategyArray(new ArtificialNondetModelFromModel(dtmc), choices);
+		return new MDStrategyArray(new ArtificialMdpFromDtmc(dtmc), choices);
 	}
 
 }

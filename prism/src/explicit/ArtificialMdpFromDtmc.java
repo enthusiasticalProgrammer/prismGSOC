@@ -23,11 +23,11 @@ import strat.MDStrategy;
  * it est it supports the nondeterministic choices etc. in a way such that
  * there are choices, but only one.
  */
-public class ArtificialNondetModelFromModel implements MDP
+public class ArtificialMdpFromDtmc implements MDP
 {
 	private final DTMC dtmc;
 
-	public ArtificialNondetModelFromModel(DTMC dtmc)
+	public ArtificialMdpFromDtmc(DTMC dtmc)
 	{
 		this.dtmc = dtmc;
 	}
