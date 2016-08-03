@@ -33,11 +33,11 @@ Features:
 	- Rabinizer used if '-ltl2datool rabinizer' is set (Nota Bene: if you use xprism, you have to set it in the options-menu)
 	- Rabinizer used always after completing it (because it seems that the implementation of something relies on it)
 
--Controller Synthesis:
+-Controller Synthesis(in explicit engine):
 	- supported parsing frequency Gs of the form "G {inf/sup >=/>/<=/< bound} subformula"
 	- difference between paper: if n=0, we treat it as n=1, because otw. we had no equations
 	- we set x_{i,a} to zero, if a transition of action a has as start or target a state outside the corresponding MEC
-
+	- DTMC together with fLTL is now also supported
 
 Technical impovements:
 
