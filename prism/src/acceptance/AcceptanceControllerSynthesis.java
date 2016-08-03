@@ -11,6 +11,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import automata.DA;
+import explicit.ArtificialMdpFromDtmc;
+import explicit.DTMC;
+import explicit.Model;
+import explicit.MultiLongRunControllerSynthesis;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import ltl.parser.Comparison;
@@ -28,6 +32,25 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	public AcceptanceType getType()
 	{
 		return AcceptanceType.CONTROLLER_SYNTHESIS_ACCEPTANCE;
+	}
+
+	/**
+	 * checks if the finite-infinite conditions holds as well as the mdpConditions 
+	 */
+	@Override
+	public boolean isBSCCAccepting(BitSet bscc_states, Model model)
+	{
+		if (model instanceof DTMC) {
+			DTMC dtmc = (DTMC) model;
+			MultiLongRunControllerSynthesis mlrcs = new MultiLongRunControllerSynthesis(new ArtificialMdpFromDtmc(dtmc),
+					AcceptanceControllerSynthesis.this, "linear programming");
+			try {
+				return mlrcs.computeStatesInAcceptingMECs().intersects(bscc_states);
+			} catch (PrismException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		throw new UnsupportedOperationException("Controller synthesis is not yet implemented for anything besides DTMCs and MDPs");
 	}
 
 	@Override
@@ -52,15 +75,6 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		{
 			super(Finite, Infinite);
 			this.mdpCondition = mdpCondition;
-		}
-
-		/**
-		 * checks if the finite-infinite conditions holds as well as the mdpConditions 
-		 */
-		@Override
-		public boolean isBSCCAccepting(BitSet bscc_states)
-		{
-			throw new UnsupportedOperationException("Not yet implemented");
 		}
 
 		@Override

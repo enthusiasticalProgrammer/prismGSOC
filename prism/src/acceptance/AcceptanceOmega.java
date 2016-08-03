@@ -46,8 +46,9 @@ public interface AcceptanceOmega extends Cloneable
 	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
 	 *  This method does not test, if bscc_states is an SCC or not!
+	 *  @param model is needed for AcceptanceControllerSynthesis
 	 **/
-	public boolean isBSCCAccepting(BitSet bscc_states);
+	public boolean isBSCCAccepting(BitSet bscc_states, Model model);
 
 	/**
 	 * Get a string describing the acceptance condition's size,

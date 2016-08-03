@@ -614,7 +614,7 @@ public class LTLModelChecker extends PrismComponent
 		BitSet result = new BitSet();
 
 		for (BitSet bscc : bsccs) {
-			if (acceptance.isBSCCAccepting(bscc)) {
+			if (acceptance.isBSCCAccepting(bscc, model)) {
 				// this BSCC is accepting
 				result.or(bscc);
 			}
