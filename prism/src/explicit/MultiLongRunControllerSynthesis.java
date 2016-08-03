@@ -44,7 +44,7 @@ public class MultiLongRunControllerSynthesis
 		this.method = method;
 	}
 
-	private int[][] computeXOffsetsForMEC(BitSet mec, AcceptanceControllerSynthesis.AccControllerPair pair)
+	private int[][] computeXOffsets(AcceptanceControllerSynthesis.AccControllerPair pair)
 	{
 		int[][] result = new int[acceptance.accList.size()][model.getNumStates()];
 		int currentIndex = 0;
@@ -82,20 +82,20 @@ public class MultiLongRunControllerSynthesis
 		BitSet result = new BitSet();
 		for (GenRabinPair acc : acceptance.accList) {
 			List<BitSet> mecsRegardingThisPair = computeMecsForPair(acc);
-			for (BitSet mec : mecsRegardingThisPair) {
-				if (acc instanceof AccControllerPair) {
-					AccControllerPair pair = (AccControllerPair) acc;
-					xOffsetArr = computeXOffsetsForMEC(mec, pair);
+			if (acc instanceof AccControllerPair) {
+				AccControllerPair pair = (AccControllerPair) acc;
+				xOffsetArr = computeXOffsets(pair);
+				for (BitSet mec : mecsRegardingThisPair) {
 					SolverProxyInterface solver = AbstractLPStakeholder.initialiseSolver(computeNumLPVars(pair), method);
 					makeLpForMec(mec, pair, solver);
 					solver.solve();
 					if (solver.getBoolResult()) {
 						result.or(mec);
 					}
-				} else {
-					//should never occur
-					throw new PrismException("A horrible bug has happened. Please check acceptance.AcceptanceControllerSynthesis to fix it");
 				}
+			} else {
+				//should never occur
+				throw new PrismException("A horrible bug has happened. Please check acceptance.AcceptanceControllerSynthesis to fix it");
 			}
 		}
 		return result;
@@ -124,7 +124,13 @@ public class MultiLongRunControllerSynthesis
 	{
 		setSumXiToOne(mec, pair, solver);
 		setKirchhofLawOfFlow(mec, pair, solver);
-		setInferiorLimits(mec, pair, solver);
+		try {
+			setInferiorLimits(mec, pair, solver);
+		} catch (RuntimeException e) {
+			System.err.println("The following exception ocurred during the generation of the LP in Controller Synthesis");
+			e.printStackTrace(System.err);
+			throw new PrismException(e.getMessage());
+		}
 		setSuperiorLimits(mec, pair, solver);
 	}
 
