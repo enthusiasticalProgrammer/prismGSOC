@@ -149,16 +149,6 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.numRealLPVars = current;
 	}
 
-	private int getMaxMECState()
-	{
-		for (int i = model.getNumStates() - 1; i >= 0; i--) {
-			if (this.isMECState(i)) {
-				return i;
-			}
-		}
-		throw new AssertionError("We should never reach here");
-	}
-
 	/**
 	 * Returns true if the state given is in some MEC.
 	 */
