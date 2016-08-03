@@ -201,7 +201,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	 * Nota bene: the BitSet corresponds here to states and our acceptance BitSets are edges.
 	 */
 	@Override
-	public boolean isBSCCAccepting(BitSet bscc_states)
+	public boolean isBSCCAccepting(BitSet bscc_states, Model model)
 	{
 		return this.accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
 	}

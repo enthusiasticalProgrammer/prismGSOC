@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import automata.DA;
+import explicit.Model;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.PrismNotSupportedException;

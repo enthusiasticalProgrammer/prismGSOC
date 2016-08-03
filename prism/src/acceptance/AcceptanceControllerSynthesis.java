@@ -18,6 +18,7 @@ import explicit.MultiLongRunControllerSynthesis;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import ltl.parser.Comparison;
+import prism.PrismException;
 import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
