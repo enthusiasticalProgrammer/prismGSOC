@@ -28,12 +28,16 @@ Features:
 	- 
 
 -Rabinizer-integration:
-	-splitted AcceptanceOmega-interface
-	-converted Rabinizer to PRISM (in the sense of rabinizer.automaton -> prism.automaton)
-	- rabinizer used if '-ltl2datool rabinizer' is set (Nota Bene: this does not work if you call xprism)
+	- splitted AcceptanceOmega-interface
+	- converted Rabinizer to PRISM (in the sense of rabinizer.automaton -> prism.automaton)
+	- Rabinizer used if '-ltl2datool rabinizer' is set (Nota Bene: if you use xprism, you have to set it in the options-menu)
+	- Rabinizer used always after completing it (because it seems that the implementation of something relies on it)
 
-
-
+-Controller Synthesis(in explicit engine):
+	- supported parsing frequency Gs of the form "G {inf/sup >=/>/<=/< bound} subformula"
+	- difference between paper: if n=0, we treat it as n=1, because otw. we had no equations
+	- we set x_{i,a} to zero, if a transition of action a has as start or target a state outside the corresponding MEC
+	- DTMC together with fLTL is now also supported
 
 Technical impovements:
 
@@ -44,7 +48,7 @@ Technical impovements:
 
 Code Style improvements:
 
--junit-Tests are added, when it was handy to me (approx. 5-10 at the moment)
+-junit-Tests are added, when it was handy to me (approx. 10-15 at the moment)
 -MultiLongRun was refactored during the expanding [not completely done, esp. regarding doc and slightly overloaded public interface]
 	-naming of variables was improved when necessary
 	-instead of parametrising methods with indices, we parametrised them with objects (in the MultiLongRun-environment)
@@ -58,7 +62,7 @@ Code Style improvements:
 	-removed memorylessness [now we have the general algorithm for multi-quant, therefore it would just increase the maintenance work
 		to keep a special algorithm]
 
-	dropped memorylessness, aka mlessmulti
+	-dropped memorylessness, aka mlessmulti (I don't think it makes much sense to use with the new algorithm)
 -Dropped unused throws-clauses
 -parametrised raw types (not yet completely done)
 -replaced unneccessary type parameters by <> operator

@@ -1,7 +1,5 @@
 package rabinizerPRISMAdapter;
 
-import java.util.Collection;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -12,6 +10,7 @@ import ltl.Conjunction;
 import ltl.Disjunction;
 import ltl.FOperator;
 import ltl.Formula;
+import ltl.FrequencyG;
 import ltl.GOperator;
 import ltl.Literal;
 import ltl.UOperator;
@@ -36,6 +35,36 @@ public class jltl2baLTLToRabinizerLTLConverter
 			return FOperator.create(transformToRabinizerLTL(simple.left, aliases));
 		case GLOBALLY:
 			return GOperator.create(transformToRabinizerLTL(simple.left, aliases));
+		case FREQ_G:
+			System.out.println("in freqG-case,simple: " + simple);
+			FrequencyG.Comparison comp = null;
+			double bound = simple.bound;
+			boolean isLimInf = simple.isLimInf;
+			Formula f = transformToRabinizerLTL(simple.left, aliases);
+			switch (simple.cmp) {
+			case LEQ:
+				bound = 1 - bound;
+				comp = FrequencyG.Comparison.GT;
+				f = f.not();
+				break;
+
+			case LT:
+				bound = 1 - bound;
+				comp = FrequencyG.Comparison.GEQ;
+				f = f.not();
+				break;
+
+			case GEQ:
+				comp = FrequencyG.Comparison.GEQ;
+				break;
+
+			case GT:
+				comp = FrequencyG.Comparison.GT;
+				break;
+			}
+			FrequencyG result = new FrequencyG(f, bound, comp, isLimInf ? FrequencyG.Limes.INF : FrequencyG.Limes.SUP);
+			System.out.println("result: " + result);
+			return result;
 		case IMPLIES:
 			return Disjunction.create(transformToRabinizerLTL(simple.left, aliases).not(), transformToRabinizerLTL(simple.right, aliases));
 		case NEXT:

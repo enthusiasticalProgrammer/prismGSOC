@@ -36,12 +36,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.List;
 
 import acceptance.AcceptanceOmega;
 import acceptance.AcceptanceOmegaState;
 import acceptance.AcceptanceRabin;
+import acceptance.AcceptanceReach;
 import acceptance.AcceptanceType;
 import jhoafparser.consumer.HOAIntermediateStoreAndManipulate;
 import jhoafparser.parser.HOAFParser;
@@ -107,8 +107,13 @@ public class LTL2DA extends PrismComponent
 					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 					result.complete();
 					result.printHOA(System.out);
+				} else if (Expression.containsFrequencyLTL(ltl)) {
+					getLog().println("warning: despite your preference, we have to use Rabinizer, because LTL2DSTAR does not parse fLTL");
+					result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+					result.complete();
 				} else {
 					result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
+					result.printHOA(System.out);
 				}
 
 				if (result != null) {
@@ -137,9 +142,13 @@ public class LTL2DA extends PrismComponent
 					if (useRabinizer() && Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)) {
 						result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
 						result.complete();
+					} else if (Expression.containsFrequencyLTL(ltl)) {
+						getLog().println("warning: despite your preference, we have to use Rabinizer, because LTL2DSTAR does not parse fLTL");
+						result = rabinizerPRISMAdapter.LTL2DA.getDA(ltl.convertForJltl2ba());
+						result.complete();
 					} else {
+						result = LTL2Rabin.ltl2da(ltl.convertForJltl2ba(), allowedAcceptance);
 					}
-					result = LTL2Rabin.ltl2da(ltl.convertForJltl2ba(), allowedAcceptance);
 				}
 			} else {
 				throw new PrismNotSupportedException("Could not convert LTL formula to deterministic automaton, formula had time-bounds");

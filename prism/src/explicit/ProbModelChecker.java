@@ -34,6 +34,7 @@ import java.util.List;
 
 import parser.ast.Coalition;
 import parser.ast.Expression;
+import parser.ast.ExpressionFrequencyG;
 import parser.ast.ExpressionProb;
 import parser.ast.ExpressionReward;
 import parser.ast.ExpressionSS;
@@ -652,7 +653,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			expr = ((ExpressionUnaryOp) expr).getOperand();
 		}
 
-		if (expr instanceof ExpressionTemporal) {
+		if (expr instanceof ExpressionTemporal || expr instanceof ExpressionFrequencyG) {
 			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
 
 			// Next
@@ -660,12 +661,14 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 				probs = checkProbNext(model, exprTemp, minMax, statesOfInterest);
 			}
 			// Until
-			else if (exprTemp.getOperator() == ExpressionTemporal.P_U) {
+			else if (exprTemp.getOperator() == ExpressionTemporal.P_U && !Expression.containsFrequencyLTL(exprTemp)) {
 				if (exprTemp.hasBounds()) {
 					probs = checkProbBoundedUntil(model, exprTemp, minMax, statesOfInterest);
 				} else {
 					probs = checkProbUntil(model, exprTemp, minMax, statesOfInterest);
 				}
+			} else {
+				probs = checkProbPathFormula(model, exprTemp, minMax, statesOfInterest);
 			}
 		}
 
@@ -1051,7 +1054,6 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = ((CTMCModelChecker) this).computeTotalRewards((CTMC) model, (MCRewards) modelRewards);
 			break;
 		case MDP:
-			break;
 		default:
 			throw new PrismNotSupportedException(
 					"Explicit engine does not yet handle the " + expr.getOperatorSymbol() + " reward operator for " + model.getModelType() + "s");

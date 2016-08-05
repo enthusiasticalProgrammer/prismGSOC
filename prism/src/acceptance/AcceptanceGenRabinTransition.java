@@ -31,6 +31,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import automata.DA;
+import explicit.Model;
 import jdd.JDDNode;
 import jdd.JDDVars;
+import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
 /**
@@ -149,19 +152,19 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			return s;
 		}
 
-		private void lift(Map<Integer, Collection<Integer>> lifter)
+		protected void lift(Map<Integer, Collection<Integer>> lifter)
 		{
 			Finite = transformSingleBitSet(Finite, lifter);
 			Infinite.replaceAll(inf -> transformSingleBitSet(inf, lifter));
 		}
 
-		private BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
+		protected BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
 		{
 			BitSet newBs = new BitSet(amountOfStates * (1 << amountOfAPs));
 			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> {
 				int start = computeStartStateOfEdge(i);
 				BitSet label = computeBitSetOfEdge(i);
-				return lifter.get(start).stream().map(x -> computeOffsetForEdge(x, label)).collect(Collectors.toSet());
+				return lifter.getOrDefault(start, Collections.emptySet()).stream().map(x -> computeOffsetForEdge(x, label)).collect(Collectors.toSet());
 			}).reduce(new HashSet<>(), (a, b) -> {
 				a.addAll(b);
 				return a;
@@ -169,15 +172,13 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			return newBs;
 		}
 
-		private void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+		protected void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
 		{
 			removeUnneccessaryProductEdgesForSet(usedEdges, Finite);
 			Infinite.forEach(inf -> removeUnneccessaryProductEdgesForSet(usedEdges, inf));
-			Finite.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin))))
-					.forEach(fin -> Finite.clear(fin));
 		}
 
-		private void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
+		protected void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
 		{
 			set.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin)))).forEach(fin -> set.clear(fin));
 		}
@@ -201,7 +202,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	 * Nota bene: the BitSet corresponds here to states and our acceptance BitSets are edges.
 	 */
 	@Override
-	public boolean isBSCCAccepting(BitSet bscc_states)
+	public boolean isBSCCAccepting(BitSet bscc_states, Model model)
 	{
 		return this.accList.stream().anyMatch(pair -> pair.isBSCCAccepting(bscc_states));
 	}
@@ -355,9 +356,12 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		}
 	}
 
+	/**
+	 * @throws PrismNotSupportedException can happen in subclass 
+	 */
 	@Override
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
-			Vector<JDDNode> labelAPs, ProbModel product)
+			Vector<JDDNode> labelAPs, ProbModel product) throws PrismNotSupportedException
 	{
 		return new AcceptanceGenRabinTransitionDD(this, ddRowVars, daColVars, allddRowVars, allddColVars, da, labelAPs, product);
 	}

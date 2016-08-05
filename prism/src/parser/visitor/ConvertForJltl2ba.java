@@ -139,6 +139,14 @@ public class ConvertForJltl2ba
 		case ExpressionTemporal.P_G:
 			res = new SimpleLTL(SimpleLTL.LTLType.GLOBALLY, ltl2);
 			break;
+		case ExpressionTemporal.P_FREQ:
+			if (e instanceof ExpressionFrequencyG) {
+				ExpressionFrequencyG expr = (ExpressionFrequencyG) e;
+				res = SimpleLTL.buildFrequencyG(ltl2, expr.bound, expr.cmpOperator, expr.isLimInf);
+			} else {
+				throw new IllegalArgumentException("malformed input");
+			}
+			break;
 		case ExpressionTemporal.P_W:
 		case ExpressionTemporal.P_R:
 			until = e.convertToUntilForm();

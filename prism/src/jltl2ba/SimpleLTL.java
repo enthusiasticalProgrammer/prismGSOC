@@ -36,19 +36,24 @@ import java.util.Map;
 
 import jltl2dstar.APMonom;
 import jltl2dstar.NBA;
+import ltl.FrequencyG;
+import ltl.parser.Comparison;
 import prism.PrismException;
 
 public class SimpleLTL
 {
 
 	public enum LTLType {
-		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FINALLY
+		FALSE, TRUE, AP, NOT, NEXT, OR, AND, EQUIV, IMPLIES, UNTIL, RELEASE, GLOBALLY, FREQ_G, FINALLY
 	}
 
 	public SimpleLTL left;
 	public SimpleLTL right;
 	public LTLType kind;
 	public String ap;
+	public double bound;
+	public Comparison cmp;
+	public boolean isLimInf;
 
 	public SimpleLTL(boolean v)
 	{
@@ -81,6 +86,15 @@ public class SimpleLTL
 		default:
 			//	throw new PrismException("Trying to build invalid SimpleLTL");
 		}
+	}
+
+	public static SimpleLTL buildFrequencyG(SimpleLTL lft, double bound, Comparison cmp, boolean isLimInf)
+	{
+		SimpleLTL result = new SimpleLTL(LTLType.FREQ_G, lft, null, null);
+		result.bound = bound;
+		result.cmp = cmp;
+		result.isLimInf = isLimInf;
+		return result;
 	}
 
 	public SimpleLTL(LTLType type, SimpleLTL lft, SimpleLTL rgt)
@@ -128,6 +142,9 @@ public class SimpleLTL
 				case GLOBALLY:
 				case FINALLY:
 					return left.equals(other.left);
+				case FREQ_G:
+					System.out.println("me: " + this + " other: " + other);
+					return left.equals(other.left) && bound == other.bound && cmp.equals(other.cmp) && isLimInf == other.isLimInf;
 				case OR:
 				case AND:
 				case EQUIV:
@@ -154,6 +171,7 @@ public class SimpleLTL
 		case NOT:
 		case NEXT:
 		case GLOBALLY:
+		case FREQ_G:
 		case FINALLY:
 			rv = left.getAPs();
 			break;
@@ -181,6 +199,32 @@ public class SimpleLTL
 			break;
 		}
 		return rv;
+	}
+
+	public boolean containsFrequencyG()
+	{
+		switch (kind) {
+		case FREQ_G:
+			return true;
+		case NOT:
+		case NEXT:
+		case GLOBALLY:
+		case FINALLY:
+			return left.containsFrequencyG();
+		case OR:
+		case AND:
+		case EQUIV:
+		case IMPLIES:
+		case UNTIL:
+		case RELEASE:
+			return left.containsFrequencyG() || right.containsFrequencyG();
+		// terminals
+		case FALSE:
+		case TRUE:
+		case AP:
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -802,6 +846,9 @@ public class SimpleLTL
 		case GLOBALLY:
 			rv = "G " + left.toString();
 			break;
+		case FREQ_G:
+			rv = "G {" + (isLimInf ? FrequencyG.Limes.INF : FrequencyG.Limes.SUP) + cmp + bound + " } " + left.toString();
+			break;
 		case NOT:
 			rv = "! " + left.toString();
 			break;
@@ -1008,6 +1055,7 @@ public class SimpleLTL
 			return;
 		case FINALLY:
 		case GLOBALLY:
+		case FREQ_G:
 		case NEXT:
 		case NOT:
 			left.renameAP(prefixFrom, prefixTo);

@@ -46,6 +46,9 @@ import parser.visitor.*;
 import prism.ModelType;
 import prism.PrismLangException;
 
+import ltl.FrequencyG;
+import ltl.parser.Comparison;
+
 @SuppressWarnings({"unused", "static-access", "serial"})
 public class PrismParser
 {
@@ -512,6 +515,8 @@ TOKEN :
 |	< RENAME:		"<-" >
 |	< QMARK:		"?" >
 |	< DQUOTE:		"\"" >
+|   < SUP:          "sup" >
+|   < INF:          "inf" >
 	// Regular expressions
 |	< REG_INT:			(["1"-"9"](["0"-"9"])*)|("0") >
 |	< REG_DOUBLE:		(["0"-"9"])*(".")?(["0"-"9"])+(["e","E"](["-","+"])?(["0"-"9"])+)? >
@@ -1156,6 +1161,9 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 	Expression ret, expr;
 	ExpressionTemporal exprTemp;
 	Token begin = null;
+	Comparison op = null;
+	String number = null;
+	boolean isLimInf = true;
 }
 {
 	(
@@ -1164,7 +1172,17 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 		{ begin = getToken(1); exprTemp = new ExpressionTemporal(); }
 		( <X> { exprTemp.setOperator(ExpressionTemporal.P_X); }
 		| <F> { exprTemp.setOperator(ExpressionTemporal.P_F); }
-		| <G> { exprTemp.setOperator(ExpressionTemporal.P_G); } )
+		| <G> (<LBRACE> (<SUP> { isLimInf = false; } | [<INF>]{ isLimInf = true; }) op = comp() number = <REG_DOUBLE>.image  <RBRACE>)? 
+		      {
+				if (op != null) {
+					double bound = Double.parseDouble(number);
+                	exprTemp = new ExpressionFrequencyG(bound, op, isLimInf);
+                	exprTemp.setOperator(ExpressionTemporal.P_FREQ);
+		        }else {
+					exprTemp.setOperator(ExpressionTemporal.P_G);
+				}
+		       
+		       })
 		( TimeBound(exprTemp) )?
 		expr = ExpressionTemporalUnary(prop, pathprop)
 		{ exprTemp.setOperand2(expr); exprTemp.setPosition(begin, getToken(0)); ret = exprTemp; }
@@ -1173,6 +1191,15 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 	)
 	{ return ret; }
 }
+
+Comparison comp() : {}
+{
+    <GE> { return Comparison.GEQ; }
+|   <GT>  { return Comparison.GT; }
+|   <LE> { return Comparison.LEQ; }
+|   <LT>  { return Comparison.LT; }
+}
+
 
 // Time bound for temporal operators
 // (see ExpressionTemporal production for lookahead explanation)

@@ -4,6 +4,7 @@ import java.util.BitSet;
 import java.util.Vector;
 
 import automata.DA;
+import explicit.Model;
 import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.PrismException;
@@ -40,4 +41,20 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 	{
 		return toAcceptanceDD(ddRowVars);
 	}
+
+	/**
+	 * It is not recommended to override this method, due to the fact that the other parameters are
+	 * not necessary for state-based acceptance. It is better to override the other isBSCCAccepting method. 
+	 */
+	@Override
+	default boolean isBSCCAccepting(BitSet bscc_states, Model model)
+	{
+		return isBSCCAccepting(bscc_states);
+	}
+
+	/** Returns true if the bottom strongly connected component (BSCC)
+	 *  given by bscc_states is accepting for this acceptance condition.
+	 *  This method does not test, if bscc_states is an SCC or not!
+	 **/
+	public boolean isBSCCAccepting(BitSet bscc_states);
 }

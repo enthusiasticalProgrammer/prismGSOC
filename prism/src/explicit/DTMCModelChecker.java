@@ -1651,7 +1651,7 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * 
 	 */
 	@Override
-	protected MultiLongRun<ArtificialNondetModelFromModel> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints,
+	protected MultiLongRun<ArtificialMdpFromDtmc> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints,
 			Collection<MDPObjective> objectives, Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
 	{
 		return new MultiLongRunDTMC((DTMCProductMLRStrategyAndMDP) model, constraints, objectives, expConstraints, method);

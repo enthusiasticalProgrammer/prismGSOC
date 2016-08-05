@@ -28,6 +28,7 @@ package simulator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -248,7 +249,7 @@ public class SimulatorEngine extends PrismComponent
 		updater.calculateStateRewards(currentState, tmpStateRewards);
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
-		strategy = prism.getStrategy();
+		this.setStrategy(prism.getStrategy());
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
 			strategy.initialise(stateIds.get(currentState));
@@ -281,6 +282,20 @@ public class SimulatorEngine extends PrismComponent
 		} else {
 			executeTransition(i, offset, index);
 		}
+	}
+
+	/**
+	 * Execute a transition from the current transition list, specified by its index
+	 * within the (whole) list. In addition, specify the amount of time to be spent in
+	 * the current state before this transition occurs.
+	 * [continuous-time models only]
+	 */
+	public void manualTransition(int index, double time) throws PrismException
+	{
+		TransitionList transitions = getTransitionList();
+		int i = transitions.getChoiceIndexOfTransition(index);
+		int offset = transitions.getChoiceOffsetOfTransition(index);
+		executeTimedTransition(i, offset, time, index);
 	}
 
 	/**
@@ -329,20 +344,6 @@ public class SimulatorEngine extends PrismComponent
 		}
 
 		return true;
-	}
-
-	/**
-	 * Execute a transition from the current transition list, specified by its index
-	 * within the (whole) list. In addition, specify the amount of time to be spent in
-	 * the current state before this transition occurs.
-	 * [continuous-time models only]
-	 */
-	public void manualTransition(int index, double time) throws PrismException
-	{
-		TransitionList transitions = getTransitionList();
-		int i = transitions.getChoiceIndexOfTransition(index);
-		int offset = transitions.getChoiceOffsetOfTransition(index);
-		executeTimedTransition(i, offset, time, index);
 	}
 
 	/**
@@ -715,6 +716,7 @@ public class SimulatorEngine extends PrismComponent
 
 		// Clear storage for strategy
 		strategy = null;
+		stateIds = null;
 
 		// Create storage for labels/properties
 		labels = new ArrayList<>();
@@ -783,7 +785,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param time Time for transition
 	 * @param index (Optionally) index of transition within whole list (-1 if unknown)
 	 */
-	protected void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
+	private void executeTimedTransition(int i, int offset, double time, int index) throws PrismException
 	{
 		TransitionList transitions = getTransitionList();
 		// Get corresponding choice and, if required (for full paths), calculate transition index
@@ -1017,23 +1019,7 @@ public class SimulatorEngine extends PrismComponent
 	 */
 	public String getTransitionUpdateString(int index) throws PrismException
 	{
-		// We need the state containing the transitions. Usually, this is the current (final) state
-		// of the path. But if the user called computeTransitionsForStep(int step), this is not so. 
-		State state = (transitionListState == null) ? path.getCurrentState() : transitionListState;
-		return getTransitionList().getTransitionUpdateString(index, state);
-	}
-
-	// ------------------------------------------------------------------------------
-	// Querying of current path (full or on-the-fly)
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * Get access to the {@code Path} object storing the current path.
-	 * This object is only valid until the next time {@link #createNewPath} is called. 
-	 */
-	public Path getPath()
-	{
-		return path;
+		return getTransitionList().getTransitionUpdateString(index, getTransitionListState());
 	}
 
 	/**
@@ -1061,6 +1047,19 @@ public class SimulatorEngine extends PrismComponent
 		return path.getTotalTime();
 	}
 
+	// ------------------------------------------------------------------------------
+	// Querying of current path (full or on-the-fly)
+	// ------------------------------------------------------------------------------
+
+	/**
+	 * Get access to the {@code Path} object storing the current path.
+	 * This object is only valid until the next time {@link #createNewPath} is called. 
+	 */
+	public Path getPath()
+	{
+		return path;
+	}
+
 	/**
 	 * Get the total reward accumulated so far
 	 * (includes reward for previous transition but no state reward for current (final) state).
@@ -1069,16 +1068,6 @@ public class SimulatorEngine extends PrismComponent
 	public double getTotalCumulativeRewardForPath(int rsi)
 	{
 		return path.getTotalCumulativeReward(rsi);
-	}
-
-	/**
-	* Get the state at a given step of the path.
-	* (Not applicable for on-the-fly paths)
-	* @param step Step index (0 = initial state/step of path)
-	 */
-	public State getStateOfPathStep(int step)
-	{
-		return ((PathFull) path).getState(step);
 	}
 
 	// ------------------------------------------------------------------------------
@@ -1093,6 +1082,16 @@ public class SimulatorEngine extends PrismComponent
 	public PathFull getPathFull()
 	{
 		return (PathFull) path;
+	}
+
+	/**
+	 * Get the state at a given step of the path.
+	 * (Not applicable for on-the-fly paths)
+	 * @param step Step index (0 = initial state/step of path)
+	 */
+	public State getStateOfPathStep(int step)
+	{
+		return ((PathFull) path).getState(step);
 	}
 
 	/**
@@ -1143,14 +1142,13 @@ public class SimulatorEngine extends PrismComponent
 				log.close();
 				throw new PrismException("Could not open file \"" + file + "\" for output");
 			}
+			log.close();
 			mainLog.println("\nExporting path to file \"" + file + "\"...");
 		} else {
 			log = mainLog;
 			log.println();
 		}
 		((PathFull) path).exportToLog(log, timeCumul, colSep, vars);
-		if (file != null)
-			log.close();
 	}
 
 	/**
@@ -1525,7 +1523,7 @@ public class SimulatorEngine extends PrismComponent
 				break;
 
 			// Display progress (of slowest property)
-			percentageDone = 0;
+			percentageDone = 100;
 			for (Sampler sampler : propertySamplers) {
 				percentageDone = Math.min(percentageDone, sampler.getSimulationMethod().getProgress(iters, sampler));
 			}
@@ -1631,5 +1629,18 @@ public class SimulatorEngine extends PrismComponent
 	public void setStrategy(Strategy strategy)
 	{
 		this.strategy = strategy;
+		if (strategy != null) {
+			this.stateIds = new HashMap<>();
+			List<State> stateslist;
+			if (prism.getBuiltModelExplicit() != null) {
+				stateslist = prism.getBuiltModelExplicit().getStatesList();
+			} else {
+				throw new UnsupportedOperationException("Cannot generate a strategy if there is no model");
+			}
+			int i = 0;
+			for (State s : stateslist) {
+				this.stateIds.put(s, i++);
+			}
+		}
 	}
 }

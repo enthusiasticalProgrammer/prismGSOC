@@ -194,6 +194,7 @@ public final class TypeCheck extends ASTTraverse
 		case ExpressionTemporal.P_G:
 		case ExpressionTemporal.P_W:
 		case ExpressionTemporal.P_R:
+		case ExpressionTemporal.P_FREQ:
 			if (e.getOperand1() != null) {
 				type = e.getOperand1().getType();
 				if (!(type instanceof TypeBool) && !(type instanceof TypePathBool))
