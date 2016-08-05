@@ -13,8 +13,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import acceptance.AcceptanceControllerSynthesis;
+import acceptance.AcceptanceControllerSynthesis.MDPCondition;
 import acceptance.AcceptanceGenRabinTransition;
 import automata.DA;
+import jhoafparser.consumer.HOAConsumerPrint;
 import ltl.parser.Comparison;
 import ltl.FrequencyG;
 import omega_automaton.Edge;
@@ -25,11 +27,8 @@ import omega_automaton.collections.valuationset.ValuationSet;
 import rabinizer.DTGRMAAcceptance.BoundAndReward;
 import rabinizer.DTGRMAAcceptance.GeneralisedRabinWithMeanPayoffAcceptance;
 import rabinizer.automata.AbstractSelfProductSlave;
-import rabinizer.automata.FrequencySelfProductSlave;
 import rabinizer.automata.Product;
 import rabinizer.automata.ProductControllerSynthesis;
-import rabinizer.automata.ProductRabinizer;
-import rabinizer.automata.RabinSlave.State;
 
 public class RabinizerToDA
 {
@@ -39,6 +38,7 @@ public class RabinizerToDA
 		DA<BitSet, AcceptanceGenRabinTransition> result = new DA<>(automaton.getStates().size());
 
 		BiMap<Product<T>.ProductState, Integer> stateIntMap = StateIntegerBiMap(automaton);
+		automaton.toHOA(new HOAConsumerPrint(System.out), aliases);
 
 		List<String> APList = getAPList(aliases);
 		result.setAPList(APList);
@@ -70,13 +70,13 @@ public class RabinizerToDA
 			result = new AcceptanceGenRabinTransition(da);
 		}
 
-		for (Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair : acceptance.acceptanceCondition) {
+		for (int i = 0; i < acceptance.acceptanceCondition.size(); i++) {
+			Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair = acceptance.acceptanceCondition.get(i);
 			BitSet Finite = transformSingleAcceptingSetFromRabinizerToPrism(genRabinPair.left, stateIntMap, result);
 			List<BitSet> Infinite = genRabinPair.right.stream().map(set -> transformSingleAcceptingSetFromRabinizerToPrism(set, stateIntMap, result))
 					.collect(Collectors.toList());
 			if (result instanceof AcceptanceControllerSynthesis) {
-				List<AcceptanceControllerSynthesis.MDPCondition> mdp = computeMDPConditions(acceptance, stateIntMap, result,
-						acceptance.acceptanceCondition.indexOf(genRabinPair));
+				List<AcceptanceControllerSynthesis.MDPCondition> mdp = computeMDPConditions(acceptance, stateIntMap, result, i);
 				result.accList.add(((AcceptanceControllerSynthesis) result).new AccControllerPair(Finite, Infinite, mdp));
 			} else {
 				result.accList.add(result.new GenRabinPair(Finite, Infinite));
