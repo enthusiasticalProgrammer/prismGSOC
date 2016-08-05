@@ -45,7 +45,7 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		if (model instanceof DTMC) {
 			DTMC dtmc = (DTMC) model;
 			MultiLongRunControllerSynthesis mlrcs = new MultiLongRunControllerSynthesis(new ArtificialMdpFromDtmc(dtmc),
-					AcceptanceControllerSynthesis.this, "linear programming");
+					AcceptanceControllerSynthesis.this, "Linear programming");
 			try {
 				return mlrcs.computeStatesInAcceptingMECs().intersects(bscc_states);
 			} catch (PrismException e) {
