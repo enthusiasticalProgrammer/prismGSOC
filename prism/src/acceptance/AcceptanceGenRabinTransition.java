@@ -356,6 +356,9 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		}
 	}
 
+	/**
+	 * @throws PrismNotSupportedException can happen in subclass 
+	 */
 	@Override
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,
 			Vector<JDDNode> labelAPs, ProbModel product) throws PrismNotSupportedException
