@@ -402,8 +402,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 		}
 
 		//fill in
-		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "x" + state);
+		for (Entry<Integer, Map<Integer, Double>> entry : map.entrySet()) {
+			solver.addRowFromMap(entry.getValue(), 0, SolverProxyInterface.Comparator.EQ, "x" + entry.getKey());
 		}
 	}
 
