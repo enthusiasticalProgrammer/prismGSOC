@@ -163,7 +163,7 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> {
 				int start = computeStartStateOfEdge(i);
 				BitSet label = computeBitSetOfEdge(i);
-				return lifter.get(start).stream().map(x -> computeOffsetForEdge(x, label)).collect(Collectors.toSet());
+				return lifter.getOrDefault(start, Collections.emptySet()).stream().map(x -> computeOffsetForEdge(x, label)).collect(Collectors.toSet());
 			}).reduce(new HashSet<>(), (a, b) -> {
 				a.addAll(b);
 				return a;
