@@ -1751,9 +1751,9 @@ public class MDPModelChecker extends ProbModelChecker
 	 */
 	@Override
 	protected MultiLongRun<MDP> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException
 	{
-		return new MultiLongRunMDP((MDP) model, constraints, objectives, expConstraints, method);
+		return new MultiLongRunMDP((MDP) model, constraints, objectives, expConstraints, method, isConjunctiveSat);
 	}
 
 	/**

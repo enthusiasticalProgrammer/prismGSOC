@@ -17,9 +17,9 @@ class MultiLongRunDTMC extends MultiLongRun<ArtificialMdpFromDtmc>
 	private final DTMCProductMLRStrategyAndMDP dtmc;
 
 	public MultiLongRunDTMC(DTMCProductMLRStrategyAndMDP dtmc, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method, new ArtificialMdpFromDtmc(dtmc));
+		super(constraints, objectives, expConstraints, method, new ArtificialMdpFromDtmc(dtmc), isConjunctiveSat);
 		this.dtmc = dtmc;
 	}
 

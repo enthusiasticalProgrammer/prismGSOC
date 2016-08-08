@@ -16,9 +16,9 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 {
 
 	public MultiLongRunMDP(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method, mdp);
+		super(constraints, objectives, expConstraints, method, mdp, isConjunctiveSat);
 	}
 
 	@Override

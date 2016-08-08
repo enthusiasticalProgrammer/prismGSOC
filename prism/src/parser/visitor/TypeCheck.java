@@ -397,6 +397,7 @@ public final class TypeCheck extends ASTTraverse
 			}
 			break;
 		case ExpressionFunc.MULTI:
+		case ExpressionFunc.MJOINT:
 			// All operands must be booleans or doubles, and doubles must come first.
 			boolean seenBoolean = false;
 			for (i = 0; i < n; i++) {
@@ -444,6 +445,7 @@ public final class TypeCheck extends ASTTraverse
 			e.setType(TypeDouble.getInstance());
 			break;
 		case ExpressionFunc.MULTI:
+		case ExpressionFunc.MJOINT:
 			// Resulting type is always same as first arg
 			if (types[0] instanceof TypeBool)
 				e.setType(TypeBool.getInstance());
@@ -452,6 +454,8 @@ public final class TypeCheck extends ASTTraverse
 			else
 				e.setType(TypeVoid.getInstance());
 			break;
+		default:
+			throw new PrismLangException("Cannot type check unknown function", e);
 		}
 	}
 

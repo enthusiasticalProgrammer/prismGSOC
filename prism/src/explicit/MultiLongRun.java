@@ -65,6 +65,11 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private int[] zIndex;
 
 	/**
+	 * This stores whether we want to solve conjunctive-sat or joint-sat in CKK15 terminolology 
+	 */
+	private final boolean isConjunctiveSat;
+
+	/**
 	 * The default constructor.
 	 * @param constraints: MLR-constraints of the form P[ R{x} >= bound [S]]
 	 * @param objectives: MLR-objectives of the form R{x}max=?
@@ -74,10 +79,12 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * @param method Method to use, should be a valid value for
 	 * @param M: a nondeterministic model, it should be either an MDP or a DTMCFromMDPAndMDStrategy,
 	 * 		because currently these are the only classes for which currently multi-objectives are used. 
+	 * @param isConjunctiveSat: true if we are considering conjunctive-SAT, false if we are considering joint-SAT, in
+	 *  		terminology of paper CKK15
 	 * @throws PrismException 
 	 */
 	protected MultiLongRun(final Collection<MDPConstraint> constraints, final Collection<MDPObjective> objectives,
-			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m) throws PrismException
+			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m, boolean isConjunctiveSat) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
@@ -86,6 +93,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.mecs = computeMECs();
 		computeOffsets();
 		this.solver = AbstractLPStakeholder.initialiseSolver(numRealLPVars, method);
+		this.isConjunctiveSat = isConjunctiveSat;
 
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
@@ -308,7 +316,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * @param state
 	 * @param action
 	 * @param threshold
-	 * @return
+	 * @return the corresponding variable number or -1 if either the using method is
 	 */
 	public int getVarX(int state, int action, int threshold)
 	{
@@ -500,16 +508,15 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setSatisfactionForNontrivialProbability() throws PrismException
 	{
-
-		for (int i = 0; i < getN(); i++) {
+		for (int i = 0; i < getNBackend(); i++) {
 			MDPConstraint constraint = this.getConstraintNonTrivialProbabilityConstraints().get(i);
 			Map<Integer, Double> map = new HashMap<>();
 
-			for (int n = 0; n < 1 << getN(); n++) {
+			for (int n = (isConjunctiveSat ? 0 : (1 << getN()) - 1); n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
 					for (int state = 0; state < model.getNumStates(); state++) {
-						for (int act = 0; act < model.getNumChoices(state); act++) {
-							if (isMECState(state)) {
+						if (isMECState(state)) {
+							for (int act = 0; act < model.getNumChoices(state); act++) {
 								map.put(getVarX(state, act, n), 1.0);
 							}
 						}
@@ -526,8 +533,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setCommitmentForSatisfaction() throws PrismException
 	{
 		for (BitSet maxEndComponent : mecs) {
-			for (int n = 0; n < 1 << getN(); n++) {
-				for (int i = 0; i < getN(); i++) {
+			for (int n = (isConjunctiveSat ? 0 : (1 << getN()) - 1); n < 1 << getN(); n++) {
+				for (int i = 0; i < getNBackend(); i++) {
 					if ((n & (1 << i)) != 0) {
 						addSingleCommitmentToSatisfaction(maxEndComponent, n, i);
 					}
@@ -657,9 +664,23 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
-	 * non-trivial probability
+	 * non-trivial probability. However, for convenience, it returns one (or zero) if we compute a multi-joint-conjunctive.
 	 */
 	int getN()
+	{
+		int result = getNBackend();
+		if (!isConjunctiveSat) { //if we are using joint-SAT
+			return result == 0 ? 0 : 1;
+		}
+		return result;
+	}
+
+	/**
+	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
+	 * non-trivial probability, ignoring whether we use conjunctive-SAT or joint-SAT. in Most cases you
+	 * should use getN and not this method.
+	 */
+	private int getNBackend()
 	{
 		int result = 0;
 		for (MDPConstraint constraint : constraints) {
