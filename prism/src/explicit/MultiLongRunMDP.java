@@ -88,7 +88,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 	{
 		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
 		for (int i = 0; i < 1 << getN(); i++) {
-			strategies[i] = new XiNStrategy(solver, model, this, i);
+			strategies[i] = new XiNStrategy(solver, model, this, (isConjunctiveSat ? i : i * 1 << (getNBackend() - 1)));
 		}
 
 		return strategies;
