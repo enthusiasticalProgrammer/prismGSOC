@@ -89,11 +89,11 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.expConstraints = new ArrayList<>(expConstraints);
+		this.isConjunctiveSat = isConjunctiveSat;
 		this.model = m;
 		this.mecs = computeMECs();
 		computeOffsets();
 		this.solver = AbstractLPStakeholder.initialiseSolver(numRealLPVars, method);
-		this.isConjunctiveSat = isConjunctiveSat;
 
 		if (getN() >= 30) {
 			throw new IllegalArgumentException(
