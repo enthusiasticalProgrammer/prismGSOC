@@ -157,7 +157,6 @@ public class StateValues implements StateVector
 		} else if (type instanceof TypeVoid) {
 			valuesO = init;
 		} else {
-			(new PrismException("")).printStackTrace();
 			throw new PrismLangException("Cannot create a vector of type " + type);
 		}
 	}
