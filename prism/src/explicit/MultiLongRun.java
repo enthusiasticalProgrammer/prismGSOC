@@ -390,9 +390,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 							break;
 						}
 
-						double val = 0;
-						if (row.containsKey(index))
-							val += map.get(en.getKey()).get(index);
+						double val = row.getOrDefault(index, 0.0);
 
 						if (val + en.getValue() != 0)
 							row.put(index, val + en.getValue());
