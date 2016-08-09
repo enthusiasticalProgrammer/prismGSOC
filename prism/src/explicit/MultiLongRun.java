@@ -126,19 +126,12 @@ public abstract class MultiLongRun<M extends NondetModel>
 	{
 		this.xOffsetArr = new int[model.getNumStates()];
 		int current = 0;
-		for (int i = 0; i < model.getNumStates(); i++) {
-			boolean isInMEC = false;
-			for (BitSet b : this.mecs) {
-				if (b.get(i)) {
-					isInMEC = true;
-					break;
-				}
-			}
-			if (isInMEC) {
-				xOffsetArr[i] = current;
-				current += model.getNumChoices(i) * (1 << getN());
+		for (int state = 0; state < model.getNumStates(); state++) {
+			if (isMECState(state)) {
+				xOffsetArr[state] = current;
+				current += model.getNumChoices(state) * (1 << getN());
 			} else {
-				xOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
+				xOffsetArr[state] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
 
