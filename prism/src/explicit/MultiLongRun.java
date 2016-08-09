@@ -144,7 +144,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.zIndex = new int[model.getNumStates()];
 
 		for (int i = 0; i < model.getNumStates(); i++) {
-			zIndex[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
+			zIndex[i] = (isMECState(i)) ? current : Integer.MIN_VALUE;
+			current += (1 << getN());
 		}
 
 		this.numRealLPVars = current;
