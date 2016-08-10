@@ -41,10 +41,9 @@ public class XiNStrategy implements Strategy
 		phase = BigInteger.ZERO;
 	}
 
-	//The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy
-	//states
 	public EpsilonApproximationXiNStrategy computeApproximation()
 	{
+		/**The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy states*/
 		setPhaseForEpsilon(PrismUtils.epsilonDouble * 1000000.0);
 		Distribution[] result = new Distribution[mdp.getNumStates()];
 		for (int state = 0; state < mdp.getNumStates(); state++) {
