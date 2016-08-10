@@ -2,6 +2,7 @@ package strat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -154,5 +155,19 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	public void clear()
 	{
 		// nothing to do
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder("");
+		for (Entry<Integer, Distribution> entry : choices.entrySet()) {
+			builder.append("State:");
+			builder.append(entry.getKey());
+			builder.append(", choices:");
+			builder.append(entry.getValue());
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }

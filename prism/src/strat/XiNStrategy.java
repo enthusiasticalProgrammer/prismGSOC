@@ -244,4 +244,11 @@ public class XiNStrategy implements Strategy
 	{
 		//Nothing to do
 	}
+
+	@Override
+	public String toString()
+	{
+		return computeApproximation().toString();
+	}
+
 }
