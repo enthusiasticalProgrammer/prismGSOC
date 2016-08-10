@@ -160,6 +160,14 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
+	 * This method returns the MEC of the state. If state is in no MEC, it returns null.
+	 */
+	public BitSet getMecOf(int state)
+	{
+		return mecs.stream().filter(mec -> mec.get(state)).reduce(null, (a, b) -> (a == null ? b : a));
+	}
+
+	/**
 	 * Names all variables, useful for debugging.
 	 * @throws PrismException
 	 */
