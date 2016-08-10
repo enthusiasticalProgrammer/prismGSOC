@@ -68,10 +68,8 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 	{
 		double[] inBetweenResult = new double[1 << getN()];
 		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
-			for (int choice = 0; choice < model.getNumChoices(state); choice++) {
-				for (int N = 0; N < 1 << getN(); N++) {
-					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
-				}
+			for (int N = 0; N < 1 << getN(); N++) {
+				inBetweenResult[N] += solver.getVariableValues()[getVarZ(state, N)];
 			}
 		}
 		double sumForNormalisation = 0.0;
