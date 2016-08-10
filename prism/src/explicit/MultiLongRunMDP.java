@@ -52,6 +52,12 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 			}
 		}
 
+		for (int state = 0; state < numStates; state++) {//To circumvent future NPEs
+			if (switchProbability[state] == null) {
+				switchProbability[state] = new Distribution();
+			}
+		}
+
 		try {
 			if (!solver.getBoolResult()) {
 				//LP is infeasible => no strategy exists
