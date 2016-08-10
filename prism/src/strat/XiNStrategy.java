@@ -85,10 +85,11 @@ public class XiNStrategy implements Strategy
 		}
 		Distribution result = new Distribution();
 		for (int action = 0; action < mdp.getNumChoices(state); action++) {
-
-			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
-			double denominator = sumOfPerturbedFrequencies(state);
-			result.add(action, numerator / denominator);
+			if (mdp.allSuccessorsInSet(state, action, mlr.getMecOf(state))) {
+				double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
+				double denominator = sumOfPerturbedFrequencies(state);
+				result.add(action, numerator / denominator);
+			}
 		}
 		return result;
 	}
