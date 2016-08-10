@@ -67,7 +67,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	/**
 	 * This stores whether we want to solve conjunctive-sat or joint-sat in CKK15 terminolology 
 	 */
-	private final boolean isConjunctiveSat;
+	protected final boolean isConjunctiveSat;
 
 	/**
 	 * The default constructor.
@@ -680,7 +680,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * non-trivial probability, ignoring whether we use conjunctive-SAT or joint-SAT. in Most cases you
 	 * should use getN and not this method.
 	 */
-	private int getNBackend()
+	protected int getNBackend()
 	{
 		int result = 0;
 		for (MDPConstraint constraint : constraints) {
