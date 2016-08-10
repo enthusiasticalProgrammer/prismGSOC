@@ -45,7 +45,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	protected final Distribution[] switchProb;
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/
-	private transient int strategy;
+	private transient int strategy = -1;
+
+	private transient int lastState = -1;
 
 	/**
 	 * This constructior is important for xml-I/O, do not remove it
@@ -100,49 +102,71 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
-	private void setRecurrency(int state)
-	{
-		if (strategy != -1)
-			return;
-		if (switchProb[state] == null) {
-			//state not in MEC
-			strategy = -1;
-		} else {
-			double rand = Math.random();
-			for (int i = 0; i < switchProb.length; i++) {
-				rand -= switchProb[state].get(i);
-				if (rand <= 0.0) {
-					strategy = i;
-					return;
-				}
-			}
-			strategy = -1;
-		}
-	}
-
 	@Override
 	public void initialise(int state)
 	{
+		lastState = state;
 		strategy = -1;
-		setRecurrency(state);
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
-		setRecurrency(state);
+
+		if (!isTransient()) {
+			return; //Nothing needs to be updated
+		}
+		Distribution probabilityToHaveSwitchedToStrategy = new Distribution();
+		if (this.transientChoices[lastState] != null) {
+			probabilityToHaveSwitchedToStrategy.add(-1, this.transientChoices[lastState].get(action));
+		}
+		switchProb[lastState].forEach(entry -> {
+			try {
+				probabilityToHaveSwitchedToStrategy.add(entry.getKey(), entry.getValue() * recurrentChoices[entry.getKey()].getNextMove(lastState).get(action));
+			} catch (Exception e) {
+				throw new RuntimeException();
+			}
+		});
+		double random = Math.random();
+		for (int strat : probabilityToHaveSwitchedToStrategy.getSupport()) {
+			if (random < probabilityToHaveSwitchedToStrategy.get(strat) / probabilityToHaveSwitchedToStrategy.sum()) {
+				this.strategy = strat;
+				lastState = state;
+				return;
+			}
+			random = random - probabilityToHaveSwitchedToStrategy.get(strat) / probabilityToHaveSwitchedToStrategy.sum();
+		}
+		lastState = state;
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
-		return (isTransient()) ? this.transientChoices[state] : this.recurrentChoices[strategy].getNextMove(state);
+		if (isTransient()) {
+			Distribution result = new Distribution();
+			Distribution switchProbability = this.switchProb[state].deepCopy();
+			switchProbability.forEach(entry -> {
+				try {
+					recurrentChoices[entry.getKey()].getNextMove(state).forEach(recurrentEntry -> {
+						result.add(recurrentEntry.getKey(), recurrentEntry.getValue() * entry.getValue());
+					});
+				} catch (InvalidStrategyStateException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			if (transientChoices[state] != null) {
+				this.transientChoices[state].forEach(entry -> result.add(entry.getKey(), entry.getValue()));
+			}
+			result.normalise();
+			return result;
+		}
+		return this.recurrentChoices[strategy].getNextMove(state);
 	}
 
 	@Override
 	public void reset()
 	{
-		//nothing to do here
+		this.strategy = -1;
 	}
 
 	@Override
