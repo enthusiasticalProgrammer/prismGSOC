@@ -13,14 +13,13 @@ Features:
 	-done by one Overall-strategy, having the recurrent-strategies [which are objects] as attributes
 	-recurrent-strategies: epsilon-approximations according to Claim 10 and its proof (for epsilon is between 10^-6 and 10^-9,
 		for very ill-conditioned LPs this may vary, note that the rounding error toleration of PRISM is at 10^-12)
-	-in a previous version: the "normal" strategies were used, but they were not readable enough to be outputted and they converged
+	-in a previous version: the strategies were used as from the paper, but they were not readable enough to be outputted and
+		they converged
 		extremely slowly; therefore we currently use them as an in-between-step during the strategy-construction (with a
 		reduced set of functionality)
-	-the probability for switching from transient to recurrent is in contrast to Claim 13 of CKK15 normalised in a way that
-		the probabilities of switch to a xi_N in an MEC m are summing up to 1
 
--Strategies can be inspected with the simulator-environment on the GUI, but the strategy is only visible and the simulation does not (yet)
-	behave according to the strategy
+	-Strategies can be inspected with the simulator-environment on the GUI
+	-Strategies can even be simulated now
 
 -buildProduct:
 	- returns a DTMC (in contrast to previous implementation returning an MDP)
