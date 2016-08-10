@@ -1,0 +1,24 @@
+mdp
+
+//state constants
+const int s=0;
+const int t=1;
+const int u=2;
+
+module CKK15Mini
+    state: [0..2];
+
+    [a] state=s -> (state'=s);
+    [b] state=s -> 0.5:(state'=t) + 0.5:(state'=u);
+
+    [c] state=t -> (state'=t);
+
+    [d] state=u -> (state'=u);
+
+endmodule
+
+rewards "r"
+    [a] true : 2;
+    [c] true : 0;
+    [d] true : 10;
+endrewards

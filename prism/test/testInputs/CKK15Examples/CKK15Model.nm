@@ -13,7 +13,6 @@ module CKK15
     [r] state=s ->  (state'=v);
 
     [a] state=u -> (state'=u);
-    [a] state=u -> (state'=u);
 
     [b] state=v -> (state'=v);
     [c] state=v -> (state'=w);

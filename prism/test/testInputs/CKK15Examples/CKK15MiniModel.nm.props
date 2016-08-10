@@ -1,0 +1,24 @@
+//RESULT: 4.7
+multi(R{"r"}max=? [S], P>=0.55[R{"r"}>=1 [S] ])
+
+//RESULT: 4.7
+mjoint(R{"r"}max=? [S], P>=0.55[R{"r"}>=1 [S] ])
+
+//RESULT: true
+multi(R{"r"}>= 2.3 [S], P>=0.9[R{"r"}>=1 [S] ])
+
+//RESULT: true
+mjoint(R{"r"}>= 2.3 [S], P>=0.9[R{"r"}>=1[S] ])
+
+//RESULT: false
+multi(R{"r"}>= 2.4 [S], P>=0.9[R{"r"}>=1 [S] ])
+
+//RESULT: false
+mjoint(R{"r"}>= 2.4 [S], P>=0.9[R{"r"}>=1 [S] ])
+
+//RESULT: true
+multi(R{"r"}>= 2.3 [S],P>=0.9[R{"r"}>=1 [S] ], P>=0.1[R{"r"}>=2 [S] ])
+
+//RESULT: false
+mjoint(R{"r"}>= 2.3 [S],P>=0.9[R{"r"}>=1 [S] ], P>=0.1[R{"r"}>=2 [S] ])
+
