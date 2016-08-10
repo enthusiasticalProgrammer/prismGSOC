@@ -400,7 +400,14 @@ public final class TypeCheck extends ASTTraverse
 		case ExpressionFunc.MJOINT:
 			// All operands must be booleans or doubles, and doubles must come first.
 			boolean seenBoolean = false;
+			boolean seenDouble = false;
 			for (i = 0; i < n; i++) {
+				if (types[i] instanceof TypeDouble) {
+					e.setType(TypeDouble.getInstance());
+					seenDouble = true;
+				} else if (types[i] instanceof TypeBool && !seenDouble) {
+					e.setType(TypeBool.getInstance());
+				}
 				if (!(types[i] instanceof TypeBool || types[i] instanceof TypeDouble)) {
 					throw new PrismLangException("Type error: non-Boolean/Double argument to  function \"" + e.getName() + "\"", e.getOperand(i));
 				}
