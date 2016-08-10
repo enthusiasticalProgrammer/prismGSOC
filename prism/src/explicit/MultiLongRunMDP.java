@@ -78,12 +78,10 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 				inBetweenResult[N] += solver.getVariableValues()[getVarZ(state, N)];
 			}
 		}
-		double sumForNormalisation = 0.0;
-		for (int i = 0; i < inBetweenResult.length; sumForNormalisation += inBetweenResult[i++])
-			;
+
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i] / sumForNormalisation);
+			result.add(i, inBetweenResult[i]);
 		}
 		return result;
 	}
@@ -104,7 +102,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 			Distribution result = new Distribution();
 
 			for (int j = 0; j < model.getNumChoices(state); j++) {
-				result.add(j, resSt[getVarY(state, j)] / transientSum);
+				result.add(j, resSt[getVarY(state, j)]);
 			}
 			return result;
 		}
