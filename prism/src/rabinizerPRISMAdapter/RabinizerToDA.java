@@ -70,8 +70,9 @@ public class RabinizerToDA
 			result = new AcceptanceGenRabinTransition(da);
 		}
 
-		for (int i = 0; i < acceptance.acceptanceCondition.size(); i++) {
-			Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair = acceptance.acceptanceCondition.get(i);
+		for (int i = 0; i < acceptance.unmodifiableCopyOfAcceptanceCondition().size(); i++) {
+			Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair = acceptance.unmodifiableCopyOfAcceptanceCondition()
+					.get(i);
 			BitSet Finite = transformSingleAcceptingSetFromRabinizerToPrism(genRabinPair.left, stateIntMap, result);
 			List<BitSet> Infinite = genRabinPair.right.stream().map(set -> transformSingleAcceptingSetFromRabinizerToPrism(set, stateIntMap, result))
 					.collect(Collectors.toList());
@@ -89,7 +90,7 @@ public class RabinizerToDA
 			BiMap<?, Integer> stateIntMap, AcceptanceGenRabinTransition result, int index)
 	{
 		GeneralisedRabinWithMeanPayoffAcceptance accMDP = (GeneralisedRabinWithMeanPayoffAcceptance) acceptance;
-		return transformMDPAccSetToPrism(accMDP.acceptanceMDP.get(index), stateIntMap, result);
+		return transformMDPAccSetToPrism(accMDP.getUnmodifiableAcceptanceMDP().get(index), stateIntMap, result);
 	}
 
 	private static <T> List<AcceptanceControllerSynthesis.MDPCondition> transformMDPAccSetToPrism(Collection<BoundAndReward> set, BiMap<T, Integer> stateIntMap,
