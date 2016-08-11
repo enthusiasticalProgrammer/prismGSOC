@@ -309,23 +309,32 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public String toString()
 	{
-		String result = "";
-		result += "transientChoices\n";
+		StringBuilder builder = new StringBuilder("");
+		builder.append("transientChoices\n");
 		for (int i = 0; i < transientChoices.length; i++) {
-			result += i + "  " + transientChoices[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(transientChoices[i]);
+			builder.append("\n");
 		}
-		result += "\n";
-		result += "switchProbabilities\n";
+		builder.append("\n");
+		builder.append("switchProbabilities\n");
 		for (int i = 0; i < switchProb.length; i++) {
-			result += i + "  " + switchProb[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(switchProb[i]);
+			builder.append("\n");
 		}
 
-		result += "\n";
-		result += "recurrentChoices\n";
+		builder.append("\n");
+		builder.append("recurrentChoices\n");
 		for (int i = 0; i < recurrentChoices.length; i++) {
-			result += i + "  " + recurrentChoices[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(recurrentChoices[i]);
+			builder.append("\n");
 		}
-		return result;
+		return builder.toString();
 	}
 
 	/**

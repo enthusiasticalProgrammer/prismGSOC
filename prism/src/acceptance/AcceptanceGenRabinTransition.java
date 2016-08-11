@@ -232,28 +232,31 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	@Override
 	public String getSignatureForEdgeHOA(int startState, BitSet label)
 	{
-		String result = "";
+		StringBuilder result = new StringBuilder("");
 		int edgeOffset = computeOffsetForEdge(startState, label);
 
 		int set_index = 0;
 		for (GenRabinPair pair : this.accList) {
 			if (pair.Finite.get(edgeOffset)) {
-				result += (result.isEmpty() ? "" : " ") + set_index;
+				result.append(result.length() == 0 ? "" : " ");
+				result.append(set_index);
 			}
 
 			set_index++;
 			for (BitSet inf : pair.Infinite) {
 				if (inf.get(edgeOffset)) {
-					result += (result.isEmpty() ? "" : " ") + set_index;
+					result.append(result.length() == 0 ? "" : " ");
+					result.append(set_index);
 				}
 				set_index++;
 			}
 		}
 
-		if (!result.isEmpty())
-			result = "{" + result + "}";
-
-		return result;
+		if (result.length() > 0) {
+			result.insert(0, "{");
+			result.append("}");
+		}
+		return result.toString();
 	}
 
 	public int computeOffsetForEdge(int startState, BitSet label)
@@ -293,11 +296,11 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	@Override
 	public String toString()
 	{
-		String result = "";
+		StringBuilder result = new StringBuilder("");
 		for (GenRabinPair pair : accList) {
-			result += pair.toString();
+			result.append(pair.toString());
 		}
-		return result;
+		return result.toString();
 	}
 
 	@Override
