@@ -23,5 +23,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/core-3.3.0-v_771.jar"/>
 	<classpathentry kind="lib" path="lib/rabinizer.jar"/>
+	<classpathentry kind="lib" path="lib/guava-19.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
