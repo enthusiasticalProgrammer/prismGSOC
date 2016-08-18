@@ -39,7 +39,7 @@ import parser.*;
 import parser.ast.*;
 import prism.*;
 
-public class GUIPropertiesList extends JList implements KeyListener
+public class GUIPropertiesList extends JList<GUIProperty> implements KeyListener
 {
 	//STATICS
 
@@ -505,7 +505,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 
 	//RENDERERS
 
-	class PictureCellRenderer extends JLabel implements ListCellRenderer
+	class PictureCellRenderer extends JLabel implements ListCellRenderer<GUIProperty>
 	{
 		String toolTip;
 
@@ -522,7 +522,7 @@ public class GUIPropertiesList extends JList implements KeyListener
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList<? extends GUIProperty> list, GUIProperty value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
 			GUIProperty p = getProperty(index);

@@ -566,7 +566,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			synchronized (theModel.getSeriesLock()) {
 				int[] sel = seriesList.getSelectedIndices();
 
-				List<Object> own = new ArrayList<>();
+				List<SeriesSettings> own = new ArrayList<>();
 				//seriesPropertiesTable.setOwners(own);
 
 				for (int i = 0; i < sel.length; i++) {

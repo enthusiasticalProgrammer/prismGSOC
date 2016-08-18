@@ -37,14 +37,14 @@ public class ChoiceEditor implements SettingEditor, ActionListener, FocusListene
 {
 	private Font font = new Font("monospaced", Font.PLAIN, 12);
 	private String[] choices;
-	private JComboBox combo;
+	private JComboBox<String> combo;
 	private JTable lastTable;
 	private boolean modified = false;
 
 	/** Creates a new instance of ChoiceEditor */
 	public ChoiceEditor(String[] choices)
 	{
-		combo = new JComboBox(choices);
+		combo = new JComboBox<>(choices);
 		combo.addActionListener(this);
 		combo.addFocusListener(this);
 		this.choices = choices;

@@ -61,7 +61,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 	private UndefinedConstants undefinedConstants;
 	private boolean cancelled = false;
 
-	private List propertyValues = null;
+	private List<Values> propertyValues = null;
 
 	//GUI for GUIProperties
 	private JTable propertyTable;
@@ -132,7 +132,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 			if (propertyValues != null) {
 				for (int i = 0; i < undefinedConstants.getNumPropertyIterations(); i++) {
 					Values mcs = undefinedConstants.getMFConstantValues();
-					Values pcs = (Values) propertyValues.get(i);
+					Values pcs = propertyValues.get(i);
 					double res = resultsFile.getResult(i);
 					Object result = (res < 0.0) ? null : new Double(res);
 					rc.setResult(mcs, pcs, result);
@@ -142,7 +142,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 	}
 
-	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList props, SimulationInformation info)
+	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList<GUIProperty> props,
+			SimulationInformation info)
 	{
 		this.isExperiment = false;
 		this.modulesFile = modulesFile;
@@ -159,8 +160,8 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		StringBuffer summary = new StringBuffer("");
 		summary.append("Verifying " + props.size() + ((props.size() == 1) ? (" property:\n") : (" properties:\n")));
 		for (int i = 0; i < props.size(); i++) {
-			if (props.get(i) instanceof GUIProperty) {
-				GUIProperty form = (GUIProperty) props.get(i);
+			if (props.get(i) != null) {
+				GUIProperty form = props.get(i);
 				summary.append("\t" + form.getProperty().toString() + "\n");
 			} else {
 				summary.append("form" + props.get(i).getClass().toString());
@@ -183,7 +184,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 
 		if (!cancelled) {
 			for (int i = 0; i < props.size(); i++) {
-				GUIProperty guiProp = (GUIProperty) props.get(i);
+				GUIProperty guiProp = props.get(i);
 				double result = network.getResultsFile().getResult(i);
 				if (result >= 0.0) {
 					guiProp.setResult(new Result(result));
@@ -614,7 +615,7 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		//do the work.
 		if (!isExperiment) {
 			try {
-				List<Expression> propFormulae = new ArrayList();
+				List<Expression> propFormulae = new ArrayList<>();
 				for (int i = 0; i < props.size(); i++) {
 					GUIProperty guiProp = props.get(i);
 					propFormulae.add(guiProp.getProperty());

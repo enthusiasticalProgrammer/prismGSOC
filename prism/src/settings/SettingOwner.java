@@ -26,7 +26,7 @@
 
 package settings;
 
-public interface SettingOwner extends Comparable
+public interface SettingOwner extends Comparable<SettingOwner>
 {
 	/**
 	 *  One for each type of owner

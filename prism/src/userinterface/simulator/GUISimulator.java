@@ -66,6 +66,7 @@ import parser.ast.ModulesFile;
 import parser.ast.PropertiesFile;
 import prism.PrismException;
 import prism.PrismLangException;
+import prism.PrismNotSupportedException;
 import prism.PrismSettings;
 import prism.PrismSettingsListener;
 import prism.PrismUtils;
@@ -84,6 +85,7 @@ import userinterface.properties.GUIMultiProperties;
 import userinterface.properties.GUIPropertiesEvent;
 import userinterface.properties.GUIPropertiesList;
 import userinterface.properties.GUIProperty;
+import userinterface.simulator.GUISimPathFormulaeList.SimPathFormula;
 import userinterface.simulator.networking.GUINetworkEditor;
 import userinterface.util.GUIComputationEvent;
 import userinterface.util.GUIEvent;
@@ -256,7 +258,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 		this.guiProp = guiProp;
 	}
 
-	public JList getStateLabelList()
+	public JList<GUISimLabelList.SimLabel> getStateLabelList()
 	{
 		return stateLabelList;
 	}
@@ -2161,7 +2163,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private javax.swing.JPanel outerPathFormulaePanel;
 	private javax.swing.JPanel outerStateLabelPanel;
 	private javax.swing.JPanel outerTopLeftPanel;
-	javax.swing.JList pathFormulaeList;
+	javax.swing.JList<SimPathFormula> pathFormulaeList;
 	private javax.swing.JScrollPane pathFormulaeScrollPane;
 	private javax.swing.JLabel pathLength;
 	private javax.swing.JLabel pathLengthLabel;
@@ -2169,7 +2171,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	private javax.swing.JPanel pathTablePlaceHolder;
 	javax.swing.JButton randomExplorationButton;
 	javax.swing.JButton resetPathButton;
-	private javax.swing.JList stateLabelList;
+	private JList<GUISimLabelList.SimLabel> stateLabelList;
 	private javax.swing.JScrollPane stateLabelScrollPane;
 	private javax.swing.JTabbedPane tabbedPane;
 	private javax.swing.JScrollPane tableScroll;

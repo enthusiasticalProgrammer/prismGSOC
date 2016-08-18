@@ -268,17 +268,13 @@ public class SeriesSettings extends Observable implements SettingOwner
 	}
 
 	@Override
-	public int compareTo(Object o)
+	public int compareTo(SettingOwner po)
 	{
-		if (o instanceof SettingOwner) {
-			SettingOwner po = (SettingOwner) o;
-			if (getSettingOwnerID() < po.getSettingOwnerID())
-				return -1;
-			else if (getSettingOwnerID() > po.getSettingOwnerID())
-				return 1;
-			else
-				return 0;
-		} else
+		if (getSettingOwnerID() < po.getSettingOwnerID())
+			return -1;
+		else if (getSettingOwnerID() > po.getSettingOwnerID())
+			return 1;
+		else
 			return 0;
 	}
 
