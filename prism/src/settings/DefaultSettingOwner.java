@@ -112,6 +112,8 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 		settings.add(s);
 	}
 
+	//TODO this method returns always null, because the if-clause checks if Settings.equals(String).
+	//Furthermore the method is not anymore used --> maybe we can drop it
 	public Setting getFromKey(String key)
 	{
 		for (int i = 0; i < getNumSettings(); i++) {

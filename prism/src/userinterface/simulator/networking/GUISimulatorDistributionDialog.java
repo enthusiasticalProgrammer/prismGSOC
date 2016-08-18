@@ -142,7 +142,10 @@ public class GUISimulatorDistributionDialog extends javax.swing.JDialog implemen
 		}
 	}
 
-	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, ArrayList props, SimulationInformation info)
+	/**
+	 * TODO is this method used? 
+	 */
+	public void show(GUIMultiProperties properties, ModulesFile modulesFile, PropertiesFile propertiesFile, List<GUIProperty> props, SimulationInformation info)
 	{
 		this.isExperiment = false;
 		this.modulesFile = modulesFile;

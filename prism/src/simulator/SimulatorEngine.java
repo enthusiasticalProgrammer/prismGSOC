@@ -251,6 +251,7 @@ public class SimulatorEngine extends PrismComponent
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
 		this.setStrategy(prism.getStrategy());
+		//TODO @Christopher: this is the same piece of code as in initialiseStrategy
 		if (strategy != null && path instanceof PathFull) {
 			// initialising the strategy
 			strategy.initialise(stateIds.get(currentState));

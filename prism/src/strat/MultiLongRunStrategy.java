@@ -80,7 +80,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
-	//TODO: the doc is garbage
+	//TODO@Christopher the doc is garbage
 	/**
 	 * 
 	 * Creates a multi-long run strategy

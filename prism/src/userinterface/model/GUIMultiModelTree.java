@@ -3664,6 +3664,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	 * Currently unused in the master-branch, can we delete it?
 	 * Besides, it just removes '\n'-chars from a string, which can be
 	 *  done by a simple API-call to String::replace.
+	 *  TODO Is this method used?
 	 */
 	private static String removeCarriages(String line)
 	{
