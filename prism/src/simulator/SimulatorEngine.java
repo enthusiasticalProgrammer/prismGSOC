@@ -1656,7 +1656,7 @@ public class SimulatorEngine extends PrismComponent
 			if (prism.getBuiltModelExplicit() != null) {
 				stateslist = prism.getBuiltModelExplicit().getStatesList();
 			} else {
-				throw new UnsupportedOperationException("Cannot generate a strategy if there is no model");
+				throw new UnsupportedOperationException("Cannot generate a strategy if there is no explicit model");
 			}
 			int i = 0;
 			for (State s : stateslist) {
