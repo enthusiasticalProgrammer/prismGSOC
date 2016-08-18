@@ -206,7 +206,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 		}
 	}
 
-	class UpdateHeaderRenderer extends JButton implements ListCellRenderer
+	class UpdateHeaderRenderer extends JButton implements ListCellRenderer<Object>
 	{
 
 		ImageIcon selectedIcon;
@@ -227,7 +227,7 @@ public class GUISimulatorUpdatesTable extends JTable implements ListSelectionLis
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(null);
 			if (getSelectedRow() == index) {

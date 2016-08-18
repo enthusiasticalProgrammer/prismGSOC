@@ -39,7 +39,7 @@ import simulator.*;
 /**
  * List of labels in the simulator GUI.
  */
-public class GUISimLabelList extends JList<Object>
+public class GUISimLabelList extends JList<GUISimLabelList.SimLabel>
 {
 	// Default serial ID
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class GUISimLabelList extends JList<Object>
 	private GUISimulator sim;
 	private SimulatorEngine engine;
 	// The list of labels
-	private DefaultListModel<Object> listModel;
+	private DefaultListModel<SimLabel> listModel;
 
 	/**
 	 * Create a new instance of GUISimLabelList
@@ -225,7 +225,7 @@ public class GUISimLabelList extends JList<Object>
 
 	// RENDERERS
 
-	class SimLabelRenderer extends JLabel implements ListCellRenderer
+	class SimLabelRenderer extends JLabel implements ListCellRenderer<SimLabel>
 	{
 		// Default serial ID
 		private static final long serialVersionUID = 1L;
@@ -245,11 +245,11 @@ public class GUISimLabelList extends JList<Object>
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList<? extends SimLabel> list, SimLabel value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
 			// Get label
-			SimLabel l = (SimLabel) value;
+			SimLabel l = value;
 			setText(l.toString());
 			// Extract value of label (either for current state or an earlier path step).
 			int val = sim.isOldUpdate() ? l.getResult(sim.getOldUpdateStep()) : l.getResult();

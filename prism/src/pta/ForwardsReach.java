@@ -294,8 +294,8 @@ public class ForwardsReach
 		// Initialise data structures
 		graph = new ReachabilityGraph(pta);
 		//Zset = new LocZoneSetOld();
-		Zset = new IndexedSet<LocZone>();
-		Y = new LinkedList<LocZone>();
+		Zset = new IndexedSet<>();
+		Y = new LinkedList<>();
 		target = new BitSet();
 
 		// Build initial symbolic state (NB: assume initial location = 0)
@@ -383,7 +383,7 @@ public class ForwardsReach
 		graph.states = Zset.toArrayList();
 
 		// Always have a single initial state 0 after this construction
-		initialStates = new ArrayList<Integer>();
+		initialStates = new ArrayList<>();
 		initialStates.add(0);
 
 		// Reachability complete

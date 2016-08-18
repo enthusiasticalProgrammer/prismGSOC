@@ -211,7 +211,7 @@ public class Property extends ASTElement
 	@SuppressWarnings("unused")
 	private String getExpectedResultString(String constValues) throws PrismException
 	{
-		HashMap<String, String> strExpectedMap = new HashMap<String, String>();
+		HashMap<String, String> strExpectedMap = new HashMap<>();
 		String strExpected = null;
 
 		// Extract expected result(s) from comment

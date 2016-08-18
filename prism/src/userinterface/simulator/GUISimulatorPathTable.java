@@ -111,7 +111,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 
 	// Cell renderer for list representing loop indicator (left of path table)
 
-	class LoopIndicatorRenderer extends JPanel implements ListCellRenderer
+	class LoopIndicatorRenderer extends JPanel implements ListCellRenderer<Object>
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -129,7 +129,7 @@ public class GUISimulatorPathTable extends GUIGroupedTable
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 		{
 			//setText((value == null) ? "" : value.toString());
 			//setBorder(new LineBorder(Color.black, 1));
