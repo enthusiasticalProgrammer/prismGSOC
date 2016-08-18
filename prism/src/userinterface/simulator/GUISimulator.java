@@ -2139,6 +2139,7 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 	public void setStrategy(Strategy strategy)
 	{
 		this.strategy = strategy;
+		this.setStrategyGenerated(false);
 	}
 
 	/**
