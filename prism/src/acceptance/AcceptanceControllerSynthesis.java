@@ -114,12 +114,13 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		@Override
 		public String toString()
 		{
-			String s = super.toString();
-			s += "mdp:";
+			StringBuilder builder = new StringBuilder(super.toString());
+			builder.append("mdp");
 			for (MDPCondition mdp : mdpCondition) {
-				s += " " + mdp.toString();
+				builder.append(' ');
+				builder.append(mdp);
 			}
-			return s;
+			return builder.toString();
 		}
 
 		@Override

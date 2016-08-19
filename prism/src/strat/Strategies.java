@@ -31,6 +31,7 @@ package strat;
  * 
  * @author aistis
  *
+ *TODO: this class seems to be a bit unneccessary, maybe we can drop it
  */
 public class Strategies
 {

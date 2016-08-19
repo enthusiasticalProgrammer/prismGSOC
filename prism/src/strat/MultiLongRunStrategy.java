@@ -95,7 +95,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		try {
 			File file = new File(filename);
-			//InputStream inputStream = new FileInputStream(file);
 			JAXBContext jc = JAXBContext.newInstance(MultiLongRunStrategy.class);
 			Unmarshaller u = jc.createUnmarshaller();
 			return (MultiLongRunStrategy) u.unmarshal(file);

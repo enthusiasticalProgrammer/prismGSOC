@@ -74,7 +74,6 @@ import parser.ast.PropertiesFile;
 
 import prism.PrismException;
 import prism.PrismLangException;
-import prism.PrismNotSupportedException;
 import prism.PrismSettings;
 import prism.PrismSettingsListener;
 import prism.PrismUtils;

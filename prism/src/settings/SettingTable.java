@@ -36,8 +36,6 @@ import java.util.List;
 
 import javax.swing.table.*;
 
-import userinterface.graph.Graph;
-
 public class SettingTable extends JPanel implements ListSelectionListener, TableModelListener, ItemListener, SettingDisplay
 {
 	private Component parent;

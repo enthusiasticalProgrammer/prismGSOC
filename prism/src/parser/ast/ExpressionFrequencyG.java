@@ -44,11 +44,14 @@ public class ExpressionFrequencyG extends ExpressionTemporal
 	@Override
 	public boolean equals(Object o)
 	{
-		if (o.getClass() != this.getClass()) {
+		if (o == null) {
 			return false;
 		}
-		ExpressionFrequencyG freq = (ExpressionFrequencyG) o;
-		return super.equals(o) && this.bound == freq.bound && this.cmpOperator == freq.cmpOperator && this.isLimInf == freq.isLimInf;
+		if (o instanceof ExpressionFrequencyG) {
+			ExpressionFrequencyG freq = (ExpressionFrequencyG) o;
+			return super.equals(o) && this.bound == freq.bound && this.cmpOperator == freq.cmpOperator && this.isLimInf == freq.isLimInf;
+		}
+		return false;
 	}
 
 	@Override
