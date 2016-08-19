@@ -1,1 +1,6 @@
-multi(R{"first"}>=1.1 [S], R{"second"}>=0.5 [S], P>=0.8 [R{"first"}>=0.5 [S] ], P>=0.8 [R{"second"}>=0.5 [S] ])
+multi(R{"first"}>=1.1 [ S ], R{"second"}>=0.5 [ S ], P>=0.8 [ R{"first"}>=0.5 [ S ] ], P>=0.8 [ R{"second"}>=0.5 [ S ] ])
+
+mjoint(R{"first"}>=1.1 [ S ], R{"second"}>=0.5 [ S ])
+
+Pmax=? [G {inf >= 0.5} state=v]
+

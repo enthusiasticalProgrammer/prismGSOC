@@ -36,10 +36,6 @@ import prism.PrismLog;
  */
 public abstract class MDStrategy implements Strategy
 {
-	/**
-	 * Current state of model
-	 */
-	protected int currentState = -1;
 
 	/**
 	 * Get the number of states of the model associated with this strategy. 
@@ -95,7 +91,7 @@ public abstract class MDStrategy implements Strategy
 	@Override
 	public void initialise(int state)
 	{
-		currentState = state;
+		//nothing to do
 	}
 
 	@Override

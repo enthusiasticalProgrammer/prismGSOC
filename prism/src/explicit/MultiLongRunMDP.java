@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package explicit;
 
 import java.util.BitSet;
@@ -16,9 +42,9 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 {
 
 	public MultiLongRunMDP(MDP mdp, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException
 	{
-		super(constraints, objectives, expConstraints, method, mdp);
+		super(constraints, objectives, expConstraints, method, mdp, isConjunctiveSat);
 	}
 
 	@Override
@@ -52,6 +78,12 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 			}
 		}
 
+		for (int state = 0; state < numStates; state++) {//To circumvent future NPEs
+			if (switchProbability[state] == null) {
+				switchProbability[state] = new Distribution();
+			}
+		}
+
 		try {
 			if (!solver.getBoolResult()) {
 				//LP is infeasible => no strategy exists
@@ -68,18 +100,14 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 	{
 		double[] inBetweenResult = new double[1 << getN()];
 		for (int state = mec.nextSetBit(0); state >= 0; state = mec.nextSetBit(state + 1)) {
-			for (int choice = 0; choice < model.getNumChoices(state); choice++) {
-				for (int N = 0; N < 1 << getN(); N++) {
-					inBetweenResult[N] += solver.getVariableValues()[getVarX(state, choice, N)];
-				}
+			for (int N = 0; N < 1 << getN(); N++) {
+				inBetweenResult[N] += solver.getVariableValues()[getVarZ(state, N)];
 			}
 		}
-		double sumForNormalisation = 0.0;
-		for (int i = 0; i < inBetweenResult.length; sumForNormalisation += inBetweenResult[i++])
-			;
+
 		Distribution result = new Distribution();
 		for (int i = 0; i < inBetweenResult.length; i++) {
-			result.add(i, inBetweenResult[i] / sumForNormalisation);
+			result.add(i, inBetweenResult[i]);
 		}
 		return result;
 	}
@@ -88,7 +116,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 	{
 		XiNStrategy[] strategies = new XiNStrategy[1 << getN()];
 		for (int i = 0; i < 1 << getN(); i++) {
-			strategies[i] = new XiNStrategy(solver, model, this, i);
+			strategies[i] = new XiNStrategy(solver, model, this, (isConjunctiveSat ? i : i * 1 << (getNBackend() - 1)));
 		}
 
 		return strategies;
@@ -100,7 +128,7 @@ class MultiLongRunMDP extends MultiLongRun<MDP>
 			Distribution result = new Distribution();
 
 			for (int j = 0; j < model.getNumChoices(state); j++) {
-				result.add(j, resSt[getVarY(state, j)] / transientSum);
+				result.add(j, resSt[getVarY(state, j)]);
 			}
 			return result;
 		}

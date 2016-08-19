@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package rabinizerPRISMAdapter;
 
 import java.util.BitSet;
@@ -12,9 +38,7 @@ import jhoafparser.consumer.HOAConsumerPrint;
 import jltl2ba.SimpleLTL;
 import ltl.Formula;
 import ltl.equivalence.EquivalenceClassFactory;
-import ltl.simplifier.Simplifier;
 import ltl.visitors.RestrictToFGXU;
-import omega_automaton.Automaton;
 import omega_automaton.collections.valuationset.BDDValuationSetFactory;
 import omega_automaton.collections.valuationset.ValuationSetFactory;
 import rabinizer.automata.AbstractAutomatonFactory;
@@ -22,8 +46,6 @@ import rabinizer.automata.DTGRAFactory;
 import rabinizer.automata.DTGRMAFactory;
 import rabinizer.automata.Optimisation;
 import rabinizer.automata.Product;
-import rabinizer.exec.CLIParser;
-import rabinizer.exec.CLIParser.AutomatonType;
 import rabinizer.frequencyLTL.MojmirOperatorVisitor;
 
 public class LTL2DA
@@ -39,9 +61,6 @@ public class LTL2DA
 	 */
 	public static DA<BitSet, ? extends AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
-		rabinizer.exec.Main.verbose = false;
-		rabinizer.exec.Main.silent = true;
-
 		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
 		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
 		inputFormula = inputFormula.accept(new RestrictToFGXU());

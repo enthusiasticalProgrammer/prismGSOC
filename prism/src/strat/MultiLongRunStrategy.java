@@ -1,9 +1,36 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package strat;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -45,7 +72,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	protected final Distribution[] switchProb;
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/
-	private transient int strategy;
+	private transient int strategy = -1;
+
+	private transient int lastState = -1;
 
 	/**
 	 * This constructior is important for xml-I/O, do not remove it
@@ -67,7 +96,6 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	{
 		try {
 			File file = new File(filename);
-			//InputStream inputStream = new FileInputStream(file);
 			JAXBContext jc = JAXBContext.newInstance(MultiLongRunStrategy.class);
 			Unmarshaller u = jc.createUnmarshaller();
 			return (MultiLongRunStrategy) u.unmarshal(file);
@@ -78,17 +106,15 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
-	//TODO: the doc is garbage
 	/**
 	 * 
 	 * Creates a multi-long run strategy
 	 *
-	 * @param minStrat minimising strategy
-	 * @param minValues expected values for states for min strategy
-	 * @param maxStrat maximising strategy
-	 * @param maxValues expected value for states for max strategy
-	 * @param targetValue value to be achieved by the strategy
-	 * @param model the model to provide info about players and transitions
+	 * @param transChoices
+	 * 			The transient choices.
+	 * @param switchProb 
+	 * 			The probability of switching in a state to certain recurrent Strategies.
+	 * @param recChoices The recurrent strategies
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, Distribution[] switchProb, XiNStrategy[] recChoices)
 	{
@@ -100,49 +126,71 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
-	private void setRecurrency(int state)
-	{
-		if (strategy != -1)
-			return;
-		if (switchProb[state] == null) {
-			//state not in MEC
-			strategy = -1;
-		} else {
-			double rand = Math.random();
-			for (int i = 0; i < switchProb.length; i++) {
-				rand -= switchProb[state].get(i);
-				if (rand <= 0.0) {
-					strategy = i;
-					return;
-				}
-			}
-			strategy = -1;
-		}
-	}
-
 	@Override
 	public void initialise(int state)
 	{
+		lastState = state;
 		strategy = -1;
-		setRecurrency(state);
 	}
 
 	@Override
 	public void updateMemory(int action, int state)
 	{
-		setRecurrency(state);
+
+		if (!isTransient()) {
+			return; //Nothing needs to be updated
+		}
+		Distribution probabilityToHaveSwitchedToStrategy = new Distribution();
+		if (this.transientChoices[lastState] != null) {
+			probabilityToHaveSwitchedToStrategy.add(-1, this.transientChoices[lastState].get(action));
+		}
+		switchProb[lastState].forEach(entry -> {
+			try {
+				probabilityToHaveSwitchedToStrategy.add(entry.getKey(), entry.getValue() * recurrentChoices[entry.getKey()].getNextMove(lastState).get(action));
+			} catch (Exception e) {
+				throw new RuntimeException();
+			}
+		});
+		double random = Math.random();
+		for (int strat : probabilityToHaveSwitchedToStrategy.getSupport()) {
+			if (random < probabilityToHaveSwitchedToStrategy.get(strat) / probabilityToHaveSwitchedToStrategy.sum()) {
+				this.strategy = strat;
+				lastState = state;
+				return;
+			}
+			random = random - probabilityToHaveSwitchedToStrategy.get(strat) / probabilityToHaveSwitchedToStrategy.sum();
+		}
+		lastState = state;
 	}
 
 	@Override
 	public Distribution getNextMove(int state) throws InvalidStrategyStateException
 	{
-		return (isTransient()) ? this.transientChoices[state] : this.recurrentChoices[strategy].getNextMove(state);
+		if (isTransient()) {
+			Distribution result = new Distribution();
+			Distribution switchProbability = this.switchProb[state].deepCopy();
+			switchProbability.forEach(entry -> {
+				try {
+					recurrentChoices[entry.getKey()].getNextMove(state).forEach(recurrentEntry -> {
+						result.add(recurrentEntry.getKey(), recurrentEntry.getValue() * entry.getValue());
+					});
+				} catch (InvalidStrategyStateException e) {
+					throw new RuntimeException(e);
+				}
+			});
+			if (transientChoices[state] != null) {
+				this.transientChoices[state].forEach(entry -> result.add(entry.getKey(), entry.getValue()));
+			}
+			result.normalise();
+			return result;
+		}
+		return this.recurrentChoices[strategy].getNextMove(state);
 	}
 
 	@Override
 	public void reset()
 	{
-		//nothing to do here
+		this.strategy = -1;
 	}
 
 	@Override
@@ -156,7 +204,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			FileWriter out = new FileWriter(new File(file));
 			m.marshal(this, out);
 			out.close();
-		} catch (JAXBException ex) { //TODO do something more clever
+		} catch (JAXBException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -285,23 +333,32 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@Override
 	public String toString()
 	{
-		String result = "";
-		result += "transientChoices\n";
+		StringBuilder builder = new StringBuilder("");
+		builder.append("transientChoices\n");
 		for (int i = 0; i < transientChoices.length; i++) {
-			result += i + "  " + transientChoices[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(transientChoices[i]);
+			builder.append("\n");
 		}
-		result += "\n";
-		result += "switchProbabilities\n";
+		builder.append("\n");
+		builder.append("switchProbabilities\n");
 		for (int i = 0; i < switchProb.length; i++) {
-			result += i + "  " + switchProb[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(switchProb[i]);
+			builder.append("\n");
 		}
 
-		result += "\n";
-		result += "recurrentChoices\n";
+		builder.append("\n");
+		builder.append("recurrentChoices\n");
 		for (int i = 0; i < recurrentChoices.length; i++) {
-			result += i + "  " + recurrentChoices[i] + "\n";
+			builder.append(i);
+			builder.append("  ");
+			builder.append(recurrentChoices[i]);
+			builder.append("\n");
 		}
-		return result;
+		return builder.toString();
 	}
 
 	/**
@@ -339,5 +396,22 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void clear()
 	{
 		//nothing to do
+	}
+
+	/**
+	 * Note that we do not compare the current state/strategy, because they are frequently changing 
+	 */
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null) {
+			return false;
+		}
+		if (o instanceof MultiLongRunStrategy) {
+			MultiLongRunStrategy that = (MultiLongRunStrategy) o;
+			return Arrays.equals(this.recurrentChoices, that.recurrentChoices) && Arrays.equals(this.switchProb, that.switchProb)
+					&& Arrays.equals(this.transientChoices, that.transientChoices);
+		}
+		return false;
 	}
 }

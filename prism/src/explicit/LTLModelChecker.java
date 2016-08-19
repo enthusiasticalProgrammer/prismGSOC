@@ -75,7 +75,7 @@ import prism.PrismUtils;
 public class LTLModelChecker extends PrismComponent
 {
 	/** Make LTL product accessible as a Product */
-	public class LTLProduct<M extends Model> extends Product<M>
+	public static class LTLProduct<M extends Model> extends Product<M>
 	{
 		private int daSize;
 		private int invMap[];
@@ -825,7 +825,7 @@ public class LTLModelChecker extends PrismComponent
 
 	/**
 	 * Find the set of states in accepting end components (ECs) in a nondeterministic model wrt a Generalized Rabin transition based acceptance condition.
-	 * Note that this method is more or less the analogous than the method above. TODO Christopher maybe we can merge them.
+	 * Note that this method is more or less the analogous than the method above. 
 	 * @param model The model
 	 * @param acceptance The acceptance condition. Note that this method only works if the acceptance is lifted
 	 */

@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package explicit;
 
 import java.io.File;
@@ -355,8 +381,8 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	@Override
 	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int state)
 	{
-		int mdpState = state / mlrs.getNumberOfDifferentStrategies();
-		int strategyState = state % mlrs.getNumberOfDifferentStrategies();
+		final int mdpState = state / mlrs.getNumberOfDifferentStrategies();
+		final int strategyState = state % mlrs.getNumberOfDifferentStrategies();
 
 		Distribution oneActionMove = null;
 		try {
@@ -378,7 +404,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 		}
 
 		Distribution afterIndexAdaption = new Distribution();
-		oneTransitionMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies(), entry.getValue()));
+		oneTransitionMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies() + strategyState, entry.getValue()));
 		if (strategyState != 0) {
 			return afterIndexAdaption.iterator();
 		}
@@ -393,6 +419,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 					//+1, because here strategy of 0 means the transient strategy and for switchDistribution strategy
 					// means the first recurrentDistribution
 				}
+				overallResult.set(stateValue, afterIndexAdaption.get(stateValue));
 			}
 		}
 		return overallResult.iterator();

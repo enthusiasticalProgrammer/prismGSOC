@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import explicit.Distribution;
 import parser.State;
 import parser.Values;
 import parser.VarList;
@@ -98,7 +99,6 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
-//TODO Christopher: if possible simulate strategies here
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -250,11 +250,6 @@ public class SimulatorEngine extends PrismComponent
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
 		this.setStrategy(prism.getStrategy());
-		if (strategy != null && path instanceof PathFull) {
-			// initialising the strategy
-			strategy.initialise(stateIds.get(currentState));
-			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
-		}
 
 		// Reset transition list
 		transitionListBuilt = false;
@@ -307,7 +302,7 @@ public class SimulatorEngine extends PrismComponent
 	public boolean automaticTransition() throws PrismException
 	{
 		Choice choice;
-		int numChoices, i, j;
+		int numChoices, i = -1, j;
 		double d, r;
 
 		TransitionList transitions = getTransitionList();
@@ -319,9 +314,36 @@ public class SimulatorEngine extends PrismComponent
 
 		switch (modelType) {
 		case DTMC:
+			i = (int) (Math.random() * numChoices);
+			choice = transitions.getChoice(i);
+			// Pick a random transition from this choice
+			d = Math.random();
+			j = choice.getIndexByProbabilitySum(d);
+			// Execute
+			executeTransition(i, j, -1);
+			break;
 		case MDP:
 			// Pick a random choice
-			i = (int) (Math.random() * numChoices);
+			//Note that we also check this in the DTMC-case, because maybe someone wants to simulate
+			// the product of an MDP and a strategy (which is a DTMC)
+			if (this.strategy == null) {
+				i = (int) (Math.random() * numChoices);
+			} else {
+				Distribution strategyChoice;
+				try {
+					strategyChoice = this.strategy.getNextMove(stateIds.get(path.getCurrentState()));
+				} catch (InvalidStrategyStateException e) {
+					throw new RuntimeException(e);
+				}
+				double random = Math.random();
+				for (int k : strategyChoice.getSupport()) {
+					if (random < strategyChoice.get(k)) {
+						i = k;
+						break;
+					}
+					random = random - strategyChoice.get(k);
+				}
+			}
 			choice = transitions.getChoice(i);
 			// Pick a random transition from this choice
 			d = Math.random();
@@ -1635,7 +1657,7 @@ public class SimulatorEngine extends PrismComponent
 			if (prism.getBuiltModelExplicit() != null) {
 				stateslist = prism.getBuiltModelExplicit().getStatesList();
 			} else {
-				throw new UnsupportedOperationException("Cannot generate a strategy if there is no model");
+				throw new UnsupportedOperationException("Cannot generate a strategy if there is no explicit model");
 			}
 			int i = 0;
 			for (State s : stateslist) {

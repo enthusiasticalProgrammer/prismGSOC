@@ -44,6 +44,10 @@ public class Updater extends PrismComponent
 	protected ModulesFile modulesFile;
 	protected ModelType modelType;
 	protected int numModules;
+
+	/**
+	 * TODO is this used? If not, can it be removed? 
+	 */
 	protected VarList varList;
 	// Synchronising action info
 	protected Vector<String> synchs;
@@ -64,6 +68,12 @@ public class Updater extends PrismComponent
 	// (where j=0 denotes independent, otherwise 1-indexed action label)
 	protected BitSet enabledModules[];
 
+	/**
+	 * This constructor should not be used, because it throws always a NullPointerException.
+	 * Furthermore it is currently not called
+	 * TODO remove it if possible
+	 */
+	@Deprecated
 	public Updater(ModulesFile modulesFile, VarList varList)
 	{
 		this(modulesFile, varList, null);

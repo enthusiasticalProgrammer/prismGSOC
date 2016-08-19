@@ -85,14 +85,14 @@ public class ECComputerDefault extends ECComputer
 	 */
 	private List<JDDNode> findEndComponents(JDDNode restrict, JDDNode accept) throws PrismException
 	{
-		Vector<JDDNode> mecs = new Vector<JDDNode>();
+		Vector<JDDNode> mecs = new Vector<>();
 		SCCComputer sccComputer;
 
 		// Initial set of candidates for MECs just contains the whole set we are searching
 		// (which, if null, is all states)
 		if (restrict == null)
 			restrict = reach;
-		Stack<JDDNode> candidates = new Stack<JDDNode>();
+		Stack<JDDNode> candidates = new Stack<>();
 		JDD.Ref(restrict);
 		candidates.push(restrict);
 

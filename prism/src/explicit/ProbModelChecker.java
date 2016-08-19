@@ -509,8 +509,9 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 			res = checkExpressionSteadyState(model, (ExpressionSS) expr);
 		}
 		//Multi-objective model-checking
-		else if (expr instanceof ExpressionFunc && (((ExpressionFunc) expr).getName().equals("multi"))) {
-			res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
+		else if (expr instanceof ExpressionFunc
+				&& (((ExpressionFunc) expr).getNameCode() == ExpressionFunc.MULTI || ((ExpressionFunc) expr).getNameCode() == ExpressionFunc.MJOINT)) {
+				res = checkExpressionMultiObjective(model, (ExpressionFunc) expr);
 		}
 		// Otherwise, use the superclass
 		else {
@@ -1215,9 +1216,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	}
 
 	/**
-	 * The following methods are there because both MDPModelChecker and DTMCModelChecker use them
-	 * during the checkMultiObjective-procedures and therefore
-	 * they belong in here (since this is the super-class) 
+	 * This method checks Multi-objective expressions explicitly.
 	 */
 
 	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
@@ -1403,11 +1402,11 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
 		if (method == null)
 			method = "";
-		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method);
+		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method, expr.getNameCode() == ExpressionFunc.MULTI);
 	}
 
 	protected abstract MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method) throws PrismException;
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException;
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException
 	{

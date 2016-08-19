@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package rabinizerPRISMAdapter;
 
 import java.util.ArrayList;
@@ -70,8 +96,9 @@ public class RabinizerToDA
 			result = new AcceptanceGenRabinTransition(da);
 		}
 
-		for (int i = 0; i < acceptance.acceptanceCondition.size(); i++) {
-			Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair = acceptance.acceptanceCondition.get(i);
+		for (int i = 0; i < acceptance.unmodifiableCopyOfAcceptanceCondition().size(); i++) {
+			Tuple<TranSet<Product<T>.ProductState>, List<TranSet<Product<T>.ProductState>>> genRabinPair = acceptance.unmodifiableCopyOfAcceptanceCondition()
+					.get(i);
 			BitSet Finite = transformSingleAcceptingSetFromRabinizerToPrism(genRabinPair.left, stateIntMap, result);
 			List<BitSet> Infinite = genRabinPair.right.stream().map(set -> transformSingleAcceptingSetFromRabinizerToPrism(set, stateIntMap, result))
 					.collect(Collectors.toList());
@@ -89,7 +116,7 @@ public class RabinizerToDA
 			BiMap<?, Integer> stateIntMap, AcceptanceGenRabinTransition result, int index)
 	{
 		GeneralisedRabinWithMeanPayoffAcceptance accMDP = (GeneralisedRabinWithMeanPayoffAcceptance) acceptance;
-		return transformMDPAccSetToPrism(accMDP.acceptanceMDP.get(index), stateIntMap, result);
+		return transformMDPAccSetToPrism(accMDP.getUnmodifiableAcceptanceMDP().get(index), stateIntMap, result);
 	}
 
 	private static <T> List<AcceptanceControllerSynthesis.MDPCondition> transformMDPAccSetToPrism(Collection<BoundAndReward> set, BiMap<T, Integer> stateIntMap,

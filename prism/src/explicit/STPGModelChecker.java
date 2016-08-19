@@ -951,7 +951,7 @@ public class STPGModelChecker extends ProbModelChecker
 
 	@Override
 	protected MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
-			Collection<MDPExpectationConstraint> expConstraints, String method)
+			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat)
 	{
 		throw new UnsupportedOperationException("STPG does not support multi-long-run properties.");
 	}

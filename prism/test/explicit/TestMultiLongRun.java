@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package explicit;
 
 import static org.junit.Assert.*;
@@ -23,28 +49,39 @@ import prism.PrismSettings;
 import prism.PrismUtils;
 import simulator.ModulesFileModelGenerator;
 
-//TODO Christopher: some parts belong to a utility-class (or at least to MDPModelChecker)
 public class TestMultiLongRun
 {
 	public MDP m1;
+	public MDP m2;
+
 	public MDPModelChecker mdp11;
 	public MDPModelChecker mdp12;
 	public MDPModelChecker mdp13;
 
+	public MDPModelChecker mdp21;
+
 	public ExpressionFunc e1;
 	public ExpressionFunc e2;
 	public ExpressionFunc e3;
+	public ExpressionFunc e21;
 
 	public ModulesFile modulesFile = null;
+	public ModulesFile modulesFile2 = null;
+
 	public PropertiesFile propertiesFile = null;
 	public PropertiesFile propertiesFile2 = null;
 	public PropertiesFile propertiesFile3 = null;
+	public PropertiesFile propertiesFile21 = null;
+
+	public PrismSettings defaultSettingsForSolvingMultiObjectives;
 
 	public StateValues infeasible;
 
-	public TestMultiLongRun() throws PrismLangException
+	public TestMultiLongRun() throws PrismLangException, PrismException
 	{
 		setUp();
+		this.defaultSettingsForSolvingMultiObjectives = new PrismSettings();
+		this.defaultSettingsForSolvingMultiObjectives.set(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD, "Linear programming");
 	}
 
 	@Before
@@ -52,13 +89,19 @@ public class TestMultiLongRun
 	{
 
 		try {
-			PrismLog mainLog = new PrismFileLog("stdout");
+			PrismLog mainLog = new PrismFileLog("/dev/null");
 			Prism prism = new Prism(mainLog);
+			prism.setMDPMultiSolnMethod(Prism.MDP_MULTI_LP); //nothing else is currently supported (besides maybe Gurobi)
 			modulesFile = prism.parseModelFile(new File("test/testInputs/CKK15Examples/CKK15Model.nm"));
 			modulesFile.setUndefinedConstants(null);
+
+			modulesFile2 = prism.parseModelFile(new File("test/testInputs/CKK15Examples/CKK15MiniModel.nm"));
+			modulesFile2.setUndefinedConstants(null);
+
 			propertiesFile = prism.parsePropertiesFile(modulesFile, new File("test/testInputs/CKK15Examples/CKK15PropertyFile1.props"));
 			propertiesFile.setUndefinedConstants(null);
 			PrismExplicit pe = new PrismExplicit(prism.getMainLog(), prism.getSettings());
+			pe.setSettings(prism.getSettings());
 
 			propertiesFile2 = prism.parsePropertiesFile(modulesFile, new File("test/testInputs/CKK15Examples/CKK15PropertyFile2.props"));
 			propertiesFile2.setUndefinedConstants(null);
@@ -66,12 +109,17 @@ public class TestMultiLongRun
 			propertiesFile3 = prism.parsePropertiesFile(modulesFile, new File("test/testInputs/CKK15Examples/CKK15PropertyFile3.props"));
 			propertiesFile3.setUndefinedConstants(null);
 
-			m1 = (MDP) pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
-			e1 = (ExpressionFunc) propertiesFile.getProperty(0);
+			propertiesFile21 = prism.parsePropertiesFile(modulesFile2, new File("test/testInputs/CKK15Examples/CKK15MiniModel.nm.props"));
+			propertiesFile21.setUndefinedConstants(null);
 
+			m1 = (MDP) pe.buildModel(modulesFile, new ModulesFileModelGenerator(modulesFile, prism));
+			m2 = (MDP) pe.buildModel(modulesFile2, new ModulesFileModelGenerator(modulesFile2, prism));
+
+			e1 = (ExpressionFunc) propertiesFile.getProperty(0);
 			e2 = (ExpressionFunc) propertiesFile2.getProperty(0);
 			e3 = (ExpressionFunc) propertiesFile3.getProperty(0);
 
+			e21 = (ExpressionFunc) propertiesFile21.getProperty(0);
 		} catch (PrismException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
@@ -82,17 +130,22 @@ public class TestMultiLongRun
 			mdp11 = new MDPModelChecker(null);
 			mdp11.currentFilter = new Filter(Filter.FilterOperator.STATE, 0);
 			mdp11.setModulesFileAndPropertiesFile(modulesFile, propertiesFile);
-			mdp11.setSettings(new PrismSettings());
+			mdp11.setSettings(defaultSettingsForSolvingMultiObjectives);
 
 			mdp12 = new MDPModelChecker(null);
 			mdp12.currentFilter = new Filter(Filter.FilterOperator.STATE, 0);
 			mdp12.setModulesFileAndPropertiesFile(modulesFile, propertiesFile2);
-			mdp12.setSettings(new PrismSettings());
+			mdp12.setSettings(defaultSettingsForSolvingMultiObjectives);
 
 			mdp13 = new MDPModelChecker(null);
 			mdp13.currentFilter = new Filter(Filter.FilterOperator.STATE, 0);
 			mdp13.setModulesFileAndPropertiesFile(modulesFile, propertiesFile3);
-			mdp13.setSettings(new PrismSettings());
+			mdp13.setSettings(defaultSettingsForSolvingMultiObjectives);
+
+			mdp21 = new MDPModelChecker(null);
+			mdp21.currentFilter = new Filter(Filter.FilterOperator.STATE, 0);
+			mdp21.setModulesFileAndPropertiesFile(modulesFile2, propertiesFile21);
+			mdp21.setSettings(defaultSettingsForSolvingMultiObjectives);
 		} catch (PrismException e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
@@ -135,7 +188,7 @@ public class TestMultiLongRun
 	public void isFeasibleWithNoConstraints() throws PrismException
 	{
 		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<MDPConstraint>(), new HashSet<MDPObjective>(), new HashSet<MDPExpectationConstraint>(),
-				"Linear programming");
+				"Linear programming", true);
 		mlr.createMultiLongRunLP();
 		mlr.solveDefault();
 		assertNotNull(mlr.getStrategy());
@@ -170,7 +223,7 @@ public class TestMultiLongRun
 	public void testGetVarXNegative() throws PrismException
 	{
 		MultiLongRun<?> ml13 = mdp13.createMultiLongRun(m1, e3);
-		assertTrue(ml13.getVarX(0, 0, 1) == -1);
+		assertEquals(-1, ml13.getVarX(0, 0, 1));
 	}
 
 	/**

@@ -416,7 +416,6 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	 * @param da the automaton
 	 * @param newAcceptance the new acceptance condition
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void switchAcceptance(DA da, AcceptanceOmega newAcceptance)
 	{
 		// as Java generics are only compile time, we can change the AcceptanceType

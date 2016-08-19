@@ -413,7 +413,7 @@ public class GUISimulatorPathTableModel extends AbstractTableModel implements GU
 	{
 		int selection = simulator.getStateLabelList().getSelectedIndex();
 		if (selection != -1) {
-			GUISimLabelList.SimLabel label = (GUISimLabelList.SimLabel) simulator.getStateLabelList().getModel().getElementAt(selection);
+			GUISimLabelList.SimLabel label = simulator.getStateLabelList().getModel().getElementAt(selection);
 			if (row == getRowCount() - 1) {
 				if (label.getResult() == 1)
 					return true;

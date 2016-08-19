@@ -3381,13 +3381,13 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	}
 
 	//Cell Editor for ModelTypeNode
-	class ModelTypeEditor extends JComboBox implements TreeCellEditor
+	class ModelTypeEditor extends JComboBox<String> implements TreeCellEditor
 	{
 		String value;
 		Vector<CellEditorListener> listeners = new Vector<>();
 		Object[] list;
 
-		public ModelTypeEditor(Object[] list)
+		public ModelTypeEditor(String[] list)
 		{
 			super(list);
 			setFont(tree.getFont());
@@ -3431,7 +3431,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 			try {
 				value = (String) getSelectedItem();
 				if (value == null) {
-					value = (String) getItemAt(0);
+					value = getItemAt(0);
 				}
 				return true;
 
@@ -3664,6 +3664,7 @@ public class GUIMultiModelTree extends JPanel implements MouseListener
 	 * Currently unused in the master-branch, can we delete it?
 	 * Besides, it just removes '\n'-chars from a string, which can be
 	 *  done by a simple API-call to String::replace.
+	 *  TODO Is this method used?
 	 */
 	private static String removeCarriages(String line)
 	{

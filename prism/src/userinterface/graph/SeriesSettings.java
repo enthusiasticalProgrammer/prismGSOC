@@ -268,17 +268,13 @@ public class SeriesSettings extends Observable implements SettingOwner
 	}
 
 	@Override
-	public int compareTo(Object o)
+	public int compareTo(SettingOwner po)
 	{
-		if (o instanceof SettingOwner) {
-			SettingOwner po = (SettingOwner) o;
-			if (getSettingOwnerID() < po.getSettingOwnerID())
-				return -1;
-			else if (getSettingOwnerID() > po.getSettingOwnerID())
-				return 1;
-			else
-				return 0;
-		} else
+		if (getSettingOwnerID() < po.getSettingOwnerID())
+			return -1;
+		else if (getSettingOwnerID() > po.getSettingOwnerID())
+			return 1;
+		else
 			return 0;
 	}
 
@@ -372,7 +368,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 	 */
 	public void setSeriesShape(int value) throws SettingException
 	{
-		seriesShape.setSelectedIndex(new Integer(value));
+		seriesShape.setSelectedIndex(value);
 		updateSeries();
 		setChanged();
 		notifyObservers(this);
@@ -439,7 +435,7 @@ public class SeriesSettings extends Observable implements SettingOwner
 	 */
 	public void setLineStyle(int value) throws SettingException
 	{
-		lineStyle.setSelectedIndex(new Integer(value));
+		lineStyle.setSelectedIndex(value);
 		updateSeries();
 		setChanged();
 		notifyObservers(this);

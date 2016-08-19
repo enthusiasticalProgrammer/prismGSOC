@@ -165,7 +165,7 @@ public class AcceptanceBuchi implements AcceptanceOmegaState
 	@Override
 	public AcceptanceBuchiDD toAcceptanceDD(JDDVars ddRowVars)
 	{
-		return new AcceptanceBuchiDD(this, ddRowVars);
+		return new AcceptanceBuchiDD(this.acceptingStates, ddRowVars);
 	}
 
 	@Override

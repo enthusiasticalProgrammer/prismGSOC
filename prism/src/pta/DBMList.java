@@ -42,7 +42,7 @@ public class DBMList extends NCZone
 	protected ArrayList<DBM> list;
 
 	/* Should we check for inclusion of DBMs as we go? */
-	public static boolean checkInclusion = true;
+	public static final boolean checkInclusion = true;
 
 	/**
 	 * Default constructor

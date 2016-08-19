@@ -31,6 +31,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
 import java.util.Set;
 
 import prism.PrismUtils;
@@ -41,6 +45,11 @@ import prism.PrismUtils;
  */
 public class Distribution implements Iterable<Entry<Integer, Double>>
 {
+	/**
+	 * The XmlElement-things are necessary for Strategy-I/O 
+	 */
+	@XmlElementWrapper(name = "Map_for_distribution_things")
+	@XmlElement(name = "map")
 	private HashMap<Integer, Double> map;
 
 	/**
@@ -243,6 +252,10 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	public boolean equals(Object o)
 	{
 		Double d1, d2;
+
+		if (o == null || !(o instanceof Distribution)) {
+			return false;
+		}
 		Distribution d = (Distribution) o;
 		if (d.size() != size())
 			return false;
@@ -268,5 +281,28 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 	public String toString()
 	{
 		return map.toString();
+	}
+
+	public Distribution deepCopy()
+	{
+		Distribution result = new Distribution();
+		for (Entry<Integer, Double> entry : map.entrySet()) {
+			result.set(entry.getKey(), entry.getValue());
+		}
+		return result;
+	}
+
+	/**
+	 * This method makes sure, that the probability of all options sums up to one
+	 */
+	public void normalise()
+	{
+		double sum = this.sum();
+		if (sum < PrismUtils.epsilonDouble) {
+			throw new UnsupportedOperationException("I currently cannot normalise, because this would mean dividing by zero.");
+		}
+		HashMap<Integer, Double> newMap = new HashMap<>();
+		this.forEach(entry -> newMap.put(entry.getKey(), entry.getValue() / sum));
+		this.map = newMap;
 	}
 }

@@ -63,7 +63,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 		this.valuePicker.setRenderer(new DefaultListCellRenderer()
 		{
 			@Override
-			public Component getListCellRendererComponent(JList list, Object obj, int i, boolean selection, boolean hasFocus)
+			public Component getListCellRendererComponent(JList<?> list, Object obj, int i, boolean selection, boolean hasFocus)
 			{
 				if (obj instanceof Double) {
 					setComponentOrientation(list.getComponentOrientation());
@@ -260,7 +260,7 @@ public class GraphConstantLine extends javax.swing.JPanel
 	}//GEN-LAST:event_valuePickerActionPerformed
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JComboBox boolSingleValueCombo;
+	private javax.swing.JComboBox<String> boolSingleValueCombo;
 	private javax.swing.ButtonGroup choiceButtonGroup;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;

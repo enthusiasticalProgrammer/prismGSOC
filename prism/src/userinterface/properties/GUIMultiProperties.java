@@ -1351,7 +1351,6 @@ public class GUIMultiProperties extends GUIPlugin implements MouseListener, List
 				JOptionPane.showMessageDialog(this, "Problem reading the file", "Cannot import", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			simulator.setStrategyGenerated(true);
 			simulator.setStrategy(getPrism().getStrategy());
 
 		}

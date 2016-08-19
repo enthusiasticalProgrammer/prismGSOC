@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package strat;
 
 import java.math.BigInteger;
@@ -41,10 +67,9 @@ public class XiNStrategy implements Strategy
 		phase = BigInteger.ZERO;
 	}
 
-	//The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy
-	//states
 	public EpsilonApproximationXiNStrategy computeApproximation()
 	{
+		/**The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy states*/
 		setPhaseForEpsilon(PrismUtils.epsilonDouble * 1000000.0);
 		Distribution[] result = new Distribution[mdp.getNumStates()];
 		for (int state = 0; state < mdp.getNumStates(); state++) {
@@ -86,10 +111,11 @@ public class XiNStrategy implements Strategy
 		}
 		Distribution result = new Distribution();
 		for (int action = 0; action < mdp.getNumChoices(state); action++) {
-
-			double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
-			double denominator = sumOfPerturbedFrequencies(state);
-			result.add(action, numerator / denominator);
+			if (mdp.allSuccessorsInSet(state, action, mlr.getMecOf(state))) {
+				double numerator = solverVariables[mlr.getVarX(state, action, N)] + xprime(state);
+				double denominator = sumOfPerturbedFrequencies(state);
+				result.add(action, numerator / denominator);
+			}
 		}
 		return result;
 	}
@@ -244,4 +270,11 @@ public class XiNStrategy implements Strategy
 	{
 		//Nothing to do
 	}
+
+	@Override
+	public String toString()
+	{
+		return computeApproximation().toString();
+	}
+
 }

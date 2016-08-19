@@ -1,7 +1,34 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package strat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -23,7 +50,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	 */
 	@XmlElementWrapper(name = "Choices_as_state_mapped_to_Distribution_of_successors")
 	@XmlElement(name = "distribution of successors:")
-	private final Map<Integer, Distribution> choices;
+	private Map<Integer, Distribution> choices;
 
 	public EpsilonApproximationXiNStrategy(Distribution[] choices)
 	{
@@ -31,6 +58,14 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		for (int i = 0; i < choices.length; i++) {
 			this.choices.put(i, choices[i]);
 		}
+	}
+
+	/**
+	 * This is neccessary for I/O with the XML-library 
+	 */
+	public EpsilonApproximationXiNStrategy()
+	{
+
 	}
 
 	@Override
@@ -143,6 +178,9 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	@Override
 	public boolean equals(Object o)
 	{
+		if (o == null) {
+			return false;
+		}
 		if (o.getClass() != this.getClass()) {
 			return false;
 		}
@@ -154,5 +192,19 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	public void clear()
 	{
 		// nothing to do
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder("");
+		for (Entry<Integer, Distribution> entry : choices.entrySet()) {
+			builder.append("State:");
+			builder.append(entry.getKey());
+			builder.append(", choices:");
+			builder.append(entry.getValue());
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }

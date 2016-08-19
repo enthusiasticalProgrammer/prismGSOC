@@ -82,7 +82,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	// Note: this code has now been modified manually; form is no longer used.
 	javax.swing.JTextField widthField;
 	javax.swing.JComboBox<String> selectSimulationMethod;
-	javax.swing.JComboBox automaticCalculateCombo;
+	javax.swing.JComboBox<String> automaticCalculateCombo;
 	private javax.swing.JButton cancelButton;
 	javax.swing.JTextField confidenceField;
 	javax.swing.JTextField numberToDecide;
@@ -237,7 +237,7 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 		jPanel11 = new javax.swing.JPanel();
 		jPanel12 = new javax.swing.JPanel();
 		selectSimulationMethod = new javax.swing.JComboBox<>(); // new
-		automaticCalculateCombo = new javax.swing.JComboBox();
+		automaticCalculateCombo = new javax.swing.JComboBox<>();
 		jPanel13 = new javax.swing.JPanel();
 		widthField = new javax.swing.JTextField();
 		confidenceField = new javax.swing.JTextField();

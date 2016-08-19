@@ -137,17 +137,13 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 
 	@Override
-	public int compareTo(Object o)
+	public int compareTo(SettingOwner po)
 	{
-		if (o instanceof SettingOwner) {
-			SettingOwner po = (SettingOwner) o;
-			if (getSettingOwnerID() < po.getSettingOwnerID())
-				return -1;
-			else if (getSettingOwnerID() > po.getSettingOwnerID())
-				return 1;
-			else
-				return 0;
-		} else
+		if (getSettingOwnerID() < po.getSettingOwnerID())
+			return -1;
+		else if (getSettingOwnerID() > po.getSettingOwnerID())
+			return 1;
+		else
 			return 0;
 	}
 
@@ -248,7 +244,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	private boolean feedback, resultsFeedback;
 	private SimulatorResultsFile srf = new SimulatorResultsFile();
 	private Values modelConstants;
-	private List propertyConstantRanges;
+	private List<Values> propertyConstantRanges;
 	private ResultsCollection resultsCollection;
 
 	public void doTesting()
@@ -296,7 +292,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 	}
 
 	public void doNetworking(int noIteration, long maxPathLengt, File simBinar, boolean feedbac, boolean resultsFeed, Values modelConstant,
-			List propertyConstants, ResultsCollection rc)
+			List<Values> propertyConstants, ResultsCollection rc)
 	{
 		this.simBinary = simBinar;
 		this.maxPathLength = maxPathLengt;
@@ -457,7 +453,7 @@ public class SimulatorNetworkHandler extends Observable implements EntityResolve
 		if (resultsCollection != null && modelConstants != null && propertyConstantRanges != null) {
 
 			for (int i = 0; i < propertyConstantRanges.size(); i++) {
-				Values pcs = (Values) propertyConstantRanges.get(i);
+				Values pcs = propertyConstantRanges.get(i);
 				double res = srf.getResult(i);
 				Object result = (res < 0.0) ? null : new Double(res);
 				resultsCollection.setResult(modelConstants, pcs, result);

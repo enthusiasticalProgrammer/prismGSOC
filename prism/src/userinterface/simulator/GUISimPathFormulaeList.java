@@ -35,7 +35,7 @@ import prism.PrismException;
 import userinterface.properties.*;
 import simulator.*;
 
-public class GUISimPathFormulaeList extends JList
+public class GUISimPathFormulaeList extends JList<GUISimPathFormulaeList.SimPathFormula>
 {
 
 	private SimulatorEngine engine;
@@ -124,7 +124,7 @@ public class GUISimPathFormulaeList extends JList
 
 	// RENDERERS
 
-	class SimPathFormulaRenderer extends JLabel implements ListCellRenderer
+	class SimPathFormulaRenderer extends JLabel implements ListCellRenderer<SimPathFormula>
 	{
 		String lastText;
 
@@ -141,10 +141,10 @@ public class GUISimPathFormulaeList extends JList
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+		public Component getListCellRendererComponent(JList<? extends SimPathFormula> list, SimPathFormula l, int index, boolean isSelected,
+				boolean cellHasFocus)
 		{
 			setBorder(new BottomBorder());
-			SimPathFormula l = (SimPathFormula) value;
 
 			setText(l.toString());
 

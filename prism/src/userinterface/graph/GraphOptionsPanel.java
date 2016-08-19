@@ -91,11 +91,11 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 
 		seriesList = new JList<>(theModel.getGraphSeriesList());
 		seriesList.addListSelectionListener(this);
-		seriesList.setCellRenderer(new ListCellRenderer()
+		seriesList.setCellRenderer(new ListCellRenderer<Object>()
 		{
 
 			@Override
-			public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+			public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 			{
 				JLabel label = new JLabel((value == null) ? "undefined" : value.toString());
 				JPanel panel = new JPanel();
@@ -565,7 +565,7 @@ public class GraphOptionsPanel extends JPanel implements ListSelectionListener
 			synchronized (theModel.getSeriesLock()) {
 				int[] sel = seriesList.getSelectedIndices();
 
-				List<Object> own = new ArrayList<>();
+				List<SeriesSettings> own = new ArrayList<>();
 				//seriesPropertiesTable.setOwners(own);
 
 				for (int i = 0; i < sel.length; i++) {

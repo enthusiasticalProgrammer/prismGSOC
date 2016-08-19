@@ -48,18 +48,14 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 	}
 
 	@Override
-	public int compareTo(Object o)
+	public int compareTo(SettingOwner po)
 	{
-		if (o instanceof SettingOwner) {
-			SettingOwner po = (SettingOwner) o;
 			if (getSettingOwnerID() < po.getSettingOwnerID())
 				return -1;
 			else if (getSettingOwnerID() > po.getSettingOwnerID())
 				return 1;
 			else
 				return 0;
-		} else
-			return 0;
 	}
 
 	@Override
@@ -116,6 +112,8 @@ public class DefaultSettingOwner extends Observable implements SettingOwner
 		settings.add(s);
 	}
 
+	//TODO this method returns always null, because the if-clause checks if Settings.equals(String).
+	//Furthermore the method is not anymore used --> maybe we can drop it
 	public Setting getFromKey(String key)
 	{
 		for (int i = 0; i < getNumSettings(); i++) {

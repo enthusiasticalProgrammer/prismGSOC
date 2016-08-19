@@ -49,7 +49,7 @@ public class PrismXYSeries extends XYSeries
 	 * 
 	 * @param key
 	 */
-	public PrismXYSeries(Comparable key)
+	public PrismXYSeries(String key)
 	{
 		super(key, true, false);
 

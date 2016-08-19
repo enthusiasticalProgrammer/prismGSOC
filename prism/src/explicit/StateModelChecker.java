@@ -686,6 +686,7 @@ public class StateModelChecker extends PrismComponent
 		case ExpressionFunc.LOG:
 			return checkExpressionFuncBinary(model, expr, statesOfInterest);
 		case ExpressionFunc.MULTI:
+		case ExpressionFunc.MJOINT:
 			throw new PrismNotSupportedException("Multi-objective model checking is not supported for " + model.getModelType() + "s");
 		default:
 			throw new PrismException("Unrecognised function \"" + expr.getName() + "\"");

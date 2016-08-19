@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//  * Vojtech Forejt <vojtech.forejt@cs.ox.ac.uk> (University of Oxford)
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
 package explicit;
 
 import java.util.ArrayList;
@@ -26,7 +52,6 @@ import strat.Strategy;
  * 
  * Note that we use a bit different notation here and refer to y_{s,N} variables as
  * Z, not to confuse them with y_{s,a}.
- * @author vojfor+Christopher
  *
  *This class is abstract, because it can model either an MDP or a DTMC (which is computed
  *	by taking the product of an MDP and a MultiLongRunStrategy)
@@ -65,6 +90,11 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private int[] zIndex;
 
 	/**
+	 * This stores whether we want to solve conjunctive-sat or joint-sat in CKK15 terminolology 
+	 */
+	protected final boolean isConjunctiveSat;
+
+	/**
 	 * The default constructor.
 	 * @param constraints: MLR-constraints of the form P[ R{x} >= bound [S]]
 	 * @param objectives: MLR-objectives of the form R{x}max=?
@@ -74,14 +104,17 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * @param method Method to use, should be a valid value for
 	 * @param M: a nondeterministic model, it should be either an MDP or a DTMCFromMDPAndMDStrategy,
 	 * 		because currently these are the only classes for which currently multi-objectives are used. 
+	 * @param isConjunctiveSat: true if we are considering conjunctive-SAT, false if we are considering joint-SAT, in
+	 *  		terminology of paper CKK15
 	 * @throws PrismException 
 	 */
 	protected MultiLongRun(final Collection<MDPConstraint> constraints, final Collection<MDPObjective> objectives,
-			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m) throws PrismException
+			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m, boolean isConjunctiveSat) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
 		this.objectives = new ArrayList<>(objectives);
 		this.expConstraints = new ArrayList<>(expConstraints);
+		this.isConjunctiveSat = isConjunctiveSat;
 		this.model = m;
 		this.mecs = computeMECs();
 		computeOffsets();
@@ -118,19 +151,12 @@ public abstract class MultiLongRun<M extends NondetModel>
 	{
 		this.xOffsetArr = new int[model.getNumStates()];
 		int current = 0;
-		for (int i = 0; i < model.getNumStates(); i++) {
-			boolean isInMEC = false;
-			for (BitSet b : this.mecs) {
-				if (b.get(i)) {
-					isInMEC = true;
-					break;
-				}
-			}
-			if (isInMEC) {
-				xOffsetArr[i] = current;
-				current += model.getNumChoices(i) * (1 << getN());
+		for (int state = 0; state < model.getNumStates(); state++) {
+			if (isMECState(state)) {
+				xOffsetArr[state] = current;
+				current += model.getNumChoices(state) * (1 << getN());
 			} else {
-				xOffsetArr[i] = Integer.MIN_VALUE; //so that when used in array, we get exception
+				xOffsetArr[state] = Integer.MIN_VALUE; //so that when used in array, we get exception
 			}
 		}
 
@@ -143,7 +169,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 		this.zIndex = new int[model.getNumStates()];
 
 		for (int i = 0; i < model.getNumStates(); i++) {
-			zIndex[i] = (isMECState(i)) ? current += (1 << getN()) : Integer.MIN_VALUE;
+			zIndex[i] = (isMECState(i)) ? current : Integer.MIN_VALUE;
+			current += (1 << getN());
 		}
 
 		this.numRealLPVars = current;
@@ -155,6 +182,14 @@ public abstract class MultiLongRun<M extends NondetModel>
 	public boolean isMECState(int state)
 	{
 		return mecs.stream().anyMatch(mec -> mec.get(state));
+	}
+
+	/**
+	 * This method returns the MEC of the state. If state is in no MEC, it returns null.
+	 */
+	public BitSet getMecOf(int state)
+	{
+		return mecs.stream().filter(mec -> mec.get(state)).reduce(null, (a, b) -> (a == null ? b : a));
 	}
 
 	/**
@@ -308,7 +343,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * @param state
 	 * @param action
 	 * @param threshold
-	 * @return
+	 * @return the corresponding variable number or -1 if either the using method is
 	 */
 	public int getVarX(int state, int action, int threshold)
 	{
@@ -388,9 +423,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 							break;
 						}
 
-						double val = 0;
-						if (row.containsKey(index))
-							val += map.get(en.getKey()).get(index);
+						double val = row.getOrDefault(index, 0.0);
 
 						if (val + en.getValue() != 0)
 							row.put(index, val + en.getValue());
@@ -402,8 +435,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 		}
 
 		//fill in
-		for (int state : map.keySet()) {
-			solver.addRowFromMap(map.get(state), 0, SolverProxyInterface.Comparator.EQ, "x" + state);
+		for (Entry<Integer, Map<Integer, Double>> entry : map.entrySet()) {
+			solver.addRowFromMap(entry.getValue(), 0, SolverProxyInterface.Comparator.EQ, "x" + entry.getKey());
 		}
 	}
 
@@ -500,16 +533,15 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private void setSatisfactionForNontrivialProbability() throws PrismException
 	{
-
-		for (int i = 0; i < getN(); i++) {
+		for (int i = 0; i < getNBackend(); i++) {
 			MDPConstraint constraint = this.getConstraintNonTrivialProbabilityConstraints().get(i);
 			Map<Integer, Double> map = new HashMap<>();
 
-			for (int n = 0; n < 1 << getN(); n++) {
+			for (int n = (isConjunctiveSat ? 0 : (1 << getN()) - 1); n < 1 << getN(); n++) {
 				if ((n & (1 << i)) != 0) {
 					for (int state = 0; state < model.getNumStates(); state++) {
-						for (int act = 0; act < model.getNumChoices(state); act++) {
-							if (isMECState(state)) {
+						if (isMECState(state)) {
+							for (int act = 0; act < model.getNumChoices(state); act++) {
 								map.put(getVarX(state, act, n), 1.0);
 							}
 						}
@@ -526,8 +558,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	private void setCommitmentForSatisfaction() throws PrismException
 	{
 		for (BitSet maxEndComponent : mecs) {
-			for (int n = 0; n < 1 << getN(); n++) {
-				for (int i = 0; i < getN(); i++) {
+			for (int n = (isConjunctiveSat ? 0 : (1 << getN()) - 1); n < 1 << getN(); n++) {
+				for (int i = 0; i < getNBackend(); i++) {
 					if ((n & (1 << i)) != 0) {
 						addSingleCommitmentToSatisfaction(maxEndComponent, n, i);
 					}
@@ -657,9 +689,23 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
-	 * non-trivial probability
+	 * non-trivial probability. However, for convenience, it returns one (or zero) if we compute a multi-joint-conjunctive.
 	 */
 	int getN()
+	{
+		int result = getNBackend();
+		if (!isConjunctiveSat) { //if we are using joint-SAT
+			return result == 0 ? 0 : 1;
+		}
+		return result;
+	}
+
+	/**
+	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
+	 * non-trivial probability, ignoring whether we use conjunctive-SAT or joint-SAT. in Most cases you
+	 * should use getN and not this method.
+	 */
+	protected int getNBackend()
 	{
 		int result = 0;
 		for (MDPConstraint constraint : constraints) {

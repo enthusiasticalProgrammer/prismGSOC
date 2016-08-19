@@ -36,8 +36,6 @@ import java.util.List;
 
 import javax.swing.table.*;
 
-import userinterface.graph.Graph;
-
 public class SettingTable extends JPanel implements ListSelectionListener, TableModelListener, ItemListener, SettingDisplay
 {
 	private Component parent;
@@ -85,7 +83,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 	}
 
-	public void setOwners(List al)
+	public void setOwners(List<? extends SettingOwner> al)
 	{
 		theModel.setOwners(al);
 	}
@@ -458,7 +456,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 	class SettingTableModel extends AbstractTableModel
 	{
 		//All of the data
-		private List<Graph> owners;
+		private List<? extends SettingOwner> owners;
 
 		//Current sorted data
 		private List<String> groupNames;
@@ -486,12 +484,12 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 			this.theTable = tab;
 		}
 
-		public void setOwners(List<Graph> owners)
+		public void setOwners(List<? extends SettingOwner> owners)
 		{
 			this.owners = owners;
 			Collections.sort(owners);
 
-			Iterator<Graph> it = owners.iterator();
+			Iterator<? extends SettingOwner> it = owners.iterator();
 			SettingOwner last = null;
 			int currGroupCount = 0;
 			String tempName = "";
@@ -549,7 +547,7 @@ public class SettingTable extends JPanel implements ListSelectionListener, Table
 
 		public void refreshGroupNames()
 		{
-			Iterator<Graph> it = owners.iterator();
+			Iterator<? extends SettingOwner> it = owners.iterator();
 			SettingOwner last = null;
 			String tempName = "";
 			groupNames = new ArrayList<>();
