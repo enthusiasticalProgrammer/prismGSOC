@@ -1559,7 +1559,7 @@ public class StateValues implements StateVector
 				if (valuesB.get(i))
 					count++;
 			}
-			return new Integer(count);
+			return count;
 		}
 		throw new PrismException("Can't take count over a vector of type " + type);
 	}
