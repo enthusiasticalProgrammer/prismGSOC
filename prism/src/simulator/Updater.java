@@ -70,6 +70,7 @@ public class Updater extends PrismComponent
 
 	/**
 	 * This constructor should not be used, because it throws always a NullPointerException.
+	 * Furthermore it is currently not called
 	 * TODO remove it if possible
 	 */
 	@Deprecated
