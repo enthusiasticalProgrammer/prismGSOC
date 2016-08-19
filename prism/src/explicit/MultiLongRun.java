@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//  * Vojtech Forejt <vojtech.forejt@cs.ox.ac.uk> (University of Oxford)
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
 package explicit;
 
 import java.util.ArrayList;
@@ -26,7 +52,6 @@ import strat.Strategy;
  * 
  * Note that we use a bit different notation here and refer to y_{s,N} variables as
  * Z, not to confuse them with y_{s,a}.
- * @author vojfor+Christopher
  *
  *This class is abstract, because it can model either an MDP or a DTMC (which is computed
  *	by taking the product of an MDP and a MultiLongRunStrategy)
