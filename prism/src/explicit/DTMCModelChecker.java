@@ -1648,7 +1648,6 @@ public class DTMCModelChecker extends ProbModelChecker
 	 * The expr is some multi-objective expression.
 	 * Note that this method is mainly here, because it can verify the product of an MDP and
 	 * a multiLongRunStrategy.
-	 *TODO @Christopher: make it deal also with ordinary DTMC
 	 * 
 	 */
 	@Override

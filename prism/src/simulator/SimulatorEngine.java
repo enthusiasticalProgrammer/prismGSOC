@@ -99,7 +99,6 @@ import userinterface.graph.Graph;
  * <LI> {@link #modelCheckExperiment}
  * </UL>
  */
-//TODO Christopher: if possible simulate strategies here
 public class SimulatorEngine extends PrismComponent
 {
 	// The current parsed model + info
@@ -251,12 +250,6 @@ public class SimulatorEngine extends PrismComponent
 		// Initialise stored path
 		path.initialise(currentState, tmpStateRewards);
 		this.setStrategy(prism.getStrategy());
-		//TODO @Christopher: this is the same piece of code as in initialiseStrategy
-		if (strategy != null && path instanceof PathFull) {
-			// initialising the strategy
-			strategy.initialise(stateIds.get(currentState));
-			((PathFull) path).initialiseStrat(strategy.getCurrentMemoryElement());
-		}
 
 		// Reset transition list
 		transitionListBuilt = false;

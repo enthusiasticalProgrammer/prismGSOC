@@ -105,17 +105,15 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		}
 	}
 
-	//TODO@Christopher the doc is garbage
 	/**
 	 * 
 	 * Creates a multi-long run strategy
 	 *
-	 * @param minStrat minimising strategy
-	 * @param minValues expected values for states for min strategy
-	 * @param maxStrat maximising strategy
-	 * @param maxValues expected value for states for max strategy
-	 * @param targetValue value to be achieved by the strategy
-	 * @param model the model to provide info about players and transitions
+	 * @param transChoices
+	 * 			The transient choices.
+	 * @param switchProb 
+	 * 			The probability of switching in a state to certain recurrent Strategies.
+	 * @param recChoices The recurrent strategies
 	 */
 	public MultiLongRunStrategy(Distribution[] transChoices, Distribution[] switchProb, XiNStrategy[] recChoices)
 	{
@@ -205,7 +203,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 			FileWriter out = new FileWriter(new File(file));
 			m.marshal(this, out);
 			out.close();
-		} catch (JAXBException ex) { //TODO do something more clever
+		} catch (JAXBException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();

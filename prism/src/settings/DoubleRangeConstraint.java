@@ -26,6 +26,7 @@
 
 package settings;
 
+//TODO is this class used, and if not, can we delete it?
 public class DoubleRangeConstraint implements SettingConstraint
 {
 	private double lower, upper;
