@@ -2541,7 +2541,6 @@ public class GUISimulator extends GUIPlugin implements MouseListener, ListSelect
 			if (!(showStrategyCheck.isSelected() && strategy != null && stateIds != null)) {
 				offset++;
 				hasStrategy = false;
-				System.out.println("Has strategy");
 			}
 			// Player
 			if (!(parsedModel.getModelType().multiplePlayers()))
