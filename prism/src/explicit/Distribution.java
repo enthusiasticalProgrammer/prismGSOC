@@ -31,6 +31,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
 import java.util.Set;
 
 import prism.PrismUtils;
@@ -41,6 +45,11 @@ import prism.PrismUtils;
  */
 public class Distribution implements Iterable<Entry<Integer, Double>>
 {
+	/**
+	 * The XmlElement-things are necessary for Strategy-I/O 
+	 */
+	@XmlElementWrapper(name = "Map_for_distribution_things")
+	@XmlElement(name = "map")
 	private HashMap<Integer, Double> map;
 
 	/**

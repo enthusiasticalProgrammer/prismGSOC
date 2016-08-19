@@ -50,7 +50,7 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	 */
 	@XmlElementWrapper(name = "Choices_as_state_mapped_to_Distribution_of_successors")
 	@XmlElement(name = "distribution of successors:")
-	private final Map<Integer, Distribution> choices;
+	private Map<Integer, Distribution> choices;
 
 	public EpsilonApproximationXiNStrategy(Distribution[] choices)
 	{
@@ -58,6 +58,14 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		for (int i = 0; i < choices.length; i++) {
 			this.choices.put(i, choices[i]);
 		}
+	}
+
+	/**
+	 * This is neccessary for I/O with the XML-library 
+	 */
+	public EpsilonApproximationXiNStrategy()
+	{
+
 	}
 
 	@Override

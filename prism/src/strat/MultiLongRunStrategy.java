@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -395,5 +396,22 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	public void clear()
 	{
 		//nothing to do
+	}
+
+	/**
+	 * Note that we do not compare the current state/strategy, because they are frequently changing 
+	 */
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null) {
+			return false;
+		}
+		if (o instanceof MultiLongRunStrategy) {
+			MultiLongRunStrategy that = (MultiLongRunStrategy) o;
+			return Arrays.equals(this.recurrentChoices, that.recurrentChoices) && Arrays.equals(this.switchProb, that.switchProb)
+					&& Arrays.equals(this.transientChoices, that.transientChoices);
+		}
+		return false;
 	}
 }

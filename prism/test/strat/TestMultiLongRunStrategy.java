@@ -28,6 +28,12 @@ package strat;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 import org.junit.Before;
@@ -160,6 +166,8 @@ public class TestMultiLongRunStrategy
 	@Test
 	public void testSecondModelFromPaper() throws PrismException, InvalidStrategyStateException
 	{
+		final double threshold = 0.00001; //It seems that rounding errors compound and therefore PrismUtiles.epsilonDouble would be too precise
+
 		MultiLongRun<?> ml21 = tmlr.mdp21.createMultiLongRun(tmlr.m2, tmlr.e21);
 		ml21.createMultiLongRunLP();
 		ml21.solveDefault();
@@ -167,12 +175,12 @@ public class TestMultiLongRunStrategy
 
 		strat.initialise(0);
 		Distribution d = strat.getNextMove(0);
-		assertEquals(0.1, d.get(0), PrismUtils.epsilonDouble);
-		assertEquals(0.9, d.get(1), PrismUtils.epsilonDouble);
+		assertEquals(0.1, d.get(0), threshold);
+		assertEquals(0.9, d.get(1), 0.000001);
 
 		strat.updateMemory(0, 0);
 		d = strat.getNextMove(0);
-		assertEquals(1.0, d.get(0), PrismUtils.epsilonDouble);
+		assertEquals(1.0, d.get(0), threshold);
 		assertEquals(Collections.singleton(0), d.getSupport());
 
 		strat.initialise(0);
@@ -186,5 +194,36 @@ public class TestMultiLongRunStrategy
 		d = strat.getNextMove(2);
 		assertEquals(1.0, d.get(0), PrismUtils.epsilonDouble);
 		assertEquals(Collections.singleton(0), d.getSupport());
+	}
+
+	/**
+	 * This tests whether we can export the MLR-Strategy, then import it and it is still the same 
+	 * @throws PrismException 
+	 */
+	@Test
+	public void testImportExport() throws PrismException
+	{
+		MultiLongRun<?> ml21 = tmlr.mdp21.createMultiLongRun(tmlr.m2, tmlr.e21);
+		ml21.createMultiLongRunLP();
+		ml21.solveDefault();
+		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml21.getStrategy();
+
+		String filename = "temporaryStrategyTestFile";
+		strat.exportToFile(filename);
+		MultiLongRunStrategy imported = MultiLongRunStrategy.loadFromFile(filename);
+
+		try {//delete the file
+			Path path = Paths.get(filename);
+			Files.delete(path);
+		} catch (NoSuchFileException x) {
+			System.err.format("%s: no such" + " file or directory%n", filename);
+		} catch (DirectoryNotEmptyException x) {
+			System.err.format("%s not empty%n", filename);
+		} catch (IOException x) {
+			// File permission problems are caught here.
+			System.err.println(x);
+		}
+
+		assertEquals(strat, imported);
 	}
 }
