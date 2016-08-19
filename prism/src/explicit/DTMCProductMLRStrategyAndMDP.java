@@ -381,8 +381,8 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 	@Override
 	public Iterator<Entry<Integer, Double>> getTransitionsIterator(int state)
 	{
-		int mdpState = state / mlrs.getNumberOfDifferentStrategies();
-		int strategyState = state % mlrs.getNumberOfDifferentStrategies();
+		final int mdpState = state / mlrs.getNumberOfDifferentStrategies();
+		final int strategyState = state % mlrs.getNumberOfDifferentStrategies();
 
 		Distribution oneActionMove = null;
 		try {
@@ -404,7 +404,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 		}
 
 		Distribution afterIndexAdaption = new Distribution();
-		oneTransitionMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies(), entry.getValue()));
+		oneTransitionMove.forEach(entry -> afterIndexAdaption.set(entry.getKey() * mlrs.getNumberOfDifferentStrategies() + strategyState, entry.getValue()));
 		if (strategyState != 0) {
 			return afterIndexAdaption.iterator();
 		}
@@ -419,6 +419,7 @@ public class DTMCProductMLRStrategyAndMDP implements DTMC
 					//+1, because here strategy of 0 means the transient strategy and for switchDistribution strategy
 					// means the first recurrentDistribution
 				}
+				overallResult.set(stateValue, afterIndexAdaption.get(stateValue));
 			}
 		}
 		return overallResult.iterator();
