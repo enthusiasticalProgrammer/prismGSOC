@@ -27,6 +27,8 @@
 
 package acceptance;
 
+import java.util.BitSet;
+
 import common.IterableBitSet;
 import jdd.JDD;
 import jdd.JDDNode;
@@ -55,14 +57,14 @@ public class AcceptanceBuchiDD implements AcceptanceOmegaDD
 	/**
 	 * Constructor, from a BitSet-based AcceptanceBuchi.
 	 *
-	 * @param acceptance the BitSet-based acceptance condition
+	 * @param acceptingBitSet the BitSet-based acceptance condition
 	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bit set
 	 */
-	public AcceptanceBuchiDD(AcceptanceBuchi acceptance, JDDVars ddRowVars)
+	public AcceptanceBuchiDD(BitSet acceptingBitSet, JDDVars ddRowVars)
 	{
 		acceptingStates = JDD.Constant(0);
 		// get BDD based on the acceptingState bit set
-		for (int i : IterableBitSet.getSetBits(acceptance.getAcceptingStates())) {
+		for (int i : IterableBitSet.getSetBits(acceptingBitSet)) {
 			acceptingStates = JDD.SetVectorElement(acceptingStates, ddRowVars, i, 1.0);
 		}
 	}

@@ -26,7 +26,8 @@
 
 package settings;
 
-//TODO is this class used, and if not, can we delete it?
+//TODO is this class used, and if not, can we delete it?--> In that context it is marked as deprecated
+@Deprecated
 public class DoubleRangeConstraint implements SettingConstraint
 {
 	private double lower, upper;
