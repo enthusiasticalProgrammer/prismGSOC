@@ -314,6 +314,14 @@ public class SimulatorEngine extends PrismComponent
 
 		switch (modelType) {
 		case DTMC:
+			i = (int) (Math.random() * numChoices);
+			choice = transitions.getChoice(i);
+			// Pick a random transition from this choice
+			d = Math.random();
+			j = choice.getIndexByProbabilitySum(d);
+			// Execute
+			executeTransition(i, j, -1);
+			break;
 		case MDP:
 			// Pick a random choice
 			//Note that we also check this in the DTMC-case, because maybe someone wants to simulate
