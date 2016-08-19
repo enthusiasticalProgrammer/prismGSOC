@@ -1,3 +1,29 @@
+//==============================================================================
+//	
+//	Copyright (c) 2016-
+//	Authors:
+//	* Christopher Ziegler <ga25suc@mytum.de>
+//	
+//------------------------------------------------------------------------------
+//	
+//	This file is part of PRISM.
+//	
+//	PRISM is free software; you can redistribute it and/or modify
+//	it under the terms of the GNU General Public License as published by
+//	the Free Software Foundation; either version 2 of the License, or
+//	(at your option) any later version.
+//	
+//	PRISM is distributed in the hope that it will be useful,
+//	but WITHOUT ANY WARRANTY; without even the implied warranty of
+//	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//	GNU General Public License for more details.
+//	
+//	You should have received a copy of the GNU General Public License
+//	along with PRISM; if not, write to the Free Software Foundation,
+//	Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//	
+//==============================================================================
+
 package strat;
 
 import static org.junit.Assert.*;
@@ -44,9 +70,9 @@ public class TestMultiLongRunStrategy
 		ml11.solveDefault();
 		MultiLongRunStrategy strat = (MultiLongRunStrategy) ml11.getStrategy();
 
-		//The numbers are slightly different to example 2 of paper TODO cite paper,
+		//The numbers are slightly different to example 2 of paper CKK15,
 		// because the strategy in the paper is not memoryless, but ours is
-		//The if-else is necessary, because sometimes the indices ar egiven the other way round
+		//The if-else is necessary, because sometimes the indices are given the other way round
 		if (strat.transientChoices[0].get(0) > 0.5) {
 			assertEquals(2.0 / 3.0, strat.transientChoices[0].get(0), PrismUtils.epsilonDouble);
 			assertEquals(1.0 / 3.0, strat.transientChoices[0].get(1), PrismUtils.epsilonDouble);
@@ -105,7 +131,7 @@ public class TestMultiLongRunStrategy
 
 		for (int i = 0; i < 1000; i++) {//updateMemory is nondeterministic, therefore the loop
 			strat.initialise(0);
-			strat.updateMemory(0, 2); //action does not matter, important is that we are in state 1
+			strat.updateMemory(0, 2); //action does not matter, important is that we are in state 2
 			Distribution d = strat.getNextMove(2);
 			assertEquals(1.0, d.sum(), PrismUtils.epsilonDouble);
 		}

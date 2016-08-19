@@ -24,9 +24,9 @@
 //	
 //==============================================================================
 
-package parser.ast;
+package acceptance;
 
-public class TestDeclarationInt
+public class TestAcceptanceGenRabinTransitionDD
 {
 
 }
