@@ -42,7 +42,7 @@ import jltl2ba.SimpleLTL;
 public class TestLTL2DA
 {
 	// X X a
-	public static SimpleLTL formula1 = new SimpleLTL(SimpleLTL.LTLType.NEXT, new SimpleLTL(SimpleLTL.LTLType.NEXT, new SimpleLTL("a")));
+	public static final SimpleLTL formula1 = new SimpleLTL(SimpleLTL.LTLType.NEXT, new SimpleLTL(SimpleLTL.LTLType.NEXT, new SimpleLTL("a")));
 
 	@Test
 	public void TestNoExceptionOccurringForFormula1()

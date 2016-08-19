@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 public class PrismUtils
 {
 	// Threshold for comparison of doubles
-	public static double epsilonDouble = 1e-12;
+	public static final double epsilonDouble = 1e-12;
 
 	/**
 	 * Compute logarithm of x to base b.
