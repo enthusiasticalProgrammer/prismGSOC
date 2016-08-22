@@ -349,7 +349,7 @@ public class LTL2DA extends PrismComponent
 	}
 
 	/** Check the atomic propositions of the (externally generated) automaton */
-	private void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
+	private static void checkAPs(SimpleLTL ltl, List<String> automatonAPs) throws PrismException
 	{
 		APSet ltlAPs = ltl.getAPs();
 		for (String ap : automatonAPs) {

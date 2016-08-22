@@ -156,7 +156,7 @@ public class DTMCFromMDPAndMDStrategy extends DTMCExplicit
 		return mdp.someSuccessorsInSet(s, strat.getChoiceIndex(s), set);
 	}
 
-	public int getNumChoices(int s)
+	public static int getNumChoices(int s)
 	{
 		// Always 1 for a DTMC
 		return 1;

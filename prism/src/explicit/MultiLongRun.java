@@ -140,7 +140,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 */
 	private List<BitSet> computeMECs() throws PrismException
 	{
-		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
+		ECComputer ecc = ECComputer.createECComputer(null, model);
 		ecc.computeMECStates();
 		return ecc.getMECStates();
 	}

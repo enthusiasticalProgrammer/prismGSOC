@@ -94,7 +94,7 @@ public class MultiLongRunControllerSynthesis
 	 * It is necessary, that this method returns at least 1, because otherwise the LP
 	 * had no equation even though there are some lim-inf-conditions present. 
 	 */
-	private int necessaryNFromPaperForAcceptance(AcceptanceControllerSynthesis.AccControllerPair pair)
+	private static int necessaryNFromPaperForAcceptance(AcceptanceControllerSynthesis.AccControllerPair pair)
 	{
 		int size = (int) pair.mdpCondition.stream().filter(mdp -> !mdp.isLimInf).count();
 		if (size == 0) {
@@ -340,7 +340,7 @@ public class MultiLongRunControllerSynthesis
 	 */
 	private List<BitSet> computeMecsForPair(GenRabinPair acc) throws PrismException
 	{
-		ECComputer ecc = ECComputerDefault.createECComputer(null, model);
+		ECComputer ecc = ECComputer.createECComputer(null, model);
 
 		BitSet notFinite = new BitSet();
 		notFinite.set(0, model.getNumStates());
