@@ -42,7 +42,6 @@ import acceptance.AcceptanceControllerSynthesis;
 import acceptance.AcceptanceControllerSynthesis.MDPCondition;
 import acceptance.AcceptanceGenRabinTransition;
 import automata.DA;
-import jhoafparser.consumer.HOAConsumerPrint;
 import ltl.parser.Comparison;
 import ltl.FrequencyG;
 import omega_automaton.Edge;
@@ -64,7 +63,6 @@ public class RabinizerToDA
 		DA<BitSet, AcceptanceGenRabinTransition> result = new DA<>(automaton.getStates().size());
 
 		BiMap<Product<T>.ProductState, Integer> stateIntMap = StateIntegerBiMap(automaton);
-		automaton.toHOA(new HOAConsumerPrint(System.out), aliases);
 
 		List<String> APList = getAPList(aliases);
 		result.setAPList(APList);
