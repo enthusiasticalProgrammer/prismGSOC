@@ -627,11 +627,11 @@ public abstract class MultiLongRun<M extends NondetModel>
 			StateValues sv = new StateValues(TypeBool.getInstance(), model);
 			sv.setBooleanValue(model.getFirstInitialState(), solver.getBoolResult());
 			return sv;
-		} else {
-			StateValues sv = new StateValues(TypeDouble.getInstance(), model);
-			sv.setDoubleValue(model.getFirstInitialState(), solver.getDoubleResult());
-			return sv;
 		}
+
+		StateValues sv = new StateValues(TypeDouble.getInstance(), model);
+		sv.setDoubleValue(model.getFirstInitialState(), solver.getDoubleResult());
+		return sv;
 	}
 
 	/**
