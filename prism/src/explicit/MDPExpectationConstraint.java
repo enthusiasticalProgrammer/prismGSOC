@@ -46,10 +46,10 @@ public class MDPExpectationConstraint extends MDPItem
 	@Override
 	public boolean equals(Object object)
 	{
-		if (!super.equals(object)) {
+		if (!super.equals(object) || object == null) {
 			return false;
 		}
-		MDPConstraint that = (MDPConstraint) object;
+		MDPExpectationConstraint that = (MDPExpectationConstraint) object;
 		if (!prism.PrismUtils.doublesAreEqual(this.bound, that.bound)) {
 			return false;
 		}
