@@ -83,7 +83,6 @@ public class LTL2DA
 		}
 
 		Product<?> dtgra = automataFactory.constructAutomaton();
-		dtgra.toHOA(new HOAConsumerPrint(System.out), aliases);
 
 		return RabinizerToDA.getGenericDA(dtgra, aliases);
 	}
