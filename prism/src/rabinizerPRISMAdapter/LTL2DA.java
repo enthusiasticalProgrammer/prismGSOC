@@ -64,8 +64,8 @@ public class LTL2DA
 	 */
 	public static DA<BitSet, ? extends AcceptanceGenRabinTransition> getDA(SimpleLTL ltlFormula)
 	{
-		BiMap<String, Integer> aliases = jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
-		Formula inputFormula = jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
+		BiMap<String, Integer> aliases = Jltl2baLTLToRabinizerLTLConverter.getAliasesFromSimpleLTL(ltlFormula);
+		Formula inputFormula = Jltl2baLTLToRabinizerLTLConverter.transformToRabinizerLTL(ltlFormula, aliases);
 		inputFormula = inputFormula.accept(new RestrictToFGXU());
 		if (ltlFormula.containsFrequencyG()) {
 			inputFormula = inputFormula.accept(new MojmirOperatorVisitor());

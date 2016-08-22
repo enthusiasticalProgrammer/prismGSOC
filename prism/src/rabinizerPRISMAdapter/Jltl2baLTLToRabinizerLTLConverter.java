@@ -42,7 +42,7 @@ import ltl.Literal;
 import ltl.UOperator;
 import ltl.XOperator;
 
-class jltl2baLTLToRabinizerLTLConverter
+class Jltl2baLTLToRabinizerLTLConverter
 {
 	static Formula transformToRabinizerLTL(SimpleLTL simple, BiMap<String, Integer> aliases)
 	{
