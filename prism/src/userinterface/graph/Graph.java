@@ -1387,6 +1387,8 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	 * @throws GraphException
 	 *             If file cannont be written to.
 	 */
+	//TODO can we drop it? It is unused and outcommented.
+	@Deprecated
 	public void exportToCSV(File file) throws GraphException
 	{
 		/*try 
