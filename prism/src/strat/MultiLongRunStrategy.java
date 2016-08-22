@@ -380,20 +380,20 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	 * strategy number 0 is transient, strategy at 1..N+1 is recurrentStrategy[x-1] 
 	 * 
 	 * @param state the state-number
-	 * @param strategy : the strategy-number ( 0 for transient, n>0 for recurrent[n-1]
+	 * @param strategy2 : the strategy-number ( 0 for transient, n>0 for recurrent[n-1]
 	 * @throws InvalidStrategyStateException if strategy is not defined in this state
 	 * @throws IllegalArgumentException, if strategy-number is not valid
 	 * @return the transition-Distribution, and not the action-Distribution
 	 */
-	public Distribution getDistributionOfStrategy(int state, int strategy) throws InvalidStrategyStateException
+	public Distribution getDistributionOfStrategy(int state, int strategy2) throws InvalidStrategyStateException
 	{
-		if (strategy < 0 || strategy > recurrentChoices.length) {
+		if (strategy2 < 0 || strategy2 > recurrentChoices.length) {
 			throw new IllegalArgumentException("wrong strategy-number");
 		}
 
-		if (strategy == 0)
+		if (strategy2 == 0)
 			return transientChoices[state];
-		return recurrentChoices[strategy - 1].getNextMove(state);
+		return recurrentChoices[strategy2 - 1].getNextMove(state);
 	}
 
 	public Distribution getSwitchProbability(int i)
