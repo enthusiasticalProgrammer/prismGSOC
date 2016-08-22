@@ -163,8 +163,10 @@ public class TestMultiLongRun
 	}
 
 	/**
-	 * To check that no exception occurs 
-	 * @throws PrismException 
+	 * We check here that no exception occurs, and if the MDP with the property is feasible
+	 * as it should be
+	 * 
+	 * @throws PrismException because it may be thrown especially in the LP-solving (not expected)
 	 */
 	@Test
 	public void isFeasible() throws PrismException
@@ -174,8 +176,10 @@ public class TestMultiLongRun
 	}
 
 	/**
-	 * To check that no exception occurs 
-	 * @throws PrismException 
+	 * We check here that no exception occurs, and if the MDP with the property is feasible
+	 * as it should be
+	 * 
+	 * @throws PrismException because it may be thrown especially in the LP-solving (not expected)
 	 */
 	@Test
 	public void isFeasible2() throws PrismException
@@ -196,7 +200,9 @@ public class TestMultiLongRun
 	}
 
 	/** 
-	 * @throws PrismException 
+	 * In this method we check that createMultiLongRun can deal with two objectives
+	 * 
+	 * @throws PrismException may be thrown in the LP-solving (not expected)
 	 */
 	@Test
 	public void testTwoObjectives() throws PrismException
@@ -206,7 +212,7 @@ public class TestMultiLongRun
 	}
 
 	/** 
-	 * @throws PrismException 
+	 * @throws PrismException may be thrown in the LP-solving (not expected)
 	 */
 	@Test
 	public void testGetN() throws PrismException
@@ -228,7 +234,8 @@ public class TestMultiLongRun
 
 	/**
 	 * This test checks some values for LP-variables given in CKK15, example 4
-	 * @throws PrismException 
+	 * 
+	 * @throws PrismException may be thrown during the LP solving (not expected)
 	 */
 	@Test
 	public void testValuesOfExample4() throws PrismException
@@ -254,7 +261,8 @@ public class TestMultiLongRun
 
 	/**
 	 * This test checks some values for LP-variables given in CKK15, example 5
-	 * @throws PrismException 
+	 * 
+	 * @throws PrismException may be thrown during the LP-solving (not expected)
 	 */
 	@Test
 	public void testValuesOfExample5() throws PrismException

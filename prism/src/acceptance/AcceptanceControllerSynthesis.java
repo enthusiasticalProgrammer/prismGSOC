@@ -63,7 +63,8 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	}
 
 	/**
-	 * checks if the finite-infinite conditions holds as well as the mdpConditions 
+	 * checks if the finite-infinite conditions holds as well as the mdpConditions.
+	 * Note that the model should be an explicit DTMC.
 	 */
 	@Override
 	public boolean isBSCCAccepting(BitSet bscc_states, Model model)

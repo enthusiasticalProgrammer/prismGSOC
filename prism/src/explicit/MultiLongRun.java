@@ -40,6 +40,7 @@ import parser.type.TypeDouble;
 import prism.Operator;
 import prism.Point;
 import prism.PrismException;
+import prism.PrismNotSupportedException;
 import solvers.SolverProxyInterface;
 import strat.Strategy;
 
@@ -49,19 +50,26 @@ import strat.Strategy;
  * problem for MDPs. It provides a LP encoding taken from
  * CKK15
  * (Unifying two views on Multiple Mean-Payoff Objectives in Markov Decision Processes).
- * 
+ * <p>
  * Note that we use a bit different notation here and refer to y_{s,N} variables as
  * Z, not to confuse them with y_{s,a}.
- *
+ *<p>
  *This class is abstract, because it can model either an MDP or a DTMC (which is computed
  *	by taking the product of an MDP and a MultiLongRunStrategy)
+ * @param <M> the type of model which is either an MDP or a DTMCProductMLRStrategyAndMDP
  */
 public abstract class MultiLongRun<M extends NondetModel>
 {
+	/**
+	 * This is used for storing the MECs (which is cheaper than recomputing them all the time)
+	 */
 	protected Collection<BitSet> mecs;
 	private final List<MDPConstraint> constraints;
 	private final Collection<MDPExpectationConstraint> expConstraints;
 	final Collection<MDPObjective> objectives;
+	/**
+	 * The model, for which we compute the linear program
+	 */
 	final protected M model;
 
 	/**
@@ -96,19 +104,19 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * The default constructor.
-	 * @param constraints: MLR-constraints of the form P[ R{x} >= bound [S]]
-	 * @param objectives: MLR-objectives of the form R{x}max=?
-	 * @param expConstraints: objectives of the form R{x} >= bound as expectation value
-	 * @param method: the method of LP solving, either "Linear programming" or "Gurobi"
-	 *        {@see PrismSettings.PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD}
+	 * 
+	 * @param constraints MLR-constraints of the form P[ R{x} >= bound [S]]
+	 * @param objectives MLR-objectives of the form R{x}max=?
+	 * @param expConstraints objectives of the form R{x} >= bound as expectation value
+	 * @param method the method of LP solving, either "Linear programming" or "Gurobi"
 	 * @param method Method to use, should be a valid value for
-	 * @param M: a nondeterministic model, it should be either an MDP or a DTMCFromMDPAndMDStrategy,
+	 * @param m a nondeterministic model, it should be either an MDP or a DTMCFromMDPAndMDStrategy,
 	 * 		because currently these are the only classes for which currently multi-objectives are used. 
-	 * @param isConjunctiveSat: true if we are considering conjunctive-SAT, false if we are considering joint-SAT, in
+	 * @param isConjunctiveSat true if we are considering conjunctive-SAT, false if we are considering joint-SAT, in
 	 *  		terminology of paper CKK15
-	 * @throws PrismException 
+	 * @throws PrismException can be thrown if something goes wrong during the MEC-computation
 	 */
-	protected MultiLongRun(final Collection<MDPConstraint> constraints, final Collection<MDPObjective> objectives,
+	protected MultiLongRun(Collection<MDPConstraint> constraints, final Collection<MDPObjective> objectives,
 			final Collection<MDPExpectationConstraint> expConstraints, final String method, final M m, boolean isConjunctiveSat) throws PrismException
 	{
 		this.constraints = new ArrayList<>(constraints);
@@ -127,8 +135,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * computes the set of end components and stores it in {@see #mecs}
-	 * @throws PrismException
+	 * This methods computes the set of maximal end components and returns it
+	 * @throws PrismException because it may get thrown during the MEC-computation
 	 */
 	private List<BitSet> computeMECs() throws PrismException
 	{
@@ -138,10 +146,10 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * The LICS11 paper considers variables y_{s,a}, y_s and x_{s,a}. The solvers mostly
+	 * The CKK15 paper considers variables y_{s,a}, y_s and x_{s,a}. The solvers mostly
 	 * access variables just by numbers, starting from 0 or so. We use
-	 * {@see #getVarY(int, int)}, {@see #getVarZ(int)} and {@see #getVarX(int, int)}
-	 * to get, for a variable y_{s,a}, y_s and x_{s,a}, respectively, in the LICS11 sense,
+	 * some get-methods 
+	 * to get, for a variable y_{s,a}, y_s and x_{s,a}, respectively, in the CKK15 sense,
 	 * a corresponding variable (i.e. column) in the linear program.
 	 * 
 	 * This method does all the required initialisations that are required for the
@@ -177,7 +185,10 @@ public abstract class MultiLongRun<M extends NondetModel>
 	}
 
 	/**
-	 * Returns true if the state given is in some MEC.
+	 * Checks if a state is in an MEC.
+	 * 
+	 * @param state the state-number
+	 * @return true if the state is in a MEC and false otherwise
 	 */
 	public boolean isMECState(int state)
 	{
@@ -186,6 +197,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * This method returns the MEC of the state. If state is in no MEC, it returns null.
+	 * 
+	 * @param state The state number
+	 * @return null if the input state is not inside of a MEC and else the MEC containing the state (as BitSet)
 	 */
 	public BitSet getMecOf(int state)
 	{
@@ -290,7 +304,6 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * Adds a row to the linear program saying that reward of item must have
 	 * at least/most required value (given in the constructor to this class)
 	 * In the paper CKK15 it is equation no 5
-	 * @return
 	 */
 	private void setEqnForExpectationConstraints() throws PrismException
 	{
@@ -340,9 +353,9 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * These are the variables x_{state,action,N} from the paper.
-	 * @param state
-	 * @param action
-	 * @param threshold
+	 * @param state the corresponding state-number
+	 * @param action the coresponding action-number
+	 * @param threshold the corresponding N from the paper CKK15
 	 * @return the corresponding variable number or -1 if either the using method is
 	 */
 	public int getVarX(int state, int action, int threshold)
@@ -501,7 +514,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * Initialises the solver and creates a new instance of
 	 * multi-longrun LP, for the parameters given in constructor.
 	 * Objective function is not set at all, no matter if it is required.
-	 * @throws PrismException
+	 * 
+	 * @throws PrismException can be thrown during the creation of the LP
 	 */
 	public void createMultiLongRunLP() throws PrismException
 	{
@@ -596,8 +610,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 
 	/**
 	 * Solves the multiobjective problem for constraint only, or numerical (i.e. no Pareto) 
-	 * @return
-	 * @throws PrismException
+	 * @return the solution of the LP, which was set up before
+	 * @throws PrismException if something goes wrong while solving the LP
 	 */
 	public StateValues solveDefault() throws PrismException
 	{
@@ -623,17 +637,18 @@ public abstract class MultiLongRun<M extends NondetModel>
 	/**
 	 * Returns the strategy for the last call to solveDefault(), or null if it was never called before,
 	 * or if the strategy did not exist.
-	 * @return
-	 * @throws PrismException 
+	 * 
+	 * @return a strategy satisfying the latest solved LP or null, if there was no LP solved before
 	 */
 	public abstract Strategy getStrategy();
 
 	/**
 	 * For the given 2D weights, get a point p on that is maximal for these weights, i.e.
 	 * there is no p' with p.weights<p'.weights.
-	 * @param weights
-	 * @return
-	 * @throws PrismException
+	 * 
+	 * @param weights specify, which point in the Pareto-curve to use
+	 * @return a point for a Pareto curve
+	 * @throws PrismException if something goes wrong during solving the LP
 	 */
 	public Point solveMulti(Point weights) throws PrismException
 	{
@@ -656,7 +671,7 @@ public abstract class MultiLongRun<M extends NondetModel>
 				numCount++;
 				numIndices.add(objective);
 			} else {
-				throw new PrismException(
+				throw new PrismNotSupportedException(
 						"Only maximising rewards in Pareto curves are currently supported (note: you can multiply your rewards by -1 and change min to max");
 			}
 		}
@@ -704,6 +719,8 @@ public abstract class MultiLongRun<M extends NondetModel>
 	 * This returns the number n from the paper CKK15, aka the number of satisfaction bound with a
 	 * non-trivial probability, ignoring whether we use conjunctive-SAT or joint-SAT. in Most cases you
 	 * should use getN and not this method.
+	 * 
+	 * @return the number N from CKK15
 	 */
 	protected int getNBackend()
 	{
@@ -716,11 +733,23 @@ public abstract class MultiLongRun<M extends NondetModel>
 		return result;
 	}
 
+	/**
+	 * This method returns an iterator over the possible transitions from a state when choosing an action.
+	 * <p>
+	 * It is necessary, because of the type parameter.
+	 * 
+	 * @param state the state-number
+	 * @param action the action number
+	 * @return an Iterator of the corresponding transitions
+	 */
 	protected abstract Iterator<Entry<Integer, Double>> getTransitionIteratorOfModel(int state, int action);
 
 	/**
 	 * if our model is a product of MDP and strategy, then we have to slightly prepare the state-
 	 * number by sometimes adjusting some offsets
+	 * @param state the state-number
+	 * @return the adjusted reward for a state
+	 * 
 	 */
 	protected abstract int prepareStateForReward(int state);
 
