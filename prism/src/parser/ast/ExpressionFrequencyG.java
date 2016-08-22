@@ -26,6 +26,8 @@
 
 package parser.ast;
 
+import java.util.Objects;
+
 import ltl.parser.Comparison;
 
 /**
@@ -75,6 +77,12 @@ public class ExpressionFrequencyG extends ExpressionTemporal
 			return super.equals(o) && this.bound == freq.bound && this.cmpOperator == freq.cmpOperator && this.isLimInf == freq.isLimInf;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(isLimInf, cmpOperator);
 	}
 
 	@Override
