@@ -149,11 +149,14 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		@Override
 		public String toString()
 		{
-			String s = "(" + Finite;
-			for (BitSet inf : Infinite)
-				s += "," + inf;
-			s += ")";
-			return s;
+			StringBuilder builder = new StringBuilder('(');
+			builder.append(Finite);
+			for (BitSet inf : Infinite) {
+				builder.append(',');
+				builder.append(inf);
+			}
+			builder.append(')');
+			return builder.toString();
 		}
 
 		void lift(Map<Integer, Collection<Integer>> lifter)
