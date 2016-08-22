@@ -29,7 +29,6 @@ package strat;
 
 import explicit.Distribution;
 import explicit.Model;
-import prism.PrismException;
 import prism.PrismLog;
 
 /**
