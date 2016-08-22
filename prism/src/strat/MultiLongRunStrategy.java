@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import explicit.DTMC;
 import explicit.DTMCProductMLRStrategyAndMDP;
 import explicit.Distribution;
 import explicit.MDPSparse;
@@ -54,10 +53,9 @@ import prism.PrismLog;
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
 {
-	public static final long serialVersionUID = 0L;
 
 	// strategy info
-	protected String info = "No information available.";
+	private String info = "No information available.";
 
 	/**
 	 * the transient strategy. The offsets corresponds to the states
