@@ -273,10 +273,8 @@ public class LTL2DA extends PrismComponent
 			tool_output.delete();
 
 			try {
-				try {
+				try (InputStream input = new FileInputStream(da_file)) {
 					HOAF2DA consumerDA = new HOAF2DA();
-
-					InputStream input = new FileInputStream(da_file);
 					HOAFParser.parseHOA(input, consumerDA);
 					result = consumerDA.getDA();
 				} catch (HOAF2DA.TransitionBasedAcceptanceException e) {
