@@ -1086,7 +1086,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	/**
 	 * Get an ECComputer object.
 	 */
-	public ECComputer getECComputer(NondetModel model) throws PrismException
+	public ECComputer getECComputer(NondetModel model)
 	{
 		return ECComputer.createECComputer(this, model, null, null);
 	}
@@ -1095,7 +1095,6 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * Get an ECComputer object.
 	 */
 	public ECComputer getECComputer(JDDNode reach, JDDNode trans, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars, JDDVars allDDNondetVars)
-			throws PrismException
 	{
 		return ECComputer.createECComputer(this, reach, trans, trans01, allDDRowVars, allDDColVars, allDDNondetVars);
 	}
@@ -3047,10 +3046,9 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
 	 * @throws PrismException if something goes wrong with the sampling algorithm
-	 * @throws InterruptedException if the thread is interrupted
 	 */
 	public void modelCheckSimulatorExperiment(PropertiesFile propertiesFile, UndefinedConstants undefinedConstants, ResultsCollection results, Expression expr,
-			State initialState, long maxPathLength, SimulationMethod simMethod) throws PrismException, InterruptedException
+			State initialState, long maxPathLength, SimulationMethod simMethod) throws PrismException
 	{
 		// Print info
 		mainLog.printSeparator();
@@ -3980,7 +3978,7 @@ public class Prism extends PrismComponent implements PrismSettingsListener
 	 */
 	public void modelCheckSimulatorExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
 			ResultsCollection results, Expression propertyToCheck, State initialState, long maxPathLength, SimulationMethod simMethod)
-			throws PrismException, InterruptedException
+			throws PrismException
 	{
 		loadPRISMModel(modulesFile);
 		modelCheckSimulatorExperiment(propertiesFile, undefinedConstants, results, propertyToCheck, initialState, maxPathLength, simMethod);

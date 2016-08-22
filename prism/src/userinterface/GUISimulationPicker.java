@@ -127,9 +127,8 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	 * @param exprs The properties to be checked (note: constants may not be defined)
 	 * @param modulesFile The model that will be simulated (for initial state info)
 	 * @param titleExtra Optional string to append to dialog (null if not needed)
-	 * @throws PrismException if there is a problem getting initial state info from the model.
 	 */
-	public GUISimulationPicker(GUIPrism parent, List<Expression> exprs, ModulesFile modulesFile, String titleExtra) throws PrismException
+	public GUISimulationPicker(GUIPrism parent, List<Expression> exprs, ModulesFile modulesFile, String titleExtra)
 	{
 		super(parent, "Simulation Parameters" + ((titleExtra != null) ? (" - " + titleExtra) : ""), true);
 		this.gui = parent;
@@ -861,10 +860,8 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	 * @param exprs The properties to be checked (note: constants may not be defined)
 	 * @param modulesFile The model that will be simulated (for initial state info)
 	 * @param titleExtra Optional string to append to dialog (null if not needed)
-	 * @throws PrismException if there is a problem getting initial state info from the model.
 	 */
 	public static SimulationInformation defineSimulationWithDialog(GUIPrism parent, List<Expression> exprs, ModulesFile modulesFile, String titleExtra)
-			throws PrismException
 	{
 		return new GUISimulationPicker(parent, exprs, modulesFile, titleExtra).defineValues();
 	}
@@ -875,10 +872,8 @@ public class GUISimulationPicker extends javax.swing.JDialog implements KeyListe
 	 * @param expr The property to be checked (note: constants may not be defined)
 	 * @param modulesFile The model that will be simulated (for initial state info)
 	 * @param titleExtra Optional string to append to dialog (null if not needed)
-	 * @throws PrismException if there is a problem getting initial state info from the model.
 	 */
 	public static SimulationInformation defineSimulationWithDialog(GUIPrism parent, Expression expr, ModulesFile modulesFile, String titleExtra)
-			throws PrismException
 	{
 		List<Expression> exprs = new ArrayList<>(1);
 		exprs.add(expr);

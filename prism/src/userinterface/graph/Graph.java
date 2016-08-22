@@ -1320,10 +1320,10 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	 * 
 	 * @param file
 	 *             The file to export the JPEG data to.
-	 * @throws GraphException, IOException
+	 * @throws IOException
 	 *             If file cannot be written to.
 	 */
-	public void exportToJPEG(File file, int width, int height) throws GraphException, IOException
+	public void exportToJPEG(File file, int width, int height) throws IOException
 	{
 		ChartUtilities.saveChartAsJPEG(file, 1.0f, this.chart, width, height);
 	}
@@ -1351,7 +1351,7 @@ public class Graph extends ChartPanel implements SettingOwner, EntityResolver, O
 	 * @throws GraphException, IOException
 	 *             If file cannot be written to.
 	 */
-	public void exportToPNG(File file, int width, int height, boolean alpha) throws GraphException, IOException
+	public void exportToPNG(File file, int width, int height, boolean alpha) throws IOException
 	{
 
 		FileOutputStream fileOutputStream = new FileOutputStream(file);

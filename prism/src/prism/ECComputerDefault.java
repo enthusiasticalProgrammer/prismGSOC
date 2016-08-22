@@ -46,7 +46,7 @@ public class ECComputerDefault extends ECComputer
 	 * Build (M)EC computer for a given model.
 	 */
 	public ECComputerDefault(PrismComponent parent, JDDNode reach, JDDNode trans, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars,
-			JDDVars allDDNondetVars) throws PrismException
+			JDDVars allDDNondetVars)
 	{
 		super(parent, reach, trans, trans01, allDDRowVars, allDDColVars, allDDNondetVars);
 	}

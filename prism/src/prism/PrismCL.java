@@ -331,8 +331,6 @@ public class PrismCL implements PrismModelListener
 						error(e.getMessage());
 						results[j].setMultipleErrors(definedMFConstants, null, e);
 						continue;
-					} catch (InterruptedException e) {
-						// ignore - won't get interrupted
 					}
 				}
 				// otherwise, treat each case individually

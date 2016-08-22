@@ -1401,11 +1401,10 @@ public class SimulatorEngine extends PrismComponent
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
 	 * @throws PrismException if something goes wrong with the sampling algorithm
-	 * @throws InterruptedException if the thread is interrupted
 	 */
 	public void modelCheckExperiment(ModulesFile modulesFile, PropertiesFile propertiesFile, UndefinedConstants undefinedConstants,
 			ResultsCollection resultsCollection, Expression expr, State initialState, long maxPathLength, SimulationMethod simMethod)
-			throws PrismException, InterruptedException
+			throws PrismException
 	{
 		// Load model into simulator
 		createNewOnTheFlyPath(modulesFile);

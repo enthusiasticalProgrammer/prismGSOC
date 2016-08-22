@@ -57,7 +57,6 @@ public abstract class ECComputer extends PrismComponent
 	 * Static method to create a new ECComputer object, depending on current settings.
 	 */
 	public static ECComputer createECComputer(PrismComponent parent, NondetModel model, JDDNode allowedTransitions, JDDNode allowedTransitions01)
-			throws PrismException
 	{
 		return createECComputer(parent, model.getReach(), allowedTransitions, allowedTransitions01, model.getAllDDRowVars(), model.getAllDDColVars(),
 				model.getAllDDNondetVars());
@@ -67,7 +66,7 @@ public abstract class ECComputer extends PrismComponent
 	 * Static method to create a new ECComputer object, depending on current settings.
 	 */
 	public static ECComputer createECComputer(PrismComponent parent, JDDNode reach, JDDNode trans, JDDNode trans01, JDDVars allDDRowVars, JDDVars allDDColVars,
-			JDDVars allDDNondetVars) throws PrismException
+			JDDVars allDDNondetVars)
 	{
 		// Only one algorithm implemented currently
 		return new ECComputerDefault(parent, reach, trans, trans01, allDDRowVars, allDDColVars, allDDNondetVars);
