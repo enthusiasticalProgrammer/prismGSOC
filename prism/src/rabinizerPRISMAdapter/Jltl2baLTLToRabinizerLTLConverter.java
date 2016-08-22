@@ -62,7 +62,6 @@ class Jltl2baLTLToRabinizerLTLConverter
 		case GLOBALLY:
 			return GOperator.create(transformToRabinizerLTL(simple.left, aliases));
 		case FREQ_G:
-			System.out.println("in freqG-case,simple: " + simple);
 			FrequencyG.Comparison comp = null;
 			double bound = simple.bound;
 			boolean isLimInf = simple.isLimInf;
