@@ -158,8 +158,8 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		switchProb[lastState].forEach(entry -> {
 			try {
 				probabilityToHaveSwitchedToStrategy.add(entry.getKey(), entry.getValue() * recurrentChoices[entry.getKey()].getNextMove(lastState).get(action));
-			} catch (Exception e) {
-				throw new RuntimeException();
+			} catch (InvalidStrategyStateException e) {
+				throw new RuntimeException(e);
 			}
 		});
 		double random = Math.random();
