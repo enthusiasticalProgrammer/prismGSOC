@@ -47,6 +47,10 @@ import explicit.MDPSparse;
 import explicit.Model;
 import prism.PrismLog;
 
+/**
+ * This strategy corresponds to a strategy which is created by a MultiLongRun. Either this can happen,
+ * with the help of the algorithm described in CKK15 or in the controller-acceptance-synthesis paper 
+ */
 @XmlRootElement
 public class MultiLongRunStrategy implements Strategy, Serializable
 {
@@ -55,6 +59,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	// strategy info
 	protected String info = "No information available.";
 
+	/**
+	 * the transient strategy. The offsets corresponds to the states
+	 */
 	@XmlElementWrapper(name = "transientChoices")
 	@XmlElement(name = "distribution", nillable = true)
 	protected final Distribution[] transientChoices;
@@ -363,6 +370,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	/**
 	 * This method is important for building the product
+	 * @return it returns the number of different strategies (one transient-strategy and some recurrent ones)
 	 */
 	public int getNumberOfDifferentStrategies()
 	{
@@ -372,6 +380,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	/**
 	 * This method returns the Distribution of a strategy in a state.
 	 * strategy number 0 is transient, strategy at 1..N+1 is recurrentStrategy[x-1] 
+	 * 
+	 * @param state the state-number
+	 * @param strategy : the strategy-number ( 0 for transient, n>0 for recurrent[n-1]
 	 * @throws InvalidStrategyStateException if strategy is not defined in this state
 	 * @throws IllegalArgumentException, if strategy-number is not valid
 	 * @return the transition-Distribution, and not the action-Distribution

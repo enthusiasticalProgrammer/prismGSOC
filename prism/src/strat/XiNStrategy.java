@@ -40,7 +40,8 @@ import solvers.SolverProxyInterface;
  * this is more or less an in-between state of a strategy, because the fact that it outputs the correct
  * strategy means that it is virtually indescribable. Therefore this gets never outputted directly,
  * but we can output an approximation of it.
- * We also ommitted some the computation of kappa and n (from the paper CKK15),
+ * <p>
+ * We also omitted some the computation of kappa and n (from the paper CKK15),
  * because it is irrelevant
  */
 public class XiNStrategy implements Strategy
@@ -67,6 +68,14 @@ public class XiNStrategy implements Strategy
 		phase = BigInteger.ZERO;
 	}
 
+	/**
+	 * This method computes an approximation of the XiN-strategy, by setting epsilon from paper CKK15 
+	 * to roughly 10^-6 to 10^-8.
+	 * <p>
+	 * It is useful, because this is easier to read (for humans) than a strategy with a (very slowly) decreasing epsilon.
+	 * 
+	 * @return an approximation of this strategy
+	 */
 	public EpsilonApproximationXiNStrategy computeApproximation()
 	{
 		/**The 1000000 is important to distinguish between (numerical) rounding errors and desired switching of strategy states*/

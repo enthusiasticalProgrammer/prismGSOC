@@ -64,7 +64,7 @@ public interface Strategy
 	/**
 	 * Initialises memory based on a state
 	 * 
-	 * @param state
+	 * @param s
 	 *            initial state
 	 */
 	public void initialise(int s);

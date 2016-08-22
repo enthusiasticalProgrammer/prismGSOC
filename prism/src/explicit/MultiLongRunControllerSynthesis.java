@@ -63,6 +63,12 @@ public class MultiLongRunControllerSynthesis
 	 */
 	private int[][] xOffsetArr;
 
+	/**
+	 * Creates a new multiLongRun-instance for the controller-synthesis algorithm 
+	 * @param model the underlying model
+	 * @param acceptance the controller-synthesis acceptance condition
+	 * @param method the methold for solving the LP
+	 */
 	public MultiLongRunControllerSynthesis(MDP model, AcceptanceControllerSynthesis acceptance, String method)
 	{
 		this.model = model;
@@ -100,7 +106,8 @@ public class MultiLongRunControllerSynthesis
 	/**
 	 * This method computes the set of all states, which are located in any accepting MEC
 	 * according to paper "Controller synthesis for MDPs and Frequency LTL(\GU)"
-	 * @result A BitSet containing each state, which is inside of any MEC
+	 *
+	 * @return A BitSet containing each state, which is inside of any MEC
 	 * @throws PrismException might get thrown when something during ECCComputation fails
 	 */
 	public BitSet computeStatesInAcceptingMECs() throws PrismException

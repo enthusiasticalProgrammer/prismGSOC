@@ -38,12 +38,14 @@ public abstract class MDStrategy implements Strategy
 {
 
 	/**
-	 * Get the number of states of the model associated with this strategy. 
+	 * @return the number of states of the associated model
 	 */
 	public abstract int getNumStates();
 
 	/**
-	 * Is choice information stored for state s?
+	 * Is choice information stored for a state?
+	 * @param s  the state-number
+	 * @return true if it is defined and else false
 	 */
 	public abstract boolean isChoiceDefined(int s);
 

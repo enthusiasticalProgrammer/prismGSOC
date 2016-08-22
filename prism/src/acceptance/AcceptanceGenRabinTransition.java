@@ -134,7 +134,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			throw new NullPointerException("Cloning a BitSet returned null");
 		}
 
-		/** Returns a textual representation of this Generalized Rabin pair. */
 		@Override
 		public String toString()
 		{

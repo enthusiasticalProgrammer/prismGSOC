@@ -36,6 +36,9 @@ package strat;
 public class InvalidStrategyStateException extends Exception
 {
 
+	/**
+	 * @param string the exception-message
+	 */
 	public InvalidStrategyStateException(String string)
 	{
 		super(string);

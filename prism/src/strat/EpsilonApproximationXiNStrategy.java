@@ -52,6 +52,9 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 	@XmlElement(name = "distribution of successors:")
 	private Map<Integer, Distribution> choices;
 
+	/**
+	 * @param choices the choices of the strategy where the offset corresponds to the state-number
+	 */
 	public EpsilonApproximationXiNStrategy(Distribution[] choices)
 	{
 		this.choices = new HashMap<>();

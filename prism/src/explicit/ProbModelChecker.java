@@ -107,8 +107,10 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 	// Enums for flags/settings
 
-	// Method used for numerical solution
 	public enum LinEqMethod {
+	/**
+	 * Method used for numerical solution
+	 */
 		POWER, JACOBI, GAUSS_SEIDEL, BACKWARDS_GAUSS_SEIDEL, JOR, SOR, BACKWARDS_SOR;
 		public String fullName()
 		{
@@ -260,6 +262,8 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	 * Inherit settings (and the log) from another ProbModelChecker object.
 	 * For model checker objects that inherit a PrismSettings object, this is superfluous
 	 * since this has been done already.
+	 * 
+	 * @param other the ProbModelChecker of which we inherit the settings 
 	 */
 	public void inheritSettings(ProbModelChecker other)
 	{
@@ -579,11 +583,14 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 	/**
 	 * Model check a P operator expression and return the values for the states of interest.
+	 * 
 	 * @param model The model
 	 * @param expr The P operator expression
 	 * @param forAll Are we checking "for all strategies" (true) or "there exists a strategy" (false)? [irrelevant for numerical (=?) queries] 
 	 * @param coalition If relevant, info about which set of players this P operator refers to (null if irrelevant)
 	 * @param statesOfInterest the states of interest, see checkExpression()
+	 * @return  the outcome of the model-checking
+	 * @throws PrismException when something goes wrong during model-checking
 	 */
 	protected StateValues checkExpressionProb(Model model, ExpressionProb expr, boolean forAll, Coalition coalition, BitSet statesOfInterest)
 			throws PrismException
@@ -1216,7 +1223,12 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 	}
 
 	/**
-	 * This method checks Multi-objective expressions explicitly.
+	 * This method checks multi-objective expressions explicitly.
+	 * 
+	 * @param model the corresponding underlying model
+	 * @param expr the multi-objective expression
+	 * @return the resulting state-values 
+	 * @throws PrismException mostly if something is malformed or if the LP-solver throws some exceptions
 	 */
 
 	protected StateValues checkExpressionMultiObjective(Model model, ExpressionFunc expr) throws PrismException
@@ -1303,6 +1315,14 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		return sv;
 	}
 
+	/**
+	 * This method creates a corresponding MultiLongRun instance, which fits to the needs of the model
+	 * 
+	 * @param modelthe underlying model
+	 * @param expr the multi(...) expression
+	 * @return the created MultiLongRun-instance
+	 * @throws PrismException mostly if some input is malformed
+	 */
 	public MultiLongRun<? extends NondetModel> createMultiLongRun(Model model, ExpressionFunc expr) throws PrismException
 	{
 		Collection<MDPConstraint> constraints = new ArrayList<>();

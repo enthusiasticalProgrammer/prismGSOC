@@ -45,14 +45,17 @@ import prism.PrismLog;
 import strat.MDStrategy;
 
 /**
- * Basically this class tries to take a model and it emulates it as nondeterministic model,
+ * Basically this class tries to take a DTMC and it emulates it as MDP,
  * it est it supports the nondeterministic choices etc. in a way such that
- * there are choices, but only one.
+ * there are choices, but only one. It is rather a wrapper-class without adding much functionality.
  */
 public class ArtificialMdpFromDtmc implements MDP
 {
 	private final DTMC dtmc;
 
+	/**
+	 * @param dtmc the underlying DTMC
+	 */
 	public ArtificialMdpFromDtmc(DTMC dtmc)
 	{
 		this.dtmc = dtmc;

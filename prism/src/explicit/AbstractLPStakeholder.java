@@ -32,11 +32,19 @@ import prism.PrismException;
 import solvers.LpSolverProxy;
 import solvers.SolverProxyInterface;
 
+/**
+ * This class defines the necessary method for initialising an LP-solver, which is used in some classes.
+ */
 public class AbstractLPStakeholder
 {
 
+	// TODO make an enum or just use always linear programming instead of String method
 	/**
-	 * Creates a new solver instance, based on the argument {@see #method}.
+	 * Creates a new solver instance, based on the arguments
+	 * 
+	 * @param numRealLPVars the number of LP-variables (which are to be real i.e. they are element in \mathcal{R})
+	 * @param method the method for solving the LP
+	 * @return an instance of a SolverProxy, which is configured with the desired parameters
 	 * @throws PrismException If the jar file providing access to the required LP solver is not found.
 	 */
 	protected static SolverProxyInterface initialiseSolver(int numRealLPVars, String method) throws PrismException
