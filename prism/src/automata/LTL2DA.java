@@ -283,9 +283,10 @@ public class LTL2DA extends PrismComponent
 					HOAF2DA consumerDA = new HOAF2DA();
 					HOAIntermediateStoreAndManipulate consumerTransform = new HOAIntermediateStoreAndManipulate(consumerDA, new ToStateAcceptance());
 
-					InputStream input = new FileInputStream(da_file);
-					HOAFParser.parseHOA(input, consumerTransform);
-					result = consumerDA.getDA();
+					try (InputStream input = new FileInputStream(da_file)) {
+						HOAFParser.parseHOA(input, consumerTransform);
+						result = consumerDA.getDA();
+					}
 				}
 
 				if (result == null) {
