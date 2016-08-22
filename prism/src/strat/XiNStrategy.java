@@ -34,7 +34,6 @@ import explicit.Model;
 import explicit.MultiLongRun;
 import prism.PrismLog;
 import prism.PrismUtils;
-import solvers.SolverProxyInterface;
 
 /**
  * this is more or less an in-between state of a strategy, because the fact that it outputs the correct
@@ -59,9 +58,15 @@ public class XiNStrategy implements Strategy
 
 	private final MDP mdp;
 
-	public XiNStrategy(SolverProxyInterface solver, MDP mdp, MultiLongRun<?> mlr, int n)
+	/**
+	 * @param solverVariables the output variables of a SolverProxyInterface
+	 * @param mdp the underlying MDP
+	 * @param mlr multi-long-run with which the LP was solved
+	 * @param n the N from paper CKK15
+	 */
+	public XiNStrategy(double[] solverVariables, MDP mdp, MultiLongRun<?> mlr, int n)
 	{
-		this.solverVariables = solver.getVariableValues();
+		this.solverVariables = solverVariables;
 		this.mlr = mlr;
 		this.N = n;
 		this.mdp = mdp;
