@@ -47,24 +47,35 @@ public interface AcceptanceOmega extends Cloneable
 {
 	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
+	 *  <p>
 	 *  This method does not test, if bscc_states is an SCC or not!
-	 *  @param model is needed for AcceptanceControllerSynthesis
+	 *  
+	 * @param bscc_states the states, which form the BSCC
+	 * @param model is needed for AcceptanceControllerSynthesis
+	 * @return true if the BSCC bscc_states is an accepting BSCC
 	 **/
 	public boolean isBSCCAccepting(BitSet bscc_states, Model model);
 
 	/**
-	 * Get a string describing the acceptance condition's size,
-	 * i.e. "x Rabin pairs", etc.
+	 * @return a description of the acceptance condition's size
 	 */
 	public String getSizeStatistics();
 
-	/** Returns the AcceptanceType of this acceptance condition */
+	/**
+	 * @return the AcceptanceType of this acceptance condition
+	 */
 	public AcceptanceType getType();
 
-	/** Print the appropriate Acceptance (and potentially acc-name) header */
+	/**
+	 * Print the appropriate Acceptance (and potentially acc-name) header
+	 * @param out the place which is the location, where we print the HOA header
+	 */
 	public void outputHOAHeader(PrintStream out);
 
-	/** Make a copy of the acceptance condition. */
+	/**
+	 * Make a copy of the acceptance condition.
+	 * @return the copy
+	 */
 	public AcceptanceOmega clone();
 
 	/** 
@@ -80,9 +91,19 @@ public interface AcceptanceOmega extends Cloneable
 	/**
 	 * The lifter basically maps an automaton-state to its corresponding states in the Product construction.
 	 * This function should lift the numbers of the BitSets according to the lifter.
-	 **/
+	 * 
+	 * @param lifter the function which maps the original model's state to the set of product states it is associated with
+	 */
 	public void lift(Map<Integer, Collection<Integer>> lifter);
 
+	/**
+	 * A useful helper method lifting only one BitSet
+	 * 
+	 * @param lifter the function which maps the original model's state to the set of product states it is associated with
+	 * @param bs the BitSet to be lifted
+	 * @return the lifted BitSet
+	 *  
+	 */
 	default BitSet liftBitSet(Map<Integer, Collection<Integer>> lifter, BitSet bs)
 	{
 		BitSet result = new BitSet();

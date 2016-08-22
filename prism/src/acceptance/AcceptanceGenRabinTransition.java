@@ -50,11 +50,10 @@ import prism.ProbModel;
  * A Generalized Rabin acceptance condition (based on BitSet state sets)
  * This is a list of GenRabinPairs, which can be manipulated with the usual List interface.
  * <br>
- * Semantics: Each Generalized Rabin pair has state sets L and K_1,...,K_n and is accepting iff
- * L is not visited infinitely often and all K_j are visited infinitely often:
- *   (F G !"L") & (G F "K_1") & ... & (G F "K_n").
+ * Semantics: Each Generalized Rabin pair has state sets Finite and some Infinite sets and is accepting iff
+ * Finite is not visited infinitely often and all Infinite are visited infinitely often:
  *
- * The Generalized Rabin condition is accepting if at least one of the pairs is accepting.
+ * The Generalised Rabin condition is accepting if at least one of the pairs is accepting.
  */
 public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 {
@@ -65,8 +64,15 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 	private int amountOfStates;
 	private final int amountOfAPs;
 
+	/**
+	 * A list of all generalised Rabin pairs of this acceptance condition 
+	 */
 	public final List<AcceptanceGenRabinTransition.GenRabinPair> accList;
 
+	/**
+	 * @param amountOfStates the number of states of the corresponding DA 
+	 * @param amountOfAPs the number of atomic propositions in the corresponding DA
+	 */
 	public AcceptanceGenRabinTransition(int amountOfStates, int amountOfAPs)
 	{
 		this.amountOfStates = amountOfStates;
@@ -76,29 +82,35 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	/**
 	 * A pair in a Generalized Rabin acceptance condition, i.e., with
-	 *  (F G !"L") & (G F "K_1") & ... & (G F "K_n").
+	 *  Fin(finite) & Inf(infinite.get(0)) & Inf(infinite.get(1)) & ...
 	 **/
 	public class GenRabinPair
 	{
-		/** Edge set Finite (should be visited only finitely often) 
-		 * The offset of the list is equal to the number of the source state 
+		/**
+		 * Edge set for transitions, which are to be visited only finitely often 
+		 * The offset of the BitSet is equal to the number of the source state 
 		 */
 		public BitSet Finite;
 
-		/** Edge sets Infinite (should all be visited infinitely often) */
+		/**
+		 * Edge sets, which are to be visited infinitely often.
+		 * <p>
+		 * The offset in the list corresponds to the number of the set and the offset in the BitSet corresponds to
+		 * the state number contained in the set. 
+		 */
 		public final List<BitSet> Infinite;
 
-		/** Constructor with L and K_j state sets */
 		public GenRabinPair(BitSet Finite, List<BitSet> Infinite)
 		{
 			this.Finite = Finite;
 			this.Infinite = Infinite;
 		}
 
-		/** Returns true if the bottom strongly connected component
-		 * given by bscc_states is accepting for this pair.
-		 * Nota Bene: bscc_states is a BitSet corresponding to states and our acceptance-BitSets
+		/** 
+		 * @param  bscc_states is a BitSet corresponding to states and our acceptance-BitSets
 		 * are BitSets over edges.
+		 * @return true if the bottom strongly connected component
+		 * given by bscc_states is accepting for this pair.
 		 */
 		public boolean isBSCCAccepting(BitSet bscc_states)
 		{
@@ -176,7 +188,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		}
 	}
 
-	/** Make a copy of the acceptance condition. */
 	@Override
 	public AcceptanceGenRabinTransition clone()
 	{
@@ -188,11 +199,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		return result;
 	}
 
-	/** Returns true if the bottom strongly connected component
-	 * given by bscc_states is accepting for this Rabin condition,
-	 * i.e., there is a pair that accepts for bscc_states.
-	 * Nota bene: the BitSet corresponds here to states and our acceptance BitSets are edges.
-	 */
 	@Override
 	public boolean isBSCCAccepting(BitSet bscc_states, Model model)
 	{
@@ -284,7 +290,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 		return result;
 	}
 
-	/** Returns a textual representation of this acceptance condition. */
 	@Override
 	public String toString()
 	{
@@ -369,8 +374,10 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	/**
 	 * This method converts the state trapState to a trap-state, it est it makes
-	 *       all outgoing transitons from it as finite. It does not check,
+	 *       all outgoing transitions from it as finite. It does not check,
 	 *       whether the input really is a trap-state.
+	 * @param trapState the state-number of the trap-state
+	 * @param da  the da in which the trapstate is included
 	 */
 	public void makeTrapState(int trapState, DA<?, ?> da)
 	{

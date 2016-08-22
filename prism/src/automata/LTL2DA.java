@@ -62,6 +62,9 @@ import prism.PrismSettings;
 public class LTL2DA extends PrismComponent
 {
 
+	/**
+	 * @param parent a PrismComponent for taking a look at the settings and at the main output-log
+	 */
 	public LTL2DA(PrismComponent parent)
 	{
 		super(parent);
@@ -73,6 +76,8 @@ public class LTL2DA extends PrismComponent
 	 * in which atomic propositions are represented by ExpressionLabel objects.
 	 * @param ltl the formula
 	 * @param constantValues the values of constants, may be {@code null}
+	 * @return a DA for the ltl-formula given by the first parameter
+	 * @throws PrismException  if something goes wrong
 	 */
 	public DA<BitSet, AcceptanceRabin> convertLTLFormulaToDRA(Expression ltl, Values constantValues) throws PrismException
 	{
@@ -84,9 +89,12 @@ public class LTL2DA extends PrismComponent
 	 * Convert an LTL formula into a deterministic automaton.
 	 * The LTL formula is represented as a PRISM Expression,
 	 * in which atomic propositions are represented by ExpressionLabel objects.
+	 * 
 	 * @param ltl the formula
 	 * @param constants the values of constants, may be {@code null}
 	 * @param allowedAcceptance the AcceptanceTypes that are allowed to be returned
+	 * @return a DA accepting the LTL-input formula
+	 * @throws PrismException if something goes wrong
 	 */
 	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDA(Expression ltl, Values constants, AcceptanceType... allowedAcceptance)
 			throws PrismException
@@ -165,6 +173,14 @@ public class LTL2DA extends PrismComponent
 		return result;
 	}
 
+	/**
+	 * This method tries to convert an LTL-formula to a DA using an external tool
+	 * 
+	 * @param ltl the LTL-formula to be converted
+	 * @param allowedAcceptance the acceptance, which we are permitted to use
+	 * @return the produced deterministic automaton
+	 * @throws PrismException when something goes wrong with the external tool or if some settings are not defined
+	 */
 	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDAWithExternalTool(Expression ltl, AcceptanceType... allowedAcceptance)
 			throws PrismException
 	{

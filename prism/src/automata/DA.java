@@ -160,6 +160,9 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 
 	/**
 	 * Add an edge
+	 * @param src the source state
+	 * @param label the label of the edge
+	 * @param dest the state-number of the destination
 	 */
 	public void addEdge(int src, Symbol label, int dest)
 	{
@@ -169,7 +172,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	// Accessors
 
 	/**
-	 * Get the size (number of states).
+	 * @return the size (number of states).
 	 */
 	public int size()
 	{
@@ -177,7 +180,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Get the start state (index)
+	 * @return the start state (index)
 	 */
 	public int getStartState()
 	{
@@ -185,7 +188,8 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Get the number of edges from state i
+	 * @param i state-number of the source state
+	 * @return the number of edges from state i
 	 */
 	public int getNumEdges(int i)
 	{
@@ -229,7 +233,8 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	}
 
 	/**
-	 * Print automaton in Dot format to a PrismLog
+	 * Prints the automaton in Dot format to a PrismLog
+	 * @param out the prismLog where it ought to be printed into
 	 */
 	public void printDot(PrismLog out)
 	{
@@ -303,8 +308,9 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	/**
 	 * Print the DA in HOA format to the output stream.
 	 * @param out the output stream
+	 * @throws PrismNotSupportedException if the Symbol-parameter is not a BitSet
 	 */
-	public void printHOA(PrintStream out) throws PrismException
+	public void printHOA(PrintStream out) throws PrismNotSupportedException
 	{
 		out.println("HOA: v1");
 		out.println("States: " + size());
@@ -365,7 +371,7 @@ public class DA<Symbol, Acceptance extends AcceptanceOmega>
 	/**
 	 * Print automaton to a PrintStream in a specified format ("dot", "txt" or "hoa").
 	 */
-	public void print(PrintStream out, String type) throws PrismException
+	public void print(PrintStream out, String type) throws PrismNotSupportedException
 	{
 		switch (type) {
 		case "txt":

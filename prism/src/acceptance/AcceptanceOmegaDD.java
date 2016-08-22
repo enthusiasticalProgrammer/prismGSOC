@@ -33,19 +33,23 @@ import jdd.JDDNode;
  */
 public interface AcceptanceOmegaDD
 {
-	/** Returns true if the bottom strongly connected component (BSSC)
+	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
-	 * <br>[ REFS: <i>none</i>, DEREFS: <i>none</i> ]
-	 **/
+	 * <br>
+	 * [ REFS: <i>none</i>, DEREFS: <i>none</i> ]
+	 * 
+	 * @param bscc_states the states forming a BSCC as JDDNode
+	 * @return true if the BSCC is accepting and els false
+	 */
 	public boolean isBSCCAccepting(JDDNode bscc_states);
 
 	/**
-	 * Get a string describing the acceptance condition's size,
+	 * @return  description of the acceptance condition's size,
 	 * i.e. "x Rabin pairs", etc.
 	 */
 	public String getSizeStatistics();
 
-	/** Returns the AcceptanceType of this acceptance condition */
+	/** @return the AcceptanceType of this acceptance condition */
 	public AcceptanceType getType();
 
 	/**

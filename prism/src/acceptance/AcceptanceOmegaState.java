@@ -36,24 +36,32 @@ import jdd.JDDVars;
 import prism.PrismException;
 import prism.ProbModel;
 
+/**
+ * This interface defines all methods for state-based omega-conditions 
+ */
 public interface AcceptanceOmegaState extends AcceptanceOmega
 {
 
 	/**
-	 * Complement the acceptance condition if possible.
+	 * Complement the acceptance condition if possible by adjusting just the condition and not touching the underlying DA.
+	 * 
 	 * @param numStates the number of states in the underlying model / automaton (needed for complementing BitSets)
 	 * @param allowedAcceptance the allowed acceptance types that may be used for complementing
+	 * @return the complement of the executing object
+	 * @throws PrismException is thrown when creating a complement with the allowed acceptance is impossible
 	 */
 	public AcceptanceOmegaState complement(int numStates, AcceptanceType... allowedAcceptance) throws PrismException;
 
 	/**
-	 * Convert this acceptance condition to an AcceptanceGeneric condition.
+	 * @return a generic acceptance condition which accepts the same as this acceptance condition does
 	 */
 	public AcceptanceGeneric toAcceptanceGeneric();
 
 	/**
 	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
-	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the bitset
+	 * 
+	 * @param ddRowVars JDDVars of the row variables corresponding to the bits in the BitSet
+	 * @return the BDD based acceptance condition
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars);
 
@@ -80,7 +88,11 @@ public interface AcceptanceOmegaState extends AcceptanceOmega
 
 	/** Returns true if the bottom strongly connected component (BSCC)
 	 *  given by bscc_states is accepting for this acceptance condition.
+	 *  <p>
 	 *  This method does not test, if bscc_states is an SCC or not!
-	 **/
+	 *  
+	 * @param bscc_states the set of states forming the BSCC
+	 * @return true if the input-BSCC is accepting
+	 */
 	public boolean isBSCCAccepting(BitSet bscc_states);
 }

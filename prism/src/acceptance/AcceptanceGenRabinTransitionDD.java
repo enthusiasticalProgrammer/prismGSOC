@@ -40,6 +40,9 @@ import jdd.JDDNode;
 import jdd.JDDVars;
 import prism.ProbModel;
 
+/**
+ * This class models a generalised transition-based Rabin-acceptance with BDDs instead of BitSets 
+ */
 public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 {
 	private final JDDVars daRowVars;
@@ -48,6 +51,10 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 	private final JDDVars allDDColVars;
 	private final DA<BitSet, ?> da;
 	private final AcceptanceGenRabinTransition accRabinTransition;
+
+	/**
+	 * list of transition-based generalised Rabin pairs 
+	 */
 	public final List<GenRabinPairTransitionDD> accList;
 	private final ProbModel product;
 
@@ -121,9 +128,19 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 		return result;
 	}
 
+	/**
+	 * a generalised transition-based Rabin-pair modeled with BDD instead of BitSets 
+	 */
 	public class GenRabinPairTransitionDD
 	{
+		/**
+		 * The transition set, which is to be traversed at most finitely often 
+		 */
 		public final JDDNode finTransitions;
+
+		/**
+		 * The transition sets, which are to be traversed at least infinitely often  
+		 */
 		public final List<JDDNode> infTransitions;
 
 		private GenRabinPairTransitionDD(JDDNode finTransitions, List<JDDNode> infTransitions)
@@ -132,6 +149,13 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 			this.infTransitions = infTransitions;
 		}
 
+		/**
+		 * This method checks if a BSCC is accepting regarding this particular acceptance pair
+		 * 
+		 * @param bsccStates the BSCC
+		 * @return true if the BSCC is accepting regarding this pair and false otherwise
+		 * 
+		 */
 		public boolean isBSCCAccepting(JDDNode bsccStates)
 		{
 			JDDNode bsccEdges = JDD.Apply(JDD.TIMES, product.getTrans(), bsccStates);

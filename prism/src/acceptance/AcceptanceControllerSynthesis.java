@@ -48,9 +48,19 @@ import prism.PrismException;
 import prism.PrismNotSupportedException;
 import prism.ProbModel;
 
+/**
+ * This class stores the acceptance of a DA being constructed by the controller-acceptance-synthesis algorithm.
+ * <p>
+ * This class is basically a transition-based generalised Rabin condition with a little mdp-overhead 
+ */
 public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 {
 
+	/**
+	 * @param amountOfStates the number of states of the corresponding DA
+	 * @param amountOfAPs the number of atomic propositions of the corresponding DA
+	 * 
+	 */
 	public AcceptanceControllerSynthesis(int amountOfStates, int amountOfAPs)
 	{
 		super(amountOfStates, amountOfAPs);
@@ -95,11 +105,22 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
+	/**
+	 * This is basically a generalised Rabin pair with some mdp-overhead
+	 */
 	public class AccControllerPair extends GenRabinPair
 	{
 
+		/**
+		 * This is a list of MDPConditions, analogous to the infinite-conditions
+		 */
 		public final List<MDPCondition> mdpCondition;
 
+		/**
+		 * @param Finite the set of edges which are to be traversed finitely often
+		 * @param Infinite the sets of edges which are to be traversed infinitely often
+		 * @param mdpCondition the corresponding mdp-conditions
+		 */
 		public AccControllerPair(BitSet Finite, List<BitSet> Infinite, List<MDPCondition> mdpCondition)
 		{
 			super(Finite, Infinite);
@@ -159,7 +180,10 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 	 */
 	public static class MDPCondition
 	{
-		public BiMap<BitSet, Integer> acceptanceSet; //means each edge gets a certain Integer-reward (or zero)
+		/**
+		 * the meaning of this is that each edge in a set contains a certain reward (or zero if it is not present in any key) 
+		 */
+		public BiMap<BitSet, Integer> acceptanceSet;
 		public final double bound;
 		public final Comparison cmpOperator;
 		public final boolean isLimInf;
@@ -179,6 +203,15 @@ public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 		}
 	}
 
+	/**
+	 * This method transforms the input-BitSet into a state-based mdp-condition and returns it.
+	 * <p>
+	 * This method should only be called, after the lift-method is called and
+	 * after the removeUnneccessaryProductEdges-method is called
+	 * 
+	 *  @param set the input transition-based acceptance BitSet
+	 *  @return the analog BitSet which is state-based
+	 */
 	public BitSet transformToStateSet(BitSet set)
 	{
 		BitSet stateSet = new BitSet();
