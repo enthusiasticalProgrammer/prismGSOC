@@ -87,9 +87,10 @@ class Jltl2baLTLToRabinizerLTLConverter
 			case GT:
 				comp = FrequencyG.Comparison.GT;
 				break;
+			default:
+				throw new AssertionError("Should never happen unless comparison is changed.");
 			}
 			FrequencyG result = new FrequencyG(f, bound, comp, isLimInf ? FrequencyG.Limes.INF : FrequencyG.Limes.SUP);
-			System.out.println("result: " + result);
 			return result;
 		case IMPLIES:
 			return Disjunction.create(transformToRabinizerLTL(simple.left, aliases).not(), transformToRabinizerLTL(simple.right, aliases));
