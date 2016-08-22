@@ -89,9 +89,9 @@ public class RabinizerToDA
 		GeneralisedRabinAcceptance<Product<T>.ProductState> acceptance = automaton.getAcceptance();
 		acceptance.AcceptanceGenRabinTransition result;
 		if (automaton instanceof ProductControllerSynthesis) {
-			result = new AcceptanceControllerSynthesis(da);
+			result = new AcceptanceControllerSynthesis(da.size(), da.getAPList().size());
 		} else {
-			result = new AcceptanceGenRabinTransition(da);
+			result = new AcceptanceGenRabinTransition(da.size(), da.getAPList().size());
 		}
 
 		for (int i = 0; i < acceptance.unmodifiableCopyOfAcceptanceCondition().size(); i++) {

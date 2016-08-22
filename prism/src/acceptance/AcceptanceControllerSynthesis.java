@@ -51,9 +51,9 @@ import prism.ProbModel;
 public class AcceptanceControllerSynthesis extends AcceptanceGenRabinTransition
 {
 
-	public AcceptanceControllerSynthesis(DA<BitSet, ?> da)
+	public AcceptanceControllerSynthesis(int amountOfStates, int amountOfAPs)
 	{
-		super(da);
+		super(amountOfStates, amountOfAPs);
 	}
 
 	@Override

@@ -135,7 +135,7 @@ public class LTL2DA extends PrismComponent
 		if (result == null) {
 			if (!containsTemporalBounds) {
 				if (useExternal) {
-					result = convertLTLFormulaToDAWithExternalTool(ltl, constants, allowedAcceptance);
+					result = convertLTLFormulaToDAWithExternalTool(ltl, allowedAcceptance);
 				} else {
 					// default tool:
 					if (useRabinizer() && Arrays.asList(allowedAcceptance).contains(AcceptanceType.GENERALIZED_RABIN_TRANSITION_BASED)) {
@@ -165,7 +165,7 @@ public class LTL2DA extends PrismComponent
 		return result;
 	}
 
-	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDAWithExternalTool(Expression ltl, Values constants, AcceptanceType... allowedAcceptance)
+	public DA<BitSet, ? extends AcceptanceOmega> convertLTLFormulaToDAWithExternalTool(Expression ltl, AcceptanceType... allowedAcceptance)
 			throws PrismException
 	{
 		String ltl2daTool = getSettings().getString(PrismSettings.PRISM_LTL2DA_TOOL);

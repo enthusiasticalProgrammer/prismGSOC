@@ -67,13 +67,6 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 
 	public final List<AcceptanceGenRabinTransition.GenRabinPair> accList;
 
-	public AcceptanceGenRabinTransition(DA<BitSet, ?> da)
-	{
-		amountOfStates = da.size();
-		amountOfAPs = da.getAPList().size();
-		accList = new ArrayList<>();
-	}
-
 	public AcceptanceGenRabinTransition(int amountOfStates, int amountOfAPs)
 	{
 		this.amountOfStates = amountOfStates;
