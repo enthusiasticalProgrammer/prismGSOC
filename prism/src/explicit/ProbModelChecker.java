@@ -1422,10 +1422,13 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 		String method = this.settings.getString(PrismSettings.PRISM_MDP_MULTI_SOLN_METHOD);
 		if (method == null)
 			method = "";
-		return getMultiLongRunMDP(model, constraints, objectives, expConstraints, method, expr.getNameCode() == ExpressionFunc.MULTI);
+		return getMultiLongRun(model, constraints, objectives, expConstraints, method, expr.getNameCode() == ExpressionFunc.MULTI);
 	}
 
-	protected abstract MultiLongRun<?> getMultiLongRunMDP(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
+	/**
+	 * This method gives out a suited MultiLongRun-instance. It is yet only overridden by DTMCModelChecker and MDPModelChecker 
+	 */
+	abstract MultiLongRun<?> getMultiLongRun(Model model, Collection<MDPConstraint> constraints, Collection<MDPObjective> objectives,
 			Collection<MDPExpectationConstraint> expConstraints, String method, boolean isConjunctiveSat) throws PrismException;
 
 	private double evaluateBound(Expression rewardBound) throws PrismLangException

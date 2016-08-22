@@ -194,7 +194,7 @@ public class TestMultiLongRun
 	@Test
 	public void isFeasibleWithNoConstraints() throws PrismException
 	{
-		MultiLongRun<MDP> mlr = mdp12.getMultiLongRunMDP(m1, new HashSet<MDPConstraint>(), new HashSet<MDPObjective>(), new HashSet<MDPExpectationConstraint>(),
+		MultiLongRun<MDP> mlr = mdp12.getMultiLongRun(m1, new HashSet<MDPConstraint>(), new HashSet<MDPObjective>(), new HashSet<MDPExpectationConstraint>(),
 				"Linear programming", true);
 		mlr.createMultiLongRunLP();
 		mlr.solveDefault();
