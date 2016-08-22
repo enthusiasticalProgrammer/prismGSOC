@@ -69,13 +69,13 @@ public class RabinizerToDA
 
 		result.setStartState(stateIntMap.get(automaton.getInitialState()));
 
-		for (Product<T>.ProductState state : stateIntMap.keySet()) {
-			Map<Edge<Product<T>.ProductState>, ValuationSet> successors = automaton.getSuccessors(state);
+		for (Entry<Product<T>.ProductState, Integer> stateIntEntry : stateIntMap.entrySet()) {
+			Map<Edge<Product<T>.ProductState>, ValuationSet> successors = automaton.getSuccessors(stateIntEntry.getKey());
 			for (Entry<Edge<Product<T>.ProductState>, ValuationSet> entry : successors.entrySet()) {
 				Iterator<BitSet> iter = entry.getValue().iterator();
 				while (iter.hasNext()) {
 					BitSet bs = iter.next();
-					result.addEdge(stateIntMap.get(state), bs, stateIntMap.get(entry.getKey().successor));
+					result.addEdge(stateIntEntry.getValue(), bs, stateIntMap.get(entry.getKey().successor));
 				}
 			}
 		}
