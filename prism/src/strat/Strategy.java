@@ -160,7 +160,7 @@ public interface Strategy
 	 * Returns the current memory element that fully describes state of the
 	 * strategy
 	 * 
-	 * @return
+	 * @return the memory element (or null if it is a memoryless strategy)
 	 */
 	public Object getCurrentMemoryElement();
 

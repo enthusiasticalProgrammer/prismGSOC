@@ -90,7 +90,9 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 
 	/**
 	 * Loads a strategy from a XML file
-	 * @param filename
+	 * 
+	 * @param filename the corresponding filename
+	 * @return the MultiLongRunStrategy described by the file
 	 */
 	public static MultiLongRunStrategy loadFromFile(String filename)
 	{

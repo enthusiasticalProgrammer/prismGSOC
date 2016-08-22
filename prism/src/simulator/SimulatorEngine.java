@@ -392,7 +392,8 @@ public class SimulatorEngine extends PrismComponent
 	 * (For discrete-time models, this just results in ceil(time) steps being executed.)
 	 * If a deadlock is found, the process stops.
 	 * The function returns the number of transitions successfully taken. 
-	 * @throws PrismException
+	 * 
+	 * @throws PrismException when something goes wrong inside a subroutine
 	 */
 	public int automaticTransitions(double time, boolean stopOnLoops) throws PrismException
 	{
@@ -1254,7 +1255,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param initialState Initial state (if null, is selected randomly)
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
-	 * @throws InvalidStrategyStateException 
+	 * @throws PrismException when the modelChecking returns it 
 	 */
 	public Object modelCheckSingleProperty(ModulesFile modulesFile, PropertiesFile propertiesFile, Expression expr, State initialState, long maxPathLength,
 			SimulationMethod simMethod) throws PrismException
@@ -1286,7 +1287,7 @@ public class SimulatorEngine extends PrismComponent
 	 * @param initialState Initial state (if null, is selected randomly)
 	 * @param maxPathLength The maximum path length for sampling
 	 * @param simMethod Object specifying details of method to use for simulation
-	 * @throws InvalidStrategyStateException 
+	 * @throws PrismException if something goes wrong
 	 */
 	public Object[] modelCheckMultipleProperties(ModulesFile modulesFile, PropertiesFile propertiesFile, List<Expression> exprs, State initialState,
 			long maxPathLength, SimulationMethod simMethod) throws PrismException
@@ -1644,9 +1645,9 @@ public class SimulatorEngine extends PrismComponent
 	}
 
 	/**
-	 * Update strategy reference
+	 * Update strategy reference and it updates the stateIds
 	 *
-	 * @param strategy
+	 * @param strategy being the new strategy of this SimulatorEngine
 	 */
 	public void setStrategy(Strategy strategy)
 	{

@@ -94,13 +94,15 @@ public interface AcceptanceOmega extends Cloneable
 
 	/**
 	 * Convert this BitSet based acceptance condition to the corresponding BDD based acceptance condition.
+	 * @param ddRowVars JDDVars of the row variables corresponding to the model
 	 * @param daRowVars JDDVars of the row variables corresponding to the bits in the bitset
 	 * @param daColVars JDDVars of the col variables from the model checker
 	 * @param allddRowVars JDDVars of the row of the product
 	 * @param allddColVars JDDVars of the col of the product
 	 * @param da DA to which this acceptance corresponds
-	 * @param labelAPs: the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
+	 * @param labelAPs the labels of the DA, only used for transition-based acceptance (but to avoid unneccessary castings in caller-methods, we use it here)
 	 * @param product The product of the DA and the Model
+	 * @return the corresponding AcceptanceOmegaDD
 	 * @throws PrismNotSupportedException is used, because AcceptanceControllerSynthesis is (currently) only possible for the explicit engine
 	 */
 	public AcceptanceOmegaDD toAcceptanceDD(JDDVars ddRowVars, JDDVars daColVars, JDDVars allddRowVars, JDDVars allddColVars, DA<BitSet, ?> da,

@@ -864,10 +864,10 @@ public class MDPModelChecker extends ProbModelChecker
 	/**
 	 * Compute reachability probabilities using policy iteration.
 	 * Optionally, store optimal (memoryless) strategy info. 
-	 * @param mdp: The MDP
-	 * @param no: Probability 0 states
-	 * @param yes: Probability 1 states
-	 * @param min: Min or max probabilities (true=min, false=max)
+	 * @param mdp The MDP
+	 * @param no Probability 0 states
+	 * @param yes Probability 1 states
+	 * @param min Min or max probabilities (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
 	protected ModelCheckerResult computeReachProbsPolIter(MDP mdp, BitSet no, BitSet yes, boolean min, int strat[]) throws PrismException
@@ -963,10 +963,10 @@ public class MDPModelChecker extends ProbModelChecker
 
 	/**
 	 * Compute reachability probabilities using modified policy iteration.
-	 * @param mdp: The MDP
-	 * @param no: Probability 0 states
-	 * @param yes: Probability 1 states
-	 * @param min: Min or max probabilities (true=min, false=max)
+	 * @param mdp The MDP
+	 * @param no Probability 0 states
+	 * @param yes Probability 1 states
+	 * @param min Min or max probabilities (true=min, false=max)
 	 * @param strat Storage for (memoryless) strategy choice indices (ignored if null)
 	 */
 	protected ModelCheckerResult computeReachProbsModPolIter(MDP mdp, BitSet no, BitSet yes, boolean min, int strat[]) throws PrismException
