@@ -142,10 +142,10 @@ public class CTMDPModelChecker extends ProbModelChecker
 	 * @param ctmdp The CTMDP
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
-	 * @param t: Time bound
+	 * @param t Time bound
 	 * @param min Min or max probabilities (true=min, false=max)
-	 * @param init: Initial solution vector - pass null for default
-	 * @param results: Optional array of size b+1 to store (init state) results for each step (null if unused)
+	 * @param init Initial solution vector - pass null for default
+	 * @param results Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
 	public ModelCheckerResult computeBoundedReachProbsOld(CTMDP ctmdp, BitSet remain, BitSet target, double t, boolean min, double init[], double results[])
 			throws PrismException

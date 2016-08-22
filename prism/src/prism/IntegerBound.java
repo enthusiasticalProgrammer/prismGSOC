@@ -40,10 +40,10 @@ public class IntegerBound
 	private Integer highest;
 
 	/** Create new bounds.
-	 * @param lower: The lower bound, {@code null} represents "no lower bound"
-	 * @param lower_strict: Is the lower bound strict (&gt; lower) or non-strict (&gt;= lower)
-	 * @param upper: The upper bound, {@code null} represents "no upper bound"
-	 * @param upper_strict: Is the upper bound strict (&lt; upper) or non-strict (&lt;= upper)
+	 * @param lower The lower bound, {@code null} represents "no lower bound"
+	 * @param lower_strict Is the lower bound strict (&gt; lower) or non-strict (&gt;= lower)
+	 * @param upper The upper bound, {@code null} represents "no upper bound"
+	 * @param upper_strict Is the upper bound strict (&lt; upper) or non-strict (&lt;= upper)
 	 */
 	public IntegerBound(Integer lower, boolean lower_strict, Integer upper, boolean upper_strict)
 	{
