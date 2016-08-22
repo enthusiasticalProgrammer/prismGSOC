@@ -1381,7 +1381,7 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 				rewStruct = modulesFile.getRewardStruct(0);
 			} else if (rs instanceof Expression) {
 				i = ((Expression) rs).evaluateInt(constantValues);
-				rs = new Integer(i); // for better error reporting below
+				rs = Integer.valueOf(i); // for better error reporting below
 				rewStruct = modulesFile.getRewardStruct(i - 1);
 			} else if (rs instanceof String) {
 				rewStruct = modulesFile.getRewardStructByName((String) rs);
