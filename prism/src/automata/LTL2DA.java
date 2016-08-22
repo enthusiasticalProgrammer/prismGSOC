@@ -122,10 +122,8 @@ public class LTL2DA extends PrismComponent
 					result = LTL2RabinLibrary.getDAforLTL(ltl, constants, allowedAcceptance);
 					result.printHOA(System.out);
 				}
+				getLog().println("Taking " + result.getAutomataType() + " from library...");
 
-				if (result != null) {
-					getLog().println("Taking " + result.getAutomataType() + " from library...");
-				}
 			} catch (Exception e) {
 				if (containsTemporalBounds) {
 					// there is (currently) no other way to translate LTL with temporal bounds,
