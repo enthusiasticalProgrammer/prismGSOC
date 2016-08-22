@@ -58,7 +58,7 @@ public class AcceptanceGenRabinTransitionDD implements AcceptanceOmegaDD
 	public final List<GenRabinPairTransitionDD> accList;
 	private final ProbModel product;
 
-	public AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars daRowVars, JDDVars daColVars, JDDVars allDDRowVars,
+	AcceptanceGenRabinTransitionDD(AcceptanceGenRabinTransition acceptanceGenRabinTransition, JDDVars daRowVars, JDDVars daColVars, JDDVars allDDRowVars,
 			JDDVars allDDColVars, DA<BitSet, ?> da, Vector<JDDNode> labelForAPs, ProbModel product)
 	{
 		super();

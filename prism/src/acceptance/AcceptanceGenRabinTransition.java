@@ -156,13 +156,13 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			return s;
 		}
 
-		protected void lift(Map<Integer, Collection<Integer>> lifter)
+		void lift(Map<Integer, Collection<Integer>> lifter)
 		{
 			Finite = transformSingleBitSet(Finite, lifter);
 			Infinite.replaceAll(inf -> transformSingleBitSet(inf, lifter));
 		}
 
-		protected BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
+		BitSet transformSingleBitSet(BitSet oldBitSet, Map<Integer, Collection<Integer>> lifter)
 		{
 			BitSet newBs = new BitSet(amountOfStates * (1 << amountOfAPs));
 			IntStream.range(0, oldBitSet.size()).filter(i -> oldBitSet.get(i)).mapToObj(i -> {
@@ -176,13 +176,13 @@ public class AcceptanceGenRabinTransition implements AcceptanceOmegaTransition
 			return newBs;
 		}
 
-		protected void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
+		void removeUnneccessaryProductEdges(Map<Integer, BitSet> usedEdges)
 		{
 			removeUnneccessaryProductEdgesForSet(usedEdges, Finite);
 			Infinite.forEach(inf -> removeUnneccessaryProductEdgesForSet(usedEdges, inf));
 		}
 
-		protected void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
+		void removeUnneccessaryProductEdgesForSet(Map<Integer, BitSet> usedEdges, BitSet set)
 		{
 			set.stream().filter(fin -> !computeBitSetOfEdge(fin).equals(usedEdges.get(computeStartStateOfEdge(fin)))).forEach(fin -> set.clear(fin));
 		}
