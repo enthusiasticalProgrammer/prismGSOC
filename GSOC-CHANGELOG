@@ -53,7 +53,6 @@ Code Style improvements:
 	-instead of parametrising methods with indices, we parametrised them with objects (in the MultiLongRun-environment)
 	-Multi-Constraints (e.g. R{...}max=?, R{...}>=0.5, P>=0.5 [R{...} >= 0.5]) are now modelled by subclasses,
 		which is a bit more clean than the old approach to set unused attributes to null, if they are not used
--dropped unused RandomNumberGenerator-class
 -dropped superfluous methods in SimulatorEngine and Strategy
 -Refactored MDPModelchecker: 
 	-put checkMultiObjectives into ProbModelChecker (such that we can perform the satisfaction-tests also for some special DTMCs)
