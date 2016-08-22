@@ -28,6 +28,7 @@ package strat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -189,6 +190,12 @@ public class EpsilonApproximationXiNStrategy implements Strategy
 		}
 		EpsilonApproximationXiNStrategy other = (EpsilonApproximationXiNStrategy) o;
 		return choices.equals(other.choices);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(choices);
 	}
 
 	@Override

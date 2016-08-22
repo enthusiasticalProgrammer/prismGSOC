@@ -128,6 +128,12 @@ public class APSet implements Iterable<String>
 		return ((other instanceof APSet) && this.equals((APSet) other));
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return vector.hashCode();
+	}
+
 	/**
 	 * Create a new APSet with the same number of
 	 * atomic propositions, but named 'p0', 'p1', 'p2', ...

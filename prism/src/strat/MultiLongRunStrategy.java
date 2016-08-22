@@ -31,6 +31,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -422,5 +423,11 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 					&& Arrays.equals(this.transientChoices, that.transientChoices);
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(Arrays.hashCode(recurrentChoices), Arrays.hashCode(switchProb), Arrays.hashCode(transientChoices));
 	}
 }
