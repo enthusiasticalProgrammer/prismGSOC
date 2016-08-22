@@ -122,10 +122,10 @@ public interface Strategy
 	 * 
 	 * @param model
 	 *            The model for which the strategy is defined.
-	 * @throws PrismException
+	 * @return the model, which is the product of the input model and the strategy
 	 * 
 	 */
-	public Model buildProduct(Model model) throws PrismException;
+	public Model buildProduct(Model model);
 
 	/**
 	 * Get textual description of the strategy
