@@ -66,9 +66,12 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 	@XmlElement(name = "One_recurrent_strategy")
 	protected final EpsilonApproximationXiNStrategy[] recurrentChoices;
 
+
+	/**
+	 * The probability-distributions for switching from the transient strategy to the recurrent ones. The offset is the state.
+	 */
 	@XmlElementWrapper(name = "switchingProbabilities")
 	@XmlElement(name = "distribution", nillable = true)
-	/**The offset is the state*/
 	protected final Distribution[] switchProb;
 
 	/**-1 for transient and 0...2^N for epsilon_{N}*/

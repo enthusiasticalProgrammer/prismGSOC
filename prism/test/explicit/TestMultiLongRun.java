@@ -49,6 +49,9 @@ import prism.PrismSettings;
 import prism.PrismUtils;
 import simulator.ModulesFileModelGenerator;
 
+/**
+ * This class tests the MultiLongRun-environment with examples from CKK15 
+ */
 public class TestMultiLongRun
 {
 	public MDP m1;
