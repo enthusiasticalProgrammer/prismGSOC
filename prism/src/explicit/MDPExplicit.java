@@ -168,12 +168,11 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 	{
 		int i, j, numChoices;
 		boolean first;
-		FileWriter out;
+
 		TreeMap<Integer, Double> sorted;
 		Object action;
-		try {
+		try (FileWriter out = new FileWriter(filename)) {
 			// Output transitions to PRISM language file
-			out = new FileWriter(filename);
 			out.write(getModelType().keyword() + "\n");
 			out.write("module M\nx : [0.." + (numStates - 1) + "];\n");
 			sorted = new TreeMap<>();
@@ -204,7 +203,6 @@ public abstract class MDPExplicit extends ModelExplicit implements MDP
 				}
 			}
 			out.write("endmodule\n");
-			out.close();
 		} catch (IOException e) {
 			throw new PrismException("Could not export " + getModelType() + " to file \"" + filename + "\"" + e);
 		}
