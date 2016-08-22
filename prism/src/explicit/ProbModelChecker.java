@@ -107,12 +107,12 @@ public abstract class ProbModelChecker extends NonProbModelChecker
 
 	// Enums for flags/settings
 
-	public enum LinEqMethod {
 	/**
 	 * Method used for numerical solution
 	 */
+	enum LinEqMethod {
 		POWER, JACOBI, GAUSS_SEIDEL, BACKWARDS_GAUSS_SEIDEL, JOR, SOR, BACKWARDS_SOR;
-		public String fullName()
+		String fullName()
 		{
 			switch (this) {
 			case POWER:
