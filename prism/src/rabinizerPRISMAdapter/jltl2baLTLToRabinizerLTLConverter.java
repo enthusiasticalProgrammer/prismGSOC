@@ -42,9 +42,9 @@ import ltl.Literal;
 import ltl.UOperator;
 import ltl.XOperator;
 
-public class jltl2baLTLToRabinizerLTLConverter
+class jltl2baLTLToRabinizerLTLConverter
 {
-	public static Formula transformToRabinizerLTL(SimpleLTL simple, BiMap<String, Integer> aliases)
+	static Formula transformToRabinizerLTL(SimpleLTL simple, BiMap<String, Integer> aliases)
 	{
 		switch (simple.kind) {
 		case AND:
@@ -110,7 +110,7 @@ public class jltl2baLTLToRabinizerLTLConverter
 		}
 	}
 
-	public static BiMap<String, Integer> getAliasesFromSimpleLTL(SimpleLTL ltl)
+	static BiMap<String, Integer> getAliasesFromSimpleLTL(SimpleLTL ltl)
 	{
 		APSet aps = ltl.getAPs();
 		BiMap<String, Integer> result = HashBiMap.create();

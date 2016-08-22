@@ -48,6 +48,9 @@ import rabinizer.automata.Optimisation;
 import rabinizer.automata.Product;
 import rabinizer.frequencyLTL.MojmirOperatorVisitor;
 
+/**
+ * This class is the overall class to transform Rabinizer automata into DAs
+ */
 public class LTL2DA
 {
 	/**
@@ -55,7 +58,7 @@ public class LTL2DA
 	 * should be only called by automata.LTL2DA, in order to keep Rabinizer and LTL2DSTAR
 	 * with LTL2BA exchangeable during runtime.
 	 * 
-	 *    @param an LTL-formula specified by SimpleLTL
+	 *    @param ltlFormula an LTL-formula specified by SimpleLTL
 	 *    @return A DA with Edges specified as BitSet and generalised Rabin acceptance,
 	 *    					which is transition-based.
 	 */

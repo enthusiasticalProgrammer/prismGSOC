@@ -55,7 +55,7 @@ import rabinizer.automata.AbstractSelfProductSlave;
 import rabinizer.automata.Product;
 import rabinizer.automata.ProductControllerSynthesis;
 
-public class RabinizerToDA
+class RabinizerToDA
 {
 	static <T extends AbstractSelfProductSlave<T>.State> DA<BitSet, ? extends AcceptanceGenRabinTransition> getGenericDA(Product<T> automaton,
 			BiMap<String, Integer> aliases)
