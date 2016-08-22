@@ -219,12 +219,7 @@ public class MultiLongRunStrategy implements Strategy, Serializable
 		if (model == null) {
 			throw new NullPointerException();
 		}
-		return buildProductFromMDPExplicit((MDPSparse) model);
-	}
-
-	public DTMC buildProductFromMDPExplicit(MDPSparse model)
-	{
-		return new DTMCProductMLRStrategyAndMDP(model, this);
+		return new DTMCProductMLRStrategyAndMDP((MDPSparse) model, this);
 	}
 
 	@Override
